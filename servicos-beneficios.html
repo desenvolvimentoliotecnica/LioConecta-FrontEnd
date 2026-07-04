@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Diretório de Pessoas</title>
+  <title>LioConecta — Benefícios</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -822,125 +822,190 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — DIRETÓRIO */
+    /* PAGE: SERVIÇOS — BENEFÍCIOS */
     .filter-chip.is-active {
-      background: #ecfeff;
-      border-color: #67e8f9;
-      color: #0e7490;
+      background: #fce7f3;
+      border-color: #f9a8d4;
+      color: #be185d;
     }
 
-    .topbar__dropdown-menu a.is-active {
-      background: #ecfeff;
-      color: #0e7490;
+    .topbar__dropdown-menu--services a.is-active {
+      background: #fce7f3;
+      color: #be185d;
+      font-weight: 600;
     }
 
-    .directory {
+    .welcome-banner {
+      margin-bottom: var(--wf-gap);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+      border: 1px dashed #f9a8d4;
+      border-radius: var(--wf-radius);
       display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .dept-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .dept-group__header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--wf-border);
-    }
-
-    .dept-group__title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .dept-group__count {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-      font-weight: 500;
-    }
-
-    .directory-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .person-card {
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      box-shadow:
-        0 2px 6px rgba(15, 23, 42, 0.06),
-        0 6px 16px rgba(15, 23, 42, 0.08);
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      grid-template-rows: auto auto;
-      column-gap: 10px;
-      row-gap: 2px;
       align-items: center;
-      text-align: left;
+      gap: 14px;
     }
 
-    .person-card__avatar {
+    .welcome-banner__icon {
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      border: 1.5px solid var(--wf-border);
-      object-fit: cover;
-      grid-row: 1 / 3;
-      align-self: center;
+      background: #fce7f3;
+      color: #db2777;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
 
-    .person-card__name {
-      font-size: 13px;
+    .welcome-banner__title {
+      font-size: 15px;
       font-weight: 700;
-      color: #1e293b;
-      margin: 0;
-      line-height: 1.25;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: #9d174d;
+      margin-bottom: 4px;
     }
 
-    .person-card__role {
-      font-size: 11px;
-      color: var(--wf-text);
-      line-height: 1.3;
-      margin: 0;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .welcome-banner__text {
+      font-size: 13px;
+      color: #be185d;
+      line-height: 1.45;
     }
 
-    .person-card__dept {
-      display: none;
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    .person-card__meta {
-      display: none;
-    }
-
-    .person-card__actions {
+    .benefit-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      grid-column: 3;
-      grid-row: 1 / 3;
-      align-self: center;
+      gap: 10px;
+      min-height: 152px;
     }
 
-    .person-card__btn {
+    .benefit-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #f9a8d4;
+      background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
+    }
+
+    .benefit-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .benefit-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .benefit-card__icon--saude { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .benefit-card__icon--alimentacao { background: #fff7ed; color: #ea580c; border-color: #fdba74; }
+    .benefit-card__icon--mobilidade { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .benefit-card__icon--qualidade { background: #dcfce7; color: #16a34a; border-color: #86efac; }
+    .benefit-card__icon--familia { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+
+    .benefit-card__main { flex: 1; min-width: 0; }
+
+    .benefit-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .benefit-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .benefit-card.is-featured .benefit-card__desc { -webkit-line-clamp: 3; }
+
+    .benefit-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .benefit-card__cat {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fce7f3;
+      color: #be185d;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .benefit-card__cat--alimentacao { background: #ffedd5; color: #c2410c; }
+    .benefit-card__cat--mobilidade { background: #e0f2fe; color: #0369a1; }
+    .benefit-card__cat--qualidade { background: #dcfce7; color: #15803d; }
+    .benefit-card__cat--familia { background: #ede9fe; color: #6d28d9; }
+
+    .benefit-card__status {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .benefit-card__status--obrigatorio { background: #fce7f3; color: #be185d; }
+    .benefit-card__status--flexivel { background: #fef3c7; color: #b45309; }
+
+    .benefit-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--wf-text-muted);
+    }
+
+    .benefit-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .benefit-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .benefit-card__actions { display: flex; gap: 4px; }
+
+    .benefit-card__btn {
       width: 28px;
       height: 28px;
       border: 1px dashed var(--wf-border);
@@ -955,10 +1020,29 @@
       text-decoration: none;
     }
 
-    .person-card__btn:hover {
-      background: #ecfeff;
-      color: #0e7490;
-      border-color: #67e8f9;
+    .benefit-card__btn:hover {
+      background: #fdf2f8;
+      color: #be185d;
+      border-color: #f9a8d4;
+    }
+
+    .benefit-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #db2777;
+      border: 1px solid #db2777;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .benefit-card__open:hover {
+      background: #be185d;
+      border-color: #be185d;
     }
 
     .page-empty-note {
@@ -968,22 +1052,9 @@
       text-align: center;
     }
 
-    @media (max-width: 1200px) {
-      .directory-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
     @media (max-width: 900px) {
-      .directory-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .directory-grid {
-        grid-template-columns: 1fr;
-      }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .benefit-card.is-featured { grid-column: auto; }
     }
 
     /* QUICK ACCESS */
@@ -1658,7 +1729,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1668,7 +1739,7 @@
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
-              <a href="pessoas-diretorio.html" role="menuitem" class="is-active">Diretório</a>
+              <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
               <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
               <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
               <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
@@ -1713,7 +1784,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1724,7 +1795,7 @@
             </button>
             <div class="topbar__dropdown-menu topbar__dropdown-menu--services" id="menu-servicos" role="menu">
               <span class="topbar__menu-heading topbar__menu-heading--rh" role="presentation"><i class="fa-solid fa-user-group" aria-hidden="true"></i> RH &amp; Pessoas</span>
-              <a href="servicos-beneficios.html" role="menuitem">Benefícios</a>
+              <a href="servicos-beneficios.html" role="menuitem" class="is-active">Benefícios</a>
               <a href="#" role="menuitem">Contracheque</a>
               <a href="#" role="menuitem">Férias e ausências</a>
               <a href="#" role="menuitem">Solicitações RH</a>
@@ -1801,39 +1872,48 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span>Serviços</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Diretório</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Benefícios</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Diretório de Pessoas</h1>
+              <h1 class="page-header__title">Benefícios</h1>
               <p class="page-header__desc">
-                Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
+                Consulte os benefícios disponíveis no seu contrato, elegibilidade, operadoras parceiras e canais para solicitar inclusão ou alterações.
               </p>
             </div>
           </div>
         </header>
 
-        <div class="page-toolbar">
-          <div class="page-filters" id="directory-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
-            <button class="filter-chip" type="button" data-filter="rh">Recursos Humanos</button>
-            <button class="filter-chip" type="button" data-filter="marketing">Marketing</button>
-            <button class="filter-chip" type="button" data-filter="ti">TI</button>
-            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
-            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar por nome ou cargo...
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-gift"></i></div>
+          <div>
+            <div class="welcome-banner__title">12 benefícios corporativos ativos</div>
+            <p class="welcome-banner__text">Pacote completo de saúde, alimentação, mobilidade e qualidade de vida. Verifique elegibilidade conforme seu plano e tempo de casa. Dúvidas? Fale com o RH pelo canal de Solicitações RH.</p>
           </div>
         </div>
 
-        <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
+        <div class="page-toolbar">
+          <div class="page-filters" id="benefits-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="saude">Saúde</button>
+            <button class="filter-chip" type="button" data-filter="alimentacao">Alimentação</button>
+            <button class="filter-chip" type="button" data-filter="mobilidade">Mobilidade</button>
+            <button class="filter-chip" type="button" data-filter="qualidade">Qualidade de vida</button>
+            <button class="filter-chip" type="button" data-filter="familia">Família</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar benefícios...
+          </div>
+        </div>
 
-        <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
+        <div class="benefits-grid" id="benefits-root" aria-label="Benefícios corporativos"></div>
+
+        <p class="page-empty-note" id="benefits-count">Exibindo 12 benefícios</p>
 
       </main>
 
@@ -1929,193 +2009,91 @@
 
   <script>
     (function () {
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
+      const catLabels = {
+        saude: "Saúde",
+        alimentacao: "Alimentação",
+        mobilidade: "Mobilidade",
+        qualidade: "Qualidade de vida",
+        familia: "Família"
+      };
+
+      const catIcons = {
+        saude: "fa-heart-pulse",
+        alimentacao: "fa-utensils",
+        mobilidade: "fa-bus",
+        qualidade: "fa-spa",
+        familia: "fa-people-roof"
+      };
+
+      const benefits = [
+        { id: "plano-saude", title: "Plano de Saúde", desc: "Cobertura médica e hospitalar com rede credenciada nacional, coparticipação e acomodação enfermaria ou apartamento conforme plano.", cat: "saude", provider: "Unimed", status: "obrigatorio", featured: true },
+        { id: "plano-odonto", title: "Plano Odontológico", desc: "Consultas, limpeza, tratamentos e ortodontia com rede referenciada e cobertura para dependentes elegíveis.", cat: "saude", provider: "Odontoprev", status: "opcional", featured: false },
+        { id: "vale-refeicao", title: "Vale-refeição", desc: "Crédito mensal em cartão bandeirado para refeições em restaurantes e estabelecimentos credenciados.", cat: "alimentacao", provider: "Alelo", status: "obrigatorio", featured: false },
+        { id: "vale-alimentacao", title: "Vale-alimentação", desc: "Benefício complementar para compras em supermercados e mercearias, conforme política vigente.", cat: "alimentacao", provider: "Alelo", status: "obrigatorio", featured: false },
+        { id: "vale-transporte", title: "Vale-transporte", desc: "Auxílio para deslocamento casa–trabalho via créditos em cartão ou reembolso conforme elegibilidade.", cat: "mobilidade", provider: "VT Corp", status: "obrigatorio", featured: false },
+        { id: "seguro-vida", title: "Seguro de Vida", desc: "Proteção financeira para colaborador e dependentes, com capital segurado e assistência funeral.", cat: "familia", provider: "Porto Seguro", status: "obrigatorio", featured: false },
+        { id: "wellhub", title: "Wellhub (Gympass)", desc: "Acesso a academias, estúdios e apps de bem-estar com planos flexíveis subsidiados parcialmente pela empresa.", cat: "qualidade", provider: "Wellhub", status: "flexivel", featured: false },
+        { id: "home-office", title: "Auxílio Home Office", desc: "Reembolso mensal para internet e energia elétrica de colaboradores em regime remoto ou híbrido elegível.", cat: "qualidade", provider: "RH Lio", status: "flexivel", featured: false },
+        { id: "previdencia", title: "Previdência Privada", desc: "Plano de previdência complementar com contratação opcional e matching parcial da contribuição pela empresa.", cat: "familia", provider: "Brasilprev", status: "opcional", featured: false },
+        { id: "creche", title: "Auxílio Creche", desc: "Subsídio para filhos até 6 anos conforme comprovantes e limites definidos em política de benefícios.", cat: "familia", provider: "RH Lio", status: "opcional", featured: false },
+        { id: "assistencia", title: "Programa de Assistência", desc: "Apoio psicológico, jurídico, financeiro e social 24h por telefone, app e sessões presenciais.", cat: "qualidade", provider: "Conexa Saúde", status: "obrigatorio", featured: false },
+        { id: "licencas", title: "Licenças e Afastamentos", desc: "Orientações sobre licença maternidade, paternidade, gala, nojo e demais afastamentos legais previstos em CLT.", cat: "familia", provider: "RH Lio", status: "obrigatorio", featured: false }
       ];
 
-      const departments = [
-        {
-          id: "produto",
-          name: "Produto",
-          people: [
-            ["Maria Silva", "Gerente de Projetos"],
-            ["Carlos Mendes", "Analista de Produto"],
-            ["Julia Santos", "Designer de Produto"],
-            ["Ricardo Souza", "Product Owner"],
-            ["Ana Costa", "UX Researcher"],
-            ["Pedro Almeida", "Analista de Negócios"],
-            ["Luciana Dias", "Scrum Master"],
-            ["Marcos Vieira", "Analista de Produto Jr."],
-            ["Isabela Moura", "Designer UI"],
-            ["João Pedro", "Estagiário de Produto"]
-          ]
-        },
-        {
-          id: "rh",
-          name: "Recursos Humanos",
-          people: [
-            ["Patricia Nunes", "Coordenadora de RH"],
-            ["Renata Gomes", "Analista de RH"],
-            ["Carla Mendes", "Business Partner"],
-            ["Helena Prado", "Analista de Departamento Pessoal"],
-            ["Diego Martins", "Recrutador"],
-            ["Vanessa Lopes", "Analista de Treinamento"],
-            ["André Luiz", "Coordenador de Benefícios"],
-            ["Mariana Silva", "Assistente de RH"]
-          ]
-        },
-        {
-          id: "marketing",
-          name: "Marketing",
-          people: [
-            ["Fernanda Lima", "Analista de Marketing"],
-            ["Camila Rocha", "Coordenadora de Comunicação"],
-            ["Thiago Barros", "Designer Gráfico"],
-            ["Gustavo Pires", "Analista de Conteúdo"],
-            ["Aline Teixeira", "Analista de Social Media"],
-            ["Rodrigo Cunha", "Analista de Branding"],
-            ["Eduarda Nascimento", "Analista de Eventos"],
-            ["Larissa Fonseca", "Analista de CRM"]
-          ]
-        },
-        {
-          id: "ti",
-          name: "Tecnologia da Informação",
-          people: [
-            ["Bruno Ferreira", "Analista de Infraestrutura"],
-            ["Eduardo Ramos", "Especialista em Segurança"],
-            ["Felipe Costa", "Desenvolvedor Backend"],
-            ["Gabriel Santos", "Desenvolvedor Frontend"],
-            ["Henrique Alves", "Analista de Suporte"],
-            ["Ivan Mendes", "Engenheiro de Dados"],
-            ["Juliana Ribeiro", "Analista de Sistemas"],
-            ["Kauã Oliveira", "DevOps Engineer"],
-            ["Leonardo Prado", "Arquiteto de Software"],
-            ["Marcelo Duarte", "Analista de QA"]
-          ]
-        },
-        {
-          id: "comercial",
-          name: "Comercial",
-          people: [
-            ["Alejandro López", "Executivo de Contas"],
-            ["Beatriz Cavalcanti", "Gerente Comercial"],
-            ["Caio Nunes", "Analista de Pré-vendas"],
-            ["Débora Lima", "Executiva de Contas"],
-            ["Elias Ferreira", "Coordenador Comercial"],
-            ["Fabiana Souza", "Analista de Propostas"],
-            ["Guilherme Rocha", "SDR"],
-            ["Helena Cardoso", "Customer Success"],
-            ["Igor Pimentel", "Analista Comercial"]
-          ]
-        },
-        {
-          id: "financeiro",
-          name: "Financeiro",
-          people: [
-            ["Júlia Campos", "Controller"],
-            ["Karina Dias", "Analista Financeiro"],
-            ["Luana Freitas", "Analista de Contas a Pagar"],
-            ["Milena Borges", "Analista de Contas a Receber"],
-            ["Nicolas Viana", "Assistente Financeiro"]
-          ]
-        }
-      ];
+      const statusLabels = { obrigatorio: "Obrigatório", opcional: "Opcional", flexivel: "Flexível" };
 
-      let avatarIndex = 0;
-
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatar;
-      }
-
-      function renderPerson(name, role) {
-        const avatar = nextAvatar();
+      function renderBenefit(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const statusClass = item.status === "obrigatorio" ? " benefit-card__status--obrigatorio" : item.status === "flexivel" ? " benefit-card__status--flexivel" : "";
+        const catBadgeClass = item.cat !== "saude" ? " benefit-card__cat--" + item.cat : "";
         return `
-          <article class="person-card">
-            <img class="person-card__avatar" src="${avatar}" alt="" />
-            <h2 class="person-card__name">${name}</h2>
-            <p class="person-card__role">${role}</p>
-            <div class="person-card__actions">
-              <a class="person-card__btn" href="#" aria-label="Enviar e-mail para ${name}"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+          <article class="benefit-card${featuredClass}" data-cat="${item.cat}">
+            <div class="benefit-card__head">
+              <div class="benefit-card__icon benefit-card__icon--${item.cat}" aria-hidden="true">
+                <i class="fa-solid ${catIcons[item.cat] || "fa-gift"}"></i>
+              </div>
+              <div class="benefit-card__main">
+                <h2 class="benefit-card__title">${item.title}</h2>
+                <p class="benefit-card__desc">${item.desc}</p>
+              </div>
             </div>
-          </article>
-        `;
+            <div class="benefit-card__tags">
+              <span class="benefit-card__cat${catBadgeClass}">${catLabels[item.cat] || item.cat}</span>
+              <span class="benefit-card__status${statusClass}">${statusLabels[item.status] || item.status}</span>
+            </div>
+            <div class="benefit-card__meta">
+              <span><i class="fa-solid fa-building" aria-hidden="true"></i> ${item.provider}</span>
+            </div>
+            <div class="benefit-card__footer">
+              <a class="benefit-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Consultar</a>
+              <div class="benefit-card__actions">
+                <a class="benefit-card__btn" href="#" aria-label="Portal ${item.title}"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a class="benefit-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
       }
 
-      function renderDepartment(dept) {
-        const cards = dept.people.map(function (person) {
-          return renderPerson(person[0], person[1]);
-        }).join("");
-
-        return `
-          <section class="dept-group" data-dept="${dept.id}" aria-label="${dept.name}">
-            <div class="dept-group__header">
-              <h2 class="dept-group__title">${dept.name}</h2>
-              <span class="dept-group__count">${dept.people.length} colaboradores</span>
-            </div>
-            <div class="directory-grid">
-              ${cards}
-            </div>
-          </section>
-        `;
-      }
-
-      const root = document.getElementById("directory-root");
-      const countEl = document.getElementById("directory-count");
-      const filters = document.getElementById("directory-filters");
-      let activeFilter = "all";
-
+      const root = document.getElementById("benefits-root");
+      const countEl = document.getElementById("benefits-count");
+      const filters = document.getElementById("benefits-filters");
       if (!root) return;
-
-      root.innerHTML = departments.map(renderDepartment).join("");
-
-      function updateCount(visibleTotal, groupCount) {
-        if (!countEl) return;
-        if (activeFilter === "all") {
-          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores em " + groupCount + " departamentos";
-        } else {
-          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores";
-        }
-      }
-
+      root.innerHTML = benefits.map(renderBenefit).join("");
       function applyFilter(filter) {
-        activeFilter = filter;
-        let visibleTotal = 0;
-        let groupCount = 0;
-
-        root.querySelectorAll(".dept-group").forEach(function (group) {
-          const match = filter === "all" || group.getAttribute("data-dept") === filter;
-          group.hidden = !match;
-          if (match) {
-            groupCount += 1;
-            visibleTotal += group.querySelectorAll(".person-card").length;
-          }
+        let visible = 0;
+        root.querySelectorAll(".benefit-card").forEach(function (card) {
+          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          card.hidden = !match;
+          if (match) visible += 1;
         });
-
-        updateCount(visibleTotal, groupCount);
+        if (countEl) countEl.textContent = "Exibindo " + visible + " benefício" + (visible === 1 ? "" : "s");
       }
-
       applyFilter("all");
-
       if (filters) {
         filters.addEventListener("click", function (event) {
           const chip = event.target.closest(".filter-chip");
           if (!chip) return;
-
-          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-            btn.classList.remove("is-active");
-          });
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
           chip.classList.add("is-active");
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
@@ -2124,3 +2102,4 @@
   </script>
 </body>
 </html>
+
