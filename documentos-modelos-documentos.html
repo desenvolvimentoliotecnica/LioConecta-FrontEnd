@@ -173,6 +173,9 @@
 
     .topbar__menu-heading {
       grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       padding: 8px 12px 4px;
       font-size: 9px;
       font-weight: 700;
@@ -182,6 +185,23 @@
       user-select: none;
     }
 
+    .topbar__menu-heading i {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      flex-shrink: 0;
+    }
+
+    .topbar__menu-heading--rh i { background: #fce7f3; color: #be185d; }
+    .topbar__menu-heading--financeiro i { background: #dcfce7; color: #15803d; }
+    .topbar__menu-heading--ti i { background: #ecfeff; color: #0891b2; }
+    .topbar__menu-heading--facilities i { background: #e0f2fe; color: #0369a1; }
+    .topbar__menu-heading--juridico i { background: #ede9fe; color: #6d28d9; }
+
     .topbar__menu-heading:not(:first-child) {
       margin-top: 4px;
       padding-top: 10px;
@@ -189,8 +209,24 @@
     }
 
     .topbar__dropdown-menu--services a {
-      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px 7px 16px;
       font-size: 12px;
+    }
+
+    .topbar__dropdown-menu--services a::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .topbar__dropdown-menu--services a:hover::before {
+      background: #64748b;
     }
 
 
@@ -1807,27 +1843,27 @@
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="topbar__dropdown-menu topbar__dropdown-menu--services" id="menu-servicos" role="menu">
-              <span class="topbar__menu-heading" role="presentation">RH &amp; Pessoas</span>
+              <span class="topbar__menu-heading topbar__menu-heading--rh" role="presentation"><i class="fa-solid fa-user-group" aria-hidden="true"></i> RH &amp; Pessoas</span>
               <a href="#" role="menuitem">Benefícios</a>
               <a href="#" role="menuitem">Contracheque</a>
               <a href="#" role="menuitem">Férias e ausências</a>
               <a href="#" role="menuitem">Solicitações RH</a>
               <a href="#" role="menuitem">Ponto eletrônico</a>
               <a href="#" role="menuitem">Vale-transporte</a>
-              <span class="topbar__menu-heading" role="presentation">Financeiro</span>
+              <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
               <a href="#" role="menuitem">Reembolso de despesas</a>
               <a href="#" role="menuitem">Adiantamento de viagem</a>
-              <span class="topbar__menu-heading" role="presentation">TI &amp; Suporte</span>
+              <span class="topbar__menu-heading topbar__menu-heading--ti" role="presentation"><i class="fa-solid fa-headset" aria-hidden="true"></i> TI &amp; Suporte</span>
               <a href="#" role="menuitem">Help Desk</a>
               <a href="#" role="menuitem">Solicitar equipamento</a>
               <a href="#" role="menuitem">Acesso a sistemas</a>
               <a href="#" role="menuitem">VPN e acesso remoto</a>
-              <span class="topbar__menu-heading" role="presentation">Facilities</span>
+              <span class="topbar__menu-heading topbar__menu-heading--facilities" role="presentation"><i class="fa-solid fa-building" aria-hidden="true"></i> Facilities</span>
               <a href="#" role="menuitem">Reservas de salas</a>
               <a href="#" role="menuitem">Reserva de veículos</a>
               <a href="#" role="menuitem">Crachá e visitantes</a>
               <a href="#" role="menuitem">Encomendas e correios</a>
-              <span class="topbar__menu-heading" role="presentation">Jurídico &amp; Compliance</span>
+              <span class="topbar__menu-heading topbar__menu-heading--juridico" role="presentation"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Jurídico &amp; Compliance</span>
               <a href="#" role="menuitem">Declarações e certidões</a>
               <a href="#" role="menuitem">Assinatura digital</a>
               <a href="#" role="menuitem">Seguro de vida</a>
