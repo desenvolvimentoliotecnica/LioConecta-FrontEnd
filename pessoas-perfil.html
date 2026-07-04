@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LioConecta — Perfil</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/pessoas-perfil.css" />
   <style>
     :root {
       --wf-bg: #eceff3;
@@ -828,431 +829,6 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — PERFIL COMPLETO */
-    .topbar__dropdown-menu a.is-active {
-      background: #ede9fe;
-      color: #6d28d9;
-    }
-
-    .profile-error {
-      padding: 24px;
-      background: #fff;
-      border: 1px dashed #fca5a5;
-      border-radius: var(--wf-radius);
-      color: #b91c1c;
-      text-align: center;
-    }
-
-    .profile-error a {
-      color: #6d28d9;
-    }
-
-    .profile-hero {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 24px;
-      margin-bottom: var(--wf-gap);
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: var(--wf-radius);
-      box-shadow:
-        0 2px 6px rgba(15, 23, 42, 0.06),
-        0 6px 16px rgba(15, 23, 42, 0.08);
-    }
-
-    .profile-hero__avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--profile-accent, #a78bfa);
-      flex-shrink: 0;
-    }
-
-    .profile-hero__name {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 4px;
-    }
-
-    .profile-hero__role {
-      font-size: 15px;
-      color: #475569;
-      margin-bottom: 10px;
-    }
-
-    .profile-hero__dept {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      background: var(--profile-badge-bg, #ede9fe);
-      color: var(--profile-badge-text, #6d28d9);
-    }
-
-    .profile-hero__actions {
-      margin-left: auto;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .profile-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-height: 38px;
-      padding: 0 14px;
-      border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      background: #f8fafc;
-      color: #475569;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .profile-btn:hover {
-      background: #f5f3ff;
-      color: #6d28d9;
-      border-color: #a78bfa;
-    }
-
-    .profile-btn--primary {
-      background: #6d28d9;
-      border-color: #6d28d9;
-      color: #fff;
-    }
-
-    .profile-btn--primary:hover {
-      background: #5b21b6;
-      border-color: #5b21b6;
-      color: #fff;
-    }
-
-    .profile-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: var(--wf-gap);
-      align-items: start;
-    }
-
-    .profile-card {
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: var(--wf-radius);
-      padding: 18px;
-      box-shadow:
-        0 2px 6px rgba(15, 23, 42, 0.06),
-        0 6px 16px rgba(15, 23, 42, 0.08);
-    }
-
-    .profile-card + .profile-card {
-      margin-top: var(--wf-gap);
-    }
-
-    .profile-card__title {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #94a3b8;
-      margin-bottom: 12px;
-    }
-
-    .profile-stat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .profile-stat {
-      padding: 10px;
-      border-radius: 8px;
-      background: #f8fafc;
-      border: 1px dashed var(--wf-border);
-      text-align: center;
-    }
-
-    .profile-stat__value {
-      display: block;
-      font-size: 20px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .profile-stat__label {
-      font-size: 11px;
-      color: #64748b;
-    }
-
-    .profile-contact-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .profile-contact-item {
-      display: grid;
-      gap: 2px;
-    }
-
-    .profile-contact-item__label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #94a3b8;
-    }
-
-    .profile-contact-item__value {
-      font-size: 13px;
-      color: #334155;
-      line-height: 1.45;
-    }
-
-    .profile-contact-item__value a {
-      color: #6d28d9;
-      text-decoration: none;
-    }
-
-    .profile-contact-item__value a:hover {
-      text-decoration: underline;
-    }
-
-    .profile-reports {
-      display: grid;
-      gap: 8px;
-    }
-
-    .profile-report {
-      display: grid;
-      grid-template-columns: 36px 1fr;
-      gap: 10px;
-      align-items: center;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px dashed var(--wf-border);
-      background: #f8fafc;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.15s ease, border-color 0.15s ease;
-    }
-
-    .profile-report:hover {
-      background: #f5f3ff;
-      border-color: #a78bfa;
-    }
-
-    .profile-report__avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid var(--wf-border);
-    }
-
-    .profile-report__name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1e293b;
-      line-height: 1.25;
-    }
-
-    .profile-report__role {
-      font-size: 11px;
-      color: #64748b;
-      line-height: 1.3;
-      margin-top: 1px;
-    }
-
-    .profile-reports-empty {
-      font-size: 13px;
-      color: #94a3b8;
-      line-height: 1.45;
-    }
-
-    .profile-panel {
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: var(--wf-radius);
-      padding: 20px 22px;
-      box-shadow:
-        0 2px 6px rgba(15, 23, 42, 0.06),
-        0 6px 16px rgba(15, 23, 42, 0.08);
-    }
-
-    .profile-panel + .profile-panel {
-      margin-top: var(--wf-gap);
-    }
-
-    .profile-panel__title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .profile-panel__title i {
-      color: #6d28d9;
-    }
-
-    .profile-bio {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #475569;
-    }
-
-    .profile-skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .profile-skill {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #f5f3ff;
-      border: 1px dashed #c4b5fd;
-      color: #6d28d9;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .profile-timeline {
-      display: grid;
-      gap: 0;
-      position: relative;
-      padding-left: 18px;
-    }
-
-    .profile-timeline::before {
-      content: "";
-      position: absolute;
-      left: 4px;
-      top: 8px;
-      bottom: 8px;
-      width: 2px;
-      background: #e2e8f0;
-    }
-
-    .profile-timeline__item {
-      position: relative;
-      padding: 0 0 18px 14px;
-    }
-
-    .profile-timeline__item:last-child {
-      padding-bottom: 0;
-    }
-
-    .profile-timeline__item::before {
-      content: "";
-      position: absolute;
-      left: -18px;
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #fff;
-      border: 2px solid #a78bfa;
-    }
-
-    .profile-timeline__date {
-      font-size: 11px;
-      font-weight: 700;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .profile-timeline__title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-top: 2px;
-    }
-
-    .profile-timeline__meta {
-      font-size: 12px;
-      color: #64748b;
-      margin-top: 2px;
-    }
-
-    .profile-timeline__note {
-      font-size: 13px;
-      color: #475569;
-      margin-top: 6px;
-      line-height: 1.45;
-    }
-
-    .profile-interactions {
-      display: grid;
-      gap: 10px;
-    }
-
-    .profile-interaction {
-      display: grid;
-      grid-template-columns: 40px 1fr auto;
-      gap: 12px;
-      align-items: start;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px dashed var(--wf-border);
-      background: #f8fafc;
-    }
-
-    .profile-interaction__icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: #ede9fe;
-      color: #6d28d9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .profile-interaction__title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1e293b;
-    }
-
-    .profile-interaction__detail {
-      font-size: 13px;
-      color: #64748b;
-      margin-top: 2px;
-      line-height: 1.4;
-    }
-
-    .profile-interaction__date {
-      font-size: 12px;
-      color: #94a3b8;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 960px) {
-      .profile-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-hero {
-        flex-wrap: wrap;
-      }
-
-      .profile-hero__actions {
-        margin-left: 0;
-        width: 100%;
-      }
-    }
     /* QUICK ACCESS */
     .quick-access {
       margin-bottom: var(--wf-gap);
@@ -1995,7 +1571,7 @@
               <a href="#" role="menuitem">Contracheque</a>
               <a href="#" role="menuitem">Férias e ausências</a>
               <a href="#" role="menuitem">Solicitações RH</a>
-              <a href="#" role="menuitem">Ponto eletrônico</a>
+              <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
               <a href="#" role="menuitem">Vale-transporte</a>
               <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
               <a href="#" role="menuitem">Reembolso de despesas</a>
@@ -2080,25 +1656,57 @@
         </div>
 
         <div id="profile-root" hidden>
+          <div class="profile-birthday-banner" id="profile-birthday-banner" hidden>
+            <div class="profile-birthday-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+            <div>
+              <div class="profile-birthday-banner__title" id="profile-birthday-title"></div>
+              <p class="profile-birthday-banner__text" id="profile-birthday-text"></p>
+            </div>
+            <a class="profile-birthday-banner__action" href="pessoas-aniversariantes.html">Ver aniversariantes</a>
+          </div>
+
           <section class="profile-hero">
             <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
-            <div>
-              <h1 class="profile-hero__name" id="profile-name"></h1>
+            <div class="profile-hero__main">
+              <div class="profile-hero__name-row">
+                <h1 class="profile-hero__name" id="profile-name"></h1>
+                <span class="profile-hero__pronouns" id="profile-pronouns"></span>
+              </div>
               <p class="profile-hero__role" id="profile-role"></p>
-              <span class="profile-hero__dept" id="profile-dept"></span>
+              <div class="profile-hero__meta">
+                <span class="profile-hero__dept" id="profile-dept"></span>
+                <span id="profile-badges"></span>
+              </div>
             </div>
             <div class="profile-hero__actions">
               <a class="profile-btn" id="profile-email-btn" href="#"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</a>
+              <a class="profile-btn" id="profile-teams-btn" href="#"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Teams</a>
+              <a class="profile-btn" id="profile-schedule-btn" href="#"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Agendar</a>
               <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
+              <button class="profile-btn" type="button" id="profile-vcard-btn"><i class="fa-regular fa-address-card" aria-hidden="true"></i> vCard</button>
+              <button class="profile-btn" type="button" id="profile-print-btn"><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir</button>
               <a class="profile-btn profile-btn--primary" id="profile-org-link" href="pessoas-organograma.html"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
             </div>
           </section>
+
+          <nav class="profile-mini-org" id="profile-mini-org" aria-label="Cadeia hierárquica"></nav>
+
+          <div class="profile-tabs" role="tablist" aria-label="Seções do perfil">
+            <button class="profile-tabs__btn is-active" type="button" role="tab" data-tab="overview" aria-selected="true">Visão geral</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="career" aria-selected="false">Carreira</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="activity" aria-selected="false">Atividade</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="documents" aria-selected="false">Documentos</button>
+          </div>
 
           <div class="profile-layout">
             <aside>
               <div class="profile-card">
                 <h2 class="profile-card__title">Resumo</h2>
                 <div class="profile-stat-grid" id="profile-stats"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Disponibilidade</h2>
+                <div class="profile-contact-list" id="profile-availability"></div>
               </div>
               <div class="profile-card">
                 <h2 class="profile-card__title">Dados pessoais</h2>
@@ -2108,37 +1716,101 @@
                 <h2 class="profile-card__title">Contato</h2>
                 <div class="profile-contact-list" id="profile-contact"></div>
               </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Mentor / Buddy</h2>
+                <div class="profile-contact-list" id="profile-mentor"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Colegas do time</h2>
+                <div class="profile-peers" id="profile-peers"></div>
+              </div>
               <div class="profile-card" id="profile-reports-card">
                 <h2 class="profile-card__title">Subordinados diretos</h2>
                 <div class="profile-reports" id="profile-reports"></div>
               </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Grupos</h2>
+                <div class="profile-groups-list" id="profile-groups"></div>
+              </div>
             </aside>
 
             <div>
-              <section class="profile-panel">
-                <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
-                <p class="profile-bio" id="profile-bio"></p>
-              </section>
+              <div class="profile-tab-panel" data-tab-panel="overview">
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                  <p class="profile-bio" id="profile-bio"></p>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                  <div class="profile-skills" id="profile-skills"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-language" aria-hidden="true"></i> Idiomas</h2>
+                  <div class="profile-lang-list" id="profile-languages"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-link" aria-hidden="true"></i> Links</h2>
+                  <div id="profile-links"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-user-group" aria-hidden="true"></i> Pessoas relacionadas</h2>
+                  <div id="profile-related"></div>
+                </section>
+              </div>
 
-              <section class="profile-panel">
-                <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
-                <div class="profile-skills" id="profile-skills"></div>
-              </section>
+              <div class="profile-tab-panel" data-tab-panel="career" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Projetos</h2>
+                  <div id="profile-projects"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
+                  <div class="profile-timeline" id="profile-education"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Certificações</h2>
+                  <div class="profile-timeline" id="profile-certifications"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                  <div class="profile-timeline" id="profile-history"></div>
+                </section>
+              </div>
 
-              <section class="profile-panel">
-                <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
-                <div class="profile-timeline" id="profile-education"></div>
-              </section>
+              <div class="profile-tab-panel" data-tab-panel="activity" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-gift" aria-hidden="true"></i> Reconhecimentos</h2>
+                  <div id="profile-recognitions"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Interações recentes</h2>
+                  <div class="profile-interactions" id="profile-interactions"></div>
+                </section>
+              </div>
 
-              <section class="profile-panel">
-                <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
-                <div class="profile-timeline" id="profile-history"></div>
-              </section>
+              <div class="profile-tab-panel" data-tab-panel="documents" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i> Documentos</h2>
+                  <div id="profile-documents"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i> Comunicados</h2>
+                  <div id="profile-communications"></div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              <section class="profile-panel">
-                <h2 class="profile-panel__title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Interações recentes</h2>
-                <div class="profile-interactions" id="profile-interactions"></div>
-              </section>
+        <div class="profile-vcard-modal" id="profile-vcard-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-vcard-title">
+          <div class="profile-vcard-modal__backdrop" data-close-vcard></div>
+          <div class="profile-vcard-modal__dialog">
+            <h2 class="profile-vcard-modal__title" id="profile-vcard-title">Cartão de visita</h2>
+            <img class="profile-vcard-modal__qr" id="profile-vcard-qr" src="" alt="QR code para contato" width="160" height="160" />
+            <p style="font-size:13px;color:#64748b;text-align:center;">Escaneie ou baixe o vCard para salvar o contato.</p>
+            <div class="profile-vcard-modal__actions">
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-vcard-download">Baixar vCard</button>
+              <button class="profile-btn" type="button" data-close-vcard>Fechar</button>
             </div>
           </div>
         </div>
@@ -2234,260 +1906,6 @@
     })();
   </script>
 
-  <script>
-    (function () {
-      const deptColors = {
-        Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
-        Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
-        "Recursos Humanos": { stroke: "#f9a8d4", badge: "#fce7f3", text: "#be185d" },
-        Marketing: { stroke: "#86efac", badge: "#dcfce7", text: "#15803d" },
-        TI: { stroke: "#67e8f9", badge: "#cffafe", text: "#0e7490" },
-        Comercial: { stroke: "#fdba74", badge: "#ffedd5", text: "#c2410c" },
-        Financeiro: { stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
-      };
-
-      const historyTypeLabels = {
-        atual: "Cargo atual",
-        promotion: "Promoção",
-        admission: "Admissão",
-        lateral: "Movimentação"
-      };
-
-      function getDeptColors(dept) {
-        return deptColors[dept] || deptColors.Executiva;
-      }
-
-      function getProfileId() {
-        return new URLSearchParams(window.location.search).get("id");
-      }
-
-      function formatDate(isoDate) {
-        const parts = isoDate.split("-");
-        if (parts.length !== 3) return isoDate;
-        return parts[2] + "/" + parts[1] + "/" + parts[0];
-      }
-
-      function renderStats(person) {
-        const stats = person.stats || {};
-        const items = [
-          { value: stats.tenureYears || 0, label: "Anos de casa" },
-          { value: stats.directReports || 0, label: "Reportes diretos" },
-          { value: stats.groups || 0, label: "Grupos" },
-          { value: stats.recognitions || 0, label: "Reconhecimentos" }
-        ];
-        return items.map(function (item) {
-          return (
-            '<div class="profile-stat">' +
-            '<span class="profile-stat__value">' + item.value + "</span>" +
-            '<span class="profile-stat__label">' + item.label + "</span>" +
-            "</div>"
-          );
-        }).join("");
-      }
-
-      function renderPersonalData(person) {
-        const personal = person.personal || {};
-
-        return (
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Nome completo</span><span class="profile-contact-item__value">' + (personal.fullName || person.name) + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Data de nascimento</span><span class="profile-contact-item__value">' + (personal.birthDate || "—") + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">CPF</span><span class="profile-contact-item__value">' + (personal.cpf || "—") + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">RG</span><span class="profile-contact-item__value">' + (personal.rg || "—") + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Estado civil</span><span class="profile-contact-item__value">' + (personal.maritalStatus || "—") + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Nacionalidade</span><span class="profile-contact-item__value">' + (personal.nationality || "—") + "</span></div>"
-        );
-      }
-
-      function renderContact(person) {
-        const contact = person.contact || {};
-        const managerHtml = person.managerId
-          ? '<a href="pessoas-perfil.html?id=' + person.managerId + '">' + person.managerName + "</a>"
-          : "—";
-
-        return (
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">E-mail</span><span class="profile-contact-item__value"><a href="mailto:' + contact.email + '">' + contact.email + "</a></span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Telefone / Ramal</span><span class="profile-contact-item__value">' + contact.phone + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Localização</span><span class="profile-contact-item__value">' + contact.location + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Microsoft Teams</span><span class="profile-contact-item__value">' + contact.teams + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Admissão</span><span class="profile-contact-item__value">' + person.admission + "</span></div>" +
-          '<div class="profile-contact-item"><span class="profile-contact-item__label">Reporta-se a</span><span class="profile-contact-item__value">' + managerHtml + "</span></div>"
-        );
-      }
-
-      function renderSkills(skills) {
-        return (skills || []).map(function (skill) {
-          return '<span class="profile-skill">' + skill + "</span>";
-        }).join("");
-      }
-
-      function renderEducation(education) {
-        if (!education || !education.length) {
-          return '<p class="profile-reports-empty">Nenhuma formação registrada.</p>';
-        }
-
-        return education.map(function (item) {
-          return (
-            '<article class="profile-timeline__item">' +
-            '<div class="profile-timeline__date">' + item.period + " · " + (item.note || item.type) + "</div>" +
-            '<div class="profile-timeline__title">' + item.degree + "</div>" +
-            '<div class="profile-timeline__meta">' + item.institution + "</div>" +
-            "</article>"
-          );
-        }).join("");
-      }
-
-      function renderHistory(history) {
-        return (history || []).map(function (item) {
-          return (
-            '<article class="profile-timeline__item">' +
-            '<div class="profile-timeline__date">' + item.date + " · " + (historyTypeLabels[item.type] || item.type) + "</div>" +
-            '<div class="profile-timeline__title">' + item.title + "</div>" +
-            '<div class="profile-timeline__meta">' + item.dept + "</div>" +
-            '<p class="profile-timeline__note">' + item.note + "</p>" +
-            "</article>"
-          );
-        }).join("");
-      }
-
-      function renderInteractions(interactions) {
-        return (interactions || []).map(function (item) {
-          return (
-            '<article class="profile-interaction">' +
-            '<div class="profile-interaction__icon"><i class="' + item.icon + '" aria-hidden="true"></i></div>' +
-            "<div>" +
-            '<div class="profile-interaction__title">' + item.title + "</div>" +
-            '<div class="profile-interaction__detail">' + item.detail + "</div>" +
-            "</div>" +
-            '<time class="profile-interaction__date" datetime="' + item.date + '">' + formatDate(item.date) + "</time>" +
-            "</article>"
-          );
-        }).join("");
-      }
-
-      function renderDirectReports(person, allPeople) {
-        const reports = (allPeople || []).filter(function (entry) {
-          return entry.managerId === person.id;
-        });
-
-        reports.sort(function (a, b) {
-          return a.name.localeCompare(b.name, "pt-BR");
-        });
-
-        if (!reports.length) {
-          return '<p class="profile-reports-empty">Nenhum subordinado direto registrado.</p>';
-        }
-
-        return reports.map(function (report) {
-          return (
-            '<a class="profile-report" href="pessoas-perfil.html?id=' + encodeURIComponent(report.id) + '">' +
-            '<img class="profile-report__avatar" src="' + report.img + '" alt="" />' +
-            "<div>" +
-            '<div class="profile-report__name">' + report.name + "</div>" +
-            '<div class="profile-report__role">' + report.title + "</div>" +
-            "</div></a>"
-          );
-        }).join("");
-      }
-
-      function buildPeopleIndex(allPeople) {
-        const index = {};
-        (allPeople || []).forEach(function (entry) {
-          index[entry.id] = entry;
-        });
-        return index;
-      }
-
-      function buildHierarchyChain(person, peopleIndex) {
-        const chain = [];
-        let managerId = person.managerId;
-
-        while (managerId && peopleIndex[managerId]) {
-          chain.unshift(peopleIndex[managerId]);
-          managerId = peopleIndex[managerId].managerId;
-        }
-
-        return chain;
-      }
-
-      function renderBreadcrumb(person, allPeople) {
-        const peopleIndex = buildPeopleIndex(allPeople);
-        const chain = buildHierarchyChain(person, peopleIndex);
-        let html = '<a href="pessoas-organograma.html">Organograma</a>';
-
-        chain.forEach(function (ancestor) {
-          html +=
-            '<span class="breadcrumb__sep">/</span>' +
-            '<a href="pessoas-perfil.html?id=' + encodeURIComponent(ancestor.id) + '">' +
-            ancestor.name +
-            "</a>";
-        });
-
-        html += '<span class="breadcrumb__sep">/</span>';
-        html += '<span class="breadcrumb__current">' + person.name + "</span>";
-
-        document.getElementById("profile-breadcrumb-trail").innerHTML = html;
-      }
-
-      function renderProfile(person, allPeople) {
-        const colors = getDeptColors(person.dept);
-        const root = document.getElementById("profile-root");
-        root.style.setProperty("--profile-accent", colors.stroke);
-        root.style.setProperty("--profile-badge-bg", colors.badge);
-        root.style.setProperty("--profile-badge-text", colors.text);
-
-        document.title = "LioConecta — " + person.name;
-        renderBreadcrumb(person, allPeople);
-        document.getElementById("profile-avatar").src = person.img;
-        document.getElementById("profile-avatar").alt = "Foto de " + person.name;
-        document.getElementById("profile-name").textContent = person.name;
-        document.getElementById("profile-role").textContent = person.title;
-        document.getElementById("profile-dept").textContent = person.dept;
-        document.getElementById("profile-bio").textContent = person.bio;
-        document.getElementById("profile-stats").innerHTML = renderStats(person);
-        document.getElementById("profile-personal").innerHTML = renderPersonalData(person);
-        document.getElementById("profile-contact").innerHTML = renderContact(person);
-        document.getElementById("profile-reports").innerHTML = renderDirectReports(person, allPeople);
-        document.getElementById("profile-skills").innerHTML = renderSkills(person.skills);
-        document.getElementById("profile-education").innerHTML = renderEducation(person.education);
-        document.getElementById("profile-history").innerHTML = renderHistory(person.history);
-        document.getElementById("profile-interactions").innerHTML = renderInteractions(person.interactions);
-
-        const emailBtn = document.getElementById("profile-email-btn");
-        emailBtn.href = "mailto:" + person.contact.email;
-
-        document.getElementById("profile-message-btn").onclick = function () {
-          alert("Mensagem para " + person.name + " — chat interno em breve.");
-        };
-
-        root.hidden = false;
-      }
-
-      function showError() {
-        document.getElementById("profile-error").hidden = false;
-      }
-
-      fetch("data/pessoas-perfis.json")
-        .then(function (response) {
-          if (!response.ok) throw new Error("fetch failed");
-          return response.json();
-        })
-        .then(function (data) {
-          const profileId = getProfileId();
-          const person = (data.people || []).find(function (entry) {
-            return entry.id === profileId || String(entry.orgChartId) === profileId;
-          });
-
-          if (!person) {
-            showError();
-            return;
-          }
-
-          renderProfile(person, data.people || []);
-        })
-        .catch(function () {
-          showError();
-        });
-    })();
-  </script>
+  <script src="assets/pessoas-perfil.js"></script>
 </body>
 </html>

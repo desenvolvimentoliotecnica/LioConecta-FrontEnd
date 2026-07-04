@@ -179,6 +179,56 @@ interaction_templates = [
     ("group", "Atividade em grupo", "Interagiu no grupo departamental da intranet.", "fa-solid fa-users"),
 ]
 
+pronouns_options = ["Ele/Dele", "Ela/Dela", "Elu/Delu"]
+work_models = ["Presencial", "Híbrido", "Remoto"]
+floors = ["2º andar", "3º andar", "4º andar"]
+
+projects_by_dept = {
+    "Executiva": [("proj-estrategia", "Plano Estratégico 2026", "Patrocinador", "ativo")],
+    "Produto": [("proj-portal", "Portal LioConecta", "Gerente", "ativo")],
+    "Recursos Humanos": [("proj-cultura", "Programa de Cultura", "Líder", "ativo")],
+    "Marketing": [("proj-rebrand", "Rebranding LioTécnica", "Coordenador", "ativo")],
+    "TI": [("proj-infra", "Modernização de Infra", "Tech Lead", "ativo")],
+    "Comercial": [("proj-expansao", "Expansão Comercial 2026", "Executivo", "ativo")],
+    "Financeiro": [("proj-orcamento", "Orçamento Anual", "Analista", "concluído")],
+}
+
+certifications_by_dept = {
+    "Executiva": [("Executive Leadership Program", "Harvard Business Publishing", "2023")],
+    "Produto": [("Certified Scrum Product Owner", "Scrum Alliance", "2024")],
+    "Recursos Humanos": [("SHRM-CP", "SHRM", "2024")],
+    "Marketing": [("Google Analytics Certification", "Google", "2024")],
+    "TI": [("AWS Certified Solutions Architect", "AWS", "2025")],
+    "Comercial": [("Salesforce Administrator", "Salesforce", "2024")],
+    "Financeiro": [("CFA Level I", "CFA Institute", "2023")],
+}
+
+groups_by_dept = {
+    "executiva": ("grupo-diretoria", "Diretoria Executiva", 8),
+    "produto": ("grupo-produto", "Produto & Inovação", 14),
+    "rh": ("grupo-rh", "People & Cultura", 12),
+    "marketing": ("grupo-marketing", "Marketing Interno", 16),
+    "ti": ("grupo-ti", "Engenharia & TI", 18),
+    "comercial": ("grupo-comercial", "Time Comercial", 15),
+    "financeiro": ("grupo-financeiro", "Finanças & Controladoria", 11),
+}
+
+recognition_titles = [
+    ("Espírito colaborativo", "Destaque por apoiar colegas em entregas críticas."),
+    ("Entrega excepcional", "Reconhecimento por superar metas do trimestre."),
+    ("Inovação prática", "Ideia implementada que melhorou processos internos."),
+]
+
+default_documents = [
+    ("Manual do Colaborador", "manual", "documentos-manuais-procedimentos.html", "2026-05-15"),
+    ("Política de Segurança da Informação", "politica", "documentos-politicas-internas.html", "2026-04-20"),
+]
+
+default_communications = [
+    ("Campanha de segurança da informação", "urgente", "comunicados-urgentes.html", "2026-05-10"),
+    ("Comunicado departamental", "departamental", "comunicados-departamentais.html", "2026-06-01"),
+]
+
 avatar_i = 0
 
 
@@ -191,16 +241,162 @@ def avatar_for(entry):
     return a
 
 
+def make_skill_objects(skill_names, seed):
+    return [
+        {
+            "name": name,
+            "level": 3 + (seed + index) % 3,
+            "endorsements": 5 + (seed + index * 3) % 20,
+        }
+        for index, name in enumerate(skill_names)
+    ]
+
+
+def make_links(sid, dept, seed):
+    links = {
+        "linkedin": f"https://www.linkedin.com/in/{sid}",
+    }
+    if dept == "TI":
+        links["github"] = f"https://github.com/{sid}"
+    if dept in ("Marketing", "Produto") and seed % 2 == 0:
+        links["portfolio"] = f"https://{sid}.liotecnica.com.br"
+    return links
+
+
+def make_projects(dept, admission, seed):
+    templates = projects_by_dept.get(dept, projects_by_dept["Produto"])
+    projects = []
+    for index, (proj_id, name, role, status) in enumerate(templates[: 1 + seed % 2]):
+        projects.append(
+            {
+                "id": proj_id,
+                "name": name,
+                "role": role,
+                "status": status,
+                "since": admission,
+            }
+        )
+    return projects
+
+
+def make_groups(dept_id, seed):
+    group_id, name, members = groups_by_dept.get(dept_id, groups_by_dept["produto"])
+    role = "Administrador" if seed % 7 == 0 else "Membro"
+    return [
+        {
+            "id": group_id,
+            "name": name,
+            "role": role,
+            "members": members + (seed % 4),
+            "url": "grupos-meus-grupos.html",
+        }
+    ]
+
+
+def make_recognitions(person, seed):
+    author_id = person.get("managerId")
+    author_name = person.get("managerName") or "LioConecta"
+    recognitions = []
+    for index, (title, detail) in enumerate(recognition_titles[: 1 + seed % 2]):
+        day = max(28 - index * 7 - (seed % 4), 1)
+        recognitions.append(
+            {
+                "date": f"2026-06-{day:02d}",
+                "author": author_name,
+                "authorId": author_id or "julio-schwartzman",
+                "title": title,
+                "detail": detail,
+                "feedUrl": f"intranet-wireframe.html#post-{20 + seed + index:03d}",
+            }
+        )
+    return recognitions
+
+
+def make_documents(seed):
+    return [
+        {
+            "title": title,
+            "type": doc_type,
+            "url": url,
+            "date": date,
+        }
+        for title, doc_type, url, date in default_documents[: 1 + seed % 2]
+    ]
+
+
+def make_communications(seed):
+    return [
+        {
+            "title": title,
+            "type": comm_type,
+            "url": url,
+            "date": date,
+        }
+        for title, comm_type, url, date in default_communications[: 1 + seed % 2]
+    ]
+
+
+def enrich_mentor_buddy(people):
+    by_id = {person["id"]: person for person in people}
+    by_dept = {}
+    for person in people:
+        by_dept.setdefault(person["deptId"], []).append(person)
+
+    for person in people:
+        if "ceo" in person.get("tags", []):
+            continue
+
+        seed = sum(ord(c) for c in person["name"])
+        admission_year = int(person["admission"].split()[-1])
+        manager = by_id.get(person["managerId"]) if person.get("managerId") else None
+        director = next(
+            (
+                candidate
+                for candidate in people
+                if candidate["deptId"] == person["deptId"]
+                and "director" in candidate.get("tags", [])
+            ),
+            manager,
+        )
+
+        if admission_year >= 2024:
+            dept_peers = [
+                peer
+                for peer in by_dept.get(person["deptId"], [])
+                if peer["id"] != person["id"] and "member" in peer.get("tags", [])
+            ]
+            if dept_peers:
+                buddy = dept_peers[seed % len(dept_peers)]
+                person["buddy"] = {
+                    "id": buddy["id"],
+                    "name": buddy["name"],
+                    "since": person["admission"],
+                }
+            if director:
+                person["mentor"] = {
+                    "id": director["id"],
+                    "name": director["name"],
+                    "since": person["admission"],
+                }
+        elif manager:
+            person["mentor"] = {
+                "id": manager["id"],
+                "name": manager["name"],
+                "since": person["admission"],
+            }
+
+
 def make_person(entry, dept, dept_id, manager_id, manager_name, org_id, tags):
     sid = slug(entry["name"])
     seed = sum(ord(c) for c in entry["name"])
     months = ["jan", "mar", "mai", "jul", "set", "nov"]
     year = 2018 + (seed % 7)
     month = months[seed % len(months)]
+    admission = f"{month} de {year}"
     email = slug(entry["name"]).replace("-", ".") + "@liotecnica.com.br"
     phone = f"(19) 3{1000 + seed % 9000:04d}"
     loc = "Campinas, SP · Matriz" if dept == "Executiva" else f"Campinas, SP · {dept}"
-    skills = skills_by_dept[dept][:3] + [entry["title"].split()[0]]
+    skill_names = skills_by_dept[dept][:3] + [entry["title"].split()[0]]
     history = [
         {
             "date": str(year),
@@ -237,6 +433,7 @@ def make_person(entry, dept, dept_id, manager_id, manager_name, org_id, tags):
                 "title": title,
                 "detail": detail,
                 "icon": icon,
+                "feedUrl": f"intranet-wireframe.html#post-{19 + seed + i:03d}",
             }
         )
     direct = 6 if "ceo" in tags else (3 if "director" in tags else 0)
@@ -256,17 +453,31 @@ def make_person(entry, dept, dept_id, manager_id, manager_name, org_id, tags):
         )
     birth_year = 1978 + (seed % 18)
     birth_day = 1 + (seed % 28)
-    birth_month = birth_months[seed % 12]
+    birth_month_num = (seed % 12) + 1
+    birth_month = birth_months[birth_month_num - 1]
     cpf_suffix = f"{seed % 100:02d}"
     rg_number = f"{10 + seed % 89:02d}.{seed % 1000:03d}.{900 + seed % 100:03d}-{seed % 10}"
+    bio = (
+        f"{entry['name']} atua em {dept} na LioConecta, com foco em {title_lower} "
+        "e colaboração entre áreas."
+    )
     personal = {
         "fullName": entry["name"],
         "birthDate": f"{birth_day} de {birth_month} de {birth_year}",
+        "birthMonth": birth_month_num,
+        "birthDay": birth_day,
         "cpf": f"***.***.***-{cpf_suffix}",
         "rg": rg_number,
         "maritalStatus": marital_statuses[seed % len(marital_statuses)],
         "nationality": "Brasileira",
+        "visibility": "rh-only" if seed % 4 == 0 else "public",
     }
+    projects = make_projects(dept, admission, seed)
+    groups = make_groups(dept_id, seed)
+    documents = make_documents(seed)
+    person_stub = {"managerId": manager_id, "managerName": manager_name}
+    recognitions = make_recognitions(person_stub, seed)
+    role_years = max(1, min(2026 - year, 2026 - year))
     return {
         "id": sid,
         "orgChartId": org_id,
@@ -284,18 +495,57 @@ def make_person(entry, dept, dept_id, manager_id, manager_name, org_id, tags):
             "location": loc,
             "teams": "@" + entry["name"],
         },
-        "admission": f"{month} de {year}",
-        "bio": f"{entry['name']} atua em {dept} na LioConecta, com foco em {title_lower} e colaboração entre áreas.",
+        "admission": admission,
+        "bio": bio,
+        "aboutMe": (
+            f"Sou {entry['name'].split()[0]}, {entry['title'].lower()} na área de {dept}. "
+            f"Trabalho na LioTécnica desde {admission} e gosto de conectar pessoas, "
+            "compartilhar conhecimento e entregar resultados com impacto."
+        ),
+        "pronouns": pronouns_options[seed % len(pronouns_options)],
+        "availability": {
+            "workModel": work_models[seed % len(work_models)],
+            "schedule": "9h–18h",
+            "timezone": "America/Sao_Paulo",
+            "floor": floors[seed % len(floors)],
+            "room": f"{dept} · Sala {300 + seed % 20}",
+        },
+        "links": make_links(sid, dept, seed),
+        "roleTenure": {
+            "years": role_years,
+            "since": admission,
+            "title": entry["title"],
+        },
         "personal": personal,
-        "skills": skills,
+        "skills": make_skill_objects(skill_names, seed),
+        "languages": [
+            {"name": "Português", "level": "Nativo"},
+            {"name": "Inglês", "level": "Avançado" if seed % 2 == 0 else "Intermediário"},
+        ],
         "education": education,
+        "certifications": [
+            {
+                "name": name,
+                "issuer": issuer,
+                "year": cert_year,
+                "type": "certificacao",
+            }
+            for name, issuer, cert_year in certifications_by_dept.get(dept, [])
+        ],
         "history": history,
+        "projects": projects,
+        "groups": groups,
+        "recognitions": recognitions,
+        "documents": documents,
+        "communications": make_communications(seed),
         "interactions": interactions,
         "stats": {
             "tenureYears": 2026 - year,
             "directReports": direct,
-            "groups": 2 + (seed % 3),
-            "recognitions": 5 + (seed % 15),
+            "groups": len(groups),
+            "recognitions": len(recognitions) + (seed % 8),
+            "documentsCount": len(documents),
+            "projectsCount": len(projects),
         },
     }
 
@@ -335,7 +585,9 @@ for branch in branches:
         )
         oid += 1
 
-output = {"version": 1, "updatedAt": "2026-07-04", "people": people}
+enrich_mentor_buddy(people)
+
+output = {"version": 2, "updatedAt": "2026-07-04", "people": people}
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data_dir = os.path.join(root, "data")
 os.makedirs(data_dir, exist_ok=True)
