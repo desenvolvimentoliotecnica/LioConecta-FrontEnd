@@ -43,6 +43,10 @@ npm run preview
 - `/pessoas/diretorio`
 - `/pessoas/perfil?id=maria-silva`
 - `/servicos/beneficios`
+- `/servicos/help-desk`
+- `/servicos/solicitar-equipamento`
+- `/servicos/acesso-sistemas`
+- `/servicos/vpn-acesso-remoto`
 
 ## Tag de snapshot pré-migração
 
