@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Arquivo de Comunicados</title>
+  <title>LioConecta — Explorar Grupos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -755,111 +755,272 @@
       gap: var(--wf-gap);
     }
 
-    .tag--archive {
-      background: #f1f5f9;
-      color: #475569;
-    }
-
+    /* PAGE: GRUPOS — EXPLORAR GRUPOS */
     .filter-chip.is-active {
-      background: #f1f5f9;
-      border-color: #94a3b8;
-      color: #334155;
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0369a1;
     }
 
     .topbar__dropdown-menu a.is-active {
-      background: #f1f5f9;
-      color: #334155;
+      background: #e0f2fe;
+      color: #0369a1;
     }
 
-    .official-card {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      background: #fff;
-      border: 1px dashed #94a3b8;
+    .welcome-banner {
+      margin-bottom: var(--wf-gap);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px dashed #7dd3fc;
       border-radius: var(--wf-radius);
-      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .welcome-banner__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .welcome-banner__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0c4a6e;
+      margin-bottom: 4px;
+    }
+
+    .welcome-banner__text {
+      font-size: 13px;
+      color: #075985;
+      line-height: 1.45;
+    }
+
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .group-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px;
       box-shadow:
-        0 4px 10px rgba(15, 23, 42, 0.08),
-        0 12px 28px rgba(15, 23, 42, 0.12);
-    }
-
-    .official-card--featured {
-      grid-template-columns: 280px 1fr;
-      background: #f8fafc;
-    }
-
-    .official-card__media {
-      min-height: 160px;
-      background: #f1f5f9;
-      overflow: hidden;
-    }
-
-    .official-card__media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .official-card__body {
-      padding: 18px 20px;
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
       display: flex;
       flex-direction: column;
+      gap: 10px;
+      min-height: 168px;
+    }
+
+    .group-card.is-highlight {
+      border-color: #7dd3fc;
+      background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
+    }
+
+    .group-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .group-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
       justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .group-card__icon--dept { background: #ecfeff; color: #0891b2; border-color: #67e8f9; }
+    .group-card__icon--project { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .group-card__icon--interest { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+    .group-card__icon--community { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+
+    .group-card__main {
+      flex: 1;
       min-width: 0;
     }
 
-    .official-card__meta {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
+    .group-card__name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
     }
 
-    .official-card__date {
-      font-size: 12px;
+    .group-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .group-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .group-card__type {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .group-card__highlight {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .group-card__highlight--new {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .group-card__access {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .group-card__access--open {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .group-card__unread {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .group-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
       color: var(--wf-text-muted);
     }
 
-    .official-card__author {
+    .group-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .group-card__footer {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
     }
 
-    .official-card__author .avatar {
-      width: 24px;
-      height: 24px;
-      border-width: 1px;
+    .group-card__actions {
+      display: flex;
+      gap: 4px;
     }
 
-    .official-card__title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .official-card--featured .official-card__title {
-      font-size: 22px;
-    }
-
-    .official-card__excerpt {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--wf-text);
-      margin-bottom: 12px;
-    }
-
-    .official-card__cta {
-      font-size: 13px;
-      font-weight: 600;
+    .group-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
       color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .group-card__btn:hover {
+      background: #f0f9ff;
+      color: #0369a1;
+      border-color: #7dd3fc;
+    }
+
+    .group-card__join {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #0284c7;
+      border: 1px solid #0284c7;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .group-card__join:hover {
+      background: #0369a1;
+      border-color: #0369a1;
+    }
+
+    .group-card__join--approval {
+      background: #fff;
+      color: #0369a1;
+      border: 1px dashed #7dd3fc;
+    }
+
+    .group-card__join--approval:hover {
+      background: #f0f9ff;
+    }
+
+    .group-card__enter {
+      font-size: 11px;
+      font-weight: 600;
+      color: #0f766e;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .group-card__enter:hover {
+      color: #134e4a;
     }
 
     .page-empty-note {
@@ -869,15 +1030,15 @@
       text-align: center;
     }
 
-    @media (max-width: 900px) {
-      .official-card,
-      .official-card--featured {
-        grid-template-columns: 1fr;
+    @media (max-width: 1100px) {
+      .groups-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
+    }
 
-      .official-card__media {
-        height: 140px;
-        min-height: 140px;
+    @media (max-width: 640px) {
+      .groups-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1535,7 +1696,7 @@
           <a href="intranet-wireframe.html">Feed</a>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1548,7 +1709,7 @@
               <a href="comunicados-oficiais.html" role="menuitem">Oficiais</a>
               <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
               <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
-              <a href="comunicados-arquivo.html" role="menuitem" class="is-active">Arquivo</a>
+              <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
             </div>
           </div>
           <div class="topbar__dropdown">
@@ -1571,7 +1732,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1582,7 +1743,7 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-grupos" role="menu">
               <a href="grupos-meus-grupos.html" role="menuitem">Meus grupos</a>
-              <a href="grupos-explorar-grupos.html" role="menuitem">Explorar grupos</a>
+              <a href="grupos-explorar-grupos.html" role="menuitem" class="is-active">Explorar grupos</a>
               <a href="#" role="menuitem">Comunidades</a>
               <a href="#" role="menuitem">Criar grupo</a>
             </div>
@@ -1677,142 +1838,46 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="comunicados-oficiais.html">Comunicados</a>
+            <span>Grupos</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Arquivo</span>
+            <span class="breadcrumb__current">Explorar grupos</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Arquivo de Comunicados</h1>
+              <h1 class="page-header__title">Explorar Grupos</h1>
               <p class="page-header__desc">
-                Histórico de comunicados já publicados. Consulte orientações anteriores, políticas e registros institucionais.
+                Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender com outros times e participar de novas iniciativas.
               </p>
             </div>
           </div>
         </header>
 
-        <div class="page-toolbar">
-          <div class="page-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button">Todos</button>
-            <button class="filter-chip" type="button">2026</button>
-            <button class="filter-chip" type="button">2025</button>
-            <button class="filter-chip" type="button">Oficiais</button>
-            <button class="filter-chip" type="button">Departamentais</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar no arquivo...
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-compass"></i></div>
+          <div>
+            <div class="welcome-banner__title">34 grupos disponíveis para explorar</div>
+            <p class="welcome-banner__text">Encontre grupos abertos para entrar imediatamente ou solicite participação nos que exigem aprovação do administrador.</p>
           </div>
         </div>
 
-        <section class="official-list" aria-label="Arquivo de comunicados">
-          <article class="official-card official-card--featured">
-            <div class="official-card__media">
-              <img src="bg-news.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">15 mai 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Diretoria
-                </div>
-              </div>
-              <h2 class="official-card__title">Resultados do primeiro trimestre e prioridades do semestre</h2>
-              <p class="official-card__excerpt">
-                Registro do comunicado institucional com o balanço do trimestre e as diretrizes de execução para as áreas.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo →</div>
-            </div>
-          </article>
+        <div class="page-toolbar">
+          <div class="page-filters" id="explore-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="popular">Populares</button>
+            <button class="filter-chip" type="button" data-filter="recent">Recentes</button>
+            <button class="filter-chip" type="button" data-filter="departamental">Departamentais</button>
+            <button class="filter-chip" type="button" data-filter="projeto">Projetos</button>
+            <button class="filter-chip" type="button" data-filter="abertos">Abertos</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar grupos para participar...
+          </div>
+        </div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-news-innovation.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">02 abr 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-ti.png" alt="" />
-                  Tecnologia da Informação
-                </div>
-              </div>
-              <h2 class="official-card__title">Migração concluída do ambiente de colaboração</h2>
-              <p class="official-card__excerpt">
-                Comunicado histórico sobre a conclusão da migração de ferramentas e os novos padrões de uso para os times.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo →</div>
-            </div>
-          </article>
+        <div class="groups-grid" id="explore-root" aria-label="Grupos disponíveis"></div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-celebration.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">18 dez 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
-              </div>
-              <h2 class="official-card__title">Encerramento do ano e calendário de recesso</h2>
-              <p class="official-card__excerpt">
-                Orientações de recesso, plantões e contatos de emergência publicados no final de 2025.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo →</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-marketing-event.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">10 nov 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Marketing
-                </div>
-              </div>
-              <h2 class="official-card__title">Cobertura e materiais do evento anual de integração</h2>
-              <p class="official-card__excerpt">
-                Galeria, apresentações e resumo das atividades do evento anual, mantidos para consulta das áreas.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo →</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-poll.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">22 set 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
-              </div>
-              <h2 class="official-card__title">Resultado da pesquisa de clima organizacional</h2>
-              <p class="official-card__excerpt">
-                Síntese dos resultados e planos de ação definidos a partir da pesquisa de clima do segundo semestre de 2025.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo →</div>
-            </div>
-          </article>
-        </section>
-
-        <p class="page-empty-note">Exibindo 5 comunicados no arquivo</p>
+        <p class="page-empty-note" id="explore-count">Exibindo 12 grupos</p>
 
       </main>
 
@@ -1908,75 +1973,248 @@
 
   <script>
     (function () {
-      const commentPool = [
-        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
-        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
-        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
-        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
-        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
-        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
-        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
-        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
-        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
-        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
-        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
-        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
-        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
-        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
-        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
-        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
-        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
-        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
-        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
-        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
-        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
-        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
-        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
-        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
+      const typeLabels = {
+        departamental: "Departamental",
+        projeto: "Projeto",
+        interesse: "Interesse",
+        comunidade: "Comunidade"
+      };
+
+      const typeIcons = {
+        departamental: "fa-building",
+        projeto: "fa-diagram-project",
+        interesse: "fa-heart",
+        comunidade: "fa-users"
+      };
+
+      const groups = [
+        {
+          id: "engenharia-qualidade",
+          name: "Engenharia de Qualidade",
+          desc: "Padrões de QA, testes automatizados e boas práticas de entrega contínua.",
+          type: "departamental",
+          members: 37,
+          posts: "120+ posts",
+          popular: true,
+          recent: false,
+          access: "open"
+        },
+        {
+          id: "data-analytics",
+          name: "Data & Analytics",
+          desc: "Dashboards, indicadores, BI e cultura data-driven na LioConecta.",
+          type: "departamental",
+          members: 29,
+          posts: "86 posts",
+          popular: true,
+          recent: false,
+          access: "approval"
+        },
+        {
+          id: "customer-success",
+          name: "Customer Success",
+          desc: "Retenção, NPS, jornada do cliente e playbooks de suporte.",
+          type: "departamental",
+          members: 21,
+          posts: "54 posts",
+          popular: false,
+          recent: false,
+          access: "open"
+        },
+        {
+          id: "hackathon-2026",
+          name: "Hackathon 2026",
+          desc: "Inscrições, squads, desafios e cronograma do hackathon interno.",
+          type: "projeto",
+          members: 64,
+          posts: "12 posts",
+          popular: true,
+          recent: true,
+          access: "open"
+        },
+        {
+          id: "mentorias-lio",
+          name: "Mentorias Lio",
+          desc: "Programa de mentoria cruzada entre áreas e trilhas de desenvolvimento.",
+          type: "comunidade",
+          members: 48,
+          posts: "31 posts",
+          popular: false,
+          recent: true,
+          access: "approval"
+        },
+        {
+          id: "fotografia-corp",
+          name: "Fotografia Corporativa",
+          desc: "Registros de eventos, ensaios internos e banco de imagens da marca.",
+          type: "interesse",
+          members: 17,
+          posts: "22 posts",
+          popular: false,
+          recent: false,
+          access: "open"
+        },
+        {
+          id: "voluntariado-lio",
+          name: "Voluntariado Lio",
+          desc: "Ações sociais, campanhas de doação e projetos com ONGs parceiras.",
+          type: "comunidade",
+          members: 56,
+          posts: "44 posts",
+          popular: true,
+          recent: false,
+          access: "open"
+        },
+        {
+          id: "agile-coaches",
+          name: "Agile Coaches",
+          desc: "Cerimônias, frameworks ágeis, facilitação e troca entre Scrum Masters.",
+          type: "interesse",
+          members: 26,
+          posts: "67 posts",
+          popular: false,
+          recent: false,
+          access: "approval"
+        },
+        {
+          id: "expansao-latam",
+          name: "Expansão LATAM",
+          desc: "Operação internacional, localização e alinhamentos da expansão regional.",
+          type: "projeto",
+          members: 14,
+          posts: "18 posts",
+          popular: false,
+          recent: true,
+          access: "approval"
+        },
+        {
+          id: "wellbeing-saude",
+          name: "Wellbeing & Saúde",
+          desc: "Saúde mental, ergonomia, pausas ativas e iniciativas de bem-estar.",
+          type: "interesse",
+          members: 39,
+          posts: "9 posts",
+          popular: false,
+          recent: true,
+          access: "open"
+        },
+        {
+          id: "privacidade-lgpd",
+          name: "Privacidade e LGPD",
+          desc: "Governança de dados, políticas de privacidade e conformidade regulatória.",
+          type: "departamental",
+          members: 13,
+          posts: "41 posts",
+          popular: false,
+          recent: false,
+          access: "approval"
+        },
+        {
+          id: "inovacao-aberta",
+          name: "Inovação Aberta",
+          desc: "Parcerias externas, POCs, labs de inovação e desafios abertos.",
+          type: "projeto",
+          members: 33,
+          posts: "27 posts",
+          popular: false,
+          recent: false,
+          access: "open"
+        }
       ];
 
-      function shuffle(list) {
-        const items = list.slice();
-        for (let i = items.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
-        }
-        return items;
-      }
+      function renderGroup(group) {
+        const highlightClass = group.popular || group.recent ? " is-highlight" : "";
+        const iconClass = group.type === "comunidade" ? "community" : group.type === "projeto" ? "project" : group.type === "interesse" ? "interest" : "dept";
 
-      function renderComment(comment) {
+        let highlightBadge = "";
+        if (group.popular) {
+          highlightBadge = '<span class="group-card__highlight">Popular</span>';
+        } else if (group.recent) {
+          highlightBadge = '<span class="group-card__highlight group-card__highlight--new">Novo</span>';
+        }
+
+        const accessLabel = group.access === "open" ? "Aberto" : "Aprovação";
+        const accessClass = group.access === "open" ? " group-card__access--open" : "";
+        const joinLabel = group.access === "open" ? "Participar" : "Solicitar entrada";
+        const joinClass = group.access === "open" ? "group-card__join" : "group-card__join group-card__join--approval";
+
         return `
-          <div class="comment">
-            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
-            <div>
-              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
-              <div class="comment__text">${comment.text}</div>
+          <article class="group-card${highlightClass}" data-type="${group.type}" data-popular="${group.popular ? "true" : "false"}" data-recent="${group.recent ? "true" : "false"}" data-access="${group.access}">
+            <div class="group-card__head">
+              <div class="group-card__icon group-card__icon--${iconClass}" aria-hidden="true">
+                <i class="fa-solid ${typeIcons[group.type] || "fa-users"}"></i>
+              </div>
+              <div class="group-card__main">
+                <h2 class="group-card__name">${group.name}</h2>
+                <p class="group-card__desc">${group.desc}</p>
+              </div>
             </div>
-          </div>
+            <div class="group-card__tags">
+              <span class="group-card__type">${typeLabels[group.type] || group.type}</span>
+              ${highlightBadge}
+              <span class="group-card__access${accessClass}">${accessLabel}</span>
+            </div>
+            <div class="group-card__meta">
+              <span><i class="fa-solid fa-user" aria-hidden="true"></i> ${group.members} membros</span>
+              <span><i class="fa-regular fa-message" aria-hidden="true"></i> ${group.posts}</span>
+            </div>
+            <div class="group-card__footer">
+              <a class="${joinClass}" href="#">${joinLabel}</a>
+              <div class="group-card__actions">
+                <a class="group-card__btn" href="#" aria-label="Ver detalhes de ${group.name}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
+                <a class="group-card__btn" href="#" aria-label="Salvar ${group.name}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
         `;
       }
 
-      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
-      let available = shuffle(commentPool);
+      const root = document.getElementById("explore-root");
+      const countEl = document.getElementById("explore-count");
+      const filters = document.getElementById("explore-filters");
 
-      posts.forEach(function (post) {
-        const total = Math.floor(Math.random() * 3) + 1;
-        const picked = [];
+      if (!root) return;
 
-        for (let i = 0; i < total; i += 1) {
-          if (!available.length) available = shuffle(commentPool);
-          picked.push(available.shift());
+      root.innerHTML = groups.map(renderGroup).join("");
+
+      function applyFilter(filter) {
+        let visible = 0;
+
+        root.querySelectorAll(".group-card").forEach(function (card) {
+          const type = card.getAttribute("data-type");
+          const popular = card.getAttribute("data-popular") === "true";
+          const recent = card.getAttribute("data-recent") === "true";
+          const access = card.getAttribute("data-access");
+          let match = filter === "all";
+
+          if (filter === "popular") match = popular;
+          else if (filter === "recent") match = recent;
+          else if (filter === "abertos") match = access === "open";
+          else if (filter !== "all") match = type === filter;
+
+          card.hidden = !match;
+          if (match) visible += 1;
+        });
+
+        if (countEl) {
+          countEl.textContent = "Exibindo " + visible + " grupo" + (visible === 1 ? "" : "s");
         }
+      }
 
-        const section = document.createElement("div");
-        section.className = "comments";
-        section.innerHTML = `
-          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
-          ${picked.map(renderComment).join("")}
-          <div class="comments__input">Escreva um comentário...</div>
-        `;
-        post.appendChild(section);
-      });
+      applyFilter("all");
+
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
+            btn.classList.remove("is-active");
+          });
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
     })();
   </script>
 </body>
