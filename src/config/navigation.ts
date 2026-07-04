@@ -65,6 +65,13 @@ export const facilitiesLinks: NavLinkItem[] = [
   { label: "Reserva de veículos", path: "/servicos/reserva-veiculos" },
   { label: "Crachá e visitantes", path: "/servicos/cracha-visitantes" },
   { label: "Encomendas e correios", path: "/servicos/encomendas-correios" },
+  { label: "Limpeza e higienização", path: "/servicos/limpeza" },
+  { label: "Manutenção predial", path: "/servicos/manutencao-predial" },
+  { label: "Copiadora e impressão", path: "/servicos/copiadora" },
+  { label: "Estacionamento", path: "/servicos/estacionamento" },
+  { label: "Refeitório e copa", path: "/servicos/refeitorio" },
+  { label: "Climatização", path: "/servicos/climatizacao" },
+  { label: "Gestão de resíduos", path: "/servicos/gestao-residuos" },
 ];
 
 export const allServicosLinks: NavLinkItem[] = [...servicosLinks, ...tiLinks, ...facilitiesLinks];

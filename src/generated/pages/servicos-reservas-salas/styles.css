@@ -588,25 +588,74 @@ flex-wrap: wrap;
 .benefit-card__icon--hibrido,
 .benefit-card__icon--disponivel,
 .benefit-card__icon--evento,
-.benefit-card__icon--retirada {
+.benefit-card__icon--retirada,
+.benefit-card__icon--rotina,
+.benefit-card__icon--profunda,
+.benefit-card__icon--emergencial,
+.benefit-card__icon--eletrica,
+.benefit-card__icon--hidraulica,
+.benefit-card__icon--civil,
+.benefit-card__icon--preventiva,
+.benefit-card__icon--impressao,
+.benefit-card__icon--digitalizacao,
+.benefit-card__icon--plotagem,
+.benefit-card__icon--suprimento,
+.benefit-card__icon--vaga,
+.benefit-card__icon--mensalista,
+.benefit-card__icon--visitante,
+.benefit-card__icon--moto,
+.benefit-card__icon--almoco,
+.benefit-card__icon--cafe,
+.benefit-card__icon--copa,
+.benefit-card__icon--ar,
+.benefit-card__icon--ventilacao,
+.benefit-card__icon--temperatura,
+.benefit-card__icon--reciclavel,
+.benefit-card__icon--organico,
+.benefit-card__icon--perigoso,
+.benefit-card__icon--coleta {
   background: #f0f9ff; color: #0284c7; border-color: #bae6fd;
 }
 .benefit-card__cat--reuniao,
 .benefit-card__cat--carro,
 .benefit-card__cat--cracha,
-.benefit-card__cat--recebida { background: #dbeafe; color: #1e40af; }
+.benefit-card__cat--recebida,
+.benefit-card__cat--rotina,
+.benefit-card__cat--eletrica,
+.benefit-card__cat--impressao,
+.benefit-card__cat--vaga,
+.benefit-card__cat--almoco,
+.benefit-card__cat--ar,
+.benefit-card__cat--reciclavel { background: #dbeafe; color: #1e40af; }
 .benefit-card__cat--treinamento,
 .benefit-card__cat--van,
 .benefit-card__cat--visitante,
-.benefit-card__cat--enviada { background: #e0f2fe; color: #0369a1; }
+.benefit-card__cat--enviada,
+.benefit-card__cat--profunda,
+.benefit-card__cat--hidraulica,
+.benefit-card__cat--digitalizacao,
+.benefit-card__cat--mensalista,
+.benefit-card__cat--cafe,
+.benefit-card__cat--ventilacao,
+.benefit-card__cat--organico { background: #e0f2fe; color: #0369a1; }
 .benefit-card__cat--auditorio,
 .benefit-card__cat--utilitario,
 .benefit-card__cat--terceiro,
-.benefit-card__cat--pendente { background: #eff6ff; color: #2563eb; }
+.benefit-card__cat--pendente,
+.benefit-card__cat--emergencial,
+.benefit-card__cat--civil,
+.benefit-card__cat--plotagem,
+.benefit-card__cat--moto,
+.benefit-card__cat--evento,
+.benefit-card__cat--temperatura,
+.benefit-card__cat--perigoso { background: #eff6ff; color: #2563eb; }
 .benefit-card__cat--hibrido,
 .benefit-card__cat--disponivel,
-.benefit-card__cat--evento,
-.benefit-card__cat--retirada { background: #f0f9ff; color: #0284c7; }
+.benefit-card__cat--retirada,
+.benefit-card__cat--preventiva,
+.benefit-card__cat--suprimento,
+.benefit-card__cat--copa,
+.benefit-card__cat--coleta { background: #f0f9ff; color: #0284c7; }
 .benefit-card__status--disponivel { background: #dcfce7; color: #15803d; }
 .benefit-card__status--sob_analise { background: #fef3c7; color: #b45309; }
 .filter-chip.is-active {

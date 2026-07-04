@@ -51,6 +51,13 @@ npm run preview
 - `/servicos/reserva-veiculos`
 - `/servicos/cracha-visitantes`
 - `/servicos/encomendas-correios`
+- `/servicos/limpeza`
+- `/servicos/manutencao-predial`
+- `/servicos/copiadora`
+- `/servicos/estacionamento`
+- `/servicos/refeitorio`
+- `/servicos/climatizacao`
+- `/servicos/gestao-residuos`
 
 ## Tag de snapshot pré-migração
 

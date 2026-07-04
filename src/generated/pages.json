@@ -243,5 +243,54 @@
     "route": "/servicos/encomendas-correios",
     "hasScript": true,
     "externals": []
+  },
+  {
+    "id": "servicos-limpeza",
+    "htmlFile": "servicos-limpeza.html",
+    "route": "/servicos/limpeza",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-manutencao-predial",
+    "htmlFile": "servicos-manutencao-predial.html",
+    "route": "/servicos/manutencao-predial",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-copiadora",
+    "htmlFile": "servicos-copiadora.html",
+    "route": "/servicos/copiadora",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-estacionamento",
+    "htmlFile": "servicos-estacionamento.html",
+    "route": "/servicos/estacionamento",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-refeitorio",
+    "htmlFile": "servicos-refeitorio.html",
+    "route": "/servicos/refeitorio",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-climatizacao",
+    "htmlFile": "servicos-climatizacao.html",
+    "route": "/servicos/climatizacao",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-gestao-residuos",
+    "htmlFile": "servicos-gestao-residuos.html",
+    "route": "/servicos/gestao-residuos",
+    "hasScript": true,
+    "externals": []
   }
 ]
