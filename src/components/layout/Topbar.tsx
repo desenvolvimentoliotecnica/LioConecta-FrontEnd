@@ -10,6 +10,7 @@ import {
   pessoasLinks,
   servicosHeadings,
   tiLinks,
+  facilitiesLinks,
   allServicosLinks,
 } from "../../config/navigation";
 import { closeOtherMenus } from "./NotificationsMenu";
@@ -106,10 +107,11 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[3].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[3].icon}`} aria-hidden="true" /> {servicosHeadings[3].label}
             </span>
-            <a href="#" role="menuitem">Reservas de salas</a>
-            <a href="#" role="menuitem">Reserva de veículos</a>
-            <a href="#" role="menuitem">Crachá e visitantes</a>
-            <a href="#" role="menuitem">Encomendas e correios</a>
+            {facilitiesLinks.map((item) => (
+              <NavLink key={item.path} to={item.path} role="menuitem" className={({ isActive }) => (isActive ? "is-active" : undefined)} onClick={() => setOpen(false)}>
+                {item.label}
+              </NavLink>
+            ))}
             <span className={`topbar__menu-heading ${servicosHeadings[4].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[4].icon}`} aria-hidden="true" /> {servicosHeadings[4].label}
             </span>

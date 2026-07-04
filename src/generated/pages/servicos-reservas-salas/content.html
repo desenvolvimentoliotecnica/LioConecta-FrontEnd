@@ -1,0 +1,43 @@
+<header class="page-header">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Início</a>
+    <span class="breadcrumb__sep">/</span>
+    <span>Serviços</span>
+    <span class="breadcrumb__sep">/</span>
+    <span>Facilities</span>
+    <span class="breadcrumb__sep">/</span>
+    <span class="breadcrumb__current">Reservas de salas</span>
+  </nav>
+  <div class="page-header__row">
+    <div>
+      <h1 class="page-header__title">Reservas de salas</h1>
+      <p class="page-header__desc">Consulte disponibilidade, reserve salas de reunião e gerencie seus agendamentos nas unidades Liotécnica.</p>
+    </div>
+  </div>
+</header>
+
+<div class="welcome-banner">
+  <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-door-open"></i></div>
+  <div>
+    <div class="welcome-banner__title">12 salas disponíveis para reserva</div>
+    <p class="welcome-banner__text">Reservas com até 30 dias de antecedência. Salas equipadas com TV, videoconferência e quadro. Cancelamento gratuito até 2h antes.</p>
+  </div>
+</div>
+
+<div class="page-toolbar">
+  <div class="page-filters" id="fac-salas-filters" role="group" aria-label="Filtros">
+    <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+    <button class="filter-chip" type="button" data-filter="reuniao">Reunião</button>
+    <button class="filter-chip" type="button" data-filter="treinamento">Treinamento</button>
+    <button class="filter-chip" type="button" data-filter="auditorio">Auditório</button>
+    <button class="filter-chip" type="button" data-filter="hibrido">Híbrido</button>
+  </div>
+  <div class="page-search">
+    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+    Buscar salas e horários...
+  </div>
+</div>
+
+<div class="benefits-grid" id="fac-salas-root" aria-label="Reservas de salas"></div>
+
+<p class="page-empty-note" id="fac-salas-count">Carregando...</p>

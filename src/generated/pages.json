@@ -215,5 +215,33 @@
     "route": "/servicos/vpn-acesso-remoto",
     "hasScript": true,
     "externals": []
+  },
+  {
+    "id": "servicos-reservas-salas",
+    "htmlFile": "servicos-reservas-salas.html",
+    "route": "/servicos/reservas-salas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-reserva-veiculos",
+    "htmlFile": "servicos-reserva-veiculos.html",
+    "route": "/servicos/reserva-veiculos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-cracha-visitantes",
+    "htmlFile": "servicos-cracha-visitantes.html",
+    "route": "/servicos/cracha-visitantes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-encomendas-correios",
+    "htmlFile": "servicos-encomendas-correios.html",
+    "route": "/servicos/encomendas-correios",
+    "hasScript": true,
+    "externals": []
   }
 ]

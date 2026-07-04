@@ -60,7 +60,14 @@ export const tiLinks: NavLinkItem[] = [
   { label: "VPN e acesso remoto", path: "/servicos/vpn-acesso-remoto" },
 ];
 
-export const allServicosLinks: NavLinkItem[] = [...servicosLinks, ...tiLinks];
+export const facilitiesLinks: NavLinkItem[] = [
+  { label: "Reservas de salas", path: "/servicos/reservas-salas" },
+  { label: "Reserva de veículos", path: "/servicos/reserva-veiculos" },
+  { label: "Crachá e visitantes", path: "/servicos/cracha-visitantes" },
+  { label: "Encomendas e correios", path: "/servicos/encomendas-correios" },
+];
+
+export const allServicosLinks: NavLinkItem[] = [...servicosLinks, ...tiLinks, ...facilitiesLinks];
 
 export const servicosHeadings = [
   { label: "RH & Pessoas", className: "topbar__menu-heading--rh", icon: "fa-user-group" },

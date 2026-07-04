@@ -47,6 +47,10 @@ npm run preview
 - `/servicos/solicitar-equipamento`
 - `/servicos/acesso-sistemas`
 - `/servicos/vpn-acesso-remoto`
+- `/servicos/reservas-salas`
+- `/servicos/reserva-veiculos`
+- `/servicos/cracha-visitantes`
+- `/servicos/encomendas-correios`
 
 ## Tag de snapshot pré-migração
 

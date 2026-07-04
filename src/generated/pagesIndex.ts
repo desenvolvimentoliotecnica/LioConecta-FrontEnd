@@ -44,6 +44,10 @@ import content_servicos_beneficios from "./pages/servicos-beneficios/content.htm
 import styles_servicos_beneficios from "./pages/servicos-beneficios/styles.css?inline";
 import content_servicos_contracheque from "./pages/servicos-contracheque/content.html?raw";
 import styles_servicos_contracheque from "./pages/servicos-contracheque/styles.css?inline";
+import content_servicos_cracha_visitantes from "./pages/servicos-cracha-visitantes/content.html?raw";
+import styles_servicos_cracha_visitantes from "./pages/servicos-cracha-visitantes/styles.css?inline";
+import content_servicos_encomendas_correios from "./pages/servicos-encomendas-correios/content.html?raw";
+import styles_servicos_encomendas_correios from "./pages/servicos-encomendas-correios/styles.css?inline";
 import content_servicos_ferias from "./pages/servicos-ferias/content.html?raw";
 import styles_servicos_ferias from "./pages/servicos-ferias/styles.css?inline";
 import content_servicos_help_desk from "./pages/servicos-help-desk/content.html?raw";
@@ -52,6 +56,10 @@ import content_servicos_ponto from "./pages/servicos-ponto/content.html?raw";
 import styles_servicos_ponto from "./pages/servicos-ponto/styles.css?inline";
 import content_servicos_reembolso from "./pages/servicos-reembolso/content.html?raw";
 import styles_servicos_reembolso from "./pages/servicos-reembolso/styles.css?inline";
+import content_servicos_reserva_veiculos from "./pages/servicos-reserva-veiculos/content.html?raw";
+import styles_servicos_reserva_veiculos from "./pages/servicos-reserva-veiculos/styles.css?inline";
+import content_servicos_reservas_salas from "./pages/servicos-reservas-salas/content.html?raw";
+import styles_servicos_reservas_salas from "./pages/servicos-reservas-salas/styles.css?inline";
 import content_servicos_rh from "./pages/servicos-rh/content.html?raw";
 import styles_servicos_rh from "./pages/servicos-rh/styles.css?inline";
 import content_servicos_solicitar_equipamento from "./pages/servicos-solicitar-equipamento/content.html?raw";
@@ -84,10 +92,14 @@ export const pageAssets: Record<string, { content: string; styles: string }> = {
   "servicos-adiantamento": { content: content_servicos_adiantamento, styles: styles_servicos_adiantamento },
   "servicos-beneficios": { content: content_servicos_beneficios, styles: styles_servicos_beneficios },
   "servicos-contracheque": { content: content_servicos_contracheque, styles: styles_servicos_contracheque },
+  "servicos-cracha-visitantes": { content: content_servicos_cracha_visitantes, styles: styles_servicos_cracha_visitantes },
+  "servicos-encomendas-correios": { content: content_servicos_encomendas_correios, styles: styles_servicos_encomendas_correios },
   "servicos-ferias": { content: content_servicos_ferias, styles: styles_servicos_ferias },
   "servicos-help-desk": { content: content_servicos_help_desk, styles: styles_servicos_help_desk },
   "servicos-ponto": { content: content_servicos_ponto, styles: styles_servicos_ponto },
   "servicos-reembolso": { content: content_servicos_reembolso, styles: styles_servicos_reembolso },
+  "servicos-reserva-veiculos": { content: content_servicos_reserva_veiculos, styles: styles_servicos_reserva_veiculos },
+  "servicos-reservas-salas": { content: content_servicos_reservas_salas, styles: styles_servicos_reservas_salas },
   "servicos-rh": { content: content_servicos_rh, styles: styles_servicos_rh },
   "servicos-solicitar-equipamento": { content: content_servicos_solicitar_equipamento, styles: styles_servicos_solicitar_equipamento },
   "servicos-vale-transporte": { content: content_servicos_vale_transporte, styles: styles_servicos_vale_transporte },
