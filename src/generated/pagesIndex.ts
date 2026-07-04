@@ -36,6 +36,8 @@ import content_pessoas_organograma from "./pages/pessoas-organograma/content.htm
 import styles_pessoas_organograma from "./pages/pessoas-organograma/styles.css?inline";
 import content_pessoas_perfil from "./pages/pessoas-perfil/content.html?raw";
 import styles_pessoas_perfil from "./pages/pessoas-perfil/styles.css?inline";
+import content_servicos_acesso_sistemas from "./pages/servicos-acesso-sistemas/content.html?raw";
+import styles_servicos_acesso_sistemas from "./pages/servicos-acesso-sistemas/styles.css?inline";
 import content_servicos_adiantamento from "./pages/servicos-adiantamento/content.html?raw";
 import styles_servicos_adiantamento from "./pages/servicos-adiantamento/styles.css?inline";
 import content_servicos_beneficios from "./pages/servicos-beneficios/content.html?raw";
@@ -44,14 +46,20 @@ import content_servicos_contracheque from "./pages/servicos-contracheque/content
 import styles_servicos_contracheque from "./pages/servicos-contracheque/styles.css?inline";
 import content_servicos_ferias from "./pages/servicos-ferias/content.html?raw";
 import styles_servicos_ferias from "./pages/servicos-ferias/styles.css?inline";
+import content_servicos_help_desk from "./pages/servicos-help-desk/content.html?raw";
+import styles_servicos_help_desk from "./pages/servicos-help-desk/styles.css?inline";
 import content_servicos_ponto from "./pages/servicos-ponto/content.html?raw";
 import styles_servicos_ponto from "./pages/servicos-ponto/styles.css?inline";
 import content_servicos_reembolso from "./pages/servicos-reembolso/content.html?raw";
 import styles_servicos_reembolso from "./pages/servicos-reembolso/styles.css?inline";
 import content_servicos_rh from "./pages/servicos-rh/content.html?raw";
 import styles_servicos_rh from "./pages/servicos-rh/styles.css?inline";
+import content_servicos_solicitar_equipamento from "./pages/servicos-solicitar-equipamento/content.html?raw";
+import styles_servicos_solicitar_equipamento from "./pages/servicos-solicitar-equipamento/styles.css?inline";
 import content_servicos_vale_transporte from "./pages/servicos-vale-transporte/content.html?raw";
 import styles_servicos_vale_transporte from "./pages/servicos-vale-transporte/styles.css?inline";
+import content_servicos_vpn_acesso_remoto from "./pages/servicos-vpn-acesso-remoto/content.html?raw";
+import styles_servicos_vpn_acesso_remoto from "./pages/servicos-vpn-acesso-remoto/styles.css?inline";
 
 export const pageAssets: Record<string, { content: string; styles: string }> = {
   "comunicados-arquivo": { content: content_comunicados_arquivo, styles: styles_comunicados_arquivo },
@@ -72,12 +80,16 @@ export const pageAssets: Record<string, { content: string; styles: string }> = {
   "pessoas-novos-colaboradores": { content: content_pessoas_novos_colaboradores, styles: styles_pessoas_novos_colaboradores },
   "pessoas-organograma": { content: content_pessoas_organograma, styles: styles_pessoas_organograma },
   "pessoas-perfil": { content: content_pessoas_perfil, styles: styles_pessoas_perfil },
+  "servicos-acesso-sistemas": { content: content_servicos_acesso_sistemas, styles: styles_servicos_acesso_sistemas },
   "servicos-adiantamento": { content: content_servicos_adiantamento, styles: styles_servicos_adiantamento },
   "servicos-beneficios": { content: content_servicos_beneficios, styles: styles_servicos_beneficios },
   "servicos-contracheque": { content: content_servicos_contracheque, styles: styles_servicos_contracheque },
   "servicos-ferias": { content: content_servicos_ferias, styles: styles_servicos_ferias },
+  "servicos-help-desk": { content: content_servicos_help_desk, styles: styles_servicos_help_desk },
   "servicos-ponto": { content: content_servicos_ponto, styles: styles_servicos_ponto },
   "servicos-reembolso": { content: content_servicos_reembolso, styles: styles_servicos_reembolso },
   "servicos-rh": { content: content_servicos_rh, styles: styles_servicos_rh },
+  "servicos-solicitar-equipamento": { content: content_servicos_solicitar_equipamento, styles: styles_servicos_solicitar_equipamento },
   "servicos-vale-transporte": { content: content_servicos_vale_transporte, styles: styles_servicos_vale_transporte },
+  "servicos-vpn-acesso-remoto": { content: content_servicos_vpn_acesso_remoto, styles: styles_servicos_vpn_acesso_remoto },
 };

@@ -53,6 +53,15 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Adiantamento de viagem", path: "/servicos/adiantamento-viagem" },
 ];
 
+export const tiLinks: NavLinkItem[] = [
+  { label: "Help Desk", path: "/servicos/help-desk" },
+  { label: "Solicitar equipamento", path: "/servicos/solicitar-equipamento" },
+  { label: "Acesso a sistemas", path: "/servicos/acesso-sistemas" },
+  { label: "VPN e acesso remoto", path: "/servicos/vpn-acesso-remoto" },
+];
+
+export const allServicosLinks: NavLinkItem[] = [...servicosLinks, ...tiLinks];
+
 export const servicosHeadings = [
   { label: "RH & Pessoas", className: "topbar__menu-heading--rh", icon: "fa-user-group" },
   { label: "Financeiro", className: "topbar__menu-heading--financeiro", icon: "fa-coins" },

@@ -187,5 +187,33 @@
     "route": "/servicos/adiantamento-viagem",
     "hasScript": true,
     "externals": []
+  },
+  {
+    "id": "servicos-help-desk",
+    "htmlFile": "servicos-help-desk.html",
+    "route": "/servicos/help-desk",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-solicitar-equipamento",
+    "htmlFile": "servicos-solicitar-equipamento.html",
+    "route": "/servicos/solicitar-equipamento",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-acesso-sistemas",
+    "htmlFile": "servicos-acesso-sistemas.html",
+    "route": "/servicos/acesso-sistemas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-vpn-acesso-remoto",
+    "htmlFile": "servicos-vpn-acesso-remoto.html",
+    "route": "/servicos/vpn-acesso-remoto",
+    "hasScript": true,
+    "externals": []
   }
 ]

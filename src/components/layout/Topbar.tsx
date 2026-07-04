@@ -9,7 +9,8 @@ import {
   isPessoasSectionActive,
   pessoasLinks,
   servicosHeadings,
-  servicosLinks,
+  tiLinks,
+  allServicosLinks,
 } from "../../config/navigation";
 import { closeOtherMenus } from "./NotificationsMenu";
 import { NotificationsMenu } from "./NotificationsMenu";
@@ -97,10 +98,11 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[2].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[2].icon}`} aria-hidden="true" /> {servicosHeadings[2].label}
             </span>
-            <a href="#" role="menuitem">Help Desk</a>
-            <a href="#" role="menuitem">Solicitar equipamento</a>
-            <a href="#" role="menuitem">Acesso a sistemas</a>
-            <a href="#" role="menuitem">VPN e acesso remoto</a>
+            {tiLinks.map((item) => (
+              <NavLink key={item.path} to={item.path} role="menuitem" className={({ isActive }) => (isActive ? "is-active" : undefined)} onClick={() => setOpen(false)}>
+                {item.label}
+              </NavLink>
+            ))}
             <span className={`topbar__menu-heading ${servicosHeadings[3].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[3].icon}`} aria-hidden="true" /> {servicosHeadings[3].label}
             </span>
@@ -158,7 +160,7 @@ export function Topbar() {
           <Dropdown label="Pessoas" menuId="menu-pessoas" items={pessoasLinks} />
           <Dropdown label="Grupos" menuId="menu-grupos" items={gruposLinks} />
           <Dropdown label="Documentos" menuId="menu-documentos" items={documentosLinks} />
-          <Dropdown label="Serviços" menuId="menu-servicos" items={servicosLinks} services />
+          <Dropdown label="Serviços" menuId="menu-servicos" items={allServicosLinks} services />
         </nav>
       </div>
 
