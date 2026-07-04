@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Novos Colaboradores</title>
+  <title>LioConecta — Formulários</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -755,23 +755,23 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — NOVOS COLABORADORES */
+    /* PAGE: DOCUMENTOS — FORMULÁRIOS */
     .filter-chip.is-active {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #15803d;
+      background: #ffedd5;
+      border-color: #fdba74;
+      color: #c2410c;
     }
 
     .topbar__dropdown-menu a.is-active {
-      background: #dcfce7;
-      color: #15803d;
+      background: #ffedd5;
+      color: #c2410c;
     }
 
     .welcome-banner {
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
-      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-      border: 1px dashed #86efac;
+      background: linear-gradient(135deg, #fffbeb 0%, #ffedd5 100%);
+      border: 1px dashed #fdba74;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -782,8 +782,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #dcfce7;
-      color: #15803d;
+      background: #ffedd5;
+      color: #ea580c;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -794,137 +794,179 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #14532d;
+      color: #9a3412;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #166534;
+      color: #c2410c;
       line-height: 1.45;
     }
 
-    .directory {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .dept-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .dept-group__header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--wf-border);
-    }
-
-    .dept-group__title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .dept-group__count {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-      font-weight: 500;
-    }
-
-    .directory-grid {
+    .docs-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    .person-card {
+    .doc-card {
       background: #fff;
       border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 14px;
       box-shadow:
         0 2px 6px rgba(15, 23, 42, 0.06),
         0 6px 16px rgba(15, 23, 42, 0.08);
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      grid-template-rows: auto auto auto auto;
-      column-gap: 10px;
-      row-gap: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 148px;
+    }
+
+    .doc-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #fdba74;
+      background: linear-gradient(135deg, #fff 0%, #fffbeb 100%);
+    }
+
+    .doc-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .doc-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
       align-items: center;
-      text-align: left;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
     }
 
-    .person-card__avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid var(--wf-border);
-      object-fit: cover;
-      grid-row: 1 / 5;
-      align-self: center;
+    .doc-card__icon--pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .doc-card__icon--doc { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .doc-card__icon--xlsx { background: #ecfdf5; color: #059669; border-color: #6ee7b7; }
+    .doc-card__icon--online { background: #fff7ed; color: #ea580c; border-color: #fdba74; }
+
+    .doc-card__main {
+      flex: 1;
+      min-width: 0;
     }
 
-    .person-card__name {
-      font-size: 13px;
+    .doc-card__title {
+      font-size: 14px;
       font-weight: 700;
       color: #1e293b;
-      margin: 0;
       line-height: 1.25;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-bottom: 4px;
     }
 
-    .person-card__role {
+    .doc-card__desc {
       font-size: 11px;
       color: var(--wf-text);
-      line-height: 1.3;
-      margin: 0;
-      grid-column: 2;
-      white-space: nowrap;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .person-card__dept {
-      font-size: 10px;
-      font-weight: 600;
+    .doc-card.is-featured .doc-card__desc {
+      -webkit-line-clamp: 3;
+    }
+
+    .doc-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .doc-card__format {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ffedd5;
+      color: #c2410c;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__format--doc { background: #eff6ff; color: #2563eb; }
+    .doc-card__format--xlsx { background: #ecfdf5; color: #059669; }
+    .doc-card__format--online { background: #fff7ed; color: #ea580c; }
+
+    .doc-card__area {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__area--rh { background: #fce7f3; color: #be185d; }
+    .doc-card__area--ti { background: #ecfeff; color: #0891b2; }
+    .doc-card__area--comercial { background: #ffedd5; color: #c2410c; }
+    .doc-card__area--financeiro { background: #dcfce7; color: #15803d; }
+    .doc-card__area--administrativo { background: #e0e7ff; color: #3730a3; }
+
+    .doc-card__version {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .doc-card__updated {
+      font-size: 9px;
+      font-weight: 700;
       padding: 2px 7px;
       border-radius: 999px;
       background: #dcfce7;
       color: #15803d;
-      grid-column: 2;
-      justify-self: start;
     }
 
-    .person-card__start {
+    .doc-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 10px;
       color: var(--wf-text-muted);
-      margin: 0;
-      grid-column: 2;
     }
 
-    .person-card__meta {
-      display: none;
-    }
-
-    .person-card__actions {
-      display: flex;
-      flex-direction: column;
+    .doc-card__meta span {
+      display: inline-flex;
+      align-items: center;
       gap: 4px;
-      grid-column: 3;
-      grid-row: 1 / 5;
-      align-self: center;
     }
 
-    .person-card__btn {
+    .doc-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .doc-card__actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .doc-card__btn {
       width: 28px;
       height: 28px;
       border: 1px dashed var(--wf-border);
@@ -939,10 +981,29 @@
       text-decoration: none;
     }
 
-    .person-card__btn:hover {
-      background: #ecfeff;
-      color: #0e7490;
-      border-color: #67e8f9;
+    .doc-card__btn:hover {
+      background: #fffbeb;
+      color: #c2410c;
+      border-color: #fdba74;
+    }
+
+    .doc-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #ea580c;
+      border: 1px solid #ea580c;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__open:hover {
+      background: #c2410c;
+      border-color: #c2410c;
     }
 
     .page-empty-note {
@@ -952,21 +1013,13 @@
       text-align: center;
     }
 
-    @media (max-width: 1200px) {
-      .directory-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
     @media (max-width: 900px) {
-      .directory-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .directory-grid {
+      .docs-grid {
         grid-template-columns: 1fr;
+      }
+
+      .doc-card.is-featured {
+        grid-column: auto;
       }
     }
 
@@ -1642,7 +1695,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1653,7 +1706,7 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
               <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
-              <a href="pessoas-novos-colaboradores.html" role="menuitem" class="is-active">Novos colaboradores</a>
+              <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
               <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
               <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
             </div>
@@ -1678,7 +1731,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1690,7 +1743,7 @@
             <div class="topbar__dropdown-menu" id="menu-documentos" role="menu">
               <a href="documentos-politicas-internas.html" role="menuitem">Políticas internas</a>
               <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
-              <a href="documentos-formularios.html" role="menuitem">Formulários</a>
+              <a href="documentos-formularios.html" role="menuitem" class="is-active">Formulários</a>
               <a href="#" role="menuitem">Modelos de documentos</a>
               <a href="#" role="menuitem">Biblioteca corporativa</a>
             </div>
@@ -1766,45 +1819,46 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span>Documentos</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Novos colaboradores</span>
+            <span class="breadcrumb__current">Formulários</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Novos Colaboradores</h1>
+              <h1 class="page-header__title">Formulários</h1>
               <p class="page-header__desc">
-                Conheça quem acabou de chegar à LioConecta. Dê boas-vindas, conecte-se com os novos times e acompanhe as admissões recentes.
+                Baixe modelos oficiais para solicitações, cadastros e registros internos. Utilize sempre a versão mais recente antes de preencher e encaminhar.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></div>
           <div>
-            <div class="welcome-banner__title">Boas-vindas aos novos membros!</div>
-            <p class="welcome-banner__text">Este mês entraram 7 colaboradores. Envie uma mensagem de acolhimento e ajude na integração.</p>
+            <div class="welcome-banner__title">14 formulários corporativos disponíveis</div>
+            <p class="welcome-banner__text">Modelos padronizados em PDF, Word e Excel, além de formulários online integrados ao portal. Dúvidas sobre preenchimento? Consulte o responsável da área indicada.</p>
           </div>
         </div>
 
         <div class="page-toolbar">
-          <div class="page-filters" id="newcomers-filters" role="group" aria-label="Filtros">
+          <div class="page-filters" id="forms-filters" role="group" aria-label="Filtros">
             <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
-            <button class="filter-chip" type="button" data-filter="jun-2026">Junho 2026</button>
-            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
+            <button class="filter-chip" type="button" data-filter="rh">RH</button>
+            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
             <button class="filter-chip" type="button" data-filter="ti">TI</button>
+            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
+            <button class="filter-chip" type="button" data-filter="administrativo">Administrativo</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar novos colaboradores...
+            Buscar formulários por nome ou área...
           </div>
         </div>
 
-        <div class="directory" id="newcomers-root" aria-label="Novos colaboradores por mês"></div>
+        <div class="docs-grid" id="forms-root" aria-label="Formulários corporativos"></div>
 
-        <p class="page-empty-note" id="newcomers-count">Exibindo 13 novos colaboradores</p>
+        <p class="page-empty-note" id="forms-count">Exibindo 14 formulários</p>
 
       </main>
 
@@ -1900,135 +1954,246 @@
 
   <script>
     (function () {
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
-      ];
+      const areaLabels = {
+        rh: "RH",
+        financeiro: "Financeiro",
+        ti: "TI",
+        comercial: "Comercial",
+        administrativo: "Administrativo"
+      };
 
-      const cohorts = [
+      const formatLabels = {
+        pdf: "PDF",
+        doc: "Word",
+        xlsx: "Excel",
+        online: "Online"
+      };
+
+      const formatIcons = {
+        pdf: "fa-file-pdf",
+        doc: "fa-file-word",
+        xlsx: "fa-file-excel",
+        online: "fa-globe"
+      };
+
+      const forms = [
         {
-          id: "jul-2026",
-          name: "Julho 2026",
-          people: [
-            { name: "Otávio Ribeiro", role: "Analista de Produto", dept: "Produto", deptId: "produto", start: "01 jul 2026" },
-            { name: "Paula Mendes", role: "Designer UI", dept: "Produto", deptId: "produto", start: "03 jul 2026" },
-            { name: "Rafael Costa", role: "Analista de RH", dept: "Recursos Humanos", deptId: "rh", start: "07 jul 2026" },
-            { name: "Simone Alves", role: "Analista de Marketing", dept: "Marketing", deptId: "marketing", start: "08 jul 2026" },
-            { name: "Tiago Nunes", role: "Desenvolvedor Frontend", dept: "TI", deptId: "ti", start: "10 jul 2026" },
-            { name: "Una Ferreira", role: "Executiva Comercial", dept: "Comercial", deptId: "comercial", start: "14 jul 2026" },
-            { name: "Vicente Lima", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", start: "15 jul 2026" }
-          ]
+          id: "req-ferias",
+          title: "Requisição de Férias",
+          desc: "Formulário oficial para solicitar férias, informar período desejado e encaminhar aprovação ao gestor e RH.",
+          area: "rh",
+          format: "pdf",
+          version: "v3.1",
+          date: "Mar/2026",
+          featured: true,
+          popular: true
         },
         {
-          id: "jun-2026",
-          name: "Junho 2026",
-          people: [
-            { name: "William Souza", role: "DevOps Engineer", dept: "TI", deptId: "ti", start: "02 jun 2026" },
-            { name: "Xavier Dias", role: "SDR", dept: "Comercial", deptId: "comercial", start: "09 jun 2026" },
-            { name: "Yasmin Teixeira", role: "Analista de Social Media", dept: "Marketing", deptId: "marketing", start: "16 jun 2026" },
-            { name: "Zilda Campos", role: "Assistente de RH", dept: "Recursos Humanos", deptId: "rh", start: "18 jun 2026" },
-            { name: "Amanda Rocha", role: "UX Researcher", dept: "Produto", deptId: "produto", start: "23 jun 2026" },
-            { name: "Bernardo Pires", role: "Analista de QA", dept: "TI", deptId: "ti", start: "30 jun 2026" }
-          ]
+          id: "solic-reembolso",
+          title: "Solicitação de Reembolso",
+          desc: "Planilha para lançamento de despesas corporativas, comprovantes e centro de custo para análise financeira.",
+          area: "financeiro",
+          format: "xlsx",
+          version: "v2.6",
+          date: "Jan/2026",
+          featured: false,
+          popular: true
+        },
+        {
+          id: "termo-equipamento",
+          title: "Termo de Responsabilidade de Equipamento",
+          desc: "Registro de entrega de notebook, celular ou periféricos corporativos com responsabilidade do colaborador.",
+          area: "ti",
+          format: "pdf",
+          version: "v1.9",
+          date: "Nov/2025",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "conflito-interesse",
+          title: "Declaração de Conflito de Interesse",
+          desc: "Formulário anual de transparência sobre vínculos, participações e situações que possam gerar conflito.",
+          area: "rh",
+          format: "pdf",
+          version: "v2.0",
+          date: "Dez/2025",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "pedido-compra",
+          title: "Pedido de Compra",
+          desc: "Modelo para requisição de materiais e serviços com descrição, quantidade, fornecedor e alçada de aprovação.",
+          area: "financeiro",
+          format: "xlsx",
+          version: "v4.2",
+          date: "Fev/2026",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "autorizacao-viagem",
+          title: "Autorização de Viagem",
+          desc: "Documento para solicitar viagens a trabalho: destino, datas, motivo, estimativa de custos e aprovadores.",
+          area: "financeiro",
+          format: "doc",
+          version: "v3.0",
+          date: "Out/2025",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "cadastro-fornecedor",
+          title: "Cadastro de Fornecedor",
+          desc: "Ficha completa para inclusão de novos fornecedores no ERP com dados fiscais, bancários e contatos.",
+          area: "financeiro",
+          format: "pdf",
+          version: "v2.3",
+          date: "Ago/2025",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "relatorio-horas",
+          title: "Relatório de Horas — Projeto",
+          desc: "Planilha de apontamento de horas por cliente, projeto e atividade para times comerciais e de delivery.",
+          area: "comercial",
+          format: "xlsx",
+          version: "v1.7",
+          date: "Mar/2026",
+          featured: false,
+          popular: true
+        },
+        {
+          id: "acesso-sistema",
+          title: "Solicitação de Acesso a Sistema",
+          desc: "Formulário para criar, alterar ou revogar permissões em sistemas corporativos e perfis de acesso.",
+          area: "ti",
+          format: "pdf",
+          version: "v5.1",
+          date: "Jan/2026",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "termo-epi",
+          title: "Termo de Entrega de EPI",
+          desc: "Registro de entrega e recebimento de equipamentos de proteção individual conforme normas de SST.",
+          area: "administrativo",
+          format: "pdf",
+          version: "v1.4",
+          date: "Set/2025",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "checklist-integracao",
+          title: "Check-list de Integração",
+          desc: "Lista de verificação para onboarding: documentos, treinamentos, acessos e entregas do primeiro dia.",
+          area: "rh",
+          format: "pdf",
+          version: "v2.2",
+          date: "Fev/2026",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "avaliacao-desempenho",
+          title: "Avaliação de Desempenho",
+          desc: "Formulário online do ciclo semestral de avaliação com metas, competências e feedback estruturado.",
+          area: "rh",
+          format: "online",
+          version: "2026.1",
+          date: "Mar/2026",
+          featured: false,
+          popular: true
+        },
+        {
+          id: "reserva-sala",
+          title: "Reserva de Sala de Reunião",
+          desc: "Formulário online para agendar salas, informar participantes e solicitar recursos audiovisuais.",
+          area: "administrativo",
+          format: "online",
+          version: "v1.0",
+          date: "Mar/2026",
+          featured: false,
+          popular: false
+        },
+        {
+          id: "solic-geral",
+          title: "Solicitação Geral ao RH",
+          desc: "Canal unificado para dúvidas, declarações, alterações cadastrais e demais demandas ao time de RH.",
+          area: "rh",
+          format: "online",
+          version: "v2.0",
+          date: "Jan/2026",
+          featured: false,
+          popular: false
         }
       ];
 
-      let avatarIndex = 0;
+      function renderForm(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const formatClass = item.format;
+        const formatBadgeClass = item.format === "doc" ? " doc-card__format--doc" : item.format === "xlsx" ? " doc-card__format--xlsx" : item.format === "online" ? " doc-card__format--online" : "";
+        const popularBadge = item.popular ? '<span class="doc-card__updated">Mais usado</span>' : "";
+        const primaryLabel = item.format === "online" ? "Preencher" : "Baixar";
+        const primaryIcon = item.format === "online" ? "fa-arrow-up-right-from-square" : "fa-download";
 
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatar;
-      }
-
-      function renderPerson(person) {
-        const avatar = nextAvatar();
         return `
-          <article class="person-card" data-dept="${person.deptId}">
-            <img class="person-card__avatar" src="${avatar}" alt="" />
-            <h2 class="person-card__name">${person.name}</h2>
-            <p class="person-card__role">${person.role}</p>
-            <span class="person-card__dept">${person.dept}</span>
-            <p class="person-card__start">Início: ${person.start}</p>
-            <div class="person-card__actions">
-              <a class="person-card__btn" href="#" aria-label="Dar boas-vindas a ${person.name}"><i class="fa-regular fa-hand-peace" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${person.name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${person.name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+          <article class="doc-card${featuredClass}" data-area="${item.area}">
+            <div class="doc-card__head">
+              <div class="doc-card__icon doc-card__icon--${formatClass}" aria-hidden="true">
+                <i class="fa-solid ${formatIcons[item.format] || "fa-file"}"></i>
+              </div>
+              <div class="doc-card__main">
+                <h2 class="doc-card__title">${item.title}</h2>
+                <p class="doc-card__desc">${item.desc}</p>
+              </div>
+            </div>
+            <div class="doc-card__tags">
+              <span class="doc-card__format${formatBadgeClass}">${formatLabels[item.format] || item.format}</span>
+              <span class="doc-card__area doc-card__area--${item.area}">${areaLabels[item.area] || item.area}</span>
+              <span class="doc-card__version">${item.version}</span>
+              ${popularBadge}
+            </div>
+            <div class="doc-card__meta">
+              <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Atualizado ${item.date}</span>
+            </div>
+            <div class="doc-card__footer">
+              <a class="doc-card__open" href="#"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>
+              <div class="doc-card__actions">
+                <a class="doc-card__btn" href="#" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
             </div>
           </article>
         `;
       }
 
-      function renderCohort(cohort) {
-        const cards = cohort.people.map(renderPerson).join("");
-        return `
-          <section class="dept-group" data-cohort="${cohort.id}" aria-label="${cohort.name}">
-            <div class="dept-group__header">
-              <h2 class="dept-group__title">${cohort.name}</h2>
-              <span class="dept-group__count">${cohort.people.length} admissões</span>
-            </div>
-            <div class="directory-grid">
-              ${cards}
-            </div>
-          </section>
-        `;
-      }
-
-      const root = document.getElementById("newcomers-root");
-      const countEl = document.getElementById("newcomers-count");
-      const filters = document.getElementById("newcomers-filters");
-      let activeFilter = "all";
+      const root = document.getElementById("forms-root");
+      const countEl = document.getElementById("forms-count");
+      const filters = document.getElementById("forms-filters");
 
       if (!root) return;
 
-      root.innerHTML = cohorts.map(renderCohort).join("");
-
-      function updateCount(visibleTotal, groupCount) {
-        if (!countEl) return;
-        if (activeFilter === "all") {
-          countEl.textContent = "Exibindo " + visibleTotal + " novos colaboradores em " + groupCount + " meses";
-        } else {
-          countEl.textContent = "Exibindo " + visibleTotal + " novos colaboradores";
-        }
-      }
+      root.innerHTML = forms.map(renderForm).join("");
 
       function applyFilter(filter) {
-        activeFilter = filter;
-        let visibleTotal = 0;
-        let groupCount = 0;
+        let visible = 0;
 
-        root.querySelectorAll(".dept-group").forEach(function (group) {
-          const cohortId = group.getAttribute("data-cohort");
-          let visibleInGroup = 0;
+        root.querySelectorAll(".doc-card").forEach(function (card) {
+          const area = card.getAttribute("data-area");
+          const match = filter === "all" || area === filter;
 
-          group.querySelectorAll(".person-card").forEach(function (card) {
-            const deptId = card.getAttribute("data-dept");
-            const match =
-              filter === "all" ||
-              filter === cohortId ||
-              filter === deptId;
-            card.hidden = !match;
-            if (match) visibleInGroup += 1;
-          });
-
-          group.hidden = visibleInGroup === 0;
-          if (visibleInGroup > 0) {
-            groupCount += 1;
-            visibleTotal += visibleInGroup;
-            const countLabel = group.querySelector(".dept-group__count");
-            if (countLabel && cohort) {
-              countLabel.textContent = visibleInGroup + " admissões";
-            }
-          }
+          card.hidden = !match;
+          if (match) visible += 1;
         });
 
-        updateCount(visibleTotal, groupCount);
+        if (countEl) {
+          countEl.textContent = "Exibindo " + visible + " formulário" + (visible === 1 ? "" : "s");
+        }
       }
 
       applyFilter("all");
