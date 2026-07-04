@@ -1,11 +1,14 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
+import { FeedComposer } from "../feed/FeedComposer";
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
 import { useFeedComments, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
 import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
+
+const FEED_GRID_MARKER = '<div class="feed-grid">';
 
 function injectPageStyles(pageId: string) {
   const assets = pageAssets[pageId];
@@ -50,6 +53,20 @@ export function LegacyPage() {
 
   const html = pageAssets[page.id]?.content ?? "";
 
+  if (page.id === "feed" && html.includes(FEED_GRID_MARKER)) {
+    const splitIndex = html.indexOf(FEED_GRID_MARKER);
+    const beforeFeedGrid = html.slice(0, splitIndex);
+    const feedGridAndAfter = html.slice(splitIndex);
+
+    return (
+      <main className="main" ref={mainRef}>
+        <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
+        <FeedComposer />
+        <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
+      </main>
+    );
+  }
+
   return (
     <main
       className="main"
@@ -76,6 +93,20 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
   }, [page.id]);
 
   const html = pageAssets[page.id]?.content ?? "";
+
+  if (page.id === "feed" && html.includes(FEED_GRID_MARKER)) {
+    const splitIndex = html.indexOf(FEED_GRID_MARKER);
+    const beforeFeedGrid = html.slice(0, splitIndex);
+    const feedGridAndAfter = html.slice(splitIndex);
+
+    return (
+      <main className="main" ref={mainRef}>
+        <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
+        <FeedComposer />
+        <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
+      </main>
+    );
+  }
 
   return (
     <main
