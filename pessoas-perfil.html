@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Comunicados Oficiais</title>
+  <title>LioConecta — Perfil</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -767,12 +767,6 @@
       cursor: pointer;
     }
 
-    .filter-chip.is-active {
-      background: #fff7ed;
-      border-color: var(--wf-announce-border);
-      color: #c2410c;
-    }
-
     .page-search {
       min-width: 220px;
       height: 36px;
@@ -792,116 +786,431 @@
       gap: var(--wf-gap);
     }
 
-    .official-card {
-      display: grid;
-      grid-template-columns: 220px 1fr;
+    /* PAGE: PESSOAS — PERFIL COMPLETO */
+    .topbar__dropdown-menu a.is-active {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .profile-error {
+      padding: 24px;
       background: #fff;
-      border: 1px dashed var(--wf-announce-border);
+      border: 1px dashed #fca5a5;
       border-radius: var(--wf-radius);
-      overflow: hidden;
-      box-shadow:
-        0 4px 10px rgba(15, 23, 42, 0.08),
-        0 12px 28px rgba(15, 23, 42, 0.12);
-    }
-
-    .official-card--featured {
-      grid-template-columns: 280px 1fr;
-      background: #fffaf3;
-    }
-
-    .official-card__media {
-      min-height: 160px;
-      background: #fff7ed;
-      overflow: hidden;
-    }
-
-    .official-card__media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .official-card__body {
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-width: 0;
-    }
-
-    .official-card__meta {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .official-card__date {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-    }
-
-    .official-card__author {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    .official-card__author .avatar {
-      width: 24px;
-      height: 24px;
-      border-width: 1px;
-    }
-
-    .official-card__title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .official-card--featured .official-card__title {
-      font-size: 22px;
-    }
-
-    .official-card__excerpt {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--wf-text);
-      margin-bottom: 12px;
-    }
-
-    .official-card__cta {
-      font-size: 13px;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    .page-empty-note {
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--wf-text-muted);
+      color: #b91c1c;
       text-align: center;
     }
 
-    @media (max-width: 900px) {
-      .official-card,
-      .official-card--featured {
+    .profile-error a {
+      color: #6d28d9;
+    }
+
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      margin-bottom: var(--wf-gap);
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: var(--wf-radius);
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .profile-hero__avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--profile-accent, #a78bfa);
+      flex-shrink: 0;
+    }
+
+    .profile-hero__name {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .profile-hero__role {
+      font-size: 15px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .profile-hero__dept {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--profile-badge-bg, #ede9fe);
+      color: var(--profile-badge-text, #6d28d9);
+    }
+
+    .profile-hero__actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .profile-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #475569;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .profile-btn:hover {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #a78bfa;
+    }
+
+    .profile-btn--primary {
+      background: #6d28d9;
+      border-color: #6d28d9;
+      color: #fff;
+    }
+
+    .profile-btn--primary:hover {
+      background: #5b21b6;
+      border-color: #5b21b6;
+      color: #fff;
+    }
+
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--wf-gap);
+      align-items: start;
+    }
+
+    .profile-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: var(--wf-radius);
+      padding: 18px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .profile-card + .profile-card {
+      margin-top: var(--wf-gap);
+    }
+
+    .profile-card__title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .profile-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .profile-stat {
+      padding: 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px dashed var(--wf-border);
+      text-align: center;
+    }
+
+    .profile-stat__value {
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .profile-stat__label {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .profile-contact-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-contact-item {
+      display: grid;
+      gap: 2px;
+    }
+
+    .profile-contact-item__label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #94a3b8;
+    }
+
+    .profile-contact-item__value {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .profile-contact-item__value a {
+      color: #6d28d9;
+      text-decoration: none;
+    }
+
+    .profile-contact-item__value a:hover {
+      text-decoration: underline;
+    }
+
+    .profile-reports {
+      display: grid;
+      gap: 8px;
+    }
+
+    .profile-report {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px dashed var(--wf-border);
+      background: #f8fafc;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .profile-report:hover {
+      background: #f5f3ff;
+      border-color: #a78bfa;
+    }
+
+    .profile-report__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--wf-border);
+    }
+
+    .profile-report__name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.25;
+    }
+
+    .profile-report__role {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.3;
+      margin-top: 1px;
+    }
+
+    .profile-reports-empty {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .profile-panel {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: var(--wf-radius);
+      padding: 20px 22px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .profile-panel + .profile-panel {
+      margin-top: var(--wf-gap);
+    }
+
+    .profile-panel__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-panel__title i {
+      color: #6d28d9;
+    }
+
+    .profile-bio {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    .profile-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .profile-skill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #f5f3ff;
+      border: 1px dashed #c4b5fd;
+      color: #6d28d9;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .profile-timeline {
+      display: grid;
+      gap: 0;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .profile-timeline::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .profile-timeline__item {
+      position: relative;
+      padding: 0 0 18px 14px;
+    }
+
+    .profile-timeline__item:last-child {
+      padding-bottom: 0;
+    }
+
+    .profile-timeline__item::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #a78bfa;
+    }
+
+    .profile-timeline__date {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .profile-timeline__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 2px;
+    }
+
+    .profile-timeline__meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .profile-timeline__note {
+      font-size: 13px;
+      color: #475569;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    .profile-interactions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-interaction {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px dashed var(--wf-border);
+      background: #f8fafc;
+    }
+
+    .profile-interaction__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #ede9fe;
+      color: #6d28d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .profile-interaction__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .profile-interaction__detail {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .profile-interaction__date {
+      font-size: 12px;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 960px) {
+      .profile-layout {
         grid-template-columns: 1fr;
       }
 
-      .official-card__media {
-        height: 140px;
-        min-height: 140px;
+      .profile-hero {
+        flex-wrap: wrap;
+      }
+
+      .profile-hero__actions {
+        margin-left: 0;
+        width: 100%;
       }
     }
-
     /* QUICK ACCESS */
     .quick-access {
       margin-bottom: var(--wf-gap);
@@ -1556,7 +1865,7 @@
           <a href="intranet-wireframe.html">Feed</a>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1566,7 +1875,7 @@
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="topbar__dropdown-menu" id="menu-comunicados" role="menu">
-              <a href="comunicados-oficiais.html" role="menuitem" class="is-active">Oficiais</a>
+              <a href="comunicados-oficiais.html" role="menuitem">Oficiais</a>
               <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
               <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
               <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
@@ -1574,7 +1883,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1717,144 +2026,82 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="comunicados-oficiais.html">Comunicados</a>
+            <a href="pessoas-diretorio.html">Pessoas</a>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Oficiais</span>
+            <a href="pessoas-organograma.html">Organograma</a>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current" id="profile-breadcrumb-name">Perfil</span>
           </nav>
-          <div class="page-header__row">
-            <div>
-              <h1 class="page-header__title">Comunicados Oficiais</h1>
-              <p class="page-header__desc">
-                Publicações institucionais da liderança e áreas corporativas. Aqui você encontra orientações, políticas e atualizações oficiais da LioConecta.
-              </p>
-            </div>
-          </div>
         </header>
 
-        <div class="page-toolbar">
-          <div class="page-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button">Todos</button>
-            <button class="filter-chip" type="button">Recentes</button>
-            <button class="filter-chip" type="button">RH</button>
-            <button class="filter-chip" type="button">TI</button>
-            <button class="filter-chip" type="button">Diretoria</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar comunicados...
-          </div>
+        <div class="profile-error" id="profile-error" hidden>
+          <p>Colaborador não encontrado.</p>
+          <p style="margin-top:8px;"><a href="pessoas-organograma.html">Voltar ao organograma</a></p>
         </div>
 
-        <section class="official-list" aria-label="Lista de comunicados oficiais">
-          <article class="official-card official-card--featured">
-            <div class="official-card__media">
-              <img src="bg-announcement.png" alt="" />
+        <div id="profile-root" hidden>
+          <section class="profile-hero">
+            <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
+            <div>
+              <h1 class="profile-hero__name" id="profile-name"></h1>
+              <p class="profile-hero__role" id="profile-role"></p>
+              <span class="profile-hero__dept" id="profile-dept"></span>
             </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag">Comunicado oficial</span>
-                <span class="official-card__date">04 jul 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
+            <div class="profile-hero__actions">
+              <a class="profile-btn" id="profile-email-btn" href="#"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</a>
+              <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
+              <a class="profile-btn profile-btn--primary" id="profile-org-link" href="pessoas-organograma.html"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
+            </div>
+          </section>
+
+          <div class="profile-layout">
+            <aside>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Resumo</h2>
+                <div class="profile-stat-grid" id="profile-stats"></div>
               </div>
-              <h2 class="official-card__title">Atualização importante sobre nossa estratégia 2026</h2>
-              <p class="official-card__excerpt">
-                Estamos lançando novas iniciativas de colaboração e bem-estar para todos os colaboradores.
-                Leia os detalhes completos e compartilhe com sua equipe.
-              </p>
-              <div class="official-card__cta">Ler comunicado completo ?</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-comunicado-security.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag">Comunicado oficial</span>
-                <span class="official-card__date">02 jul 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-ti.png" alt="" />
-                  Tecnologia da Informação
-                </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Dados pessoais</h2>
+                <div class="profile-contact-list" id="profile-personal"></div>
               </div>
-              <h2 class="official-card__title">Nova política de segurança da informação</h2>
-              <p class="official-card__excerpt">
-                A partir da próxima semana, todos os colaboradores devem atualizar suas senhas e concluir o treinamento obrigatório de segurança.
-              </p>
-              <div class="official-card__cta">Acessar treinamento ?</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-benefits.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag">Comunicado oficial</span>
-                <span class="official-card__date">28 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Contato</h2>
+                <div class="profile-contact-list" id="profile-contact"></div>
               </div>
-              <h2 class="official-card__title">Calendário de férias coletivas 2026</h2>
-              <p class="official-card__excerpt">
-                Informamos o calendário de férias coletivas para o final do ano. Consulte as datas por unidade e registre sua preferência até sexta-feira.
-              </p>
-              <div class="official-card__cta">Ver calendário ?</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-news.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag">Comunicado oficial</span>
-                <span class="official-card__date">20 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Diretoria
-                </div>
+              <div class="profile-card" id="profile-reports-card">
+                <h2 class="profile-card__title">Subordinados diretos</h2>
+                <div class="profile-reports" id="profile-reports"></div>
               </div>
-              <h2 class="official-card__title">Novas parcerias estratégicas para 2026</h2>
-              <p class="official-card__excerpt">
-                A LioConecta anuncia parcerias que ampliam oportunidades de desenvolvimento e colaboração entre áreas e unidades.
-              </p>
-              <div class="official-card__cta">Ler comunicado completo ?</div>
-            </div>
-          </article>
+            </aside>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-news-innovation.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag">Comunicado oficial</span>
-                <span class="official-card__date">12 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-ti.png" alt="" />
-                  Tecnologia da Informação
-                </div>
-              </div>
-              <h2 class="official-card__title">Inauguração do centro de inovação</h2>
-              <p class="official-card__excerpt">
-                O novo centro de inovação e pesquisa aplicada já está em operação. Conheça os espaços, agendas e formas de participação dos times.
-              </p>
-              <div class="official-card__cta">Conhecer o centro ?</div>
-            </div>
-          </article>
-        </section>
+            <div>
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                <p class="profile-bio" id="profile-bio"></p>
+              </section>
 
-        <p class="page-empty-note">Exibindo 5 comunicados oficiais</p>
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                <div class="profile-skills" id="profile-skills"></div>
+              </section>
 
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
+                <div class="profile-timeline" id="profile-education"></div>
+              </section>
+
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                <div class="profile-timeline" id="profile-history"></div>
+              </section>
+
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Interações recentes</h2>
+                <div class="profile-interactions" id="profile-interactions"></div>
+              </section>
+            </div>
+          </div>
+        </div>
       </main>
 
       <aside class="sidebar sidebar--right" id="sidebar-right" aria-label="Menu lateral direito">
@@ -1949,75 +2196,218 @@
 
   <script>
     (function () {
-      const commentPool = [
-        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
-        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
-        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
-        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
-        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
-        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
-        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
-        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
-        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
-        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
-        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
-        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
-        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
-        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
-        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
-        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
-        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
-        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
-        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
-        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
-        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
-        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
-        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
-        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
-      ];
+      const deptColors = {
+        Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
+        Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
+        "Recursos Humanos": { stroke: "#f9a8d4", badge: "#fce7f3", text: "#be185d" },
+        Marketing: { stroke: "#86efac", badge: "#dcfce7", text: "#15803d" },
+        TI: { stroke: "#67e8f9", badge: "#cffafe", text: "#0e7490" },
+        Comercial: { stroke: "#fdba74", badge: "#ffedd5", text: "#c2410c" },
+        Financeiro: { stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
+      };
 
-      function shuffle(list) {
-        const items = list.slice();
-        for (let i = items.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
-        }
-        return items;
+      const historyTypeLabels = {
+        atual: "Cargo atual",
+        promotion: "Promoção",
+        admission: "Admissão",
+        lateral: "Movimentação"
+      };
+
+      function getDeptColors(dept) {
+        return deptColors[dept] || deptColors.Executiva;
       }
 
-      function renderComment(comment) {
-        return `
-          <div class="comment">
-            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
-            <div>
-              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
-              <div class="comment__text">${comment.text}</div>
-            </div>
-          </div>
-        `;
+      function getProfileId() {
+        return new URLSearchParams(window.location.search).get("id");
       }
 
-      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
-      let available = shuffle(commentPool);
+      function formatDate(isoDate) {
+        const parts = isoDate.split("-");
+        if (parts.length !== 3) return isoDate;
+        return parts[2] + "/" + parts[1] + "/" + parts[0];
+      }
 
-      posts.forEach(function (post) {
-        const total = Math.floor(Math.random() * 3) + 1;
-        const picked = [];
+      function renderStats(person) {
+        const stats = person.stats || {};
+        const items = [
+          { value: stats.tenureYears || 0, label: "Anos de casa" },
+          { value: stats.directReports || 0, label: "Reportes diretos" },
+          { value: stats.groups || 0, label: "Grupos" },
+          { value: stats.recognitions || 0, label: "Reconhecimentos" }
+        ];
+        return items.map(function (item) {
+          return (
+            '<div class="profile-stat">' +
+            '<span class="profile-stat__value">' + item.value + "</span>" +
+            '<span class="profile-stat__label">' + item.label + "</span>" +
+            "</div>"
+          );
+        }).join("");
+      }
 
-        for (let i = 0; i < total; i += 1) {
-          if (!available.length) available = shuffle(commentPool);
-          picked.push(available.shift());
+      function renderPersonalData(person) {
+        const personal = person.personal || {};
+
+        return (
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Nome completo</span><span class="profile-contact-item__value">' + (personal.fullName || person.name) + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Data de nascimento</span><span class="profile-contact-item__value">' + (personal.birthDate || "—") + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">CPF</span><span class="profile-contact-item__value">' + (personal.cpf || "—") + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">RG</span><span class="profile-contact-item__value">' + (personal.rg || "—") + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Estado civil</span><span class="profile-contact-item__value">' + (personal.maritalStatus || "—") + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Nacionalidade</span><span class="profile-contact-item__value">' + (personal.nationality || "—") + "</span></div>"
+        );
+      }
+
+      function renderContact(person) {
+        const contact = person.contact || {};
+        const managerHtml = person.managerId
+          ? '<a href="pessoas-perfil.html?id=' + person.managerId + '">' + person.managerName + "</a>"
+          : "—";
+
+        return (
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">E-mail</span><span class="profile-contact-item__value"><a href="mailto:' + contact.email + '">' + contact.email + "</a></span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Telefone / Ramal</span><span class="profile-contact-item__value">' + contact.phone + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Localização</span><span class="profile-contact-item__value">' + contact.location + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Microsoft Teams</span><span class="profile-contact-item__value">' + contact.teams + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Admissão</span><span class="profile-contact-item__value">' + person.admission + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Reporta-se a</span><span class="profile-contact-item__value">' + managerHtml + "</span></div>"
+        );
+      }
+
+      function renderSkills(skills) {
+        return (skills || []).map(function (skill) {
+          return '<span class="profile-skill">' + skill + "</span>";
+        }).join("");
+      }
+
+      function renderEducation(education) {
+        if (!education || !education.length) {
+          return '<p class="profile-reports-empty">Nenhuma formação registrada.</p>';
         }
 
-        const section = document.createElement("div");
-        section.className = "comments";
-        section.innerHTML = `
-          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
-          ${picked.map(renderComment).join("")}
-          <div class="comments__input">Escreva um comentário...</div>
-        `;
-        post.appendChild(section);
-      });
+        return education.map(function (item) {
+          return (
+            '<article class="profile-timeline__item">' +
+            '<div class="profile-timeline__date">' + item.period + " · " + (item.note || item.type) + "</div>" +
+            '<div class="profile-timeline__title">' + item.degree + "</div>" +
+            '<div class="profile-timeline__meta">' + item.institution + "</div>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderHistory(history) {
+        return (history || []).map(function (item) {
+          return (
+            '<article class="profile-timeline__item">' +
+            '<div class="profile-timeline__date">' + item.date + " · " + (historyTypeLabels[item.type] || item.type) + "</div>" +
+            '<div class="profile-timeline__title">' + item.title + "</div>" +
+            '<div class="profile-timeline__meta">' + item.dept + "</div>" +
+            '<p class="profile-timeline__note">' + item.note + "</p>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderInteractions(interactions) {
+        return (interactions || []).map(function (item) {
+          return (
+            '<article class="profile-interaction">' +
+            '<div class="profile-interaction__icon"><i class="' + item.icon + '" aria-hidden="true"></i></div>' +
+            "<div>" +
+            '<div class="profile-interaction__title">' + item.title + "</div>" +
+            '<div class="profile-interaction__detail">' + item.detail + "</div>" +
+            "</div>" +
+            '<time class="profile-interaction__date" datetime="' + item.date + '">' + formatDate(item.date) + "</time>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderDirectReports(person, allPeople) {
+        const reports = (allPeople || []).filter(function (entry) {
+          return entry.managerId === person.id;
+        });
+
+        reports.sort(function (a, b) {
+          return a.name.localeCompare(b.name, "pt-BR");
+        });
+
+        if (!reports.length) {
+          return '<p class="profile-reports-empty">Nenhum subordinado direto registrado.</p>';
+        }
+
+        return reports.map(function (report) {
+          return (
+            '<a class="profile-report" href="pessoas-perfil.html?id=' + encodeURIComponent(report.id) + '">' +
+            '<img class="profile-report__avatar" src="' + report.img + '" alt="" />' +
+            "<div>" +
+            '<div class="profile-report__name">' + report.name + "</div>" +
+            '<div class="profile-report__role">' + report.title + "</div>" +
+            "</div></a>"
+          );
+        }).join("");
+      }
+
+      function renderProfile(person, allPeople) {
+        const colors = getDeptColors(person.dept);
+        const root = document.getElementById("profile-root");
+        root.style.setProperty("--profile-accent", colors.stroke);
+        root.style.setProperty("--profile-badge-bg", colors.badge);
+        root.style.setProperty("--profile-badge-text", colors.text);
+
+        document.title = "LioConecta — " + person.name;
+        document.getElementById("profile-breadcrumb-name").textContent = person.name;
+        document.getElementById("profile-avatar").src = person.img;
+        document.getElementById("profile-avatar").alt = "Foto de " + person.name;
+        document.getElementById("profile-name").textContent = person.name;
+        document.getElementById("profile-role").textContent = person.title;
+        document.getElementById("profile-dept").textContent = person.dept;
+        document.getElementById("profile-bio").textContent = person.bio;
+        document.getElementById("profile-stats").innerHTML = renderStats(person);
+        document.getElementById("profile-personal").innerHTML = renderPersonalData(person);
+        document.getElementById("profile-contact").innerHTML = renderContact(person);
+        document.getElementById("profile-reports").innerHTML = renderDirectReports(person, allPeople);
+        document.getElementById("profile-skills").innerHTML = renderSkills(person.skills);
+        document.getElementById("profile-education").innerHTML = renderEducation(person.education);
+        document.getElementById("profile-history").innerHTML = renderHistory(person.history);
+        document.getElementById("profile-interactions").innerHTML = renderInteractions(person.interactions);
+
+        const emailBtn = document.getElementById("profile-email-btn");
+        emailBtn.href = "mailto:" + person.contact.email;
+
+        document.getElementById("profile-message-btn").onclick = function () {
+          alert("Mensagem para " + person.name + " — chat interno em breve.");
+        };
+
+        root.hidden = false;
+      }
+
+      function showError() {
+        document.getElementById("profile-error").hidden = false;
+      }
+
+      fetch("data/pessoas-perfis.json")
+        .then(function (response) {
+          if (!response.ok) throw new Error("fetch failed");
+          return response.json();
+        })
+        .then(function (data) {
+          const profileId = getProfileId();
+          const person = (data.people || []).find(function (entry) {
+            return entry.id === profileId || String(entry.orgChartId) === profileId;
+          });
+
+          if (!person) {
+            showError();
+            return;
+          }
+
+          renderProfile(person, data.people || []);
+        })
+        .catch(function () {
+          showError();
+        });
     })();
   </script>
 </body>

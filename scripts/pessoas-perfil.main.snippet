@@ -1,0 +1,67 @@
+        <header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="intranet-wireframe.html">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="pessoas-organograma.html">Organograma</a>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current" id="profile-breadcrumb-name">Perfil</span>
+          </nav>
+        </header>
+
+        <div class="profile-error" id="profile-error" hidden>
+          <p>Colaborador não encontrado.</p>
+          <p style="margin-top:8px;"><a href="pessoas-organograma.html">Voltar ao organograma</a></p>
+        </div>
+
+        <div id="profile-root" hidden>
+          <section class="profile-hero">
+            <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
+            <div>
+              <h1 class="profile-hero__name" id="profile-name"></h1>
+              <p class="profile-hero__role" id="profile-role"></p>
+              <span class="profile-hero__dept" id="profile-dept"></span>
+            </div>
+            <div class="profile-hero__actions">
+              <a class="profile-btn" id="profile-email-btn" href="#"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</a>
+              <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
+              <a class="profile-btn profile-btn--primary" id="profile-org-link" href="pessoas-organograma.html"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
+            </div>
+          </section>
+
+          <div class="profile-layout">
+            <aside>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Resumo</h2>
+                <div class="profile-stat-grid" id="profile-stats"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Contato</h2>
+                <div class="profile-contact-list" id="profile-contact"></div>
+              </div>
+            </aside>
+
+            <div>
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                <p class="profile-bio" id="profile-bio"></p>
+              </section>
+
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                <div class="profile-skills" id="profile-skills"></div>
+              </section>
+
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                <div class="profile-timeline" id="profile-history"></div>
+              </section>
+
+              <section class="profile-panel">
+                <h2 class="profile-panel__title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Interações recentes</h2>
+                <div class="profile-interactions" id="profile-interactions"></div>
+              </section>
+            </div>
+          </div>
+        </div>

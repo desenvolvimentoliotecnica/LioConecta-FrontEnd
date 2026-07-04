@@ -1,0 +1,2956 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-04",
+  "people": [
+    {
+      "id": "julio-schwartzman",
+      "orgChartId": 1,
+      "name": "Júlio Schwartzman",
+      "title": "CEO · Diretoria Executiva",
+      "dept": "Executiva",
+      "deptId": "executiva",
+      "img": "avatar-julio-schwartzman.png",
+      "tags": [
+        "ceo"
+      ],
+      "managerId": null,
+      "managerName": null,
+      "contact": {
+        "email": "julio.schwartzman@liotecnica.com.br",
+        "phone": "(19) 32850",
+        "location": "Campinas, SP · Matriz",
+        "teams": "@Júlio Schwartzman"
+      },
+      "admission": "mai de 2020",
+      "bio": "Júlio Schwartzman atua em Executiva na LioConecta, com foco em ceo · diretoria executiva e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Júlio Schwartzman",
+        "birthDate": "3 de março de 1992",
+        "cpf": "***.***.***-50",
+        "rg": "80.850.950-0",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Estratégia",
+        "Governança",
+        "Liderança executiva",
+        "CEO"
+      ],
+      "education": [
+        {
+          "degree": "MBA em Gestão Empresarial",
+          "institution": "FGV",
+          "period": "2012–2016",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Administração de Empresas",
+          "institution": "PUC-Campinas",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2020",
+          "title": "CEO · Diretoria Executiva",
+          "dept": "Executiva",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2018",
+          "title": "Diretor · Coordenadoria Executiva",
+          "dept": "Executiva",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2016",
+          "title": "Analista",
+          "dept": "Executiva",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 6,
+        "directReports": 6,
+        "groups": 4,
+        "recognitions": 10
+      }
+    },
+    {
+      "id": "carlos-mendes",
+      "orgChartId": 2,
+      "name": "Carlos Mendes",
+      "title": "Diretor de Produto",
+      "dept": "Produto",
+      "deptId": "produto",
+      "img": "avatar-carlos-mendes.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "carlos.mendes@liotecnica.com.br",
+        "phone": "(19) 32248",
+        "location": "Campinas, SP · Produto",
+        "teams": "@Carlos Mendes"
+      },
+      "admission": "jan de 2020",
+      "bio": "Carlos Mendes atua em Produto na LioConecta, com foco em diretor de produto e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Carlos Mendes",
+        "birthDate": "17 de janeiro de 1984",
+        "cpf": "***.***.***-48",
+        "rg": "12.248.948-8",
+        "maritalStatus": "Solteiro(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Roadmap",
+        "Discovery",
+        "UX Research",
+        "Diretor"
+      ],
+      "education": [
+        {
+          "degree": "Gestão de Produtos Digitais",
+          "institution": "PM3",
+          "period": "2012–2014",
+          "type": "certificacao",
+          "note": "Certificação"
+        },
+        {
+          "degree": "Design Digital",
+          "institution": "IAC",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2020",
+          "title": "Diretor de Produto",
+          "dept": "Produto",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2018",
+          "title": "Coordenador de Produto",
+          "dept": "Produto",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2016",
+          "title": "Analista",
+          "dept": "Produto",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 6,
+        "directReports": 3,
+        "groups": 2,
+        "recognitions": 8
+      }
+    },
+    {
+      "id": "maria-silva",
+      "orgChartId": 3,
+      "name": "Maria Silva",
+      "title": "Gerente de Projetos",
+      "dept": "Produto",
+      "deptId": "produto",
+      "img": "avatar-maria-silva.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "carlos-mendes",
+      "managerName": "Carlos Mendes",
+      "contact": {
+        "email": "maria.silva@liotecnica.com.br",
+        "phone": "(19) 32033",
+        "location": "Campinas, SP · Produto",
+        "teams": "@Maria Silva"
+      },
+      "admission": "mar de 2022",
+      "bio": "Maria Silva atua em Produto na LioConecta, com foco em gerente de projetos e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Maria Silva",
+        "birthDate": "26 de fevereiro de 1985",
+        "cpf": "***.***.***-33",
+        "rg": "64.033.933-3",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Roadmap",
+        "Discovery",
+        "UX Research",
+        "Gerente"
+      ],
+      "education": [
+        {
+          "degree": "Gestão de Produtos Digitais",
+          "institution": "PM3",
+          "period": "2013–2015",
+          "type": "certificacao",
+          "note": "Certificação"
+        },
+        {
+          "degree": "Design Digital",
+          "institution": "IAC",
+          "period": "2010–2014",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2022",
+          "title": "Gerente de Projetos",
+          "dept": "Produto",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2020",
+          "title": "Analista de Projetos",
+          "dept": "Produto",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2018",
+          "title": "Analista",
+          "dept": "Produto",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 4,
+        "directReports": 0,
+        "groups": 3,
+        "recognitions": 18
+      }
+    },
+    {
+      "id": "ricardo-souza",
+      "orgChartId": 4,
+      "name": "Ricardo Souza",
+      "title": "Product Owner",
+      "dept": "Produto",
+      "deptId": "produto",
+      "img": "avatar-carlos-mendes.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "carlos-mendes",
+      "managerName": "Carlos Mendes",
+      "contact": {
+        "email": "ricardo.souza@liotecnica.com.br",
+        "phone": "(19) 32270",
+        "location": "Campinas, SP · Produto",
+        "teams": "@Ricardo Souza"
+      },
+      "admission": "set de 2021",
+      "bio": "Ricardo Souza atua em Produto na LioConecta, com foco em product owner e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Ricardo Souza",
+        "birthDate": "11 de novembro de 1988",
+        "cpf": "***.***.***-70",
+        "rg": "34.270.970-0",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Roadmap",
+        "Discovery",
+        "UX Research",
+        "Product"
+      ],
+      "education": [
+        {
+          "degree": "Gestão de Produtos Digitais",
+          "institution": "PM3",
+          "period": "2013–2015",
+          "type": "certificacao",
+          "note": "Certificação"
+        },
+        {
+          "degree": "Design Digital",
+          "institution": "IAC",
+          "period": "2010–2014",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Product Owner",
+          "dept": "Produto",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Product Owner",
+          "dept": "Produto",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "Produto",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 3,
+        "recognitions": 15
+      }
+    },
+    {
+      "id": "julia-santos",
+      "orgChartId": 5,
+      "name": "Julia Santos",
+      "title": "Designer de Produto",
+      "dept": "Produto",
+      "deptId": "produto",
+      "img": "avatar-julia-santos.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "carlos-mendes",
+      "managerName": "Carlos Mendes",
+      "contact": {
+        "email": "julia.santos@liotecnica.com.br",
+        "phone": "(19) 32165",
+        "location": "Campinas, SP · Produto",
+        "teams": "@Julia Santos"
+      },
+      "admission": "mar de 2021",
+      "bio": "Julia Santos atua em Produto na LioConecta, com foco em designer de produto e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Julia Santos",
+        "birthDate": "18 de fevereiro de 1991",
+        "cpf": "***.***.***-65",
+        "rg": "18.165.965-5",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Roadmap",
+        "Discovery",
+        "UX Research",
+        "Designer"
+      ],
+      "education": [
+        {
+          "degree": "Gestão de Produtos Digitais",
+          "institution": "PM3",
+          "period": "2012–2014",
+          "type": "certificacao",
+          "note": "Certificação"
+        },
+        {
+          "degree": "Design Digital",
+          "institution": "IAC",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Designer de Produto",
+          "dept": "Produto",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Designer de Produto",
+          "dept": "Produto",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "Produto",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 3,
+        "recognitions": 15
+      }
+    },
+    {
+      "id": "patricia-nunes",
+      "orgChartId": 6,
+      "name": "Patricia Nunes",
+      "title": "Coordenadora de RH",
+      "dept": "Recursos Humanos",
+      "deptId": "rh",
+      "img": "avatar-rh.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "patricia.nunes@liotecnica.com.br",
+        "phone": "(19) 32366",
+        "location": "Campinas, SP · Recursos Humanos",
+        "teams": "@Patricia Nunes"
+      },
+      "admission": "set de 2019",
+      "bio": "Patricia Nunes atua em Recursos Humanos na LioConecta, com foco em coordenadora de rh e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Patricia Nunes",
+        "birthDate": "23 de novembro de 1994",
+        "cpf": "***.***.***-66",
+        "rg": "41.366.966-6",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "People analytics",
+        "Recrutamento",
+        "Desenvolvimento organizacional",
+        "Coordenadora"
+      ],
+      "education": [
+        {
+          "degree": "Pós-graduação em Gestão de Pessoas",
+          "institution": "ESAN",
+          "period": "2011–2015",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Psicologia Organizacional",
+          "institution": "PUC-Campinas",
+          "period": "2008–2012",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2019",
+          "title": "Coordenadora de RH",
+          "dept": "Recursos Humanos",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2017",
+          "title": "Coordenadora de RH",
+          "dept": "Recursos Humanos",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2015",
+          "title": "Analista",
+          "dept": "Recursos Humanos",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-29",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-22",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-15",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-08",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 7,
+        "directReports": 3,
+        "groups": 3,
+        "recognitions": 6
+      }
+    },
+    {
+      "id": "renata-gomes",
+      "orgChartId": 7,
+      "name": "Renata Gomes",
+      "title": "Analista de RH",
+      "dept": "Recursos Humanos",
+      "deptId": "rh",
+      "img": "avatar-rh.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "patricia-nunes",
+      "managerName": "Patricia Nunes",
+      "contact": {
+        "email": "renata.gomes@liotecnica.com.br",
+        "phone": "(19) 32142",
+        "location": "Campinas, SP · Recursos Humanos",
+        "teams": "@Renata Gomes"
+      },
+      "admission": "mai de 2019",
+      "bio": "Renata Gomes atua em Recursos Humanos na LioConecta, com foco em analista de rh e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Renata Gomes",
+        "birthDate": "23 de março de 1986",
+        "cpf": "***.***.***-42",
+        "rg": "84.142.942-2",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "People analytics",
+        "Recrutamento",
+        "Desenvolvimento organizacional",
+        "Analista"
+      ],
+      "education": [
+        {
+          "degree": "Pós-graduação em Gestão de Pessoas",
+          "institution": "ESAN",
+          "period": "2011–2015",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Psicologia Organizacional",
+          "institution": "PUC-Campinas",
+          "period": "2008–2012",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2019",
+          "title": "Analista de RH",
+          "dept": "Recursos Humanos",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2017",
+          "title": "Analista de RH",
+          "dept": "Recursos Humanos",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2015",
+          "title": "Analista",
+          "dept": "Recursos Humanos",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-28",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-21",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-07",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 7,
+        "directReports": 0,
+        "groups": 4,
+        "recognitions": 7
+      }
+    },
+    {
+      "id": "helena-prado",
+      "orgChartId": 8,
+      "name": "Helena Prado",
+      "title": "Business Partner",
+      "dept": "Recursos Humanos",
+      "deptId": "rh",
+      "img": "avatar-marketing.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "patricia-nunes",
+      "managerName": "Patricia Nunes",
+      "contact": {
+        "email": "helena.prado@liotecnica.com.br",
+        "phone": "(19) 32123",
+        "location": "Campinas, SP · Recursos Humanos",
+        "teams": "@Helena Prado"
+      },
+      "admission": "mar de 2021",
+      "bio": "Helena Prado atua em Recursos Humanos na LioConecta, com foco em business partner e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Helena Prado",
+        "birthDate": "4 de agosto de 1985",
+        "cpf": "***.***.***-23",
+        "rg": "65.123.923-3",
+        "maritalStatus": "Divorciado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "People analytics",
+        "Recrutamento",
+        "Desenvolvimento organizacional",
+        "Business"
+      ],
+      "education": [
+        {
+          "degree": "Pós-graduação em Gestão de Pessoas",
+          "institution": "ESAN",
+          "period": "2012–2016",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Psicologia Organizacional",
+          "institution": "PUC-Campinas",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Business Partner",
+          "dept": "Recursos Humanos",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Business Partner",
+          "dept": "Recursos Humanos",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "Recursos Humanos",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 3,
+        "recognitions": 18
+      }
+    },
+    {
+      "id": "diego-martins",
+      "orgChartId": 9,
+      "name": "Diego Martins",
+      "title": "Recrutador",
+      "dept": "Recursos Humanos",
+      "deptId": "rh",
+      "img": "avatar-ti.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "patricia-nunes",
+      "managerName": "Patricia Nunes",
+      "contact": {
+        "email": "diego.martins@liotecnica.com.br",
+        "phone": "(19) 32254",
+        "location": "Campinas, SP · Recursos Humanos",
+        "teams": "@Diego Martins"
+      },
+      "admission": "jan de 2019",
+      "bio": "Diego Martins atua em Recursos Humanos na LioConecta, com foco em recrutador e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Diego Martins",
+        "birthDate": "23 de julho de 1990",
+        "cpf": "***.***.***-54",
+        "rg": "18.254.954-4",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "People analytics",
+        "Recrutamento",
+        "Desenvolvimento organizacional",
+        "Recrutador"
+      ],
+      "education": [
+        {
+          "degree": "Pós-graduação em Gestão de Pessoas",
+          "institution": "ESAN",
+          "period": "2011–2015",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Psicologia Organizacional",
+          "institution": "PUC-Campinas",
+          "period": "2008–2012",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2019",
+          "title": "Recrutador",
+          "dept": "Recursos Humanos",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2017",
+          "title": "Recrutador",
+          "dept": "Recursos Humanos",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2015",
+          "title": "Analista",
+          "dept": "Recursos Humanos",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-26",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-19",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-12",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-05",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 7,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 14
+      }
+    },
+    {
+      "id": "camila-rocha",
+      "orgChartId": 10,
+      "name": "Camila Rocha",
+      "title": "Coord. de Comunicação",
+      "dept": "Marketing",
+      "deptId": "marketing",
+      "img": "avatar-marketing.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "camila.rocha@liotecnica.com.br",
+        "phone": "(19) 32108",
+        "location": "Campinas, SP · Marketing",
+        "teams": "@Camila Rocha"
+      },
+      "admission": "set de 2020",
+      "bio": "Camila Rocha atua em Marketing na LioConecta, com foco em coord. de comunicação e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Camila Rocha",
+        "birthDate": "17 de maio de 1988",
+        "cpf": "***.***.***-08",
+        "rg": "50.108.908-8",
+        "maritalStatus": "Solteiro(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Branding",
+        "Conteúdo",
+        "Campanhas",
+        "Coord."
+      ],
+      "education": [
+        {
+          "degree": "Marketing Digital",
+          "institution": "ESPM",
+          "period": "2012–2016",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Publicidade e Propaganda",
+          "institution": "UNICAMP",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2020",
+          "title": "Coord. de Comunicação",
+          "dept": "Marketing",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2018",
+          "title": "Coord. de Comunicação",
+          "dept": "Marketing",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2016",
+          "title": "Analista",
+          "dept": "Marketing",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 6,
+        "directReports": 3,
+        "groups": 3,
+        "recognitions": 18
+      }
+    },
+    {
+      "id": "fernanda-lima",
+      "orgChartId": 11,
+      "name": "Fernanda Lima",
+      "title": "Analista de Marketing",
+      "dept": "Marketing",
+      "deptId": "marketing",
+      "img": "avatar-alejandro-lopez.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "camila-rocha",
+      "managerName": "Camila Rocha",
+      "contact": {
+        "email": "fernanda.lima@liotecnica.com.br",
+        "phone": "(19) 32218",
+        "location": "Campinas, SP · Marketing",
+        "teams": "@Fernanda Lima"
+      },
+      "admission": "jan de 2018",
+      "bio": "Fernanda Lima atua em Marketing na LioConecta, com foco em analista de marketing e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Fernanda Lima",
+        "birthDate": "15 de julho de 1990",
+        "cpf": "***.***.***-18",
+        "rg": "71.218.918-8",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Branding",
+        "Conteúdo",
+        "Campanhas",
+        "Analista"
+      ],
+      "education": [
+        {
+          "degree": "Marketing Digital",
+          "institution": "ESPM",
+          "period": "2010–2014",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Publicidade e Propaganda",
+          "institution": "UNICAMP",
+          "period": "2007–2011",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Analista de Marketing",
+          "dept": "Marketing",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Analista de Marketing",
+          "dept": "Marketing",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Marketing",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 8
+      }
+    },
+    {
+      "id": "thiago-barros",
+      "orgChartId": 12,
+      "name": "Thiago Barros",
+      "title": "Designer Gráfico",
+      "dept": "Marketing",
+      "deptId": "marketing",
+      "img": "avatar-nexora-news.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "camila-rocha",
+      "managerName": "Camila Rocha",
+      "contact": {
+        "email": "thiago.barros@liotecnica.com.br",
+        "phone": "(19) 32253",
+        "location": "Campinas, SP · Marketing",
+        "teams": "@Thiago Barros"
+      },
+      "admission": "nov de 2018",
+      "bio": "Thiago Barros atua em Marketing na LioConecta, com foco em designer gráfico e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Thiago Barros",
+        "birthDate": "22 de junho de 1989",
+        "cpf": "***.***.***-53",
+        "rg": "17.253.953-3",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Branding",
+        "Conteúdo",
+        "Campanhas",
+        "Designer"
+      ],
+      "education": [
+        {
+          "degree": "Marketing Digital",
+          "institution": "ESPM",
+          "period": "2009–2013",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Publicidade e Propaganda",
+          "institution": "UNICAMP",
+          "period": "2006–2010",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Designer Gráfico",
+          "dept": "Marketing",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Designer Gráfico",
+          "dept": "Marketing",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Marketing",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 0,
+        "groups": 4,
+        "recognitions": 13
+      }
+    },
+    {
+      "id": "simone-alves",
+      "orgChartId": 13,
+      "name": "Simone Alves",
+      "title": "Analista de Conteúdo",
+      "dept": "Marketing",
+      "deptId": "marketing",
+      "img": "avatar-maria-silva.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "camila-rocha",
+      "managerName": "Camila Rocha",
+      "contact": {
+        "email": "simone.alves@liotecnica.com.br",
+        "phone": "(19) 32158",
+        "location": "Campinas, SP · Marketing",
+        "teams": "@Simone Alves"
+      },
+      "admission": "jan de 2021",
+      "bio": "Simone Alves atua em Marketing na LioConecta, com foco em analista de conteúdo e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Simone Alves",
+        "birthDate": "11 de julho de 1984",
+        "cpf": "***.***.***-58",
+        "rg": "11.158.958-8",
+        "maritalStatus": "União estável",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Branding",
+        "Conteúdo",
+        "Campanhas",
+        "Analista"
+      ],
+      "education": [
+        {
+          "degree": "Marketing Digital",
+          "institution": "ESPM",
+          "period": "2013–2017",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Publicidade e Propaganda",
+          "institution": "UNICAMP",
+          "period": "2010–2014",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Analista de Conteúdo",
+          "dept": "Marketing",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Analista de Conteúdo",
+          "dept": "Marketing",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "Marketing",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 8
+      }
+    },
+    {
+      "id": "igor-martins",
+      "orgChartId": 14,
+      "name": "Igor Martins",
+      "title": "Tech Lead",
+      "dept": "TI",
+      "deptId": "ti",
+      "img": "avatar-ti.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "igor.martins@liotecnica.com.br",
+        "phone": "(19) 32167",
+        "location": "Campinas, SP · TI",
+        "teams": "@Igor Martins"
+      },
+      "admission": "jul de 2023",
+      "bio": "Igor Martins atua em TI na LioConecta, com foco em tech lead e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Igor Martins",
+        "birthDate": "20 de abril de 1993",
+        "cpf": "***.***.***-67",
+        "rg": "20.167.967-7",
+        "maritalStatus": "Divorciado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Arquitetura",
+        "DevOps",
+        "Segurança",
+        "Tech"
+      ],
+      "education": [
+        {
+          "degree": "Ciência da Computação",
+          "institution": "UNICAMP",
+          "period": "2014–2018",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Cloud Architecture",
+          "institution": "AWS Training",
+          "period": "2011–2013",
+          "type": "certificacao",
+          "note": "Certificação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2023",
+          "title": "Tech Lead",
+          "dept": "TI",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2021",
+          "title": "Tech Lead",
+          "dept": "TI",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2019",
+          "title": "Analista",
+          "dept": "TI",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-28",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-21",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-07",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 3,
+        "directReports": 3,
+        "groups": 2,
+        "recognitions": 17
+      }
+    },
+    {
+      "id": "tiago-nunes",
+      "orgChartId": 15,
+      "name": "Tiago Nunes",
+      "title": "Desenvolvedor Frontend",
+      "dept": "TI",
+      "deptId": "ti",
+      "img": "avatar-carlos-mendes.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "igor-martins",
+      "managerName": "Igor Martins",
+      "contact": {
+        "email": "tiago.nunes@liotecnica.com.br",
+        "phone": "(19) 32053",
+        "location": "Campinas, SP · TI",
+        "teams": "@Tiago Nunes"
+      },
+      "admission": "jul de 2021",
+      "bio": "Tiago Nunes atua em TI na LioConecta, com foco em desenvolvedor frontend e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Tiago Nunes",
+        "birthDate": "18 de outubro de 1987",
+        "cpf": "***.***.***-53",
+        "rg": "84.053.953-3",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Arquitetura",
+        "DevOps",
+        "Segurança",
+        "Desenvolvedor"
+      ],
+      "education": [
+        {
+          "degree": "Ciência da Computação",
+          "institution": "UNICAMP",
+          "period": "2012–2016",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Cloud Architecture",
+          "institution": "AWS Training",
+          "period": "2009–2011",
+          "type": "certificacao",
+          "note": "Certificação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Desenvolvedor Frontend",
+          "dept": "TI",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Desenvolvedor Frontend",
+          "dept": "TI",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "TI",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 8
+      }
+    },
+    {
+      "id": "william-souza",
+      "orgChartId": 16,
+      "name": "William Souza",
+      "title": "DevOps Engineer",
+      "dept": "TI",
+      "deptId": "ti",
+      "img": "avatar-julia-santos.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "igor-martins",
+      "managerName": "Igor Martins",
+      "contact": {
+        "email": "william.souza@liotecnica.com.br",
+        "phone": "(19) 32281",
+        "location": "Campinas, SP · TI",
+        "teams": "@William Souza"
+      },
+      "admission": "jul de 2018",
+      "bio": "William Souza atua em TI na LioConecta, com foco em devops engineer e colaboração entre áreas.",
+      "personal": {
+        "fullName": "William Souza",
+        "birthDate": "22 de outubro de 1981",
+        "cpf": "***.***.***-81",
+        "rg": "45.281.981-1",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Arquitetura",
+        "DevOps",
+        "Segurança",
+        "DevOps"
+      ],
+      "education": [
+        {
+          "degree": "Ciência da Computação",
+          "institution": "UNICAMP",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Cloud Architecture",
+          "institution": "AWS Training",
+          "period": "2006–2008",
+          "type": "certificacao",
+          "note": "Certificação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "DevOps Engineer",
+          "dept": "TI",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "DevOps Engineer",
+          "dept": "TI",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "TI",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-29",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-22",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-15",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-08",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 11
+      }
+    },
+    {
+      "id": "rafael-costa",
+      "orgChartId": 17,
+      "name": "Rafael Costa",
+      "title": "Desenvolvedor Backend",
+      "dept": "TI",
+      "deptId": "ti",
+      "img": "avatar-rh.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "igor-martins",
+      "managerName": "Igor Martins",
+      "contact": {
+        "email": "rafael.costa@liotecnica.com.br",
+        "phone": "(19) 32125",
+        "location": "Campinas, SP · TI",
+        "teams": "@Rafael Costa"
+      },
+      "admission": "jul de 2023",
+      "bio": "Rafael Costa atua em TI na LioConecta, com foco em desenvolvedor backend e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Rafael Costa",
+        "birthDate": "6 de outubro de 1987",
+        "cpf": "***.***.***-25",
+        "rg": "67.125.925-5",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Arquitetura",
+        "DevOps",
+        "Segurança",
+        "Desenvolvedor"
+      ],
+      "education": [
+        {
+          "degree": "Ciência da Computação",
+          "institution": "UNICAMP",
+          "period": "2014–2018",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Cloud Architecture",
+          "institution": "AWS Training",
+          "period": "2011–2013",
+          "type": "certificacao",
+          "note": "Certificação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2023",
+          "title": "Desenvolvedor Backend",
+          "dept": "TI",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2021",
+          "title": "Desenvolvedor Backend",
+          "dept": "TI",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2019",
+          "title": "Analista",
+          "dept": "TI",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 3,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 5
+      }
+    },
+    {
+      "id": "joao-pereira",
+      "orgChartId": 18,
+      "name": "João Pereira",
+      "title": "Gerente Comercial",
+      "dept": "Comercial",
+      "deptId": "comercial",
+      "img": "avatar-nexora-news.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "joao.pereira@liotecnica.com.br",
+        "phone": "(19) 32267",
+        "location": "Campinas, SP · Comercial",
+        "teams": "@João Pereira"
+      },
+      "admission": "mar de 2018",
+      "bio": "João Pereira atua em Comercial na LioConecta, com foco em gerente comercial e colaboração entre áreas.",
+      "personal": {
+        "fullName": "João Pereira",
+        "birthDate": "8 de agosto de 1985",
+        "cpf": "***.***.***-67",
+        "rg": "31.267.967-7",
+        "maritalStatus": "Divorciado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Negociação",
+        "CRM",
+        "Prospecção",
+        "Gerente"
+      ],
+      "education": [
+        {
+          "degree": "Negócios e Vendas Consultivas",
+          "institution": "FIA",
+          "period": "2009–2013",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Administração de Empresas",
+          "institution": "UNIP",
+          "period": "2006–2010",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Gerente Comercial",
+          "dept": "Comercial",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Analista Comercial",
+          "dept": "Comercial",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Comercial",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-28",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-21",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-07",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 3,
+        "groups": 3,
+        "recognitions": 12
+      }
+    },
+    {
+      "id": "una-ferreira",
+      "orgChartId": 19,
+      "name": "Una Ferreira",
+      "title": "Executiva Comercial",
+      "dept": "Comercial",
+      "deptId": "comercial",
+      "img": "avatar-marketing.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "joao-pereira",
+      "managerName": "João Pereira",
+      "contact": {
+        "email": "una.ferreira@liotecnica.com.br",
+        "phone": "(19) 32140",
+        "location": "Campinas, SP · Comercial",
+        "teams": "@Una Ferreira"
+      },
+      "admission": "jan de 2024",
+      "bio": "Una Ferreira atua em Comercial na LioConecta, com foco em executiva comercial e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Una Ferreira",
+        "birthDate": "21 de janeiro de 1984",
+        "cpf": "***.***.***-40",
+        "rg": "82.140.940-0",
+        "maritalStatus": "Solteiro(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Negociação",
+        "CRM",
+        "Prospecção",
+        "Executiva"
+      ],
+      "education": [
+        {
+          "degree": "Negócios e Vendas Consultivas",
+          "institution": "FIA",
+          "period": "2016–2020",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Administração de Empresas",
+          "institution": "UNIP",
+          "period": "2013–2017",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2024",
+          "title": "Executiva Comercial",
+          "dept": "Comercial",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2022",
+          "title": "Executiva Comercial",
+          "dept": "Comercial",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2020",
+          "title": "Analista",
+          "dept": "Comercial",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 2,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 5
+      }
+    },
+    {
+      "id": "xavier-dias",
+      "orgChartId": 20,
+      "name": "Xavier Dias",
+      "title": "SDR",
+      "dept": "Comercial",
+      "deptId": "comercial",
+      "img": "avatar-ti.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "joao-pereira",
+      "managerName": "João Pereira",
+      "contact": {
+        "email": "xavier.dias@liotecnica.com.br",
+        "phone": "(19) 32040",
+        "location": "Campinas, SP · Comercial",
+        "teams": "@Xavier Dias"
+      },
+      "admission": "mai de 2022",
+      "bio": "Xavier Dias atua em Comercial na LioConecta, com foco em sdr e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Xavier Dias",
+        "birthDate": "5 de setembro de 1992",
+        "cpf": "***.***.***-40",
+        "rg": "71.040.940-0",
+        "maritalStatus": "Solteiro(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Negociação",
+        "CRM",
+        "Prospecção",
+        "SDR"
+      ],
+      "education": [
+        {
+          "degree": "Negócios e Vendas Consultivas",
+          "institution": "FIA",
+          "period": "2014–2018",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Administração de Empresas",
+          "institution": "UNIP",
+          "period": "2011–2015",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2022",
+          "title": "SDR",
+          "dept": "Comercial",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2020",
+          "title": "SDR",
+          "dept": "Comercial",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2018",
+          "title": "Analista",
+          "dept": "Comercial",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-30",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-23",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-16",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-09",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-02",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 4,
+        "directReports": 0,
+        "groups": 4,
+        "recognitions": 10
+      }
+    },
+    {
+      "id": "lucas-ferreira",
+      "orgChartId": 21,
+      "name": "Lucas Ferreira",
+      "title": "Account Executive",
+      "dept": "Comercial",
+      "deptId": "comercial",
+      "img": "avatar-alejandro-lopez.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "joao-pereira",
+      "managerName": "João Pereira",
+      "contact": {
+        "email": "lucas.ferreira@liotecnica.com.br",
+        "phone": "(19) 32352",
+        "location": "Campinas, SP · Comercial",
+        "teams": "@Lucas Ferreira"
+      },
+      "admission": "mai de 2019",
+      "bio": "Lucas Ferreira atua em Comercial na LioConecta, com foco em account executive e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Lucas Ferreira",
+        "birthDate": "9 de setembro de 1980",
+        "cpf": "***.***.***-52",
+        "rg": "27.352.952-2",
+        "maritalStatus": "Solteiro(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Negociação",
+        "CRM",
+        "Prospecção",
+        "Account"
+      ],
+      "education": [
+        {
+          "degree": "Negócios e Vendas Consultivas",
+          "institution": "FIA",
+          "period": "2011–2015",
+          "type": "pos",
+          "note": "Pós-graduação"
+        },
+        {
+          "degree": "Administração de Empresas",
+          "institution": "UNIP",
+          "period": "2008–2012",
+          "type": "graduacao",
+          "note": "Graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2019",
+          "title": "Account Executive",
+          "dept": "Comercial",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2017",
+          "title": "Account Executive",
+          "dept": "Comercial",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2015",
+          "title": "Analista",
+          "dept": "Comercial",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-28",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-21",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-07",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 7,
+        "directReports": 0,
+        "groups": 4,
+        "recognitions": 7
+      }
+    },
+    {
+      "id": "marcos-vieira",
+      "orgChartId": 22,
+      "name": "Marcos Vieira",
+      "title": "Gerente Financeiro",
+      "dept": "Financeiro",
+      "deptId": "financeiro",
+      "img": "avatar-maria-silva.png",
+      "tags": [
+        "director"
+      ],
+      "managerId": "julio-schwartzman",
+      "managerName": "Júlio Schwartzman",
+      "contact": {
+        "email": "marcos.vieira@liotecnica.com.br",
+        "phone": "(19) 32253",
+        "location": "Campinas, SP · Financeiro",
+        "teams": "@Marcos Vieira"
+      },
+      "admission": "nov de 2018",
+      "bio": "Marcos Vieira atua em Financeiro na LioConecta, com foco em gerente financeiro e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Marcos Vieira",
+        "birthDate": "22 de junho de 1989",
+        "cpf": "***.***.***-53",
+        "rg": "17.253.953-3",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Controladoria",
+        "Orçamento",
+        "Fluxo de caixa",
+        "Gerente"
+      ],
+      "education": [
+        {
+          "degree": "Contabilidade e Finanças",
+          "institution": "Mackenzie",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Controladoria e Finanças",
+          "institution": "FIPECAFI",
+          "period": "2006–2010",
+          "type": "pos",
+          "note": "Pós-graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Gerente Financeiro",
+          "dept": "Financeiro",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Analista Financeiro",
+          "dept": "Financeiro",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Financeiro",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 3,
+        "groups": 4,
+        "recognitions": 13
+      }
+    },
+    {
+      "id": "vicente-lima",
+      "orgChartId": 23,
+      "name": "Vicente Lima",
+      "title": "Analista Financeiro",
+      "dept": "Financeiro",
+      "deptId": "financeiro",
+      "img": "avatar-nexora-news.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "marcos-vieira",
+      "managerName": "Marcos Vieira",
+      "contact": {
+        "email": "vicente.lima@liotecnica.com.br",
+        "phone": "(19) 32137",
+        "location": "Campinas, SP · Financeiro",
+        "teams": "@Vicente Lima"
+      },
+      "admission": "jul de 2021",
+      "bio": "Vicente Lima atua em Financeiro na LioConecta, com foco em analista financeiro e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Vicente Lima",
+        "birthDate": "18 de outubro de 1981",
+        "cpf": "***.***.***-37",
+        "rg": "79.137.937-7",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Controladoria",
+        "Orçamento",
+        "Fluxo de caixa",
+        "Analista"
+      ],
+      "education": [
+        {
+          "degree": "Contabilidade e Finanças",
+          "institution": "Mackenzie",
+          "period": "2012–2016",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Controladoria e Finanças",
+          "institution": "FIPECAFI",
+          "period": "2009–2013",
+          "type": "pos",
+          "note": "Pós-graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2021",
+          "title": "Analista Financeiro",
+          "dept": "Financeiro",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2019",
+          "title": "Analista Financeiro",
+          "dept": "Financeiro",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2017",
+          "title": "Analista",
+          "dept": "Financeiro",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-28",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-21",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-07",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 5,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 17
+      }
+    },
+    {
+      "id": "natalia-rocha",
+      "orgChartId": 24,
+      "name": "Natália Rocha",
+      "title": "Analista de Controladoria",
+      "dept": "Financeiro",
+      "deptId": "financeiro",
+      "img": "avatar-maria-silva.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "marcos-vieira",
+      "managerName": "Marcos Vieira",
+      "contact": {
+        "email": "natalia.rocha@liotecnica.com.br",
+        "phone": "(19) 32351",
+        "location": "Campinas, SP · Financeiro",
+        "teams": "@Natália Rocha"
+      },
+      "admission": "mar de 2018",
+      "bio": "Natália Rocha atua em Financeiro na LioConecta, com foco em analista de controladoria e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Natália Rocha",
+        "birthDate": "8 de agosto de 1979",
+        "cpf": "***.***.***-51",
+        "rg": "26.351.951-1",
+        "maritalStatus": "Divorciado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Controladoria",
+        "Orçamento",
+        "Fluxo de caixa",
+        "Analista"
+      ],
+      "education": [
+        {
+          "degree": "Contabilidade e Finanças",
+          "institution": "Mackenzie",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Controladoria e Finanças",
+          "institution": "FIPECAFI",
+          "period": "2006–2010",
+          "type": "pos",
+          "note": "Pós-graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Analista de Controladoria",
+          "dept": "Financeiro",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Analista de Controladoria",
+          "dept": "Financeiro",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Financeiro",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-29",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-22",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-15",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-08",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 0,
+        "groups": 3,
+        "recognitions": 6
+      }
+    },
+    {
+      "id": "bianca-alves",
+      "orgChartId": 25,
+      "name": "Bianca Alves",
+      "title": "Assistente Financeiro",
+      "dept": "Financeiro",
+      "deptId": "financeiro",
+      "img": "avatar-carlos-mendes.png",
+      "tags": [
+        "member"
+      ],
+      "managerId": "marcos-vieira",
+      "managerName": "Marcos Vieira",
+      "contact": {
+        "email": "bianca.alves@liotecnica.com.br",
+        "phone": "(19) 32113",
+        "location": "Campinas, SP · Financeiro",
+        "teams": "@Bianca Alves"
+      },
+      "admission": "jul de 2018",
+      "bio": "Bianca Alves atua em Financeiro na LioConecta, com foco em assistente financeiro e colaboração entre áreas.",
+      "personal": {
+        "fullName": "Bianca Alves",
+        "birthDate": "22 de outubro de 1993",
+        "cpf": "***.***.***-13",
+        "rg": "55.113.913-3",
+        "maritalStatus": "Casado(a)",
+        "nationality": "Brasileira"
+      },
+      "skills": [
+        "Controladoria",
+        "Orçamento",
+        "Fluxo de caixa",
+        "Assistente"
+      ],
+      "education": [
+        {
+          "degree": "Contabilidade e Finanças",
+          "institution": "Mackenzie",
+          "period": "2009–2013",
+          "type": "graduacao",
+          "note": "Graduação"
+        },
+        {
+          "degree": "Controladoria e Finanças",
+          "institution": "FIPECAFI",
+          "period": "2006–2010",
+          "type": "pos",
+          "note": "Pós-graduação"
+        }
+      ],
+      "history": [
+        {
+          "date": "2018",
+          "title": "Assistente Financeiro",
+          "dept": "Financeiro",
+          "type": "atual",
+          "note": "Cargo atual na LioConecta."
+        },
+        {
+          "date": "2016",
+          "title": "Assistente Financeiro",
+          "dept": "Financeiro",
+          "type": "promotion",
+          "note": "Promoção por desempenho e entrega consistente."
+        },
+        {
+          "date": "2014",
+          "title": "Analista",
+          "dept": "Financeiro",
+          "type": "admission",
+          "note": "Admissão na LioTécnica."
+        }
+      ],
+      "interactions": [
+        {
+          "date": "2026-06-27",
+          "type": "recognition",
+          "title": "Reconhecimento no feed",
+          "detail": "Recebeu elogio público por entrega de projeto.",
+          "icon": "fa-solid fa-gift"
+        },
+        {
+          "date": "2026-06-20",
+          "type": "message",
+          "title": "Mensagem interna",
+          "detail": "Conversou com colega sobre alinhamento de sprint.",
+          "icon": "fa-regular fa-comment"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "meeting",
+          "title": "Reunião registrada",
+          "detail": "Participou de reunião de alinhamento semanal.",
+          "icon": "fa-regular fa-calendar"
+        },
+        {
+          "date": "2026-06-06",
+          "type": "document",
+          "title": "Documento compartilhado",
+          "detail": "Publicou material no módulo de documentos.",
+          "icon": "fa-regular fa-file-lines"
+        },
+        {
+          "date": "2026-06-01",
+          "type": "group",
+          "title": "Atividade em grupo",
+          "detail": "Interagiu no grupo departamental da intranet.",
+          "icon": "fa-solid fa-users"
+        }
+      ],
+      "stats": {
+        "tenureYears": 8,
+        "directReports": 0,
+        "groups": 2,
+        "recognitions": 8
+      }
+    }
+  ]
+}

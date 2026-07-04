@@ -162,6 +162,37 @@
       background: #f1f5f9;
       color: #1e293b;
     }
+    .topbar__dropdown-menu--services {
+      min-width: 420px;
+      max-height: min(72vh, 520px);
+      overflow-y: auto;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 4px;
+      align-content: start;
+    }
+
+    .topbar__menu-heading {
+      grid-column: 1 / -1;
+      padding: 8px 12px 4px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--wf-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      user-select: none;
+    }
+
+    .topbar__menu-heading:not(:first-child) {
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .topbar__dropdown-menu--services a {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
 
     .topbar__zone {
       font-size: 10px;
@@ -1760,13 +1791,32 @@
               Serviços
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
-            <div class="topbar__dropdown-menu" id="menu-servicos" role="menu">
+            <div class="topbar__dropdown-menu topbar__dropdown-menu--services" id="menu-servicos" role="menu">
+              <span class="topbar__menu-heading" role="presentation">RH &amp; Pessoas</span>
               <a href="#" role="menuitem">Benefícios</a>
               <a href="#" role="menuitem">Contracheque</a>
               <a href="#" role="menuitem">Férias e ausências</a>
-              <a href="#" role="menuitem">Solicitações</a>
+              <a href="#" role="menuitem">Solicitações RH</a>
+              <a href="#" role="menuitem">Ponto eletrônico</a>
+              <a href="#" role="menuitem">Vale-transporte</a>
+              <span class="topbar__menu-heading" role="presentation">Financeiro</span>
+              <a href="#" role="menuitem">Reembolso de despesas</a>
+              <a href="#" role="menuitem">Adiantamento de viagem</a>
+              <span class="topbar__menu-heading" role="presentation">TI &amp; Suporte</span>
               <a href="#" role="menuitem">Help Desk</a>
+              <a href="#" role="menuitem">Solicitar equipamento</a>
+              <a href="#" role="menuitem">Acesso a sistemas</a>
+              <a href="#" role="menuitem">VPN e acesso remoto</a>
+              <span class="topbar__menu-heading" role="presentation">Facilities</span>
               <a href="#" role="menuitem">Reservas de salas</a>
+              <a href="#" role="menuitem">Reserva de veículos</a>
+              <a href="#" role="menuitem">Crachá e visitantes</a>
+              <a href="#" role="menuitem">Encomendas e correios</a>
+              <span class="topbar__menu-heading" role="presentation">Jurídico &amp; Compliance</span>
+              <a href="#" role="menuitem">Declarações e certidões</a>
+              <a href="#" role="menuitem">Assinatura digital</a>
+              <a href="#" role="menuitem">Seguro de vida</a>
+              <a href="#" role="menuitem">Canal de denúncias</a>
             </div>
           </div>
         </nav>

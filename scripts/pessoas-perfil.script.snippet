@@ -1,0 +1,159 @@
+  <script>
+    (function () {
+      const deptColors = {
+        Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
+        Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
+        "Recursos Humanos": { stroke: "#f9a8d4", badge: "#fce7f3", text: "#be185d" },
+        Marketing: { stroke: "#86efac", badge: "#dcfce7", text: "#15803d" },
+        TI: { stroke: "#67e8f9", badge: "#cffafe", text: "#0e7490" },
+        Comercial: { stroke: "#fdba74", badge: "#ffedd5", text: "#c2410c" },
+        Financeiro: { stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
+      };
+
+      const historyTypeLabels = {
+        atual: "Cargo atual",
+        promotion: "Promoção",
+        admission: "Admissão",
+        lateral: "Movimentação"
+      };
+
+      function getDeptColors(dept) {
+        return deptColors[dept] || deptColors.Executiva;
+      }
+
+      function getProfileId() {
+        return new URLSearchParams(window.location.search).get("id");
+      }
+
+      function formatDate(isoDate) {
+        const parts = isoDate.split("-");
+        if (parts.length !== 3) return isoDate;
+        return parts[2] + "/" + parts[1] + "/" + parts[0];
+      }
+
+      function renderStats(person) {
+        const stats = person.stats || {};
+        const items = [
+          { value: stats.tenureYears || 0, label: "Anos de casa" },
+          { value: stats.directReports || 0, label: "Reportes diretos" },
+          { value: stats.groups || 0, label: "Grupos" },
+          { value: stats.recognitions || 0, label: "Reconhecimentos" }
+        ];
+        return items.map(function (item) {
+          return (
+            '<div class="profile-stat">' +
+            '<span class="profile-stat__value">' + item.value + "</span>" +
+            '<span class="profile-stat__label">' + item.label + "</span>" +
+            "</div>"
+          );
+        }).join("");
+      }
+
+      function renderContact(person) {
+        const contact = person.contact || {};
+        const managerHtml = person.managerId
+          ? '<a href="pessoas-perfil.html?id=' + person.managerId + '">' + person.managerName + "</a>"
+          : "—";
+
+        return (
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">E-mail</span><span class="profile-contact-item__value"><a href="mailto:' + contact.email + '">' + contact.email + "</a></span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Telefone / Ramal</span><span class="profile-contact-item__value">' + contact.phone + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Localização</span><span class="profile-contact-item__value">' + contact.location + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Microsoft Teams</span><span class="profile-contact-item__value">' + contact.teams + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Admissão</span><span class="profile-contact-item__value">' + person.admission + "</span></div>" +
+          '<div class="profile-contact-item"><span class="profile-contact-item__label">Reporta-se a</span><span class="profile-contact-item__value">' + managerHtml + "</span></div>"
+        );
+      }
+
+      function renderSkills(skills) {
+        return (skills || []).map(function (skill) {
+          return '<span class="profile-skill">' + skill + "</span>";
+        }).join("");
+      }
+
+      function renderHistory(history) {
+        return (history || []).map(function (item) {
+          return (
+            '<article class="profile-timeline__item">' +
+            '<div class="profile-timeline__date">' + item.date + " · " + (historyTypeLabels[item.type] || item.type) + "</div>" +
+            '<div class="profile-timeline__title">' + item.title + "</div>" +
+            '<div class="profile-timeline__meta">' + item.dept + "</div>" +
+            '<p class="profile-timeline__note">' + item.note + "</p>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderInteractions(interactions) {
+        return (interactions || []).map(function (item) {
+          return (
+            '<article class="profile-interaction">' +
+            '<div class="profile-interaction__icon"><i class="' + item.icon + '" aria-hidden="true"></i></div>' +
+            "<div>" +
+            '<div class="profile-interaction__title">' + item.title + "</div>" +
+            '<div class="profile-interaction__detail">' + item.detail + "</div>" +
+            "</div>" +
+            '<time class="profile-interaction__date" datetime="' + item.date + '">' + formatDate(item.date) + "</time>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function renderProfile(person) {
+        const colors = getDeptColors(person.dept);
+        const root = document.getElementById("profile-root");
+        root.style.setProperty("--profile-accent", colors.stroke);
+        root.style.setProperty("--profile-badge-bg", colors.badge);
+        root.style.setProperty("--profile-badge-text", colors.text);
+
+        document.title = "LioConecta — " + person.name;
+        document.getElementById("profile-breadcrumb-name").textContent = person.name;
+        document.getElementById("profile-avatar").src = person.img;
+        document.getElementById("profile-avatar").alt = "Foto de " + person.name;
+        document.getElementById("profile-name").textContent = person.name;
+        document.getElementById("profile-role").textContent = person.title;
+        document.getElementById("profile-dept").textContent = person.dept;
+        document.getElementById("profile-bio").textContent = person.bio;
+        document.getElementById("profile-stats").innerHTML = renderStats(person);
+        document.getElementById("profile-contact").innerHTML = renderContact(person);
+        document.getElementById("profile-skills").innerHTML = renderSkills(person.skills);
+        document.getElementById("profile-history").innerHTML = renderHistory(person.history);
+        document.getElementById("profile-interactions").innerHTML = renderInteractions(person.interactions);
+
+        const emailBtn = document.getElementById("profile-email-btn");
+        emailBtn.href = "mailto:" + person.contact.email;
+
+        document.getElementById("profile-message-btn").onclick = function () {
+          alert("Mensagem para " + person.name + " — chat interno em breve.");
+        };
+
+        root.hidden = false;
+      }
+
+      function showError() {
+        document.getElementById("profile-error").hidden = false;
+      }
+
+      fetch("data/pessoas-perfis.json")
+        .then(function (response) {
+          if (!response.ok) throw new Error("fetch failed");
+          return response.json();
+        })
+        .then(function (data) {
+          const profileId = getProfileId();
+          const person = (data.people || []).find(function (entry) {
+            return entry.id === profileId || String(entry.orgChartId) === profileId;
+          });
+
+          if (!person) {
+            showError();
+            return;
+          }
+
+          renderProfile(person);
+        })
+        .catch(function () {
+          showError();
+        });
+    })();
+  </script>
