@@ -19,6 +19,23 @@ function injectPageStyles(pageId: string) {
   let combined = assets?.styles ?? "";
   if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
   if (pageId === "pessoas-organograma") combined += "\n" + orgModalCss;
+  if (pageId === "feed") {
+    combined += `
+.main.main--feed-scroll {
+  max-height: calc(100vh - var(--wf-topbar-h, 72px)) !important;
+  overflow-y: auto !important;
+  padding: 0 24px 40px !important;
+}
+.main.main--feed-scroll > :first-child {
+  padding-top: 20px;
+}
+.feed-composer {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 25 !important;
+}
+`;
+  }
   if (!combined) return;
   el.textContent = combined;
   document.head.appendChild(el);
@@ -59,7 +76,7 @@ export function LegacyPage() {
     const feedGridAndAfter = html.slice(splitIndex);
 
     return (
-      <main className="main" ref={mainRef}>
+      <main className="main main--feed-scroll" ref={mainRef}>
         <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
         <FeedComposer />
         <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
@@ -100,7 +117,7 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
     const feedGridAndAfter = html.slice(splitIndex);
 
     return (
-      <main className="main" ref={mainRef}>
+      <main className="main main--feed-scroll" ref={mainRef}>
         <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
         <FeedComposer />
         <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
