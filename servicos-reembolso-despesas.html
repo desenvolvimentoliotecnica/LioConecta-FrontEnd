@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Novos Colaboradores</title>
+  <title>LioConecta — Reembolso de Despesas</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="assets/user-menu.css" />
   <style>
@@ -823,23 +823,24 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — NOVOS COLABORADORES */
+    /* PAGE: SERVIÇOS — REEMBOLSO DE DESPESAS */
     .filter-chip.is-active {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #15803d;
+      background: #ffe4e6;
+      border-color: #fda4af;
+      color: #be123c;
     }
 
-    .topbar__dropdown-menu a.is-active {
-      background: #dcfce7;
-      color: #15803d;
+    .topbar__dropdown-menu--services a.is-active {
+      background: #ffe4e6;
+      color: #be123c;
+      font-weight: 600;
     }
 
     .welcome-banner {
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
-      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-      border: 1px dashed #86efac;
+      background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+      border: 1px dashed #fda4af;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -850,8 +851,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #dcfce7;
-      color: #15803d;
+      background: #ffe4e6;
+      color: #e11d48;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -862,137 +863,178 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #14532d;
+      color: #881337;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #166534;
+      color: #be123c;
       line-height: 1.45;
     }
 
-    .directory {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .dept-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .dept-group__header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--wf-border);
-    }
-
-    .dept-group__title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .dept-group__count {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-      font-weight: 500;
-    }
-
-    .directory-grid {
+    .reimb-stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
+      margin-bottom: var(--wf-gap);
     }
 
-    .person-card {
+    .reimb-stat {
       background: #fff;
       border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .reimb-stat__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e11d48;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .reimb-stat__label {
+      font-size: 11px;
+      color: var(--wf-text-muted);
+      line-height: 1.35;
+    }
+
+    .reimb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .reimb-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px;
       box-shadow:
         0 2px 6px rgba(15, 23, 42, 0.06),
         0 6px 16px rgba(15, 23, 42, 0.08);
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      grid-template-rows: auto auto auto auto;
-      column-gap: 10px;
-      row-gap: 2px;
-      align-items: center;
-      text-align: left;
-    }
-
-    .person-card__avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid var(--wf-border);
-      object-fit: cover;
-      grid-row: 1 / 5;
-      align-self: center;
-    }
-
-    .person-card__name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #1e293b;
-      margin: 0;
-      line-height: 1.25;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .person-card__role {
-      font-size: 11px;
-      color: var(--wf-text);
-      line-height: 1.3;
-      margin: 0;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .person-card__dept {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #dcfce7;
-      color: #15803d;
-      grid-column: 2;
-      justify-self: start;
-    }
-
-    .person-card__start {
-      font-size: 10px;
-      color: var(--wf-text-muted);
-      margin: 0;
-      grid-column: 2;
-    }
-
-    .person-card__meta {
-      display: none;
-    }
-
-    .person-card__actions {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      grid-column: 3;
-      grid-row: 1 / 5;
-      align-self: center;
+      gap: 10px;
+      min-height: 152px;
     }
 
-    .person-card__btn {
+    .reimb-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #fda4af;
+      background: linear-gradient(135deg, #fff 0%, #fff1f2 100%);
+    }
+
+    .reimb-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .reimb-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .reimb-card__icon--solicitacao { background: #ffe4e6; color: #e11d48; border-color: #fda4af; }
+    .reimb-card__cat--solicitacao { background: #ffe4e6; color: #be123c; }
+    .reimb-card__icon--despesa { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .reimb-card__cat--despesa { background: #fef3c7; color: #b45309; }
+    .reimb-card__icon--aprovacao { background: #dcfce7; color: #16a34a; border-color: #86efac; }
+    .reimb-card__cat--aprovacao { background: #dcfce7; color: #15803d; }
+    .reimb-card__icon--relatorio { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .reimb-card__cat--relatorio { background: #e0f2fe; color: #0369a1; }
+    .reimb-card__icon--consulta { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+    .reimb-card__cat--consulta { background: #ede9fe; color: #6d28d9; }
+
+    .reimb-card__main { flex: 1; min-width: 0; }
+
+    .reimb-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .reimb-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .reimb-card.is-featured .reimb-card__desc { -webkit-line-clamp: 3; }
+
+    .reimb-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .reimb-card__cat {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ffe4e6;
+      color: #be123c;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .reimb-card__badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .reimb-card__badge--online { background: #dcfce7; color: #15803d; }
+
+    .reimb-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--wf-text-muted);
+    }
+
+    .reimb-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .reimb-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .reimb-card__actions { display: flex; gap: 4px; }
+
+    .reimb-card__btn {
       width: 28px;
       height: 28px;
       border: 1px dashed var(--wf-border);
@@ -1007,10 +1049,29 @@
       text-decoration: none;
     }
 
-    .person-card__btn:hover {
-      background: #ecfeff;
-      color: #0e7490;
-      border-color: #67e8f9;
+    .reimb-card__btn:hover {
+      background: #fff1f2;
+      color: #be123c;
+      border-color: #fda4af;
+    }
+
+    .reimb-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #e11d48;
+      border: 1px solid #e11d48;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .reimb-card__open:hover {
+      background: #be123c;
+      border-color: #be123c;
     }
 
     .page-empty-note {
@@ -1020,22 +1081,10 @@
       text-align: center;
     }
 
-    @media (max-width: 1200px) {
-      .directory-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
     @media (max-width: 900px) {
-      .directory-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .directory-grid {
-        grid-template-columns: 1fr;
-      }
+      .reimb-stats { grid-template-columns: 1fr; }
+      .reimb-grid { grid-template-columns: 1fr; }
+      .reimb-card.is-featured { grid-column: auto; }
     }
 
     /* QUICK ACCESS */
@@ -1710,7 +1759,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1721,7 +1770,7 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
               <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
-              <a href="pessoas-novos-colaboradores.html" role="menuitem" class="is-active">Novos colaboradores</a>
+              <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
               <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
               <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
             </div>
@@ -1765,7 +1814,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1783,7 +1832,7 @@
               <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
               <a href="servicos-vale-transporte.html" role="menuitem">Vale-transporte</a>
               <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
-              <a href="servicos-reembolso-despesas.html" role="menuitem">Reembolso de despesas</a>
+              <a href="servicos-reembolso-despesas.html" role="menuitem" class="is-active">Reembolso de despesas</a>
               <a href="#" role="menuitem">Adiantamento de viagem</a>
               <span class="topbar__menu-heading topbar__menu-heading--ti" role="presentation"><i class="fa-solid fa-headset" aria-hidden="true"></i> TI &amp; Suporte</span>
               <a href="#" role="menuitem">Help Desk</a>
@@ -1873,45 +1922,63 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span>Serviços</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Novos colaboradores</span>
+            <span>Financeiro</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Reembolso de despesas</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Novos Colaboradores</h1>
+              <h1 class="page-header__title">Reembolso de Despesas</h1>
               <p class="page-header__desc">
-                Conheça quem acabou de chegar à LioConecta. Dê boas-vindas, conecte-se com os novos times e acompanhe as admissões recentes.
+                Envie comprovantes, acompanhe aprovações e receba reembolsos de despesas corporativas com rastreabilidade completa.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></div>
           <div>
-            <div class="welcome-banner__title">Boas-vindas aos novos membros!</div>
-            <p class="welcome-banner__text">Este mês entraram 7 colaboradores. Envie uma mensagem de acolhimento e ajude na integração.</p>
+            <div class="welcome-banner__title">Despesas corporativas</div>
+            <p class="welcome-banner__text">Solicite reembolso de despesas relacionadas ao trabalho com comprovantes e aprovação conforme a política financeira da empresa.</p>
+          </div>
+        </div>
+
+        <div class="reimb-stats" aria-label="Resumo">
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">R$ 1.240,00</div>
+            <div class="reimb-stat__label">Valor pendente de pagamento</div>
+          </div>
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">2</div>
+            <div class="reimb-stat__label">Solicitações em análise</div>
+          </div>
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">18</div>
+            <div class="reimb-stat__label">Reembolsos pagos em 2026</div>
           </div>
         </div>
 
         <div class="page-toolbar">
-          <div class="page-filters" id="newcomers-filters" role="group" aria-label="Filtros">
+          <div class="page-filters" id="reimb-filters" role="group" aria-label="Filtros">
             <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
-            <button class="filter-chip" type="button" data-filter="jun-2026">Junho 2026</button>
-            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
-            <button class="filter-chip" type="button" data-filter="ti">TI</button>
+            <button class="filter-chip" type="button" data-filter="solicitacao">Solicitações</button>
+            <button class="filter-chip" type="button" data-filter="despesa">Tipos de despesa</button>
+            <button class="filter-chip" type="button" data-filter="aprovacao">Aprovações</button>
+            <button class="filter-chip" type="button" data-filter="relatorio">Relatórios</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar novos colaboradores...
+            Buscar serviços de reembolso...
           </div>
         </div>
 
-        <div class="directory" id="newcomers-root" aria-label="Novos colaboradores por mês"></div>
+        <div class="reimb-grid" id="reimb-root" aria-label="Serviços de reembolso de despesas"></div>
 
-        <p class="page-empty-note" id="newcomers-count">Exibindo 13 novos colaboradores</p>
+        <p class="page-empty-note" id="reimb-count">Exibindo 12 serviços</p>
 
       </main>
 
@@ -1972,147 +2039,100 @@
 
   <script>
     (function () {
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
+      const catLabels = {
+        solicitacao: "Solicitação",
+        despesa: "Despesa",
+        aprovacao: "Aprovação",
+        relatorio: "Relatório",
+        consulta: "Consulta"
+      };
+
+      const catIcons = {
+        solicitacao: "fa-file-circle-plus",
+        despesa: "fa-wallet",
+        aprovacao: "fa-check-double",
+        relatorio: "fa-chart-line",
+        consulta: "fa-circle-question"
+      };
+
+      const catStyles = {
+        solicitacao: "",
+        despesa: "",
+        aprovacao: "",
+        relatorio: "",
+        consulta: ""
+      };
+
+      const items = [
+        { id: "nova", title: "Nova Solicitação de Reembolso", desc: "Abra um pedido informando data, valor, categoria da despesa e anexe notas fiscais ou recibos para análise do financeiro.", cat: "solicitacao", sla: "Protocolo imediato", online: true, featured: true, action: "Solicitar" },
+        { id: "alimentacao", title: "Despesas de Alimentação", desc: "Reembolso de refeições em viagens ou eventos externos conforme limites diários da política de despesas.", cat: "despesa", sla: "Até 5 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "transporte", title: "Transporte e Táxi", desc: "Deslocamentos a trabalho com taxi, app ou transporte por aplicativo, com comprovante e justificativa.", cat: "despesa", sla: "Até 5 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "hospedagem", title: "Hospedagem", desc: "Estadias em viagens corporativas dentro do teto por cidade e categoria aprovada pela empresa.", cat: "despesa", sla: "Até 7 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "material", title: "Material e Escritório", desc: "Compras pontuais de insumos ou materiais para uso profissional com aprovação prévia quando exigido.", cat: "despesa", sla: "Até 5 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "comprovantes", title: "Anexar Comprovantes", desc: "Inclua ou substitua notas fiscais, cupons e recibos em solicitações já abertas aguardando documentação.", cat: "solicitacao", sla: "Até 24 horas", online: true, featured: false, action: "Anexar" },
+        { id: "status", title: "Acompanhar Status", desc: "Consulte em qual etapa está cada pedido: análise, aprovação gerencial, financeiro ou pagamento.", cat: "aprovacao", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "aprovar-equipe", title: "Aprovar Reembolsos da Equipe", desc: "Gestores validam despesas dos colaboradores do time antes do encaminhamento ao financeiro.", cat: "aprovacao", sla: "Até 2 dias úteis", online: true, featured: false, action: "Aprovar" },
+        { id: "politica", title: "Política de Reembolso", desc: "Limites por categoria, prazos para solicitação, documentos aceitos e regras de aprovação vigentes.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "extrato", title: "Extrato de Reembolsos", desc: "Histórico de valores solicitados, aprovados e pagos nos últimos 24 meses com exportação.", cat: "relatorio", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "prestacao", title: "Prestação de Contas", desc: "Finalize viagens ou projetos informando saldo utilizado e devolução de valores não usados.", cat: "solicitacao", sla: "Até 3 dias úteis", online: true, featured: false, action: "Enviar" },
+        { id: "duvidas", title: "Dúvidas Financeiras", desc: "Orientações sobre categorias elegíveis, prazos de pagamento e documentação exigida pelo financeiro.", cat: "consulta", sla: "Até 2 dias úteis", online: true, featured: false, action: "Consultar" }
       ];
 
-      const cohorts = [
-        {
-          id: "jul-2026",
-          name: "Julho 2026",
-          people: [
-            { name: "Otávio Ribeiro", role: "Analista de Produto", dept: "Produto", deptId: "produto", start: "01 jul 2026" },
-            { name: "Paula Mendes", role: "Designer UI", dept: "Produto", deptId: "produto", start: "03 jul 2026" },
-            { name: "Rafael Costa", role: "Analista de RH", dept: "Recursos Humanos", deptId: "rh", start: "07 jul 2026" },
-            { name: "Simone Alves", role: "Analista de Marketing", dept: "Marketing", deptId: "marketing", start: "08 jul 2026" },
-            { name: "Tiago Nunes", role: "Desenvolvedor Frontend", dept: "TI", deptId: "ti", start: "10 jul 2026" },
-            { name: "Una Ferreira", role: "Executiva Comercial", dept: "Comercial", deptId: "comercial", start: "14 jul 2026" },
-            { name: "Vicente Lima", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", start: "15 jul 2026" }
-          ]
-        },
-        {
-          id: "jun-2026",
-          name: "Junho 2026",
-          people: [
-            { name: "William Souza", role: "DevOps Engineer", dept: "TI", deptId: "ti", start: "02 jun 2026" },
-            { name: "Xavier Dias", role: "SDR", dept: "Comercial", deptId: "comercial", start: "09 jun 2026" },
-            { name: "Yasmin Teixeira", role: "Analista de Social Media", dept: "Marketing", deptId: "marketing", start: "16 jun 2026" },
-            { name: "Zilda Campos", role: "Assistente de RH", dept: "Recursos Humanos", deptId: "rh", start: "18 jun 2026" },
-            { name: "Amanda Rocha", role: "UX Researcher", dept: "Produto", deptId: "produto", start: "23 jun 2026" },
-            { name: "Bernardo Pires", role: "Analista de QA", dept: "TI", deptId: "ti", start: "30 jun 2026" }
-          ]
-        }
-      ];
-
-      let avatarIndex = 0;
-
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatar;
-      }
-
-      function renderPerson(person) {
-        const avatar = nextAvatar();
+      function renderItem(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const catBadgeClass = item.cat !== "solicitacao" ? " reimb-card__cat--" + item.cat : "";
+        const onlineBadge = item.online ? '<span class="reimb-card__badge reimb-card__badge--online">Online</span>' : "";
+        const viewActions = ["Consultar", "Abrir", "Simular"];
+        const actionIcon = viewActions.indexOf(item.action) !== -1 ? "fa-regular fa-eye" : "fa-solid fa-paper-plane";
+        const style = catStyles[item.cat] || "";
         return `
-          <article class="person-card" data-dept="${person.deptId}">
-            <img class="person-card__avatar" src="${avatar}" alt="" />
-            <h2 class="person-card__name">${person.name}</h2>
-            <p class="person-card__role">${person.role}</p>
-            <span class="person-card__dept">${person.dept}</span>
-            <p class="person-card__start">Início: ${person.start}</p>
-            <div class="person-card__actions">
-              <a class="person-card__btn" href="#" aria-label="Dar boas-vindas a ${person.name}"><i class="fa-regular fa-hand-peace" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${person.name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${person.name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+          <article class="reimb-card${featuredClass}" data-cat="${item.cat}">
+            <div class="reimb-card__head">
+              <div class="reimb-card__icon reimb-card__icon--${item.cat}${style ? " " + style : ""}" aria-hidden="true">
+                <i class="fa-solid ${catIcons[item.cat] || "fa-file"}"></i>
+              </div>
+              <div class="reimb-card__main">
+                <h2 class="reimb-card__title">${item.title}</h2>
+                <p class="reimb-card__desc">${item.desc}</p>
+              </div>
             </div>
-          </article>
-        `;
+            <div class="reimb-card__tags">
+              <span class="reimb-card__cat${catBadgeClass}">${catLabels[item.cat] || item.cat}</span>
+              ${onlineBadge}
+            </div>
+            <div class="reimb-card__meta">
+              <span><i class="fa-regular fa-clock" aria-hidden="true"></i> ${item.sla}</span>
+            </div>
+            <div class="reimb-card__footer">
+              <a class="reimb-card__open" href="#"><i class="${actionIcon}" aria-hidden="true"></i> ${item.action}</a>
+              <div class="reimb-card__actions">
+                <a class="reimb-card__btn" href="#" aria-label="Ajuda ${item.title}"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></a>
+                <a class="reimb-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
       }
 
-      function renderCohort(cohort) {
-        const cards = cohort.people.map(renderPerson).join("");
-        return `
-          <section class="dept-group" data-cohort="${cohort.id}" aria-label="${cohort.name}">
-            <div class="dept-group__header">
-              <h2 class="dept-group__title">${cohort.name}</h2>
-              <span class="dept-group__count">${cohort.people.length} admissões</span>
-            </div>
-            <div class="directory-grid">
-              ${cards}
-            </div>
-          </section>
-        `;
-      }
-
-      const root = document.getElementById("newcomers-root");
-      const countEl = document.getElementById("newcomers-count");
-      const filters = document.getElementById("newcomers-filters");
-      let activeFilter = "all";
-
+      const root = document.getElementById("reimb-root");
+      const countEl = document.getElementById("reimb-count");
+      const filters = document.getElementById("reimb-filters");
       if (!root) return;
-
-      root.innerHTML = cohorts.map(renderCohort).join("");
-
-      function updateCount(visibleTotal, groupCount) {
-        if (!countEl) return;
-        if (activeFilter === "all") {
-          countEl.textContent = "Exibindo " + visibleTotal + " novos colaboradores em " + groupCount + " meses";
-        } else {
-          countEl.textContent = "Exibindo " + visibleTotal + " novos colaboradores";
-        }
-      }
-
+      root.innerHTML = items.map(renderItem).join("");
       function applyFilter(filter) {
-        activeFilter = filter;
-        let visibleTotal = 0;
-        let groupCount = 0;
-
-        root.querySelectorAll(".dept-group").forEach(function (group) {
-          const cohortId = group.getAttribute("data-cohort");
-          let visibleInGroup = 0;
-
-          group.querySelectorAll(".person-card").forEach(function (card) {
-            const deptId = card.getAttribute("data-dept");
-            const match =
-              filter === "all" ||
-              filter === cohortId ||
-              filter === deptId;
-            card.hidden = !match;
-            if (match) visibleInGroup += 1;
-          });
-
-          group.hidden = visibleInGroup === 0;
-          if (visibleInGroup > 0) {
-            groupCount += 1;
-            visibleTotal += visibleInGroup;
-            const countLabel = group.querySelector(".dept-group__count");
-            if (countLabel && cohort) {
-              countLabel.textContent = visibleInGroup + " admissões";
-            }
-          }
+        let visible = 0;
+        root.querySelectorAll(".reimb-card").forEach(function (card) {
+          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          card.hidden = !match;
+          if (match) visible += 1;
         });
-
-        updateCount(visibleTotal, groupCount);
+        if (countEl) countEl.textContent = "Exibindo " + visible + " serviço" + (visible === 1 ? "" : "s");
       }
-
       applyFilter("all");
-
       if (filters) {
         filters.addEventListener("click", function (event) {
           const chip = event.target.closest(".filter-chip");
           if (!chip) return;
-
-          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-            btn.classList.remove("is-active");
-          });
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
           chip.classList.add("is-active");
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
