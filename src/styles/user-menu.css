@@ -1,0 +1,117 @@
+/* Menu do usuário logado — isolado dos dropdowns do topbar */
+
+.user-menu {
+  position: relative;
+  z-index: 45;
+}
+
+.user-menu__trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px 2px 2px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.user-menu__trigger:hover,
+.user-menu.is-open .user-menu__trigger {
+  background: #f1f5f9;
+}
+
+.user-menu__trigger .avatar {
+  width: 36px;
+  height: 36px;
+}
+
+.user-menu__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  margin-right: 4px;
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.user-menu.is-open .user-menu__chevron {
+  transform: rotate(180deg);
+}
+
+.user-menu__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.user-menu__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  padding: 6px;
+  background: #fff;
+  border: 1px dashed var(--wf-border, #b8c0cc);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.12);
+  display: none;
+  z-index: 50;
+  gap: 2px;
+}
+
+.user-menu.is-open .user-menu__panel {
+  display: grid;
+}
+
+.user-menu__panel a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wf-text, #4a5568);
+  text-decoration: none;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.user-menu__panel a:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.user-menu__panel a i {
+  width: 16px;
+  text-align: center;
+  color: #64748b;
+}
+
+.user-menu__panel a.is-active {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.user-menu__panel a.is-active i {
+  color: #6d28d9;
+}
+
+@media (max-width: 720px) {
+  .user-menu__name,
+  .user-menu__chevron {
+    display: none;
+  }
+
+  .user-menu__trigger .avatar {
+    width: 34px;
+    height: 34px;
+  }
+}

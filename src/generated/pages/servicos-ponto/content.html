@@ -1,0 +1,61 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Serviços</span>
+            <span class="breadcrumb__sep">/</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Ponto eletrônico</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Ponto Eletrônico</h1>
+              <p class="page-header__desc">
+                Registre marcações, consulte espelho de ponto, solicite ajustes e acompanhe saldo de horas com o time de RH.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-fingerprint"></i></div>
+          <div>
+            <div class="welcome-banner__title">Controle de jornada de trabalho</div>
+            <p class="welcome-banner__text">Registre entrada, saída e intervalos pelo portal ou app mobile. Ajustes de ponto são validados pelo gestor em até 2 dias úteis.</p>
+          </div>
+        </div>
+
+        <div class="time-stats" aria-label="Resumo de ponto">
+          <div class="time-stat">
+            <div class="time-stat__value">7h 42min</div>
+            <div class="time-stat__label">Horas registradas hoje</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-stat__value">+02:15</div>
+            <div class="time-stat__label">Saldo no banco de horas</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-stat__value">2</div>
+            <div class="time-stat__label">Pendências aguardando aprovação</div>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="time-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="registro">Registro</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
+            <button class="filter-chip" type="button" data-filter="ajuste">Ajustes</button>
+            <button class="filter-chip" type="button" data-filter="relatorio">Relatórios</button>
+            <button class="filter-chip" type="button" data-filter="integracao">Integrações</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar serviços de ponto...
+          </div>
+        </div>
+
+        <div class="time-grid" id="time-root" aria-label="Serviços de ponto eletrônico"></div>
+
+        <p class="page-empty-note" id="time-count">Exibindo 12 serviços</p>

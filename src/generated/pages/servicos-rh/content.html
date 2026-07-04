@@ -1,0 +1,72 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Serviços</span>
+            <span class="breadcrumb__sep">/</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Solicitações RH</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Solicitações RH</h1>
+              <p class="page-header__desc">
+                Gerencie solicitações enviadas pelo RH e abra novos pedidos ao time de Pessoas. Tudo em um fluxo de mão dupla, com protocolo e acompanhamento.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div>
+            <div class="welcome-banner__title">Canal bidirecional com o RH</div>
+            <p class="welcome-banner__text">Receba pedidos do RH que exigem sua ação e envie suas próprias solicitações formalmente. Cada interação gera protocolo rastreável.</p>
+          </div>
+        </div>
+
+        <div class="rhreq-flow" aria-label="Fluxo de solicitações">
+          <div class="rhreq-flow__side rhreq-flow__side--in">
+            <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+            <span><strong>RH → Você</strong> — pendências, documentos e confirmações enviadas pelo time de Pessoas</span>
+          </div>
+          <div class="rhreq-flow__arrow" aria-hidden="true"><i class="fa-solid fa-arrows-left-right"></i></div>
+          <div class="rhreq-flow__side rhreq-flow__side--out">
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+            <span><strong>Você → RH</strong> — pedidos, declarações e alterações iniciadas por você</span>
+          </div>
+        </div>
+
+        <div class="rhreq-stats" aria-label="Resumo de solicitações">
+          <div class="rhreq-stat">
+            <div class="rhreq-stat__value">3</div>
+            <div class="rhreq-stat__label">Aguardando sua resposta (do RH)</div>
+          </div>
+          <div class="rhreq-stat">
+            <div class="rhreq-stat__value">2</div>
+            <div class="rhreq-stat__label">Aguardando retorno do RH (suas)</div>
+          </div>
+          <div class="rhreq-stat">
+            <div class="rhreq-stat__value">28</div>
+            <div class="rhreq-stat__label">Concluídas em 2026</div>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="rhreq-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="recebida">Do RH para mim</button>
+            <button class="filter-chip" type="button" data-filter="enviada">Minhas solicitações</button>
+            <button class="filter-chip" type="button" data-filter="documento">Documentos</button>
+            <button class="filter-chip" type="button" data-filter="acompanhamento">Acompanhamento</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar solicitações RH...
+          </div>
+        </div>
+
+        <div class="rhreq-grid" id="rhreq-root" aria-label="Serviços de solicitações RH"></div>
+
+        <p class="page-empty-note" id="rhreq-count">Exibindo 12 serviços</p>

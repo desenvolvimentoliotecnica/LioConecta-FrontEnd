@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LioConecta — Wireframe Layout</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/user-menu.css" />
+  <link rel="stylesheet" href="assets/notifications.css" />
+  <link rel="stylesheet" href="assets/shell.css" />
+  <style>
+    :root {
+      --wf-bg: #eceff3;
+      --wf-surface: #ffffff;
+      --wf-border: #b8c0cc;
+      --wf-border-strong: #8a96a8;
+      --wf-text: #4a5568;
+      --wf-text-muted: #8a96a8;
+      --wf-sidebar: #dfe6ef;
+      --wf-accent: #cbd5e1;
+      --wf-announce: #f3e8d8;
+      --wf-announce-border: #d4b896;
+      --wf-topbar-h: 72px;
+      --wf-sidebar-w-left: 56px;
+      --wf-sidebar-w-right: 56px;
+      --wf-sidebar-w-expanded: 196px;
+      --wf-radius: 10px;
+      --wf-gap: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--wf-bg);
+      color: var(--wf-text);
+      min-height: 100vh;
+    }
+
+    .wireframe-badge {
+      display: none;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-rows: var(--wf-topbar-h) 1fr;
+      min-height: 100vh;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px 2px 2px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+
+    .user-chip:hover {
+      background: #f1f5f9;
+    }
+
+    .user-chip .avatar {
+      width: 36px;
+      height: 36px;
+    }
+
+    .user-chip__chevron {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      margin-right: 4px;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--wf-border);
+      flex-shrink: 0;
+      object-fit: cover;
+      display: block;
+      background: var(--wf-accent);
+    }
+
+    .avatar--sm {
+      width: 40px;
+      height: 40px;
+    }
+
+    .avatar--brand {
+      object-fit: contain;
+      padding: 4px;
+      background: #fff;
+    }
+
+    .user-chip__name {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: #334155;
+    }
+
+    /* BODY */
+    .body {
+      display: grid;
+      grid-template-columns: var(--wf-sidebar-w-left) 1fr var(--wf-sidebar-w-right);
+      align-items: start;
+      min-height: calc(100vh - var(--wf-topbar-h));
+      transition: grid-template-columns 0.25s ease;
+      position: relative;
+    }
+
+    .body::before {
+      content: "";
+      position: fixed;
+      top: var(--wf-topbar-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      background-image: url("assets/watermark-facility.png");
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-size: 100% auto;
+      opacity: 0.40;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 28%,
+        rgba(0, 0, 0, 0.88) 40%,
+        rgba(0, 0, 0, 0.55) 50%,
+        rgba(0, 0, 0, 0.22) 58%,
+        transparent 66%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 28%,
+        rgba(0, 0, 0, 0.88) 40%,
+        rgba(0, 0, 0, 0.55) 50%,
+        rgba(0, 0, 0, 0.22) 58%,
+        transparent 66%
+      );
+    }
+
+    .body::after {
+      content: "";
+      position: fixed;
+      top: var(--wf-topbar-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 32%,
+        rgba(236, 239, 243, 0.18) 44%,
+        rgba(236, 239, 243, 0.52) 54%,
+        rgba(236, 239, 243, 0.88) 62%,
+        var(--wf-bg) 70%
+      );
+    }
+
+    .body.is-left-expanded {
+      --wf-sidebar-w-left: var(--wf-sidebar-w-expanded);
+    }
+
+    .body.is-right-expanded {
+      --wf-sidebar-w-right: var(--wf-sidebar-w-expanded);
+    }
+
+    .sidebar {
+      background: var(--wf-sidebar);
+      border-right: 1px dashed var(--wf-border-strong);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 12px 8px;
+      gap: 6px;
+      position: sticky;
+      top: var(--wf-topbar-h);
+      align-self: start;
+      height: calc(100vh - var(--wf-topbar-h));
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .sidebar--right {
+      border-right: none;
+      border-left: 1px dashed var(--wf-border-strong);
+    }
+
+    .sidebar__toggle {
+      flex-shrink: 0;
+      height: 40px;
+      min-height: 40px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--wf-text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 8px;
+      font-size: 11px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .sidebar:not(.is-expanded) .sidebar__toggle {
+      gap: 0;
+      padding: 0;
+    }
+
+    .sidebar__toggle:hover {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .sidebar__toggle-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+
+    .sidebar__toggle-icon svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      transition: transform 0.25s ease;
+      transform-origin: center center;
+    }
+
+    .sidebar--left .sidebar__toggle-icon svg {
+      transform: rotate(0deg);
+    }
+
+    .sidebar--left.is-expanded .sidebar__toggle-icon svg {
+      transform: rotate(180deg);
+    }
+
+    .sidebar--right .sidebar__toggle-icon svg {
+      transform: rotate(180deg);
+    }
+
+    .sidebar--right.is-expanded .sidebar__toggle-icon svg {
+      transform: rotate(0deg);
+    }
+
+    .sidebar__toggle-label {
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transition: max-width 0.25s ease, opacity 0.2s ease;
+    }
+
+    .sidebar:not(.is-expanded) .sidebar__toggle-label {
+      display: none;
+    }
+
+    .sidebar.is-expanded .sidebar__toggle-label {
+      max-width: 80px;
+      opacity: 1;
+    }
+
+    .sidebar__item {
+      width: 100%;
+      height: 40px;
+      min-height: 40px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: none;
+      justify-content: center;
+    }
+
+    .sidebar:not(.is-expanded) .sidebar__item {
+      gap: 0;
+    }
+
+    .sidebar.is-expanded .sidebar__item {
+      justify-content: flex-start;
+      padding: 0 6px;
+    }
+
+    .sidebar__item::before {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      top: 50%;
+      margin-top: -20px;
+      left: 50%;
+      margin-left: -20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar.is-expanded .sidebar__item::before {
+      left: 26px;
+      margin-left: -20px;
+    }
+
+    .sidebar__item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: block;
+      object-fit: cover;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar__text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #334155;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transition: max-width 0.25s ease, opacity 0.2s ease;
+      position: relative;
+      z-index: 1;
+      flex: 0 0 auto;
+    }
+
+    .sidebar:not(.is-expanded) .sidebar__text {
+      display: none;
+    }
+
+    .sidebar.is-expanded .sidebar__text {
+      max-width: 140px;
+      opacity: 1;
+    }
+
+    .sidebar__item.is-active::before {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.95);
+    }
+
+    .sidebar__item.is-active {
+      background: transparent;
+      outline: none;
+    }
+
+    .sidebar__item.is-active .sidebar__text {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .sidebar__spacer {
+      flex: 1;
+    }
+
+    /* MAIN */
+    .main {
+      padding: 20px 24px 40px;
+      overflow: auto;
+      z-index: 1;
+    }
+
+    .main__zone-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--wf-text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* ANNOUNCEMENT */
+    .announcement {
+      margin-bottom: var(--wf-gap);
+      background: #fffaf3;
+      border: 1px dashed var(--wf-announce-border);
+      border-radius: var(--wf-radius);
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 4px 10px rgba(15, 23, 42, 0.08),
+        0 12px 28px rgba(15, 23, 42, 0.12);
+    }
+
+    .announcement__hero {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      min-height: 180px;
+      background: #fff7ed url("bg-announcement.png") right center / cover no-repeat;
+      overflow: hidden;
+    }
+
+    .announcement__content {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 65%;
+      max-width: 65%;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .announcement .tag {
+      background: transparent;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .announcement h2 {
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+
+    .announcement p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--wf-text);
+    }
+
+    .announcement__cta {
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    /* QUICK ACCESS */
+    .quick-access {
+      margin-bottom: var(--wf-gap);
+      background: transparent;
+      border: none;
+      padding: 10px 0;
+    }
+
+    .quick-access__row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .quick-access__nav {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      color: #3b82f6;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+    }
+
+    .quick-access__nav:hover {
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .quick-access__track {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      flex: 1;
+      padding: 4px 2px 2px;
+    }
+
+    .quick-access__track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-access__item {
+      flex: 0 0 auto;
+      width: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .quick-access__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid currentColor;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #475569;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .quick-access__item:hover .quick-access__icon {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+    }
+
+    .quick-access__item:nth-child(1) .quick-access__icon { background: #eff6ff; color: #2563eb; }
+    .quick-access__item:nth-child(2) .quick-access__icon { background: #fdf2f8; color: #db2777; }
+    .quick-access__item:nth-child(3) .quick-access__icon { background: #f0fdf4; color: #16a34a; }
+    .quick-access__item:nth-child(4) .quick-access__icon { background: #f5f3ff; color: #7c3aed; }
+    .quick-access__item:nth-child(5) .quick-access__icon { background: #fffbeb; color: #d97706; }
+    .quick-access__item:nth-child(6) .quick-access__icon { background: #ecfeff; color: #0d9488; }
+    .quick-access__item:nth-child(7) .quick-access__icon { background: #fff7ed; color: #ea580c; }
+    .quick-access__item:nth-child(8) .quick-access__icon { background: #eef2ff; color: #4f46e5; }
+    .quick-access__item:nth-child(9) .quick-access__icon { background: #f8fafc; color: #475569; }
+
+    .quick-access__label {
+      font-size: 12px;
+      line-height: 1.25;
+      text-align: center;
+      color: #475569;
+      font-weight: 500;
+      max-width: 92px;
+    }
+
+    /* FEED GRID — layout em colunas (masonry) evita gaps verticais entre cards de alturas diferentes */
+    .feed-grid {
+      column-count: 2;
+      column-gap: var(--wf-gap);
+    }
+
+    .feed-column {
+      display: contents;
+    }
+
+    .feed-grid .card {
+      break-inside: avoid;
+      margin-bottom: var(--wf-gap);
+      width: 100%;
+      display: inline-block;
+    }
+
+    .card {
+      background: var(--wf-surface);
+      border: 1px dashed var(--wf-border);
+      border-radius: var(--wf-radius);
+      overflow: hidden;
+      box-shadow:
+        0 4px 10px rgba(15, 23, 42, 0.08),
+        0 12px 28px rgba(15, 23, 42, 0.12);
+    }
+
+    .card__header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 16px 0;
+    }
+
+    .card__meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card__author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .card__verified {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #2563eb;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .card__verified i {
+      display: block;
+    }
+
+    .card__time {
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      margin-top: 2px;
+    }
+
+    .avatar--xs {
+      width: 28px;
+      height: 28px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .badge--social {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge--comunicado {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .badge--enquete {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .badge--noticia {
+      background: #ccfbf1;
+      color: #0f766e;
+    }
+
+    .badge--parabenizacao {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge--bemestar {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .mood {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mood__option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 6px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      background: #f8fafc;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .mood__option:hover {
+      transform: translateY(-2px);
+      background: #fff;
+      border-color: var(--wf-border-strong);
+    }
+
+    .mood__emoji {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 28px;
+      line-height: 1;
+      color: #475569;
+    }
+
+    .mood__emoji i {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .mood__label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .mood__hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      line-height: 1.4;
+    }
+
+    .card__body {
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .hashtags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .hashtag {
+      font-size: 12px;
+      color: #475569;
+      padding: 2px 8px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 999px;
+      background: #f8fafc;
+    }
+
+    .post-media {
+      margin: 12px 16px 0;
+      height: 180px;
+      border: 1px solid var(--wf-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--wf-accent);
+    }
+
+    .post-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .post-media--tall {
+      height: 220px;
+    }
+
+    .card--celebration {
+      background-image: url("bg-celebration.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card--celebration .card__header,
+    .card--celebration .card__body,
+    .card--celebration .card__footer {
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .card--celebration .card__footer {
+      border-top-color: rgba(184, 192, 204, 0.7);
+    }
+
+    .card--comunicado {
+      border-color: var(--wf-announce-border);
+      background: #fffaf3;
+    }
+
+    .card--comunicado .tag {
+      margin-bottom: 0;
+    }
+
+    .card--comunicado .card__body {
+      padding-top: 10px;
+    }
+
+    .post-media--banner {
+      margin: 0;
+      height: 120px;
+      border: none;
+      border-radius: 0;
+    }
+
+    .card__footer {
+      display: flex;
+      gap: 18px;
+      padding: 12px 16px 16px;
+      border-top: 1px dashed var(--wf-border);
+      margin-top: 4px;
+    }
+
+    .action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+    }
+
+    .action i {
+      font-size: 14px;
+      width: 16px;
+      text-align: center;
+      color: var(--wf-text-muted);
+    }
+
+    .comments {
+      padding: 12px 16px 16px;
+      border-top: 1px dashed var(--wf-border);
+      background: #f8fafc;
+    }
+
+    .card--celebration .comments {
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .comments__title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--wf-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+
+    .comment__meta {
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 2px;
+    }
+
+    .comment__time {
+      font-weight: 400;
+      color: var(--wf-text-muted);
+    }
+
+    .comment__text {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--wf-text);
+    }
+
+    .comments__input {
+      margin-top: 12px;
+      height: 34px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+    }
+
+    /* NEWS CARD */
+    .news-card {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .news-card__thumb {
+      height: 90px;
+      border: 1px solid var(--wf-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--wf-accent);
+    }
+
+    .news-card__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .news-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .news-card__link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    /* POLL */
+    .poll {
+      padding: 0;
+    }
+
+    .poll__banner {
+      height: 96px;
+      overflow: hidden;
+      background: var(--wf-accent);
+    }
+
+    .poll__banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .poll__content {
+      padding: 16px;
+    }
+
+    .poll__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .poll__title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .poll__options {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .poll__option {
+      display: grid;
+      grid-template-columns: 16px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .poll__option-content {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .poll__label {
+      font-size: 13px;
+      color: var(--wf-text);
+      line-height: 1.3;
+    }
+
+    .poll__radio {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--wf-border-strong);
+      border-radius: 50%;
+    }
+
+    .poll__bar-wrap {
+      height: 8px;
+      background: #eef2f7;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .poll__bar {
+      height: 100%;
+      background: var(--wf-accent);
+      border-right: 1px solid var(--wf-border-strong);
+    }
+
+    .poll__pct {
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      height: 36px;
+      padding: 0 18px;
+      border: 1px dashed var(--wf-border-strong);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    @media (min-width: 1400px) {
+      .feed-grid {
+        column-count: 3;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .feed-grid {
+        column-count: 1;
+      }
+
+      .announcement__hero {
+        min-height: 200px;
+      }
+
+      .announcement__content {
+        flex: 1 1 auto;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar__menu > a,
+      .topbar__dropdown-trigger {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .topbar__brand {
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px 16px;
+        height: auto;
+      }
+
+      .search {
+        order: 3;
+        grid-column: 1 / -1;
+      }
+
+      .user-chip__name,
+      .user-chip__chevron {
+        display: none;
+      }
+
+      .user-chip .avatar {
+        width: 34px;
+        height: 34px;
+      }
+
+      .topbar__menu {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar__brand {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="icon-chevron" viewBox="0 0 24 24">
+      <path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <div class="app-shell">
+    <header class="topbar" aria-label="Barra superior">
+      <div class="topbar__brand">
+        <a class="logo" href="intranet-wireframe.html" style="text-decoration:none;color:inherit;">
+          <div class="logo__mark">
+            <img src="logo-lioconecta.png" alt="LioConecta" />
+          </div>
+          <div class="logo__text">LioConecta</div>
+        </a>
+        <nav class="topbar__menu" aria-label="Menu principal">
+          <a href="intranet-wireframe.html" class="is-active">Feed</a>
+          <div class="topbar__dropdown">
+            <button
+              class="topbar__dropdown-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="menu-comunicados"
+            >
+              Comunicados
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="topbar__dropdown-menu" id="menu-comunicados" role="menu">
+              <a href="comunicados-oficiais.html" role="menuitem">Oficiais</a>
+              <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
+              <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
+              <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
+            </div>
+          </div>
+          <div class="topbar__dropdown">
+            <button
+              class="topbar__dropdown-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="menu-pessoas"
+            >
+              Pessoas
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
+              <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
+              <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
+              <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
+              <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
+            </div>
+          </div>
+          <div class="topbar__dropdown">
+            <button
+              class="topbar__dropdown-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="menu-grupos"
+            >
+              Grupos
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="topbar__dropdown-menu" id="menu-grupos" role="menu">
+              <a href="grupos-meus-grupos.html" role="menuitem">Meus grupos</a>
+              <a href="grupos-explorar-grupos.html" role="menuitem">Explorar grupos</a>
+              <a href="#" role="menuitem">Comunidades</a>
+              <a href="grupos-criar-grupo.html" role="menuitem">Criar grupo</a>
+            </div>
+          </div>
+          <div class="topbar__dropdown">
+            <button
+              class="topbar__dropdown-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="menu-documentos"
+            >
+              Documentos
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="topbar__dropdown-menu" id="menu-documentos" role="menu">
+              <a href="documentos-politicas-internas.html" role="menuitem">Políticas internas</a>
+              <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
+              <a href="documentos-formularios.html" role="menuitem">Formulários</a>
+              <a href="documentos-modelos-documentos.html" role="menuitem">Modelos de documentos</a>
+              <a href="documentos-biblioteca-corporativa.html" role="menuitem">Biblioteca corporativa</a>
+            </div>
+          </div>
+          <div class="topbar__dropdown">
+            <button
+              class="topbar__dropdown-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="menu-servicos"
+            >
+              Serviços
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="topbar__dropdown-menu topbar__dropdown-menu--services" id="menu-servicos" role="menu">
+              <span class="topbar__menu-heading topbar__menu-heading--rh" role="presentation"><i class="fa-solid fa-user-group" aria-hidden="true"></i> RH &amp; Pessoas</span>
+              <a href="servicos-beneficios.html" role="menuitem">Benefícios</a>
+              <a href="servicos-contracheque.html" role="menuitem">Contracheque</a>
+              <a href="servicos-ferias-ausencias.html" role="menuitem">Férias e ausências</a>
+              <a href="servicos-solicitacoes-rh.html" role="menuitem">Solicitações RH</a>
+              <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
+              <a href="servicos-vale-transporte.html" role="menuitem">Vale-transporte</a>
+              <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
+              <a href="servicos-reembolso-despesas.html" role="menuitem">Reembolso de despesas</a>
+              <a href="servicos-adiantamento-viagem.html" role="menuitem">Adiantamento de viagem</a>
+              <span class="topbar__menu-heading topbar__menu-heading--ti" role="presentation"><i class="fa-solid fa-headset" aria-hidden="true"></i> TI &amp; Suporte</span>
+              <a href="#" role="menuitem">Help Desk</a>
+              <a href="#" role="menuitem">Solicitar equipamento</a>
+              <a href="#" role="menuitem">Acesso a sistemas</a>
+              <a href="#" role="menuitem">VPN e acesso remoto</a>
+              <span class="topbar__menu-heading topbar__menu-heading--facilities" role="presentation"><i class="fa-solid fa-building" aria-hidden="true"></i> Facilities</span>
+              <a href="#" role="menuitem">Reservas de salas</a>
+              <a href="#" role="menuitem">Reserva de veículos</a>
+              <a href="#" role="menuitem">Crachá e visitantes</a>
+              <a href="#" role="menuitem">Encomendas e correios</a>
+              <span class="topbar__menu-heading topbar__menu-heading--juridico" role="presentation"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Jurídico &amp; Compliance</span>
+              <a href="#" role="menuitem">Declarações e certidões</a>
+              <a href="#" role="menuitem">Assinatura digital</a>
+              <a href="#" role="menuitem">Seguro de vida</a>
+              <a href="#" role="menuitem">Canal de denúncias</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="search">
+        <div class="search__field">
+          <span class="search__icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
+          Buscar pessoas, grupos, documentos e mais...
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <div class="notifications-menu icon-btn-wrap" data-badge="3">
+          <button
+            class="topbar-icon-btn notifications-menu__trigger"
+            type="button"
+            aria-label="Notificações"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="notifications-panel"
+          >
+            <i class="fa-regular fa-bell" aria-hidden="true"></i>
+          </button>
+          <div class="notifications-menu__panel" id="notifications-panel" role="region" aria-label="Notificações recentes">
+            <div class="notifications-menu__header">
+              <span class="notifications-menu__title">Notificações</span>
+              <button class="notifications-menu__mark-read" type="button">Marcar todas como lidas</button>
+            </div>
+            <ul class="notifications-menu__list">
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--comunicado"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Novo comunicado oficial</strong>
+                  <p>Atualização importante sobre a estratégia 2026.</p>
+                  <time datetime="2026-07-04T14:30:00">Há 2 horas</time>
+                </div>
+              </li>
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--rh"><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Solicitação aprovada</strong>
+                  <p>Sua solicitação de férias foi aprovada pelo RH.</p>
+                  <time datetime="2026-07-04T11:00:00">Há 5 horas</time>
+                </div>
+              </li>
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--social"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Aniversariante do dia</strong>
+                  <p>Julia Santos completa mais um ano na Liotécnica hoje.</p>
+                  <time datetime="2026-07-04T08:00:00">Hoje</time>
+                </div>
+              </li>
+            </ul>
+            <a class="notifications-menu__footer" href="comunicados-oficiais.html">Ver todas as notificações</a>
+          </div>
+        </div>
+        <div class="icon-btn-wrap" data-badge="2">
+          <button class="topbar-icon-btn" type="button" aria-label="Mensagens">
+            <i class="fa-regular fa-comment" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="user-menu">
+          <button
+            class="user-menu__trigger"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="user-menu-panel"
+            aria-label="Perfil de Maria Silva"
+          >
+            <img class="avatar" src="avatar-maria-silva.png" alt="" />
+            <span class="user-menu__name">Maria Silva</span>
+            <span class="user-menu__chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="user-menu__panel" id="user-menu-panel" role="menu">
+            <a href="pessoas-perfil.html?id=maria-silva" role="menuitem">
+              <i class="fa-regular fa-user" aria-hidden="true"></i> Ver perfil completo
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-gear" aria-hidden="true"></i> Configurações
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="body" id="app-body">
+      <aside class="sidebar sidebar--left" id="sidebar-left" aria-label="Menu lateral esquerdo">
+        <button class="sidebar__toggle" type="button" aria-expanded="false" aria-controls="sidebar-left" aria-label="Expandir menu esquerdo">
+          <span class="sidebar__toggle-icon" aria-hidden="true"><svg><use href="#icon-chevron"/></svg></span>
+          <span class="sidebar__toggle-label">Recolher</span>
+        </button>
+        <a class="sidebar__item is-active" href="#" title="Início"><img src="icon-home.png" alt="" /><span class="sidebar__text">Início</span></a>
+        <a class="sidebar__item" href="#" title="Feed"><img src="icon-feed.png" alt="" /><span class="sidebar__text">Feed</span></a>
+        <a class="sidebar__item" href="#" title="Pessoas"><img src="icon-people.png" alt="" /><span class="sidebar__text">Pessoas</span></a>
+        <a class="sidebar__item" href="#" title="Grupos"><img src="icon-groups.png" alt="" /><span class="sidebar__text">Grupos</span></a>
+        <a class="sidebar__item" href="#" title="Calendário"><img src="icon-calendar.png" alt="" /><span class="sidebar__text">Calendário</span></a>
+        <a class="sidebar__item" href="#" title="Documentos"><img src="icon-documents.png" alt="" /><span class="sidebar__text">Documentos</span></a>
+        <div class="sidebar__spacer"></div>
+        <a class="sidebar__item" href="#" title="Configurações"><img src="icon-settings.png" alt="" /><span class="sidebar__text">Configurações</span></a>
+      </aside>
+
+      <main class="main">
+
+        <section class="announcement" aria-label="Comunicado oficial">
+          <div class="announcement__hero">
+            <div class="announcement__content">
+              <span class="tag">Comunicado oficial</span>
+              <h2>Atualização importante sobre nossa estratégia 2026</h2>
+              <p>
+                Estamos lançando novas iniciativas de colaboração e bem-estar para todos os colaboradores.
+                Leia os detalhes completos e compartilhe com sua equipe.
+              </p>
+              <div class="announcement__cta">Ler comunicado completo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="quick-access" aria-label="Acessos rápidos">
+          <div class="quick-access__row">
+            <button class="quick-access__nav" type="button" data-quick-nav="-1" aria-label="Anterior">
+              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <div class="quick-access__track" id="quick-access-track">
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-user-tie"></i></span>
+                <span class="quick-access__label">Recursos Humanos</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
+                <span class="quick-access__label">Marketing</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-laptop-code"></i></span>
+                <span class="quick-access__label">Tecnologia da Informação</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
+                <span class="quick-access__label">Enquetes</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-champagne-glasses"></i></span>
+                <span class="quick-access__label">Parabenizações</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-newspaper"></i></span>
+                <span class="quick-access__label">Notícias</span>
+              </a>
+              <a class="quick-access__item" href="comunicados-oficiais.html">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-envelope-open-text"></i></span>
+                <span class="quick-access__label">Comunicados</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
+                <span class="quick-access__label">Grupos</span>
+              </a>
+              <a class="quick-access__item" href="#">
+                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-folder-open"></i></span>
+                <span class="quick-access__label">Documentos</span>
+              </a>
+            </div>
+            <button class="quick-access__nav" type="button" data-quick-nav="1" aria-label="Próximo">
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </section>
+
+        <div class="feed-grid">
+          <div class="feed-column">
+            <article class="card card--mood">
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-rh.png" alt="Recursos Humanos" />
+                <div class="card__meta">
+                  <div class="card__author">
+                    Recursos Humanos
+                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+                  </div>
+                  <div class="card__time">Hoje</div>
+                </div>
+                <span class="badge badge--bemestar">Bem-estar</span>
+              </div>
+              <div class="card__body">
+                <strong>Como você está se sentindo hoje?</strong>
+                <p style="margin-top:8px;">Sua resposta é anônima e ajuda o RH a cuidar melhor do clima da equipe.</p>
+                <div class="mood" role="group" aria-label="Opções de humor">
+                  <button class="mood__option" type="button">
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-grin-beam"></i></span>
+                    <span class="mood__label">Ótimo</span>
+                  </button>
+                  <button class="mood__option" type="button">
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-smile"></i></span>
+                    <span class="mood__label">Bem</span>
+                  </button>
+                  <button class="mood__option" type="button">
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-meh"></i></span>
+                    <span class="mood__label">Neutro</span>
+                  </button>
+                  <button class="mood__option" type="button">
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-sad-tear"></i></span>
+                    <span class="mood__label">Preciso de apoio</span>
+                  </button>
+                </div>
+                <p class="mood__hint">Toque em uma opção para registrar como está se sentindo.</p>
+              </div>
+            </article>
+
+            <article class="card card--comunicado">
+              <div class="post-media post-media--banner">
+                <img src="bg-comunicado-security.png" alt="Campanha de segurança da informação" />
+              </div>
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-ti.png" alt="Tecnologia da Informação" />
+                <div class="card__meta">
+                  <div class="card__author">
+                    Tecnologia da Informação
+                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+                  </div>
+                  <div class="card__time">Há 3 horas</div>
+                </div>
+                <span class="badge badge--comunicado">Comunicado</span>
+              </div>
+              <div class="card__body">
+                <span class="tag">Comunicado oficial</span>
+                <p style="margin-top:10px;">Nova política de segurança da informação entra em vigor na próxima semana. Todos os colaboradores devem atualizar suas senhas e concluir o treinamento obrigatório.</p>
+                <div class="announcement__cta">Acessar treinamento <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 31</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 5</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card card--celebration">
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-alejandro-lopez.png" alt="Alejandro López" />
+                <div class="card__meta">
+                  <div class="card__author">Alejandro López</div>
+                  <div class="card__time">Ontem</div>
+                </div>
+                <span class="badge badge--parabenizacao">Parabenização</span>
+              </div>
+              <div class="card__body">
+                Parabéns por 5 anos conosco! Obrigado por sua dedicação e contribuição contínua.
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 56</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 12</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-carlos-mendes.png" alt="Carlos Mendes" />
+                <div class="card__meta">
+                  <div class="card__author">Carlos Mendes</div>
+                  <div class="card__time">Há 5 horas</div>
+                </div>
+                <span class="badge badge--social">Social</span>
+              </div>
+              <div class="post-media">
+                <img src="bg-social-coffee.png" alt="Coffee break com a equipe" />
+              </div>
+              <div class="card__body">
+                Ótimo coffee break com o time de produto hoje! Nada melhor do que pausar para conversar e trocar ideias.
+                <div class="hashtags">
+                  <span class="hashtag">#Cultura</span>
+                  <span class="hashtag">#Equipe</span>
+                </div>
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 19</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 6</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__header">
+                <img class="avatar avatar--sm avatar--brand" src="avatar-nexora-news.png" alt="LioConecta Notícias" />
+                <div class="card__meta">
+                  <div class="card__author">LioConecta Notícias</div>
+                  <div class="card__time">Há 1 dia</div>
+                </div>
+                <span class="badge badge--noticia">Notícia</span>
+              </div>
+              <div class="news-card">
+                <div class="news-card__thumb">
+                  <img src="bg-news.png" alt="Sede corporativa LioConecta" />
+                </div>
+                <div>
+                  <div class="news-card__title">LioConecta anuncia novas parcerias estratégicas para 2026</div>
+                  <div class="news-card__link">Ler mais <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+                </div>
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 18</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 3</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__header">
+                <img class="avatar avatar--sm avatar--brand" src="avatar-nexora-news.png" alt="LioConecta Notícias" />
+                <div class="card__meta">
+                  <div class="card__author">LioConecta Notícias</div>
+                  <div class="card__time">Há 2 dias</div>
+                </div>
+                <span class="badge badge--noticia">Notícia</span>
+              </div>
+              <div class="news-card">
+                <div class="news-card__thumb">
+                  <img src="bg-news-innovation.png" alt="Centro de inovação LioConecta" />
+                </div>
+                <div>
+                  <div class="news-card__title">LioConecta inaugura centro de inovação e pesquisa aplicada</div>
+                  <div class="news-card__link">Ler mais <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+                </div>
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 27</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 9</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+          </div>
+
+          <!-- Coluna direita -->
+          <div class="feed-column">
+            <article class="card">
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-marketing.png" alt="Marketing" />
+                <div class="card__meta">
+                  <div class="card__author">Marketing</div>
+                  <div class="card__time">Há 4 horas</div>
+                </div>
+                <span class="badge badge--social">Social</span>
+              </div>
+              <div class="post-media post-media--tall">
+                <img src="bg-marketing-event.png" alt="Evento anual de integração da equipe" />
+              </div>
+              <div class="card__body">
+                Momentos incríveis do nosso evento anual de integração. Obrigado a todos que participaram!
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 42</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 15</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="poll">
+                <div class="poll__banner">
+                  <img src="bg-poll.png" alt="Palestra de liderança" />
+                </div>
+                <div class="poll__content">
+                  <div class="poll__header">
+                    <div class="poll__title">Qual tema você gostaria para a próxima palestra de liderança?</div>
+                    <span class="badge badge--enquete">Enquete</span>
+                  </div>
+                  <div class="poll__options">
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Gestão de conflitos</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:45%"></div></div>
+                      </div>
+                      <span class="poll__pct">45%</span>
+                    </div>
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Comunicação assertiva</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:30%"></div></div>
+                      </div>
+                      <span class="poll__pct">30%</span>
+                    </div>
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Inteligência emocional</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:15%"></div></div>
+                      </div>
+                      <span class="poll__pct">15%</span>
+                    </div>
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Tomada de decisão</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:10%"></div></div>
+                      </div>
+                      <span class="poll__pct">10%</span>
+                    </div>
+                  </div>
+                  <button class="btn" type="button">Votar</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="card card--celebration" style="background-image:url('bg-celebration-promotion.png');">
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-julia-santos.png" alt="Julia Santos" />
+                <div class="card__meta">
+                  <div class="card__author">Julia Santos</div>
+                  <div class="card__time">Há 6 horas</div>
+                </div>
+                <span class="badge badge--parabenizacao">Parabenização</span>
+              </div>
+              <div class="card__body">
+                Parabéns pela promoção a Gerente de Projetos! Muito merecido — desejamos muito sucesso na nova jornada.
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 73</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 21</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="poll">
+                <div class="poll__banner">
+                  <img src="bg-poll-remote.png" alt="Trabalho remoto e híbrido" />
+                </div>
+                <div class="poll__content">
+                  <div class="poll__header">
+                    <div class="poll__title">Qual modelo de trabalho você prefere para 2026?</div>
+                    <span class="badge badge--enquete">Enquete</span>
+                  </div>
+                  <div class="poll__options">
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Híbrido</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:52%"></div></div>
+                      </div>
+                      <span class="poll__pct">52%</span>
+                    </div>
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Presencial</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:28%"></div></div>
+                      </div>
+                      <span class="poll__pct">28%</span>
+                    </div>
+                    <div class="poll__option">
+                      <span class="poll__radio"></span>
+                      <div class="poll__option-content">
+                        <span class="poll__label">Remoto</span>
+                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:20%"></div></div>
+                      </div>
+                      <span class="poll__pct">20%</span>
+                    </div>
+                  </div>
+                  <button class="btn" type="button">Votar</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="card card--comunicado">
+              <div class="post-media post-media--banner">
+                <img src="bg-announcement.png" alt="Política de férias coletivas" />
+              </div>
+              <div class="card__header">
+                <img class="avatar avatar--sm" src="avatar-rh.png" alt="Recursos Humanos" />
+                <div class="card__meta">
+                  <div class="card__author">
+                    Recursos Humanos
+                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+                  </div>
+                  <div class="card__time">Há 1 dia</div>
+                </div>
+                <span class="badge badge--comunicado">Comunicado</span>
+              </div>
+              <div class="card__body">
+                <span class="tag">Comunicado oficial</span>
+                <p style="margin-top:10px;">Informamos o calendário de férias coletivas para o final do ano. Consulte as datas por unidade e registre sua preferência até sexta-feira.</p>
+                <div class="announcement__cta">Ver calendário <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+              </div>
+              <div class="card__footer">
+                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 14</span>
+                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 2</span>
+                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </main>
+
+      <aside class="sidebar sidebar--right" id="sidebar-right" aria-label="Menu lateral direito">
+        <button class="sidebar__toggle" type="button" aria-expanded="false" aria-controls="sidebar-right" aria-label="Expandir menu direito">
+          <span class="sidebar__toggle-icon" aria-hidden="true"><svg><use href="#icon-chevron"/></svg></span>
+          <span class="sidebar__toggle-label">Recolher</span>
+        </button>
+        <a class="sidebar__item" href="#" title="Analytics"><img src="icon-analytics.png" alt="" /><span class="sidebar__text">Analytics</span></a>
+        <a class="sidebar__item" href="#" title="Ajuda"><img src="icon-help.png" alt="" /><span class="sidebar__text">Ajuda</span></a>
+        <a class="sidebar__item" href="#" title="Favoritos"><img src="icon-favorites.png" alt="" /><span class="sidebar__text">Favoritos</span></a>
+        <a class="sidebar__item" href="#" title="Bookmarks"><img src="icon-bookmarks.png" alt="" /><span class="sidebar__text">Bookmarks</span></a>
+        <div class="sidebar__spacer"></div>
+        <a class="sidebar__item" href="#" title="Atalhos"><img src="icon-shortcuts.png" alt="" /><span class="sidebar__text">Atalhos</span></a>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function setupSidebar(sidebar, bodyClass) {
+        const body = document.getElementById("app-body");
+        const toggle = sidebar.querySelector(".sidebar__toggle");
+
+        toggle.addEventListener("click", function () {
+          const expanded = sidebar.classList.toggle("is-expanded");
+          body.classList.toggle(bodyClass, expanded);
+          toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+          toggle.setAttribute(
+            "aria-label",
+            expanded ? "Recolher menu lateral" : "Expandir menu lateral"
+          );
+        });
+      }
+
+      setupSidebar(
+        document.getElementById("sidebar-left"),
+        "is-left-expanded"
+      );
+
+      setupSidebar(
+        document.getElementById("sidebar-right"),
+        "is-right-expanded"
+      );
+
+      const quickTrack = document.getElementById("quick-access-track");
+      if (quickTrack) {
+        document.querySelectorAll("[data-quick-nav]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const dir = Number(btn.getAttribute("data-quick-nav"));
+            quickTrack.scrollBy({ left: dir * 220, behavior: "smooth" });
+          });
+        });
+      }
+
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const commentPool = [
+        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
+        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
+        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
+        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
+        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
+        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
+        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
+        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
+        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
+        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
+        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
+        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
+        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
+        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
+        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
+        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
+        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
+        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
+        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
+        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
+        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
+        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
+        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
+        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
+      ];
+
+      function shuffle(list) {
+        const items = list.slice();
+        for (let i = items.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+        return items;
+      }
+
+      function renderComment(comment) {
+        return `
+          <div class="comment">
+            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
+            <div>
+              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
+              <div class="comment__text">${comment.text}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
+      let available = shuffle(commentPool);
+
+      posts.forEach(function (post) {
+        const total = Math.floor(Math.random() * 3) + 1;
+        const picked = [];
+
+        for (let i = 0; i < total; i += 1) {
+          if (!available.length) available = shuffle(commentPool);
+          picked.push(available.shift());
+        }
+
+        const section = document.createElement("div");
+        section.className = "comments";
+        section.innerHTML = `
+          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
+          ${picked.map(renderComment).join("")}
+          <div class="comments__input">Escreva um comentário...</div>
+        `;
+        post.appendChild(section);
+      });
+    })();
+  </script>
+  <script src="assets/user-menu.js"></script>
+  <script src="assets/notifications.js"></script>
+</body>
+</html>

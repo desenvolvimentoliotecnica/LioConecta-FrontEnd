@@ -1,0 +1,366 @@
+[
+  {
+    "id": "feed",
+    "htmlFile": "intranet-wireframe.html",
+    "route": "/",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-oficiais",
+    "htmlFile": "comunicados-oficiais.html",
+    "route": "/comunicados/oficiais",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-departamentais",
+    "htmlFile": "comunicados-departamentais.html",
+    "route": "/comunicados/departamentais",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-urgentes",
+    "htmlFile": "comunicados-urgentes.html",
+    "route": "/comunicados/urgentes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-arquivo",
+    "htmlFile": "comunicados-arquivo.html",
+    "route": "/comunicados/arquivo",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-diretorio",
+    "htmlFile": "pessoas-diretorio.html",
+    "route": "/pessoas/diretorio",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-novos-colaboradores",
+    "htmlFile": "pessoas-novos-colaboradores.html",
+    "route": "/pessoas/novos-colaboradores",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-aniversariantes",
+    "htmlFile": "pessoas-aniversariantes.html",
+    "route": "/pessoas/aniversariantes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-organograma",
+    "htmlFile": "pessoas-organograma.html",
+    "route": "/pessoas/organograma",
+    "hasScript": true,
+    "externals": [
+      "assets/org-profile-modal.js",
+      "https://cdn.balkan.app/orgchart-community.js"
+    ],
+    "organograma": true
+  },
+  {
+    "id": "pessoas-perfil",
+    "htmlFile": "pessoas-perfil.html",
+    "route": "/pessoas/perfil",
+    "hasScript": false,
+    "externals": [
+      "assets/pessoas-perfil.js"
+    ],
+    "profileAssets": true
+  },
+  {
+    "id": "grupos-meus-grupos",
+    "htmlFile": "grupos-meus-grupos.html",
+    "route": "/grupos/meus-grupos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "grupos-explorar",
+    "htmlFile": "grupos-explorar-grupos.html",
+    "route": "/grupos/explorar",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "grupos-criar-grupo",
+    "htmlFile": "grupos-criar-grupo.html",
+    "route": "/grupos/criar",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-politicas",
+    "htmlFile": "documentos-politicas-internas.html",
+    "route": "/documentos/politicas-internas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-manuais",
+    "htmlFile": "documentos-manuais-procedimentos.html",
+    "route": "/documentos/manuais-procedimentos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-formularios",
+    "htmlFile": "documentos-formularios.html",
+    "route": "/documentos/formularios",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-modelos",
+    "htmlFile": "documentos-modelos-documentos.html",
+    "route": "/documentos/modelos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-biblioteca",
+    "htmlFile": "documentos-biblioteca-corporativa.html",
+    "route": "/documentos/biblioteca",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-beneficios",
+    "htmlFile": "servicos-beneficios.html",
+    "route": "/servicos/beneficios",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-contracheque",
+    "htmlFile": "servicos-contracheque.html",
+    "route": "/servicos/contracheque",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-ponto",
+    "htmlFile": "servicos-ponto-eletronico.html",
+    "route": "/servicos/ponto-eletronico",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-ferias",
+    "htmlFile": "servicos-ferias-ausencias.html",
+    "route": "/servicos/ferias-ausencias",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-rh",
+    "htmlFile": "servicos-solicitacoes-rh.html",
+    "route": "/servicos/solicitacoes-rh",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-vale-transporte",
+    "htmlFile": "servicos-vale-transporte.html",
+    "route": "/servicos/vale-transporte",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-reembolso",
+    "htmlFile": "servicos-reembolso-despesas.html",
+    "route": "/servicos/reembolso-despesas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-adiantamento",
+    "htmlFile": "servicos-adiantamento-viagem.html",
+    "route": "/servicos/adiantamento-viagem",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-help-desk",
+    "htmlFile": "servicos-help-desk.html",
+    "route": "/servicos/help-desk",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-solicitar-equipamento",
+    "htmlFile": "servicos-solicitar-equipamento.html",
+    "route": "/servicos/solicitar-equipamento",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-acesso-sistemas",
+    "htmlFile": "servicos-acesso-sistemas.html",
+    "route": "/servicos/acesso-sistemas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-vpn-acesso-remoto",
+    "htmlFile": "servicos-vpn-acesso-remoto.html",
+    "route": "/servicos/vpn-acesso-remoto",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-reservas-salas",
+    "htmlFile": "servicos-reservas-salas.html",
+    "route": "/servicos/reservas-salas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-reserva-veiculos",
+    "htmlFile": "servicos-reserva-veiculos.html",
+    "route": "/servicos/reserva-veiculos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-cracha-visitantes",
+    "htmlFile": "servicos-cracha-visitantes.html",
+    "route": "/servicos/cracha-visitantes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-encomendas-correios",
+    "htmlFile": "servicos-encomendas-correios.html",
+    "route": "/servicos/encomendas-correios",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-limpeza",
+    "htmlFile": "servicos-limpeza.html",
+    "route": "/servicos/limpeza",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-manutencao-predial",
+    "htmlFile": "servicos-manutencao-predial.html",
+    "route": "/servicos/manutencao-predial",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-copiadora",
+    "htmlFile": "servicos-copiadora.html",
+    "route": "/servicos/copiadora",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-estacionamento",
+    "htmlFile": "servicos-estacionamento.html",
+    "route": "/servicos/estacionamento",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-refeitorio",
+    "htmlFile": "servicos-refeitorio.html",
+    "route": "/servicos/refeitorio",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-climatizacao",
+    "htmlFile": "servicos-climatizacao.html",
+    "route": "/servicos/climatizacao",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-gestao-residuos",
+    "htmlFile": "servicos-gestao-residuos.html",
+    "route": "/servicos/gestao-residuos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-declaracoes-certidoes",
+    "htmlFile": "servicos-declaracoes-certidoes.html",
+    "route": "/servicos/declaracoes-certidoes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-assinatura-digital",
+    "htmlFile": "servicos-assinatura-digital.html",
+    "route": "/servicos/assinatura-digital",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-seguro-vida",
+    "htmlFile": "servicos-seguro-vida.html",
+    "route": "/servicos/seguro-vida",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-canal-denuncias",
+    "htmlFile": "servicos-canal-denuncias.html",
+    "route": "/servicos/canal-denuncias",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-contratos-minutas",
+    "htmlFile": "servicos-contratos-minutas.html",
+    "route": "/servicos/contratos-minutas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-lgpd-privacidade",
+    "htmlFile": "servicos-lgpd-privacidade.html",
+    "route": "/servicos/lgpd-privacidade",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-codigo-conduta",
+    "htmlFile": "servicos-codigo-conduta.html",
+    "route": "/servicos/codigo-conduta",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-due-diligence",
+    "htmlFile": "servicos-due-diligence.html",
+    "route": "/servicos/due-diligence",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-procuracoes",
+    "htmlFile": "servicos-procuracoes.html",
+    "route": "/servicos/procuracoes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-consultoria-juridica",
+    "htmlFile": "servicos-consultoria-juridica.html",
+    "route": "/servicos/consultoria-juridica",
+    "hasScript": true,
+    "externals": []
+  }
+]

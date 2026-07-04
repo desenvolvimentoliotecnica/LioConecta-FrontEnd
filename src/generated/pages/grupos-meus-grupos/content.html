@@ -1,0 +1,43 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Grupos</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Meus grupos</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Meus Grupos</h1>
+              <p class="page-header__desc">
+                Acesse os grupos dos quais você participa, acompanhe novidades e colabore com times, projetos e comunidades internas.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-user-group"></i></div>
+          <div>
+            <div class="welcome-banner__title">Você participa de 12 grupos</div>
+            <p class="welcome-banner__text">3 grupos com publicações novas desde ontem. Entre nos favoritos para acompanhar o que importa primeiro.</p>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="groups-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="departamental">Departamentais</button>
+            <button class="filter-chip" type="button" data-filter="projeto">Projetos</button>
+            <button class="filter-chip" type="button" data-filter="interesse">Interesse</button>
+            <button class="filter-chip" type="button" data-filter="favoritos">Favoritos</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar nos meus grupos...
+          </div>
+        </div>
+
+        <div class="groups-grid" id="groups-root" aria-label="Lista de grupos"></div>
+
+        <p class="page-empty-note" id="groups-count">Exibindo 12 grupos</p>

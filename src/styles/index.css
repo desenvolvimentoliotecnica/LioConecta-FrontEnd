@@ -1,0 +1,13 @@
+@import "./shell.css";
+@import "./layout.css";
+@import "./list-page.css";
+@import "./notifications.css";
+@import "./user-menu.css";
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}

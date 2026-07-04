@@ -1,0 +1,174 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="/pessoas/diretorio">Pessoas</a>
+            <span class="breadcrumb__sep">/</span>
+            <span id="profile-breadcrumb-trail"></span>
+          </nav>
+        </header>
+
+        <div class="profile-error" id="profile-error" hidden>
+          <p>Colaborador não encontrado.</p>
+          <p style="margin-top:8px;"><a href="/pessoas/organograma">Voltar ao organograma</a></p>
+        </div>
+
+        <div id="profile-root" hidden>
+          <div class="profile-birthday-banner" id="profile-birthday-banner" hidden>
+            <div class="profile-birthday-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+            <div>
+              <div class="profile-birthday-banner__title" id="profile-birthday-title"></div>
+              <p class="profile-birthday-banner__text" id="profile-birthday-text"></p>
+            </div>
+            <a class="profile-birthday-banner__action" href="/pessoas/aniversariantes">Enviar parabéns</a>
+          </div>
+
+          <section class="profile-hero">
+            <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
+            <div class="profile-hero__main">
+              <div class="profile-hero__name-row">
+                <h1 class="profile-hero__name" id="profile-name"></h1>
+                <span class="profile-hero__pronouns" id="profile-pronouns"></span>
+              </div>
+              <p class="profile-hero__role" id="profile-role"></p>
+              <div class="profile-hero__meta">
+                <span class="profile-hero__dept" id="profile-dept"></span>
+                <span id="profile-badges"></span>
+              </div>
+            </div>
+            <div class="profile-hero__actions">
+              <a class="profile-btn" id="profile-email-btn" href="#"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</a>
+              <a class="profile-btn" id="profile-teams-btn" href="#"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Teams</a>
+              <a class="profile-btn" id="profile-schedule-btn" href="#"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Agendar</a>
+              <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
+              <button class="profile-btn" type="button" id="profile-vcard-btn"><i class="fa-regular fa-address-card" aria-hidden="true"></i> vCard</button>
+              <button class="profile-btn" type="button" id="profile-print-btn"><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir</button>
+              <a class="profile-btn profile-btn--primary" id="profile-org-link" href="/pessoas/organograma"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
+            </div>
+          </section>
+
+          <nav class="profile-mini-org" id="profile-mini-org" aria-label="Cadeia hierárquica"></nav>
+
+          <div class="profile-tabs" role="tablist" aria-label="Seções do perfil">
+            <button class="profile-tabs__btn is-active" type="button" role="tab" data-tab="overview" aria-selected="true">Visão geral</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="career" aria-selected="false">Carreira</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="activity" aria-selected="false">Atividade</button>
+            <button class="profile-tabs__btn" type="button" role="tab" data-tab="documents" aria-selected="false">Documentos</button>
+          </div>
+
+          <div class="profile-layout">
+            <aside>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Resumo</h2>
+                <div class="profile-stat-grid" id="profile-stats"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Disponibilidade</h2>
+                <div class="profile-contact-list" id="profile-availability"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Dados pessoais</h2>
+                <div class="profile-contact-list" id="profile-personal"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Contato</h2>
+                <div class="profile-contact-list" id="profile-contact"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Mentor / Buddy</h2>
+                <div class="profile-contact-list" id="profile-mentor"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Colegas do time</h2>
+                <div class="profile-peers" id="profile-peers"></div>
+              </div>
+              <div class="profile-card" id="profile-reports-card">
+                <h2 class="profile-card__title">Subordinados diretos</h2>
+                <div class="profile-reports" id="profile-reports"></div>
+              </div>
+              <div class="profile-card">
+                <h2 class="profile-card__title">Grupos</h2>
+                <div class="profile-groups-list" id="profile-groups"></div>
+              </div>
+            </aside>
+
+            <div>
+              <div class="profile-tab-panel" data-tab-panel="overview">
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                  <p class="profile-bio" id="profile-bio"></p>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                  <div class="profile-skills" id="profile-skills"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-language" aria-hidden="true"></i> Idiomas</h2>
+                  <div class="profile-lang-list" id="profile-languages"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-link" aria-hidden="true"></i> Links</h2>
+                  <div id="profile-links"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-user-group" aria-hidden="true"></i> Pessoas relacionadas</h2>
+                  <div id="profile-related"></div>
+                </section>
+              </div>
+
+              <div class="profile-tab-panel" data-tab-panel="career" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Projetos</h2>
+                  <div id="profile-projects"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
+                  <div class="profile-timeline" id="profile-education"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Certificações</h2>
+                  <div class="profile-timeline" id="profile-certifications"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                  <div class="profile-timeline" id="profile-history"></div>
+                </section>
+              </div>
+
+              <div class="profile-tab-panel" data-tab-panel="activity" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-gift" aria-hidden="true"></i> Reconhecimentos</h2>
+                  <div id="profile-recognitions"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Interações recentes</h2>
+                  <div class="profile-interactions" id="profile-interactions"></div>
+                </section>
+              </div>
+
+              <div class="profile-tab-panel" data-tab-panel="documents" hidden>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-regular fa-file-lines" aria-hidden="true"></i> Documentos</h2>
+                  <div id="profile-documents"></div>
+                </section>
+                <section class="profile-panel">
+                  <h2 class="profile-panel__title"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i> Comunicados</h2>
+                  <div id="profile-communications"></div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-vcard-modal" id="profile-vcard-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-vcard-title">
+          <div class="profile-vcard-modal__backdrop" data-close-vcard></div>
+          <div class="profile-vcard-modal__dialog">
+            <h2 class="profile-vcard-modal__title" id="profile-vcard-title">Cartão de visita</h2>
+            <img class="profile-vcard-modal__qr" id="profile-vcard-qr" src="" alt="QR code para contato" width="160" height="160" />
+            <p style="font-size:13px;color:#64748b;text-align:center;">Escaneie ou baixe o vCard para salvar o contato.</p>
+            <div class="profile-vcard-modal__actions">
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-vcard-download">Baixar vCard</button>
+              <button class="profile-btn" type="button" data-close-vcard>Fechar</button>
+            </div>
+          </div>
+        </div>
