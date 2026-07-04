@@ -47,7 +47,7 @@ body {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 20px;
-  padding: 0 20px;
+  padding: 0 20px 0 calc((var(--wf-sidebar-w-left) - 40px) / 2);
   background: var(--wf-surface);
   border-bottom: 1px dashed var(--wf-border-strong);
   position: sticky;

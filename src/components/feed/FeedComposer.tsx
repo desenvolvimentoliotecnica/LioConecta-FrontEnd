@@ -158,8 +158,8 @@ export function FeedComposer() {
             </button>
           </div>
 
-          {expanded && (
-            <div className="feed-composer__submit">
+          <div className="feed-composer__submit">
+            {expanded && (
               <button
                 type="button"
                 className="feed-composer__cancel"
@@ -167,16 +167,16 @@ export function FeedComposer() {
               >
                 Cancelar
               </button>
-              <button
-                type="button"
-                className="feed-composer__publish"
-                disabled={!canPublish}
-                onClick={handlePublish}
-              >
-                Publicar
-              </button>
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              className="feed-composer__publish"
+              disabled={!canPublish}
+              onClick={handlePublish}
+            >
+              Publicar
+            </button>
+          </div>
         </div>
       </article>
     </section>
