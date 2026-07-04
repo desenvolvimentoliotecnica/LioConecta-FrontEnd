@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Wireframe Layout</title>
+  <title>LioConecta — Ponto Eletrônico</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -722,6 +722,370 @@
       color: #475569;
     }
 
+    /* PAGE: COMUNICADOS OFICIAIS */
+    .page-header {
+      margin-bottom: var(--wf-gap);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .breadcrumb a {
+      color: var(--wf-text-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #334155;
+    }
+
+    .breadcrumb__sep {
+      color: #cbd5e1;
+    }
+
+    .breadcrumb__current {
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .page-header__row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-header__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.2;
+    }
+
+    .page-header__desc {
+      margin-top: 6px;
+      font-size: 14px;
+      color: var(--wf-text);
+      max-width: 560px;
+    }
+
+    .page-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: var(--wf-gap);
+    }
+
+    .page-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      border: 1px dashed var(--wf-border);
+      background: #fff;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .page-search {
+      min-width: 220px;
+      height: 36px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 999px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      color: var(--wf-text-muted);
+      font-size: 13px;
+    }
+
+    .official-list {
+      display: grid;
+      gap: var(--wf-gap);
+    }
+
+    /* PAGE: SERVIÇOS — PONTO ELETRÔNICO */
+    .filter-chip.is-active {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+      color: #047857;
+    }
+
+    .topbar__dropdown-menu--services a.is-active {
+      background: #d1fae5;
+      color: #047857;
+      font-weight: 600;
+    }
+
+    .welcome-banner {
+      margin-bottom: var(--wf-gap);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border: 1px dashed #6ee7b7;
+      border-radius: var(--wf-radius);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .welcome-banner__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #d1fae5;
+      color: #059669;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .welcome-banner__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #064e3b;
+      margin-bottom: 4px;
+    }
+
+    .welcome-banner__text {
+      font-size: 13px;
+      color: #047857;
+      line-height: 1.45;
+    }
+
+    .time-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: var(--wf-gap);
+    }
+
+    .time-stat {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .time-stat__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #059669;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .time-stat__label {
+      font-size: 11px;
+      color: var(--wf-text-muted);
+      line-height: 1.35;
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .time-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 152px;
+    }
+
+    .time-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #6ee7b7;
+      background: linear-gradient(135deg, #fff 0%, #ecfdf5 100%);
+    }
+
+    .time-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .time-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .time-card__icon--registro { background: #d1fae5; color: #059669; border-color: #6ee7b7; }
+    .time-card__icon--consulta { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+    .time-card__icon--ajuste { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .time-card__icon--relatorio { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .time-card__icon--integracao { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+
+    .time-card__main { flex: 1; min-width: 0; }
+
+    .time-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .time-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .time-card.is-featured .time-card__desc { -webkit-line-clamp: 3; }
+
+    .time-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .time-card__cat {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #d1fae5;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .time-card__cat--consulta { background: #ede9fe; color: #6d28d9; }
+    .time-card__cat--ajuste { background: #fef3c7; color: #b45309; }
+    .time-card__cat--relatorio { background: #e0f2fe; color: #0369a1; }
+    .time-card__cat--integracao { background: #fce7f3; color: #be185d; }
+
+    .time-card__badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .time-card__badge--online { background: #dcfce7; color: #15803d; }
+
+    .time-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--wf-text-muted);
+    }
+
+    .time-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .time-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .time-card__actions { display: flex; gap: 4px; }
+
+    .time-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .time-card__btn:hover {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #6ee7b7;
+    }
+
+    .time-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #059669;
+      border: 1px solid #059669;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .time-card__open:hover {
+      background: #047857;
+      border-color: #047857;
+    }
+
+    .page-empty-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .time-stats { grid-template-columns: 1fr; }
+      .time-grid { grid-template-columns: 1fr; }
+      .time-card.is-featured { grid-column: auto; }
+    }
+
     /* QUICK ACCESS */
     .quick-access {
       margin-bottom: var(--wf-gap);
@@ -1373,7 +1737,7 @@
           <div class="logo__text">LioConecta</div>
         </a>
         <nav class="topbar__menu" aria-label="Menu principal">
-          <a href="intranet-wireframe.html" class="is-active">Feed</a>
+          <a href="intranet-wireframe.html">Feed</a>
           <div class="topbar__dropdown">
             <button
               class="topbar__dropdown-trigger"
@@ -1449,7 +1813,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1464,7 +1828,7 @@
               <a href="#" role="menuitem">Contracheque</a>
               <a href="servicos-ferias-ausencias.html" role="menuitem">Férias e ausências</a>
               <a href="#" role="menuitem">Solicitações RH</a>
-              <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
+              <a href="servicos-ponto-eletronico.html" role="menuitem" class="is-active">Ponto eletrônico</a>
               <a href="#" role="menuitem">Vale-transporte</a>
               <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
               <a href="#" role="menuitem">Reembolso de despesas</a>
@@ -1521,8 +1885,8 @@
           <span class="sidebar__toggle-icon" aria-hidden="true"><svg><use href="#icon-chevron"/></svg></span>
           <span class="sidebar__toggle-label">Recolher</span>
         </button>
-        <a class="sidebar__item is-active" href="#" title="Início"><img src="icon-home.png" alt="" /><span class="sidebar__text">Início</span></a>
-        <a class="sidebar__item" href="#" title="Feed"><img src="icon-feed.png" alt="" /><span class="sidebar__text">Feed</span></a>
+        <a class="sidebar__item" href="intranet-wireframe.html" title="Início"><img src="icon-home.png" alt="" /><span class="sidebar__text">Início</span></a>
+        <a class="sidebar__item" href="intranet-wireframe.html" title="Feed"><img src="icon-feed.png" alt="" /><span class="sidebar__text">Feed</span></a>
         <a class="sidebar__item" href="#" title="Pessoas"><img src="icon-people.png" alt="" /><span class="sidebar__text">Pessoas</span></a>
         <a class="sidebar__item" href="#" title="Grupos"><img src="icon-groups.png" alt="" /><span class="sidebar__text">Grupos</span></a>
         <a class="sidebar__item" href="#" title="Calendário"><img src="icon-calendar.png" alt="" /><span class="sidebar__text">Calendário</span></a>
@@ -1533,392 +1897,68 @@
 
       <main class="main">
 
-        <section class="announcement" aria-label="Comunicado oficial">
-          <div class="announcement__hero">
-            <div class="announcement__content">
-              <span class="tag">Comunicado oficial</span>
-              <h2>Atualização importante sobre nossa estratégia 2026</h2>
-              <p>
-                Estamos lançando novas iniciativas de colaboração e bem-estar para todos os colaboradores.
-                Leia os detalhes completos e compartilhe com sua equipe.
+        <header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="intranet-wireframe.html">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Serviços</span>
+            <span class="breadcrumb__sep">/</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Ponto eletrônico</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Ponto Eletrônico</h1>
+              <p class="page-header__desc">
+                Registre marcações, consulte espelho de ponto, solicite ajustes e acompanhe saldo de horas com o time de RH.
               </p>
-              <div class="announcement__cta">Ler comunicado completo ?</div>
             </div>
           </div>
-        </section>
+        </header>
 
-        <section class="quick-access" aria-label="Acessos rápidos">
-          <div class="quick-access__row">
-            <button class="quick-access__nav" type="button" data-quick-nav="-1" aria-label="Anterior">
-              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-            </button>
-            <div class="quick-access__track" id="quick-access-track">
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-user-tie"></i></span>
-                <span class="quick-access__label">Recursos Humanos</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
-                <span class="quick-access__label">Marketing</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-laptop-code"></i></span>
-                <span class="quick-access__label">Tecnologia da Informação</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
-                <span class="quick-access__label">Enquetes</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-champagne-glasses"></i></span>
-                <span class="quick-access__label">Parabenizações</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-newspaper"></i></span>
-                <span class="quick-access__label">Notícias</span>
-              </a>
-              <a class="quick-access__item" href="comunicados-oficiais.html">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-envelope-open-text"></i></span>
-                <span class="quick-access__label">Comunicados</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
-                <span class="quick-access__label">Grupos</span>
-              </a>
-              <a class="quick-access__item" href="#">
-                <span class="quick-access__icon" aria-hidden="true"><i class="fa-solid fa-folder-open"></i></span>
-                <span class="quick-access__label">Documentos</span>
-              </a>
-            </div>
-            <button class="quick-access__nav" type="button" data-quick-nav="1" aria-label="Próximo">
-              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-            </button>
-          </div>
-        </section>
-
-        <div class="feed-grid">
-          <div class="feed-column">
-            <article class="card card--mood">
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-rh.png" alt="Recursos Humanos" />
-                <div class="card__meta">
-                  <div class="card__author">
-                    Recursos Humanos
-                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
-                  </div>
-                  <div class="card__time">Hoje</div>
-                </div>
-                <span class="badge badge--bemestar">Bem-estar</span>
-              </div>
-              <div class="card__body">
-                <strong>Como você está se sentindo hoje?</strong>
-                <p style="margin-top:8px;">Sua resposta é anônima e ajuda o RH a cuidar melhor do clima da equipe.</p>
-                <div class="mood" role="group" aria-label="Opções de humor">
-                  <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
-                    <span class="mood__label">Ótimo</span>
-                  </button>
-                  <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
-                    <span class="mood__label">Bem</span>
-                  </button>
-                  <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
-                    <span class="mood__label">Neutro</span>
-                  </button>
-                  <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
-                    <span class="mood__label">Preciso de apoio</span>
-                  </button>
-                </div>
-                <p class="mood__hint">Toque em uma opção para registrar como está se sentindo.</p>
-              </div>
-            </article>
-
-            <article class="card card--comunicado">
-              <div class="post-media post-media--banner">
-                <img src="bg-comunicado-security.png" alt="Campanha de segurança da informação" />
-              </div>
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-ti.png" alt="Tecnologia da Informação" />
-                <div class="card__meta">
-                  <div class="card__author">
-                    Tecnologia da Informação
-                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
-                  </div>
-                  <div class="card__time">Há 3 horas</div>
-                </div>
-                <span class="badge badge--comunicado">Comunicado</span>
-              </div>
-              <div class="card__body">
-                <span class="tag">Comunicado oficial</span>
-                <p style="margin-top:10px;">Nova política de segurança da informação entra em vigor na próxima semana. Todos os colaboradores devem atualizar suas senhas e concluir o treinamento obrigatório.</p>
-                <div class="announcement__cta">Acessar treinamento ?</div>
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 31</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 5</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card card--celebration">
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-alejandro-lopez.png" alt="Alejandro López" />
-                <div class="card__meta">
-                  <div class="card__author">Alejandro López</div>
-                  <div class="card__time">Ontem</div>
-                </div>
-                <span class="badge badge--parabenizacao">Parabenização</span>
-              </div>
-              <div class="card__body">
-                Parabéns por 5 anos conosco! Obrigado por sua dedicação e contribuição contínua.
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 56</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 12</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-carlos-mendes.png" alt="Carlos Mendes" />
-                <div class="card__meta">
-                  <div class="card__author">Carlos Mendes</div>
-                  <div class="card__time">Há 5 horas</div>
-                </div>
-                <span class="badge badge--social">Social</span>
-              </div>
-              <div class="post-media">
-                <img src="bg-social-coffee.png" alt="Coffee break com a equipe" />
-              </div>
-              <div class="card__body">
-                Ótimo coffee break com o time de produto hoje! Nada melhor do que pausar para conversar e trocar ideias.
-                <div class="hashtags">
-                  <span class="hashtag">#Cultura</span>
-                  <span class="hashtag">#Equipe</span>
-                </div>
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 19</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 6</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__header">
-                <img class="avatar avatar--sm avatar--brand" src="avatar-nexora-news.png" alt="LioConecta Notícias" />
-                <div class="card__meta">
-                  <div class="card__author">LioConecta Notícias</div>
-                  <div class="card__time">Há 1 dia</div>
-                </div>
-                <span class="badge badge--noticia">Notícia</span>
-              </div>
-              <div class="news-card">
-                <div class="news-card__thumb">
-                  <img src="bg-news.png" alt="Sede corporativa LioConecta" />
-                </div>
-                <div>
-                  <div class="news-card__title">LioConecta anuncia novas parcerias estratégicas para 2026</div>
-                  <div class="news-card__link">Ler mais ?</div>
-                </div>
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 18</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 3</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card__header">
-                <img class="avatar avatar--sm avatar--brand" src="avatar-nexora-news.png" alt="LioConecta Notícias" />
-                <div class="card__meta">
-                  <div class="card__author">LioConecta Notícias</div>
-                  <div class="card__time">Há 2 dias</div>
-                </div>
-                <span class="badge badge--noticia">Notícia</span>
-              </div>
-              <div class="news-card">
-                <div class="news-card__thumb">
-                  <img src="bg-news-innovation.png" alt="Centro de inovação LioConecta" />
-                </div>
-                <div>
-                  <div class="news-card__title">LioConecta inaugura centro de inovação e pesquisa aplicada</div>
-                  <div class="news-card__link">Ler mais ?</div>
-                </div>
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 27</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 9</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-          </div>
-
-          <!-- Coluna direita -->
-          <div class="feed-column">
-            <article class="card">
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-marketing.png" alt="Marketing" />
-                <div class="card__meta">
-                  <div class="card__author">Marketing</div>
-                  <div class="card__time">Há 4 horas</div>
-                </div>
-                <span class="badge badge--social">Social</span>
-              </div>
-              <div class="post-media post-media--tall">
-                <img src="bg-marketing-event.png" alt="Evento anual de integração da equipe" />
-              </div>
-              <div class="card__body">
-                Momentos incríveis do nosso evento anual de integração. Obrigado a todos que participaram!
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 42</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 15</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="poll">
-                <div class="poll__banner">
-                  <img src="bg-poll.png" alt="Palestra de liderança" />
-                </div>
-                <div class="poll__content">
-                  <div class="poll__header">
-                    <div class="poll__title">Qual tema você gostaria para a próxima palestra de liderança?</div>
-                    <span class="badge badge--enquete">Enquete</span>
-                  </div>
-                  <div class="poll__options">
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Gestão de conflitos</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:45%"></div></div>
-                      </div>
-                      <span class="poll__pct">45%</span>
-                    </div>
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Comunicação assertiva</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:30%"></div></div>
-                      </div>
-                      <span class="poll__pct">30%</span>
-                    </div>
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Inteligência emocional</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:15%"></div></div>
-                      </div>
-                      <span class="poll__pct">15%</span>
-                    </div>
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Tomada de decisão</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:10%"></div></div>
-                      </div>
-                      <span class="poll__pct">10%</span>
-                    </div>
-                  </div>
-                  <button class="btn" type="button">Votar</button>
-                </div>
-              </div>
-            </article>
-
-            <article class="card card--celebration" style="background-image:url('bg-celebration-promotion.png');">
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-julia-santos.png" alt="Julia Santos" />
-                <div class="card__meta">
-                  <div class="card__author">Julia Santos</div>
-                  <div class="card__time">Há 6 horas</div>
-                </div>
-                <span class="badge badge--parabenizacao">Parabenização</span>
-              </div>
-              <div class="card__body">
-                Parabéns pela promoção a Gerente de Projetos! Muito merecido — desejamos muito sucesso na nova jornada.
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 73</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 21</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="poll">
-                <div class="poll__banner">
-                  <img src="bg-poll-remote.png" alt="Trabalho remoto e híbrido" />
-                </div>
-                <div class="poll__content">
-                  <div class="poll__header">
-                    <div class="poll__title">Qual modelo de trabalho você prefere para 2026?</div>
-                    <span class="badge badge--enquete">Enquete</span>
-                  </div>
-                  <div class="poll__options">
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Híbrido</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:52%"></div></div>
-                      </div>
-                      <span class="poll__pct">52%</span>
-                    </div>
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Presencial</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:28%"></div></div>
-                      </div>
-                      <span class="poll__pct">28%</span>
-                    </div>
-                    <div class="poll__option">
-                      <span class="poll__radio"></span>
-                      <div class="poll__option-content">
-                        <span class="poll__label">Remoto</span>
-                        <div class="poll__bar-wrap"><div class="poll__bar" style="width:20%"></div></div>
-                      </div>
-                      <span class="poll__pct">20%</span>
-                    </div>
-                  </div>
-                  <button class="btn" type="button">Votar</button>
-                </div>
-              </div>
-            </article>
-
-            <article class="card card--comunicado">
-              <div class="post-media post-media--banner">
-                <img src="bg-announcement.png" alt="Política de férias coletivas" />
-              </div>
-              <div class="card__header">
-                <img class="avatar avatar--sm" src="avatar-rh.png" alt="Recursos Humanos" />
-                <div class="card__meta">
-                  <div class="card__author">
-                    Recursos Humanos
-                    <span class="card__verified" title="Verificado"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
-                  </div>
-                  <div class="card__time">Há 1 dia</div>
-                </div>
-                <span class="badge badge--comunicado">Comunicado</span>
-              </div>
-              <div class="card__body">
-                <span class="tag">Comunicado oficial</span>
-                <p style="margin-top:10px;">Informamos o calendário de férias coletivas para o final do ano. Consulte as datas por unidade e registre sua preferência até sexta-feira.</p>
-                <div class="announcement__cta">Ver calendário ?</div>
-              </div>
-              <div class="card__footer">
-                <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 14</span>
-                <span class="action"><i class="fa-regular fa-comment" aria-hidden="true"></i> 2</span>
-                <span class="action"><i class="fa-regular fa-share-from-square" aria-hidden="true"></i> Compartilhar</span>
-              </div>
-            </article>
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-fingerprint"></i></div>
+          <div>
+            <div class="welcome-banner__title">Controle de jornada de trabalho</div>
+            <p class="welcome-banner__text">Registre entrada, saída e intervalos pelo portal ou app mobile. Ajustes de ponto são validados pelo gestor em até 2 dias úteis.</p>
           </div>
         </div>
+
+        <div class="time-stats" aria-label="Resumo de ponto">
+          <div class="time-stat">
+            <div class="time-stat__value">7h 42min</div>
+            <div class="time-stat__label">Horas registradas hoje</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-stat__value">+02:15</div>
+            <div class="time-stat__label">Saldo no banco de horas</div>
+          </div>
+          <div class="time-stat">
+            <div class="time-stat__value">2</div>
+            <div class="time-stat__label">Pendências aguardando aprovação</div>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="time-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="registro">Registro</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
+            <button class="filter-chip" type="button" data-filter="ajuste">Ajustes</button>
+            <button class="filter-chip" type="button" data-filter="relatorio">Relatórios</button>
+            <button class="filter-chip" type="button" data-filter="integracao">Integrações</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar serviços de ponto...
+          </div>
+        </div>
+
+        <div class="time-grid" id="time-root" aria-label="Serviços de ponto eletrônico"></div>
+
+        <p class="page-empty-note" id="time-count">Exibindo 12 serviços</p>
+
       </main>
 
       <aside class="sidebar sidebar--right" id="sidebar-right" aria-label="Menu lateral direito">
@@ -2013,76 +2053,96 @@
 
   <script>
     (function () {
-      const commentPool = [
-        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
-        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
-        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
-        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
-        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
-        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
-        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
-        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
-        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
-        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
-        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
-        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
-        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
-        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
-        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
-        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
-        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
-        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
-        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
-        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
-        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
-        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
-        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
-        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
+      const catLabels = {
+        registro: "Registro",
+        consulta: "Consulta",
+        ajuste: "Ajuste",
+        relatorio: "Relatório",
+        integracao: "Integração"
+      };
+
+      const catIcons = {
+        registro: "fa-fingerprint",
+        consulta: "fa-clock-rotate-left",
+        ajuste: "fa-pen-to-square",
+        relatorio: "fa-chart-column",
+        integracao: "fa-mobile-screen-button"
+      };
+
+      const items = [
+        { id: "registrar-ponto", title: "Registrar Ponto", desc: "Marque entrada, saída e intervalos pelo portal ou app mobile. A última marcação registrada hoje foi às 13:02.", cat: "registro", sla: "Imediato", online: true, featured: true, action: "Registrar" },
+        { id: "espelho-ponto", title: "Espelho de Ponto", desc: "Visualize marcações do mês com totais de horas normais, extras, faltas e inconsistências pendentes.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "historico-marcacoes", title: "Histórico de Marcações", desc: "Linha do tempo detalhada dos últimos 90 dias com origem da marcação (web, app ou relógio).", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "banco-horas", title: "Banco de Horas", desc: "Consulte saldo, créditos, débitos e projeção de compensação conforme política de jornada.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "ajuste-ponto", title: "Solicitar Ajuste de Ponto", desc: "Corrija esquecimentos ou inconsistências informando data, horário e justificativa para aprovação do gestor.", cat: "ajuste", sla: "Até 2 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "justificar-falta", title: "Justificar Falta no Ponto", desc: "Registre motivo de ausência não marcada no dia, com anexos quando exigido pela política interna.", cat: "ajuste", sla: "Até 24 horas", online: true, featured: false, action: "Registrar" },
+        { id: "horario-trabalho", title: "Horário de Trabalho", desc: "Consulte escala, jornada contratual, tolerâncias e regras de intervalo do seu vínculo.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "horas-extras", title: "Horas Extras", desc: "Relatório de horas extras por período, percentuais aplicáveis e status de aprovação pelo gestor.", cat: "relatorio", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "intervalo-refeicao", title: "Intervalo e Refeição", desc: "Registre início e fim de intervalo intrajornada conforme política de refeição e descanso.", cat: "registro", sla: "Imediato", online: true, featured: false, action: "Registrar" },
+        { id: "marcacao-remota", title: "Marcação Remota", desc: "Ponto para trabalho remoto ou externo com validação de localização e registro de atividade.", cat: "registro", sla: "Imediato", online: true, featured: false, action: "Registrar" },
+        { id: "aprovar-equipe", title: "Aprovar Pontos da Equipe", desc: "Gestores validam ajustes, justificativas e pendências de marcação dos colaboradores do time.", cat: "ajuste", sla: "Até 2 dias úteis", online: true, featured: false, action: "Aprovar" },
+        { id: "app-relogio", title: "App e Relógio de Ponto", desc: "Download do app mobile, cadastro de biometria, QR Code e suporte técnico dos equipamentos.", cat: "integracao", sla: "Conforme TI", online: false, featured: false, action: "Abrir" }
       ];
 
-      function shuffle(list) {
-        const items = list.slice();
-        for (let i = items.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
-        }
-        return items;
-      }
-
-      function renderComment(comment) {
+      function renderItem(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const catBadgeClass = item.cat !== "registro" ? " time-card__cat--" + item.cat : "";
+        const onlineBadge = item.online ? '<span class="time-card__badge time-card__badge--online">Online</span>' : "";
+        const actionIcon = item.action === "Consultar" || item.action === "Abrir" ? "fa-regular fa-eye" : item.action === "Aprovar" ? "fa-solid fa-check" : "fa-solid fa-paper-plane";
         return `
-          <div class="comment">
-            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
-            <div>
-              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
-              <div class="comment__text">${comment.text}</div>
+          <article class="time-card${featuredClass}" data-cat="${item.cat}">
+            <div class="time-card__head">
+              <div class="time-card__icon time-card__icon--${item.cat}" aria-hidden="true">
+                <i class="fa-solid ${catIcons[item.cat] || "fa-clock"}"></i>
+              </div>
+              <div class="time-card__main">
+                <h2 class="time-card__title">${item.title}</h2>
+                <p class="time-card__desc">${item.desc}</p>
+              </div>
             </div>
-          </div>
-        `;
+            <div class="time-card__tags">
+              <span class="time-card__cat${catBadgeClass}">${catLabels[item.cat] || item.cat}</span>
+              ${onlineBadge}
+            </div>
+            <div class="time-card__meta">
+              <span><i class="fa-regular fa-clock" aria-hidden="true"></i> ${item.sla}</span>
+            </div>
+            <div class="time-card__footer">
+              <a class="time-card__open" href="#"><i class="${actionIcon}" aria-hidden="true"></i> ${item.action}</a>
+              <div class="time-card__actions">
+                <a class="time-card__btn" href="#" aria-label="Ajuda ${item.title}"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></a>
+                <a class="time-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
       }
 
-      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
-      let available = shuffle(commentPool);
-
-      posts.forEach(function (post) {
-        const total = Math.floor(Math.random() * 3) + 1;
-        const picked = [];
-
-        for (let i = 0; i < total; i += 1) {
-          if (!available.length) available = shuffle(commentPool);
-          picked.push(available.shift());
-        }
-
-        const section = document.createElement("div");
-        section.className = "comments";
-        section.innerHTML = `
-          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
-          ${picked.map(renderComment).join("")}
-          <div class="comments__input">Escreva um comentário...</div>
-        `;
-        post.appendChild(section);
-      });
+      const root = document.getElementById("time-root");
+      const countEl = document.getElementById("time-count");
+      const filters = document.getElementById("time-filters");
+      if (!root) return;
+      root.innerHTML = items.map(renderItem).join("");
+      function applyFilter(filter) {
+        let visible = 0;
+        root.querySelectorAll(".time-card").forEach(function (card) {
+          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          card.hidden = !match;
+          if (match) visible += 1;
+        });
+        if (countEl) countEl.textContent = "Exibindo " + visible + " serviço" + (visible === 1 ? "" : "s");
+      }
+      applyFilter("all");
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
     })();
   </script>
 </body>
 </html>
+
