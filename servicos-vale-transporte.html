@@ -6,6 +6,7 @@
   <title>LioConecta — Vale-Transporte</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="assets/user-menu.css" />
+  <link rel="stylesheet" href="assets/notifications.css" />
   <style>
     :root {
       --wf-bg: #eceff3;
@@ -348,8 +349,8 @@
       height: 15px;
       padding: 0 4px;
       border-radius: 999px;
-      background: #64748b;
-      color: #fff;
+      background: #fff;
+      color: #ef4444;
       font-size: 9px;
       font-weight: 700;
       line-height: 11px;
@@ -1862,10 +1863,50 @@
       </div>
 
       <div class="topbar__actions">
-        <div class="icon-btn-wrap" data-badge="3">
-          <button class="topbar-icon-btn" type="button" aria-label="Notificações">
+        <div class="notifications-menu icon-btn-wrap" data-badge="3">
+          <button
+            class="topbar-icon-btn notifications-menu__trigger"
+            type="button"
+            aria-label="Notificações"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="notifications-panel"
+          >
             <i class="fa-regular fa-bell" aria-hidden="true"></i>
           </button>
+          <div class="notifications-menu__panel" id="notifications-panel" role="region" aria-label="Notificações recentes">
+            <div class="notifications-menu__header">
+              <span class="notifications-menu__title">Notificações</span>
+              <button class="notifications-menu__mark-read" type="button">Marcar todas como lidas</button>
+            </div>
+            <ul class="notifications-menu__list">
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--comunicado"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Novo comunicado oficial</strong>
+                  <p>Atualização importante sobre a estratégia 2026.</p>
+                  <time datetime="2026-07-04T14:30:00">Há 2 horas</time>
+                </div>
+              </li>
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--rh"><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Solicitação aprovada</strong>
+                  <p>Sua solicitação de férias foi aprovada pelo RH.</p>
+                  <time datetime="2026-07-04T11:00:00">Há 5 horas</time>
+                </div>
+              </li>
+              <li class="notifications-menu__item notifications-menu__item--unread">
+                <span class="notifications-menu__icon notifications-menu__icon--social"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i></span>
+                <div class="notifications-menu__body">
+                  <strong>Aniversariante do dia</strong>
+                  <p>Julia Santos completa mais um ano na Liotécnica hoje.</p>
+                  <time datetime="2026-07-04T08:00:00">Hoje</time>
+                </div>
+              </li>
+            </ul>
+            <a class="notifications-menu__footer" href="comunicados-oficiais.html">Ver todas as notificações</a>
+          </div>
         </div>
         <div class="icon-btn-wrap" data-badge="2">
           <button class="topbar-icon-btn" type="button" aria-label="Mensagens">
@@ -2131,5 +2172,6 @@
     })();
   </script>
   <script src="assets/user-menu.js"></script>
+  <script src="assets/notifications.js"></script>
 </body>
 </html>

@@ -38,6 +38,7 @@
       event.stopPropagation();
 
       var willOpen = !menu.classList.contains("is-open");
+      if (window.LioNotifications) window.LioNotifications.closeAll(null);
       closeAllTopbarDropdowns(null);
       closeAllUserMenus(willOpen ? menu : null);
 
@@ -73,6 +74,7 @@
         event.stopPropagation();
 
         var willOpen = !dropdown.classList.contains("is-open");
+        if (window.LioNotifications) window.LioNotifications.closeAll(null);
         closeAllUserMenus(null);
         closeAllTopbarDropdowns(willOpen ? dropdown : null);
 
