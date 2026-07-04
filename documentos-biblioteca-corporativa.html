@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Organograma</title>
+  <title>LioConecta — Biblioteca Corporativa</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdn.balkan.app/orgchart-community.css" />
   <style>
     :root {
       --wf-bg: #eceff3;
@@ -756,10 +755,10 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — ORGANOGRAMA */
+    /* PAGE: DOCUMENTOS — BIBLIOTECA CORPORATIVA */
     .filter-chip.is-active {
       background: #ede9fe;
-      border-color: #a78bfa;
+      border-color: #c4b5fd;
       color: #6d28d9;
     }
 
@@ -772,7 +771,7 @@
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
       background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-      border: 1px dashed #a78bfa;
+      border: 1px dashed #c4b5fd;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -784,7 +783,7 @@
       height: 44px;
       border-radius: 50%;
       background: #ede9fe;
-      color: #6d28d9;
+      color: #7c3aed;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -795,40 +794,221 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #4c1d95;
+      color: #5b21b6;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #5b21b6;
+      color: #6d28d9;
       line-height: 1.45;
     }
 
-    .org-chart-panel {
-      position: relative;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(248, 250, 252, 0.68) 100%),
-        url("org-chart-background.png") center / 570px repeat,
-        #f8fafc;
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .doc-card {
+      background: #fff;
       border: 1px dashed var(--wf-border);
-      border-radius: var(--wf-radius);
-      overflow: hidden;
-      min-height: 640px;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 148px;
+    }
+
+    .doc-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #c4b5fd;
+      background: linear-gradient(135deg, #fff 0%, #f5f3ff 100%);
+    }
+
+    .doc-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .doc-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .doc-card__icon--pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .doc-card__icon--doc { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .doc-card__icon--xlsx { background: #ecfdf5; color: #059669; border-color: #6ee7b7; }
+    .doc-card__icon--ebook { background: #f5f3ff; color: #7c3aed; border-color: #c4b5fd; }
+    .doc-card__icon--video { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+    .doc-card__icon--case { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .doc-card__icon--acervo { background: #ecfeff; color: #0891b2; border-color: #67e8f9; }
+    .doc-card__icon--artigo { background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; }
+
+    .doc-card__main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .doc-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
       margin-bottom: 4px;
     }
 
-    #org-tree {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 640px;
-      background: transparent !important;
+    .doc-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    #org-tree [data-boc-right],
-    #org-tree [data-boc-content] {
-      background: transparent !important;
+    .doc-card.is-featured .doc-card__desc {
+      -webkit-line-clamp: 3;
+    }
+
+    .doc-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .doc-card__media {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #6d28d9;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__media--video { background: #fce7f3; color: #be185d; }
+    .doc-card__media--case { background: #fef3c7; color: #b45309; }
+    .doc-card__media--acervo { background: #ecfeff; color: #0891b2; }
+
+    .doc-card__area {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__area--conhecimento { background: #ede9fe; color: #6d28d9; }
+    .doc-card__area--historia { background: #ffedd5; color: #c2410c; }
+    .doc-card__area--marca { background: #fce7f3; color: #be185d; }
+    .doc-card__area--treinamentos { background: #dcfce7; color: #15803d; }
+    .doc-card__area--cases { background: #fef3c7; color: #b45309; }
+    .doc-card__area--publicacoes { background: #e0f2fe; color: #0369a1; }
+
+    .doc-card__version {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .doc-card__updated {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .doc-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--wf-text-muted);
+    }
+
+    .doc-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .doc-card__actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .doc-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .doc-card__btn:hover {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #c4b5fd;
+    }
+
+    .doc-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #7c3aed;
+      border: 1px solid #7c3aed;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__open:hover {
+      background: #6d28d9;
+      border-color: #6d28d9;
     }
 
     .page-empty-note {
@@ -838,64 +1018,14 @@
       text-align: center;
     }
 
-    .org-action-toast {
-      margin-top: 8px;
-      padding: 10px 14px;
-      background: #f5f3ff;
-      border: 1px dashed #a78bfa;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #5b21b6;
-      text-align: center;
-      line-height: 1.45;
-    }
+    @media (max-width: 900px) {
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
 
-    .org-action-toast[hidden] {
-      display: none;
-    }
-
-    #org-tree .boc-menu {
-      font-family: inherit;
-      border-radius: 10px;
-      border: 1px dashed var(--wf-border);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-    }
-
-    .org-node-menu {
-      position: fixed;
-      z-index: 200;
-      min-width: 196px;
-      padding: 6px;
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: 10px;
-      box-shadow:
-        0 4px 10px rgba(15, 23, 42, 0.08),
-        0 12px 28px rgba(15, 23, 42, 0.12);
-    }
-
-    .org-node-menu[hidden] {
-      display: none;
-    }
-
-    .org-node-menu__item {
-      display: block;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      background: transparent;
-      padding: 9px 12px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      color: #334155;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .org-node-menu__item:hover {
-      background: #f5f3ff;
-      color: #6d28d9;
+      .doc-card.is-featured {
+        grid-column: auto;
+      }
     }
 
     /* QUICK ACCESS */
@@ -1570,7 +1700,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1583,7 +1713,7 @@
               <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
               <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
               <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
-              <a href="pessoas-organograma.html" role="menuitem" class="is-active">Organograma</a>
+              <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
             </div>
           </div>
           <div class="topbar__dropdown">
@@ -1606,7 +1736,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1620,7 +1750,7 @@
               <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
               <a href="documentos-formularios.html" role="menuitem">Formulários</a>
               <a href="documentos-modelos-documentos.html" role="menuitem">Modelos de documentos</a>
-              <a href="documentos-biblioteca-corporativa.html" role="menuitem">Biblioteca corporativa</a>
+              <a href="documentos-biblioteca-corporativa.html" role="menuitem" class="is-active">Biblioteca corporativa</a>
             </div>
           </div>
           <div class="topbar__dropdown">
@@ -1694,40 +1824,47 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span>Documentos</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Organograma</span>
+            <span class="breadcrumb__current">Biblioteca corporativa</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Organograma</h1>
+              <h1 class="page-header__title">Biblioteca Corporativa</h1>
               <p class="page-header__desc">
-                Visualize a estrutura hierárquica da LioConecta, entenda as linhas de reporte e encontre rapidamente quem lidera cada área.
+                Acervo de conhecimento, história, marca, treinamentos e publicações internas. Explore materiais curados para aprender, compartilhar e preservar a memória da organização.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-sitemap"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-building-columns"></i></div>
           <div>
-            <div class="welcome-banner__title">Estrutura organizacional</div>
-            <p class="welcome-banner__text">6 áreas de negócio, 1 diretoria executiva e 50 colaboradores distribuídos em times multidisciplinares.</p>
+            <div class="welcome-banner__title">14 materiais no acervo corporativo</div>
+            <p class="welcome-banner__text">E-books, cases, vídeos, publicações e repositórios de marca reunidos em um só lugar. Conteúdos revisados pelas áreas responsáveis e disponíveis para consulta ou download.</p>
           </div>
         </div>
 
-        <div class="org-chart-panel">
-          <div id="org-tree" aria-label="Organograma da empresa"></div>
+        <div class="page-toolbar">
+          <div class="page-filters" id="library-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="conhecimento">Conhecimento</button>
+            <button class="filter-chip" type="button" data-filter="marca">Marca</button>
+            <button class="filter-chip" type="button" data-filter="treinamentos">Treinamentos</button>
+            <button class="filter-chip" type="button" data-filter="cases">Cases</button>
+            <button class="filter-chip" type="button" data-filter="publicacoes">Publicações</button>
+            <button class="filter-chip" type="button" data-filter="historia">História</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar no acervo por título ou tema...
+          </div>
         </div>
 
-        <p class="page-empty-note" id="org-count"></p>
-        <p class="org-action-toast" id="org-action-toast" hidden role="status"></p>
+        <div class="docs-grid" id="library-root" aria-label="Biblioteca corporativa"></div>
 
-        <div class="org-node-menu" id="org-node-menu" hidden role="menu" aria-label="Ações do colaborador">
-          <button class="org-node-menu__item" type="button" role="menuitem" data-action="perfil">Ver perfil</button>
-          <button class="org-node-menu__item" type="button" role="menuitem" data-action="ferias">Solicitar férias</button>
-          <button class="org-node-menu__item" type="button" role="menuitem" data-action="promover">Promover</button>
-        </div>
+        <p class="page-empty-note" id="library-count">Exibindo 14 materiais</p>
 
       </main>
 
@@ -1821,389 +1958,256 @@
     })();
   </script>
 
-  <script src="https://cdn.balkan.app/orgchart-community.js"></script>
   <script>
     (function () {
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
-      ];
-
-      const deptColors = {
-        Executiva: { fill: "#f5f3ff", stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
-        Produto: { fill: "#eff6ff", stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
-        "Recursos Humanos": { fill: "#fdf2f8", stroke: "#f9a8d4", badge: "#fce7f3", text: "#be185d" },
-        Marketing: { fill: "#f0fdf4", stroke: "#86efac", badge: "#dcfce7", text: "#15803d" },
-        TI: { fill: "#ecfeff", stroke: "#67e8f9", badge: "#cffafe", text: "#0e7490" },
-        Comercial: { fill: "#fff7ed", stroke: "#fdba74", badge: "#ffedd5", text: "#c2410c" },
-        Financeiro: { fill: "#fffbeb", stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
+      const areaLabels = {
+        conhecimento: "Conhecimento",
+        historia: "História",
+        marca: "Marca",
+        treinamentos: "Treinamentos",
+        cases: "Cases",
+        publicacoes: "Publicações"
       };
 
-      const ceo = {
-        name: "Júlio Schwartzman",
-        role: "CEO · Diretoria Executiva",
-        avatar: "avatar-julio-schwartzman.png"
+      const mediaLabels = {
+        ebook: "E-book",
+        artigo: "Artigo",
+        video: "Vídeo",
+        case: "Case",
+        publicacao: "Publicação",
+        acervo: "Acervo"
       };
 
-      const branches = [
+      const mediaIcons = {
+        ebook: "fa-book-open",
+        artigo: "fa-newspaper",
+        video: "fa-circle-play",
+        case: "fa-trophy",
+        publicacao: "fa-book",
+        acervo: "fa-images"
+      };
+
+      const items = [
         {
-          id: "produto",
-          dept: "Produto",
-          director: { name: "Carlos Mendes", role: "Diretor de Produto", avatar: "avatar-carlos-mendes.png" },
-          team: [
-            { name: "Maria Silva", role: "Gerente de Projetos" },
-            { name: "Ricardo Souza", role: "Product Owner" },
-            { name: "Julia Santos", role: "Designer de Produto" }
-          ]
+          id: "guia-cultura",
+          title: "Guia de Cultura Organizacional Lio",
+          desc: "E-book interativo com missão, visão, valores, comportamentos esperados e histórias que definem a identidade da companhia.",
+          area: "conhecimento",
+          media: "ebook",
+          date: "Mar/2026",
+          featured: true,
+          curated: true
         },
         {
-          id: "rh",
-          dept: "Recursos Humanos",
-          director: { name: "Patricia Nunes", role: "Coordenadora de RH", avatar: "avatar-rh.png" },
-          team: [
-            { name: "Renata Gomes", role: "Analista de RH" },
-            { name: "Helena Prado", role: "Business Partner" },
-            { name: "Diego Martins", role: "Recrutador" }
-          ]
+          id: "historia-30-anos",
+          title: "História da Lio — 30 Anos de Trajetória",
+          desc: "Linha do tempo ilustrada com marcos, fundadores, expansão e evolução dos negócios ao longo de três décadas.",
+          area: "historia",
+          media: "publicacao",
+          date: "Jan/2026",
+          featured: false,
+          curated: true
         },
         {
-          id: "marketing",
-          dept: "Marketing",
-          director: { name: "Camila Rocha", role: "Coord. de Comunicação", avatar: "avatar-marketing.png" },
-          team: [
-            { name: "Fernanda Lima", role: "Analista de Marketing" },
-            { name: "Thiago Barros", role: "Designer Gráfico" },
-            { name: "Simone Alves", role: "Analista de Conteúdo" }
-          ]
+          id: "identidade-visual",
+          title: "Manual de Identidade Visual",
+          desc: "Diretrizes oficiais de logo, cores, tipografia, aplicações e usos incorretos da marca Lio Tecnica.",
+          area: "marca",
+          media: "ebook",
+          date: "Fev/2026",
+          featured: false,
+          curated: true
         },
         {
-          id: "ti",
-          dept: "TI",
-          director: { name: "Igor Martins", role: "Tech Lead", avatar: "avatar-ti.png" },
-          team: [
-            { name: "Tiago Nunes", role: "Desenvolvedor Frontend" },
-            { name: "William Souza", role: "DevOps Engineer" },
-            { name: "Rafael Costa", role: "Desenvolvedor Backend" }
-          ]
+          id: "brandbook",
+          title: "Brandbook Completo",
+          desc: "Documento ampliado de posicionamento de marca, tom de voz, arquétipos e exemplos de comunicação institucional.",
+          area: "marca",
+          media: "ebook",
+          date: "Nov/2025",
+          featured: false,
+          curated: false
         },
         {
-          id: "comercial",
-          dept: "Comercial",
-          director: { name: "João Pereira", role: "Gerente Comercial", avatar: "avatar-nexora-news.png" },
-          team: [
-            { name: "Una Ferreira", role: "Executiva Comercial" },
-            { name: "Xavier Dias", role: "SDR" },
-            { name: "Lucas Ferreira", role: "Account Executive" }
-          ]
+          id: "case-rh-digital",
+          title: "Case: Transformação Digital no RH",
+          desc: "Estudo de caso sobre digitalização de processos de admissão, folha e gestão de pessoas com resultados mensuráveis.",
+          area: "cases",
+          media: "case",
+          date: "Dez/2025",
+          featured: false,
+          curated: true
         },
         {
-          id: "financeiro",
-          dept: "Financeiro",
-          director: { name: "Marcos Vieira", role: "Gerente Financeiro", avatar: "avatar-maria-silva.png" },
-          team: [
-            { name: "Vicente Lima", role: "Analista Financeiro" },
-            { name: "Natália Rocha", role: "Analista de Controladoria" },
-            { name: "Bianca Alves", role: "Assistente Financeiro" }
-          ]
+          id: "case-expansao",
+          title: "Case: Expansão Comercial 2025",
+          desc: "Relato da estratégia de crescimento regional, metas batidas, lições aprendidas e indicadores de performance.",
+          area: "cases",
+          media: "case",
+          date: "Mar/2026",
+          featured: false,
+          curated: false
+        },
+        {
+          id: "ebook-lideranca",
+          title: "E-book: Liderança Colaborativa",
+          desc: "Material de desenvolvimento sobre feedback, delegação, conversas difíceis e construção de times de alta performance.",
+          area: "treinamentos",
+          media: "ebook",
+          date: "Out/2025",
+          featured: false,
+          curated: false
+        },
+        {
+          id: "trilha-onboarding",
+          title: "Trilha de Onboarding — Vídeos",
+          desc: "Playlist com boas-vindas, tour virtual, apresentação das áreas e primeiros passos para novos colaboradores.",
+          area: "treinamentos",
+          media: "video",
+          date: "Mar/2026",
+          featured: false,
+          curated: true
+        },
+        {
+          id: "artigo-inovacao",
+          title: "Artigo: Inovação e Sustentabilidade",
+          desc: "Publicação interna sobre práticas ESG, projetos verdes e iniciativas de inovação aberta na Lio Tecnica.",
+          area: "publicacoes",
+          media: "artigo",
+          date: "Fev/2026",
+          featured: false,
+          curated: false
+        },
+        {
+          id: "revista-lioconecta",
+          title: "Revista LioConnecta — Edição 12",
+          desc: "Edição trimestral com entrevistas, destaques de colaboradores, novidades da empresa e agenda de eventos internos.",
+          area: "publicacoes",
+          media: "publicacao",
+          date: "Mar/2026",
+          featured: false,
+          curated: true
+        },
+        {
+          id: "fotos-institucionais",
+          title: "Repositório de Fotos Institucionais",
+          desc: "Banco de imagens oficiais de eventos, sede, equipes e campanhas internas para uso autorizado em materiais.",
+          area: "marca",
+          media: "acervo",
+          date: "Jan/2026",
+          featured: false,
+          curated: false
+        },
+        {
+          id: "apresentacoes-historicas",
+          title: "Acervo de Apresentações Históricas",
+          desc: "Coleção de decks estratégicos, resultados anuais e comunicados de liderança arquivados para consulta.",
+          area: "historia",
+          media: "acervo",
+          date: "Ago/2025",
+          featured: false,
+          curated: false
+        },
+        {
+          id: "icones-logos",
+          title: "Biblioteca de Ícones e Logos",
+          desc: "Download centralizado de logos, ícones, selos e variações aprovadas para apresentações e documentos internos.",
+          area: "marca",
+          media: "acervo",
+          date: "Mar/2026",
+          featured: false,
+          curated: true
+        },
+        {
+          id: "glossario",
+          title: "Glossário Corporativo",
+          desc: "Artigo de referência com siglas, termos técnicos, nomenclaturas de produtos e vocabulário usado na organização.",
+          area: "conhecimento",
+          media: "artigo",
+          date: "Set/2025",
+          featured: false,
+          curated: false
         }
       ];
 
-      let avatarIndex = 0;
+      function renderItem(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const mediaClass = item.media === "video" ? "video" : item.media === "case" ? "case" : item.media === "acervo" ? "acervo" : item.media === "artigo" ? "artigo" : "ebook";
+        const mediaBadgeClass = item.media === "video" ? " doc-card__media--video" : item.media === "case" ? " doc-card__media--case" : item.media === "acervo" ? " doc-card__media--acervo" : "";
+        const curatedBadge = item.curated ? '<span class="doc-card__updated">Curado</span>' : "";
+        const primaryLabel = item.media === "video" ? "Assistir" : item.media === "acervo" ? "Explorar" : "Acessar";
+        const primaryIcon = item.media === "video" ? "fa-play" : item.media === "acervo" ? "fa-folder-open" : "fa-book-open";
 
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatar;
+        return `
+          <article class="doc-card${featuredClass}" data-area="${item.area}">
+            <div class="doc-card__head">
+              <div class="doc-card__icon doc-card__icon--${mediaClass}" aria-hidden="true">
+                <i class="fa-solid ${mediaIcons[item.media] || "fa-book"}"></i>
+              </div>
+              <div class="doc-card__main">
+                <h2 class="doc-card__title">${item.title}</h2>
+                <p class="doc-card__desc">${item.desc}</p>
+              </div>
+            </div>
+            <div class="doc-card__tags">
+              <span class="doc-card__media${mediaBadgeClass}">${mediaLabels[item.media] || item.media}</span>
+              <span class="doc-card__area doc-card__area--${item.area}">${areaLabels[item.area] || item.area}</span>
+              ${curatedBadge}
+            </div>
+            <div class="doc-card__meta">
+              <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Publicado ${item.date}</span>
+            </div>
+            <div class="doc-card__footer">
+              <a class="doc-card__open" href="#"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>
+              <div class="doc-card__actions">
+                <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="#" aria-label="Compartilhar ${item.title}"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+        `;
       }
 
-      function getDeptColors(dept) {
-        return deptColors[dept] || deptColors.Executiva;
-      }
+      const root = document.getElementById("library-root");
+      const countEl = document.getElementById("library-count");
+      const filters = document.getElementById("library-filters");
 
-      function buildOrgChartNodes(ceoData, branchList, avatarFn) {
-        const nodes = [];
-        let nextId = 1;
+      if (!root) return;
 
-        const ceoId = nextId++;
-        nodes.push({
-          id: ceoId,
-          name: ceoData.name,
-          title: ceoData.role,
-          img: ceoData.avatar,
-          dept: "Executiva",
-          tags: ["ceo"]
+      root.innerHTML = items.map(renderItem).join("");
+
+      function applyFilter(filter) {
+        let visible = 0;
+
+        root.querySelectorAll(".doc-card").forEach(function (card) {
+          const area = card.getAttribute("data-area");
+          const match = filter === "all" || area === filter;
+
+          card.hidden = !match;
+          if (match) visible += 1;
         });
 
-        branchList.forEach(function (branch) {
-          const directorId = nextId++;
-          nodes.push({
-            id: directorId,
-            pid: ceoId,
-            name: branch.director.name,
-            title: branch.director.role,
-            img: branch.director.avatar,
-            dept: branch.dept,
-            tags: ["director"]
-          });
-
-          branch.team.forEach(function (member) {
-            nodes.push({
-              id: nextId++,
-              pid: directorId,
-              name: member.name,
-              title: member.role,
-              img: member.avatar || avatarFn(),
-              dept: branch.dept,
-              tags: ["member"]
-            });
-          });
-        });
-
-        return nodes;
-      }
-
-      function getCardLayout(node) {
-        const contentH = 108;
-        const top = Math.max(8, Math.round((node.h - contentH) / 2));
-        const cx = node.w / 2;
-        return {
-          top: top,
-          cx: cx,
-          imgY: top,
-          imgCy: top + 26,
-          nameY: top + 62,
-          titleY: top + 78,
-          badgeY: top + 88,
-          badgeTextY: top + 103
-        };
-      }
-
-      function setupLioTemplate() {
-        OrgChart.templates.lio = Object.assign({}, OrgChart.templates.ana);
-        OrgChart.templates.lio.size = [220, 168];
-        OrgChart.templates.lio.expandCollapseSize = 28;
-
-        OrgChart.templates.lio.node = function (node, data) {
-          const colors = getDeptColors(data.dept);
-          return (
-            '<rect x="0" y="0" height="' + node.h + '" width="' + node.w +
-            '" fill="' + colors.fill + '" stroke-width="1.5" stroke="' + colors.stroke +
-            '" rx="10" ry="10"></rect>' +
-            '<g class="lio-node-menu-btn" style="cursor:pointer;" transform="matrix(1,0,0,1,' + (node.w - 22) + ', 10)" data-lio-node-menu="' + node.id + '" aria-label="Ações">' +
-            '<rect x="-4" y="-2" width="22" height="16" rx="6" fill="#ffffff" fill-opacity="0.9"></rect>' +
-            '<circle cx="2" cy="6" r="1.7" fill="' + colors.text + '"></circle>' +
-            '<circle cx="8" cy="6" r="1.7" fill="' + colors.text + '"></circle>' +
-            '<circle cx="14" cy="6" r="1.7" fill="' + colors.text + '"></circle>' +
-            '</g>'
-          );
-        };
-
-        OrgChart.templates.lio.img_0 = function (node, data, template, config, value) {
-          const colors = getDeptColors(data.dept);
-          const layout = getCardLayout(node);
-          const r = 26;
-          const clipId = "lioClip" + node.id;
-          return (
-            '<clipPath id="' + clipId + '"><circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '"></circle></clipPath>' +
-            '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#' + clipId + ')" ' +
-            'xlink:href="' + value + '" x="' + (layout.cx - r) + '" y="' + layout.imgY + '" width="' + (r * 2) + '" height="' + (r * 2) + '"></image>' +
-            '<circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '" fill="none" stroke="' + colors.stroke + '" stroke-width="2.5"></circle>'
-          );
-        };
-
-        OrgChart.templates.lio.field_0 = function (node, data, template, config, value) {
-          const layout = getCardLayout(node);
-          return (
-            '<text data-width="' + (node.w - 20) + '" data-text-overflow="multiline" ' +
-            'style="font-size:15px;font-weight:700;" fill="#1e293b" stroke="#ffffff" stroke-width="2.5" ' +
-            'paint-order="stroke fill" stroke-linejoin="round" x="' + layout.cx + '" y="' + layout.nameY + '" text-anchor="middle">' + value + '</text>'
-          );
-        };
-
-        OrgChart.templates.lio.field_1 = function (node, data, template, config, value) {
-          const layout = getCardLayout(node);
-          return (
-            '<text data-width="' + (node.w - 20) + '" data-text-overflow="multiline" style="font-size:12px;" ' +
-            'fill="#4a5568" x="' + layout.cx + '" y="' + layout.titleY + '" text-anchor="middle">' + value + '</text>'
-          );
-        };
-
-        OrgChart.templates.lio.field_2 = function (node, data, template, config, value) {
-          const colors = getDeptColors(data.dept);
-          const layout = getCardLayout(node);
-          const badgeW = Math.min(node.w - 16, Math.max(104, String(value).length * 8 + 28));
-          const badgeX = (node.w - badgeW) / 2;
-          return (
-            '<rect x="' + badgeX + '" y="' + layout.badgeY + '" width="' + badgeW + '" height="22" rx="11" ry="11" fill="' + colors.badge + '"></rect>' +
-            '<text style="font-size:12px;font-weight:700;" fill="' + colors.text + '" x="' + layout.cx + '" y="' + layout.badgeTextY + '" text-anchor="middle">' + value + '</text>'
-          );
-        };
-
-        OrgChart.templates.lio.plus = function (node, data, template, config, defaultPosition) {
-          const colors = getDeptColors(data.dept);
-          const count = node.deepCollapsedChildCount || node.childrenIds.length;
-          return (
-            '<g transform="matrix(1,0,0,1,' + (defaultPosition.x - 14) + ',' + (defaultPosition.y - 6) + ')">' +
-            '<circle cx="14" cy="14" r="14" fill="#ffffff" stroke="' + colors.stroke + '" stroke-width="1.5"></circle>' +
-            '<text text-anchor="middle" style="font-size:12px;font-weight:700;cursor:pointer;" fill="' + colors.text + '" x="14" y="18">' +
-            count + '</text></g>'
-          );
-        };
-
-        OrgChart.templates.lio.minus = function (node, data, template, config, defaultPosition) {
-          const colors = getDeptColors(data.dept);
-          return (
-            '<g transform="matrix(1,0,0,1,' + (defaultPosition.x - 14) + ',' + (defaultPosition.y - 6) + ')">' +
-            '<circle cx="14" cy="14" r="14" fill="#ffffff" stroke="' + colors.stroke + '" stroke-width="1.5"></circle>' +
-            '<line x1="7" y1="14" x2="21" y2="14" stroke="' + colors.text + '" stroke-width="1.5"></line></g>'
-          );
-        };
-      }
-
-      let orgActionToastTimer;
-      let activeMenuNodeId = null;
-
-      function showOrgAction(message) {
-        const toast = document.getElementById("org-action-toast");
-        if (!toast) return;
-        toast.textContent = message;
-        toast.hidden = false;
-        clearTimeout(orgActionToastTimer);
-        orgActionToastTimer = setTimeout(function () {
-          toast.hidden = true;
-        }, 4000);
-      }
-
-      function handleOrgAction(nodeId, action, nodeIndex) {
-        const person = nodeIndex[nodeId];
-        if (!person) return;
-
-        if (action === "perfil") {
-          showOrgAction("Ver perfil de " + person.name + " — em breve no diretório de pessoas.");
-          return;
-        }
-
-        if (action === "ferias") {
-          showOrgAction("Solicitar férias para " + person.name + " — fluxo em breve no módulo de RH.");
-          return;
-        }
-
-        if (action === "promover") {
-          showOrgAction("Promover " + person.name + " — fluxo em breve para gestores e RH.");
-        }
-      }
-
-      function closeOrgNodeMenu() {
-        const menu = document.getElementById("org-node-menu");
-        if (menu) menu.hidden = true;
-        activeMenuNodeId = null;
-      }
-
-      function openOrgNodeMenu(nodeId, anchorEl) {
-        const menu = document.getElementById("org-node-menu");
-        if (!menu || !anchorEl) return;
-
-        const rect = anchorEl.getBoundingClientRect();
-        menu.hidden = false;
-        activeMenuNodeId = nodeId;
-
-        const menuWidth = menu.offsetWidth || 196;
-        let left = rect.right - menuWidth;
-        let top = rect.bottom + 6;
-
-        if (left < 12) left = 12;
-        if (top + menu.offsetHeight > window.innerHeight - 12) {
-          top = rect.top - menu.offsetHeight - 6;
-        }
-
-        menu.style.left = left + "px";
-        menu.style.top = top + "px";
-      }
-
-      function findMenuButton(el) {
-        while (el && el !== treeEl) {
-          if (el.getAttribute && el.getAttribute("data-lio-node-menu")) return el;
-          el = el.parentNode;
-        }
-        return null;
-      }
-
-      function setupOrgNodeMenu(nodeIndex) {
-        const menu = document.getElementById("org-node-menu");
-        if (!menu) return;
-
-        treeEl.addEventListener("click", function (event) {
-          const menuBtn = findMenuButton(event.target);
-          if (menuBtn) {
-            event.stopPropagation();
-            const nodeId = menuBtn.getAttribute("data-lio-node-menu");
-            if (activeMenuNodeId === nodeId && !menu.hidden) {
-              closeOrgNodeMenu();
-            } else {
-              openOrgNodeMenu(nodeId, menuBtn);
-            }
-            return;
-          }
-
-          if (!event.target.closest("#org-node-menu")) {
-            closeOrgNodeMenu();
-          }
-        });
-
-        menu.addEventListener("click", function (event) {
-          const item = event.target.closest("[data-action]");
-          if (!item || activeMenuNodeId === null) return;
-          handleOrgAction(activeMenuNodeId, item.getAttribute("data-action"), nodeIndex);
-          closeOrgNodeMenu();
-        });
-
-        document.addEventListener("keydown", function (event) {
-          if (event.key === "Escape") closeOrgNodeMenu();
-        });
-      }
-
-      const treeEl = document.getElementById("org-tree");
-      const countEl = document.getElementById("org-count");
-
-      if (!treeEl || typeof OrgChart === "undefined") return;
-
-      setupLioTemplate();
-
-      const nodes = buildOrgChartNodes(ceo, branches, nextAvatar);
-      const nodeIndex = {};
-
-      nodes.forEach(function (node) {
-        nodeIndex[node.id] = node;
-      });
-
-      const chart = new OrgChart(treeEl, {
-        template: "lio",
-        collapse: { level: 2, allChildren: true },
-        nodeBinding: {
-          field_0: "name",
-          field_1: "title",
-          field_2: "dept",
-          img_0: "img"
-        }
-      });
-
-      setupOrgNodeMenu(nodeIndex);
-
-      chart.onInit(function () {
         if (countEl) {
-          countEl.textContent =
-            nodes.length + " colaboradores · 6 áreas · clique nos números abaixo dos diretores para expandir os times";
+          countEl.textContent = "Exibindo " + visible + " material" + (visible === 1 ? "" : "is");
         }
-      });
+      }
 
-      chart.load(nodes);
+      applyFilter("all");
+
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
+            btn.classList.remove("is-active");
+          });
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
     })();
   </script>
 </body>
 </html>
+
