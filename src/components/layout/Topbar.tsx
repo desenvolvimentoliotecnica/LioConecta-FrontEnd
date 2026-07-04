@@ -11,6 +11,7 @@ import {
   servicosHeadings,
   tiLinks,
   facilitiesLinks,
+  juridicoLinks,
   allServicosLinks,
 } from "../../config/navigation";
 import { closeOtherMenus } from "./NotificationsMenu";
@@ -115,10 +116,11 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[4].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[4].icon}`} aria-hidden="true" /> {servicosHeadings[4].label}
             </span>
-            <a href="#" role="menuitem">Declarações e certidões</a>
-            <a href="#" role="menuitem">Assinatura digital</a>
-            <a href="#" role="menuitem">Seguro de vida</a>
-            <a href="#" role="menuitem">Canal de denúncias</a>
+            {juridicoLinks.map((item) => (
+              <NavLink key={item.path} to={item.path} role="menuitem" className={({ isActive }) => (isActive ? "is-active" : undefined)} onClick={() => setOpen(false)}>
+                {item.label}
+              </NavLink>
+            ))}
           </>
         ) : (
           items.map((item) =>

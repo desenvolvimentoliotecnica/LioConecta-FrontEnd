@@ -74,7 +74,25 @@ export const facilitiesLinks: NavLinkItem[] = [
   { label: "Gestão de resíduos", path: "/servicos/gestao-residuos" },
 ];
 
-export const allServicosLinks: NavLinkItem[] = [...servicosLinks, ...tiLinks, ...facilitiesLinks];
+export const juridicoLinks: NavLinkItem[] = [
+  { label: "Declarações e certidões", path: "/servicos/declaracoes-certidoes" },
+  { label: "Assinatura digital", path: "/servicos/assinatura-digital" },
+  { label: "Seguro de vida", path: "/servicos/seguro-vida" },
+  { label: "Canal de denúncias", path: "/servicos/canal-denuncias" },
+  { label: "Contratos e minutas", path: "/servicos/contratos-minutas" },
+  { label: "LGPD e privacidade", path: "/servicos/lgpd-privacidade" },
+  { label: "Código de conduta", path: "/servicos/codigo-conduta" },
+  { label: "Due diligence", path: "/servicos/due-diligence" },
+  { label: "Procurações e poderes", path: "/servicos/procuracoes" },
+  { label: "Consultoria jurídica", path: "/servicos/consultoria-juridica" },
+];
+
+export const allServicosLinks: NavLinkItem[] = [
+  ...servicosLinks,
+  ...tiLinks,
+  ...facilitiesLinks,
+  ...juridicoLinks,
+];
 
 export const servicosHeadings = [
   { label: "RH & Pessoas", className: "topbar__menu-heading--rh", icon: "fa-user-group" },

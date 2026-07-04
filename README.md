@@ -58,6 +58,16 @@ npm run preview
 - `/servicos/refeitorio`
 - `/servicos/climatizacao`
 - `/servicos/gestao-residuos`
+- `/servicos/declaracoes-certidoes`
+- `/servicos/assinatura-digital`
+- `/servicos/seguro-vida`
+- `/servicos/canal-denuncias`
+- `/servicos/contratos-minutas`
+- `/servicos/lgpd-privacidade`
+- `/servicos/codigo-conduta`
+- `/servicos/due-diligence`
+- `/servicos/procuracoes`
+- `/servicos/consultoria-juridica`
 
 ## Tag de snapshot pré-migração
 

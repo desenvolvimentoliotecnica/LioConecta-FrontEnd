@@ -292,5 +292,75 @@
     "route": "/servicos/gestao-residuos",
     "hasScript": true,
     "externals": []
+  },
+  {
+    "id": "servicos-declaracoes-certidoes",
+    "htmlFile": "servicos-declaracoes-certidoes.html",
+    "route": "/servicos/declaracoes-certidoes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-assinatura-digital",
+    "htmlFile": "servicos-assinatura-digital.html",
+    "route": "/servicos/assinatura-digital",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-seguro-vida",
+    "htmlFile": "servicos-seguro-vida.html",
+    "route": "/servicos/seguro-vida",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-canal-denuncias",
+    "htmlFile": "servicos-canal-denuncias.html",
+    "route": "/servicos/canal-denuncias",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-contratos-minutas",
+    "htmlFile": "servicos-contratos-minutas.html",
+    "route": "/servicos/contratos-minutas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-lgpd-privacidade",
+    "htmlFile": "servicos-lgpd-privacidade.html",
+    "route": "/servicos/lgpd-privacidade",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-codigo-conduta",
+    "htmlFile": "servicos-codigo-conduta.html",
+    "route": "/servicos/codigo-conduta",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-due-diligence",
+    "htmlFile": "servicos-due-diligence.html",
+    "route": "/servicos/due-diligence",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-procuracoes",
+    "htmlFile": "servicos-procuracoes.html",
+    "route": "/servicos/procuracoes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-consultoria-juridica",
+    "htmlFile": "servicos-consultoria-juridica.html",
+    "route": "/servicos/consultoria-juridica",
+    "hasScript": true,
+    "externals": []
   }
 ]

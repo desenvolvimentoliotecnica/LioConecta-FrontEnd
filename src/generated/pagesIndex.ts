@@ -40,16 +40,30 @@ import content_servicos_acesso_sistemas from "./pages/servicos-acesso-sistemas/c
 import styles_servicos_acesso_sistemas from "./pages/servicos-acesso-sistemas/styles.css?inline";
 import content_servicos_adiantamento from "./pages/servicos-adiantamento/content.html?raw";
 import styles_servicos_adiantamento from "./pages/servicos-adiantamento/styles.css?inline";
+import content_servicos_assinatura_digital from "./pages/servicos-assinatura-digital/content.html?raw";
+import styles_servicos_assinatura_digital from "./pages/servicos-assinatura-digital/styles.css?inline";
 import content_servicos_beneficios from "./pages/servicos-beneficios/content.html?raw";
 import styles_servicos_beneficios from "./pages/servicos-beneficios/styles.css?inline";
+import content_servicos_canal_denuncias from "./pages/servicos-canal-denuncias/content.html?raw";
+import styles_servicos_canal_denuncias from "./pages/servicos-canal-denuncias/styles.css?inline";
 import content_servicos_climatizacao from "./pages/servicos-climatizacao/content.html?raw";
 import styles_servicos_climatizacao from "./pages/servicos-climatizacao/styles.css?inline";
+import content_servicos_codigo_conduta from "./pages/servicos-codigo-conduta/content.html?raw";
+import styles_servicos_codigo_conduta from "./pages/servicos-codigo-conduta/styles.css?inline";
+import content_servicos_consultoria_juridica from "./pages/servicos-consultoria-juridica/content.html?raw";
+import styles_servicos_consultoria_juridica from "./pages/servicos-consultoria-juridica/styles.css?inline";
 import content_servicos_contracheque from "./pages/servicos-contracheque/content.html?raw";
 import styles_servicos_contracheque from "./pages/servicos-contracheque/styles.css?inline";
+import content_servicos_contratos_minutas from "./pages/servicos-contratos-minutas/content.html?raw";
+import styles_servicos_contratos_minutas from "./pages/servicos-contratos-minutas/styles.css?inline";
 import content_servicos_copiadora from "./pages/servicos-copiadora/content.html?raw";
 import styles_servicos_copiadora from "./pages/servicos-copiadora/styles.css?inline";
 import content_servicos_cracha_visitantes from "./pages/servicos-cracha-visitantes/content.html?raw";
 import styles_servicos_cracha_visitantes from "./pages/servicos-cracha-visitantes/styles.css?inline";
+import content_servicos_declaracoes_certidoes from "./pages/servicos-declaracoes-certidoes/content.html?raw";
+import styles_servicos_declaracoes_certidoes from "./pages/servicos-declaracoes-certidoes/styles.css?inline";
+import content_servicos_due_diligence from "./pages/servicos-due-diligence/content.html?raw";
+import styles_servicos_due_diligence from "./pages/servicos-due-diligence/styles.css?inline";
 import content_servicos_encomendas_correios from "./pages/servicos-encomendas-correios/content.html?raw";
 import styles_servicos_encomendas_correios from "./pages/servicos-encomendas-correios/styles.css?inline";
 import content_servicos_estacionamento from "./pages/servicos-estacionamento/content.html?raw";
@@ -60,12 +74,16 @@ import content_servicos_gestao_residuos from "./pages/servicos-gestao-residuos/c
 import styles_servicos_gestao_residuos from "./pages/servicos-gestao-residuos/styles.css?inline";
 import content_servicos_help_desk from "./pages/servicos-help-desk/content.html?raw";
 import styles_servicos_help_desk from "./pages/servicos-help-desk/styles.css?inline";
+import content_servicos_lgpd_privacidade from "./pages/servicos-lgpd-privacidade/content.html?raw";
+import styles_servicos_lgpd_privacidade from "./pages/servicos-lgpd-privacidade/styles.css?inline";
 import content_servicos_limpeza from "./pages/servicos-limpeza/content.html?raw";
 import styles_servicos_limpeza from "./pages/servicos-limpeza/styles.css?inline";
 import content_servicos_manutencao_predial from "./pages/servicos-manutencao-predial/content.html?raw";
 import styles_servicos_manutencao_predial from "./pages/servicos-manutencao-predial/styles.css?inline";
 import content_servicos_ponto from "./pages/servicos-ponto/content.html?raw";
 import styles_servicos_ponto from "./pages/servicos-ponto/styles.css?inline";
+import content_servicos_procuracoes from "./pages/servicos-procuracoes/content.html?raw";
+import styles_servicos_procuracoes from "./pages/servicos-procuracoes/styles.css?inline";
 import content_servicos_reembolso from "./pages/servicos-reembolso/content.html?raw";
 import styles_servicos_reembolso from "./pages/servicos-reembolso/styles.css?inline";
 import content_servicos_refeitorio from "./pages/servicos-refeitorio/content.html?raw";
@@ -76,6 +94,8 @@ import content_servicos_reservas_salas from "./pages/servicos-reservas-salas/con
 import styles_servicos_reservas_salas from "./pages/servicos-reservas-salas/styles.css?inline";
 import content_servicos_rh from "./pages/servicos-rh/content.html?raw";
 import styles_servicos_rh from "./pages/servicos-rh/styles.css?inline";
+import content_servicos_seguro_vida from "./pages/servicos-seguro-vida/content.html?raw";
+import styles_servicos_seguro_vida from "./pages/servicos-seguro-vida/styles.css?inline";
 import content_servicos_solicitar_equipamento from "./pages/servicos-solicitar-equipamento/content.html?raw";
 import styles_servicos_solicitar_equipamento from "./pages/servicos-solicitar-equipamento/styles.css?inline";
 import content_servicos_vale_transporte from "./pages/servicos-vale-transporte/content.html?raw";
@@ -104,24 +124,34 @@ export const pageAssets: Record<string, { content: string; styles: string }> = {
   "pessoas-perfil": { content: content_pessoas_perfil, styles: styles_pessoas_perfil },
   "servicos-acesso-sistemas": { content: content_servicos_acesso_sistemas, styles: styles_servicos_acesso_sistemas },
   "servicos-adiantamento": { content: content_servicos_adiantamento, styles: styles_servicos_adiantamento },
+  "servicos-assinatura-digital": { content: content_servicos_assinatura_digital, styles: styles_servicos_assinatura_digital },
   "servicos-beneficios": { content: content_servicos_beneficios, styles: styles_servicos_beneficios },
+  "servicos-canal-denuncias": { content: content_servicos_canal_denuncias, styles: styles_servicos_canal_denuncias },
   "servicos-climatizacao": { content: content_servicos_climatizacao, styles: styles_servicos_climatizacao },
+  "servicos-codigo-conduta": { content: content_servicos_codigo_conduta, styles: styles_servicos_codigo_conduta },
+  "servicos-consultoria-juridica": { content: content_servicos_consultoria_juridica, styles: styles_servicos_consultoria_juridica },
   "servicos-contracheque": { content: content_servicos_contracheque, styles: styles_servicos_contracheque },
+  "servicos-contratos-minutas": { content: content_servicos_contratos_minutas, styles: styles_servicos_contratos_minutas },
   "servicos-copiadora": { content: content_servicos_copiadora, styles: styles_servicos_copiadora },
   "servicos-cracha-visitantes": { content: content_servicos_cracha_visitantes, styles: styles_servicos_cracha_visitantes },
+  "servicos-declaracoes-certidoes": { content: content_servicos_declaracoes_certidoes, styles: styles_servicos_declaracoes_certidoes },
+  "servicos-due-diligence": { content: content_servicos_due_diligence, styles: styles_servicos_due_diligence },
   "servicos-encomendas-correios": { content: content_servicos_encomendas_correios, styles: styles_servicos_encomendas_correios },
   "servicos-estacionamento": { content: content_servicos_estacionamento, styles: styles_servicos_estacionamento },
   "servicos-ferias": { content: content_servicos_ferias, styles: styles_servicos_ferias },
   "servicos-gestao-residuos": { content: content_servicos_gestao_residuos, styles: styles_servicos_gestao_residuos },
   "servicos-help-desk": { content: content_servicos_help_desk, styles: styles_servicos_help_desk },
+  "servicos-lgpd-privacidade": { content: content_servicos_lgpd_privacidade, styles: styles_servicos_lgpd_privacidade },
   "servicos-limpeza": { content: content_servicos_limpeza, styles: styles_servicos_limpeza },
   "servicos-manutencao-predial": { content: content_servicos_manutencao_predial, styles: styles_servicos_manutencao_predial },
   "servicos-ponto": { content: content_servicos_ponto, styles: styles_servicos_ponto },
+  "servicos-procuracoes": { content: content_servicos_procuracoes, styles: styles_servicos_procuracoes },
   "servicos-reembolso": { content: content_servicos_reembolso, styles: styles_servicos_reembolso },
   "servicos-refeitorio": { content: content_servicos_refeitorio, styles: styles_servicos_refeitorio },
   "servicos-reserva-veiculos": { content: content_servicos_reserva_veiculos, styles: styles_servicos_reserva_veiculos },
   "servicos-reservas-salas": { content: content_servicos_reservas_salas, styles: styles_servicos_reservas_salas },
   "servicos-rh": { content: content_servicos_rh, styles: styles_servicos_rh },
+  "servicos-seguro-vida": { content: content_servicos_seguro_vida, styles: styles_servicos_seguro_vida },
   "servicos-solicitar-equipamento": { content: content_servicos_solicitar_equipamento, styles: styles_servicos_solicitar_equipamento },
   "servicos-vale-transporte": { content: content_servicos_vale_transporte, styles: styles_servicos_vale_transporte },
   "servicos-vpn-acesso-remoto": { content: content_servicos_vpn_acesso_remoto, styles: styles_servicos_vpn_acesso_remoto },
