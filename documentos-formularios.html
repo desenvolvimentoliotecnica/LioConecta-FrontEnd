@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LioConecta — Formulários</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/user-menu.css" />
   <style>
     :root {
       --wf-bg: #eceff3;
@@ -1833,7 +1834,7 @@
               <a href="servicos-ferias-ausencias.html" role="menuitem">Férias e ausências</a>
               <a href="servicos-solicitacoes-rh.html" role="menuitem">Solicitações RH</a>
               <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
-              <a href="#" role="menuitem">Vale-transporte</a>
+              <a href="servicos-vale-transporte.html" role="menuitem">Vale-transporte</a>
               <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
               <a href="#" role="menuitem">Reembolso de despesas</a>
               <a href="#" role="menuitem">Adiantamento de viagem</a>
@@ -1875,11 +1876,31 @@
             <i class="fa-regular fa-comment" aria-hidden="true"></i>
           </button>
         </div>
-        <button class="user-chip" type="button" aria-label="Perfil de Maria Silva">
-          <img class="avatar" src="avatar-maria-silva.png" alt="" />
-          <span class="user-chip__name">Maria Silva</span>
-          <span class="user-chip__chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
-        </button>
+        <div class="user-menu">
+          <button
+            class="user-menu__trigger"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="user-menu-panel"
+            aria-label="Perfil de Maria Silva"
+          >
+            <img class="avatar" src="avatar-maria-silva.png" alt="" />
+            <span class="user-menu__name">Maria Silva</span>
+            <span class="user-menu__chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="user-menu__panel" id="user-menu-panel" role="menu">
+            <a href="pessoas-perfil.html?id=maria-silva" role="menuitem">
+              <i class="fa-regular fa-user" aria-hidden="true"></i> Ver perfil completo
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-gear" aria-hidden="true"></i> Configurações
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair
+            </a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -2000,41 +2021,6 @@
         });
       }
 
-      document.querySelectorAll(".topbar__dropdown").forEach(function (dropdown) {
-        const trigger = dropdown.querySelector(".topbar__dropdown-trigger");
-        const menu = dropdown.querySelector(".topbar__dropdown-menu");
-        if (!trigger) return;
-
-        trigger.addEventListener("click", function (event) {
-          event.stopPropagation();
-          const isOpen = dropdown.classList.toggle("is-open");
-          trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
-
-          document.querySelectorAll(".topbar__dropdown.is-open").forEach(function (other) {
-            if (other !== dropdown) {
-              other.classList.remove("is-open");
-              const otherTrigger = other.querySelector(".topbar__dropdown-trigger");
-              if (otherTrigger) otherTrigger.setAttribute("aria-expanded", "false");
-            }
-          });
-        });
-
-        if (menu) {
-          menu.addEventListener("click", function (event) {
-            event.stopPropagation();
-          });
-        }
-      });
-
-      document.addEventListener("click", function (event) {
-        if (event.target.closest(".topbar__dropdown-menu a")) return;
-
-        document.querySelectorAll(".topbar__dropdown.is-open").forEach(function (dropdown) {
-          dropdown.classList.remove("is-open");
-          const trigger = dropdown.querySelector(".topbar__dropdown-trigger");
-          if (trigger) trigger.setAttribute("aria-expanded", "false");
-        });
-      });
     })();
   </script>
 
@@ -2298,5 +2284,6 @@
       }
     })();
   </script>
+  <script src="assets/user-menu.js"></script>
 </body>
 </html>

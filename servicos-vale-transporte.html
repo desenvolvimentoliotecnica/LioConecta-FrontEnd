@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Arquivo de Comunicados</title>
+  <title>LioConecta — Vale-Transporte</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="assets/user-menu.css" />
   <style>
@@ -823,111 +823,255 @@
       gap: var(--wf-gap);
     }
 
-    .tag--archive {
+    /* PAGE: SERVIÇOS — VALE-TRANSPORTE */
+    .filter-chip.is-active {
+      background: #ccfbf1;
+      border-color: #5eead4;
+      color: #0f766e;
+    }
+
+    .topbar__dropdown-menu--services a.is-active {
+      background: #ccfbf1;
+      color: #0f766e;
+      font-weight: 600;
+    }
+
+    .welcome-banner {
+      margin-bottom: var(--wf-gap);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+      border: 1px dashed #5eead4;
+      border-radius: var(--wf-radius);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .welcome-banner__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #ccfbf1;
+      color: #0d9488;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .welcome-banner__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #134e4a;
+      margin-bottom: 4px;
+    }
+
+    .welcome-banner__text {
+      font-size: 13px;
+      color: #0f766e;
+      line-height: 1.45;
+    }
+
+    .vt-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: var(--wf-gap);
+    }
+
+    .vt-stat {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .vt-stat__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0d9488;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .vt-stat__label {
+      font-size: 11px;
+      color: var(--wf-text-muted);
+      line-height: 1.35;
+    }
+
+    .vt-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .vt-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 152px;
+    }
+
+    .vt-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #5eead4;
+      background: linear-gradient(135deg, #fff 0%, #f0fdfa 100%);
+    }
+
+    .vt-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .vt-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .vt-card__icon--cartao { background: #ccfbf1; color: #0d9488; border-color: #5eead4; }
+    .vt-card__icon--rota { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .vt-card__icon--solicitacao { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .vt-card__icon--desconto { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+    .vt-card__icon--consulta { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+
+    .vt-card__main { flex: 1; min-width: 0; }
+
+    .vt-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .vt-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .vt-card.is-featured .vt-card__desc { -webkit-line-clamp: 3; }
+
+    .vt-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .vt-card__cat {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ccfbf1;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .vt-card__cat--rota { background: #e0f2fe; color: #0369a1; }
+    .vt-card__cat--solicitacao { background: #fef3c7; color: #b45309; }
+    .vt-card__cat--desconto { background: #fce7f3; color: #be185d; }
+    .vt-card__cat--consulta { background: #ede9fe; color: #6d28d9; }
+
+    .vt-card__badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
       background: #f1f5f9;
       color: #475569;
     }
 
-    .filter-chip.is-active {
-      background: #f1f5f9;
-      border-color: #94a3b8;
-      color: #334155;
-    }
+    .vt-card__badge--online { background: #dcfce7; color: #15803d; }
 
-    .topbar__dropdown-menu a.is-active {
-      background: #f1f5f9;
-      color: #334155;
-    }
-
-    .official-card {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      background: #fff;
-      border: 1px dashed #94a3b8;
-      border-radius: var(--wf-radius);
-      overflow: hidden;
-      box-shadow:
-        0 4px 10px rgba(15, 23, 42, 0.08),
-        0 12px 28px rgba(15, 23, 42, 0.12);
-    }
-
-    .official-card--featured {
-      grid-template-columns: 280px 1fr;
-      background: #f8fafc;
-    }
-
-    .official-card__media {
-      min-height: 160px;
-      background: #f1f5f9;
-      overflow: hidden;
-    }
-
-    .official-card__media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .official-card__body {
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-width: 0;
-    }
-
-    .official-card__meta {
+    .vt-card__meta {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .official-card__date {
-      font-size: 12px;
+      gap: 12px;
+      font-size: 10px;
       color: var(--wf-text-muted);
     }
 
-    .official-card__author {
+    .vt-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vt-card__footer {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
     }
 
-    .official-card__author .avatar {
-      width: 24px;
-      height: 24px;
-      border-width: 1px;
-    }
+    .vt-card__actions { display: flex; gap: 4px; }
 
-    .official-card__title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .official-card--featured .official-card__title {
-      font-size: 22px;
-    }
-
-    .official-card__excerpt {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--wf-text);
-      margin-bottom: 12px;
-    }
-
-    .official-card__cta {
-      font-size: 13px;
-      font-weight: 600;
+    .vt-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
       color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .vt-card__btn:hover {
+      background: #f0fdfa;
+      color: #0f766e;
+      border-color: #5eead4;
+    }
+
+    .vt-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #0d9488;
+      border: 1px solid #0d9488;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vt-card__open:hover {
+      background: #0f766e;
+      border-color: #0f766e;
     }
 
     .page-empty-note {
@@ -938,15 +1082,9 @@
     }
 
     @media (max-width: 900px) {
-      .official-card,
-      .official-card--featured {
-        grid-template-columns: 1fr;
-      }
-
-      .official-card__media {
-        height: 140px;
-        min-height: 140px;
-      }
+      .vt-stats { grid-template-columns: 1fr; }
+      .vt-grid { grid-template-columns: 1fr; }
+      .vt-card.is-featured { grid-column: auto; }
     }
 
     /* QUICK ACCESS */
@@ -1603,7 +1741,7 @@
           <a href="intranet-wireframe.html">Feed</a>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1616,7 +1754,7 @@
               <a href="comunicados-oficiais.html" role="menuitem">Oficiais</a>
               <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
               <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
-              <a href="comunicados-arquivo.html" role="menuitem" class="is-active">Arquivo</a>
+              <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
             </div>
           </div>
           <div class="topbar__dropdown">
@@ -1676,7 +1814,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1692,7 +1830,7 @@
               <a href="servicos-ferias-ausencias.html" role="menuitem">Férias e ausências</a>
               <a href="servicos-solicitacoes-rh.html" role="menuitem">Solicitações RH</a>
               <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
-              <a href="servicos-vale-transporte.html" role="menuitem">Vale-transporte</a>
+              <a href="servicos-vale-transporte.html" role="menuitem" class="is-active">Vale-transporte</a>
               <span class="topbar__menu-heading topbar__menu-heading--financeiro" role="presentation"><i class="fa-solid fa-coins" aria-hidden="true"></i> Financeiro</span>
               <a href="#" role="menuitem">Reembolso de despesas</a>
               <a href="#" role="menuitem">Adiantamento de viagem</a>
@@ -1784,142 +1922,63 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="comunicados-oficiais.html">Comunicados</a>
+            <span>Serviços</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Arquivo</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Vale-transporte</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Arquivo de Comunicados</h1>
+              <h1 class="page-header__title">Vale-Transporte</h1>
               <p class="page-header__desc">
-                Histórico de comunicados já publicados. Consulte orientações anteriores, políticas e registros institucionais.
+                Gerencie cartão, rotas casa–trabalho, recargas e descontos em folha do vale-transporte conforme a política de mobilidade da empresa.
               </p>
             </div>
           </div>
         </header>
 
-        <div class="page-toolbar">
-          <div class="page-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button">Todos</button>
-            <button class="filter-chip" type="button">2026</button>
-            <button class="filter-chip" type="button">2025</button>
-            <button class="filter-chip" type="button">Oficiais</button>
-            <button class="filter-chip" type="button">Departamentais</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar no arquivo...
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-bus"></i></div>
+          <div>
+            <div class="welcome-banner__title">Mobilidade e deslocamento</div>
+            <p class="welcome-banner__text">O vale-transporte cobre deslocamentos residência–trabalho por transporte público. Desconto em folha limitado a 6% da remuneração, conforme legislação vigente.</p>
           </div>
         </div>
 
-        <section class="official-list" aria-label="Arquivo de comunicados">
-          <article class="official-card official-card--featured">
-            <div class="official-card__media">
-              <img src="bg-news.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">15 mai 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Diretoria
-                </div>
-              </div>
-              <h2 class="official-card__title">Resultados do primeiro trimestre e prioridades do semestre</h2>
-              <p class="official-card__excerpt">
-                Registro do comunicado institucional com o balanço do trimestre e as diretrizes de execução para as áreas.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo ?</div>
-            </div>
-          </article>
+        <div class="vt-stats" aria-label="Resumo de vale-transporte">
+          <div class="vt-stat">
+            <div class="vt-stat__value">R$ 220,00</div>
+            <div class="vt-stat__label">Crédito disponível este mês</div>
+          </div>
+          <div class="vt-stat">
+            <div class="vt-stat__value">2</div>
+            <div class="vt-stat__label">Trajetos cadastrados</div>
+          </div>
+          <div class="vt-stat">
+            <div class="vt-stat__value">6%</div>
+            <div class="vt-stat__label">Desconto em folha (teto legal)</div>
+          </div>
+        </div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-news-innovation.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">02 abr 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-ti.png" alt="" />
-                  Tecnologia da Informação
-                </div>
-              </div>
-              <h2 class="official-card__title">Migração concluída do ambiente de colaboração</h2>
-              <p class="official-card__excerpt">
-                Comunicado histórico sobre a conclusão da migração de ferramentas e os novos padrões de uso para os times.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo ?</div>
-            </div>
-          </article>
+        <div class="page-toolbar">
+          <div class="page-filters" id="vt-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="cartao">Cartão</button>
+            <button class="filter-chip" type="button" data-filter="rota">Rotas</button>
+            <button class="filter-chip" type="button" data-filter="solicitacao">Solicitações</button>
+            <button class="filter-chip" type="button" data-filter="desconto">Descontos</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar serviços de vale-transporte...
+          </div>
+        </div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-celebration.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">18 dez 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
-              </div>
-              <h2 class="official-card__title">Encerramento do ano e calendário de recesso</h2>
-              <p class="official-card__excerpt">
-                Orientações de recesso, plantões e contatos de emergência publicados no final de 2025.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo ?</div>
-            </div>
-          </article>
+        <div class="vt-grid" id="vt-root" aria-label="Serviços de vale-transporte"></div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-marketing-event.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">10 nov 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Marketing
-                </div>
-              </div>
-              <h2 class="official-card__title">Cobertura e materiais do evento anual de integração</h2>
-              <p class="official-card__excerpt">
-                Galeria, apresentações e resumo das atividades do evento anual, mantidos para consulta das áreas.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo ?</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-poll.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--archive">Arquivo</span>
-                <span class="official-card__date">22 set 2025</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
-              </div>
-              <h2 class="official-card__title">Resultado da pesquisa de clima organizacional</h2>
-              <p class="official-card__excerpt">
-                Síntese dos resultados e planos de ação definidos a partir da pesquisa de clima do segundo semestre de 2025.
-              </p>
-              <div class="official-card__cta">Abrir no arquivo ?</div>
-            </div>
-          </article>
-        </section>
-
-        <p class="page-empty-note">Exibindo 5 comunicados no arquivo</p>
+        <p class="page-empty-note" id="vt-count">Exibindo 12 serviços</p>
 
       </main>
 
@@ -1980,75 +2039,95 @@
 
   <script>
     (function () {
-      const commentPool = [
-        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
-        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
-        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
-        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
-        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
-        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
-        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
-        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
-        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
-        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
-        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
-        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
-        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
-        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
-        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
-        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
-        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
-        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
-        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
-        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
-        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
-        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
-        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
-        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
+      const catLabels = {
+        cartao: "Cartão",
+        rota: "Rota",
+        solicitacao: "Solicitação",
+        desconto: "Desconto",
+        consulta: "Consulta"
+      };
+
+      const catIcons = {
+        cartao: "fa-bus",
+        rota: "fa-route",
+        solicitacao: "fa-file-circle-plus",
+        desconto: "fa-percent",
+        consulta: "fa-circle-question"
+      };
+
+      const items = [
+        { id: "saldo-vt", title: "Consultar Saldo do VT", desc: "Visualize créditos disponíveis no cartão, valor provisionado para o mês e última recarga processada pela empresa.", cat: "cartao", sla: "Imediato", online: true, featured: true, action: "Consultar" },
+        { id: "recarga", title: "Solicitar Recarga", desc: "Peça recarga complementar quando houver alteração de rota, jornada ou necessidade extraordinária aprovada pelo RH.", cat: "cartao", sla: "Até 3 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "segunda-via", title: "2ª Via do Cartão", desc: "Solicite reemissão do cartão de transporte em caso de perda, roubo ou dano. Taxas podem ser descontadas conforme política.", cat: "solicitacao", sla: "Até 5 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "cadastrar-rota", title: "Cadastrar Rota Casa–Trabalho", desc: "Informe origem, destino, linhas utilizadas e tipo de transporte para cálculo do benefício conforme legislação.", cat: "rota", sla: "Até 5 dias úteis", online: true, featured: false, action: "Cadastrar" },
+        { id: "alterar-rota", title: "Alterar Itinerário", desc: "Atualize linhas, operadoras ou endereço residencial quando houver mudança de trajeto ou emprego interno.", cat: "rota", sla: "Até 5 dias úteis", online: true, featured: false, action: "Alterar" },
+        { id: "incluir-vt", title: "Solicitar Inclusão no VT", desc: "Opte pelo vale-transporte informando modal de deslocamento e autorizando desconto em folha de até 6%.", cat: "solicitacao", sla: "Até 3 dias úteis", online: true, featured: false, action: "Solicitar" },
+        { id: "renunciar-vt", title: "Renunciar ao Vale-Transporte", desc: "Formalize a opção por não receber o benefício quando utilizar transporte próprio ou outro meio não elegível.", cat: "solicitacao", sla: "Até 5 dias úteis", online: false, featured: false, action: "Solicitar" },
+        { id: "simular-desconto", title: "Simular Desconto em Folha", desc: "Estime o valor descontado do salário com base nas tarifas da sua rota e no teto legal de 6% da remuneração.", cat: "desconto", sla: "Imediato", online: true, featured: false, action: "Simular" },
+        { id: "extrato", title: "Extrato de Utilização", desc: "Histórico de recargas, passagens estimadas e movimentações do cartão nos últimos 12 meses.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "operadoras", title: "Operadoras e Linhas", desc: "Consulte operadoras conveniadas, tipos de transporte elegíveis e orientações para integração tarifária.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "perda-roubo", title: "Comunicar Perda ou Roubo", desc: "Bloqueie o cartão e abra protocolo para reemissão informando data e circunstâncias do incidente.", cat: "solicitacao", sla: "Até 24 horas", online: true, featured: false, action: "Comunicar" },
+        { id: "duvidas", title: "Dúvidas sobre Vale-Transporte", desc: "Orientações sobre elegibilidade, prazos de recarga, integrações e regras do benefício na empresa.", cat: "consulta", sla: "Até 2 dias úteis", online: true, featured: false, action: "Consultar" }
       ];
 
-      function shuffle(list) {
-        const items = list.slice();
-        for (let i = items.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
-        }
-        return items;
-      }
-
-      function renderComment(comment) {
+      function renderItem(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const catBadgeClass = item.cat !== "cartao" ? " vt-card__cat--" + item.cat : "";
+        const onlineBadge = item.online ? '<span class="vt-card__badge vt-card__badge--online">Online</span>' : "";
+        const viewActions = ["Consultar", "Simular"];
+        const actionIcon = viewActions.indexOf(item.action) !== -1 ? "fa-regular fa-eye" : item.action === "Comunicar" ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-paper-plane";
         return `
-          <div class="comment">
-            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
-            <div>
-              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
-              <div class="comment__text">${comment.text}</div>
+          <article class="vt-card${featuredClass}" data-cat="${item.cat}">
+            <div class="vt-card__head">
+              <div class="vt-card__icon vt-card__icon--${item.cat}" aria-hidden="true">
+                <i class="fa-solid ${catIcons[item.cat] || "fa-bus"}"></i>
+              </div>
+              <div class="vt-card__main">
+                <h2 class="vt-card__title">${item.title}</h2>
+                <p class="vt-card__desc">${item.desc}</p>
+              </div>
             </div>
-          </div>
-        `;
+            <div class="vt-card__tags">
+              <span class="vt-card__cat${catBadgeClass}">${catLabels[item.cat] || item.cat}</span>
+              ${onlineBadge}
+            </div>
+            <div class="vt-card__meta">
+              <span><i class="fa-regular fa-clock" aria-hidden="true"></i> ${item.sla}</span>
+            </div>
+            <div class="vt-card__footer">
+              <a class="vt-card__open" href="#"><i class="${actionIcon}" aria-hidden="true"></i> ${item.action}</a>
+              <div class="vt-card__actions">
+                <a class="vt-card__btn" href="#" aria-label="Ajuda ${item.title}"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></a>
+                <a class="vt-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
       }
 
-      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
-      let available = shuffle(commentPool);
-
-      posts.forEach(function (post) {
-        const total = Math.floor(Math.random() * 3) + 1;
-        const picked = [];
-
-        for (let i = 0; i < total; i += 1) {
-          if (!available.length) available = shuffle(commentPool);
-          picked.push(available.shift());
-        }
-
-        const section = document.createElement("div");
-        section.className = "comments";
-        section.innerHTML = `
-          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
-          ${picked.map(renderComment).join("")}
-          <div class="comments__input">Escreva um comentário...</div>
-        `;
-        post.appendChild(section);
-      });
+      const root = document.getElementById("vt-root");
+      const countEl = document.getElementById("vt-count");
+      const filters = document.getElementById("vt-filters");
+      if (!root) return;
+      root.innerHTML = items.map(renderItem).join("");
+      function applyFilter(filter) {
+        let visible = 0;
+        root.querySelectorAll(".vt-card").forEach(function (card) {
+          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          card.hidden = !match;
+          if (match) visible += 1;
+        });
+        if (countEl) countEl.textContent = "Exibindo " + visible + " serviço" + (visible === 1 ? "" : "s");
+      }
+      applyFilter("all");
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
     })();
   </script>
   <script src="assets/user-menu.js"></script>
