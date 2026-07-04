@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Criar Grupo</title>
+  <title>LioConecta — Modelos de Documentos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -572,7 +572,7 @@
     /* MAIN */
     .main {
       padding: 20px 24px 40px;
-      overflow: visible;
+      overflow: auto;
     }
 
     .main__zone-label {
@@ -755,17 +755,23 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: GRUPOS — CRIAR GRUPO */
+    /* PAGE: DOCUMENTOS — MODELOS DE DOCUMENTOS */
+    .filter-chip.is-active {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0369a1;
+    }
+
     .topbar__dropdown-menu a.is-active {
-      background: #ffedd5;
-      color: #c2410c;
+      background: #e0f2fe;
+      color: #0369a1;
     }
 
     .welcome-banner {
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
-      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-      border: 1px dashed #fdba74;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px dashed #7dd3fc;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -776,8 +782,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #ffedd5;
-      color: #c2410c;
+      background: #e0f2fe;
+      color: #0284c7;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -788,258 +794,23 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #9a3412;
+      color: #0c4a6e;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #c2410c;
+      color: #0369a1;
       line-height: 1.45;
     }
 
-    .create-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: var(--wf-gap);
-    }
-
-    .create-form {
-      display: flex;
-      flex-direction: column;
-      gap: var(--wf-gap);
-      align-self: start;
-    }
-
-    .form-section {
-      background: #fff;
-      border: 1px dashed var(--wf-border);
-      border-radius: var(--wf-radius);
-      padding: 18px;
-      box-shadow:
-        0 2px 6px rgba(15, 23, 42, 0.06),
-        0 6px 16px rgba(15, 23, 42, 0.08);
-    }
-
-    .form-section__title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 4px;
-    }
-
-    .form-section__desc {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-      margin-bottom: 14px;
-      line-height: 1.45;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .form-field:last-child {
-      margin-bottom: 0;
-    }
-
-    .form-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    .form-label__hint {
-      font-weight: 500;
-      color: var(--wf-text-muted);
-    }
-
-    .form-input,
-    .form-textarea,
-    .form-select {
-      width: 100%;
-      border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      background: #f8fafc;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-family: inherit;
-      color: #334155;
-    }
-
-    .form-textarea {
-      min-height: 88px;
-      resize: vertical;
-      line-height: 1.45;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus,
-    .form-select:focus {
-      outline: none;
-      border-color: #fdba74;
-      background: #fff;
-    }
-
-    .option-grid {
+    .docs-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 14px;
     }
 
-    .option-grid--3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .option-card {
-      border: 1px dashed var(--wf-border);
-      border-radius: 10px;
-      background: #f8fafc;
-      padding: 12px;
-      text-align: left;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.15s ease, border-color 0.15s ease;
-    }
-
-    .option-card.is-selected {
-      border-color: #fdba74;
-      background: #fff7ed;
-      box-shadow: 0 0 0 1px #fdba74;
-    }
-
-    .option-card__icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-bottom: 8px;
-      border: 1px dashed var(--wf-border);
-    }
-
-    .option-card__title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 3px;
-    }
-
-    .option-card__text {
-      font-size: 10px;
-      color: var(--wf-text-muted);
-      line-height: 1.35;
-    }
-
-    .icon-picker {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      max-height: 240px;
-      overflow-y: auto;
-      padding: 4px 2px;
-    }
-
-    .icon-picker__btn {
-      width: 40px;
-      height: 40px;
-      border: 1px dashed var(--wf-border);
-      border-radius: 10px;
-      background: #f8fafc;
-      color: #475569;
-      font-size: 16px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .icon-picker__btn.is-selected {
-      border-color: #fdba74;
-      background: #fff7ed;
-      color: #c2410c;
-    }
-
-    .invite-field {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px dashed var(--wf-border);
-      border-radius: 999px;
-      background: #f8fafc;
-      padding: 6px 12px;
-      font-size: 12px;
-      color: var(--wf-text-muted);
-    }
-
-    .form-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      padding-top: 4px;
-    }
-
-    .btn-secondary,
-    .btn-primary {
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      padding: 10px 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-secondary {
-      background: #fff;
-      color: #475569;
-      border: 1px dashed var(--wf-border);
-    }
-
-    .btn-secondary:hover {
-      background: #f8fafc;
-    }
-
-    .btn-primary {
-      background: #ea580c;
-      color: #fff;
-      border: 1px solid #ea580c;
-    }
-
-    .btn-primary:hover {
-      background: #c2410c;
-      border-color: #c2410c;
-    }
-
-    .create-preview-sticky {
-      align-self: stretch;
-    }
-
-    .create-preview {
-      position: sticky;
-      top: calc(var(--wf-topbar-h) + 16px);
-      z-index: 2;
-    }
-
-    .create-preview__title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 10px;
-    }
-
-    .group-card {
+    .doc-card {
       background: #fff;
       border: 1px dashed var(--wf-border);
       border-radius: 10px;
@@ -1050,30 +821,44 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-height: 148px;
     }
 
-    .group-card__head {
+    .doc-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #7dd3fc;
+      background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
+    }
+
+    .doc-card__head {
       display: flex;
       gap: 12px;
       align-items: flex-start;
     }
 
-    .group-card__icon {
+    .doc-card__icon {
       width: 48px;
       height: 48px;
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
       flex-shrink: 0;
       border: 1px dashed var(--wf-border);
-      background: #fff7ed;
-      color: #c2410c;
-      border-color: #fdba74;
     }
 
-    .group-card__name {
+    .doc-card__icon--pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .doc-card__icon--doc { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .doc-card__icon--xlsx { background: #ecfdf5; color: #059669; border-color: #6ee7b7; }
+    .doc-card__icon--pptx { background: #fff7ed; color: #ea580c; border-color: #fdba74; }
+
+    .doc-card__main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .doc-card__title {
       font-size: 14px;
       font-weight: 700;
       color: #1e293b;
@@ -1081,61 +866,176 @@
       margin-bottom: 4px;
     }
 
-    .group-card__desc {
+    .doc-card__desc {
       font-size: 11px;
       color: var(--wf-text);
       line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .group-card__tags {
+    .doc-card.is-featured .doc-card__desc {
+      -webkit-line-clamp: 3;
+    }
+
+    .doc-card__tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      align-items: center;
     }
 
-    .group-card__type,
-    .group-card__access {
+    .doc-card__category {
       font-size: 9px;
       font-weight: 700;
       padding: 2px 7px;
       border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
-    .group-card__type {
-      background: #ffedd5;
-      color: #c2410c;
+    .doc-card__category--apresentacao { background: #fff7ed; color: #c2410c; }
+    .doc-card__category--contrato { background: #ede9fe; color: #6d28d9; }
+    .doc-card__category--comunicacao { background: #fce7f3; color: #be185d; }
+
+    .doc-card__format {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    .group-card__access {
+    .doc-card__format--doc { background: #eff6ff; color: #2563eb; }
+    .doc-card__format--xlsx { background: #ecfdf5; color: #059669; }
+    .doc-card__format--pptx { background: #fff7ed; color: #ea580c; }
+
+    .doc-card__area {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__area--comunicacao { background: #fce7f3; color: #be185d; }
+    .doc-card__area--comercial { background: #ffedd5; color: #c2410c; }
+    .doc-card__area--juridico { background: #ede9fe; color: #6d28d9; }
+    .doc-card__area--rh { background: #fce7f3; color: #be185d; }
+    .doc-card__area--marketing { background: #e0f2fe; color: #0369a1; }
+    .doc-card__area--ti { background: #ecfeff; color: #0891b2; }
+
+    .doc-card__version {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
       background: #f1f5f9;
       color: #475569;
     }
 
-    .group-card__meta {
+    .doc-card__updated {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .doc-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 10px;
       color: var(--wf-text-muted);
     }
 
-    @media (max-width: 1000px) {
-      .create-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .create-preview-sticky {
-        align-self: auto;
-      }
-
-      .create-preview {
-        position: static;
-      }
+    .doc-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    @media (max-width: 640px) {
-      .option-grid,
-      .option-grid--3 {
+    .doc-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .doc-card__actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .doc-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .doc-card__btn:hover {
+      background: #f0f9ff;
+      color: #0369a1;
+      border-color: #7dd3fc;
+    }
+
+    .doc-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #0284c7;
+      border: 1px solid #0284c7;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__open:hover {
+      background: #0369a1;
+      border-color: #0369a1;
+    }
+
+    .page-empty-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .docs-grid {
         grid-template-columns: 1fr;
+      }
+
+      .doc-card.is-featured {
+        grid-column: auto;
       }
     }
 
@@ -1829,7 +1729,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1842,12 +1742,12 @@
               <a href="grupos-meus-grupos.html" role="menuitem">Meus grupos</a>
               <a href="grupos-explorar-grupos.html" role="menuitem">Explorar grupos</a>
               <a href="#" role="menuitem">Comunidades</a>
-              <a href="grupos-criar-grupo.html" role="menuitem" class="is-active">Criar grupo</a>
+              <a href="grupos-criar-grupo.html" role="menuitem">Criar grupo</a>
             </div>
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1860,7 +1760,7 @@
               <a href="documentos-politicas-internas.html" role="menuitem">Políticas internas</a>
               <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
               <a href="documentos-formularios.html" role="menuitem">Formulários</a>
-              <a href="documentos-modelos-documentos.html" role="menuitem">Modelos de documentos</a>
+              <a href="documentos-modelos-documentos.html" role="menuitem" class="is-active">Modelos de documentos</a>
               <a href="#" role="menuitem">Biblioteca corporativa</a>
             </div>
           </div>
@@ -1935,133 +1835,47 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <span>Grupos</span>
+            <span>Documentos</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Criar grupo</span>
+            <span class="breadcrumb__current">Modelos de documentos</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Criar Grupo</h1>
+              <h1 class="page-header__title">Modelos de Documentos</h1>
               <p class="page-header__desc">
-                Configure um novo espaço de colaboração para seu time, projeto ou comunidade de interesse dentro da LioConecta.
+                Templates padronizados com identidade visual Lio para cartas, apresentações, contratos, comunicados e demais materiais corporativos.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-circle-plus"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-clone"></i></div>
           <div>
-            <div class="welcome-banner__title">Novo grupo em poucos passos</div>
-            <p class="welcome-banner__text">Preencha as informações abaixo, escolha o tipo e a privacidade. Você poderá convidar membros assim que o grupo for criado.</p>
+            <div class="welcome-banner__title">13 modelos corporativos prontos para uso</div>
+            <p class="welcome-banner__text">Arquivos editáveis com layout, tipografia e cores oficiais da marca. Baixe, personalize o conteúdo e mantenha a consistência visual em todas as comunicações.</p>
           </div>
         </div>
 
-        <div class="create-layout">
-          <form class="create-form" id="create-group-form" action="#" method="post">
-            <section class="form-section" aria-labelledby="section-basic">
-              <h2 class="form-section__title" id="section-basic">Informações básicas</h2>
-              <p class="form-section__desc">Nome e descrição que identificam o propósito do grupo.</p>
-              <div class="form-field">
-                <label class="form-label" for="group-name">Nome do grupo</label>
-                <input class="form-input" id="group-name" name="name" type="text" placeholder="Ex.: Squad Mobile 2026" value="" />
-              </div>
-              <div class="form-field">
-                <label class="form-label" for="group-desc">Descrição <span class="form-label__hint">(opcional)</span></label>
-                <textarea class="form-textarea" id="group-desc" name="description" placeholder="Descreva o objetivo, público-alvo e tipo de conteúdo compartilhado no grupo."></textarea>
-              </div>
-            </section>
-
-            <section class="form-section" aria-labelledby="section-type">
-              <h2 class="form-section__title" id="section-type">Tipo de grupo</h2>
-              <p class="form-section__desc">Define a categoria do grupo no catálogo interno.</p>
-              <div class="option-grid" id="type-options" role="radiogroup" aria-label="Tipo de grupo">
-                <button class="option-card is-selected" type="button" data-type="departamental" data-label="Departamental">
-                  <div class="option-card__icon" style="background:#ecfeff;color:#0891b2;border-color:#67e8f9;"><i class="fa-solid fa-building" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Departamental</div>
-                  <p class="option-card__text">Times e áreas da empresa.</p>
-                </button>
-                <button class="option-card" type="button" data-type="projeto" data-label="Projeto">
-                  <div class="option-card__icon" style="background:#fef3c7;color:#d97706;border-color:#fcd34d;"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Projeto</div>
-                  <p class="option-card__text">Squads e iniciativas temporárias.</p>
-                </button>
-                <button class="option-card" type="button" data-type="interesse" data-label="Interesse">
-                  <div class="option-card__icon" style="background:#fce7f3;color:#db2777;border-color:#f9a8d4;"><i class="fa-solid fa-heart" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Interesse</div>
-                  <p class="option-card__text">Hobbies, clubes e temas transversais.</p>
-                </button>
-                <button class="option-card" type="button" data-type="comunidade" data-label="Comunidade">
-                  <div class="option-card__icon" style="background:#ede9fe;color:#7c3aed;border-color:#c4b5fd;"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Comunidade</div>
-                  <p class="option-card__text">Comitês, ERGs e grupos abertos.</p>
-                </button>
-              </div>
-            </section>
-
-            <section class="form-section" aria-labelledby="section-access">
-              <h2 class="form-section__title" id="section-access">Privacidade e acesso</h2>
-              <p class="form-section__desc">Controle quem pode encontrar e entrar no grupo.</p>
-              <div class="option-grid option-grid--3" id="access-options" role="radiogroup" aria-label="Privacidade">
-                <button class="option-card is-selected" type="button" data-access="open" data-label="Aberto">
-                  <div class="option-card__icon" style="background:#dcfce7;color:#15803d;border-color:#86efac;"><i class="fa-solid fa-lock-open" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Aberto</div>
-                  <p class="option-card__text">Qualquer colaborador pode participar.</p>
-                </button>
-                <button class="option-card" type="button" data-access="approval" data-label="Aprovação">
-                  <div class="option-card__icon" style="background:#fef3c7;color:#b45309;border-color:#fcd34d;"><i class="fa-solid fa-user-check" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Com aprovação</div>
-                  <p class="option-card__text">Entrada sujeita à liberação do admin.</p>
-                </button>
-                <button class="option-card" type="button" data-access="private" data-label="Privado">
-                  <div class="option-card__icon" style="background:#f1f5f9;color:#475569;border-color:#cbd5e1;"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
-                  <div class="option-card__title">Privado</div>
-                  <p class="option-card__text">Somente convidados podem entrar.</p>
-                </button>
-              </div>
-            </section>
-
-            <section class="form-section" aria-labelledby="section-icon">
-              <h2 class="form-section__title" id="section-icon">Ícone do grupo</h2>
-              <p class="form-section__desc">Escolha um ícone para identificar visualmente o grupo.</p>
-              <div class="icon-picker" id="icon-picker" role="radiogroup" aria-label="Ícone do grupo"></div>
-            </section>
-
-            <section class="form-section" aria-labelledby="section-invite">
-              <h2 class="form-section__title" id="section-invite">Convidar membros</h2>
-              <p class="form-section__desc">Opcional — adicione colegas agora ou convide depois da criação.</p>
-              <div class="invite-field">
-                <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
-                Buscar pessoas por nome ou e-mail...
-              </div>
-            </section>
-
-            <div class="form-actions">
-              <a class="btn-secondary" href="grupos-meus-grupos.html">Cancelar</a>
-              <button class="btn-primary" type="submit"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> Criar grupo</button>
-            </div>
-          </form>
-
-          <div class="create-preview-sticky">
-            <aside class="create-preview" aria-label="Pré-visualização do grupo">
-              <div class="create-preview__title">Pré-visualização</div>
-              <article class="group-card">
-                <div class="group-card__head">
-                  <div class="group-card__icon" id="preview-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></div>
-                  <div>
-                    <h2 class="group-card__name" id="preview-name">Nome do grupo</h2>
-                    <p class="group-card__desc" id="preview-desc">A descrição aparecerá aqui conforme você preenche o formulário.</p>
-                  </div>
-                </div>
-                <div class="group-card__tags">
-                  <span class="group-card__type" id="preview-type">Departamental</span>
-                  <span class="group-card__access" id="preview-access">Aberto</span>
-                </div>
-                <p class="group-card__meta"><i class="fa-solid fa-user" aria-hidden="true"></i> 1 membro · criado por Maria Silva</p>
-              </article>
-            </aside>
+        <div class="page-toolbar">
+          <div class="page-filters" id="templates-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="comunicacao">Comunicação</button>
+            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
+            <button class="filter-chip" type="button" data-filter="juridico">Jurídico</button>
+            <button class="filter-chip" type="button" data-filter="rh">RH</button>
+            <button class="filter-chip" type="button" data-filter="marketing">Marketing</button>
+            <button class="filter-chip" type="button" data-filter="ti">TI</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar modelos por nome ou tipo...
           </div>
         </div>
+
+        <div class="docs-grid" id="templates-root" aria-label="Modelos de documentos"></div>
+
+        <p class="page-empty-note" id="templates-count">Exibindo 13 modelos</p>
 
       </main>
 
@@ -2157,177 +1971,276 @@
 
   <script>
     (function () {
-      const nameInput = document.getElementById("group-name");
-      const descInput = document.getElementById("group-desc");
-      const previewName = document.getElementById("preview-name");
-      const previewDesc = document.getElementById("preview-desc");
-      const previewType = document.getElementById("preview-type");
-      const previewAccess = document.getElementById("preview-access");
-      const previewIcon = document.getElementById("preview-icon");
-      const form = document.getElementById("create-group-form");
+      const areaLabels = {
+        comunicacao: "Comunicação",
+        comercial: "Comercial",
+        juridico: "Jurídico",
+        rh: "RH",
+        marketing: "Marketing",
+        ti: "TI"
+      };
 
-      const groupIcons = [
-        { icon: "fa-users", label: "Usuários" },
-        { icon: "fa-user-group", label: "Grupo" },
-        { icon: "fa-people-group", label: "Pessoas" },
-        { icon: "fa-people-line", label: "Equipe" },
-        { icon: "fa-people-roof", label: "Comunidade" },
-        { icon: "fa-user-plus", label: "Convite" },
-        { icon: "fa-handshake", label: "Parceria" },
-        { icon: "fa-building", label: "Empresa" },
-        { icon: "fa-briefcase", label: "Negócios" },
-        { icon: "fa-sitemap", label: "Estrutura" },
-        { icon: "fa-diagram-project", label: "Projeto" },
-        { icon: "fa-tasks", label: "Tarefas" },
-        { icon: "fa-clipboard-list", label: "Checklist" },
-        { icon: "fa-lightbulb", label: "Ideia" },
-        { icon: "fa-rocket", label: "Lançamento" },
-        { icon: "fa-star", label: "Destaque" },
-        { icon: "fa-trophy", label: "Conquista" },
-        { icon: "fa-bullseye", label: "Meta" },
-        { icon: "fa-chart-line", label: "Crescimento" },
-        { icon: "fa-chart-pie", label: "Indicadores" },
-        { icon: "fa-chart-bar", label: "Relatórios" },
-        { icon: "fa-code", label: "Código" },
-        { icon: "fa-laptop-code", label: "Desenvolvimento" },
-        { icon: "fa-microchip", label: "Tecnologia" },
-        { icon: "fa-server", label: "Infraestrutura" },
-        { icon: "fa-database", label: "Dados" },
-        { icon: "fa-cloud", label: "Cloud" },
-        { icon: "fa-shield-halved", label: "Segurança" },
-        { icon: "fa-lock", label: "Privacidade" },
-        { icon: "fa-comments", label: "Discussão" },
-        { icon: "fa-message", label: "Mensagens" },
-        { icon: "fa-bullhorn", label: "Comunicação" },
-        { icon: "fa-envelope", label: "E-mail" },
-        { icon: "fa-share-nodes", label: "Compartilhar" },
-        { icon: "fa-book", label: "Conhecimento" },
-        { icon: "fa-book-open", label: "Leitura" },
-        { icon: "fa-graduation-cap", label: "Aprendizado" },
-        { icon: "fa-chalkboard-user", label: "Treinamento" },
-        { icon: "fa-palette", label: "Design" },
-        { icon: "fa-pen-nib", label: "Conteúdo" },
-        { icon: "fa-camera", label: "Fotografia" },
-        { icon: "fa-video", label: "Vídeo" },
-        { icon: "fa-microphone", label: "Podcast" },
-        { icon: "fa-heart", label: "Interesse" },
-        { icon: "fa-heart-pulse", label: "Saúde" },
-        { icon: "fa-dumbbell", label: "Esporte" },
-        { icon: "fa-leaf", label: "Sustentabilidade" },
-        { icon: "fa-seedling", label: "ESG" },
-        { icon: "fa-calendar", label: "Eventos" },
-        { icon: "fa-gift", label: "Celebração" },
-        { icon: "fa-cake-candles", label: "Aniversário" },
-        { icon: "fa-music", label: "Música" },
-        { icon: "fa-gamepad", label: "Games" },
-        { icon: "fa-futbol", label: "Futebol" },
-        { icon: "fa-globe", label: "Global" },
-        { icon: "fa-compass", label: "Exploração" },
-        { icon: "fa-map", label: "Local" },
-        { icon: "fa-flag", label: "Iniciativa" },
-        { icon: "fa-wrench", label: "Operações" },
-        { icon: "fa-gear", label: "Configuração" },
-        { icon: "fa-puzzle-piece", label: "Integração" },
-        { icon: "fa-cubes", label: "Módulos" },
-        { icon: "fa-layer-group", label: "Camadas" },
-        { icon: "fa-infinity", label: "Contínuo" },
-        { icon: "fa-bolt", label: "Agilidade" },
-        { icon: "fa-fire", label: "Engajamento" },
-        { icon: "fa-gem", label: "Premium" },
-        { icon: "fa-hand-holding-heart", label: "Voluntariado" },
-        { icon: "fa-scale-balanced", label: "Compliance" },
-        { icon: "fa-truck", label: "Logística" },
-        { icon: "fa-store", label: "Varejo" },
-        { icon: "fa-cart-shopping", label: "Comercial" },
-        { icon: "fa-headset", label: "Suporte" },
-        { icon: "fa-mug-hot", label: "Informal" },
-        { icon: "fa-mountain-sun", label: "Outdoor" },
-        { icon: "fa-plane", label: "Viagens" },
-        { icon: "fa-car", label: "Mobilidade" },
-        { icon: "fa-house", label: "Home office" },
-        { icon: "fa-bell", label: "Alertas" },
-        { icon: "fa-bookmark", label: "Favoritos" },
-        { icon: "fa-thumbs-up", label: "Reconhecimento" },
-        { icon: "fa-circle-nodes", label: "Rede" },
-        { icon: "fa-network-wired", label: "Conexões" },
-        { icon: "fa-flask", label: "Laboratório" },
-        { icon: "fa-vial", label: "Pesquisa" },
-        { icon: "fa-stethoscope", label: "Bem-estar" },
-        { icon: "fa-spa", label: "Relaxamento" },
-        { icon: "fa-paw", label: "Pets" },
-        { icon: "fa-child", label: "Família" },
-        { icon: "fa-language", label: "Idiomas" },
-        { icon: "fa-earth-americas", label: "Américas" },
-        { icon: "fa-hourglass-half", label: "Tempo" },
-        { icon: "fa-recycle", label: "Reciclagem" }
+      const categoryLabels = {
+        apresentacao: "Apresentação",
+        proposta: "Proposta",
+        carta: "Carta",
+        memorando: "Memorando",
+        relatorio: "Relatório",
+        contrato: "Contrato",
+        comunicado: "Comunicado",
+        ata: "Ata"
+      };
+
+      const formatLabels = {
+        pptx: "PowerPoint",
+        doc: "Word",
+        xlsx: "Excel",
+        pdf: "PDF"
+      };
+
+      const formatIcons = {
+        pptx: "fa-file-powerpoint",
+        doc: "fa-file-word",
+        xlsx: "fa-file-excel",
+        pdf: "fa-file-pdf"
+      };
+
+      const templates = [
+        {
+          id: "apresentacao-institucional",
+          title: "Apresentação Institucional Lio",
+          desc: "Template padrão de slides com capa, agenda, blocos de conteúdo, gráficos e encerramento com identidade visual da marca.",
+          area: "marketing",
+          category: "apresentacao",
+          format: "pptx",
+          version: "v5.0",
+          date: "Mar/2026",
+          featured: true,
+          official: true
+        },
+        {
+          id: "proposta-comercial",
+          title: "Modelo de Proposta Comercial",
+          desc: "Documento editável com sumário executivo, escopo, investimento, cronograma e condições comerciais padronizadas.",
+          area: "comercial",
+          category: "proposta",
+          format: "doc",
+          version: "v3.4",
+          date: "Fev/2026",
+          featured: false,
+          official: true
+        },
+        {
+          id: "carta-oficial",
+          title: "Carta Oficial em Papel Timbrado",
+          desc: "Modelo de carta corporativa com cabeçalho, destinatário, corpo, fecho e assinatura no layout institucional.",
+          area: "comunicacao",
+          category: "carta",
+          format: "doc",
+          version: "v2.1",
+          date: "Jan/2026",
+          featured: false,
+          official: true
+        },
+        {
+          id: "memorando-interno",
+          title: "Memorando Interno",
+          desc: "Formato padrão para comunicações internas entre áreas, com campos de assunto, destinatários e referência.",
+          area: "comunicacao",
+          category: "memorando",
+          format: "doc",
+          version: "v1.8",
+          date: "Nov/2025",
+          featured: false,
+          official: false
+        },
+        {
+          id: "relatorio-mensal",
+          title: "Relatório Mensal de Indicadores",
+          desc: "Planilha com abas de KPIs, metas, realizado, variação e gráficos automáticos para reporte gerencial.",
+          area: "comercial",
+          category: "relatorio",
+          format: "xlsx",
+          version: "v2.5",
+          date: "Mar/2026",
+          featured: false,
+          official: false
+        },
+        {
+          id: "contrato-prestacao",
+          title: "Contrato de Prestação de Serviços",
+          desc: "Minuta padrão com cláusulas de escopo, prazo, remuneração, confidencialidade e foro, sujeita a revisão jurídica.",
+          area: "juridico",
+          category: "contrato",
+          format: "doc",
+          version: "v4.0",
+          date: "Dez/2025",
+          featured: false,
+          official: true
+        },
+        {
+          id: "termo-aditivo",
+          title: "Termo Aditivo Contratual",
+          desc: "Modelo para alterações de escopo, prazo ou valores em contratos vigentes, com referência ao instrumento original.",
+          area: "juridico",
+          category: "contrato",
+          format: "doc",
+          version: "v2.2",
+          date: "Ago/2025",
+          featured: false,
+          official: false
+        },
+        {
+          id: "cv-lio",
+          title: "Curriculum Vitae — Padrão Lio",
+          desc: "Template de CV interno para movimentações, promoções e banco de talentos, com seções de experiência e competências.",
+          area: "rh",
+          category: "relatorio",
+          format: "doc",
+          version: "v1.6",
+          date: "Fev/2026",
+          featured: false,
+          official: false
+        },
+        {
+          id: "one-pager-comercial",
+          title: "One Pager Comercial",
+          desc: "Apresentação resumida de produto ou solução em uma página, ideal para prospecção e follow-up com clientes.",
+          area: "comercial",
+          category: "apresentacao",
+          format: "pptx",
+          version: "v2.0",
+          date: "Mar/2026",
+          featured: false,
+          official: true
+        },
+        {
+          id: "comunicado-interno",
+          title: "Comunicado Interno",
+          desc: "Layout para avisos oficiais à companhia com título, corpo, responsável pela publicação e data de vigência.",
+          area: "comunicacao",
+          category: "comunicado",
+          format: "doc",
+          version: "v3.1",
+          date: "Jan/2026",
+          featured: false,
+          official: true
+        },
+        {
+          id: "ata-reuniao",
+          title: "Ata de Reunião",
+          desc: "Modelo estruturado com participantes, pauta, deliberações, ações e responsáveis para registro de reuniões.",
+          area: "comunicacao",
+          category: "ata",
+          format: "doc",
+          version: "v1.4",
+          date: "Out/2025",
+          featured: false,
+          official: false
+        },
+        {
+          id: "relatorio-tecnico-ti",
+          title: "Relatório Técnico de Projeto TI",
+          desc: "Documento para entrega de projetos de tecnologia com escopo, arquitetura, riscos, cronograma e anexos técnicos.",
+          area: "ti",
+          category: "relatorio",
+          format: "doc",
+          version: "v2.3",
+          date: "Set/2025",
+          featured: false,
+          official: false
+        },
+        {
+          id: "briefing-marketing",
+          title: "Briefing de Campanha de Marketing",
+          desc: "Template para briefing criativo com objetivos, público-alvo, mensagens-chave, canais e cronograma de produção.",
+          area: "marketing",
+          category: "proposta",
+          format: "doc",
+          version: "v1.9",
+          date: "Mar/2026",
+          featured: false,
+          official: false
+        }
       ];
 
-      function renderIconPicker() {
-        const picker = document.getElementById("icon-picker");
-        if (!picker) return;
+      function renderTemplate(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const formatClass = item.format;
+        const formatBadgeClass = item.format === "doc" ? " doc-card__format--doc" : item.format === "xlsx" ? " doc-card__format--xlsx" : item.format === "pptx" ? " doc-card__format--pptx" : "";
+        const categoryClass = item.category === "apresentacao" ? " doc-card__category--apresentacao" : item.category === "contrato" ? " doc-card__category--contrato" : item.category === "comunicado" || item.category === "carta" || item.category === "memorando" || item.category === "ata" ? " doc-card__category--comunicacao" : "";
+        const officialBadge = item.official ? '<span class="doc-card__updated">Oficial</span>' : "";
 
-        picker.innerHTML = groupIcons.map(function (item, index) {
-          const selected = index === 0 ? " is-selected" : "";
-          return (
-            '<button class="icon-picker__btn' + selected + '" type="button" data-icon="' + item.icon + '" aria-label="' + item.label + '">' +
-            '<i class="fa-solid ' + item.icon + '" aria-hidden="true"></i></button>'
-          );
-        }).join("");
+        return `
+          <article class="doc-card${featuredClass}" data-area="${item.area}">
+            <div class="doc-card__head">
+              <div class="doc-card__icon doc-card__icon--${formatClass}" aria-hidden="true">
+                <i class="fa-solid ${formatIcons[item.format] || "fa-file"}"></i>
+              </div>
+              <div class="doc-card__main">
+                <h2 class="doc-card__title">${item.title}</h2>
+                <p class="doc-card__desc">${item.desc}</p>
+              </div>
+            </div>
+            <div class="doc-card__tags">
+              <span class="doc-card__category${categoryClass}">${categoryLabels[item.category] || item.category}</span>
+              <span class="doc-card__format${formatBadgeClass}">${formatLabels[item.format] || item.format}</span>
+              <span class="doc-card__area doc-card__area--${item.area}">${areaLabels[item.area] || item.area}</span>
+              <span class="doc-card__version">${item.version}</span>
+              ${officialBadge}
+            </div>
+            <div class="doc-card__meta">
+              <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Atualizado ${item.date}</span>
+            </div>
+            <div class="doc-card__footer">
+              <a class="doc-card__open" href="#"><i class="fa-solid fa-download" aria-hidden="true"></i> Baixar modelo</a>
+              <div class="doc-card__actions">
+                <a class="doc-card__btn" href="#" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+        `;
       }
 
-      renderIconPicker();
+      const root = document.getElementById("templates-root");
+      const countEl = document.getElementById("templates-count");
+      const filters = document.getElementById("templates-filters");
 
-      function setupOptionGroup(container, attrName, onSelect) {
-        if (!container) return;
+      if (!root) return;
 
-        container.addEventListener("click", function (event) {
-          const option = event.target.closest("[data-" + attrName + "]");
-          if (!option) return;
+      root.innerHTML = templates.map(renderTemplate).join("");
 
-          container.querySelectorAll(".option-card, .icon-picker__btn").forEach(function (btn) {
-            btn.classList.remove("is-selected");
+      function applyFilter(filter) {
+        let visible = 0;
+
+        root.querySelectorAll(".doc-card").forEach(function (card) {
+          const area = card.getAttribute("data-area");
+          const match = filter === "all" || area === filter;
+
+          card.hidden = !match;
+          if (match) visible += 1;
+        });
+
+        if (countEl) {
+          countEl.textContent = "Exibindo " + visible + " modelo" + (visible === 1 ? "" : "s");
+        }
+      }
+
+      applyFilter("all");
+
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
+            btn.classList.remove("is-active");
           });
-          option.classList.add("is-selected");
-          onSelect(option);
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
-
-      function updatePreview() {
-        if (previewName) {
-          previewName.textContent = nameInput && nameInput.value.trim()
-            ? nameInput.value.trim()
-            : "Nome do grupo";
-        }
-        if (previewDesc) {
-          previewDesc.textContent = descInput && descInput.value.trim()
-            ? descInput.value.trim()
-            : "A descrição aparecerá aqui conforme você preenche o formulário.";
-        }
-      }
-
-      if (nameInput) nameInput.addEventListener("input", updatePreview);
-      if (descInput) descInput.addEventListener("input", updatePreview);
-
-      setupOptionGroup(document.getElementById("type-options"), "type", function (option) {
-        if (previewType) previewType.textContent = option.getAttribute("data-label") || "Departamental";
-      });
-
-      setupOptionGroup(document.getElementById("access-options"), "access", function (option) {
-        if (previewAccess) previewAccess.textContent = option.getAttribute("data-label") || "Aberto";
-      });
-
-      setupOptionGroup(document.getElementById("icon-picker"), "icon", function (option) {
-        const iconClass = option.getAttribute("data-icon") || "fa-users";
-        if (previewIcon) previewIcon.innerHTML = '<i class="fa-solid ' + iconClass + '" aria-hidden="true"></i>';
-      });
-
-      if (form) {
-        form.addEventListener("submit", function (event) {
-          event.preventDefault();
-        });
-      }
-
-      updatePreview();
     })();
   </script>
 </body>
