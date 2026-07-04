@@ -341,22 +341,22 @@
     .icon-btn-wrap::after {
       content: attr(data-badge);
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 2px;
+      right: 2px;
       transform: translate(20%, -20%);
-      min-width: 15px;
-      height: 15px;
-      padding: 0 4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
       border-radius: 999px;
       background: #64748b;
       color: #fff;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 700;
-      line-height: 11px;
+      line-height: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid #fff;
+      border: 2px solid #ef4444;
       box-sizing: border-box;
       pointer-events: none;
       z-index: 1;
@@ -427,8 +427,64 @@
     .body {
       display: grid;
       grid-template-columns: var(--wf-sidebar-w-left) 1fr var(--wf-sidebar-w-right);
+      align-items: start;
       min-height: calc(100vh - var(--wf-topbar-h));
       transition: grid-template-columns 0.25s ease;
+      position: relative;
+    }
+
+    .body::before {
+      content: "";
+      position: fixed;
+      top: var(--wf-topbar-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      background-image: url("assets/watermark-facility.png");
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-size: 100% auto;
+      opacity: 0.40;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 28%,
+        rgba(0, 0, 0, 0.88) 40%,
+        rgba(0, 0, 0, 0.55) 50%,
+        rgba(0, 0, 0, 0.22) 58%,
+        transparent 66%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 28%,
+        rgba(0, 0, 0, 0.88) 40%,
+        rgba(0, 0, 0, 0.55) 50%,
+        rgba(0, 0, 0, 0.22) 58%,
+        transparent 66%
+      );
+    }
+
+    .body::after {
+      content: "";
+      position: fixed;
+      top: var(--wf-topbar-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 32%,
+        rgba(236, 239, 243, 0.18) 44%,
+        rgba(236, 239, 243, 0.52) 54%,
+        rgba(236, 239, 243, 0.88) 62%,
+        var(--wf-bg) 70%
+      );
     }
 
     .body.is-left-expanded {
@@ -449,8 +505,10 @@
       gap: 6px;
       position: sticky;
       top: var(--wf-topbar-h);
+      align-self: start;
       height: calc(100vh - var(--wf-topbar-h));
       overflow: hidden;
+      z-index: 1;
     }
 
     .sidebar--right {
@@ -641,6 +699,7 @@
     .main {
       padding: 20px 24px 40px;
       overflow: auto;
+      z-index: 1;
     }
 
     .main__zone-label {
@@ -962,6 +1021,17 @@
     }
 
     .mood__emoji {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 28px;
+      line-height: 1;
+      color: #475569;
+    }
+
+    .mood__emoji i {
       font-size: 28px;
       line-height: 1;
     }
@@ -1293,7 +1363,6 @@
 
       .announcement__hero {
         min-height: 200px;
-        background-position: center right;
       }
 
       .announcement__content {
@@ -1563,7 +1632,7 @@
                 Estamos lançando novas iniciativas de colaboração e bem-estar para todos os colaboradores.
                 Leia os detalhes completos e compartilhe com sua equipe.
               </p>
-              <div class="announcement__cta">Ler comunicado completo ?</div>
+              <div class="announcement__cta">Ler comunicado completo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
             </div>
           </div>
         </section>
@@ -1636,19 +1705,19 @@
                 <p style="margin-top:8px;">Sua resposta é anônima e ajuda o RH a cuidar melhor do clima da equipe.</p>
                 <div class="mood" role="group" aria-label="Opções de humor">
                   <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-grin-beam"></i></span>
                     <span class="mood__label">Ótimo</span>
                   </button>
                   <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-smile"></i></span>
                     <span class="mood__label">Bem</span>
                   </button>
                   <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-meh"></i></span>
                     <span class="mood__label">Neutro</span>
                   </button>
                   <button class="mood__option" type="button">
-                    <span class="mood__emoji" aria-hidden="true">??</span>
+                    <span class="mood__emoji" aria-hidden="true"><i class="fa-solid fa-face-sad-tear"></i></span>
                     <span class="mood__label">Preciso de apoio</span>
                   </button>
                 </div>
@@ -1674,7 +1743,7 @@
               <div class="card__body">
                 <span class="tag">Comunicado oficial</span>
                 <p style="margin-top:10px;">Nova política de segurança da informação entra em vigor na próxima semana. Todos os colaboradores devem atualizar suas senhas e concluir o treinamento obrigatório.</p>
-                <div class="announcement__cta">Acessar treinamento ?</div>
+                <div class="announcement__cta">Acessar treinamento <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
               </div>
               <div class="card__footer">
                 <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 31</span>
@@ -1743,7 +1812,7 @@
                 </div>
                 <div>
                   <div class="news-card__title">LioConecta anuncia novas parcerias estratégicas para 2026</div>
-                  <div class="news-card__link">Ler mais ?</div>
+                  <div class="news-card__link">Ler mais <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
                 </div>
               </div>
               <div class="card__footer">
@@ -1768,7 +1837,7 @@
                 </div>
                 <div>
                   <div class="news-card__title">LioConecta inaugura centro de inovação e pesquisa aplicada</div>
-                  <div class="news-card__link">Ler mais ?</div>
+                  <div class="news-card__link">Ler mais <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
                 </div>
               </div>
               <div class="card__footer">
@@ -1930,7 +1999,7 @@
               <div class="card__body">
                 <span class="tag">Comunicado oficial</span>
                 <p style="margin-top:10px;">Informamos o calendário de férias coletivas para o final do ano. Consulte as datas por unidade e registre sua preferência até sexta-feira.</p>
-                <div class="announcement__cta">Ver calendário ?</div>
+                <div class="announcement__cta">Ver calendário <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
               </div>
               <div class="card__footer">
                 <span class="action"><i class="fa-regular fa-thumbs-up" aria-hidden="true"></i> 14</span>
