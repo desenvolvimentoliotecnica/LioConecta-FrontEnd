@@ -1536,9 +1536,9 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-comunicados" role="menu">
               <a href="comunicados-oficiais.html" role="menuitem" class="is-active">Oficiais</a>
-              <a href="#" role="menuitem">Departamentais</a>
-              <a href="#" role="menuitem">Urgentes</a>
-              <a href="#" role="menuitem">Arquivo</a>
+              <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
+              <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
+              <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
             </div>
           </div>
           <div class="topbar__dropdown">
@@ -1861,6 +1861,7 @@
 
       document.querySelectorAll(".topbar__dropdown").forEach(function (dropdown) {
         const trigger = dropdown.querySelector(".topbar__dropdown-trigger");
+        const menu = dropdown.querySelector(".topbar__dropdown-menu");
         if (!trigger) return;
 
         trigger.addEventListener("click", function (event) {
@@ -1876,9 +1877,17 @@
             }
           });
         });
+
+        if (menu) {
+          menu.addEventListener("click", function (event) {
+            event.stopPropagation();
+          });
+        }
       });
 
-      document.addEventListener("click", function () {
+      document.addEventListener("click", function (event) {
+        if (event.target.closest(".topbar__dropdown-menu a")) return;
+
         document.querySelectorAll(".topbar__dropdown.is-open").forEach(function (dropdown) {
           dropdown.classList.remove("is-open");
           const trigger = dropdown.querySelector(".topbar__dropdown-trigger");
