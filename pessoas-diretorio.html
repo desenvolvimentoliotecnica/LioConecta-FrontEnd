@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Comunicados Departamentais</title>
+  <title>LioConecta — Diretório de Pessoas</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -755,106 +755,143 @@
       gap: var(--wf-gap);
     }
 
-    .tag--dept {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
+    /* PAGE: PESSOAS — DIRETÓRIO */
     .filter-chip.is-active {
-      background: #eff6ff;
-      border-color: #93c5fd;
-      color: #1d4ed8;
+      background: #ecfeff;
+      border-color: #67e8f9;
+      color: #0e7490;
     }
 
-    .official-card {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      background: #fff;
-      border: 1px dashed #93c5fd;
-      border-radius: var(--wf-radius);
-      overflow: hidden;
-      box-shadow:
-        0 4px 10px rgba(15, 23, 42, 0.08),
-        0 12px 28px rgba(15, 23, 42, 0.12);
+    .topbar__dropdown-menu a.is-active {
+      background: #ecfeff;
+      color: #0e7490;
     }
 
-    .official-card--featured {
-      grid-template-columns: 280px 1fr;
-      background: #f8fbff;
-    }
-
-    .official-card__media {
-      min-height: 160px;
-      background: #eff6ff;
-      overflow: hidden;
-    }
-
-    .official-card__media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .official-card__body {
-      padding: 18px 20px;
+    .directory {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      min-width: 0;
+      gap: 28px;
     }
 
-    .official-card__meta {
+    .dept-group {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .official-card__date {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-    }
-
-    .official-card__author {
+    .dept-group__header {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--wf-border);
     }
 
-    .official-card__author .avatar {
-      width: 24px;
-      height: 24px;
-      border-width: 1px;
-    }
-
-    .official-card__title {
-      font-size: 18px;
+    .dept-group__title {
+      font-size: 15px;
       font-weight: 700;
       color: #1e293b;
-      line-height: 1.3;
-      margin-bottom: 8px;
     }
 
-    .official-card--featured .official-card__title {
-      font-size: 22px;
+    .dept-group__count {
+      font-size: 12px;
+      color: var(--wf-text-muted);
+      font-weight: 500;
     }
 
-    .official-card__excerpt {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--wf-text);
-      margin-bottom: 12px;
+    .directory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
 
-    .official-card__cta {
+    .person-card {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.06),
+        0 6px 16px rgba(15, 23, 42, 0.08);
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: 10px;
+      row-gap: 2px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .person-card__avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--wf-border);
+      object-fit: cover;
+      grid-row: 1 / 3;
+      align-self: center;
+    }
+
+    .person-card__name {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+      line-height: 1.25;
+      grid-column: 2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-card__role {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.3;
+      margin: 0;
+      grid-column: 2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-card__dept {
+      display: none;
+    }
+
+    .person-card__meta {
+      display: none;
+    }
+
+    .person-card__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      grid-column: 3;
+      grid-row: 1 / 3;
+      align-self: center;
+    }
+
+    .person-card__btn {
+      width: 28px;
+      height: 28px;
+      border: 1px dashed var(--wf-border);
+      border-radius: 7px;
+      background: #f8fafc;
       color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .person-card__btn:hover {
+      background: #ecfeff;
+      color: #0e7490;
+      border-color: #67e8f9;
     }
 
     .page-empty-note {
@@ -864,15 +901,21 @@
       text-align: center;
     }
 
-    @media (max-width: 900px) {
-      .official-card,
-      .official-card--featured {
-        grid-template-columns: 1fr;
+    @media (max-width: 1200px) {
+      .directory-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
+    }
 
-      .official-card__media {
-        height: 140px;
-        min-height: 140px;
+    @media (max-width: 900px) {
+      .directory-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .directory-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1530,7 +1573,7 @@
           <a href="intranet-wireframe.html">Feed</a>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1541,14 +1584,14 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-comunicados" role="menu">
               <a href="comunicados-oficiais.html" role="menuitem">Oficiais</a>
-              <a href="comunicados-departamentais.html" role="menuitem" class="is-active">Departamentais</a>
+              <a href="comunicados-departamentais.html" role="menuitem">Departamentais</a>
               <a href="comunicados-urgentes.html" role="menuitem">Urgentes</a>
               <a href="comunicados-arquivo.html" role="menuitem">Arquivo</a>
             </div>
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1558,7 +1601,7 @@
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
-              <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
+              <a href="pessoas-diretorio.html" role="menuitem" class="is-active">Diretório</a>
               <a href="#" role="menuitem">Novos colaboradores</a>
               <a href="#" role="menuitem">Aniversariantes</a>
               <a href="#" role="menuitem">Organograma</a>
@@ -1672,143 +1715,39 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="comunicados-oficiais.html">Comunicados</a>
+            <a href="pessoas-diretorio.html">Pessoas</a>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Departamentais</span>
+            <span class="breadcrumb__current">Diretório</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Comunicados Departamentais</h1>
+              <h1 class="page-header__title">Diretório de Pessoas</h1>
               <p class="page-header__desc">
-                Avisos e atualizações publicados pelas áreas da empresa. Acompanhe o que está acontecendo no seu departamento e nos times parceiros.
+                Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
               </p>
             </div>
           </div>
         </header>
 
         <div class="page-toolbar">
-          <div class="page-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button">Todos</button>
-            <button class="filter-chip" type="button">Recentes</button>
-            <button class="filter-chip" type="button">RH</button>
-            <button class="filter-chip" type="button">Marketing</button>
-            <button class="filter-chip" type="button">TI</button>
-            <button class="filter-chip" type="button">Comercial</button>
+          <div class="page-filters" id="directory-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
+            <button class="filter-chip" type="button" data-filter="rh">Recursos Humanos</button>
+            <button class="filter-chip" type="button" data-filter="marketing">Marketing</button>
+            <button class="filter-chip" type="button" data-filter="ti">TI</button>
+            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
+            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar comunicados...
+            Buscar por nome ou cargo...
           </div>
         </div>
 
-        <section class="official-list" aria-label="Lista de comunicados departamentais">
-          <article class="official-card official-card--featured">
-            <div class="official-card__media">
-              <img src="bg-marketing-event.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--dept">Departamental</span>
-                <span class="official-card__date">03 jul 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Marketing
-                </div>
-              </div>
-              <h2 class="official-card__title">Kick-off da campanha interna do segundo semestre</h2>
-              <p class="official-card__excerpt">
-                O time de Marketing convida todas as áreas para o alinhamento da campanha interna. Participe da reunião e confira o calendário de ações.
-              </p>
-              <div class="official-card__cta">Ver detalhes →</div>
-            </div>
-          </article>
+        <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
 
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-comunicado-security.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--dept">Departamental</span>
-                <span class="official-card__date">01 jul 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-ti.png" alt="" />
-                  Tecnologia da Informação
-                </div>
-              </div>
-              <h2 class="official-card__title">Janela de manutenção dos sistemas internos</h2>
-              <p class="official-card__excerpt">
-                No sábado, das 8h às 12h, alguns sistemas ficarão indisponíveis para atualização. Planeje suas atividades com antecedência.
-              </p>
-              <div class="official-card__cta">Ver sistemas afetados →</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-benefits.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--dept">Departamental</span>
-                <span class="official-card__date">30 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-rh.png" alt="" />
-                  Recursos Humanos
-                </div>
-              </div>
-              <h2 class="official-card__title">Onboarding dos novos colaboradores de julho</h2>
-              <p class="official-card__excerpt">
-                Gestores devem confirmar a agenda de integração e indicar padrinhos para os novos membros que chegam na próxima semana.
-              </p>
-              <div class="official-card__cta">Abrir checklist →</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-social-coffee.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--dept">Departamental</span>
-                <span class="official-card__date">27 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-carlos-mendes.png" alt="" />
-                  Comercial
-                </div>
-              </div>
-              <h2 class="official-card__title">Metas e rituais do time comercial em julho</h2>
-              <p class="official-card__excerpt">
-                Confira o novo formato das reuniões semanais, o ranking de indicadores e os materiais de apoio para o ciclo comercial.
-              </p>
-              <div class="official-card__cta">Acessar materiais →</div>
-            </div>
-          </article>
-
-          <article class="official-card">
-            <div class="official-card__media">
-              <img src="bg-poll.png" alt="" />
-            </div>
-            <div class="official-card__body">
-              <div class="official-card__meta">
-                <span class="tag tag--dept">Departamental</span>
-                <span class="official-card__date">24 jun 2026</span>
-                <div class="official-card__author">
-                  <img class="avatar" src="avatar-marketing.png" alt="" />
-                  Marketing
-                </div>
-              </div>
-              <h2 class="official-card__title">Pesquisa de preferências para o evento de integração</h2>
-              <p class="official-card__excerpt">
-                O Marketing está coletando sugestões de atividades e horários para o próximo evento de integração entre áreas.
-              </p>
-              <div class="official-card__cta">Responder pesquisa →</div>
-            </div>
-          </article>
-        </section>
-
-        <p class="page-empty-note">Exibindo 5 comunicados departamentais</p>
+        <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
 
       </main>
 
@@ -1904,75 +1843,197 @@
 
   <script>
     (function () {
-      const commentPool = [
-        { author: "Ana Costa", avatar: "avatar-julia-santos.png", time: "Há 12 min", text: "Excelente iniciativa! Já compartilhei com minha equipe." },
-        { author: "Pedro Almeida", avatar: "avatar-carlos-mendes.png", time: "Há 25 min", text: "Muito bom ver a empresa investindo nisso." },
-        { author: "Fernanda Lima", avatar: "avatar-marketing.png", time: "Há 40 min", text: "Alguém sabe onde encontro mais detalhes?" },
-        { author: "Ricardo Souza", avatar: "avatar-alejandro-lopez.png", time: "Há 1 h", text: "Parabéns a todos os envolvidos!" },
-        { author: "Camila Rocha", avatar: "avatar-maria-silva.png", time: "Há 1 h", text: "Isso vai fazer muita diferença no dia a dia." },
-        { author: "Bruno Ferreira", avatar: "avatar-ti.png", time: "Há 2 h", text: "Ótima comunicação, clara e objetiva." },
-        { author: "Luciana Dias", avatar: "avatar-rh.png", time: "Há 2 h", text: "Já estou aguardando a próxima etapa." },
-        { author: "Marcos Vieira", avatar: "avatar-carlos-mendes.png", time: "Há 3 h", text: "Concordo plenamente com a proposta." },
-        { author: "Patricia Nunes", avatar: "avatar-julia-santos.png", time: "Há 3 h", text: "Vou participar com certeza!" },
-        { author: "Diego Martins", avatar: "avatar-alejandro-lopez.png", time: "Há 4 h", text: "Muito relevante para o nosso setor." },
-        { author: "Helena Prado", avatar: "avatar-maria-silva.png", time: "Há 5 h", text: "Adorei a iniciativa, parabéns!" },
-        { author: "Thiago Barros", avatar: "avatar-marketing.png", time: "Há 5 h", text: "Quando entra em vigor?" },
-        { author: "Renata Gomes", avatar: "avatar-rh.png", time: "Há 6 h", text: "Informação muito útil, obrigada!" },
-        { author: "Felipe Castro", avatar: "avatar-ti.png", time: "Há 7 h", text: "Já votei na enquete, boa ideia." },
-        { author: "Isabela Moura", avatar: "avatar-julia-santos.png", time: "Há 8 h", text: "Que orgulho fazer parte dessa empresa!" },
-        { author: "Gustavo Pires", avatar: "avatar-carlos-mendes.png", time: "Há 9 h", text: "Evento foi incrível, parabéns ao time!" },
-        { author: "Aline Teixeira", avatar: "avatar-maria-silva.png", time: "Há 10 h", text: "Merecido demais, parabéns!" },
-        { author: "Rodrigo Cunha", avatar: "avatar-alejandro-lopez.png", time: "Há 11 h", text: "Boa sorte na nova jornada!" },
-        { author: "Vanessa Lopes", avatar: "avatar-marketing.png", time: "Há 12 h", text: "Fico feliz em ver essas novidades." },
-        { author: "Eduardo Ramos", avatar: "avatar-ti.png", time: "Ontem", text: "Treinamento já concluído por aqui." },
-        { author: "Carla Mendes", avatar: "avatar-rh.png", time: "Ontem", text: "Calendário recebido, vou verificar as datas." },
-        { author: "João Pedro", avatar: "avatar-carlos-mendes.png", time: "Ontem", text: "Coffee break sempre une o time!" },
-        { author: "Mariana Silva", avatar: "avatar-julia-santos.png", time: "Ontem", text: "Centro de inovação ficou lindo!" },
-        { author: "André Luiz", avatar: "avatar-alejandro-lopez.png", time: "Ontem", text: "Cinco anos voando, parabéns!" }
+      const avatars = [
+        "avatar-maria-silva.png",
+        "avatar-carlos-mendes.png",
+        "avatar-julia-santos.png",
+        "avatar-rh.png",
+        "avatar-marketing.png",
+        "avatar-ti.png",
+        "avatar-alejandro-lopez.png",
+        "avatar-nexora-news.png"
       ];
 
-      function shuffle(list) {
-        const items = list.slice();
-        for (let i = items.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
+      const departments = [
+        {
+          id: "produto",
+          name: "Produto",
+          people: [
+            ["Maria Silva", "Gerente de Projetos"],
+            ["Carlos Mendes", "Analista de Produto"],
+            ["Julia Santos", "Designer de Produto"],
+            ["Ricardo Souza", "Product Owner"],
+            ["Ana Costa", "UX Researcher"],
+            ["Pedro Almeida", "Analista de Negócios"],
+            ["Luciana Dias", "Scrum Master"],
+            ["Marcos Vieira", "Analista de Produto Jr."],
+            ["Isabela Moura", "Designer UI"],
+            ["João Pedro", "Estagiário de Produto"]
+          ]
+        },
+        {
+          id: "rh",
+          name: "Recursos Humanos",
+          people: [
+            ["Patricia Nunes", "Coordenadora de RH"],
+            ["Renata Gomes", "Analista de RH"],
+            ["Carla Mendes", "Business Partner"],
+            ["Helena Prado", "Analista de Departamento Pessoal"],
+            ["Diego Martins", "Recrutador"],
+            ["Vanessa Lopes", "Analista de Treinamento"],
+            ["André Luiz", "Coordenador de Benefícios"],
+            ["Mariana Silva", "Assistente de RH"]
+          ]
+        },
+        {
+          id: "marketing",
+          name: "Marketing",
+          people: [
+            ["Fernanda Lima", "Analista de Marketing"],
+            ["Camila Rocha", "Coordenadora de Comunicação"],
+            ["Thiago Barros", "Designer Gráfico"],
+            ["Gustavo Pires", "Analista de Conteúdo"],
+            ["Aline Teixeira", "Analista de Social Media"],
+            ["Rodrigo Cunha", "Analista de Branding"],
+            ["Eduarda Nascimento", "Analista de Eventos"],
+            ["Larissa Fonseca", "Analista de CRM"]
+          ]
+        },
+        {
+          id: "ti",
+          name: "Tecnologia da Informação",
+          people: [
+            ["Bruno Ferreira", "Analista de Infraestrutura"],
+            ["Eduardo Ramos", "Especialista em Segurança"],
+            ["Felipe Costa", "Desenvolvedor Backend"],
+            ["Gabriel Santos", "Desenvolvedor Frontend"],
+            ["Henrique Alves", "Analista de Suporte"],
+            ["Ivan Mendes", "Engenheiro de Dados"],
+            ["Juliana Ribeiro", "Analista de Sistemas"],
+            ["Kauã Oliveira", "DevOps Engineer"],
+            ["Leonardo Prado", "Arquiteto de Software"],
+            ["Marcelo Duarte", "Analista de QA"]
+          ]
+        },
+        {
+          id: "comercial",
+          name: "Comercial",
+          people: [
+            ["Alejandro López", "Executivo de Contas"],
+            ["Beatriz Cavalcanti", "Gerente Comercial"],
+            ["Caio Nunes", "Analista de Pré-vendas"],
+            ["Débora Lima", "Executiva de Contas"],
+            ["Elias Ferreira", "Coordenador Comercial"],
+            ["Fabiana Souza", "Analista de Propostas"],
+            ["Guilherme Rocha", "SDR"],
+            ["Helena Cardoso", "Customer Success"],
+            ["Igor Pimentel", "Analista Comercial"]
+          ]
+        },
+        {
+          id: "financeiro",
+          name: "Financeiro",
+          people: [
+            ["Júlia Campos", "Controller"],
+            ["Karina Dias", "Analista Financeiro"],
+            ["Luana Freitas", "Analista de Contas a Pagar"],
+            ["Milena Borges", "Analista de Contas a Receber"],
+            ["Nicolas Viana", "Assistente Financeiro"]
+          ]
         }
-        return items;
+      ];
+
+      let avatarIndex = 0;
+
+      function nextAvatar() {
+        const avatar = avatars[avatarIndex % avatars.length];
+        avatarIndex += 1;
+        return avatar;
       }
 
-      function renderComment(comment) {
+      function renderPerson(name, role) {
+        const avatar = nextAvatar();
         return `
-          <div class="comment">
-            <img class="avatar avatar--xs" src="${comment.avatar}" alt="${comment.author}" />
-            <div>
-              <div class="comment__meta">${comment.author} <span class="comment__time">· ${comment.time}</span></div>
-              <div class="comment__text">${comment.text}</div>
+          <article class="person-card">
+            <img class="person-card__avatar" src="${avatar}" alt="" />
+            <h2 class="person-card__name">${name}</h2>
+            <p class="person-card__role">${role}</p>
+            <div class="person-card__actions">
+              <a class="person-card__btn" href="#" aria-label="Enviar e-mail para ${name}"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a>
+              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
+              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
             </div>
-          </div>
+          </article>
         `;
       }
 
-      const posts = document.querySelectorAll(".feed-grid .card:not(.card--mood)");
-      let available = shuffle(commentPool);
+      function renderDepartment(dept) {
+        const cards = dept.people.map(function (person) {
+          return renderPerson(person[0], person[1]);
+        }).join("");
 
-      posts.forEach(function (post) {
-        const total = Math.floor(Math.random() * 3) + 1;
-        const picked = [];
-
-        for (let i = 0; i < total; i += 1) {
-          if (!available.length) available = shuffle(commentPool);
-          picked.push(available.shift());
-        }
-
-        const section = document.createElement("div");
-        section.className = "comments";
-        section.innerHTML = `
-          <div class="comments__title">${picked.length} comentário${picked.length > 1 ? "s" : ""}</div>
-          ${picked.map(renderComment).join("")}
-          <div class="comments__input">Escreva um comentário...</div>
+        return `
+          <section class="dept-group" data-dept="${dept.id}" aria-label="${dept.name}">
+            <div class="dept-group__header">
+              <h2 class="dept-group__title">${dept.name}</h2>
+              <span class="dept-group__count">${dept.people.length} colaboradores</span>
+            </div>
+            <div class="directory-grid">
+              ${cards}
+            </div>
+          </section>
         `;
-        post.appendChild(section);
-      });
+      }
+
+      const root = document.getElementById("directory-root");
+      const countEl = document.getElementById("directory-count");
+      const filters = document.getElementById("directory-filters");
+      let activeFilter = "all";
+
+      if (!root) return;
+
+      root.innerHTML = departments.map(renderDepartment).join("");
+
+      function updateCount(visibleTotal, groupCount) {
+        if (!countEl) return;
+        if (activeFilter === "all") {
+          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores em " + groupCount + " departamentos";
+        } else {
+          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores";
+        }
+      }
+
+      function applyFilter(filter) {
+        activeFilter = filter;
+        let visibleTotal = 0;
+        let groupCount = 0;
+
+        root.querySelectorAll(".dept-group").forEach(function (group) {
+          const match = filter === "all" || group.getAttribute("data-dept") === filter;
+          group.hidden = !match;
+          if (match) {
+            groupCount += 1;
+            visibleTotal += group.querySelectorAll(".person-card").length;
+          }
+        });
+
+        updateCount(visibleTotal, groupCount);
+      }
+
+      applyFilter("all");
+
+      if (filters) {
+        filters.addEventListener("click", function (event) {
+          const chip = event.target.closest(".filter-chip");
+          if (!chip) return;
+
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
+            btn.classList.remove("is-active");
+          });
+          chip.classList.add("is-active");
+          applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
     })();
   </script>
 </body>
