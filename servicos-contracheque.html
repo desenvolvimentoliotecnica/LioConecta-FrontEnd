@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Formulários</title>
+  <title>LioConecta — Contracheque</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/user-menu.css" />
   <style>
     :root {
       --wf-bg: #eceff3;
@@ -822,23 +823,24 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: DOCUMENTOS — FORMULÁRIOS */
+    /* PAGE: SERVIÇOS — CONTRACHEQUE */
     .filter-chip.is-active {
-      background: #ffedd5;
-      border-color: #fdba74;
-      color: #c2410c;
+      background: #fef3c7;
+      border-color: #fcd34d;
+      color: #b45309;
     }
 
-    .topbar__dropdown-menu a.is-active {
-      background: #ffedd5;
-      color: #c2410c;
+    .topbar__dropdown-menu--services a.is-active {
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 600;
     }
 
     .welcome-banner {
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
-      background: linear-gradient(135deg, #fffbeb 0%, #ffedd5 100%);
-      border: 1px dashed #fdba74;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1px dashed #fcd34d;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -849,8 +851,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #ffedd5;
-      color: #ea580c;
+      background: #fef3c7;
+      color: #d97706;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -861,23 +863,52 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #9a3412;
+      color: #78350f;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #c2410c;
+      color: #b45309;
       line-height: 1.45;
     }
 
-    .docs-grid {
+    .pay-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: var(--wf-gap);
+    }
+
+    .pay-stat {
+      background: #fff;
+      border: 1px dashed var(--wf-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .pay-stat__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #d97706;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .pay-stat__label {
+      font-size: 11px;
+      color: var(--wf-text-muted);
+      line-height: 1.35;
+    }
+
+    .pay-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
 
-    .doc-card {
+    .pay-card {
       background: #fff;
       border: 1px dashed var(--wf-border);
       border-radius: 10px;
@@ -888,44 +919,42 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      min-height: 148px;
+      min-height: 152px;
     }
 
-    .doc-card.is-featured {
+    .pay-card.is-featured {
       grid-column: 1 / -1;
-      border-color: #fdba74;
+      border-color: #fcd34d;
       background: linear-gradient(135deg, #fff 0%, #fffbeb 100%);
     }
 
-    .doc-card__head {
+    .pay-card__head {
       display: flex;
       gap: 12px;
       align-items: flex-start;
     }
 
-    .doc-card__icon {
+    .pay-card__icon {
       width: 48px;
       height: 48px;
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       flex-shrink: 0;
       border: 1px dashed var(--wf-border);
     }
 
-    .doc-card__icon--pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
-    .doc-card__icon--doc { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
-    .doc-card__icon--xlsx { background: #ecfdf5; color: #059669; border-color: #6ee7b7; }
-    .doc-card__icon--online { background: #fff7ed; color: #ea580c; border-color: #fdba74; }
+    .pay-card__icon--holerite { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+    .pay-card__icon--historico { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .pay-card__icon--documento { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+    .pay-card__icon--informe { background: #fce7f3; color: #db2777; border-color: #f9a8d4; }
+    .pay-card__icon--consulta { background: #dcfce7; color: #16a34a; border-color: #86efac; }
 
-    .doc-card__main {
-      flex: 1;
-      min-width: 0;
-    }
+    .pay-card__main { flex: 1; min-width: 0; }
 
-    .doc-card__title {
+    .pay-card__title {
       font-size: 14px;
       font-weight: 700;
       color: #1e293b;
@@ -933,7 +962,7 @@
       margin-bottom: 4px;
     }
 
-    .doc-card__desc {
+    .pay-card__desc {
       font-size: 11px;
       color: var(--wf-text);
       line-height: 1.4;
@@ -943,50 +972,32 @@
       overflow: hidden;
     }
 
-    .doc-card.is-featured .doc-card__desc {
-      -webkit-line-clamp: 3;
-    }
+    .pay-card.is-featured .pay-card__desc { -webkit-line-clamp: 3; }
 
-    .doc-card__tags {
+    .pay-card__tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       align-items: center;
     }
 
-    .doc-card__format {
+    .pay-card__cat {
       font-size: 9px;
       font-weight: 700;
       padding: 2px 7px;
       border-radius: 999px;
-      background: #ffedd5;
-      color: #c2410c;
+      background: #fef3c7;
+      color: #b45309;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
-    .doc-card__format--doc { background: #eff6ff; color: #2563eb; }
-    .doc-card__format--xlsx { background: #ecfdf5; color: #059669; }
-    .doc-card__format--online { background: #fff7ed; color: #ea580c; }
+    .pay-card__cat--historico { background: #e0f2fe; color: #0369a1; }
+    .pay-card__cat--documento { background: #ede9fe; color: #6d28d9; }
+    .pay-card__cat--informe { background: #fce7f3; color: #be185d; }
+    .pay-card__cat--consulta { background: #dcfce7; color: #15803d; }
 
-    .doc-card__area {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .doc-card__area--rh { background: #fce7f3; color: #be185d; }
-    .doc-card__area--ti { background: #ecfeff; color: #0891b2; }
-    .doc-card__area--comercial { background: #ffedd5; color: #c2410c; }
-    .doc-card__area--financeiro { background: #dcfce7; color: #15803d; }
-    .doc-card__area--administrativo { background: #e0e7ff; color: #3730a3; }
-
-    .doc-card__version {
+    .pay-card__badge {
       font-size: 9px;
       font-weight: 700;
       padding: 2px 7px;
@@ -995,16 +1006,9 @@
       color: #475569;
     }
 
-    .doc-card__updated {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #dcfce7;
-      color: #15803d;
-    }
+    .pay-card__badge--online { background: #dcfce7; color: #15803d; }
 
-    .doc-card__meta {
+    .pay-card__meta {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -1012,13 +1016,13 @@
       color: var(--wf-text-muted);
     }
 
-    .doc-card__meta span {
+    .pay-card__meta span {
       display: inline-flex;
       align-items: center;
       gap: 4px;
     }
 
-    .doc-card__footer {
+    .pay-card__footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1028,12 +1032,9 @@
       border-top: 1px dashed #e2e8f0;
     }
 
-    .doc-card__actions {
-      display: flex;
-      gap: 4px;
-    }
+    .pay-card__actions { display: flex; gap: 4px; }
 
-    .doc-card__btn {
+    .pay-card__btn {
       width: 28px;
       height: 28px;
       border: 1px dashed var(--wf-border);
@@ -1048,18 +1049,18 @@
       text-decoration: none;
     }
 
-    .doc-card__btn:hover {
+    .pay-card__btn:hover {
       background: #fffbeb;
-      color: #c2410c;
-      border-color: #fdba74;
+      color: #b45309;
+      border-color: #fcd34d;
     }
 
-    .doc-card__open {
+    .pay-card__open {
       font-size: 11px;
       font-weight: 600;
       color: #fff;
-      background: #ea580c;
-      border: 1px solid #ea580c;
+      background: #d97706;
+      border: 1px solid #d97706;
       border-radius: 999px;
       padding: 6px 12px;
       text-decoration: none;
@@ -1068,9 +1069,9 @@
       gap: 4px;
     }
 
-    .doc-card__open:hover {
-      background: #c2410c;
-      border-color: #c2410c;
+    .pay-card__open:hover {
+      background: #b45309;
+      border-color: #b45309;
     }
 
     .page-empty-note {
@@ -1081,13 +1082,9 @@
     }
 
     @media (max-width: 900px) {
-      .docs-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .doc-card.is-featured {
-        grid-column: auto;
-      }
+      .pay-stats { grid-template-columns: 1fr; }
+      .pay-grid { grid-template-columns: 1fr; }
+      .pay-card.is-featured { grid-column: auto; }
     }
 
     /* QUICK ACCESS */
@@ -1798,7 +1795,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1810,14 +1807,14 @@
             <div class="topbar__dropdown-menu" id="menu-documentos" role="menu">
               <a href="documentos-politicas-internas.html" role="menuitem">Políticas internas</a>
               <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
-              <a href="documentos-formularios.html" role="menuitem" class="is-active">Formulários</a>
+              <a href="documentos-formularios.html" role="menuitem">Formulários</a>
               <a href="documentos-modelos-documentos.html" role="menuitem">Modelos de documentos</a>
               <a href="documentos-biblioteca-corporativa.html" role="menuitem">Biblioteca corporativa</a>
             </div>
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1829,7 +1826,7 @@
             <div class="topbar__dropdown-menu topbar__dropdown-menu--services" id="menu-servicos" role="menu">
               <span class="topbar__menu-heading topbar__menu-heading--rh" role="presentation"><i class="fa-solid fa-user-group" aria-hidden="true"></i> RH &amp; Pessoas</span>
               <a href="servicos-beneficios.html" role="menuitem">Benefícios</a>
-              <a href="servicos-contracheque.html" role="menuitem">Contracheque</a>
+              <a href="servicos-contracheque.html" role="menuitem" class="is-active">Contracheque</a>
               <a href="servicos-ferias-ausencias.html" role="menuitem">Férias e ausências</a>
               <a href="#" role="menuitem">Solicitações RH</a>
               <a href="servicos-ponto-eletronico.html" role="menuitem">Ponto eletrônico</a>
@@ -1875,11 +1872,31 @@
             <i class="fa-regular fa-comment" aria-hidden="true"></i>
           </button>
         </div>
-        <button class="user-chip" type="button" aria-label="Perfil de Maria Silva">
-          <img class="avatar" src="avatar-maria-silva.png" alt="" />
-          <span class="user-chip__name">Maria Silva</span>
-          <span class="user-chip__chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
-        </button>
+        <div class="topbar__dropdown user-menu">
+          <button
+            class="user-chip topbar__dropdown-trigger"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="user-menu-panel"
+            aria-label="Perfil de Maria Silva"
+          >
+            <img class="avatar" src="avatar-maria-silva.png" alt="" />
+            <span class="user-chip__name">Maria Silva</span>
+            <span class="user-chip__chevron" aria-hidden="true"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="topbar__dropdown-menu user-menu__panel" id="user-menu-panel" role="menu">
+            <a href="pessoas-perfil.html?id=maria-silva" role="menuitem">
+              <i class="fa-regular fa-user" aria-hidden="true"></i> Ver perfil completo
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-gear" aria-hidden="true"></i> Configurações
+            </a>
+            <a href="#" role="menuitem">
+              <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair
+            </a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -1905,46 +1922,63 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <span>Documentos</span>
+            <span>Serviços</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Formulários</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Contracheque</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Formulários</h1>
+              <h1 class="page-header__title">Contracheque</h1>
               <p class="page-header__desc">
-                Baixe modelos oficiais para solicitações, cadastros e registros internos. Utilize sempre a versão mais recente antes de preencher e encaminhar.
+                Consulte holerites, baixe comprovantes, emita informes de rendimentos e acompanhe sua remuneração com segurança.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-file-invoice-dollar"></i></div>
           <div>
-            <div class="welcome-banner__title">14 formulários corporativos disponíveis</div>
-            <p class="welcome-banner__text">Modelos padronizados em PDF, Word e Excel, além de formulários online integrados ao portal. Dúvidas sobre preenchimento? Consulte o responsável da área indicada.</p>
+            <div class="welcome-banner__title">Folha de pagamento digital</div>
+            <p class="welcome-banner__text">Seus contracheques ficam disponíveis até o 5º dia útil após o fechamento da folha. Documentos são confidenciais e acessíveis apenas com sua autenticação.</p>
+          </div>
+        </div>
+
+        <div class="pay-stats" aria-label="Resumo de contracheque">
+          <div class="pay-stat">
+            <div class="pay-stat__value">Jun/2026</div>
+            <div class="pay-stat__label">Último contracheque disponível</div>
+          </div>
+          <div class="pay-stat">
+            <div class="pay-stat__value">R$ 8.742,50</div>
+            <div class="pay-stat__label">Valor líquido do último pagamento</div>
+          </div>
+          <div class="pay-stat">
+            <div class="pay-stat__value">24</div>
+            <div class="pay-stat__label">Holerites no histórico</div>
           </div>
         </div>
 
         <div class="page-toolbar">
-          <div class="page-filters" id="forms-filters" role="group" aria-label="Filtros">
+          <div class="page-filters" id="pay-filters" role="group" aria-label="Filtros">
             <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="rh">RH</button>
-            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
-            <button class="filter-chip" type="button" data-filter="ti">TI</button>
-            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
-            <button class="filter-chip" type="button" data-filter="administrativo">Administrativo</button>
+            <button class="filter-chip" type="button" data-filter="holerite">Holerite</button>
+            <button class="filter-chip" type="button" data-filter="historico">Histórico</button>
+            <button class="filter-chip" type="button" data-filter="documento">Documentos</button>
+            <button class="filter-chip" type="button" data-filter="informe">Informes</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar formulários por nome ou área...
+            Buscar serviços de contracheque...
           </div>
         </div>
 
-        <div class="docs-grid" id="forms-root" aria-label="Formulários corporativos"></div>
+        <div class="pay-grid" id="pay-root" aria-label="Serviços de contracheque"></div>
 
-        <p class="page-empty-note" id="forms-count">Exibindo 14 formulários</p>
+        <p class="page-empty-note" id="pay-count">Exibindo 12 serviços</p>
 
       </main>
 
@@ -2040,258 +2074,94 @@
 
   <script>
     (function () {
-      const areaLabels = {
-        rh: "RH",
-        financeiro: "Financeiro",
-        ti: "TI",
-        comercial: "Comercial",
-        administrativo: "Administrativo"
+      const catLabels = {
+        holerite: "Holerite",
+        historico: "Histórico",
+        documento: "Documento",
+        informe: "Informe",
+        consulta: "Consulta"
       };
 
-      const formatLabels = {
-        pdf: "PDF",
-        doc: "Word",
-        xlsx: "Excel",
-        online: "Online"
+      const catIcons = {
+        holerite: "fa-file-invoice-dollar",
+        historico: "fa-clock-rotate-left",
+        documento: "fa-file-lines",
+        informe: "fa-receipt",
+        consulta: "fa-circle-question"
       };
 
-      const formatIcons = {
-        pdf: "fa-file-pdf",
-        doc: "fa-file-word",
-        xlsx: "fa-file-excel",
-        online: "fa-globe"
-      };
-
-      const forms = [
-        {
-          id: "req-ferias",
-          title: "Requisição de Férias",
-          desc: "Formulário oficial para solicitar férias, informar período desejado e encaminhar aprovação ao gestor e RH.",
-          area: "rh",
-          format: "pdf",
-          version: "v3.1",
-          date: "Mar/2026",
-          featured: true,
-          popular: true
-        },
-        {
-          id: "solic-reembolso",
-          title: "Solicitação de Reembolso",
-          desc: "Planilha para lançamento de despesas corporativas, comprovantes e centro de custo para análise financeira.",
-          area: "financeiro",
-          format: "xlsx",
-          version: "v2.6",
-          date: "Jan/2026",
-          featured: false,
-          popular: true
-        },
-        {
-          id: "termo-equipamento",
-          title: "Termo de Responsabilidade de Equipamento",
-          desc: "Registro de entrega de notebook, celular ou periféricos corporativos com responsabilidade do colaborador.",
-          area: "ti",
-          format: "pdf",
-          version: "v1.9",
-          date: "Nov/2025",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "conflito-interesse",
-          title: "Declaração de Conflito de Interesse",
-          desc: "Formulário anual de transparência sobre vínculos, participações e situações que possam gerar conflito.",
-          area: "rh",
-          format: "pdf",
-          version: "v2.0",
-          date: "Dez/2025",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "pedido-compra",
-          title: "Pedido de Compra",
-          desc: "Modelo para requisição de materiais e serviços com descrição, quantidade, fornecedor e alçada de aprovação.",
-          area: "financeiro",
-          format: "xlsx",
-          version: "v4.2",
-          date: "Fev/2026",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "autorizacao-viagem",
-          title: "Autorização de Viagem",
-          desc: "Documento para solicitar viagens a trabalho: destino, datas, motivo, estimativa de custos e aprovadores.",
-          area: "financeiro",
-          format: "doc",
-          version: "v3.0",
-          date: "Out/2025",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "cadastro-fornecedor",
-          title: "Cadastro de Fornecedor",
-          desc: "Ficha completa para inclusão de novos fornecedores no ERP com dados fiscais, bancários e contatos.",
-          area: "financeiro",
-          format: "pdf",
-          version: "v2.3",
-          date: "Ago/2025",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "relatorio-horas",
-          title: "Relatório de Horas — Projeto",
-          desc: "Planilha de apontamento de horas por cliente, projeto e atividade para times comerciais e de delivery.",
-          area: "comercial",
-          format: "xlsx",
-          version: "v1.7",
-          date: "Mar/2026",
-          featured: false,
-          popular: true
-        },
-        {
-          id: "acesso-sistema",
-          title: "Solicitação de Acesso a Sistema",
-          desc: "Formulário para criar, alterar ou revogar permissões em sistemas corporativos e perfis de acesso.",
-          area: "ti",
-          format: "pdf",
-          version: "v5.1",
-          date: "Jan/2026",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "termo-epi",
-          title: "Termo de Entrega de EPI",
-          desc: "Registro de entrega e recebimento de equipamentos de proteção individual conforme normas de SST.",
-          area: "administrativo",
-          format: "pdf",
-          version: "v1.4",
-          date: "Set/2025",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "checklist-integracao",
-          title: "Check-list de Integração",
-          desc: "Lista de verificação para onboarding: documentos, treinamentos, acessos e entregas do primeiro dia.",
-          area: "rh",
-          format: "pdf",
-          version: "v2.2",
-          date: "Fev/2026",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "avaliacao-desempenho",
-          title: "Avaliação de Desempenho",
-          desc: "Formulário online do ciclo semestral de avaliação com metas, competências e feedback estruturado.",
-          area: "rh",
-          format: "online",
-          version: "2026.1",
-          date: "Mar/2026",
-          featured: false,
-          popular: true
-        },
-        {
-          id: "reserva-sala",
-          title: "Reserva de Sala de Reunião",
-          desc: "Formulário online para agendar salas, informar participantes e solicitar recursos audiovisuais.",
-          area: "administrativo",
-          format: "online",
-          version: "v1.0",
-          date: "Mar/2026",
-          featured: false,
-          popular: false
-        },
-        {
-          id: "solic-geral",
-          title: "Solicitação Geral ao RH",
-          desc: "Canal unificado para dúvidas, declarações, alterações cadastrais e demais demandas ao time de RH.",
-          area: "rh",
-          format: "online",
-          version: "v2.0",
-          date: "Jan/2026",
-          featured: false,
-          popular: false
-        }
+      const items = [
+        { id: "visualizar", title: "Visualizar Contracheque", desc: "Acesse o holerite de Jun/2026 com proventos, descontos e valor líquido. Disponível após fechamento da folha de pagamento.", cat: "holerite", sla: "Imediato", online: true, featured: true, action: "Visualizar" },
+        { id: "download-pdf", title: "Download em PDF", desc: "Baixe o contracheque do mês selecionado em PDF para arquivamento pessoal ou comprovação.", cat: "holerite", sla: "Imediato", online: true, featured: false, action: "Baixar" },
+        { id: "historico", title: "Histórico de Holerites", desc: "Consulte contracheques dos últimos 24 meses com busca por competência e tipo de pagamento.", cat: "historico", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "comparativo", title: "Comparativo Salarial", desc: "Compare proventos, descontos e líquido entre dois meses para entender variações na remuneração.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "demonstrativo", title: "Demonstrativo Detalhado", desc: "Visualize rubricas, bases de cálculo, horas extras, adicionais e descontos linha a linha.", cat: "holerite", sla: "Imediato", online: true, featured: false, action: "Visualizar" },
+        { id: "informe-rendimentos", title: "Informe de Rendimentos", desc: "Emita o informe anual para declaração de Imposto de Renda com valores pagos e retidos.", cat: "informe", sla: "Imediato", online: true, featured: false, action: "Emitir" },
+        { id: "comprovante", title: "Comprovante de Rendimentos", desc: "Documento simplificado para comprovação de renda em processos internos ou externos.", cat: "informe", sla: "Até 1 dia útil", online: true, featured: false, action: "Solicitar" },
+        { id: "carta-consignacao", title: "Carta de Consignação", desc: "Consulte margem consignável e emita carta para empréstimos e convênios autorizados.", cat: "documento", sla: "Até 2 dias úteis", online: true, featured: false, action: "Emitir" },
+        { id: "fgts", title: "FGTS e Encargos", desc: "Resumo de depósitos de FGTS, INSS e demais encargos vinculados ao seu contrato.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "descontos", title: "Descontos em Folha", desc: "Detalhamento de plano de saúde, vale-transporte, empréstimos consignados e outros descontos.", cat: "consulta", sla: "Imediato", online: true, featured: false, action: "Consultar" },
+        { id: "segunda-via", title: "Solicitar 2ª Via", desc: "Peça reemissão de holerite de competências anteriores quando o documento original não estiver acessível.", cat: "documento", sla: "Até 3 dias úteis", online: false, featured: false, action: "Solicitar" },
+        { id: "duvidas-rubricas", title: "Dúvidas sobre Rubricas", desc: "Orientações sobre códigos, siglas e regras de cálculo aplicadas na sua folha de pagamento.", cat: "consulta", sla: "Até 2 dias úteis", online: true, featured: false, action: "Consultar" }
       ];
 
-      function renderForm(item) {
+      function renderItem(item) {
         const featuredClass = item.featured ? " is-featured" : "";
-        const formatClass = item.format;
-        const formatBadgeClass = item.format === "doc" ? " doc-card__format--doc" : item.format === "xlsx" ? " doc-card__format--xlsx" : item.format === "online" ? " doc-card__format--online" : "";
-        const popularBadge = item.popular ? '<span class="doc-card__updated">Mais usado</span>' : "";
-        const primaryLabel = item.format === "online" ? "Preencher" : "Baixar";
-        const primaryIcon = item.format === "online" ? "fa-arrow-up-right-from-square" : "fa-download";
-
+        const catBadgeClass = item.cat !== "holerite" ? " pay-card__cat--" + item.cat : "";
+        const onlineBadge = item.online ? '<span class="pay-card__badge pay-card__badge--online">Online</span>' : "";
+        const viewActions = ["Visualizar", "Consultar", "Emitir", "Abrir"];
+        const downloadActions = ["Baixar"];
+        let actionIcon = "fa-solid fa-paper-plane";
+        if (viewActions.indexOf(item.action) !== -1) actionIcon = "fa-regular fa-eye";
+        if (downloadActions.indexOf(item.action) !== -1) actionIcon = "fa-solid fa-download";
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
-            <div class="doc-card__head">
-              <div class="doc-card__icon doc-card__icon--${formatClass}" aria-hidden="true">
-                <i class="fa-solid ${formatIcons[item.format] || "fa-file"}"></i>
+          <article class="pay-card${featuredClass}" data-cat="${item.cat}">
+            <div class="pay-card__head">
+              <div class="pay-card__icon pay-card__icon--${item.cat}" aria-hidden="true">
+                <i class="fa-solid ${catIcons[item.cat] || "fa-file-invoice"}"></i>
               </div>
-              <div class="doc-card__main">
-                <h2 class="doc-card__title">${item.title}</h2>
-                <p class="doc-card__desc">${item.desc}</p>
-              </div>
-            </div>
-            <div class="doc-card__tags">
-              <span class="doc-card__format${formatBadgeClass}">${formatLabels[item.format] || item.format}</span>
-              <span class="doc-card__area doc-card__area--${item.area}">${areaLabels[item.area] || item.area}</span>
-              <span class="doc-card__version">${item.version}</span>
-              ${popularBadge}
-            </div>
-            <div class="doc-card__meta">
-              <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Atualizado ${item.date}</span>
-            </div>
-            <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>
-              <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
-                <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              <div class="pay-card__main">
+                <h2 class="pay-card__title">${item.title}</h2>
+                <p class="pay-card__desc">${item.desc}</p>
               </div>
             </div>
-          </article>
-        `;
+            <div class="pay-card__tags">
+              <span class="pay-card__cat${catBadgeClass}">${catLabels[item.cat] || item.cat}</span>
+              ${onlineBadge}
+            </div>
+            <div class="pay-card__meta">
+              <span><i class="fa-regular fa-clock" aria-hidden="true"></i> ${item.sla}</span>
+            </div>
+            <div class="pay-card__footer">
+              <a class="pay-card__open" href="#"><i class="${actionIcon}" aria-hidden="true"></i> ${item.action}</a>
+              <div class="pay-card__actions">
+                <a class="pay-card__btn" href="#" aria-label="Ajuda ${item.title}"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></a>
+                <a class="pay-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
       }
 
-      const root = document.getElementById("forms-root");
-      const countEl = document.getElementById("forms-count");
-      const filters = document.getElementById("forms-filters");
-
+      const root = document.getElementById("pay-root");
+      const countEl = document.getElementById("pay-count");
+      const filters = document.getElementById("pay-filters");
       if (!root) return;
-
-      root.innerHTML = forms.map(renderForm).join("");
-
+      root.innerHTML = items.map(renderItem).join("");
       function applyFilter(filter) {
         let visible = 0;
-
-        root.querySelectorAll(".doc-card").forEach(function (card) {
-          const area = card.getAttribute("data-area");
-          const match = filter === "all" || area === filter;
-
+        root.querySelectorAll(".pay-card").forEach(function (card) {
+          const match = filter === "all" || card.getAttribute("data-cat") === filter;
           card.hidden = !match;
           if (match) visible += 1;
         });
-
-        if (countEl) {
-          countEl.textContent = "Exibindo " + visible + " formulário" + (visible === 1 ? "" : "s");
-        }
+        if (countEl) countEl.textContent = "Exibindo " + visible + " serviço" + (visible === 1 ? "" : "s");
       }
-
       applyFilter("all");
-
       if (filters) {
         filters.addEventListener("click", function (event) {
           const chip = event.target.closest(".filter-chip");
           if (!chip) return;
-
-          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-            btn.classList.remove("is-active");
-          });
+          filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
           chip.classList.add("is-active");
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
@@ -2300,3 +2170,4 @@
   </script>
 </body>
 </html>
+
