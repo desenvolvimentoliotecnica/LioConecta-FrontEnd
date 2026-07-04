@@ -1,0 +1,43 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="/pessoas/diretorio">Pessoas</a>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Aniversariantes</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Aniversariantes</h1>
+              <p class="page-header__desc">
+                Celebre com quem faz aniversário hoje, esta semana ou ao longo do mês. Envie parabéns e fortaleça o clima de equipe na LioConecta.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+          <div>
+            <div class="welcome-banner__title">Julho cheio de celebrações!</div>
+            <p class="welcome-banner__text" id="birthday-banner-text">Hoje são 2 aniversariantes. Nos próximos meses, 16 colaboradores comemoram mais um ano de vida.</p>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="birthday-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="today">Hoje</button>
+            <button class="filter-chip" type="button" data-filter="week">Esta semana</button>
+            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
+            <button class="filter-chip" type="button" data-filter="ago-2026">Agosto 2026</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar aniversariantes...
+          </div>
+        </div>
+
+        <div class="directory" id="birthday-root" aria-label="Aniversariantes por período"></div>
+
+        <p class="page-empty-note" id="birthday-count">Exibindo aniversariantes por período</p>

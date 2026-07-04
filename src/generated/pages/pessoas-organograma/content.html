@@ -1,0 +1,38 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="/pessoas/diretorio">Pessoas</a>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Organograma</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Organograma</h1>
+              <p class="page-header__desc">
+                Visualize a estrutura hierárquica da LioConecta, entenda as linhas de reporte e encontre rapidamente quem lidera cada área.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <div class="welcome-banner__title">Estrutura organizacional</div>
+            <p class="welcome-banner__text">6 áreas de negócio, 1 diretoria executiva e 50 colaboradores distribuídos em times multidisciplinares.</p>
+          </div>
+        </div>
+
+        <div class="org-chart-panel">
+          <div id="org-tree" aria-label="Organograma da empresa"></div>
+        </div>
+
+        <p class="page-empty-note" id="org-count"></p>
+        <p class="org-action-toast" id="org-action-toast" hidden role="status"></p>
+
+        <div class="org-node-menu" id="org-node-menu" hidden role="menu" aria-label="Ações do colaborador">
+          <button class="org-node-menu__item" type="button" role="menuitem" data-action="perfil">Ver perfil</button>
+          <button class="org-node-menu__item" type="button" role="menuitem" data-action="ferias">Solicitar férias</button>
+          <button class="org-node-menu__item" type="button" role="menuitem" data-action="promover">Promover</button>
+        </div>

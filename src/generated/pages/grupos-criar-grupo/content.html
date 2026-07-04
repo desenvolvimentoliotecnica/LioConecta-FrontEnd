@@ -1,0 +1,131 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Grupos</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Criar grupo</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Criar Grupo</h1>
+              <p class="page-header__desc">
+                Configure um novo espaço de colaboração para seu time, projeto ou comunidade de interesse dentro da LioConecta.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-circle-plus"></i></div>
+          <div>
+            <div class="welcome-banner__title">Novo grupo em poucos passos</div>
+            <p class="welcome-banner__text">Preencha as informações abaixo, escolha o tipo e a privacidade. Você poderá convidar membros assim que o grupo for criado.</p>
+          </div>
+        </div>
+
+        <div class="create-layout">
+          <form class="create-form" id="create-group-form" action="#" method="post">
+            <section class="form-section" aria-labelledby="section-basic">
+              <h2 class="form-section__title" id="section-basic">Informações básicas</h2>
+              <p class="form-section__desc">Nome e descrição que identificam o propósito do grupo.</p>
+              <div class="form-field">
+                <label class="form-label" for="group-name">Nome do grupo</label>
+                <input class="form-input" id="group-name" name="name" type="text" placeholder="Ex.: Squad Mobile 2026" value="" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="group-desc">Descrição <span class="form-label__hint">(opcional)</span></label>
+                <textarea class="form-textarea" id="group-desc" name="description" placeholder="Descreva o objetivo, público-alvo e tipo de conteúdo compartilhado no grupo."></textarea>
+              </div>
+            </section>
+
+            <section class="form-section" aria-labelledby="section-type">
+              <h2 class="form-section__title" id="section-type">Tipo de grupo</h2>
+              <p class="form-section__desc">Define a categoria do grupo no catálogo interno.</p>
+              <div class="option-grid" id="type-options" role="radiogroup" aria-label="Tipo de grupo">
+                <button class="option-card is-selected" type="button" data-type="departamental" data-label="Departamental">
+                  <div class="option-card__icon" style="background:#ecfeff;color:#0891b2;border-color:#67e8f9;"><i class="fa-solid fa-building" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Departamental</div>
+                  <p class="option-card__text">Times e áreas da empresa.</p>
+                </button>
+                <button class="option-card" type="button" data-type="projeto" data-label="Projeto">
+                  <div class="option-card__icon" style="background:#fef3c7;color:#d97706;border-color:#fcd34d;"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Projeto</div>
+                  <p class="option-card__text">Squads e iniciativas temporárias.</p>
+                </button>
+                <button class="option-card" type="button" data-type="interesse" data-label="Interesse">
+                  <div class="option-card__icon" style="background:#fce7f3;color:#db2777;border-color:#f9a8d4;"><i class="fa-solid fa-heart" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Interesse</div>
+                  <p class="option-card__text">Hobbies, clubes e temas transversais.</p>
+                </button>
+                <button class="option-card" type="button" data-type="comunidade" data-label="Comunidade">
+                  <div class="option-card__icon" style="background:#ede9fe;color:#7c3aed;border-color:#c4b5fd;"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Comunidade</div>
+                  <p class="option-card__text">Comitês, ERGs e grupos abertos.</p>
+                </button>
+              </div>
+            </section>
+
+            <section class="form-section" aria-labelledby="section-access">
+              <h2 class="form-section__title" id="section-access">Privacidade e acesso</h2>
+              <p class="form-section__desc">Controle quem pode encontrar e entrar no grupo.</p>
+              <div class="option-grid option-grid--3" id="access-options" role="radiogroup" aria-label="Privacidade">
+                <button class="option-card is-selected" type="button" data-access="open" data-label="Aberto">
+                  <div class="option-card__icon" style="background:#dcfce7;color:#15803d;border-color:#86efac;"><i class="fa-solid fa-lock-open" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Aberto</div>
+                  <p class="option-card__text">Qualquer colaborador pode participar.</p>
+                </button>
+                <button class="option-card" type="button" data-access="approval" data-label="Aprovação">
+                  <div class="option-card__icon" style="background:#fef3c7;color:#b45309;border-color:#fcd34d;"><i class="fa-solid fa-user-check" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Com aprovação</div>
+                  <p class="option-card__text">Entrada sujeita à liberação do admin.</p>
+                </button>
+                <button class="option-card" type="button" data-access="private" data-label="Privado">
+                  <div class="option-card__icon" style="background:#f1f5f9;color:#475569;border-color:#cbd5e1;"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
+                  <div class="option-card__title">Privado</div>
+                  <p class="option-card__text">Somente convidados podem entrar.</p>
+                </button>
+              </div>
+            </section>
+
+            <section class="form-section" aria-labelledby="section-icon">
+              <h2 class="form-section__title" id="section-icon">Ícone do grupo</h2>
+              <p class="form-section__desc">Escolha um ícone para identificar visualmente o grupo.</p>
+              <div class="icon-picker" id="icon-picker" role="radiogroup" aria-label="Ícone do grupo"></div>
+            </section>
+
+            <section class="form-section" aria-labelledby="section-invite">
+              <h2 class="form-section__title" id="section-invite">Convidar membros</h2>
+              <p class="form-section__desc">Opcional — adicione colegas agora ou convide depois da criação.</p>
+              <div class="invite-field">
+                <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                Buscar pessoas por nome ou e-mail...
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <a class="btn-secondary" href="/grupos/meus-grupos">Cancelar</a>
+              <button class="btn-primary" type="submit"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> Criar grupo</button>
+            </div>
+          </form>
+
+          <div class="create-preview-sticky">
+            <aside class="create-preview" aria-label="Pré-visualização do grupo">
+              <div class="create-preview__title">Pré-visualização</div>
+              <article class="group-card">
+                <div class="group-card__head">
+                  <div class="group-card__icon" id="preview-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></div>
+                  <div>
+                    <h2 class="group-card__name" id="preview-name">Nome do grupo</h2>
+                    <p class="group-card__desc" id="preview-desc">A descrição aparecerá aqui conforme você preenche o formulário.</p>
+                  </div>
+                </div>
+                <div class="group-card__tags">
+                  <span class="group-card__type" id="preview-type">Departamental</span>
+                  <span class="group-card__access" id="preview-access">Aberto</span>
+                </div>
+                <p class="group-card__meta"><i class="fa-solid fa-user" aria-hidden="true"></i> 1 membro · criado por Maria Silva</p>
+              </article>
+            </aside>
+          </div>
+        </div>

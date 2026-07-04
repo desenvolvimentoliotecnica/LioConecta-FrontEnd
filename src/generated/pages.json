@@ -1,0 +1,191 @@
+[
+  {
+    "id": "feed",
+    "htmlFile": "intranet-wireframe.html",
+    "route": "/",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-oficiais",
+    "htmlFile": "comunicados-oficiais.html",
+    "route": "/comunicados/oficiais",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-departamentais",
+    "htmlFile": "comunicados-departamentais.html",
+    "route": "/comunicados/departamentais",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-urgentes",
+    "htmlFile": "comunicados-urgentes.html",
+    "route": "/comunicados/urgentes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "comunicados-arquivo",
+    "htmlFile": "comunicados-arquivo.html",
+    "route": "/comunicados/arquivo",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-diretorio",
+    "htmlFile": "pessoas-diretorio.html",
+    "route": "/pessoas/diretorio",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-novos-colaboradores",
+    "htmlFile": "pessoas-novos-colaboradores.html",
+    "route": "/pessoas/novos-colaboradores",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-aniversariantes",
+    "htmlFile": "pessoas-aniversariantes.html",
+    "route": "/pessoas/aniversariantes",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "pessoas-organograma",
+    "htmlFile": "pessoas-organograma.html",
+    "route": "/pessoas/organograma",
+    "hasScript": true,
+    "externals": [
+      "assets/org-profile-modal.js",
+      "https://cdn.balkan.app/orgchart-community.js"
+    ],
+    "organograma": true
+  },
+  {
+    "id": "pessoas-perfil",
+    "htmlFile": "pessoas-perfil.html",
+    "route": "/pessoas/perfil",
+    "hasScript": false,
+    "externals": [
+      "assets/pessoas-perfil.js"
+    ],
+    "profileAssets": true
+  },
+  {
+    "id": "grupos-meus-grupos",
+    "htmlFile": "grupos-meus-grupos.html",
+    "route": "/grupos/meus-grupos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "grupos-explorar",
+    "htmlFile": "grupos-explorar-grupos.html",
+    "route": "/grupos/explorar",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "grupos-criar-grupo",
+    "htmlFile": "grupos-criar-grupo.html",
+    "route": "/grupos/criar",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-politicas",
+    "htmlFile": "documentos-politicas-internas.html",
+    "route": "/documentos/politicas-internas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-manuais",
+    "htmlFile": "documentos-manuais-procedimentos.html",
+    "route": "/documentos/manuais-procedimentos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-formularios",
+    "htmlFile": "documentos-formularios.html",
+    "route": "/documentos/formularios",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-modelos",
+    "htmlFile": "documentos-modelos-documentos.html",
+    "route": "/documentos/modelos",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "documentos-biblioteca",
+    "htmlFile": "documentos-biblioteca-corporativa.html",
+    "route": "/documentos/biblioteca",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-beneficios",
+    "htmlFile": "servicos-beneficios.html",
+    "route": "/servicos/beneficios",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-contracheque",
+    "htmlFile": "servicos-contracheque.html",
+    "route": "/servicos/contracheque",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-ponto",
+    "htmlFile": "servicos-ponto-eletronico.html",
+    "route": "/servicos/ponto-eletronico",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-ferias",
+    "htmlFile": "servicos-ferias-ausencias.html",
+    "route": "/servicos/ferias-ausencias",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-rh",
+    "htmlFile": "servicos-solicitacoes-rh.html",
+    "route": "/servicos/solicitacoes-rh",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-vale-transporte",
+    "htmlFile": "servicos-vale-transporte.html",
+    "route": "/servicos/vale-transporte",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-reembolso",
+    "htmlFile": "servicos-reembolso-despesas.html",
+    "route": "/servicos/reembolso-despesas",
+    "hasScript": true,
+    "externals": []
+  },
+  {
+    "id": "servicos-adiantamento",
+    "htmlFile": "servicos-adiantamento-viagem.html",
+    "route": "/servicos/adiantamento-viagem",
+    "hasScript": true,
+    "externals": []
+  }
+]

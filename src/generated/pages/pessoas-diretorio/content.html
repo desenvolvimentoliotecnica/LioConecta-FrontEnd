@@ -1,0 +1,37 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <a href="/pessoas/diretorio">Pessoas</a>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Diretório</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Diretório de Pessoas</h1>
+              <p class="page-header__desc">
+                Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="directory-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
+            <button class="filter-chip" type="button" data-filter="rh">Recursos Humanos</button>
+            <button class="filter-chip" type="button" data-filter="marketing">Marketing</button>
+            <button class="filter-chip" type="button" data-filter="ti">TI</button>
+            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
+            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar por nome ou cargo...
+          </div>
+        </div>
+
+        <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
+
+        <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>

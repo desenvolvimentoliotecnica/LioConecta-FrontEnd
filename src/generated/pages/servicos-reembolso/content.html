@@ -1,0 +1,61 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Serviços</span>
+            <span class="breadcrumb__sep">/</span>
+            <span>Financeiro</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Reembolso de despesas</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Reembolso de Despesas</h1>
+              <p class="page-header__desc">
+                Envie comprovantes, acompanhe aprovações e receba reembolsos de despesas corporativas com rastreabilidade completa.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-receipt"></i></div>
+          <div>
+            <div class="welcome-banner__title">Despesas corporativas</div>
+            <p class="welcome-banner__text">Solicite reembolso de despesas relacionadas ao trabalho com comprovantes e aprovação conforme a política financeira da empresa.</p>
+          </div>
+        </div>
+
+        <div class="reimb-stats" aria-label="Resumo">
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">R$ 1.240,00</div>
+            <div class="reimb-stat__label">Valor pendente de pagamento</div>
+          </div>
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">2</div>
+            <div class="reimb-stat__label">Solicitações em análise</div>
+          </div>
+          <div class="reimb-stat">
+            <div class="reimb-stat__value">18</div>
+            <div class="reimb-stat__label">Reembolsos pagos em 2026</div>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="reimb-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="solicitacao">Solicitações</button>
+            <button class="filter-chip" type="button" data-filter="despesa">Tipos de despesa</button>
+            <button class="filter-chip" type="button" data-filter="aprovacao">Aprovações</button>
+            <button class="filter-chip" type="button" data-filter="relatorio">Relatórios</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar serviços de reembolso...
+          </div>
+        </div>
+
+        <div class="reimb-grid" id="reimb-root" aria-label="Serviços de reembolso de despesas"></div>
+
+        <p class="page-empty-note" id="reimb-count">Exibindo 12 serviços</p>

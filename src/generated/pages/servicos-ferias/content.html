@@ -1,0 +1,61 @@
+<header class="page-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Início</a>
+            <span class="breadcrumb__sep">/</span>
+            <span>Serviços</span>
+            <span class="breadcrumb__sep">/</span>
+            <span>RH &amp; Pessoas</span>
+            <span class="breadcrumb__sep">/</span>
+            <span class="breadcrumb__current">Férias e ausências</span>
+          </nav>
+          <div class="page-header__row">
+            <div>
+              <h1 class="page-header__title">Férias e Ausências</h1>
+              <p class="page-header__desc">
+                Solicite férias, registre ausências, consulte saldos e acompanhe o status das suas solicitações com o time de RH.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-umbrella-beach"></i></div>
+          <div>
+            <div class="welcome-banner__title">Gestão de férias e ausências</div>
+            <p class="welcome-banner__text">Planeje seus períodos de descanso com antecedência e mantenha seu gestor informado. Solicitações são analisadas pelo RH em até 3 dias úteis.</p>
+          </div>
+        </div>
+
+        <div class="leave-stats" aria-label="Resumo de férias">
+          <div class="leave-stat">
+            <div class="leave-stat__value">18</div>
+            <div class="leave-stat__label">Dias de férias disponíveis</div>
+          </div>
+          <div class="leave-stat">
+            <div class="leave-stat__value">1</div>
+            <div class="leave-stat__label">Solicitação pendente de aprovação</div>
+          </div>
+          <div class="leave-stat">
+            <div class="leave-stat__value">Ago/2026</div>
+            <div class="leave-stat__label">Próximo período programado</div>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <div class="page-filters" id="leave-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="ferias">Férias</button>
+            <button class="filter-chip" type="button" data-filter="licenca">Licenças</button>
+            <button class="filter-chip" type="button" data-filter="afastamento">Afastamentos</button>
+            <button class="filter-chip" type="button" data-filter="consulta">Consultas</button>
+            <button class="filter-chip" type="button" data-filter="banco">Banco de horas</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar serviços de ausência...
+          </div>
+        </div>
+
+        <div class="leave-grid" id="leave-root" aria-label="Serviços de férias e ausências"></div>
+
+        <p class="page-empty-note" id="leave-count">Exibindo 12 serviços</p>

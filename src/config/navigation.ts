@@ -1,0 +1,72 @@
+export type NavLinkItem = {
+  label: string;
+  path: string;
+};
+
+export type NavDropdown = {
+  label: string;
+  id: string;
+  items: NavLinkItem[];
+  services?: boolean;
+  headings?: { label: string; className: string; icon: string }[];
+};
+
+export const FEED_PATH = "/";
+
+export const comunicadosLinks: NavLinkItem[] = [
+  { label: "Oficiais", path: "/comunicados/oficiais" },
+  { label: "Departamentais", path: "/comunicados/departamentais" },
+  { label: "Urgentes", path: "/comunicados/urgentes" },
+  { label: "Arquivo", path: "/comunicados/arquivo" },
+];
+
+export const pessoasLinks: NavLinkItem[] = [
+  { label: "Diretório", path: "/pessoas/diretorio" },
+  { label: "Novos colaboradores", path: "/pessoas/novos-colaboradores" },
+  { label: "Aniversariantes", path: "/pessoas/aniversariantes" },
+  { label: "Organograma", path: "/pessoas/organograma" },
+];
+
+export const gruposLinks: NavLinkItem[] = [
+  { label: "Meus grupos", path: "/grupos/meus-grupos" },
+  { label: "Explorar grupos", path: "/grupos/explorar" },
+  { label: "Comunidades", path: "#" },
+  { label: "Criar grupo", path: "/grupos/criar" },
+];
+
+export const documentosLinks: NavLinkItem[] = [
+  { label: "Políticas internas", path: "/documentos/politicas-internas" },
+  { label: "Manuais e procedimentos", path: "/documentos/manuais-procedimentos" },
+  { label: "Formulários", path: "/documentos/formularios" },
+  { label: "Modelos de documentos", path: "/documentos/modelos" },
+  { label: "Biblioteca corporativa", path: "/documentos/biblioteca" },
+];
+
+export const servicosLinks: NavLinkItem[] = [
+  { label: "Benefícios", path: "/servicos/beneficios" },
+  { label: "Contracheque", path: "/servicos/contracheque" },
+  { label: "Férias e ausências", path: "/servicos/ferias-ausencias" },
+  { label: "Solicitações RH", path: "/servicos/solicitacoes-rh" },
+  { label: "Ponto eletrônico", path: "/servicos/ponto-eletronico" },
+  { label: "Vale-transporte", path: "/servicos/vale-transporte" },
+  { label: "Reembolso de despesas", path: "/servicos/reembolso-despesas" },
+  { label: "Adiantamento de viagem", path: "/servicos/adiantamento-viagem" },
+];
+
+export const servicosHeadings = [
+  { label: "RH & Pessoas", className: "topbar__menu-heading--rh", icon: "fa-user-group" },
+  { label: "Financeiro", className: "topbar__menu-heading--financeiro", icon: "fa-coins" },
+  { label: "TI & Suporte", className: "topbar__menu-heading--ti", icon: "fa-headset" },
+  { label: "Facilities", className: "topbar__menu-heading--facilities", icon: "fa-building" },
+  { label: "Jurídico & Compliance", className: "topbar__menu-heading--juridico", icon: "fa-scale-balanced" },
+];
+
+export const pessoasSectionPrefix = "/pessoas/";
+
+export function isDropdownActive(pathname: string, items: NavLinkItem[]): boolean {
+  return items.some((item) => item.path !== "#" && pathname.startsWith(item.path));
+}
+
+export function isPessoasSectionActive(pathname: string): boolean {
+  return pathname.startsWith(pessoasSectionPrefix);
+}
