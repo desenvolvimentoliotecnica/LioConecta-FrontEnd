@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Diretório de Pessoas</title>
+  <title>LioConecta — Aniversariantes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -755,16 +755,53 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — DIRETÓRIO */
+    /* PAGE: PESSOAS — ANIVERSARIANTES */
     .filter-chip.is-active {
-      background: #ecfeff;
-      border-color: #67e8f9;
-      color: #0e7490;
+      background: #fce7f3;
+      border-color: #f9a8d4;
+      color: #be185d;
     }
 
     .topbar__dropdown-menu a.is-active {
-      background: #ecfeff;
-      color: #0e7490;
+      background: #fce7f3;
+      color: #be185d;
+    }
+
+    .welcome-banner {
+      margin-bottom: var(--wf-gap);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+      border: 1px dashed #f9a8d4;
+      border-radius: var(--wf-radius);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .welcome-banner__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fce7f3;
+      color: #be185d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .welcome-banner__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #831843;
+      margin-bottom: 4px;
+    }
+
+    .welcome-banner__text {
+      font-size: 13px;
+      color: #9d174d;
+      line-height: 1.45;
     }
 
     .directory {
@@ -816,7 +853,7 @@
         0 6px 16px rgba(15, 23, 42, 0.08);
       display: grid;
       grid-template-columns: 44px 1fr auto;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto auto;
       column-gap: 10px;
       row-gap: 2px;
       align-items: center;
@@ -829,7 +866,7 @@
       border-radius: 50%;
       border: 1.5px solid var(--wf-border);
       object-fit: cover;
-      grid-row: 1 / 3;
+      grid-row: 1 / 5;
       align-self: center;
     }
 
@@ -857,7 +894,54 @@
     }
 
     .person-card__dept {
-      display: none;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fce7f3;
+      color: #be185d;
+      grid-column: 2;
+      justify-self: start;
+    }
+
+    .person-card__birthday {
+      font-size: 10px;
+      color: var(--wf-text-muted);
+      margin: 0;
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .person-card__today-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #be185d;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .person-card.is-today {
+      border-color: #f9a8d4;
+      background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
+      box-shadow:
+        0 2px 6px rgba(190, 24, 93, 0.08),
+        0 6px 16px rgba(190, 24, 93, 0.12);
+    }
+
+    .person-card.is-today .person-card__avatar {
+      border-color: #f9a8d4;
+    }
+
+    .person-card__start {
+      font-size: 10px;
+      color: var(--wf-text-muted);
+      margin: 0;
+      grid-column: 2;
     }
 
     .person-card__meta {
@@ -869,7 +953,7 @@
       flex-direction: column;
       gap: 4px;
       grid-column: 3;
-      grid-row: 1 / 3;
+      grid-row: 1 / 5;
       align-self: center;
     }
 
@@ -889,9 +973,9 @@
     }
 
     .person-card__btn:hover {
-      background: #ecfeff;
-      color: #0e7490;
-      border-color: #67e8f9;
+      background: #fdf2f8;
+      color: #be185d;
+      border-color: #f9a8d4;
     }
 
     .page-empty-note {
@@ -1601,9 +1685,9 @@
               <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
-              <a href="pessoas-diretorio.html" role="menuitem" class="is-active">Diretório</a>
+              <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
               <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
-              <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
+              <a href="pessoas-aniversariantes.html" role="menuitem" class="is-active">Aniversariantes</a>
               <a href="#" role="menuitem">Organograma</a>
             </div>
           </div>
@@ -1717,37 +1801,43 @@
             <span class="breadcrumb__sep">/</span>
             <a href="pessoas-diretorio.html">Pessoas</a>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Diretório</span>
+            <span class="breadcrumb__current">Aniversariantes</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Diretório de Pessoas</h1>
+              <h1 class="page-header__title">Aniversariantes</h1>
               <p class="page-header__desc">
-                Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
+                Celebre com quem faz aniversário hoje, esta semana ou ao longo do mês. Envie parabéns e fortaleça o clima de equipe na LioConecta.
               </p>
             </div>
           </div>
         </header>
 
-        <div class="page-toolbar">
-          <div class="page-filters" id="directory-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
-            <button class="filter-chip" type="button" data-filter="rh">Recursos Humanos</button>
-            <button class="filter-chip" type="button" data-filter="marketing">Marketing</button>
-            <button class="filter-chip" type="button" data-filter="ti">TI</button>
-            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
-            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar por nome ou cargo...
+        <div class="welcome-banner">
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+          <div>
+            <div class="welcome-banner__title">Julho cheio de celebrações!</div>
+            <p class="welcome-banner__text" id="birthday-banner-text">Hoje são 2 aniversariantes. Nos próximos meses, 16 colaboradores comemoram mais um ano de vida.</p>
           </div>
         </div>
 
-        <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
+        <div class="page-toolbar">
+          <div class="page-filters" id="birthday-filters" role="group" aria-label="Filtros">
+            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+            <button class="filter-chip" type="button" data-filter="today">Hoje</button>
+            <button class="filter-chip" type="button" data-filter="week">Esta semana</button>
+            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
+            <button class="filter-chip" type="button" data-filter="ago-2026">Agosto 2026</button>
+          </div>
+          <div class="page-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            Buscar aniversariantes...
+          </div>
+        </div>
 
-        <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
+        <div class="directory" id="birthday-root" aria-label="Aniversariantes por período"></div>
+
+        <p class="page-empty-note" id="birthday-count">Exibindo aniversariantes por período</p>
 
       </main>
 
@@ -1854,91 +1944,53 @@
         "avatar-nexora-news.png"
       ];
 
-      const departments = [
+      const REF_DAY = 4;
+      const REF_MONTH = 7;
+      const REF_YEAR = 2026;
+
+      const groups = [
         {
-          id: "produto",
-          name: "Produto",
+          id: "today",
+          name: "Hoje — 4 de julho",
+          month: 7,
           people: [
-            ["Maria Silva", "Gerente de Projetos"],
-            ["Carlos Mendes", "Analista de Produto"],
-            ["Julia Santos", "Designer de Produto"],
-            ["Ricardo Souza", "Product Owner"],
-            ["Ana Costa", "UX Researcher"],
-            ["Pedro Almeida", "Analista de Negócios"],
-            ["Luciana Dias", "Scrum Master"],
-            ["Marcos Vieira", "Analista de Produto Jr."],
-            ["Isabela Moura", "Designer UI"],
-            ["João Pedro", "Estagiário de Produto"]
+            { name: "Carlos Mendes", role: "Gerente de Produto", dept: "Produto", deptId: "produto", day: 4, month: 7, label: "4 de julho" },
+            { name: "Fernanda Lopes", role: "Analista de Comunicação", dept: "Marketing", deptId: "marketing", day: 4, month: 7, label: "4 de julho" }
           ]
         },
         {
-          id: "rh",
-          name: "Recursos Humanos",
+          id: "week",
+          name: "Esta semana — 1 a 6 de julho",
+          month: 7,
           people: [
-            ["Patricia Nunes", "Coordenadora de RH"],
-            ["Renata Gomes", "Analista de RH"],
-            ["Carla Mendes", "Business Partner"],
-            ["Helena Prado", "Analista de Departamento Pessoal"],
-            ["Diego Martins", "Recrutador"],
-            ["Vanessa Lopes", "Analista de Treinamento"],
-            ["André Luiz", "Coordenador de Benefícios"],
-            ["Mariana Silva", "Assistente de RH"]
+            { name: "Helena Prado", role: "Coordenadora de RH", dept: "Recursos Humanos", deptId: "rh", day: 1, month: 7, label: "1 de julho" },
+            { name: "Igor Martins", role: "Tech Lead", dept: "TI", deptId: "ti", day: 2, month: 7, label: "2 de julho" },
+            { name: "João Pereira", role: "Executivo Comercial", dept: "Comercial", deptId: "comercial", day: 6, month: 7, label: "6 de julho" }
           ]
         },
         {
-          id: "marketing",
-          name: "Marketing",
+          id: "jul-rest",
+          name: "Restante de julho 2026",
+          month: 7,
           people: [
-            ["Fernanda Lima", "Analista de Marketing"],
-            ["Camila Rocha", "Coordenadora de Comunicação"],
-            ["Thiago Barros", "Designer Gráfico"],
-            ["Gustavo Pires", "Analista de Conteúdo"],
-            ["Aline Teixeira", "Analista de Social Media"],
-            ["Rodrigo Cunha", "Analista de Branding"],
-            ["Eduarda Nascimento", "Analista de Eventos"],
-            ["Larissa Fonseca", "Analista de CRM"]
+            { name: "Luciana Dias", role: "Product Owner", dept: "Produto", deptId: "produto", day: 9, month: 7, label: "9 de julho" },
+            { name: "Marcos Vieira", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", day: 12, month: 7, label: "12 de julho" },
+            { name: "Natália Rocha", role: "Designer UX", dept: "Produto", deptId: "produto", day: 15, month: 7, label: "15 de julho" },
+            { name: "Otávio Ribeiro", role: "Analista de Produto", dept: "Produto", deptId: "produto", day: 18, month: 7, label: "18 de julho" },
+            { name: "Patrícia Nunes", role: "Analista de RH", dept: "Recursos Humanos", deptId: "rh", day: 21, month: 7, label: "21 de julho" },
+            { name: "Rafael Costa", role: "Desenvolvedor Backend", dept: "TI", deptId: "ti", day: 24, month: 7, label: "24 de julho" },
+            { name: "Simone Alves", role: "Analista de Marketing", dept: "Marketing", deptId: "marketing", day: 27, month: 7, label: "27 de julho" },
+            { name: "Tiago Nunes", role: "Desenvolvedor Frontend", dept: "TI", deptId: "ti", day: 30, month: 7, label: "30 de julho" }
           ]
         },
         {
-          id: "ti",
-          name: "Tecnologia da Informação",
+          id: "ago-2026",
+          name: "Agosto 2026",
+          month: 8,
           people: [
-            ["Bruno Ferreira", "Analista de Infraestrutura"],
-            ["Eduardo Ramos", "Especialista em Segurança"],
-            ["Felipe Costa", "Desenvolvedor Backend"],
-            ["Gabriel Santos", "Desenvolvedor Frontend"],
-            ["Henrique Alves", "Analista de Suporte"],
-            ["Ivan Mendes", "Engenheiro de Dados"],
-            ["Juliana Ribeiro", "Analista de Sistemas"],
-            ["Kauã Oliveira", "DevOps Engineer"],
-            ["Leonardo Prado", "Arquiteto de Software"],
-            ["Marcelo Duarte", "Analista de QA"]
-          ]
-        },
-        {
-          id: "comercial",
-          name: "Comercial",
-          people: [
-            ["Alejandro López", "Executivo de Contas"],
-            ["Beatriz Cavalcanti", "Gerente Comercial"],
-            ["Caio Nunes", "Analista de Pré-vendas"],
-            ["Débora Lima", "Executiva de Contas"],
-            ["Elias Ferreira", "Coordenador Comercial"],
-            ["Fabiana Souza", "Analista de Propostas"],
-            ["Guilherme Rocha", "SDR"],
-            ["Helena Cardoso", "Customer Success"],
-            ["Igor Pimentel", "Analista Comercial"]
-          ]
-        },
-        {
-          id: "financeiro",
-          name: "Financeiro",
-          people: [
-            ["Júlia Campos", "Controller"],
-            ["Karina Dias", "Analista Financeiro"],
-            ["Luana Freitas", "Analista de Contas a Pagar"],
-            ["Milena Borges", "Analista de Contas a Receber"],
-            ["Nicolas Viana", "Assistente Financeiro"]
+            { name: "Una Ferreira", role: "Executiva Comercial", dept: "Comercial", deptId: "comercial", day: 3, month: 8, label: "3 de agosto" },
+            { name: "Vicente Lima", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", day: 8, month: 8, label: "8 de agosto" },
+            { name: "William Souza", role: "DevOps Engineer", dept: "TI", deptId: "ti", day: 14, month: 8, label: "14 de agosto" }
           ]
         }
       ];
@@ -1951,32 +2003,40 @@
         return avatar;
       }
 
-      function renderPerson(name, role) {
+      function isToday(person) {
+        return person.day === REF_DAY && person.month === REF_MONTH;
+      }
+
+      function renderPerson(person) {
         const avatar = nextAvatar();
+        const todayClass = isToday(person) ? " is-today" : "";
+        const todayBadge = isToday(person)
+          ? '<span class="person-card__today-badge">Hoje</span>'
+          : "";
+
         return `
-          <article class="person-card">
+          <article class="person-card${todayClass}" data-dept="${person.deptId}" data-day="${person.day}" data-month="${person.month}">
             <img class="person-card__avatar" src="${avatar}" alt="" />
-            <h2 class="person-card__name">${name}</h2>
-            <p class="person-card__role">${role}</p>
+            <h2 class="person-card__name">${person.name}</h2>
+            <p class="person-card__role">${person.role}</p>
+            <span class="person-card__dept">${person.dept}</span>
+            <p class="person-card__birthday">${person.label}${todayBadge}</p>
             <div class="person-card__actions">
-              <a class="person-card__btn" href="#" aria-label="Enviar e-mail para ${name}"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+              <a class="person-card__btn" href="#" aria-label="Parabenizar ${person.name}"><i class="fa-solid fa-gift" aria-hidden="true"></i></a>
+              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${person.name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
+              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${person.name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
             </div>
           </article>
         `;
       }
 
-      function renderDepartment(dept) {
-        const cards = dept.people.map(function (person) {
-          return renderPerson(person[0], person[1]);
-        }).join("");
-
+      function renderGroup(group) {
+        const cards = group.people.map(renderPerson).join("");
         return `
-          <section class="dept-group" data-dept="${dept.id}" aria-label="${dept.name}">
+          <section class="dept-group" data-group="${group.id}" data-month="${group.month}" aria-label="${group.name}">
             <div class="dept-group__header">
-              <h2 class="dept-group__title">${dept.name}</h2>
-              <span class="dept-group__count">${dept.people.length} colaboradores</span>
+              <h2 class="dept-group__title">${group.name}</h2>
+              <span class="dept-group__count">${group.people.length} aniversariantes</span>
             </div>
             <div class="directory-grid">
               ${cards}
@@ -1985,22 +2045,42 @@
         `;
       }
 
-      const root = document.getElementById("directory-root");
-      const countEl = document.getElementById("directory-count");
-      const filters = document.getElementById("directory-filters");
+      const root = document.getElementById("birthday-root");
+      const countEl = document.getElementById("birthday-count");
+      const filters = document.getElementById("birthday-filters");
       let activeFilter = "all";
 
       if (!root) return;
 
-      root.innerHTML = departments.map(renderDepartment).join("");
+      root.innerHTML = groups.map(renderGroup).join("");
 
       function updateCount(visibleTotal, groupCount) {
         if (!countEl) return;
         if (activeFilter === "all") {
-          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores em " + groupCount + " departamentos";
+          countEl.textContent = "Exibindo " + visibleTotal + " aniversariantes em " + groupCount + " períodos";
         } else {
-          countEl.textContent = "Exibindo " + visibleTotal + " colaboradores";
+          countEl.textContent = "Exibindo " + visibleTotal + " aniversariantes";
         }
+      }
+
+      function cardMatchesFilter(card, filter, groupId) {
+        const day = Number(card.getAttribute("data-day"));
+        const month = Number(card.getAttribute("data-month"));
+
+        if (filter === "all") return true;
+        if (filter === "today") {
+          return day === REF_DAY && month === REF_MONTH;
+        }
+        if (filter === "week") {
+          return month === REF_MONTH && day >= 1 && day <= 6;
+        }
+        if (filter === "jul-2026") {
+          return month === 7;
+        }
+        if (filter === "ago-2026") {
+          return month === 8;
+        }
+        return filter === groupId;
       }
 
       function applyFilter(filter) {
@@ -2009,11 +2089,23 @@
         let groupCount = 0;
 
         root.querySelectorAll(".dept-group").forEach(function (group) {
-          const match = filter === "all" || group.getAttribute("data-dept") === filter;
-          group.hidden = !match;
-          if (match) {
+          const groupId = group.getAttribute("data-group");
+          let visibleInGroup = 0;
+
+          group.querySelectorAll(".person-card").forEach(function (card) {
+            const match = cardMatchesFilter(card, filter, groupId);
+            card.hidden = !match;
+            if (match) visibleInGroup += 1;
+          });
+
+          group.hidden = visibleInGroup === 0;
+          if (visibleInGroup > 0) {
             groupCount += 1;
-            visibleTotal += group.querySelectorAll(".person-card").length;
+            visibleTotal += visibleInGroup;
+            const countLabel = group.querySelector(".dept-group__count");
+            if (countLabel) {
+              countLabel.textContent = visibleInGroup + " aniversariantes";
+            }
           }
         });
 
