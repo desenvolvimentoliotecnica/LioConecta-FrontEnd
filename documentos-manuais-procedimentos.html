@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LioConecta — Aniversariantes</title>
+  <title>LioConecta — Manuais e Procedimentos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -755,23 +755,23 @@
       gap: var(--wf-gap);
     }
 
-    /* PAGE: PESSOAS — ANIVERSARIANTES */
+    /* PAGE: DOCUMENTOS — MANUAIS E PROCEDIMENTOS */
     .filter-chip.is-active {
-      background: #fce7f3;
-      border-color: #f9a8d4;
-      color: #be185d;
+      background: #ccfbf1;
+      border-color: #5eead4;
+      color: #0f766e;
     }
 
     .topbar__dropdown-menu a.is-active {
-      background: #fce7f3;
-      color: #be185d;
+      background: #ccfbf1;
+      color: #0f766e;
     }
 
     .welcome-banner {
       margin-bottom: var(--wf-gap);
       padding: 16px 20px;
-      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
-      border: 1px dashed #f9a8d4;
+      background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+      border: 1px dashed #5eead4;
       border-radius: var(--wf-radius);
       display: flex;
       align-items: center;
@@ -782,8 +782,8 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #fce7f3;
-      color: #be185d;
+      background: #ccfbf1;
+      color: #0d9488;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -794,170 +794,180 @@
     .welcome-banner__title {
       font-size: 15px;
       font-weight: 700;
-      color: #831843;
+      color: #134e4a;
       margin-bottom: 4px;
     }
 
     .welcome-banner__text {
       font-size: 13px;
-      color: #9d174d;
+      color: #0f766e;
       line-height: 1.45;
     }
 
-    .directory {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .dept-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .dept-group__header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--wf-border);
-    }
-
-    .dept-group__title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .dept-group__count {
-      font-size: 12px;
-      color: var(--wf-text-muted);
-      font-weight: 500;
-    }
-
-    .directory-grid {
+    .docs-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    .person-card {
+    .doc-card {
       background: #fff;
       border: 1px dashed var(--wf-border);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 14px;
       box-shadow:
         0 2px 6px rgba(15, 23, 42, 0.06),
         0 6px 16px rgba(15, 23, 42, 0.08);
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      grid-template-rows: auto auto auto auto;
-      column-gap: 10px;
-      row-gap: 2px;
-      align-items: center;
-      text-align: left;
-    }
-
-    .person-card__avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid var(--wf-border);
-      object-fit: cover;
-      grid-row: 1 / 5;
-      align-self: center;
-    }
-
-    .person-card__name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #1e293b;
-      margin: 0;
-      line-height: 1.25;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .person-card__role {
-      font-size: 11px;
-      color: var(--wf-text);
-      line-height: 1.3;
-      margin: 0;
-      grid-column: 2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .person-card__dept {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #fce7f3;
-      color: #be185d;
-      grid-column: 2;
-      justify-self: start;
-    }
-
-    .person-card__birthday {
-      font-size: 10px;
-      color: var(--wf-text-muted);
-      margin: 0;
-      grid-column: 2;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .person-card__today-badge {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 999px;
-      background: #be185d;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .person-card.is-today {
-      border-color: #f9a8d4;
-      background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
-      box-shadow:
-        0 2px 6px rgba(190, 24, 93, 0.08),
-        0 6px 16px rgba(190, 24, 93, 0.12);
-    }
-
-    .person-card.is-today .person-card__avatar {
-      border-color: #f9a8d4;
-    }
-
-    .person-card__start {
-      font-size: 10px;
-      color: var(--wf-text-muted);
-      margin: 0;
-      grid-column: 2;
-    }
-
-    .person-card__meta {
-      display: none;
-    }
-
-    .person-card__actions {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      grid-column: 3;
-      grid-row: 1 / 5;
-      align-self: center;
+      gap: 10px;
+      min-height: 148px;
     }
 
-    .person-card__btn {
+    .doc-card.is-featured {
+      grid-column: 1 / -1;
+      border-color: #5eead4;
+      background: linear-gradient(135deg, #fff 0%, #f0fdfa 100%);
+    }
+
+    .doc-card__head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .doc-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px dashed var(--wf-border);
+    }
+
+    .doc-card__icon--pdf { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .doc-card__icon--doc { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .doc-card__icon--manual { background: #f0fdfa; color: #0d9488; border-color: #99f6e4; }
+    .doc-card__icon--procedimento { background: #ecfeff; color: #0891b2; border-color: #67e8f9; }
+    .doc-card__icon--guia { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+
+    .doc-card__main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .doc-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .doc-card__desc {
+      font-size: 11px;
+      color: var(--wf-text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .doc-card.is-featured .doc-card__desc {
+      -webkit-line-clamp: 3;
+    }
+
+    .doc-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .doc-card__type {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ccfbf1;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__type--procedimento { background: #ecfeff; color: #0891b2; }
+    .doc-card__type--guia { background: #fef3c7; color: #b45309; }
+
+    .doc-card__area {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .doc-card__area--rh { background: #fce7f3; color: #be185d; }
+    .doc-card__area--ti { background: #ecfeff; color: #0891b2; }
+    .doc-card__area--qualidade { background: #ede9fe; color: #6d28d9; }
+    .doc-card__area--comercial { background: #ffedd5; color: #c2410c; }
+    .doc-card__area--financeiro { background: #dcfce7; color: #15803d; }
+    .doc-card__area--operacional { background: #e0f2fe; color: #0369a1; }
+
+    .doc-card__version {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .doc-card__updated {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .doc-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--wf-text-muted);
+    }
+
+    .doc-card__meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .doc-card__actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .doc-card__btn {
       width: 28px;
       height: 28px;
       border: 1px dashed var(--wf-border);
@@ -972,10 +982,29 @@
       text-decoration: none;
     }
 
-    .person-card__btn:hover {
-      background: #fdf2f8;
-      color: #be185d;
-      border-color: #f9a8d4;
+    .doc-card__btn:hover {
+      background: #f0fdfa;
+      color: #0f766e;
+      border-color: #5eead4;
+    }
+
+    .doc-card__open {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      background: #0d9488;
+      border: 1px solid #0d9488;
+      border-radius: 999px;
+      padding: 6px 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-card__open:hover {
+      background: #0f766e;
+      border-color: #0f766e;
     }
 
     .page-empty-note {
@@ -985,21 +1014,13 @@
       text-align: center;
     }
 
-    @media (max-width: 1200px) {
-      .directory-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
     @media (max-width: 900px) {
-      .directory-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .directory-grid {
+      .docs-grid {
         grid-template-columns: 1fr;
+      }
+
+      .doc-card.is-featured {
+        grid-column: auto;
       }
     }
 
@@ -1675,7 +1696,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger is-active"
+              class="topbar__dropdown-trigger"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1687,7 +1708,7 @@
             <div class="topbar__dropdown-menu" id="menu-pessoas" role="menu">
               <a href="pessoas-diretorio.html" role="menuitem">Diretório</a>
               <a href="pessoas-novos-colaboradores.html" role="menuitem">Novos colaboradores</a>
-              <a href="pessoas-aniversariantes.html" role="menuitem" class="is-active">Aniversariantes</a>
+              <a href="pessoas-aniversariantes.html" role="menuitem">Aniversariantes</a>
               <a href="pessoas-organograma.html" role="menuitem">Organograma</a>
             </div>
           </div>
@@ -1711,7 +1732,7 @@
           </div>
           <div class="topbar__dropdown">
             <button
-              class="topbar__dropdown-trigger"
+              class="topbar__dropdown-trigger is-active"
               type="button"
               aria-expanded="false"
               aria-haspopup="true"
@@ -1722,7 +1743,7 @@
             </button>
             <div class="topbar__dropdown-menu" id="menu-documentos" role="menu">
               <a href="documentos-politicas-internas.html" role="menuitem">Políticas internas</a>
-              <a href="documentos-manuais-procedimentos.html" role="menuitem">Manuais e procedimentos</a>
+              <a href="documentos-manuais-procedimentos.html" role="menuitem" class="is-active">Manuais e procedimentos</a>
               <a href="#" role="menuitem">Formulários</a>
               <a href="#" role="menuitem">Modelos de documentos</a>
               <a href="#" role="menuitem">Biblioteca corporativa</a>
@@ -1799,45 +1820,47 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="intranet-wireframe.html">Início</a>
             <span class="breadcrumb__sep">/</span>
-            <a href="pessoas-diretorio.html">Pessoas</a>
+            <span>Documentos</span>
             <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Aniversariantes</span>
+            <span class="breadcrumb__current">Manuais e procedimentos</span>
           </nav>
           <div class="page-header__row">
             <div>
-              <h1 class="page-header__title">Aniversariantes</h1>
+              <h1 class="page-header__title">Manuais e Procedimentos</h1>
               <p class="page-header__desc">
-                Celebre com quem faz aniversário hoje, esta semana ou ao longo do mês. Envie parabéns e fortaleça o clima de equipe na LioConecta.
+                Guias operacionais, manuais de processo e procedimentos passo a passo para executar rotinas com segurança, qualidade e conformidade.
               </p>
             </div>
           </div>
         </header>
 
         <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-book-open"></i></div>
           <div>
-            <div class="welcome-banner__title">Julho cheio de celebrações!</div>
-            <p class="welcome-banner__text" id="birthday-banner-text">Hoje são 2 aniversariantes. Nos próximos meses, 16 colaboradores comemoram mais um ano de vida.</p>
+            <div class="welcome-banner__title">12 manuais e procedimentos disponíveis</div>
+            <p class="welcome-banner__text">Documentos práticos para o dia a dia. Consulte antes de iniciar processos críticos e verifique sempre a versão mais recente antes de executar uma rotina.</p>
           </div>
         </div>
 
         <div class="page-toolbar">
-          <div class="page-filters" id="birthday-filters" role="group" aria-label="Filtros">
+          <div class="page-filters" id="manuals-filters" role="group" aria-label="Filtros">
             <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="today">Hoje</button>
-            <button class="filter-chip" type="button" data-filter="week">Esta semana</button>
-            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
-            <button class="filter-chip" type="button" data-filter="ago-2026">Agosto 2026</button>
+            <button class="filter-chip" type="button" data-filter="operacional">Operacional</button>
+            <button class="filter-chip" type="button" data-filter="ti">TI</button>
+            <button class="filter-chip" type="button" data-filter="rh">RH</button>
+            <button class="filter-chip" type="button" data-filter="qualidade">Qualidade</button>
+            <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
+            <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar aniversariantes...
+            Buscar manuais e procedimentos...
           </div>
         </div>
 
-        <div class="directory" id="birthday-root" aria-label="Aniversariantes por período"></div>
+        <div class="docs-grid" id="manuals-root" aria-label="Manuais e procedimentos"></div>
 
-        <p class="page-empty-note" id="birthday-count">Exibindo aniversariantes por período</p>
+        <p class="page-empty-note" id="manuals-count">Exibindo 12 documentos</p>
 
       </main>
 
@@ -1933,183 +1956,234 @@
 
   <script>
     (function () {
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
-      ];
+      const areaLabels = {
+        operacional: "Operacional",
+        ti: "TI",
+        rh: "RH",
+        qualidade: "Qualidade",
+        comercial: "Comercial",
+        financeiro: "Financeiro"
+      };
 
-      const REF_DAY = 4;
-      const REF_MONTH = 7;
-      const REF_YEAR = 2026;
+      const typeLabels = {
+        manual: "Manual",
+        procedimento: "Procedimento",
+        guia: "Guia rápido"
+      };
 
-      const groups = [
+      const typeIcons = {
+        manual: "fa-book",
+        procedimento: "fa-list-check",
+        guia: "fa-bolt"
+      };
+
+      const manuals = [
         {
-          id: "today",
-          name: "Hoje — 4 de julho",
-          month: 7,
-          people: [
-            { name: "Carlos Mendes", role: "Gerente de Produto", dept: "Produto", deptId: "produto", day: 4, month: 7, label: "4 de julho" },
-            { name: "Fernanda Lopes", role: "Analista de Comunicação", dept: "Marketing", deptId: "marketing", day: 4, month: 7, label: "4 de julho" }
-          ]
+          id: "manual-colaborador",
+          title: "Manual do Colaborador",
+          desc: "Guia completo de integração: cultura, estrutura organizacional, benefícios, rotinas internas e canais oficiais de comunicação.",
+          area: "rh",
+          type: "manual",
+          version: "v7.0",
+          date: "Mar/2026",
+          pages: 42,
+          featured: true,
+          updated: true
         },
         {
-          id: "week",
-          name: "Esta semana — 1 a 6 de julho",
-          month: 7,
-          people: [
-            { name: "Helena Prado", role: "Coordenadora de RH", dept: "Recursos Humanos", deptId: "rh", day: 1, month: 7, label: "1 de julho" },
-            { name: "Igor Martins", role: "Tech Lead", dept: "TI", deptId: "ti", day: 2, month: 7, label: "2 de julho" },
-            { name: "João Pereira", role: "Executivo Comercial", dept: "Comercial", deptId: "comercial", day: 6, month: 7, label: "6 de julho" }
-          ]
+          id: "proc-admissao",
+          title: "Procedimento de Admissão",
+          desc: "Fluxo de contratação: documentação, exames, assinaturas, provisionamento de acessos e checklist de integração do novo colaborador.",
+          area: "rh",
+          type: "procedimento",
+          version: "v3.2",
+          date: "Jan/2026",
+          pages: 18,
+          featured: false,
+          updated: false
         },
         {
-          id: "jul-rest",
-          name: "Restante de julho 2026",
-          month: 7,
-          people: [
-            { name: "Luciana Dias", role: "Product Owner", dept: "Produto", deptId: "produto", day: 9, month: 7, label: "9 de julho" },
-            { name: "Marcos Vieira", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", day: 12, month: 7, label: "12 de julho" },
-            { name: "Natália Rocha", role: "Designer UX", dept: "Produto", deptId: "produto", day: 15, month: 7, label: "15 de julho" },
-            { name: "Otávio Ribeiro", role: "Analista de Produto", dept: "Produto", deptId: "produto", day: 18, month: 7, label: "18 de julho" },
-            { name: "Patrícia Nunes", role: "Analista de RH", dept: "Recursos Humanos", deptId: "rh", day: 21, month: 7, label: "21 de julho" },
-            { name: "Rafael Costa", role: "Desenvolvedor Backend", dept: "TI", deptId: "ti", day: 24, month: 7, label: "24 de julho" },
-            { name: "Simone Alves", role: "Analista de Marketing", dept: "Marketing", deptId: "marketing", day: 27, month: 7, label: "27 de julho" },
-            { name: "Tiago Nunes", role: "Desenvolvedor Frontend", dept: "TI", deptId: "ti", day: 30, month: 7, label: "30 de julho" }
-          ]
+          id: "guia-ponto",
+          title: "Guia Rápido: Registro de Ponto",
+          desc: "Como registrar entrada, saída, intervalos e solicitar ajustes no sistema de ponto eletrônico.",
+          area: "rh",
+          type: "guia",
+          version: "v1.5",
+          date: "Fev/2026",
+          pages: 4,
+          featured: false,
+          updated: true
         },
         {
-          id: "ago-2026",
-          name: "Agosto 2026",
-          month: 8,
-          people: [
-            { name: "Una Ferreira", role: "Executiva Comercial", dept: "Comercial", deptId: "comercial", day: 3, month: 8, label: "3 de agosto" },
-            { name: "Vicente Lima", role: "Analista Financeiro", dept: "Financeiro", deptId: "financeiro", day: 8, month: 8, label: "8 de agosto" },
-            { name: "William Souza", role: "DevOps Engineer", dept: "TI", deptId: "ti", day: 14, month: 8, label: "14 de agosto" }
-          ]
+          id: "proc-chamados-ti",
+          title: "Procedimento de Abertura de Chamados TI",
+          desc: "Classificação de incidentes, prioridades, SLA por categoria e encaminhamento no help desk corporativo.",
+          area: "ti",
+          type: "procedimento",
+          version: "v4.1",
+          date: "Dez/2025",
+          pages: 14,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "guia-vpn",
+          title: "Guia Rápido: VPN e Acesso Remoto",
+          desc: "Instalação do cliente VPN, autenticação multifator e resolução dos erros mais comuns de conexão remota.",
+          area: "ti",
+          type: "guia",
+          version: "v2.0",
+          date: "Mar/2026",
+          pages: 6,
+          featured: false,
+          updated: true
+        },
+        {
+          id: "proc-backup",
+          title: "Procedimento de Backup e Restore",
+          desc: "Rotinas de backup, retenção, testes de restauração e responsabilidades em caso de perda de dados.",
+          area: "ti",
+          type: "procedimento",
+          version: "v3.4",
+          date: "Out/2025",
+          pages: 22,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "manual-iso9001",
+          title: "Manual de Qualidade ISO 9001",
+          desc: "Sistema de gestão da qualidade, escopo, mapa de processos e referências normativas aplicáveis à organização.",
+          area: "qualidade",
+          type: "manual",
+          version: "v6.3",
+          date: "Nov/2025",
+          pages: 56,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "proc-nc-capa",
+          title: "Procedimento de NC e CAPA",
+          desc: "Registro de não conformidades, análise de causa raiz, plano de ação corretiva e verificação de eficácia.",
+          area: "qualidade",
+          type: "procedimento",
+          version: "v2.9",
+          date: "Jan/2026",
+          pages: 16,
+          featured: false,
+          updated: true
+        },
+        {
+          id: "manual-atendimento",
+          title: "Manual de Boas Práticas de Atendimento",
+          desc: "Padrões de comunicação, SLA comercial, scripts de abordagem e tratamento de objeções no relacionamento com clientes.",
+          area: "comercial",
+          type: "manual",
+          version: "v3.0",
+          date: "Fev/2026",
+          pages: 28,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "proc-onboarding-comercial",
+          title: "Procedimento de Onboarding Comercial",
+          desc: "Handoff de leads, cadastro no CRM, definição de carteira e acompanhamento dos primeiros 90 dias de novos vendedores.",
+          area: "comercial",
+          type: "procedimento",
+          version: "v1.8",
+          date: "Ago/2025",
+          pages: 12,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "proc-compras",
+          title: "Procedimento de Compras e Cotações",
+          desc: "Solicitação de compras, alçadas de aprovação, cotação com fornecedores e registro no ERP financeiro.",
+          area: "financeiro",
+          type: "procedimento",
+          version: "v4.5",
+          date: "Set/2025",
+          pages: 20,
+          featured: false,
+          updated: false
+        },
+        {
+          id: "manual-seguranca-operacional",
+          title: "Manual de Segurança Operacional",
+          desc: "Instruções de EPI, sinalização, permissão de trabalho e resposta a emergências em áreas operacionais e planta.",
+          area: "operacional",
+          type: "manual",
+          version: "v5.1",
+          date: "Mar/2026",
+          pages: 32,
+          featured: false,
+          updated: true
         }
       ];
 
-      let avatarIndex = 0;
-
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatar;
-      }
-
-      function isToday(person) {
-        return person.day === REF_DAY && person.month === REF_MONTH;
-      }
-
-      function renderPerson(person) {
-        const avatar = nextAvatar();
-        const todayClass = isToday(person) ? " is-today" : "";
-        const todayBadge = isToday(person)
-          ? '<span class="person-card__today-badge">Hoje</span>'
-          : "";
+      function renderManual(item) {
+        const featuredClass = item.featured ? " is-featured" : "";
+        const typeClass = item.type === "procedimento" ? "procedimento" : item.type === "guia" ? "guia" : "manual";
+        const typeBadgeClass = item.type === "procedimento" ? " doc-card__type--procedimento" : item.type === "guia" ? " doc-card__type--guia" : "";
+        const updatedBadge = item.updated ? '<span class="doc-card__updated">Atualizado</span>' : "";
 
         return `
-          <article class="person-card${todayClass}" data-dept="${person.deptId}" data-day="${person.day}" data-month="${person.month}">
-            <img class="person-card__avatar" src="${avatar}" alt="" />
-            <h2 class="person-card__name">${person.name}</h2>
-            <p class="person-card__role">${person.role}</p>
-            <span class="person-card__dept">${person.dept}</span>
-            <p class="person-card__birthday">${person.label}${todayBadge}</p>
-            <div class="person-card__actions">
-              <a class="person-card__btn" href="#" aria-label="Parabenizar ${person.name}"><i class="fa-solid fa-gift" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Enviar mensagem para ${person.name}"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
-              <a class="person-card__btn" href="#" aria-label="Ver perfil de ${person.name}"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+          <article class="doc-card${featuredClass}" data-area="${item.area}">
+            <div class="doc-card__head">
+              <div class="doc-card__icon doc-card__icon--${typeClass}" aria-hidden="true">
+                <i class="fa-solid ${typeIcons[item.type] || "fa-book"}"></i>
+              </div>
+              <div class="doc-card__main">
+                <h2 class="doc-card__title">${item.title}</h2>
+                <p class="doc-card__desc">${item.desc}</p>
+              </div>
+            </div>
+            <div class="doc-card__tags">
+              <span class="doc-card__type${typeBadgeClass}">${typeLabels[item.type] || item.type}</span>
+              <span class="doc-card__area doc-card__area--${item.area}">${areaLabels[item.area] || item.area}</span>
+              <span class="doc-card__version">${item.version}</span>
+              ${updatedBadge}
+            </div>
+            <div class="doc-card__meta">
+              <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Revisão ${item.date}</span>
+              <span><i class="fa-regular fa-file-lines" aria-hidden="true"></i> ${item.pages} páginas</span>
+            </div>
+            <div class="doc-card__footer">
+              <a class="doc-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</a>
+              <div class="doc-card__actions">
+                <a class="doc-card__btn" href="#" aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
+              </div>
             </div>
           </article>
         `;
       }
 
-      function renderGroup(group) {
-        const cards = group.people.map(renderPerson).join("");
-        return `
-          <section class="dept-group" data-group="${group.id}" data-month="${group.month}" aria-label="${group.name}">
-            <div class="dept-group__header">
-              <h2 class="dept-group__title">${group.name}</h2>
-              <span class="dept-group__count">${group.people.length} aniversariantes</span>
-            </div>
-            <div class="directory-grid">
-              ${cards}
-            </div>
-          </section>
-        `;
-      }
-
-      const root = document.getElementById("birthday-root");
-      const countEl = document.getElementById("birthday-count");
-      const filters = document.getElementById("birthday-filters");
-      let activeFilter = "all";
+      const root = document.getElementById("manuals-root");
+      const countEl = document.getElementById("manuals-count");
+      const filters = document.getElementById("manuals-filters");
 
       if (!root) return;
 
-      root.innerHTML = groups.map(renderGroup).join("");
-
-      function updateCount(visibleTotal, groupCount) {
-        if (!countEl) return;
-        if (activeFilter === "all") {
-          countEl.textContent = "Exibindo " + visibleTotal + " aniversariantes em " + groupCount + " períodos";
-        } else {
-          countEl.textContent = "Exibindo " + visibleTotal + " aniversariantes";
-        }
-      }
-
-      function cardMatchesFilter(card, filter, groupId) {
-        const day = Number(card.getAttribute("data-day"));
-        const month = Number(card.getAttribute("data-month"));
-
-        if (filter === "all") return true;
-        if (filter === "today") {
-          return day === REF_DAY && month === REF_MONTH;
-        }
-        if (filter === "week") {
-          return month === REF_MONTH && day >= 1 && day <= 6;
-        }
-        if (filter === "jul-2026") {
-          return month === 7;
-        }
-        if (filter === "ago-2026") {
-          return month === 8;
-        }
-        return filter === groupId;
-      }
+      root.innerHTML = manuals.map(renderManual).join("");
 
       function applyFilter(filter) {
-        activeFilter = filter;
-        let visibleTotal = 0;
-        let groupCount = 0;
+        let visible = 0;
 
-        root.querySelectorAll(".dept-group").forEach(function (group) {
-          const groupId = group.getAttribute("data-group");
-          let visibleInGroup = 0;
+        root.querySelectorAll(".doc-card").forEach(function (card) {
+          const area = card.getAttribute("data-area");
+          const match = filter === "all" || area === filter;
 
-          group.querySelectorAll(".person-card").forEach(function (card) {
-            const match = cardMatchesFilter(card, filter, groupId);
-            card.hidden = !match;
-            if (match) visibleInGroup += 1;
-          });
-
-          group.hidden = visibleInGroup === 0;
-          if (visibleInGroup > 0) {
-            groupCount += 1;
-            visibleTotal += visibleInGroup;
-            const countLabel = group.querySelector(".dept-group__count");
-            if (countLabel) {
-              countLabel.textContent = visibleInGroup + " aniversariantes";
-            }
-          }
+          card.hidden = !match;
+          if (match) visible += 1;
         });
 
-        updateCount(visibleTotal, groupCount);
+        if (countEl) {
+          countEl.textContent = "Exibindo " + visible + " documento" + (visible === 1 ? "" : "s");
+        }
       }
 
       applyFilter("all");
