@@ -11,7 +11,7 @@ const LEFT_ITEMS = [
 
 const RIGHT_ITEMS = [
   { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
-  { label: "Ajuda", icon: "/icon-help.png", href: "#" },
+  { label: "Ajuda", icon: "/icon-help.png", href: "/ajuda" },
   { label: "Favoritos", icon: "/icon-favorites.png", href: "#" },
   { label: "Bookmarks", icon: "/icon-bookmarks.png", href: "#" },
   { label: "Atalhos", icon: "/icon-shortcuts.png", href: "#", spacerBefore: true },
