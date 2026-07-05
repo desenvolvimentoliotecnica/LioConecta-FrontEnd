@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { GruposHubPage } from "./components/pages/GruposHubPage";
+import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
 import { BookmarksPage } from "./components/pages/BookmarksPage";
@@ -27,6 +29,8 @@ function App() {
         <Route path="/atalhos" element={<ShortcutsPage />} />
         <Route path="/calendario" element={<CalendarPage />} />
         <Route path="/documentos" element={<DocumentsHubPage />} />
+        <Route path="/pessoas" element={<PessoasHubPage />} />
+        <Route path="/grupos" element={<GruposHubPage />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
