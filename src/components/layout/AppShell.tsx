@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { useNotificationHubSync } from "../../api/hooks/useNotifications";
 import { useSidebar } from "../../hooks/useSidebar";
 import { ChatProvider, useChatWindowApi } from "../chat/ChatContext";
 import { ChatWidget } from "../chat/ChatWidget";
@@ -22,6 +23,7 @@ function ChatWindowBridge() {
 export function AppShell() {
   const { leftExpanded, rightExpanded, toggleLeft, toggleRight, bodyClass } = useSidebar();
   const location = useLocation();
+  useNotificationHubSync();
 
   return (
     <ChatProvider>

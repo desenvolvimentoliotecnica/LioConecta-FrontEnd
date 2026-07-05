@@ -28,7 +28,7 @@ export interface PagedResult<T> {
 
 export interface NotificationDto {
   id: string;
-  type: string;
+  type: string | number;
   title: string;
   body: string;
   href?: string | null;

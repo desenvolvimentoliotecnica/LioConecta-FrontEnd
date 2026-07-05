@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
+import {
+  NOTIFICATIONS_QUERY_KEY,
+  NOTIFICATIONS_UNREAD_QUERY_KEY,
+} from "../../utils/notifications";
 import type {
   ComunicadoDto,
   ComunicadoKind,
@@ -108,6 +112,8 @@ export function useCreateComunicado() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: COMUNICADOS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_UNREAD_QUERY_KEY });
     },
   });
 }

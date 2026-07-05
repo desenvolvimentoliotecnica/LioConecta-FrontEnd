@@ -1,45 +1,59 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  NOTIFICATIONS,
-  NOTIFICATION_FILTERS,
-  type NotificationFilter,
-  type NotificationItem,
-} from "../../config/notifications";
+  useMarkAllNotificationsRead,
+  useMarkNotificationRead,
+  useNotifications,
+  useUnreadNotificationCount,
+} from "../../api/hooks/useNotifications";
+import { NOTIFICATION_FILTERS, type NotificationFilter } from "../../config/notifications";
+import {
+  mapNotificationDtoToItem,
+  matchesNotificationFilter,
+} from "../../utils/notifications";
 import "../../styles/notifications-page.css";
-
-function matchesFilter(item: NotificationItem, filter: NotificationFilter) {
-  return filter === "all" || item.mod === filter;
-}
 
 export function NotificationsPage() {
   const [filter, setFilter] = useState<NotificationFilter>("all");
   const [query, setQuery] = useState("");
-  const [unreadIds, setUnreadIds] = useState(() => new Set(NOTIFICATIONS.slice(0, 3).map((item) => item.id)));
+  const { data: notificationsPage, isLoading } = useNotifications(100);
+  const { data: unreadCount = 0 } = useUnreadNotificationCount();
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
+
+  const items = useMemo(
+    () => (notificationsPage?.items ?? []).map(mapNotificationDtoToItem),
+    [notificationsPage?.items]
+  );
+
+  const readById = useMemo(() => {
+    const map = new Map<string, boolean>();
+    for (const dto of notificationsPage?.items ?? []) {
+      map.set(dto.id, dto.isRead);
+    }
+    return map;
+  }, [notificationsPage?.items]);
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    return NOTIFICATIONS.filter((item) => {
-      if (!matchesFilter(item, filter)) return false;
+    return items.filter((item) => {
+      if (!matchesNotificationFilter(item, filter)) return false;
       if (!normalized) return true;
       return (
         item.title.toLowerCase().includes(normalized) ||
         item.text.toLowerCase().includes(normalized)
       );
     });
-  }, [filter, query]);
+  }, [filter, items, query]);
 
-  const unreadCount = unreadIds.size;
+  const handleMarkAllRead = () => {
+    markAllRead.mutate();
+  };
 
-  const markAllRead = () => setUnreadIds(new Set());
-
-  const markItemRead = (id: string) => {
-    setUnreadIds((prev) => {
-      if (!prev.has(id)) return prev;
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
+  const handleMarkItemRead = (id: string) => {
+    if (!readById.get(id)) {
+      markRead.mutate(id);
+    }
   };
 
   return (
@@ -58,7 +72,7 @@ export function NotificationsPage() {
             </p>
           </div>
           {unreadCount > 0 ? (
-            <button className="notifications-page__mark-all" type="button" onClick={markAllRead}>
+            <button className="notifications-page__mark-all" type="button" onClick={handleMarkAllRead}>
               Marcar todas como lidas
             </button>
           ) : null}
@@ -110,16 +124,21 @@ export function NotificationsPage() {
         </div>
       </section>
 
-      {filtered.length > 0 ? (
+      {isLoading ? (
+        <div className="notifications-page__empty">
+          <i className="fa-solid fa-spinner fa-spin" aria-hidden="true" />
+          <p>Carregando notificações...</p>
+        </div>
+      ) : filtered.length > 0 ? (
         <ul className="notifications-page__list" aria-label="Lista de notificações">
           {filtered.map((item) => {
-            const unread = unreadIds.has(item.id);
+            const unread = !readById.get(item.id);
             return (
               <li key={item.id}>
                 <Link
                   className={`notifications-page__item${unread ? " notifications-page__item--unread" : ""}`}
                   to={item.href}
-                  onClick={() => markItemRead(item.id)}
+                  onClick={() => handleMarkItemRead(item.id)}
                 >
                   <span className={`notifications-page__icon notifications-page__icon--${item.mod}`}>
                     <i className={`fa-solid ${item.icon}`} aria-hidden="true" />
@@ -146,7 +165,7 @@ export function NotificationsPage() {
       )}
 
       <p className="page-empty-note">
-        Exibindo {filtered.length} de {NOTIFICATIONS.length} notificações
+        Exibindo {filtered.length} de {items.length} notificações
       </p>
     </main>
   );

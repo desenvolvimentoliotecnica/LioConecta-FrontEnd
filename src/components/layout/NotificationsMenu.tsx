@@ -1,15 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { getRecentNotifications } from "../../config/notifications";
+import {
+  useMarkAllNotificationsRead,
+  useMarkNotificationRead,
+  useNotifications,
+  useUnreadNotificationCount,
+} from "../../api/hooks/useNotifications";
+import { mapNotificationDtoToItem } from "../../utils/notifications";
 
 type MenuApi = { closeAll: (except: Element | null) => void };
 
 export function NotificationsMenu() {
   const [open, setOpen] = useState(false);
-  const [badge, setBadge] = useState(3);
-  const recent = getRecentNotifications(3);
-  const [unread, setUnread] = useState(() => recent.map((item) => item.id));
   const ref = useRef<HTMLDivElement>(null);
+  const { data: notificationsPage } = useNotifications(20);
+  const { data: unreadCount = 0 } = useUnreadNotificationCount();
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
+
+  const recent = useMemo(
+    () => (notificationsPage?.items ?? []).slice(0, 3).map(mapNotificationDtoToItem),
+    [notificationsPage?.items]
+  );
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
@@ -28,21 +40,22 @@ export function NotificationsMenu() {
     };
   }, []);
 
-  const markAllRead = () => {
-    setUnread([]);
-    setBadge(0);
+  const handleMarkAllRead = () => {
+    markAllRead.mutate();
   };
 
-  const markItemRead = (id: string) => {
-    setUnread((prev) => {
-      const next = prev.filter((itemId) => itemId !== id);
-      setBadge(next.length);
-      return next;
-    });
+  const handleMarkItemRead = (id: string) => {
+    markRead.mutate(id);
   };
+
+  const badge = unreadCount > 0 ? unreadCount : undefined;
 
   return (
-    <div className={`notifications-menu icon-btn-wrap${open ? " is-open" : ""}`} data-badge={badge} ref={ref}>
+    <div
+      className={`notifications-menu icon-btn-wrap${open ? " is-open" : ""}`}
+      data-badge={badge}
+      ref={ref}
+    >
       <button
         className="topbar-icon-btn notifications-menu__trigger"
         type="button"
@@ -66,36 +79,46 @@ export function NotificationsMenu() {
       >
         <div className="notifications-menu__header">
           <span className="notifications-menu__title">Notificações</span>
-          <button className="notifications-menu__mark-read" type="button" onClick={markAllRead}>
-            Marcar todas como lidas
-          </button>
+          {unreadCount > 0 ? (
+            <button className="notifications-menu__mark-read" type="button" onClick={handleMarkAllRead}>
+              Marcar todas como lidas
+            </button>
+          ) : null}
         </div>
-        <ul className="notifications-menu__list">
-          {recent.map((item) => (
-            <li
-              key={item.id}
-              className={`notifications-menu__item${unread.includes(item.id) ? " notifications-menu__item--unread" : ""}`}
-            >
-              <Link
-                className="notifications-menu__link"
-                to={item.href}
-                onClick={() => {
-                  markItemRead(item.id);
-                  setOpen(false);
-                }}
-              >
-                <span className={`notifications-menu__icon notifications-menu__icon--${item.mod}`}>
-                  <i className={`fa-solid ${item.icon}`} aria-hidden="true" />
-                </span>
-                <div className="notifications-menu__body">
-                  <strong>{item.title}</strong>
-                  <p>{item.text}</p>
-                  <time dateTime={item.dateTime}>{item.time}</time>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {recent.length > 0 ? (
+          <ul className="notifications-menu__list">
+            {recent.map((item) => {
+              const dto = notificationsPage?.items.find((entry) => entry.id === item.id);
+              const unread = dto ? !dto.isRead : false;
+              return (
+                <li
+                  key={item.id}
+                  className={`notifications-menu__item${unread ? " notifications-menu__item--unread" : ""}`}
+                >
+                  <Link
+                    className="notifications-menu__link"
+                    to={item.href}
+                    onClick={() => {
+                      if (unread) handleMarkItemRead(item.id);
+                      setOpen(false);
+                    }}
+                  >
+                    <span className={`notifications-menu__icon notifications-menu__icon--${item.mod}`}>
+                      <i className={`fa-solid ${item.icon}`} aria-hidden="true" />
+                    </span>
+                    <div className="notifications-menu__body">
+                      <strong>{item.title}</strong>
+                      <p>{item.text}</p>
+                      <time dateTime={item.dateTime}>{item.time}</time>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="notifications-menu__empty">Nenhuma notificação recente.</p>
+        )}
         <Link className="notifications-menu__footer" to="/notificacoes" onClick={() => setOpen(false)}>
           Ver todas as notificações
         </Link>
