@@ -23,6 +23,19 @@ function runInlineScript(code: string) {
   fn();
 }
 
+function waitForProfileDom(): Promise<void> {
+  return new Promise((resolve) => {
+    function check() {
+      if (document.getElementById("profile-root")) {
+        resolve();
+        return;
+      }
+      requestAnimationFrame(check);
+    }
+    requestAnimationFrame(check);
+  });
+}
+
 export function usePageScript(page: PageEntry | undefined, contentKey: string) {
   const ranRef = useRef<string | null>(null);
 
@@ -38,6 +51,8 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
 
       if (page!.profileAssets) {
         await loadScript("/assets/pessoas-perfil.js");
+        if (cancelled) return;
+        await waitForProfileDom();
         if (cancelled) return;
         window.ProfilePage?.init();
         ranRef.current = key;
@@ -73,6 +88,9 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
 
     return () => {
       cancelled = true;
+      if (ranRef.current === key) {
+        ranRef.current = null;
+      }
     };
   }, [page, contentKey]);
 }

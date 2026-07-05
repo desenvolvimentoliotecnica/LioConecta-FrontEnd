@@ -540,6 +540,12 @@
   function renderProfile(person, allPeople) {
     var colors = getDeptColors(person.dept);
     var root = document.getElementById("profile-root");
+    if (!root) {
+      throw new Error("profile-root not found");
+    }
+    root.hidden = false;
+    var errorEl = document.getElementById("profile-error");
+    if (errorEl) errorEl.hidden = true;
     root.style.setProperty("--profile-accent", colors.stroke);
     root.style.setProperty("--profile-badge-bg", colors.badge);
     root.style.setProperty("--profile-badge-text", colors.text);
@@ -607,14 +613,85 @@
     if (root) root.hidden = true;
   }
 
-  function init() {
-    setupVCardModal();
-    var profileId = getProfileId();
-    if (!profileId) {
-      showError();
-      return;
+  function mapApiProfileToLegacy(dto) {
+    return {
+      id: dto.slug,
+      orgChartId: dto.orgChartId,
+      name: dto.name,
+      title: dto.title || "",
+      dept: dto.departmentName || "",
+      img: dto.photoUrl || "/avatar-maria-silva.png",
+      aboutMe: dto.personalData && dto.personalData.bio ? dto.personalData.bio : "",
+      tags: dto.tags || ["member"],
+      tagLabels: (dto.tags || []).map(function (t) {
+        if (t === "ceo") return "CEO";
+        if (t === "director") return "Liderança";
+        return "Colaborador";
+      }),
+      contact: {
+        email: dto.email,
+        phone: dto.phone || "",
+        location: dto.location || ""
+      },
+      personal: dto.personalData || { visibility: "public" },
+      managerId: null,
+      managerName: dto.managerName || null,
+      skills: (dto.skills || []).map(function (name) {
+        return { name: name, level: 3, endorsements: 0 };
+      }),
+      groups: [],
+      languages: [],
+      links: {},
+      education: [],
+      certifications: [],
+      history: dto.hireDate ? [{ type: "admission", title: dto.title, period: dto.hireDate }] : [],
+      projects: [],
+      recognitions: [],
+      interactions: [],
+      documents: [],
+      communications: [],
+      stats: { recognitions: 0, projects: 0, groups: 0 }
+    };
+  }
+
+  function mapApiSummaryToLegacy(summary) {
+    return {
+      id: summary.slug,
+      name: summary.name,
+      title: summary.title || "",
+      dept: summary.departmentName || "",
+      img: summary.photoUrl || "/avatar-maria-silva.png",
+      managerId: null,
+    };
+  }
+
+  function normalizePeopleList(raw) {
+    if (Array.isArray(raw)) return raw;
+    if (raw && Array.isArray(raw.items)) return raw.items;
+    if (raw && Array.isArray(raw.value)) return raw.value;
+    return [];
+  }
+
+  function loadFromApi(profileId) {
+    if (!global.LioApi || global.LioApi.useMock) {
+      return Promise.reject(new Error("API unavailable"));
     }
-    fetch("data/pessoas-perfis.json")
+
+    return global.LioApi
+      .get("/people/" + encodeURIComponent(profileId) + "/profile")
+      .then(function (dto) {
+        return global.LioApi.get("/people?limit=100").then(function (peopleList) {
+          var allPeople = normalizePeopleList(peopleList).map(mapApiSummaryToLegacy);
+          return {
+            person: mapApiProfileToLegacy(dto),
+            allPeople: allPeople.length ? allPeople : [mapApiProfileToLegacy(dto)]
+          };
+        });
+      });
+  }
+
+  function loadFromJson(profileId) {
+    return fetch("/data/pessoas-perfis.json")
       .then(function (res) {
         return res.json();
       })
@@ -623,11 +700,26 @@
           return p.id === profileId || String(p.orgChartId) === profileId;
         });
         if (!person) {
-          showError();
-          return;
+          throw new Error("Profile not found in JSON");
         }
-        document.getElementById("profile-root").hidden = false;
-        renderProfile(person, data.people || []);
+        return { person: person, allPeople: data.people || [] };
+      });
+  }
+
+  function init() {
+    setupVCardModal();
+    var profileId = getProfileId();
+    if (!profileId) {
+      showError();
+      return;
+    }
+
+    loadFromApi(profileId)
+      .catch(function () {
+        return loadFromJson(profileId);
+      })
+      .then(function (result) {
+        renderProfile(result.person, result.allPeople);
       })
       .catch(function () {
         showError();
@@ -640,10 +732,4 @@
       VIEWER_ROLE = role;
     }
   };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
 })(window);
