@@ -16,6 +16,7 @@ import {
 } from "../api/types";
 
 export const GROUP_CREATE_PAGE_ID = "grupos-criar-grupo";
+export const GROUP_EXPLORE_PAGE_ID = "grupos-explorar";
 
 export const GROUP_TYPE_OPTIONS: Array<{
   value: GroupType;
@@ -136,6 +137,23 @@ export function injectGroupCreatePageStyles(): () => void {
 
   const el = document.createElement("style");
   el.setAttribute("data-page-style", GROUP_CREATE_PAGE_ID);
+  el.textContent = assets.styles;
+  document.head.appendChild(el);
+
+  return () => {
+    document.querySelector(`style[${attr}]`)?.remove();
+  };
+}
+
+export function injectGroupExplorePageStyles(): () => void {
+  const attr = `data-page-style="${GROUP_EXPLORE_PAGE_ID}"`;
+  document.querySelector(`style[${attr}]`)?.remove();
+
+  const assets = pageAssets[GROUP_EXPLORE_PAGE_ID];
+  if (!assets?.styles) return () => undefined;
+
+  const el = document.createElement("style");
+  el.setAttribute("data-page-style", GROUP_EXPLORE_PAGE_ID);
   el.textContent = assets.styles;
   document.head.appendChild(el);
 

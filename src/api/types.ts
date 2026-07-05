@@ -177,6 +177,7 @@ export interface GroupDto {
   isPrivate: boolean;
   owner: PersonSummaryDto;
   memberCount: number;
+  postCount: number;
   isMember: boolean;
   createdAt: string;
   reviewedAt?: string | null;

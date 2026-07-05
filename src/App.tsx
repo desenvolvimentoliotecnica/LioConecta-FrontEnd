@@ -8,6 +8,7 @@ import { NoticiasHubPage } from "./components/pages/NoticiasHubPage";
 import { ParabenizacoesHubPage } from "./components/pages/ParabenizacoesHubPage";
 import { GroupApprovalsPage } from "./components/pages/GroupApprovalsPage";
 import { GroupCreatePage } from "./components/pages/GroupCreatePage";
+import { GroupExplorePage } from "./components/pages/GroupExplorePage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
@@ -78,6 +79,7 @@ function App() {
         <Route path="/pessoas" element={<PessoasHubPage />} />
         <Route path="/grupos" element={<GruposHubPage />} />
         <Route path="/grupos/criar" element={<GroupCreatePage />} />
+        <Route path="/grupos/explorar" element={<GroupExplorePage />} />
         <Route path="/grupos/aprovacoes" element={<GroupApprovalsPage />} />
         <Route path="/servicos/rh" element={<RhHubPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
@@ -91,7 +93,8 @@ function App() {
             page.id === "comunicados-departamentais" ||
             page.id === "comunicados-urgentes" ||
             page.id === "comunicados-arquivo" ||
-            page.id === "grupos-criar-grupo"
+            page.id === "grupos-criar-grupo" ||
+            page.id === "grupos-explorar"
           ) {
             return null;
           }

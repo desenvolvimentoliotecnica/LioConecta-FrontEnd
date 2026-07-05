@@ -4,6 +4,17 @@ import type { CreateGroupRequest, GroupDto, RejectGroupRequest } from "../types"
 
 export const GROUPS_QUERY_KEY = ["groups"] as const;
 
+export function useExploreGroups() {
+  return useQuery({
+    queryKey: [...GROUPS_QUERY_KEY, "explore"],
+    queryFn: async (): Promise<GroupDto[]> => {
+      if (config.useMock) return [];
+      return api.get<GroupDto[]>("/groups/explore");
+    },
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
 export function useMyGroups() {
   return useQuery({
     queryKey: [...GROUPS_QUERY_KEY, "mine"],
@@ -49,6 +60,7 @@ export function useCreateGroup() {
             isActive: true,
           },
           memberCount: 1,
+          postCount: 0,
           isMember: true,
           createdAt: new Date().toISOString(),
         };
