@@ -357,6 +357,17 @@ var(--wf-bg) 70%
   color: #475569;
 }
 
+a.announcement__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+a.announcement__cta:hover {
+  color: #334155;
+}
+
 /* QUICK ACCESS */
 .quick-access {
   margin-bottom: var(--wf-gap);
