@@ -33,7 +33,7 @@ function Dropdown({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  useMenuCloseSync(setOpen, "dropdown");
+  useMenuCloseSync(setOpen, menuId);
 
   const active =
     label === "Pessoas"
@@ -67,7 +67,7 @@ function Dropdown({
         aria-controls={menuId}
         onClick={(e) => {
           e.stopPropagation();
-          closeOtherMenus("dropdown");
+          closeOtherMenus(menuId);
           setOpen((v) => !v);
         }}
       >

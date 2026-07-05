@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { getRecentNotifications } from "../../config/notifications";
 
 type MenuApi = { closeAll: (except: Element | null) => void };
 
 export function NotificationsMenu() {
   const [open, setOpen] = useState(false);
   const [badge, setBadge] = useState(3);
-  const [unread, setUnread] = useState([0, 1, 2]);
+  const recent = getRecentNotifications(3);
+  const [unread, setUnread] = useState(() => recent.map((item) => item.id));
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,9 +33,9 @@ export function NotificationsMenu() {
     setBadge(0);
   };
 
-  const markItemRead = (idx: number) => {
+  const markItemRead = (id: string) => {
     setUnread((prev) => {
-      const next = prev.filter((i) => i !== idx);
+      const next = prev.filter((itemId) => itemId !== id);
       setBadge(next.length);
       return next;
     });
@@ -68,39 +71,40 @@ export function NotificationsMenu() {
           </button>
         </div>
         <ul className="notifications-menu__list">
-          {[
-            { icon: "fa-bullhorn", mod: "comunicado", title: "Novo comunicado oficial", text: "Atualização importante sobre a estratégia 2026.", time: "Há 2 horas" },
-            { icon: "fa-clipboard-check", mod: "rh", title: "Solicitação aprovada", text: "Sua solicitação de férias foi aprovada pelo RH.", time: "Há 5 horas" },
-            { icon: "fa-cake-candles", mod: "social", title: "Aniversariante do dia", text: "Julia Santos completa mais um ano na Liotécnica hoje.", time: "Hoje" },
-          ].map((item, idx) => (
+          {recent.map((item) => (
             <li
-              key={idx}
-              className={`notifications-menu__item${unread.includes(idx) ? " notifications-menu__item--unread" : ""}`}
-              onClick={() => markItemRead(idx)}
+              key={item.id}
+              className={`notifications-menu__item${unread.includes(item.id) ? " notifications-menu__item--unread" : ""}`}
             >
-              <span className={`notifications-menu__icon notifications-menu__icon--${item.mod}`}>
-                <i className={`fa-solid ${item.icon}`} aria-hidden="true" />
-              </span>
-              <div className="notifications-menu__body">
-                <strong>{item.title}</strong>
-                <p>{item.text}</p>
-                <time>{item.time}</time>
-              </div>
+              <Link
+                className="notifications-menu__link"
+                to={item.href}
+                onClick={() => {
+                  markItemRead(item.id);
+                  setOpen(false);
+                }}
+              >
+                <span className={`notifications-menu__icon notifications-menu__icon--${item.mod}`}>
+                  <i className={`fa-solid ${item.icon}`} aria-hidden="true" />
+                </span>
+                <div className="notifications-menu__body">
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                  <time dateTime={item.dateTime}>{item.time}</time>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
-        <a className="notifications-menu__footer" href="/comunicados/oficiais">
+        <Link className="notifications-menu__footer" to="/notificacoes" onClick={() => setOpen(false)}>
           Ver todas as notificações
-        </a>
+        </Link>
       </div>
     </div>
   );
 }
 
-export function useMenuCloseSync(
-  setOpen: (v: boolean) => void,
-  id: "user" | "dropdown" | "notifications"
-) {
+export function useMenuCloseSync(setOpen: (v: boolean) => void, id: string) {
   useEffect(() => {
     function onClose(e: Event) {
       const detail = (e as CustomEvent<{ except?: string }>).detail;

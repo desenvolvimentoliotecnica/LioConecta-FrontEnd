@@ -70,21 +70,30 @@
 .notifications-menu__item {
   display: flex;
   gap: 12px;
-  padding: 10px;
+  padding: 0;
   border-radius: 10px;
-  cursor: pointer;
   transition: background 0.15s ease;
 }
 
-.notifications-menu__item:hover {
+.notifications-menu__link {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.notifications-menu__link:hover {
   background: #f8fafc;
 }
 
-.notifications-menu__item--unread {
+.notifications-menu__item--unread .notifications-menu__link {
   background: #fff7ed;
 }
 
-.notifications-menu__item--unread:hover {
+.notifications-menu__item--unread .notifications-menu__link:hover {
   background: #ffedd5;
 }
 
