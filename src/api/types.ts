@@ -535,3 +535,89 @@ export interface BenefitRequestResultDto {
   status: string;
   message: string;
 }
+
+export interface LeaveSummaryDto {
+  availableDays: number;
+  pendingRequests: number;
+  nextScheduledLabel?: string | null;
+}
+
+export interface LeaveServiceDto {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  sla: string;
+  online: boolean;
+  featured: boolean;
+  action: string;
+  helpText: string;
+  portalUrl?: string | null;
+}
+
+export interface LeavePeriodDto {
+  label: string;
+  acquiredDays: number;
+  usedDays: number;
+  availableDays: number;
+  expiresAt?: string | null;
+}
+
+export interface LeaveBalanceDto {
+  availableDays: number;
+  acquiredDays: number;
+  scheduledDays: number;
+  expiredDays: number;
+  periods: LeavePeriodDto[];
+  notes: string[];
+}
+
+export interface LeaveHistoryItemDto {
+  id: string;
+  title: string;
+  recordType: string;
+  status: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  note?: string | null;
+}
+
+export interface LeaveBancoHorasEntryDto {
+  date: string;
+  description: string;
+  hours: number;
+  type: string;
+}
+
+export interface LeaveBancoHorasDto {
+  balanceHours: number;
+  entries: LeaveBancoHorasEntryDto[];
+}
+
+export interface LeaveTeamMemberDto {
+  name: string;
+  role: string;
+  absenceType: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface LeaveTeamCalendarDto {
+  members: LeaveTeamMemberDto[];
+}
+
+export interface CreateLeaveRequestDto {
+  serviceId: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  notes?: string | null;
+}
+
+export interface LeaveRequestResultDto {
+  requestId: string;
+  recordId: string;
+  status: string;
+  message: string;
+}
