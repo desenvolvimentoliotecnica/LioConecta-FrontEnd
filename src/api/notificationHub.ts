@@ -14,8 +14,27 @@ function buildConnection(): HubConnection {
       withCredentials: true,
     })
     .withAutomaticReconnect([0, 2000, 5000, 10_000, 30_000])
-    .configureLogging(LogLevel.Warning)
+    .configureLogging(import.meta.env.DEV ? LogLevel.Error : LogLevel.Warning)
     .build();
+}
+
+const START_MAX_ATTEMPTS = 3;
+const START_RETRY_MS = 1500;
+
+async function startWithRetry(conn: HubConnection): Promise<void> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= START_MAX_ATTEMPTS; attempt += 1) {
+    try {
+      await conn.start();
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < START_MAX_ATTEMPTS) {
+        await new Promise((resolve) => setTimeout(resolve, START_RETRY_MS * attempt));
+      }
+    }
+  }
+  throw lastError;
 }
 
 async function ensureStarted(): Promise<HubConnection> {
@@ -33,8 +52,7 @@ async function ensureStarted(): Promise<HubConnection> {
   }
 
   if (!startPromise) {
-    startPromise = connection
-      .start()
+    startPromise = startWithRetry(connection)
       .catch((error) => {
         startPromise = null;
         throw error;

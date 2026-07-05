@@ -7,7 +7,7 @@ export function FeedPosts() {
 
   if (config.useMock) return null;
 
-  const socialPosts = (data?.items ?? []).filter((post) => post.type === 0);
+  const posts = data?.items ?? [];
 
   if (isLoading) {
     return (
@@ -27,13 +27,13 @@ export function FeedPosts() {
     );
   }
 
-  if (socialPosts.length === 0) return null;
+  if (posts.length === 0) return null;
 
   return (
     <div className="feed-api-posts" aria-label="Publicações do feed">
       <div className="feed-grid">
         <div className="feed-column">
-          {socialPosts.map((post) => (
+          {posts.map((post) => (
             <FeedPostCard key={post.id} post={post} />
           ))}
         </div>
