@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
+import { useCreatePost } from "../../api/hooks/useFeed";
+import { useMe } from "../../api/hooks/useMe";
+import { config } from "../../api/client";
 import "./feed-composer.css";
 
-const CURRENT_USER = {
+const FALLBACK_USER = {
   name: "Maria Silva",
-  avatar: "/avatar-maria-silva.png",
+  photoUrl: "/avatar-maria-silva.png",
 };
 
 type Attachment = {
@@ -12,14 +15,27 @@ type Attachment = {
 };
 
 export function FeedComposer() {
+  const { data: me } = useMe();
+  const createPost = useCreatePost();
+  const user = me ?? FALLBACK_USER;
+  const avatar = user.photoUrl?.startsWith("/")
+    ? user.photoUrl
+    : user.photoUrl ?? FALLBACK_USER.photoUrl;
+
   const [expanded, setExpanded] = useState(false);
   const [text, setText] = useState("");
   const [attachment, setAttachment] = useState<Attachment | null>(null);
-  const [published, setPublished] = useState(false);
+  const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const canPublish = text.trim().length > 0 || attachment !== null;
+  const canPublish = text.trim().length > 0;
+  const isPublishing = createPost.isPending;
+
+  function showToast(type: "success" | "error", message: string) {
+    setToast({ type, message });
+    window.setTimeout(() => setToast(null), 4000);
+  }
 
   function handleExpand() {
     setExpanded(true);
@@ -40,13 +56,26 @@ export function FeedComposer() {
     setAttachment(null);
   }
 
-  function handlePublish() {
-    if (!canPublish) return;
-    setPublished(true);
-    setText("");
-    removeAttachment();
-    setExpanded(false);
-    window.setTimeout(() => setPublished(false), 4000);
+  async function handlePublish() {
+    if (!canPublish || isPublishing) return;
+
+    if (config.useMock) {
+      showToast("success", "Publicação enviada (modo mock).");
+      setText("");
+      removeAttachment();
+      setExpanded(false);
+      return;
+    }
+
+    try {
+      await createPost.mutateAsync(text.trim());
+      setText("");
+      removeAttachment();
+      setExpanded(false);
+      showToast("success", "Publicação enviada com sucesso!");
+    } catch {
+      showToast("error", "Não foi possível publicar. Tente novamente.");
+    }
   }
 
   function handleCancel() {
@@ -57,20 +86,22 @@ export function FeedComposer() {
 
   return (
     <section className="feed-composer" aria-label="Criar publicação">
-      {published && (
-        <div className="feed-composer__toast" role="status">
-          <i className="fa-solid fa-circle-check" aria-hidden="true" />
-          Publicação enviada com sucesso!
+      {toast && (
+        <div
+          className={`feed-composer__toast feed-composer__toast--${toast.type}`}
+          role="status"
+        >
+          <i
+            className={`fa-solid ${toast.type === "success" ? "fa-circle-check" : "fa-circle-exclamation"}`}
+            aria-hidden="true"
+          />
+          {toast.message}
         </div>
       )}
 
       <article className="card feed-composer__card">
         <div className="feed-composer__top">
-          <img
-            className="avatar avatar--sm"
-            src={CURRENT_USER.avatar}
-            alt={CURRENT_USER.name}
-          />
+          <img className="avatar avatar--sm" src={avatar} alt={user.name} />
 
           {!expanded ? (
             <button
@@ -89,6 +120,7 @@ export function FeedComposer() {
               onChange={(e) => setText(e.target.value)}
               rows={3}
               aria-label="Texto da publicação"
+              disabled={isPublishing}
             />
           )}
         </div>
@@ -101,6 +133,7 @@ export function FeedComposer() {
               className="feed-composer__preview-remove"
               aria-label="Remover imagem"
               onClick={removeAttachment}
+              disabled={isPublishing}
             >
               <i className="fa-solid fa-xmark" aria-hidden="true" />
             </button>
@@ -125,6 +158,7 @@ export function FeedComposer() {
               className="feed-composer__tool feed-composer__tool--photo"
               aria-label="Adicionar foto ou vídeo"
               onClick={() => fileInputRef.current?.click()}
+              disabled={isPublishing}
             >
               <i className="fa-solid fa-image" aria-hidden="true" />
               <span>Foto/vídeo</span>
@@ -134,6 +168,7 @@ export function FeedComposer() {
               className="feed-composer__tool feed-composer__tool--doc"
               aria-label="Anexar documento"
               onClick={handleExpand}
+              disabled={isPublishing}
             >
               <i className="fa-solid fa-file-lines" aria-hidden="true" />
               <span>Documento</span>
@@ -143,6 +178,7 @@ export function FeedComposer() {
               className="feed-composer__tool feed-composer__tool--poll"
               aria-label="Criar enquete"
               onClick={handleExpand}
+              disabled={isPublishing}
             >
               <i className="fa-solid fa-chart-bar" aria-hidden="true" />
               <span>Enquete</span>
@@ -152,6 +188,7 @@ export function FeedComposer() {
               className="feed-composer__tool feed-composer__tool--celebrate"
               aria-label="Parabenizar colega"
               onClick={handleExpand}
+              disabled={isPublishing}
             >
               <i className="fa-solid fa-champagne-glasses" aria-hidden="true" />
               <span>Parabenizar</span>
@@ -164,6 +201,7 @@ export function FeedComposer() {
                 type="button"
                 className="feed-composer__cancel"
                 onClick={handleCancel}
+                disabled={isPublishing}
               >
                 Cancelar
               </button>
@@ -171,10 +209,10 @@ export function FeedComposer() {
             <button
               type="button"
               className="feed-composer__publish"
-              disabled={!canPublish}
-              onClick={handlePublish}
+              disabled={!canPublish || isPublishing}
+              onClick={() => void handlePublish()}
             >
-              Publicar
+              {isPublishing ? "Publicando…" : "Publicar"}
             </button>
           </div>
         </div>

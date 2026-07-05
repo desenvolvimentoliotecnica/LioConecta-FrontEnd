@@ -35,3 +35,44 @@ export interface NotificationDto {
   isRead: boolean;
   createdAt: string;
 }
+
+export type PostType =
+  | "Social"
+  | "Comunicado"
+  | "Poll"
+  | "Celebration"
+  | "News"
+  | "MoodCheck";
+
+export const POST_TYPE_SOCIAL = 0 as const;
+
+export interface PersonSummaryDto {
+  id: string;
+  slug: string;
+  name: string;
+  title?: string | null;
+  photoUrl?: string | null;
+  departmentName?: string | null;
+  location?: string | null;
+  isActive: boolean;
+}
+
+export interface FeedPostDto {
+  id: string;
+  type: number;
+  content: string;
+  author: PersonSummaryDto;
+  createdAt: string;
+  isPinned: boolean;
+  metadata: Record<string, unknown>;
+  commentCount: number;
+  reactionCount: number;
+  viewerReaction?: string | null;
+  comments: unknown[];
+}
+
+export interface CreatePostRequest {
+  type: number;
+  content: string;
+  metadata?: Record<string, unknown> | null;
+}
