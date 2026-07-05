@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
 import { FeedComposer } from "../feed/FeedComposer";
 import { FeedPosts } from "../feed/FeedPosts";
+import { MoodCheckCard } from "../feed/MoodCheckCard";
 import { FEED_PAGE_ID, injectFeedPageStyles, splitFeedHtml } from "../../config/feed";
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
@@ -65,6 +66,7 @@ export function LegacyPage() {
       <main className="main main--feed-scroll" ref={mainRef}>
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
+        <MoodCheckCard />
         <FeedPosts />
         <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
@@ -102,6 +104,7 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
       <main className="main main--feed-scroll" ref={mainRef}>
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
+        <MoodCheckCard />
         <FeedPosts />
         <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
