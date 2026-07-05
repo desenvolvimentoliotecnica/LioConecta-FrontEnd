@@ -43,7 +43,7 @@
       function nextAvatar() {
         const avatar = avatars[avatarIndex % avatars.length];
         avatarIndex += 1;
-        return avatar;
+        return "/" + avatar;
       }
 
       function renderPerson(person) {
