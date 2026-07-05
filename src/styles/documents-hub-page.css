@@ -1,4 +1,4 @@
-/* Hub de Documentos */
+/* Hubs de seção (Documentos, Pessoas, Grupos) */
 
 .docs-hub__controls {
   margin-bottom: var(--wf-gap);
@@ -188,10 +188,44 @@
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.docs-hub__recent-item:hover {
-  background: #fff;
-  border-color: #5eead4;
+.docs-hub__summary-icon--pessoas { background: #fdf2f8; color: #db2777; }
+.docs-hub__summary-icon--grupos { background: #f5f3ff; color: #7c3aed; }
+
+.docs-hub__grid--quad {
+  grid-template-columns: repeat(2, 1fr);
 }
+
+@media (min-width: 1101px) {
+  .docs-hub__grid--quad {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.docs-hub__card--disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.docs-hub__card--diretorio { background: #eff6ff; border-color: #bfdbfe; }
+.docs-hub__card--novos { background: #f0fdf4; border-color: #86efac; }
+.docs-hub__card--aniversariantes { background: #fdf2f8; border-color: #f9a8d4; }
+.docs-hub__card--organograma { background: #f5f3ff; border-color: #c4b5fd; }
+
+.docs-hub__card--meus { background: #eff6ff; border-color: #bfdbfe; }
+.docs-hub__card--explorar { background: #ecfeff; border-color: #5eead4; }
+.docs-hub__card--comunidades { background: #f8fafc; border-color: #cbd5e1; }
+.docs-hub__card--criar { background: #f5f3ff; border-color: #c4b5fd; }
+
+.docs-hub__card-icon--diretorio { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__card-icon--novos { background: #dcfce7; color: #15803d; }
+.docs-hub__card-icon--aniversariantes { background: #fce7f3; color: #be185d; }
+.docs-hub__card-icon--organograma { background: #ede9fe; color: #6d28d9; }
+
+.docs-hub__card-icon--meus { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__card-icon--explorar { background: #cffafe; color: #0f766e; }
+.docs-hub__card-icon--comunidades { background: #e2e8f0; color: #64748b; }
+.docs-hub__card-icon--criar { background: #ede9fe; color: #6d28d9; }
 
 .docs-hub__recent-icon {
   width: 32px;
@@ -203,6 +237,21 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
+}
+
+.docs-hub__recent-item:hover {
+  background: #fff;
+  border-color: #5eead4;
+}
+
+.docs-hub__recent-icon--pessoas {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.docs-hub__recent-icon--grupo {
+  background: #ede9fe;
+  color: #6d28d9;
 }
 
 .docs-hub__recent-body {

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 const LEFT_ITEMS = [
   { label: "Início", icon: "/icon-home.png", href: "/", activeOn: ["/"] },
   { label: "Feed", icon: "/icon-feed.png", href: "/" },
-  { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas/diretorio" },
-  { label: "Grupos", icon: "/icon-groups.png", href: "/grupos/meus-grupos" },
+  { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas", activePrefix: "/pessoas" },
+  { label: "Grupos", icon: "/icon-groups.png", href: "/grupos", activePrefix: "/grupos" },
   { label: "Calendário", icon: "/icon-calendar.png", href: "/calendario" },
   { label: "Documentos", icon: "/icon-documents.png", href: "/documentos", activePrefix: "/documentos" },
 ] as const;

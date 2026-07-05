@@ -7,6 +7,7 @@ import {
   gruposLinks,
   isDropdownActive,
   isDocumentosSectionActive,
+  isGruposSectionActive,
   isPessoasSectionActive,
   pessoasLinks,
   servicosHeadings,
@@ -42,7 +43,9 @@ function Dropdown({
       ? isPessoasSectionActive(location.pathname)
       : label === "Documentos"
         ? isDocumentosSectionActive(location.pathname)
-        : isDropdownActive(location.pathname, items);
+        : label === "Grupos"
+          ? isGruposSectionActive(location.pathname)
+          : isDropdownActive(location.pathname, items);
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
