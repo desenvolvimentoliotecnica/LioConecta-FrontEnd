@@ -4,6 +4,7 @@ import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../
 import type { CommentDto, FeedPostDto } from "../../api/types";
 import { POST_TYPE_COMUNICADO, POST_TYPE_POLL } from "../../api/types";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
+import { ImageLightbox } from "./ImageLightbox";
 import { formatFeedTime, getPostMedia, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
 type Props = {
@@ -41,6 +42,7 @@ export function FeedPostCard({ post }: Props) {
   const formId = useId();
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
   const avatar = authorAvatar(post.author.photoUrl);
   const viewerAvatar = authorAvatar(me?.photoUrl);
@@ -90,8 +92,15 @@ export function FeedPostCard({ post }: Props) {
       data-feed-post-id={post.id}
     >
       {heroImage ? (
-        <div className="post-media post-media--banner">
-          <img src={heroImage} alt="" />
+        <div className="post-media post-media--banner post-media--clickable">
+          <button
+            type="button"
+            className="post-media__trigger"
+            aria-label="Ampliar imagem"
+            onClick={() => setLightboxSrc(heroImage)}
+          >
+            <img src={heroImage} alt="" />
+          </button>
         </div>
       ) : null}
       <div className="card__header">
@@ -114,11 +123,20 @@ export function FeedPostCard({ post }: Props) {
         <div className="card__body">{post.content}</div>
       ) : null}
       {postMedia ? (
-        <div className={`post-media${postMedia.type === "video" ? " post-media--video" : ""}`}>
+        <div
+          className={`post-media${postMedia.type === "video" ? " post-media--video" : " post-media--clickable"}`}
+        >
           {postMedia.type === "video" ? (
             <video src={postMedia.url} controls playsInline preload="metadata" />
           ) : (
-            <img src={postMedia.url} alt="" loading="lazy" />
+            <button
+              type="button"
+              className="post-media__trigger"
+              aria-label="Ampliar imagem"
+              onClick={() => setLightboxSrc(postMedia.url)}
+            >
+              <img src={postMedia.url} alt="" loading="lazy" />
+            </button>
           )}
         </div>
       ) : null}
@@ -189,6 +207,14 @@ export function FeedPostCard({ post }: Props) {
             </button>
           </form>
         </section>
+      ) : null}
+
+      {lightboxSrc ? (
+        <ImageLightbox
+          open
+          src={lightboxSrc}
+          onClose={() => setLightboxSrc(null)}
+        />
       ) : null}
     </article>
   );

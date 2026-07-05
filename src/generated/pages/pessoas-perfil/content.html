@@ -33,6 +33,7 @@
               <div class="profile-hero__name-row">
                 <h1 class="profile-hero__name" id="profile-name"></h1>
                 <span class="profile-hero__pronouns" id="profile-pronouns"></span>
+                <button class="profile-panel__edit profile-hero__edit" type="button" data-edit-section="pronouns" hidden>Editar</button>
               </div>
               <p class="profile-hero__role" id="profile-role"></p>
               <div class="profile-hero__meta">
@@ -66,8 +67,11 @@
                 <h2 class="profile-card__title">Resumo</h2>
                 <div class="profile-stat-grid" id="profile-stats"></div>
               </div>
-              <div class="profile-card">
-                <h2 class="profile-card__title">Disponibilidade</h2>
+              <div class="profile-card" data-profile-section="availability">
+                <div class="profile-card__head">
+                  <h2 class="profile-card__title">Disponibilidade</h2>
+                  <button class="profile-panel__edit" type="button" data-edit-section="availability" hidden>Editar</button>
+                </div>
                 <div class="profile-contact-list" id="profile-availability"></div>
               </div>
               <div class="profile-card">
@@ -78,8 +82,11 @@
                 <h2 class="profile-card__title">Contato</h2>
                 <div class="profile-contact-list" id="profile-contact"></div>
               </div>
-              <div class="profile-card">
-                <h2 class="profile-card__title">Mentor / Buddy</h2>
+              <div class="profile-card" data-profile-section="mentorship">
+                <div class="profile-card__head">
+                  <h2 class="profile-card__title">Mentor / Buddy</h2>
+                  <button class="profile-panel__edit" type="button" data-edit-section="mentorship" hidden>Editar</button>
+                </div>
                 <div class="profile-contact-list" id="profile-mentor"></div>
               </div>
               <div class="profile-card">
@@ -98,20 +105,32 @@
 
             <div>
               <div class="profile-tab-panel" data-tab-panel="overview">
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                <section class="profile-panel" data-profile-section="about">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-regular fa-id-card" aria-hidden="true"></i> Sobre</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="about" hidden>Editar</button>
+                  </div>
                   <p class="profile-bio" id="profile-bio"></p>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                <section class="profile-panel" data-profile-section="skills">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-star" aria-hidden="true"></i> Competências</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="skills" hidden>Editar</button>
+                  </div>
                   <div class="profile-skills" id="profile-skills"></div>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-language" aria-hidden="true"></i> Idiomas</h2>
+                <section class="profile-panel" data-profile-section="languages">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-language" aria-hidden="true"></i> Idiomas</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="languages" hidden>Editar</button>
+                  </div>
                   <div class="profile-lang-list" id="profile-languages"></div>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-link" aria-hidden="true"></i> Links</h2>
+                <section class="profile-panel" data-profile-section="links">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-link" aria-hidden="true"></i> Links</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="links" hidden>Editar</button>
+                  </div>
                   <div id="profile-links"></div>
                 </section>
                 <section class="profile-panel">
@@ -121,20 +140,32 @@
               </div>
 
               <div class="profile-tab-panel" data-tab-panel="career" hidden>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Projetos</h2>
+                <section class="profile-panel" data-profile-section="projects">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Projetos</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="projects" hidden>Editar</button>
+                  </div>
                   <div id="profile-projects"></div>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
+                <section class="profile-panel" data-profile-section="education">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Formação</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="education" hidden>Editar</button>
+                  </div>
                   <div class="profile-timeline" id="profile-education"></div>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Certificações</h2>
+                <section class="profile-panel" data-profile-section="certifications">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Certificações</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="certifications" hidden>Editar</button>
+                  </div>
                   <div class="profile-timeline" id="profile-certifications"></div>
                 </section>
-                <section class="profile-panel">
-                  <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                <section class="profile-panel" data-profile-section="career-history">
+                  <div class="profile-panel__head">
+                    <h2 class="profile-panel__title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Histórico na empresa</h2>
+                    <button class="profile-panel__edit" type="button" data-edit-section="career-history" hidden>Editar</button>
+                  </div>
                   <div class="profile-timeline" id="profile-history"></div>
                 </section>
               </div>
@@ -174,5 +205,278 @@
               <button class="profile-btn profile-btn--primary" type="button" id="profile-vcard-download">Baixar vCard</button>
               <button class="profile-btn" type="button" data-close-vcard>Fechar</button>
             </div>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-about-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-about-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="about"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-about-title">Editar Sobre</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="about" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <label class="profile-edit-field" for="profile-edit-about-input">
+                <span class="profile-edit-field__label">Texto sobre você</span>
+                <textarea id="profile-edit-about-input" class="profile-edit-field__textarea" rows="6" maxlength="2000" placeholder="Conte um pouco sobre sua trajetória, interesses e áreas de atuação."></textarea>
+              </label>
+              <p class="profile-edit-hint">Máximo de 2000 caracteres.</p>
+              <p class="profile-edit-error" id="profile-edit-about-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="about">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-about-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-skills-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-skills-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="skills"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-skills-title">Editar Competências</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="skills" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <div class="profile-edit-list" id="profile-edit-skills-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-skills-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar competência</button>
+              <p class="profile-edit-error" id="profile-edit-skills-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="skills">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-skills-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-languages-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-languages-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="languages"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-languages-title">Editar Idiomas</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="languages" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <div class="profile-edit-list" id="profile-edit-languages-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-languages-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar idioma</button>
+              <p class="profile-edit-error" id="profile-edit-languages-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="languages">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-languages-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-links-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-links-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="links"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-links-title">Editar Links</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="links" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <label class="profile-edit-field" for="profile-edit-link-linkedin">
+                <span class="profile-edit-field__label">LinkedIn</span>
+                <input id="profile-edit-link-linkedin" class="profile-edit-field__input" type="url" placeholder="https://linkedin.com/in/seu-perfil" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-link-github">
+                <span class="profile-edit-field__label">GitHub</span>
+                <input id="profile-edit-link-github" class="profile-edit-field__input" type="url" placeholder="https://github.com/seu-usuario" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-link-portfolio">
+                <span class="profile-edit-field__label">Portfolio</span>
+                <input id="profile-edit-link-portfolio" class="profile-edit-field__input" type="url" placeholder="https://seu-site.com" />
+              </label>
+              <p class="profile-edit-error" id="profile-edit-links-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="links">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-links-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-pronouns-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-pronouns-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="pronouns"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-pronouns-title">Editar pronomes</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="pronouns" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <label class="profile-edit-field" for="profile-edit-pronouns-input">
+                <span class="profile-edit-field__label">Pronomes</span>
+                <input id="profile-edit-pronouns-input" class="profile-edit-field__input" type="text" maxlength="40" placeholder="Ex.: ele/de, she/her" />
+              </label>
+              <p class="profile-edit-error" id="profile-edit-pronouns-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="pronouns">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-pronouns-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-availability-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-availability-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="availability"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-availability-title">Editar disponibilidade</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="availability" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <label class="profile-edit-field" for="profile-edit-availability-model">
+                <span class="profile-edit-field__label">Modelo de trabalho</span>
+                <select id="profile-edit-availability-model" class="profile-edit-field__input">
+                  <option value="">Selecione</option>
+                  <option value="Presencial">Presencial</option>
+                  <option value="Híbrido">Híbrido</option>
+                  <option value="Remoto">Remoto</option>
+                </select>
+              </label>
+              <label class="profile-edit-field" for="profile-edit-availability-schedule">
+                <span class="profile-edit-field__label">Horário</span>
+                <input id="profile-edit-availability-schedule" class="profile-edit-field__input" type="text" maxlength="80" placeholder="Ex.: 09:00–18:00" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-availability-timezone">
+                <span class="profile-edit-field__label">Fuso horário</span>
+                <input id="profile-edit-availability-timezone" class="profile-edit-field__input" type="text" maxlength="60" placeholder="Ex.: GMT-3 (Brasília)" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-availability-floor">
+                <span class="profile-edit-field__label">Andar</span>
+                <input id="profile-edit-availability-floor" class="profile-edit-field__input" type="text" maxlength="40" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-availability-room">
+                <span class="profile-edit-field__label">Sala</span>
+                <input id="profile-edit-availability-room" class="profile-edit-field__input" type="text" maxlength="40" />
+              </label>
+              <p class="profile-edit-error" id="profile-edit-availability-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="availability">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-availability-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-mentorship-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-mentorship-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="mentorship"></div>
+          <div class="profile-edit-modal__dialog">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-mentorship-title">Editar mentor / buddy</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="mentorship" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <h3 class="profile-edit-subtitle">Mentor</h3>
+              <label class="profile-edit-field" for="profile-edit-mentor-name">
+                <span class="profile-edit-field__label">Nome</span>
+                <input id="profile-edit-mentor-name" class="profile-edit-field__input" type="text" maxlength="120" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-mentor-slug">
+                <span class="profile-edit-field__label">Perfil (slug)</span>
+                <input id="profile-edit-mentor-slug" class="profile-edit-field__input" type="text" placeholder="nome-sobrenome" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-mentor-since">
+                <span class="profile-edit-field__label">Desde</span>
+                <input id="profile-edit-mentor-since" class="profile-edit-field__input" type="text" maxlength="40" placeholder="Ex.: jan/2024" />
+              </label>
+              <h3 class="profile-edit-subtitle">Buddy de onboarding</h3>
+              <label class="profile-edit-field" for="profile-edit-buddy-name">
+                <span class="profile-edit-field__label">Nome</span>
+                <input id="profile-edit-buddy-name" class="profile-edit-field__input" type="text" maxlength="120" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-buddy-slug">
+                <span class="profile-edit-field__label">Perfil (slug)</span>
+                <input id="profile-edit-buddy-slug" class="profile-edit-field__input" type="text" placeholder="nome-sobrenome" />
+              </label>
+              <label class="profile-edit-field" for="profile-edit-buddy-since">
+                <span class="profile-edit-field__label">Desde</span>
+                <input id="profile-edit-buddy-since" class="profile-edit-field__input" type="text" maxlength="40" placeholder="Ex.: mar/2025" />
+              </label>
+              <p class="profile-edit-hint">Deixe em branco para remover mentor ou buddy.</p>
+              <p class="profile-edit-error" id="profile-edit-mentorship-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="mentorship">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-mentorship-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-projects-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-projects-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="projects"></div>
+          <div class="profile-edit-modal__dialog profile-edit-modal__dialog--wide">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-projects-title">Editar projetos</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="projects" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <div class="profile-edit-list" id="profile-edit-projects-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-projects-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar projeto</button>
+              <p class="profile-edit-error" id="profile-edit-projects-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="projects">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-projects-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-education-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-education-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="education"></div>
+          <div class="profile-edit-modal__dialog profile-edit-modal__dialog--wide">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-education-title">Editar formação</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="education" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <div class="profile-edit-list" id="profile-edit-education-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-education-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar formação</button>
+              <p class="profile-edit-error" id="profile-edit-education-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="education">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-education-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-certifications-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-certifications-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="certifications"></div>
+          <div class="profile-edit-modal__dialog profile-edit-modal__dialog--wide">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-certifications-title">Editar certificações</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="certifications" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <div class="profile-edit-list" id="profile-edit-certifications-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-certifications-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar certificação</button>
+              <p class="profile-edit-error" id="profile-edit-certifications-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="certifications">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-certifications-save">Salvar</button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="profile-edit-modal" id="profile-edit-career-history-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-edit-career-history-title">
+          <div class="profile-edit-modal__backdrop" data-close-edit="career-history"></div>
+          <div class="profile-edit-modal__dialog profile-edit-modal__dialog--wide">
+            <header class="profile-edit-modal__header">
+              <h2 class="profile-edit-modal__title" id="profile-edit-career-history-title">Editar histórico complementar</h2>
+              <button class="profile-edit-modal__close" type="button" data-close-edit="career-history" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-edit-modal__body">
+              <p class="profile-edit-hint">Registros vindos do TOTVS RM (ex.: admissão) não podem ser editados aqui.</p>
+              <div class="profile-edit-list" id="profile-edit-career-history-list"></div>
+              <button class="profile-edit-add" type="button" id="profile-edit-career-history-add"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar registro</button>
+              <p class="profile-edit-error" id="profile-edit-career-history-error" hidden></p>
+            </div>
+            <footer class="profile-edit-modal__footer">
+              <button class="profile-btn" type="button" data-close-edit="career-history">Cancelar</button>
+              <button class="profile-btn profile-btn--primary" type="button" id="profile-edit-career-history-save">Salvar</button>
+            </footer>
           </div>
         </div>

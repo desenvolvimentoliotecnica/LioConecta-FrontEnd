@@ -521,6 +521,25 @@ min-height: 140px;
   display: block;
 }
 
+.post-media--clickable {
+  cursor: zoom-in;
+}
+
+.post-media__trigger {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.post-media__trigger:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .post-media video {
   width: 100%;
   height: 100%;
