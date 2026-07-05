@@ -320,7 +320,8 @@ var(--wf-bg) 70%
   margin-left: -20px;
 }
 
-.sidebar__item img {
+.sidebar__item img,
+.sidebar__fa-icon {
   width: 40px;
   height: 40px;
   border-radius: 10px;
@@ -330,6 +331,14 @@ var(--wf-bg) 70%
   position: relative;
   z-index: 1;
   background: var(--wf-sidebar-icon-bg);
+}
+
+.sidebar__fa-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e40af;
+  font-size: 16px;
 }
 
 .sidebar__text {
@@ -359,7 +368,8 @@ var(--wf-bg) 70%
   opacity: 0;
 }
 
-.sidebar__item.is-active img {
+.sidebar__item.is-active img,
+.sidebar__item.is-active .sidebar__fa-icon {
   box-shadow:
     0 0 0 2px #fff,
     0 0 0 3px rgba(1, 46, 90, 0.45);

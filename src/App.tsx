@@ -10,6 +10,7 @@ import { BookmarksPage } from "./components/pages/BookmarksPage";
 import { FavoritesPage } from "./components/pages/FavoritesPage";
 import { ShortcutsPage } from "./components/pages/ShortcutsPage";
 import { HelpPage } from "./components/pages/HelpPage";
+import { SitemapPage } from "./components/pages/SitemapPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { NotificationsPage } from "./components/pages/NotificationsPage";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
+        <Route path="/mapa-do-site" element={<SitemapPage />} />
         <Route path="/favoritos" element={<FavoritesPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/atalhos" element={<ShortcutsPage />} />
