@@ -128,6 +128,15 @@ export interface ComunicadoListItemDto {
   isReadByViewer: boolean;
 }
 
+export interface ComunicadoHubDto {
+  oficiaisCount: number;
+  departamentaisCount: number;
+  urgentesCount: number;
+  urgentesUnreadCount: number;
+  arquivoCount: number;
+  recent: ComunicadoListItemDto[];
+}
+
 export interface CreateComunicadoRequest {
   kind: ComunicadoKind;
   title: string;

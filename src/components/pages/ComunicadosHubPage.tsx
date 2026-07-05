@@ -1,15 +1,26 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useComunicadosHub } from "../../api/hooks/useComunicadosHub";
 import {
+  buildComunicadosRecent,
+  buildComunicadosSections,
   COMUNICADOS_HUB_PATH,
-  COMUNICADOS_RECENT,
   filterComunicadosSections,
 } from "../../config/comunicados-hub";
 import "../../styles/documents-hub-page.css";
 
 export function ComunicadosHubPage() {
   const [query, setQuery] = useState("");
-  const sections = useMemo(() => filterComunicadosSections(query), [query]);
+  const { data: hub, isLoading, isError } = useComunicadosHub();
+
+  const sections = useMemo(
+    () => filterComunicadosSections(buildComunicadosSections(hub, { useMockFallback: isError }), query),
+    [hub, query, isError],
+  );
+  const recent = useMemo(
+    () => buildComunicadosRecent(hub, { useMockFallback: isError }),
+    [hub, isError],
+  );
 
   return (
     <main className="main">
@@ -54,6 +65,14 @@ export function ComunicadosHubPage() {
         </label>
       </section>
 
+      {isLoading ? <p className="page-empty-note">Carregando comunicados...</p> : null}
+
+      {isError ? (
+        <p className="page-empty-note">
+          Não foi possível carregar os dados do hub — exibindo informações simuladas.
+        </p>
+      ) : null}
+
       {sections.length > 0 ? (
         <section className="docs-hub__grid docs-hub__grid--quad" aria-label="Categorias de comunicados">
           {sections.map((section) => (
@@ -75,36 +94,40 @@ export function ComunicadosHubPage() {
             </Link>
           ))}
         </section>
-      ) : (
+      ) : !isLoading ? (
         <div className="docs-hub__empty">
           <i className="fa-regular fa-bullhorn" aria-hidden="true" />
           <p>Nenhuma categoria encontrada para a busca informada.</p>
         </div>
-      )}
+      ) : null}
 
       <section className="docs-hub__recent" aria-label="Comunicados acessados recentemente">
-        <h2 className="docs-hub__section-title">Acessados recentemente</h2>
-        <ul className="docs-hub__recent-list">
-          {COMUNICADOS_RECENT.map((item) => (
-            <li key={item.id}>
-              <Link className="docs-hub__recent-item" to={item.href}>
-                <span
-                  className="docs-hub__recent-icon docs-hub__recent-icon--comunicados"
-                  aria-hidden="true"
-                >
-                  <i className={`fa-solid ${item.icon}`} />
-                </span>
-                <span className="docs-hub__recent-body">
-                  <strong>{item.title}</strong>
-                  <span>
-                    {item.section} · {item.date}
+        <h2 className="docs-hub__section-title">Publicados recentemente</h2>
+        {recent.length > 0 ? (
+          <ul className="docs-hub__recent-list">
+            {recent.map((item) => (
+              <li key={item.id}>
+                <Link className="docs-hub__recent-item" to={item.href}>
+                  <span
+                    className="docs-hub__recent-icon docs-hub__recent-icon--comunicados"
+                    aria-hidden="true"
+                  >
+                    <i className={`fa-solid ${item.icon}`} />
                   </span>
-                </span>
-                <i className="fa-solid fa-chevron-right docs-hub__recent-chevron" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
+                  <span className="docs-hub__recent-body">
+                    <strong>{item.title}</strong>
+                    <span>
+                      {item.section} · {item.date}
+                    </span>
+                  </span>
+                  <i className="fa-solid fa-chevron-right docs-hub__recent-chevron" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : !isLoading ? (
+          <p className="page-empty-note">Nenhum comunicado publicado recentemente.</p>
+        ) : null}
       </section>
     </main>
   );
