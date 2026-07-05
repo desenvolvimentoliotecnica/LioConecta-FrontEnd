@@ -56,6 +56,15 @@ export function ContrachequePage() {
     [servicesQuery.data, category, query],
   );
 
+  const summaryData = summaryQuery.data;
+  const syncedLabel = useMemo(() => {
+    if (!summaryData?.syncedAt) {
+      return null;
+    }
+
+    return `Atualizado em ${new Date(summaryData.syncedAt).toLocaleString("pt-BR")}`;
+  }, [summaryData?.syncedAt]);
+
   const latest = historyQuery.data?.[0];
   const previous = historyQuery.data?.[1];
 
@@ -145,6 +154,19 @@ export function ContrachequePage() {
           </p>
         </div>
       </div>
+
+      {syncedLabel ? (
+        <p className="pay-sync-meta">
+          {syncedLabel}
+          {summaryData?.dataSource ? ` · origem ${summaryData.dataSource}` : ""}
+        </p>
+      ) : null}
+
+      {summaryData?.userMessage ? (
+        <div className="pay-alert" role="alert">
+          {summaryData.userMessage}
+        </div>
+      ) : null}
 
       <div className="pay-stats" aria-label="Resumo de contracheque">
         <div className="pay-stat">

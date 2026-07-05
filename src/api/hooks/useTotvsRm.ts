@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
 import { PONTO_PERIODS_QUERY_KEY } from "./usePonto";
+import { PAYSLIPS_QUERY_KEY } from "./usePayslips";
 import type {
   TotvsRmConfigurationDto,
   TotvsRmConnectionTestResponse,
@@ -25,6 +26,7 @@ export function useSaveTotvsRmConfiguration() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: TOTVS_RM_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: PONTO_PERIODS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: PAYSLIPS_QUERY_KEY });
     },
   });
 }

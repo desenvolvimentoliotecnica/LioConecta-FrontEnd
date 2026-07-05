@@ -179,12 +179,19 @@ export function Topbar() {
       </div>
 
       <div className="search">
-        <div className="search__field">
+        <label className="search__field">
           <span className="search__icon" aria-hidden="true">
             <i className="fa-solid fa-magnifying-glass" />
           </span>
-          Buscar pessoas, grupos, documentos e mais...
-        </div>
+          <input
+            type="search"
+            className="search__input"
+            placeholder="Buscar pessoas, grupos, documentos..."
+            aria-label="Buscar pessoas, grupos, documentos e mais"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </label>
       </div>
 
       <div className="topbar__actions">

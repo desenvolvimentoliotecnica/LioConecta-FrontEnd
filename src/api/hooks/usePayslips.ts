@@ -122,3 +122,21 @@ export async function downloadPayslipPdf(year: number, month: number): Promise<v
   anchor.click();
   URL.revokeObjectURL(url);
 }
+
+export async function openPayslipPdfForPrint(year: number, month: number): Promise<void> {
+  const blob = await api.getBlob(`/rh/payslips/${year}/${month}/pdf`);
+  const url = URL.createObjectURL(blob);
+  const printWindow = window.open(url, "_blank", "noopener,noreferrer");
+
+  if (!printWindow) {
+    URL.revokeObjectURL(url);
+    throw new Error("Não foi possível abrir o PDF para impressão.");
+  }
+
+  printWindow.addEventListener("load", () => {
+    printWindow.focus();
+    printWindow.print();
+  });
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}

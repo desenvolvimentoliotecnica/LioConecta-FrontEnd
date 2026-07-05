@@ -1,4 +1,8 @@
-import { usePayslipDetail } from "../../api/hooks/usePayslips";
+import {
+  downloadPayslipPdf,
+  openPayslipPdfForPrint,
+  usePayslipDetail,
+} from "../../api/hooks/usePayslips";
 import type { PayslipDetailDto } from "../../api/types";
 import { formatMoney } from "../../utils/money";
 import { ContrachequeModal } from "./ContrachequeModal";
@@ -89,6 +93,8 @@ export function PayslipViewerModal({
 }: Props) {
   const { data, isLoading, isError } = usePayslipDetail(open ? year : null, open ? month : null);
 
+  const canExport = year !== null && month !== null;
+
   return (
     <ContrachequeModal
       open={open}
@@ -97,6 +103,31 @@ export function PayslipViewerModal({
       onClose={onClose}
       showValues={showValues}
       onToggleShowValues={onToggleShowValues}
+      footer={
+        <>
+          {canExport ? (
+            <>
+              <button
+                type="button"
+                className="pay-modal__btn pay-modal__btn--ghost"
+                onClick={() => void downloadPayslipPdf(year, month)}
+              >
+                <i className="fa-regular fa-file-pdf" aria-hidden="true" /> Baixar PDF
+              </button>
+              <button
+                type="button"
+                className="pay-modal__btn pay-modal__btn--ghost"
+                onClick={() => void openPayslipPdfForPrint(year, month)}
+              >
+                <i className="fa-solid fa-print" aria-hidden="true" /> Imprimir
+              </button>
+            </>
+          ) : null}
+          <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={onClose}>
+            Fechar
+          </button>
+        </>
+      }
     >
       {isLoading ? <p className="pay-status">Carregando holerite…</p> : null}
       {isError ? <p className="pay-status">Não foi possível carregar o holerite.</p> : null}

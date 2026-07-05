@@ -371,6 +371,10 @@ export interface PayslipSummaryDto {
   latestCompetence: string;
   latestNetAmount: number;
   historyCount: number;
+  availabilityStatus?: string | null;
+  userMessage?: string | null;
+  dataSource?: string | null;
+  syncedAt?: string | null;
 }
 
 export interface PayslipServiceDto {
@@ -390,6 +394,7 @@ export interface PayslipLineDto {
   label: string;
   amount: number;
   quantity?: number | null;
+  reference?: string | null;
 }
 
 export interface PayslipListItemDto {
@@ -399,6 +404,7 @@ export interface PayslipListItemDto {
   grossAmount: number;
   netAmount: number;
   publishedAt: string;
+  paymentType?: string;
 }
 
 export interface PayslipDetailDto {
