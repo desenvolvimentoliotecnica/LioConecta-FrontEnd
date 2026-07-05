@@ -1,30 +1,53 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api/v1";
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+import { apiConfig as config } from "./config";
+import { applyObservabilityHeaders } from "../telemetry/sessionCorrelation";
 
-export const config = {
-  apiBaseUrl: API_BASE.replace(/\/$/, ""),
-  useMock: USE_MOCK,
-  azureClientId: import.meta.env.VITE_AZURE_CLIENT_ID ?? "",
-  azureTenantId: import.meta.env.VITE_AZURE_TENANT_ID ?? "",
-  azureApiScope: import.meta.env.VITE_AZURE_API_SCOPE ?? "",
-};
+let networkErrorTracker: ((path: string, status: number, correlationId?: string) => void) | undefined;
+
+export function setNetworkErrorTracker(
+  tracker: (path: string, status: number, correlationId?: string) => void
+) {
+  networkErrorTracker = tracker;
+}
+
+export { config };
 
 type TokenProvider = () => Promise<string | null>;
 
 let tokenProvider: TokenProvider = async () => null;
 
+function applyDefaultHeaders(headers: Headers, init: RequestInit = {}) {
+  if (init.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  applyObservabilityHeaders(headers);
+}
+
 export function setTokenProvider(provider: TokenProvider) {
   tokenProvider = provider;
 }
 
+function extractCorrelationId(body: unknown): string | undefined {
+  if (!body || typeof body !== "object") {
+    return undefined;
+  }
+
+  const value = (body as Record<string, unknown>).correlationId;
+  return typeof value === "string" ? value : undefined;
+}
+
 export class ApiError extends Error {
+  readonly correlationId?: string;
+
   constructor(
     message: string,
     readonly status: number,
-    readonly body?: unknown
+    readonly body?: unknown,
+    correlationId?: string
   ) {
     super(message);
     this.name = "ApiError";
+    this.correlationId = correlationId ?? extractCorrelationId(body);
   }
 }
 
@@ -43,9 +66,7 @@ export async function apiFetch<T>(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  if (init.body && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
+  applyDefaultHeaders(headers, init);
 
   const response = await fetch(`${config.apiBaseUrl}${path}`, {
     ...init,
@@ -59,7 +80,13 @@ export async function apiFetch<T>(
     } catch {
       body = await response.text();
     }
-    throw new ApiError(`API ${response.status}: ${path}`, response.status, body);
+
+    const correlationId =
+      response.headers.get("X-Correlation-Id") ?? extractCorrelationId(body);
+
+    networkErrorTracker?.(path, response.status, correlationId ?? undefined);
+
+    throw new ApiError(`API ${response.status}: ${path}`, response.status, body, correlationId ?? undefined);
   }
 
   if (response.status === 204) {
@@ -81,6 +108,8 @@ export async function apiUpload<T>(path: string, formData: FormData): Promise<T>
     headers.set("Authorization", `Bearer ${token}`);
   }
 
+  applyDefaultHeaders(headers);
+
   const response = await fetch(`${config.apiBaseUrl}${path}`, {
     method: "POST",
     headers,
@@ -94,7 +123,13 @@ export async function apiUpload<T>(path: string, formData: FormData): Promise<T>
     } catch {
       body = await response.text();
     }
-    throw new ApiError(`API ${response.status}: ${path}`, response.status, body);
+
+    const correlationId =
+      response.headers.get("X-Correlation-Id") ?? extractCorrelationId(body);
+
+    networkErrorTracker?.(path, response.status, correlationId ?? undefined);
+
+    throw new ApiError(`API ${response.status}: ${path}`, response.status, body, correlationId ?? undefined);
   }
 
   return (await response.json()) as T;
@@ -120,9 +155,13 @@ export const api = {
       headers.set("Authorization", `Bearer ${token}`);
     }
 
+    applyDefaultHeaders(headers);
+
     const response = await fetch(`${config.apiBaseUrl}${path}`, { headers });
     if (!response.ok) {
-      throw new ApiError(`API ${response.status}: ${path}`, response.status);
+      const correlationId = response.headers.get("X-Correlation-Id") ?? undefined;
+      networkErrorTracker?.(path, response.status, correlationId);
+      throw new ApiError(`API ${response.status}: ${path}`, response.status, undefined, correlationId);
     }
 
     return response.blob();

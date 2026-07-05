@@ -250,6 +250,31 @@ export function buildSitemapSections(): SitemapSection[] {
           "Credenciais, integrações e parâmetros operacionais — persistidos no banco.",
         ),
         entry(
+          "Trilha de auditoria",
+          "/admin/trilha-auditoria",
+          "Consulta paginada de eventos de mutações HTTP e alterações de entidades.",
+        ),
+        entry(
+          "Observabilidade",
+          "/admin/observabilidade",
+          "Hub de logs, métricas, acessos e investigação por correlation ID.",
+        ),
+        entry(
+          "Workers",
+          "/admin/workers",
+          "Monitoramento de jobs em background — execuções, logs e disparo manual.",
+        ),
+        entry(
+          "TOTVS RM — Ponto",
+          "/admin/totvs-rm",
+          "Configuração SQL Server read-only para integração de espelho de ponto.",
+        ),
+        entry(
+          "Configurações observabilidade",
+          "/admin/configuracoes-backend?category=observability",
+          "Retenção, OTel, page views e access audit — seção observability do backend.",
+        ),
+        entry(
           "Aprovações de grupos",
           "/grupos/aprovacoes",
           "Fila de grupos aguardando aprovação de administrador.",

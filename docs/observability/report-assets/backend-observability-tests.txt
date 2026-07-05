@@ -1,0 +1,10 @@
+C:\Users\leonardo.mendes\Projects\LioConecta.Backend\src\LioConecta.Api\LioConecta.Api.csproj : warning NU1902: O pacote 'OpenTelemetry.Exporter.OpenTelemetryProtocol' 1.9.0 tem uma moderado vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-4625-4j76-fww9
+  LioConecta.Domain -> C:\Users\leonardo.mendes\Projects\LioConecta.Backend\src\LioConecta.Domain\bin\Debug\net8.0\LioConecta.Domain.dll
+  LioConecta.Application -> C:\Users\leonardo.mendes\Projects\LioConecta.Backend\src\LioConecta.Application\bin\Debug\net8.0\LioConecta.Application.dll
+  LioConecta.Infrastructure -> C:\Users\leonardo.mendes\Projects\LioConecta.Backend\src\LioConecta.Infrastructure\bin\Debug\net8.0\LioConecta.Infrastructure.dll
+  LioConecta.Api -> C:\Users\leonardo.mendes\Projects\LioConecta.Backend\src\LioConecta.Api\bin\Debug\net8.0\LioConecta.Api.dll
+  LioConecta.IntegrationTests -> C:\Users\leonardo.mendes\Projects\LioConecta.Backend\tests\LioConecta.IntegrationTests\bin\Debug\net8.0\LioConecta.IntegrationTests.dll
+Execução de teste para C:\Users\leonardo.mendes\Projects\LioConecta.Backend\tests\LioConecta.IntegrationTests\bin\Debug\net8.0\LioConecta.IntegrationTests.dll (.NETCoreApp,Version=v8.0)
+1 arquivos de teste no total corresponderam ao padrão especificado.
+
+Aprovado!  – Com falha:     0, Aprovado:    16, Ignorado:     0, Total:    16, Duração: 3 s - LioConecta.IntegrationTests.dll (net8.0)

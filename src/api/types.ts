@@ -621,3 +621,275 @@ export interface LeaveRequestResultDto {
   status: string;
   message: string;
 }
+
+export type AuditSource = "HttpRequest" | "EntityChange";
+
+export interface AuditEventDto {
+  id: string;
+  correlationId: string;
+  transactionId: string;
+  source: AuditSource | number;
+  action: string;
+  actorId?: string | null;
+  actorName?: string | null;
+  targetType: string;
+  targetId: string;
+  httpMethod?: string | null;
+  path?: string | null;
+  statusCode?: number | null;
+  durationMs?: number | null;
+  detailsJson?: string | null;
+  createdAt: string;
+}
+
+export interface AuditEventQueryParams {
+  action?: string;
+  actorId?: string;
+  targetType?: string;
+  correlationId?: string;
+  source?: AuditSource;
+  from?: string;
+  to?: string;
+  httpStatus?: AuditHttpStatusFilter;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface AuditEventSummaryDto {
+  totalCount: number;
+  httpCount: number;
+  entityCount: number;
+  errorCount: number;
+  uniqueActors: number;
+  uniqueActions: number;
+}
+
+export type AuditHttpStatusFilter = "" | "success" | "error";
+
+export interface PagedAuditEventsDto {
+  items: AuditEventDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface ObservabilitySummaryDto {
+  errorsLast24h: number;
+  httpErrorRate: number;
+  p95LatencyMs?: number | null;
+  requestsPerMinute: number;
+  dailyActiveUsers: number;
+  pageViews: number;
+  accessDenied: number;
+  authFailures: number;
+  topModule?: string | null;
+  topPage?: string | null;
+  observabilityEvents: number;
+  accessEvents: number;
+}
+
+export interface ObservabilityEventListItemDto {
+  id: string;
+  occurredAt: string;
+  eventType: string;
+  eventName: string;
+  severity: number;
+  userId?: string | null;
+  userName?: string | null;
+  correlationId: string;
+  routeTemplate?: string | null;
+  metadataJson?: string | null;
+}
+
+export interface PageViewListItemDto {
+  id: string;
+  occurredAt: string;
+  userId?: string | null;
+  userName?: string | null;
+  sessionId: string;
+  correlationId: string;
+  pageName: string;
+  routeTemplate: string;
+  module: string;
+  referrerTemplate?: string | null;
+  durationMs?: number | null;
+}
+
+export interface AccessEventListItemDto {
+  id: string;
+  occurredAt: string;
+  eventType: string;
+  eventName: string;
+  userId?: string | null;
+  userName?: string | null;
+  usernameSnapshot?: string | null;
+  correlationId: string;
+  resource?: string | null;
+  action?: string | null;
+  result: string;
+  reasonCode?: string | null;
+}
+
+export interface PagedObservabilityEventsDto {
+  items: ObservabilityEventListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PagedPageViewsDto {
+  items: PageViewListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PagedAccessEventsDto {
+  items: AccessEventListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface ObservabilityMetricPointDto {
+  timestamp: string;
+  value: number;
+}
+
+export interface ObservabilityMetricsDto {
+  requestsPerMinute: ObservabilityMetricPointDto[];
+  errorRate: ObservabilityMetricPointDto[];
+  p95LatencyMs: ObservabilityMetricPointDto[];
+}
+
+export interface ObservabilityTimelineItemDto {
+  occurredAt: string;
+  source: string;
+  label: string;
+  detail?: string | null;
+  referenceId: string;
+}
+
+export interface ObservabilityTimelineDto {
+  correlationId: string;
+  items: ObservabilityTimelineItemDto[];
+}
+
+export interface PontoEntryDto {
+  date: string;
+  weekdayLabel: string;
+  clockIn: string;
+  lunchOut: string;
+  lunchIn: string;
+  clockOut: string;
+  breakMinutes: string;
+  workedHours: string;
+  balanceHours: string;
+  status: string;
+}
+
+export interface PontoSummaryDto {
+  periodLabel: string;
+  workedHours: string;
+  expectedHours: string;
+  balanceHours: string;
+  absences: number;
+  delays: number;
+}
+
+export interface PontoResponseDto {
+  title: string;
+  summary?: PontoSummaryDto | null;
+  entries: PontoEntryDto[];
+  provider: string;
+  isSimulated: boolean;
+  availabilityStatus?: string | null;
+  userMessage?: string | null;
+  dataSource?: string | null;
+  syncedAt?: string | null;
+}
+
+export interface WorkerDefinitionDto {
+  key: string;
+  label: string;
+  description: string;
+  intervalSettingKey?: string | null;
+  defaultIntervalMinutes?: number | null;
+}
+
+export interface WorkerRunDto {
+  id: string;
+  workerKey: string;
+  status: string;
+  triggerSource: string;
+  startedAtUtc: string;
+  finishedAtUtc?: string | null;
+  errorMessage?: string | null;
+}
+
+export interface WorkerRunLogDto {
+  id: string;
+  loggedAtUtc: string;
+  level: string;
+  message: string;
+}
+
+export interface WorkerRunDetailDto {
+  run: WorkerRunDto;
+  logs: WorkerRunLogDto[];
+}
+
+export interface WorkerTriggerResultDto {
+  runId: string;
+  workerKey: string;
+  status: string;
+  errorMessage?: string | null;
+}
+
+export interface TotvsRmConfigurationDto {
+  id: string;
+  isEnabled: boolean;
+  server: string;
+  port: number;
+  database: string;
+  userName: string;
+  hasPassword: boolean;
+  trustServerCertificate: boolean;
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+  updatedAt: string;
+}
+
+export interface UpsertTotvsRmConfigurationRequest {
+  isEnabled: boolean;
+  server: string;
+  port: number;
+  database: string;
+  userName: string;
+  password?: string | null;
+  trustServerCertificate: boolean;
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+}
+
+export interface PontoPeriodOptionDto {
+  endMonth: number;
+  endYear: number;
+  label: string;
+}
+
+export interface PontoPeriodSettingsDto {
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+  options: PontoPeriodOptionDto[];
+}
+
+export interface TotvsRmConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+}

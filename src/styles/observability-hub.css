@@ -1,0 +1,207 @@
+.observability-hub__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--wf-gap);
+}
+
+.observability-hub__tab {
+  border: 1px dashed var(--wf-border);
+  background: #fff;
+  color: #334155;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.observability-hub__tab.is-active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #fff;
+}
+
+.observability-hub__empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--wf-text-muted);
+}
+
+.observability-hub__links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.observability-hub__link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.observability-hub__link-card:hover {
+  border-color: #0f766e;
+  box-shadow: 0 8px 24px rgba(15, 118, 110, 0.08);
+}
+
+.observability-hub__link-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #0f766e;
+  display: grid;
+  place-items: center;
+}
+
+.observability-hub__link-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.observability-hub__link-card-text {
+  font-size: 13px;
+  color: var(--wf-text-muted);
+  line-height: 1.45;
+}
+
+.observability-hub__investigate-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.observability-hub__investigate-form input {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.analytics-kpi-grid.observability-hub__kpi-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin-bottom: var(--wf-gap);
+}
+
+.observability-hub__kpi-grid .analytics-kpi {
+  padding: 12px 14px;
+}
+
+.observability-hub__kpi-grid .analytics-kpi__value {
+  font-size: 20px;
+}
+
+.observability-hub__kpi-grid .analytics-kpi__label {
+  font-size: 11px;
+}
+
+.observability-timeline__meta {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--wf-text-muted);
+}
+
+.observability-timeline__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid #e2e8f0;
+}
+
+.observability-timeline__item {
+  position: relative;
+  padding: 0 0 18px 20px;
+}
+
+.observability-timeline__marker {
+  position: absolute;
+  left: -6px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #0f766e;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #cbd5e1;
+}
+
+.observability-timeline__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--wf-text-muted);
+}
+
+.observability-timeline__badge {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.observability-timeline__badge--page-view {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.observability-timeline__badge--access-event {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.observability-timeline__badge--observability-event {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.observability-timeline__badge--audit-event {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.observability-timeline__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.observability-timeline__detail {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--wf-text-muted);
+  word-break: break-word;
+}
+
+.observability-timeline__link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+@media (max-width: 1200px) {
+  .analytics-kpi-grid.observability-hub__kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .analytics-kpi-grid.observability-hub__kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
