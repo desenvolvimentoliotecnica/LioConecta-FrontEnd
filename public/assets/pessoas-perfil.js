@@ -3,6 +3,28 @@
 
   var VIEWER_ROLE = "colleague";
 
+  function mapViewerRole(viewerContext) {
+    if (viewerContext === 2 || viewerContext === "Self") return "self";
+    if (viewerContext === 1 || viewerContext === "HR") return "rh";
+    if (viewerContext === 3 || viewerContext === "Admin") return "admin";
+    return "colleague";
+  }
+
+  function profileHref(slug) {
+    return "/pessoas/perfil?id=" + encodeURIComponent(slug);
+  }
+
+  function orgChartHref(focusId) {
+    return focusId
+      ? "/pessoas/organograma?focus=" + encodeURIComponent(focusId)
+      : "/pessoas/organograma";
+  }
+
+  function formatStatValue(value) {
+    if (value === null || value === undefined || value === "") return "—";
+    return value;
+  }
+
   var deptColors = {
     Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
     Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
@@ -76,17 +98,18 @@
   }
 
   function canViewRhData(person) {
-    return VIEWER_ROLE === "rh" || person.personal.visibility !== "rh-only";
+    return VIEWER_ROLE === "rh" || VIEWER_ROLE === "admin" || VIEWER_ROLE === "self" ||
+      person.personal.visibility !== "rh-only";
   }
 
   function renderBreadcrumb(person, allPeople) {
     var peopleIndex = buildPeopleIndex(allPeople);
     var chain = buildHierarchyChain(person, peopleIndex);
-    var html = '<a href="pessoas-organograma.html">Organograma</a>';
+    var html = '<a href="' + orgChartHref() + '">Organograma</a>';
     chain.forEach(function (ancestor) {
       html +=
         '<span class="breadcrumb__sep">/</span>' +
-        '<a href="pessoas-perfil.html?id=' + encodeURIComponent(ancestor.id) + '">' +
+        '<a href="' + profileHref(ancestor.id) + '">' +
         ancestor.name + "</a>";
     });
     html += '<span class="breadcrumb__sep">/</span>';
@@ -134,14 +157,12 @@
     var peopleIndex = buildPeopleIndex(allPeople);
     var chain = buildHierarchyChain(person, peopleIndex);
     var html = '<span class="profile-mini-org__label">Cadeia hierárquica:</span>';
-    html += '<a class="profile-mini-org__item" href="pessoas-organograma.html?focus=' +
-      encodeURIComponent(person.id) + '"><i class="fa-solid fa-sitemap"></i> Organograma</a>';
+    html += '<a class="profile-mini-org__item" href="' + orgChartHref(person.id) + '"><i class="fa-solid fa-sitemap"></i> Organograma</a>';
     chain.forEach(function (node) {
       html += '<span class="profile-mini-org__sep">›</span>';
       html +=
-        '<a class="profile-mini-org__item" href="pessoas-perfil.html?id=' +
-        encodeURIComponent(node.id) + '">' +
-        '<img src="' + node.img + '" alt="" />' + node.name + "</a>";
+        '<a class="profile-mini-org__item" href="' + profileHref(node.id) + '">' +
+        (node.img ? '<img src="' + node.img + '" alt="" />' : "") + node.name + "</a>";
     });
     html += '<span class="profile-mini-org__sep">›</span>';
     html += '<span class="profile-mini-org__current">' + person.name + "</span>";
@@ -151,12 +172,12 @@
   function renderStats(person) {
     var stats = person.stats || {};
     var items = [
-      { value: stats.tenureYears || 0, label: "Anos de casa", tab: null },
-      { value: (person.roleTenure && person.roleTenure.years) || 0, label: "Anos no cargo", tab: "career" },
-      { value: stats.directReports || 0, label: "Reportes diretos", tab: "overview" },
-      { value: stats.groups || 0, label: "Grupos", tab: "overview" },
-      { value: stats.recognitions || 0, label: "Reconhecimentos", tab: "activity" },
-      { value: stats.projectsCount || 0, label: "Projetos", tab: "career" }
+      { value: stats.tenureYears, label: "Anos de casa", tab: null },
+      { value: person.roleTenure && person.roleTenure.years, label: "Anos no cargo", tab: "career" },
+      { value: stats.directReports, label: "Reportes diretos", tab: "overview" },
+      { value: stats.groups, label: "Grupos", tab: "overview" },
+      { value: stats.recognitions, label: "Reconhecimentos", tab: "activity" },
+      { value: stats.projectsCount, label: "Projetos", tab: "career" }
     ];
     return items.map(function (item) {
       var tag = item.tab
@@ -164,7 +185,7 @@
         : ' class="profile-stat"';
       return (
         "<button type=\"button\"" + tag + ">" +
-        '<span class="profile-stat__value">' + item.value + "</span>" +
+        '<span class="profile-stat__value">' + formatStatValue(item.value) + "</span>" +
         '<span class="profile-stat__label">' + item.label + "</span>" +
         "</button>"
       );
@@ -181,10 +202,12 @@
     }
     var personal = person.personal || {};
     return (
-      '<div class="profile-contact-item"><span class="profile-contact-item__label">Nome completo</span><span class="profile-contact-item__value">' + (personal.fullName || person.name) + "</span></div>" +
+      '<div class="profile-contact-item"><span class="profile-contact-item__label">Nome completo</span><span class="profile-contact-item__value">' + (personal.fullName || person.name || "—") + "</span></div>" +
+      '<div class="profile-contact-item"><span class="profile-contact-item__label">Matrícula</span><span class="profile-contact-item__value">' + (personal.matricula || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Data de nascimento</span><span class="profile-contact-item__value">' + (personal.birthDate || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">CPF</span><span class="profile-contact-item__value">' + (personal.cpf || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">RG</span><span class="profile-contact-item__value">' + (personal.rg || "—") + "</span></div>" +
+      '<div class="profile-contact-item"><span class="profile-contact-item__label">Endereço</span><span class="profile-contact-item__value">' + (personal.address || personal.cityState || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Estado civil</span><span class="profile-contact-item__value">' + (personal.maritalStatus || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Nacionalidade</span><span class="profile-contact-item__value">' + (personal.nationality || "—") + "</span></div>"
     );
@@ -194,8 +217,8 @@
     var contact = person.contact || {};
     var avail = person.availability || {};
     var managerHtml = person.managerId
-      ? '<a href="pessoas-perfil.html?id=' + person.managerId + '">' + person.managerName + "</a>"
-      : "—";
+      ? '<a href="' + profileHref(person.managerId) + '">' + (person.managerName || "—") + "</a>"
+      : (person.managerName || "—");
     return (
       '<div class="profile-contact-item"><span class="profile-contact-item__label">E-mail</span><span class="profile-contact-item__value"><a href="mailto:' + contact.email + '">' + contact.email + "</a></span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Telefone / Ramal</span><span class="profile-contact-item__value">' + (contact.phone || "—") + "</span></div>" +
@@ -203,7 +226,7 @@
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Microsoft Teams</span><span class="profile-contact-item__value"><a href="https://teams.microsoft.com/l/chat/0/0?users=' + encodeURIComponent(contact.email || "") + '">' + (contact.teams || "—") + "</a></span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Modelo de trabalho</span><span class="profile-contact-item__value">' + (avail.workModel || "—") + " · " + (avail.schedule || "") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Escritório</span><span class="profile-contact-item__value">' + (avail.floor || "—") + " · " + (avail.room || "—") + "</span></div>" +
-      '<div class="profile-contact-item"><span class="profile-contact-item__label">Admissão</span><span class="profile-contact-item__value">' + person.admission + "</span></div>" +
+      '<div class="profile-contact-item"><span class="profile-contact-item__label">Admissão</span><span class="profile-contact-item__value">' + (person.admission || "—") + "</span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Reporta-se a</span><span class="profile-contact-item__value">' + managerHtml + "</span></div>"
     );
   }
@@ -222,14 +245,14 @@
     if (person.buddy) {
       return (
         '<div class="profile-contact-item"><span class="profile-contact-item__label">Buddy de onboarding</span>' +
-        '<span class="profile-contact-item__value"><a href="pessoas-perfil.html?id=' + person.buddy.id + '">' +
+        '<span class="profile-contact-item__value"><a href="' + profileHref(person.buddy.id) + '">' +
         person.buddy.name + "</a> · desde " + person.buddy.since + "</span></div>"
       );
     }
     if (person.mentor) {
       return (
         '<div class="profile-contact-item"><span class="profile-contact-item__label">Mentor</span>' +
-        '<span class="profile-contact-item__value"><a href="pessoas-perfil.html?id=' + person.mentor.id + '">' +
+        '<span class="profile-contact-item__value"><a href="' + profileHref(person.mentor.id) + '">' +
         person.mentor.name + "</a> · desde " + person.mentor.since + "</span></div>"
       );
     }
@@ -343,7 +366,7 @@
         "<div>" +
         '<div class="profile-recognition__title">' + r.title + "</div>" +
         '<div class="profile-recognition__detail">' + r.detail + "</div>" +
-        '<div class="profile-recognition__meta">Por <a href="pessoas-perfil.html?id=' + r.authorId + '">' + r.author + "</a> · " + formatDate(r.date) + "</div>" +
+        '<div class="profile-recognition__meta">Por <a href="' + profileHref(r.authorId) + '">' + r.author + "</a> · " + formatDate(r.date) + "</div>" +
         (r.feedUrl ? '<a class="profile-recognition__link" href="' + r.feedUrl + '">Ver no feed →</a>' : "") +
         "</div></article>"
       );
@@ -411,7 +434,7 @@
     if (!reports.length) return '<p class="profile-empty">Nenhum subordinado direto registrado.</p>';
     return reports.map(function (report) {
       return (
-        '<a class="profile-report" href="pessoas-perfil.html?id=' + encodeURIComponent(report.id) + '">' +
+        '<a class="profile-report" href="' + profileHref(report.id) + '">' +
         '<img class="profile-report__avatar" src="' + report.img + '" alt="" />' +
         "<div>" +
         '<div class="profile-report__name">' + report.name + "</div>" +
@@ -429,7 +452,7 @@
     if (!peers.length) return '<p class="profile-empty">Nenhum colega direto registrado.</p>';
     return peers.map(function (peer) {
       return (
-        '<a class="profile-peer" href="pessoas-perfil.html?id=' + encodeURIComponent(peer.id) + '">' +
+        '<a class="profile-peer" href="' + profileHref(peer.id) + '">' +
         '<img class="profile-peer__avatar" src="' + peer.img + '" alt="" />' +
         "<div>" +
         '<div class="profile-peer__name">' + peer.name + "</div>" +
@@ -463,7 +486,7 @@
       '<div class="profile-related">' +
       related.map(function (p) {
         return (
-          '<a class="profile-related__chip" href="pessoas-perfil.html?id=' + encodeURIComponent(p.id) + '">' +
+          '<a class="profile-related__chip" href="' + profileHref(p.id) + '">' +
           '<img src="' + p.img + '" alt="" />' + p.name.split(" ")[0] +
           "</a>"
         );
@@ -537,7 +560,589 @@
     });
   }
 
+  function mountProfileModalsToBody() {
+    document.querySelectorAll(".profile-edit-modal, .profile-vcard-modal").forEach(function (modal) {
+      if (modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+      }
+    });
+  }
+
+  var currentPerson = null;
+  var currentAllPeople = null;
+  var activeEditModal = null;
+
+  var languageLevels = ["Básico", "Intermediário", "Avançado", "Fluente", "Nativo"];
+  var projectStatuses = ["Ativo", "Concluído", "Pausado"];
+  var careerTypes = [
+    { value: "atual", label: "Cargo atual" },
+    { value: "promotion", label: "Promoção" },
+    { value: "transfer", label: "Transferência" },
+  ];
+
+  function canEditProfile() {
+    return VIEWER_ROLE === "self";
+  }
+
+  function toggleEditButtons() {
+    var visible = canEditProfile();
+    document.querySelectorAll("[data-edit-section]").forEach(function (btn) {
+      btn.hidden = !visible;
+    });
+  }
+
+  function setEditError(section, message) {
+    var el = document.getElementById("profile-edit-" + section + "-error");
+    if (!el) return;
+    if (message) {
+      el.textContent = message;
+      el.hidden = false;
+    } else {
+      el.textContent = "";
+      el.hidden = true;
+    }
+  }
+
+  function closeEditModal(section) {
+    if (!section) return;
+    var modal = document.getElementById("profile-edit-" + section + "-modal");
+    if (modal) modal.hidden = true;
+    if (activeEditModal === section) activeEditModal = null;
+    setEditError(section, "");
+    if (!activeEditModal) {
+      document.body.style.overflow = "";
+    }
+  }
+
+  function renderSkillsEditor(skills) {
+    var list = document.getElementById("profile-edit-skills-list");
+    if (!list) return;
+    var rows = (skills.length ? skills : [{ name: "", level: 3, endorsements: 0 }]).map(function (skill, index) {
+      var level = typeof skill.level === "number" ? skill.level : 3;
+      return (
+        '<div class="profile-edit-row" data-skill-row="' + index + '">' +
+        '<input class="profile-edit-row__input" type="text" data-skill-name maxlength="80" placeholder="Nome da competência" value="' + escapeAttr(skill.name || "") + '" />' +
+        '<select class="profile-edit-row__select" data-skill-level aria-label="Nível">' +
+        [1, 2, 3, 4, 5].map(function (value) {
+          return '<option value="' + value + '"' + (level === value ? " selected" : "") + ">" + value + "/5</option>";
+        }).join("") +
+        "</select>" +
+        '<button class="profile-edit-row__remove" type="button" data-remove-skill aria-label="Remover competência"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>' +
+        "</div>"
+      );
+    }).join("");
+    list.innerHTML = rows;
+  }
+
+  function renderLanguagesEditor(languages) {
+    var list = document.getElementById("profile-edit-languages-list");
+    if (!list) return;
+    var rows = (languages.length ? languages : [{ name: "", level: "Intermediário" }]).map(function (lang, index) {
+      return (
+        '<div class="profile-edit-row profile-edit-row--languages" data-language-row="' + index + '">' +
+        '<input class="profile-edit-row__input" type="text" data-language-name maxlength="60" placeholder="Idioma" value="' + escapeAttr(lang.name || "") + '" />' +
+        '<select class="profile-edit-row__select" data-language-level aria-label="Nível">' +
+        languageLevels.map(function (level) {
+          return '<option value="' + level + '"' + ((lang.level || "") === level ? " selected" : "") + ">" + level + "</option>";
+        }).join("") +
+        "</select>" +
+        '<button class="profile-edit-row__remove" type="button" data-remove-language aria-label="Remover idioma"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>' +
+        "</div>"
+      );
+    }).join("");
+    list.innerHTML = rows;
+  }
+
+  function escapeAttr(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;");
+  }
+
+  function collectSkillsFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-skills-list [data-skill-row]");
+    var skills = [];
+    rows.forEach(function (row) {
+      var name = row.querySelector("[data-skill-name]").value.trim();
+      if (!name) return;
+      var level = parseInt(row.querySelector("[data-skill-level]").value, 10) || 3;
+      skills.push({ name: name, level: level, endorsements: 0 });
+    });
+    return skills;
+  }
+
+  function collectLanguagesFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-languages-list [data-language-row]");
+    var languages = [];
+    rows.forEach(function (row) {
+      var name = row.querySelector("[data-language-name]").value.trim();
+      var level = row.querySelector("[data-language-level]").value.trim();
+      if (!name || !level) return;
+      languages.push({ name: name, level: level });
+    });
+    return languages;
+  }
+
+  function mergeProfileHistory(personalData) {
+    var baseHistory = parseJsonField(personalData.history, []) || [];
+    var userHistory = parseJsonField(personalData.careerHistory, []) || [];
+    return baseHistory.concat(userHistory);
+  }
+
+  function renderProjectsEditor(projects) {
+    var list = document.getElementById("profile-edit-projects-list");
+    if (!list) return;
+    var items = projects.length ? projects : [{ name: "", role: "", since: "", status: "Ativo" }];
+    list.innerHTML = items.map(function (project, index) {
+      var status = project.status || "Ativo";
+      return (
+        '<article class="profile-edit-block" data-project-row="' + index + '">' +
+        '<div class="profile-edit-block__head"><strong>Projeto ' + (index + 1) + '</strong>' +
+        '<button class="profile-edit-row__remove" type="button" data-remove-project aria-label="Remover projeto"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div>' +
+        '<div class="profile-edit-block__grid">' +
+        '<input class="profile-edit-row__input" type="text" data-project-name maxlength="120" placeholder="Nome" value="' + escapeAttr(project.name || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-project-role maxlength="80" placeholder="Papel" value="' + escapeAttr(project.role || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-project-since maxlength="40" placeholder="Desde" value="' + escapeAttr(project.since || "") + '" />' +
+        '<select class="profile-edit-row__select" data-project-status aria-label="Status">' +
+        projectStatuses.map(function (option) {
+          return '<option value="' + option + '"' + (status === option ? " selected" : "") + ">" + option + "</option>";
+        }).join("") +
+        "</select></div></article>"
+      );
+    }).join("");
+  }
+
+  function renderEducationEditor(education) {
+    var list = document.getElementById("profile-edit-education-list");
+    if (!list) return;
+    var items = education.length ? education : [{ period: "", degree: "", institution: "", note: "" }];
+    list.innerHTML = items.map(function (item, index) {
+      return (
+        '<article class="profile-edit-block" data-education-row="' + index + '">' +
+        '<div class="profile-edit-block__head"><strong>Formação ' + (index + 1) + '</strong>' +
+        '<button class="profile-edit-row__remove" type="button" data-remove-education aria-label="Remover formação"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div>' +
+        '<div class="profile-edit-block__grid">' +
+        '<input class="profile-edit-row__input" type="text" data-education-period maxlength="40" placeholder="Período" value="' + escapeAttr(item.period || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-education-degree maxlength="120" placeholder="Curso / grau" value="' + escapeAttr(item.degree || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-education-institution maxlength="120" placeholder="Instituição" value="' + escapeAttr(item.institution || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-education-note maxlength="120" placeholder="Observação" value="' + escapeAttr(item.note || "") + '" />' +
+        "</div></article>"
+      );
+    }).join("");
+  }
+
+  function renderCertificationsEditor(certifications) {
+    var list = document.getElementById("profile-edit-certifications-list");
+    if (!list) return;
+    var items = certifications.length ? certifications : [{ name: "", issuer: "", year: "" }];
+    list.innerHTML = items.map(function (item, index) {
+      return (
+        '<article class="profile-edit-block" data-certification-row="' + index + '">' +
+        '<div class="profile-edit-block__head"><strong>Certificação ' + (index + 1) + '</strong>' +
+        '<button class="profile-edit-row__remove" type="button" data-remove-certification aria-label="Remover certificação"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div>' +
+        '<div class="profile-edit-block__grid">' +
+        '<input class="profile-edit-row__input" type="text" data-certification-name maxlength="120" placeholder="Nome" value="' + escapeAttr(item.name || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-certification-issuer maxlength="120" placeholder="Emissor" value="' + escapeAttr(item.issuer || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-certification-year maxlength="10" placeholder="Ano" value="' + escapeAttr(item.year || "") + '" />' +
+        "</div></article>"
+      );
+    }).join("");
+  }
+
+  function renderCareerHistoryEditor(history) {
+    var list = document.getElementById("profile-edit-career-history-list");
+    if (!list) return;
+    var items = history.length ? history : [{ type: "atual", title: "", date: "", dept: "", note: "" }];
+    list.innerHTML = items.map(function (item, index) {
+      var type = item.type || "atual";
+      return (
+        '<article class="profile-edit-block" data-career-history-row="' + index + '">' +
+        '<div class="profile-edit-block__head"><strong>Registro ' + (index + 1) + '</strong>' +
+        '<button class="profile-edit-row__remove" type="button" data-remove-career-history aria-label="Remover registro"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></div>' +
+        '<div class="profile-edit-block__grid">' +
+        '<select class="profile-edit-row__select" data-career-history-type aria-label="Tipo">' +
+        careerTypes.map(function (option) {
+          return '<option value="' + option.value + '"' + (type === option.value ? " selected" : "") + ">" + option.label + "</option>";
+        }).join("") +
+        "</select>" +
+        '<input class="profile-edit-row__input" type="text" data-career-history-title maxlength="120" placeholder="Cargo / função" value="' + escapeAttr(item.title || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-career-history-date maxlength="20" placeholder="Ano ou período" value="' + escapeAttr(item.date || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-career-history-dept maxlength="80" placeholder="Área / departamento" value="' + escapeAttr(item.dept || "") + '" />' +
+        '<input class="profile-edit-row__input" type="text" data-career-history-note maxlength="200" placeholder="Observação" value="' + escapeAttr(item.note || "") + '" />' +
+        "</div></article>"
+      );
+    }).join("");
+  }
+
+  function collectProjectsFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-projects-list [data-project-row]");
+    var projects = [];
+    rows.forEach(function (row) {
+      var name = row.querySelector("[data-project-name]").value.trim();
+      if (!name) return;
+      projects.push({
+        name: name,
+        role: row.querySelector("[data-project-role]").value.trim(),
+        since: row.querySelector("[data-project-since]").value.trim(),
+        status: row.querySelector("[data-project-status]").value,
+      });
+    });
+    return projects;
+  }
+
+  function collectEducationFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-education-list [data-education-row]");
+    var education = [];
+    rows.forEach(function (row) {
+      var degree = row.querySelector("[data-education-degree]").value.trim();
+      var institution = row.querySelector("[data-education-institution]").value.trim();
+      if (!degree && !institution) return;
+      education.push({
+        period: row.querySelector("[data-education-period]").value.trim(),
+        degree: degree,
+        institution: institution,
+        note: row.querySelector("[data-education-note]").value.trim(),
+      });
+    });
+    return education;
+  }
+
+  function collectCertificationsFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-certifications-list [data-certification-row]");
+    var certifications = [];
+    rows.forEach(function (row) {
+      var name = row.querySelector("[data-certification-name]").value.trim();
+      if (!name) return;
+      certifications.push({
+        name: name,
+        issuer: row.querySelector("[data-certification-issuer]").value.trim(),
+        year: row.querySelector("[data-certification-year]").value.trim(),
+      });
+    });
+    return certifications;
+  }
+
+  function collectCareerHistoryFromEditor() {
+    var rows = document.querySelectorAll("#profile-edit-career-history-list [data-career-history-row]");
+    var history = [];
+    rows.forEach(function (row) {
+      var title = row.querySelector("[data-career-history-title]").value.trim();
+      if (!title) return;
+      history.push({
+        type: row.querySelector("[data-career-history-type]").value,
+        title: title,
+        date: row.querySelector("[data-career-history-date]").value.trim(),
+        dept: row.querySelector("[data-career-history-dept]").value.trim(),
+        note: row.querySelector("[data-career-history-note]").value.trim(),
+      });
+    });
+    return history;
+  }
+
+  function refreshEditableSections(person) {
+    document.getElementById("profile-bio").textContent = person.aboutMe || person.bio || "";
+    document.getElementById("profile-pronouns").textContent = person.pronouns || "";
+    document.getElementById("profile-skills").innerHTML = renderSkills(person.skills);
+    document.getElementById("profile-languages").innerHTML = renderLanguages(person.languages);
+    document.getElementById("profile-links").innerHTML = renderLinks(person.links);
+    document.getElementById("profile-availability").innerHTML = renderAvailability(person);
+    document.getElementById("profile-mentor").innerHTML = renderMentorBuddy(person);
+    document.getElementById("profile-projects").innerHTML = renderProjects(person.projects);
+    document.getElementById("profile-education").innerHTML = renderEducation(person.education);
+    document.getElementById("profile-certifications").innerHTML = renderCertifications(person.certifications);
+    document.getElementById("profile-history").innerHTML = renderHistory(person.history);
+  }
+
+  function updateOverviewFromPerson(person) {
+    refreshEditableSections(person);
+  }
+
+  function applyUpdatedProfile(dto) {
+    currentPerson = mapApiProfileToLegacy(dto);
+    updateOverviewFromPerson(currentPerson);
+  }
+
+  function saveProfileSection(section, payload, saveButton) {
+    if (!global.LioApi || global.LioApi.useMock) {
+      setEditError(section, "Edição indisponível no modo mock.");
+      return Promise.resolve();
+    }
+
+    var originalLabel = saveButton.textContent;
+    saveButton.disabled = true;
+    saveButton.textContent = "Salvando…";
+    setEditError(section, "");
+
+    return global.LioApi.patch("/me/profile/" + section, payload)
+      .then(function (dto) {
+        applyUpdatedProfile(dto);
+        closeEditModal(section);
+      })
+      .catch(function (error) {
+        var message = "Não foi possível salvar. Tente novamente.";
+        if (error && error.body && error.body.message) {
+          message = error.body.message;
+        }
+        setEditError(section, message);
+      })
+      .finally(function () {
+        saveButton.disabled = false;
+        saveButton.textContent = originalLabel;
+      });
+  }
+
+  function openEditModal(section) {
+    if (!canEditProfile() || !currentPerson) return;
+    if (activeEditModal) closeEditModal(activeEditModal);
+    activeEditModal = section;
+    var modal = document.getElementById("profile-edit-" + section + "-modal");
+    if (!modal) return;
+
+    document.body.style.overflow = "hidden";
+
+    if (section === "about") {
+      document.getElementById("profile-edit-about-input").value =
+        currentPerson.aboutMe || currentPerson.bio || "";
+    } else if (section === "skills") {
+      renderSkillsEditor(currentPerson.skills || []);
+    } else if (section === "languages") {
+      renderLanguagesEditor(currentPerson.languages || []);
+    } else if (section === "links") {
+      var links = currentPerson.links || {};
+      document.getElementById("profile-edit-link-linkedin").value = links.linkedin || "";
+      document.getElementById("profile-edit-link-github").value = links.github || "";
+      document.getElementById("profile-edit-link-portfolio").value = links.portfolio || "";
+    } else if (section === "pronouns") {
+      document.getElementById("profile-edit-pronouns-input").value = currentPerson.pronouns || "";
+    } else if (section === "availability") {
+      var avail = currentPerson.availability || {};
+      document.getElementById("profile-edit-availability-model").value = avail.workModel || "";
+      document.getElementById("profile-edit-availability-schedule").value = avail.schedule || "";
+      document.getElementById("profile-edit-availability-timezone").value = avail.timezone || "";
+      document.getElementById("profile-edit-availability-floor").value = avail.floor || "";
+      document.getElementById("profile-edit-availability-room").value = avail.room || "";
+    } else if (section === "mentorship") {
+      var mentor = currentPerson.mentor || {};
+      var buddy = currentPerson.buddy || {};
+      document.getElementById("profile-edit-mentor-name").value = mentor.name || "";
+      document.getElementById("profile-edit-mentor-slug").value = mentor.id || mentor.slug || "";
+      document.getElementById("profile-edit-mentor-since").value = mentor.since || "";
+      document.getElementById("profile-edit-buddy-name").value = buddy.name || "";
+      document.getElementById("profile-edit-buddy-slug").value = buddy.id || buddy.slug || "";
+      document.getElementById("profile-edit-buddy-since").value = buddy.since || "";
+    } else if (section === "projects") {
+      renderProjectsEditor(currentPerson.projects || []);
+    } else if (section === "education") {
+      renderEducationEditor(currentPerson.education || []);
+    } else if (section === "certifications") {
+      renderCertificationsEditor(currentPerson.certifications || []);
+    } else if (section === "career-history") {
+      renderCareerHistoryEditor(currentPerson.careerHistory || []);
+    }
+
+    modal.hidden = false;
+  }
+
+  var editModalsInitialized = false;
+
+  function setupProfileEditModals() {
+    if (editModalsInitialized) return;
+    editModalsInitialized = true;
+    document.querySelectorAll("[data-edit-section]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        openEditModal(btn.getAttribute("data-edit-section"));
+      });
+    });
+
+    document.querySelectorAll("[data-close-edit]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        closeEditModal(el.getAttribute("data-close-edit"));
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && activeEditModal) {
+        closeEditModal(activeEditModal);
+      }
+    });
+
+    var skillsList = document.getElementById("profile-edit-skills-list");
+    if (skillsList) {
+      skillsList.addEventListener("click", function (event) {
+        var removeBtn = event.target.closest("[data-remove-skill]");
+        if (!removeBtn) return;
+        var row = removeBtn.closest("[data-skill-row]");
+        if (row) row.remove();
+      });
+    }
+
+    var languagesList = document.getElementById("profile-edit-languages-list");
+    if (languagesList) {
+      languagesList.addEventListener("click", function (event) {
+        var removeBtn = event.target.closest("[data-remove-language]");
+        if (!removeBtn) return;
+        var row = removeBtn.closest("[data-language-row]");
+        if (row) row.remove();
+      });
+    }
+
+    var skillsAdd = document.getElementById("profile-edit-skills-add");
+    if (skillsAdd) {
+      skillsAdd.addEventListener("click", function () {
+        renderSkillsEditor(collectSkillsFromEditor().concat([{ name: "", level: 3, endorsements: 0 }]));
+      });
+    }
+
+    var languagesAdd = document.getElementById("profile-edit-languages-add");
+    if (languagesAdd) {
+      languagesAdd.addEventListener("click", function () {
+        renderLanguagesEditor(collectLanguagesFromEditor().concat([{ name: "", level: "Intermediário" }]));
+      });
+    }
+
+    var aboutSave = document.getElementById("profile-edit-about-save");
+    if (aboutSave) {
+      aboutSave.addEventListener("click", function () {
+        var value = document.getElementById("profile-edit-about-input").value.trim();
+        saveProfileSection("about", { aboutMe: value || null }, aboutSave);
+      });
+    }
+
+    var skillsSave = document.getElementById("profile-edit-skills-save");
+    if (skillsSave) {
+      skillsSave.addEventListener("click", function () {
+        saveProfileSection("skills", { skills: collectSkillsFromEditor() }, skillsSave);
+      });
+    }
+
+    var languagesSave = document.getElementById("profile-edit-languages-save");
+    if (languagesSave) {
+      languagesSave.addEventListener("click", function () {
+        saveProfileSection("languages", { languages: collectLanguagesFromEditor() }, languagesSave);
+      });
+    }
+
+    var linksSave = document.getElementById("profile-edit-links-save");
+    if (linksSave) {
+      linksSave.addEventListener("click", function () {
+        saveProfileSection("links", {
+          links: {
+            linkedin: document.getElementById("profile-edit-link-linkedin").value.trim(),
+            github: document.getElementById("profile-edit-link-github").value.trim(),
+            portfolio: document.getElementById("profile-edit-link-portfolio").value.trim(),
+          },
+        }, linksSave);
+      });
+    }
+
+    bindListEditor("#profile-edit-projects-list", "[data-remove-project]", "[data-project-row]", function () {
+      renderProjectsEditor(collectProjectsFromEditor().concat([{ name: "", role: "", since: "", status: "Ativo" }]));
+    }, "profile-edit-projects-add", collectProjectsFromEditor);
+
+    bindListEditor("#profile-edit-education-list", "[data-remove-education]", "[data-education-row]", function () {
+      renderEducationEditor(collectEducationFromEditor().concat([{ period: "", degree: "", institution: "", note: "" }]));
+    }, "profile-edit-education-add", collectEducationFromEditor);
+
+    bindListEditor("#profile-edit-certifications-list", "[data-remove-certification]", "[data-certification-row]", function () {
+      renderCertificationsEditor(collectCertificationsFromEditor().concat([{ name: "", issuer: "", year: "" }]));
+    }, "profile-edit-certifications-add", collectCertificationsFromEditor);
+
+    bindListEditor("#profile-edit-career-history-list", "[data-remove-career-history]", "[data-career-history-row]", function () {
+      renderCareerHistoryEditor(collectCareerHistoryFromEditor().concat([{ type: "atual", title: "", date: "", dept: "", note: "" }]));
+    }, "profile-edit-career-history-add", collectCareerHistoryFromEditor);
+
+    var pronounsSave = document.getElementById("profile-edit-pronouns-save");
+    if (pronounsSave) {
+      pronounsSave.addEventListener("click", function () {
+        saveProfileSection("pronouns", {
+          pronouns: document.getElementById("profile-edit-pronouns-input").value.trim() || null,
+        }, pronounsSave);
+      });
+    }
+
+    var availabilitySave = document.getElementById("profile-edit-availability-save");
+    if (availabilitySave) {
+      availabilitySave.addEventListener("click", function () {
+        saveProfileSection("availability", {
+          availability: {
+            workModel: document.getElementById("profile-edit-availability-model").value,
+            schedule: document.getElementById("profile-edit-availability-schedule").value.trim(),
+            timezone: document.getElementById("profile-edit-availability-timezone").value.trim(),
+            floor: document.getElementById("profile-edit-availability-floor").value.trim(),
+            room: document.getElementById("profile-edit-availability-room").value.trim(),
+          },
+        }, availabilitySave);
+      });
+    }
+
+    var mentorshipSave = document.getElementById("profile-edit-mentorship-save");
+    if (mentorshipSave) {
+      mentorshipSave.addEventListener("click", function () {
+        function buildContact(nameId, slugId, sinceId) {
+          var name = document.getElementById(nameId).value.trim();
+          if (!name) return null;
+          return {
+            name: name,
+            slug: document.getElementById(slugId).value.trim() || null,
+            since: document.getElementById(sinceId).value.trim() || null,
+          };
+        }
+        saveProfileSection("mentorship", {
+          mentor: buildContact("profile-edit-mentor-name", "profile-edit-mentor-slug", "profile-edit-mentor-since"),
+          buddy: buildContact("profile-edit-buddy-name", "profile-edit-buddy-slug", "profile-edit-buddy-since"),
+        }, mentorshipSave);
+      });
+    }
+
+    var projectsSave = document.getElementById("profile-edit-projects-save");
+    if (projectsSave) {
+      projectsSave.addEventListener("click", function () {
+        saveProfileSection("projects", { projects: collectProjectsFromEditor() }, projectsSave);
+      });
+    }
+
+    var educationSave = document.getElementById("profile-edit-education-save");
+    if (educationSave) {
+      educationSave.addEventListener("click", function () {
+        saveProfileSection("education", { education: collectEducationFromEditor() }, educationSave);
+      });
+    }
+
+    var certificationsSave = document.getElementById("profile-edit-certifications-save");
+    if (certificationsSave) {
+      certificationsSave.addEventListener("click", function () {
+        saveProfileSection("certifications", { certifications: collectCertificationsFromEditor() }, certificationsSave);
+      });
+    }
+
+    var careerHistorySave = document.getElementById("profile-edit-career-history-save");
+    if (careerHistorySave) {
+      careerHistorySave.addEventListener("click", function () {
+        saveProfileSection("career-history", { careerHistory: collectCareerHistoryFromEditor() }, careerHistorySave);
+      });
+    }
+  }
+
+  function bindListEditor(listSelector, removeSelector, rowSelector, onAdd, addButtonId, collectFn) {
+    var list = document.querySelector(listSelector);
+    if (list) {
+      list.addEventListener("click", function (event) {
+        var removeBtn = event.target.closest(removeSelector);
+        if (!removeBtn) return;
+        var row = removeBtn.closest(rowSelector);
+        if (row) row.remove();
+      });
+    }
+    var addButton = document.getElementById(addButtonId);
+    if (addButton) {
+      addButton.addEventListener("click", onAdd);
+    }
+  }
+
   function renderProfile(person, allPeople) {
+    currentPerson = person;
+    currentAllPeople = allPeople;
     var loading = document.getElementById("profile-loading");
     if (loading) loading.hidden = true;
 
@@ -557,8 +1162,15 @@
     renderBreadcrumb(person, allPeople);
     renderBirthdayBanner(person);
 
-    document.getElementById("profile-avatar").src = person.img;
-    document.getElementById("profile-avatar").alt = "Foto de " + person.name;
+    var avatarEl = document.getElementById("profile-avatar");
+    if (person.img) {
+      avatarEl.src = person.img;
+      avatarEl.hidden = false;
+    } else {
+      avatarEl.removeAttribute("src");
+      avatarEl.hidden = true;
+    }
+    avatarEl.alt = "Foto de " + person.name;
     document.getElementById("profile-name").textContent = person.name;
     document.getElementById("profile-role").textContent = person.title;
     document.getElementById("profile-dept").textContent = person.dept;
@@ -595,8 +1207,7 @@
       "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email || "");
     document.getElementById("profile-schedule-btn").href =
       "https://outlook.office.com/calendar/action/compose?subject=Reuni%C3%A3o%20com%20" + encodeURIComponent(person.name);
-    document.getElementById("profile-org-link").href =
-      "pessoas-organograma.html?focus=" + encodeURIComponent(person.id);
+    document.getElementById("profile-org-link").href = orgChartHref(person.id);
     document.getElementById("profile-message-btn").onclick = function () {
       window.alert("Mensagem interna para " + person.name + " — em breve.");
     };
@@ -608,6 +1219,7 @@
     };
 
     setupTabs();
+    toggleEditButtons();
   }
 
   function showLoading() {
@@ -649,17 +1261,29 @@
     return monthLabel.slice(0, 3) + " de " + parts[0];
   }
 
+  function normalizeContactRef(value) {
+    if (!value || typeof value !== "object") return null;
+    var slug = value.slug || value.id || null;
+    if (!value.name && !slug) return null;
+    return {
+      id: slug,
+      name: value.name || "",
+      since: value.since || "",
+    };
+  }
+
   function mapApiProfileToLegacy(dto) {
+    VIEWER_ROLE = mapViewerRole(dto.viewerContext);
     var personalData = parseJsonField(dto.personalData, {}) || {};
     var availability = parseJsonField(personalData.availability, personalData.availability) || {};
     var stats = parseJsonField(personalData.stats, {}) || {};
     var skills = (dto.skills || []).map(function (skill) {
       if (typeof skill === "string") {
-        return { name: skill, level: 3, endorsements: 0 };
+        return { name: skill, level: 0, endorsements: 0 };
       }
       return {
         name: skill.name || skill.Name || "",
-        level: skill.level || skill.Level || 3,
+        level: skill.level || skill.Level || 0,
         endorsements: skill.endorsements || skill.Endorsements || 0,
       };
     });
@@ -667,26 +1291,27 @@
     return {
       id: dto.slug,
       orgChartId: dto.orgChartId,
-      name: dto.name,
+      name: dto.name || "",
       title: dto.title || "",
       dept: dto.departmentName || "",
-      img: dto.photoUrl || "/avatar-maria-silva.png",
+      img: dto.photoUrl || "",
       aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
       bio: personalData.bio || dto.bio || "",
       pronouns: personalData.pronouns || dto.pronouns || "",
-      tags: dto.tags || ["member"],
+      tags: dto.tags || [],
       tagLabels: (dto.tags || []).map(function (t) {
         if (t === "ceo") return "CEO";
         if (t === "director") return "Liderança";
-        return "Colaborador";
+        if (t === "member") return "Colaborador";
+        return t;
       }),
       contact: {
-        email: dto.email,
+        email: dto.email || "",
         phone: dto.phone || "",
-        location: dto.location || "",
-        teams: dto.teamsUpn || personalData.teams || dto.email,
+        location: dto.location || personalData.cityState || "",
+        teams: dto.teamsUpn || dto.email || "",
       },
-      personal: personalData.visibility ? personalData : { visibility: "public", fullName: dto.name },
+      personal: personalData.visibility ? personalData : { visibility: "public", fullName: dto.name || "" },
       availability: availability,
       managerId: dto.managerSlug || null,
       managerName: dto.managerName || null,
@@ -697,29 +1322,22 @@
       links: parseJsonField(personalData.links, {}),
       education: parseJsonField(personalData.education, []),
       certifications: parseJsonField(personalData.certifications, []),
-      history: parseJsonField(personalData.history, dto.hireDate
-        ? [{
-            type: "admission",
-            title: dto.title || "",
-            date: String(dto.hireDate).slice(0, 4),
-            dept: dto.departmentName || "",
-            note: "Admissão na LioTécnica.",
-          }]
-        : []),
+      careerHistory: parseJsonField(personalData.careerHistory, []),
+      history: mergeProfileHistory(personalData),
       projects: parseJsonField(personalData.projects, []),
       recognitions: parseJsonField(personalData.recognitions, []),
       interactions: parseJsonField(personalData.interactions, []),
       documents: parseJsonField(personalData.documents, []),
       communications: parseJsonField(personalData.communications, []),
       groups: parseJsonField(personalData.groups, []),
-      mentor: personalData.mentor || null,
-      buddy: personalData.buddy || null,
+      mentor: normalizeContactRef(personalData.mentor),
+      buddy: normalizeContactRef(personalData.buddy),
       stats: {
-        tenureYears: stats.tenureYears || 0,
-        directReports: stats.directReports || 0,
-        groups: stats.groups || (parseJsonField(personalData.groups, []).length || 0),
-        recognitions: stats.recognitions || 0,
-        projectsCount: stats.projectsCount || 0,
+        tenureYears: stats.tenureYears,
+        directReports: stats.directReports,
+        groups: stats.groups,
+        recognitions: stats.recognitions,
+        projectsCount: stats.projectsCount,
       },
     };
   }
@@ -730,7 +1348,7 @@
       name: summary.name,
       title: summary.title || "",
       dept: summary.departmentName || "",
-      img: summary.photoUrl || "/avatar-maria-silva.png",
+      img: summary.photoUrl || "",
       managerId: summary.managerSlug || null,
     };
   }
@@ -760,27 +1378,13 @@
       });
   }
 
-  function loadFromJson(profileId) {
-    return fetch("/data/pessoas-perfis.json")
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (data) {
-        var person = (data.people || []).find(function (p) {
-          return p.id === profileId || String(p.orgChartId) === profileId;
-        });
-        if (!person) {
-          throw new Error("Profile not found in JSON");
-        }
-        return { person: person, allPeople: data.people || [] };
-      });
-  }
-
   var activeLoadId = 0;
 
   function init() {
     var loadId = ++activeLoadId;
     setupVCardModal();
+    mountProfileModalsToBody();
+    setupProfileEditModals();
     var profileId = getProfileId();
     if (!profileId) {
       showError();
@@ -790,9 +1394,6 @@
     showLoading();
 
     return loadFromApi(profileId)
-      .catch(function () {
-        return loadFromJson(profileId);
-      })
       .then(function (result) {
         if (loadId !== activeLoadId) return;
         renderProfile(result.person, result.allPeople);
