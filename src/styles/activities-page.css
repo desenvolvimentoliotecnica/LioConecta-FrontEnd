@@ -1,0 +1,544 @@
+/* Minhas atividades — diário pessoal */
+
+.activities-page__new-btn {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.activities-page__new-btn:hover {
+  background: #1d4ed8;
+}
+
+.activities-page__controls {
+  margin-bottom: var(--wf-gap);
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.activities-page__summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--wf-border);
+}
+
+.activities-page__summary-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.activities-page__summary-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.activities-page__summary-text {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.activities-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+}
+
+.activities-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activities-page__search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: #334155;
+  width: 100%;
+  min-width: 180px;
+}
+
+.activities-page__layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--wf-gap);
+}
+
+.activities-page__diary {
+  display: grid;
+  gap: var(--wf-gap);
+}
+
+.activities-page__day {
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  padding: 18px 20px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.activities-page__day-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--wf-border);
+}
+
+.activities-page__day-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.activities-page__day-header span {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.activities-page__timeline {
+  display: grid;
+  gap: 14px;
+}
+
+.activities-page__entry {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.activities-page__entry-time {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  padding-top: 14px;
+  line-height: 1.4;
+}
+
+.activities-page__entry-card {
+  background: #f8fafc;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.activities-page__entry-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.activities-page__entry-head h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.activities-page__entry-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.activities-page__entry-actions button {
+  width: 30px;
+  height: 30px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  background: #fff;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.activities-page__entry-actions button:hover {
+  color: #2563eb;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.activities-page__entry-desc {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.activities-page__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.activities-page__progress-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.activities-page__progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.activities-page__progress strong {
+  font-size: 12px;
+  color: #2563eb;
+  min-width: 36px;
+  text-align: right;
+}
+
+.activities-page__tasks {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.activities-page__tasks label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.activities-page__tasks input {
+  margin-top: 2px;
+}
+
+.activities-page__tasks .is-done {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.activities-page__aside {
+  display: grid;
+  gap: var(--wf-gap);
+  align-content: start;
+}
+
+.activities-page__aside-card {
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  padding: 18px 20px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.activities-page__aside-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.activities-page__aside-card ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.activities-page__aside-card li {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.45;
+  padding-left: 14px;
+  position: relative;
+}
+
+.activities-page__aside-card li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #2563eb;
+}
+
+.activities-page__aside-card--accent {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.activities-page__aside-card--accent p {
+  font-size: 13px;
+  color: #1e40af;
+  line-height: 1.5;
+}
+
+.activities-page__empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  color: #64748b;
+}
+
+.activities-page__empty i {
+  font-size: 36px;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.activities-page__empty p {
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.activities-page__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.activities-page__modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.activities-page__modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px dashed var(--wf-border);
+}
+
+.activities-page__modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.activities-page__modal-close {
+  width: 34px;
+  height: 34px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.activities-page__form {
+  padding: 18px 20px 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.activities-page__field {
+  display: grid;
+  gap: 6px;
+}
+
+.activities-page__field > span,
+.activities-page__field-label-row span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.activities-page__field input[type="text"],
+.activities-page__field input[type="datetime-local"],
+.activities-page__field textarea {
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  color: #1e293b;
+  background: #fff;
+}
+
+.activities-page__field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.activities-page__field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.activities-page__field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activities-page__field-label-row strong {
+  font-size: 13px;
+  color: #2563eb;
+}
+
+.activities-page__field input[type="range"] {
+  width: 100%;
+}
+
+.activities-page__field-hint {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.activities-page__form-tasks {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.activities-page__form-tasks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.activities-page__form-tasks button {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.activities-page__task-add {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.activities-page__task-add input {
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font: inherit;
+}
+
+.activities-page__task-add button {
+  border: 1px dashed var(--wf-border);
+  background: #fff;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #2563eb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.activities-page__form-error {
+  font-size: 12px;
+  color: #dc2626;
+}
+
+.activities-page__form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.activities-page__btn {
+  border: 1px dashed var(--wf-border);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.activities-page__btn--ghost {
+  background: #fff;
+  color: #475569;
+}
+
+.activities-page__btn--primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+@media (max-width: 1100px) {
+  .activities-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .activities-page__entry {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .activities-page__entry-time {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .activities-page__field-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { ActivitiesPage } from "./components/pages/ActivitiesPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/comunicados/leitura" element={<ComunicadoReader />} />
         <Route path="/notificacoes" element={<NotificationsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
         <Route path="/favoritos" element={<FavoritesPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
