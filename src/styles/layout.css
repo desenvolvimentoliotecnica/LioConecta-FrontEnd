@@ -13,6 +13,7 @@
   --wf-sidebar-w-left: 56px;
   --wf-sidebar-w-right: 56px;
   --wf-sidebar-w-expanded: 196px;
+  --wf-sidebar-icon-bg: #012e5a;
   --wf-radius: 10px;
   --wf-gap: 16px;
 }
@@ -328,6 +329,7 @@ var(--wf-bg) 70%
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  background: var(--wf-sidebar-icon-bg);
 }
 
 .sidebar__text {
@@ -354,9 +356,13 @@ var(--wf-bg) 70%
 }
 
 .sidebar__item.is-active::before {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.95);
+  opacity: 0;
+}
+
+.sidebar__item.is-active img {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 3px rgba(1, 46, 90, 0.45);
 }
 
 .sidebar__item.is-active {
