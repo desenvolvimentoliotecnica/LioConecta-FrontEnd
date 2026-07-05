@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { HelpPage } from "./components/pages/HelpPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { NotificationsPage } from "./components/pages/NotificationsPage";
@@ -15,6 +16,7 @@ function App() {
         <Route path="/comunicados/leitura" element={<ComunicadoReader />} />
         <Route path="/notificacoes" element={<NotificationsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/ajuda" element={<HelpPage />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
