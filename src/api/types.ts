@@ -621,3 +621,55 @@ export interface LeaveRequestResultDto {
   status: string;
   message: string;
 }
+
+export type AuditSource = "HttpRequest" | "EntityChange";
+
+export interface AuditEventDto {
+  id: string;
+  correlationId: string;
+  transactionId: string;
+  source: AuditSource | number;
+  action: string;
+  actorId?: string | null;
+  actorName?: string | null;
+  targetType: string;
+  targetId: string;
+  httpMethod?: string | null;
+  path?: string | null;
+  statusCode?: number | null;
+  durationMs?: number | null;
+  detailsJson?: string | null;
+  createdAt: string;
+}
+
+export interface AuditEventQueryParams {
+  action?: string;
+  actorId?: string;
+  targetType?: string;
+  correlationId?: string;
+  source?: AuditSource;
+  from?: string;
+  to?: string;
+  httpStatus?: AuditHttpStatusFilter;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface AuditEventSummaryDto {
+  totalCount: number;
+  httpCount: number;
+  entityCount: number;
+  errorCount: number;
+  uniqueActors: number;
+  uniqueActions: number;
+}
+
+export type AuditHttpStatusFilter = "" | "success" | "error";
+
+export interface PagedAuditEventsDto {
+  items: AuditEventDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}

@@ -250,6 +250,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Credenciais, integrações e parâmetros operacionais — persistidos no banco.",
         ),
         entry(
+          "Trilha de auditoria",
+          "/admin/trilha-auditoria",
+          "Consulta paginada de eventos de mutações HTTP e alterações de entidades.",
+        ),
+        entry(
           "Aprovações de grupos",
           "/grupos/aprovacoes",
           "Fila de grupos aguardando aprovação de administrador.",

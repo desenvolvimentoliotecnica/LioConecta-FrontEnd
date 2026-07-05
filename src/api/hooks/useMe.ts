@@ -10,7 +10,7 @@ const MOCK_ME: MeDto = {
   title: "Gerente de Projetos",
   photoUrl: "/avatar-maria-silva.png",
   departmentName: "Produto",
-  roles: ["Employee", "Manager"],
+  roles: ["Employee", "Manager", "Admin"],
 };
 
 export function useMe() {

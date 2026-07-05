@@ -13,6 +13,18 @@ type TokenProvider = () => Promise<string | null>;
 
 let tokenProvider: TokenProvider = async () => null;
 
+const CORRELATION_HEADER = "X-Correlation-Id";
+
+function applyDefaultHeaders(headers: Headers, init: RequestInit = {}) {
+  if (init.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (!headers.has(CORRELATION_HEADER)) {
+    headers.set(CORRELATION_HEADER, crypto.randomUUID());
+  }
+}
+
 export function setTokenProvider(provider: TokenProvider) {
   tokenProvider = provider;
 }
@@ -43,9 +55,7 @@ export async function apiFetch<T>(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  if (init.body && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
+  applyDefaultHeaders(headers, init);
 
   const response = await fetch(`${config.apiBaseUrl}${path}`, {
     ...init,
@@ -80,6 +90,8 @@ export async function apiUpload<T>(path: string, formData: FormData): Promise<T>
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
+
+  applyDefaultHeaders(headers);
 
   const response = await fetch(`${config.apiBaseUrl}${path}`, {
     method: "POST",
@@ -119,6 +131,8 @@ export const api = {
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
+
+    applyDefaultHeaders(headers);
 
     const response = await fetch(`${config.apiBaseUrl}${path}`, { headers });
     if (!response.ok) {

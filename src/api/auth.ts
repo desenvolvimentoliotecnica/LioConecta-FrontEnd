@@ -21,3 +21,8 @@ export function hasRole(me: MeDto | undefined, role: UserRole): boolean {
 export function isAdminUser(me: MeDto | undefined): boolean {
   return hasRole(me, "Admin");
 }
+
+/** Alinhado à policy RequireAdmin do backend (Admin ou AnalyticsViewer). */
+export function canAccessAdminArea(me: MeDto | undefined): boolean {
+  return hasRole(me, "Admin") || hasRole(me, "AnalyticsViewer");
+}

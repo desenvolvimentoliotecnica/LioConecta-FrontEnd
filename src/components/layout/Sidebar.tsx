@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { isAdminUser } from "../../api/auth";
+import { canAccessAdminArea } from "../../api/auth";
 import { useMe } from "../../api/hooks/useMe";
 
 type SidebarItemConfig = {
@@ -30,6 +30,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     href: "/admin/configuracoes-backend",
     activePrefix: "/admin/configuracoes-backend",
     spacerBefore: true,
+    adminOnly: true,
+  },
+  {
+    label: "Trilha de auditoria",
+    icon: "fa-clipboard-list",
+    href: "/admin/trilha-auditoria",
+    activePrefix: "/admin/trilha-auditoria",
     adminOnly: true,
   },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
@@ -74,11 +81,11 @@ function SidebarItem({ label, icon, href }: SidebarItemConfig) {
 
 export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarProps) {
   const { data: me } = useMe();
-  const isAdmin = isAdminUser(me);
+  const canAccessAdmin = canAccessAdminArea(me);
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
   const items =
     side === "right"
-      ? baseItems.filter((item) => !item.adminOnly || isAdmin)
+      ? baseItems.filter((item) => !item.adminOnly || canAccessAdmin)
       : baseItems;
   const id = side === "left" ? "sidebar-left" : "sidebar-right";
 
