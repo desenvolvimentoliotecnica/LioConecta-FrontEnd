@@ -39,6 +39,23 @@
   margin: 0;
 }
 
+.pay-sync-meta {
+  font-size: 12px;
+  color: var(--wf-muted, #64748b);
+  margin: -8px 0 var(--wf-gap);
+}
+
+.pay-alert {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: var(--wf-gap);
+  padding: 10px 14px;
+}
+
 .pay-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -458,6 +475,41 @@
 
 .pay-table tr.is-clickable:hover {
   background: #fffbeb;
+}
+
+.pay-table--history .pay-table__actions-col {
+  text-align: right;
+  width: 112px;
+}
+
+.pay-table__actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.pay-row-action {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dbe6f0;
+  border-radius: 6px;
+  color: #173154;
+  cursor: pointer;
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  margin-left: 4px;
+  width: 28px;
+}
+
+.pay-row-action:hover {
+  background: #f8fbfd;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.pay-row-action:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
 }
 
 .pay-summary-row {

@@ -58,7 +58,9 @@ export function UserMenu() {
         }}
       >
         <img className="avatar" src={avatarSrc} alt="" />
-        <span className="user-menu__name">{user.name}</span>
+        <span className="user-menu__name" title={user.name}>
+          {user.name}
+        </span>
         <span className="user-menu__chevron" aria-hidden="true">
           <i className="fa-solid fa-chevron-down" />
         </span>
