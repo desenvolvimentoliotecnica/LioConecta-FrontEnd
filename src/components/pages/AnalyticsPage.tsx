@@ -13,7 +13,7 @@ import {
   type AnalyticsModule,
   type AnalyticsPeriod,
 } from "../../config/analytics";
-import { buildAnalyticsView } from "../../utils/analyticsView";
+import { buildAnalyticsView, buildMockAnalyticsView } from "../../utils/analyticsView";
 import "../../styles/analytics-page.css";
 
 const PERIOD_LABELS: Record<AnalyticsPeriod, string> = {
@@ -28,10 +28,13 @@ export function AnalyticsPage() {
   const [module, setModule] = useState<AnalyticsModule>("all");
   const { data: snapshot, isLoading, isError } = useAnalyticsSnapshot(period);
 
-  const view = useMemo(
-    () => buildAnalyticsView(snapshot, period, module),
-    [snapshot, period, module],
-  );
+  const view = useMemo(() => {
+    try {
+      return buildAnalyticsView(snapshot, period, module);
+    } catch {
+      return buildMockAnalyticsView(period, module);
+    }
+  }, [snapshot, period, module]);
 
   const showActivityTrend =
     module !== "enquetes" &&
@@ -287,47 +290,49 @@ export function AnalyticsPage() {
         </section>
       ) : null}
 
-      <section className="analytics-grid-2" aria-label="Rankings e departamentos">
-        {view.topContent.length > 0 && module !== "enquetes" ? (
-          <article className="analytics-panel">
-            <h2 className="analytics-panel__title">Conteúdo em destaque</h2>
-            <p className="analytics-panel__desc">
-              Itens com maior engajamento no período selecionado.
-              {view.topContentIsMock ? " · dados simulados" : " · dados reais"}
-            </p>
-            <ol className="analytics-ranking">
-              {view.topContent.map((item) => (
-                <li key={item.rank}>
-                  <Link className="analytics-ranking__item" to={item.href}>
-                    <span className="analytics-ranking__rank">{item.rank}</span>
-                    <div>
-                      <div className="analytics-ranking__title">{item.title}</div>
-                      <div className="analytics-ranking__meta">{item.meta}</div>
-                    </div>
-                    <span className="analytics-ranking__value">{item.value}</span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </article>
-        ) : (
-          <div className="analytics-page__empty">
-            <i className="fa-solid fa-chart-simple" aria-hidden="true" />
-            <p>Nenhum conteúdo em destaque para o módulo selecionado.</p>
-          </div>
-        )}
+      {module !== "enquetes" ? (
+        <section className="analytics-grid-2" aria-label="Rankings e departamentos">
+          {view.topContent.length > 0 ? (
+            <article className="analytics-panel">
+              <h2 className="analytics-panel__title">Conteúdo em destaque</h2>
+              <p className="analytics-panel__desc">
+                Itens com maior engajamento no período selecionado.
+                {view.topContentIsMock ? " · dados simulados" : " · dados reais"}
+              </p>
+              <ol className="analytics-ranking">
+                {view.topContent.map((item) => (
+                  <li key={item.rank}>
+                    <Link className="analytics-ranking__item" to={item.href}>
+                      <span className="analytics-ranking__rank">{item.rank}</span>
+                      <div>
+                        <div className="analytics-ranking__title">{item.title}</div>
+                        <div className="analytics-ranking__meta">{item.meta}</div>
+                      </div>
+                      <span className="analytics-ranking__value">{item.value}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          ) : (
+            <div className="analytics-page__empty">
+              <i className="fa-solid fa-chart-simple" aria-hidden="true" />
+              <p>Nenhum conteúdo em destaque para o módulo selecionado.</p>
+            </div>
+          )}
 
-        {showDepartmentEngagement ? (
-          <article className="analytics-panel">
-            <h2 className="analytics-panel__title">Engajamento por departamento</h2>
-            <p className="analytics-panel__desc">
-              Taxa de participação ativa dos colaboradores por área.
-              {view.departmentsIsMock ? " · dados simulados" : " · dados reais"}
-            </p>
-            <DepartmentEngagementChart data={view.departments} />
-          </article>
-        ) : null}
-      </section>
+          {showDepartmentEngagement ? (
+            <article className="analytics-panel">
+              <h2 className="analytics-panel__title">Engajamento por departamento</h2>
+              <p className="analytics-panel__desc">
+                Taxa de participação ativa dos colaboradores por área.
+                {view.departmentsIsMock ? " · dados simulados" : " · dados reais"}
+              </p>
+              <DepartmentEngagementChart data={view.departments} />
+            </article>
+          ) : null}
+        </section>
+      ) : null}
 
       <p className="page-empty-note">
         {footerNote}

@@ -51,9 +51,10 @@ function formatTopItemValue(item: AnalyticsSnapshotDto["topContent"][number]): s
 }
 
 function mapTopContent(snapshot: AnalyticsSnapshotDto): RankedItem[] {
-  if (snapshot.topContent.length === 0) return [];
+  const topContent = snapshot.topContent ?? [];
+  if (topContent.length === 0) return [];
 
-  return snapshot.topContent.map((item, index) => ({
+  return topContent.map((item, index) => ({
     rank: index + 1,
     title: item.title,
     meta: item.meta,
@@ -63,10 +64,42 @@ function mapTopContent(snapshot: AnalyticsSnapshotDto): RankedItem[] {
   }));
 }
 
-function mapTopPolls(snapshot: AnalyticsSnapshotDto): RankedItem[] {
-  if (snapshot.topPolls.length === 0) return [];
+function snapshotHasPollAnalytics(snapshot: AnalyticsSnapshotDto): boolean {
+  return (
+    snapshot.pollsCreated !== undefined ||
+    snapshot.pollVotes !== undefined ||
+    snapshot.activePolls !== undefined ||
+    snapshot.pollsClosed !== undefined ||
+    snapshot.pollParticipationRate !== undefined ||
+    snapshot.pollAvgVotesPerPoll !== undefined ||
+    snapshot.pollActivityTrend !== undefined ||
+    snapshot.topPolls !== undefined
+  );
+}
 
-  return snapshot.topPolls.map((item, index) => ({
+function normalizeSnapshot(snapshot: AnalyticsSnapshotDto): AnalyticsSnapshotDto {
+  return {
+    ...snapshot,
+    activityTrend: snapshot.activityTrend ?? [],
+    serviceBreakdown: snapshot.serviceBreakdown ?? [],
+    departmentEngagement: snapshot.departmentEngagement ?? [],
+    topContent: snapshot.topContent ?? [],
+    pollsCreated: snapshot.pollsCreated ?? 0,
+    pollVotes: snapshot.pollVotes ?? 0,
+    activePolls: snapshot.activePolls ?? 0,
+    pollsClosed: snapshot.pollsClosed ?? 0,
+    pollParticipationRate: snapshot.pollParticipationRate ?? 0,
+    pollAvgVotesPerPoll: snapshot.pollAvgVotesPerPoll ?? 0,
+    pollActivityTrend: snapshot.pollActivityTrend ?? [],
+    topPolls: snapshot.topPolls ?? [],
+  };
+}
+
+function mapTopPolls(snapshot: AnalyticsSnapshotDto): RankedItem[] {
+  const topPolls = snapshot.topPolls ?? [];
+  if (topPolls.length === 0) return [];
+
+  return topPolls.map((item, index) => ({
     rank: index + 1,
     title: item.title,
     meta: item.meta,
@@ -278,25 +311,25 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
     {
       id: "polls-created",
       label: "Enquetes criadas",
-      value: formatNumber(snapshot.pollsCreated),
+      value: formatNumber(snapshot.pollsCreated ?? 0),
       delta: mockById.get("polls-created")?.delta ?? "—",
-      trend: snapshot.pollsCreated > 0 ? "up" : "neutral",
+      trend: (snapshot.pollsCreated ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-square-plus",
       mod: "enquetes",
     },
     {
       id: "poll-votes",
       label: "Total de votos",
-      value: formatNumber(snapshot.pollVotes),
+      value: formatNumber(snapshot.pollVotes ?? 0),
       delta: mockById.get("poll-votes")?.delta ?? "—",
-      trend: snapshot.pollVotes > 0 ? "up" : "neutral",
+      trend: (snapshot.pollVotes ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-check-to-slot",
       mod: "enquetes",
     },
     {
       id: "polls-active",
       label: "Enquetes ativas",
-      value: formatNumber(snapshot.activePolls),
+      value: formatNumber(snapshot.activePolls ?? 0),
       delta: "—",
       trend: "neutral",
       icon: "fa-circle-play",
@@ -305,27 +338,27 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
     {
       id: "poll-participation",
       label: "Taxa de participação",
-      value: `${snapshot.pollParticipationRate}%`,
+      value: `${snapshot.pollParticipationRate ?? 0}%`,
       delta: mockById.get("poll-participation")?.delta ?? "—",
-      trend: snapshot.pollParticipationRate > 0 ? "up" : "neutral",
+      trend: (snapshot.pollParticipationRate ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-users-viewfinder",
       mod: "enquetes",
     },
     {
       id: "poll-avg-votes",
       label: "Média de votos/enquete",
-      value: formatNumber(snapshot.pollAvgVotesPerPoll),
+      value: formatNumber(snapshot.pollAvgVotesPerPoll ?? 0),
       delta: mockById.get("poll-avg-votes")?.delta ?? "—",
-      trend: snapshot.pollAvgVotesPerPoll > 0 ? "up" : "neutral",
+      trend: (snapshot.pollAvgVotesPerPoll ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-chart-simple",
       mod: "enquetes",
     },
     {
       id: "polls-closed",
       label: "Enquetes encerradas",
-      value: formatNumber(snapshot.pollsClosed),
+      value: formatNumber(snapshot.pollsClosed ?? 0),
       delta: mockById.get("polls-closed")?.delta ?? "—",
-      trend: snapshot.pollsClosed > 0 ? "up" : "neutral",
+      trend: (snapshot.pollsClosed ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-circle-stop",
       mod: "enquetes",
     },
@@ -335,12 +368,13 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
     const mock = mockById.get(kpi.id);
     if (!mock) return kpi;
     const hasRealData =
-      (kpi.id === "polls-created" && snapshot.pollsCreated >= 0) ||
-      (kpi.id === "poll-votes" && snapshot.pollVotes >= 0) ||
-      (kpi.id === "polls-active" && snapshot.activePolls >= 0) ||
-      (kpi.id === "poll-participation" && snapshot.pollParticipationRate >= 0) ||
-      (kpi.id === "poll-avg-votes" && snapshot.pollAvgVotesPerPoll >= 0) ||
-      (kpi.id === "polls-closed" && snapshot.pollsClosed >= 0);
+      snapshotHasPollAnalytics(snapshot) &&
+      ((kpi.id === "polls-created" && (snapshot.pollsCreated ?? 0) > 0) ||
+        (kpi.id === "poll-votes" && (snapshot.pollVotes ?? 0) > 0) ||
+        (kpi.id === "polls-active" && (snapshot.activePolls ?? 0) > 0) ||
+        (kpi.id === "poll-participation" && (snapshot.pollParticipationRate ?? 0) > 0) ||
+        (kpi.id === "poll-avg-votes" && (snapshot.pollAvgVotesPerPoll ?? 0) > 0) ||
+        (kpi.id === "polls-closed" && (snapshot.pollsClosed ?? 0) > 0));
 
     return {
       ...kpi,
@@ -355,7 +389,10 @@ function buildPollSection(
   period: AnalyticsPeriod,
   mockSections: string[],
 ): PollSectionView {
-  if (!snapshot) {
+  if (!snapshot || !snapshotHasPollAnalytics(snapshot)) {
+    if (snapshot && !snapshotHasPollAnalytics(snapshot)) {
+      mockSections.push("métricas de enquetes");
+    }
     return {
       kpis: getPollKpis(period),
       activityTrend: getPollActivityTrend(period),
@@ -366,7 +403,10 @@ function buildPollSection(
     };
   }
 
-  const pollTrend = snapshot.pollActivityTrend.map((point) => ({ label: point.label, value: point.value }));
+  const pollTrend = (snapshot.pollActivityTrend ?? []).map((point) => ({
+    label: point.label,
+    value: point.value,
+  }));
   const pollTrendIsMock = !hasTrendData(pollTrend);
   if (pollTrendIsMock) mockSections.push("tendência de votos em enquetes");
 
@@ -392,8 +432,8 @@ function buildPollSection(
         { label: "Participação", value: byId.get("poll-participation")?.value ?? "—" },
       ],
       highlight:
-        snapshot.pollVotes > 0
-          ? `${formatNumber(snapshot.pollVotes)} votos registrados no período`
+        (snapshot.pollVotes ?? 0) > 0
+          ? `${formatNumber(snapshot.pollVotes ?? 0)} votos registrados no período`
           : mockInsight.highlight,
     },
   };
@@ -437,29 +477,30 @@ export function buildAnalyticsView(
     return buildMockAnalyticsView(period, module);
   }
 
+  const normalized = normalizeSnapshot(snapshot);
   const mockSections: string[] = [];
-  const activityTrend = snapshot.activityTrend.map((p) => ({ label: p.label, value: p.value }));
+  const activityTrend = normalized.activityTrend.map((p) => ({ label: p.label, value: p.value }));
   const activityTrendIsMock = !hasTrendData(activityTrend);
   const trend = activityTrendIsMock ? getActivityTrend(period) : activityTrend;
   if (activityTrendIsMock) mockSections.push("tendência de atividade");
 
-  const serviceBreakdownIsMock = snapshot.serviceBreakdown.length === 0;
+  const serviceBreakdownIsMock = normalized.serviceBreakdown.length === 0;
   const serviceBreakdown = serviceBreakdownIsMock
     ? getServiceBreakdown(period)
-    : snapshot.serviceBreakdown;
+    : normalized.serviceBreakdown;
   if (serviceBreakdownIsMock) mockSections.push("solicitações por área");
 
-  const departmentsIsMock = snapshot.departmentEngagement.length === 0;
+  const departmentsIsMock = normalized.departmentEngagement.length === 0;
   const departments = departmentsIsMock
     ? getDepartmentEngagement()
-    : snapshot.departmentEngagement.map((d) => ({
+    : normalized.departmentEngagement.map((d) => ({
         name: d.name,
         activeUsers: d.activeUsers,
         engagement: d.engagement,
       }));
   if (departmentsIsMock) mockSections.push("engajamento por departamento");
 
-  const mappedTop = mapTopContent(snapshot);
+  const mappedTop = mapTopContent(normalized);
   const topContentIsMock = mappedTop.length === 0;
   const topContent = topContentIsMock
     ? filterByModule(getTopContent(period), module)
@@ -471,21 +512,21 @@ export function buildAnalyticsView(
 
   const pollSection =
     module === "all" || module === "enquetes"
-      ? buildPollSection(snapshot, period, mockSections)
+      ? buildPollSection(normalized, period, mockSections)
       : null;
 
   const modules =
     module === "all"
-      ? [...buildModulesFromSnapshot(snapshot, period), pollSection!.moduleInsight]
+      ? [...buildModulesFromSnapshot(normalized, period), pollSection!.moduleInsight]
       : module === "enquetes"
         ? [pollSection!.moduleInsight]
-        : buildModulesFromSnapshot(snapshot, period).filter((m) => m.id === module);
+        : buildModulesFromSnapshot(normalized, period).filter((m) => m.id === module);
 
   return {
     kpis:
       module === "enquetes"
         ? pollSection!.kpis
-        : filterByModule(buildKpisFromSnapshot(snapshot, period), module),
+        : filterByModule(buildKpisFromSnapshot(normalized, period), module),
     activityTrend: trend,
     activityTrendIsMock,
     modules,
