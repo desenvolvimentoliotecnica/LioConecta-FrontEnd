@@ -1,18 +1,18 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAnalyticsSnapshot } from "../../api/hooks/useAnalytics";
+import {
+  ActivityTrendChart,
+  DepartmentEngagementChart,
+  ServiceBreakdownChart,
+} from "../analytics/AnalyticsCharts";
 import {
   ANALYTICS_MODULES,
   ANALYTICS_PERIODS,
-  filterByModule,
-  getActivityTrend,
-  getDepartmentEngagement,
-  getKpis,
-  getModuleInsights,
-  getServiceBreakdown,
-  getTopContent,
   type AnalyticsModule,
   type AnalyticsPeriod,
 } from "../../config/analytics";
+import { buildAnalyticsView } from "../../utils/analyticsView";
 import "../../styles/analytics-page.css";
 
 const PERIOD_LABELS: Record<AnalyticsPeriod, string> = {
@@ -25,19 +25,12 @@ const PERIOD_LABELS: Record<AnalyticsPeriod, string> = {
 export function AnalyticsPage() {
   const [period, setPeriod] = useState<AnalyticsPeriod>("30d");
   const [module, setModule] = useState<AnalyticsModule>("all");
+  const { data: snapshot, isLoading, isError } = useAnalyticsSnapshot(period);
 
-  const kpis = useMemo(() => filterByModule(getKpis(period), module), [period, module]);
-  const trend = useMemo(() => getActivityTrend(period), [period]);
-  const maxTrend = useMemo(() => Math.max(...trend.map((p) => p.value), 1), [trend]);
-  const modules = useMemo(() => {
-    const all = getModuleInsights(period);
-    if (module === "all") return all;
-    return all.filter((m) => m.id === module);
-  }, [period, module]);
-  const topContent = useMemo(() => filterByModule(getTopContent(period), module), [period, module]);
-  const serviceBreakdown = useMemo(() => getServiceBreakdown(period), [period]);
-  const maxService = useMemo(() => Math.max(...serviceBreakdown.map((s) => s.value), 1), [serviceBreakdown]);
-  const departments = useMemo(() => getDepartmentEngagement(), []);
+  const view = useMemo(
+    () => buildAnalyticsView(snapshot, period, module),
+    [snapshot, period, module],
+  );
 
   const showActivityTrend =
     module === "all" ||
@@ -51,6 +44,14 @@ export function AnalyticsPage() {
   const showChartsSection = showActivityTrend || showServiceBreakdown;
   const showDepartmentEngagement =
     module === "all" || module === "pessoas" || module === "engajamento";
+
+  const footerNote = isLoading
+    ? "Carregando dados do analytics..."
+    : isError
+      ? "Não foi possível carregar a API — exibindo dados simulados."
+      : view.mockSections.length > 0
+        ? `Dados reais do banco · simulado: ${view.mockSections.join(", ")} · ${PERIOD_LABELS[period]}`
+        : `Dados reais do banco · ${PERIOD_LABELS[period]}`;
 
   return (
     <main className="main">
@@ -121,9 +122,13 @@ export function AnalyticsPage() {
         </div>
       </section>
 
-      {kpis.length > 0 ? (
+      {isLoading ? (
+        <p className="page-empty-note">Carregando indicadores...</p>
+      ) : null}
+
+      {view.kpis.length > 0 ? (
         <section className="analytics-kpi-grid" aria-label="Indicadores principais">
-          {kpis.map((kpi) => (
+          {view.kpis.map((kpi) => (
             <article key={kpi.id} className={`analytics-kpi analytics-kpi--${kpi.mod}`}>
               <div className="analytics-kpi__head">
                 <span className={`analytics-kpi__icon analytics-kpi__icon--${kpi.mod}`}>
@@ -146,20 +151,10 @@ export function AnalyticsPage() {
             <article className="analytics-panel">
               <h2 className="analytics-panel__title">Atividade no portal</h2>
               <p className="analytics-panel__desc">
-                Sessões e interações agregadas (acessos, cliques, publicações e solicitações).
+                Sessões e interações agregadas (eventos, publicações, notificações e solicitações).
+                {view.activityTrendIsMock ? " · dados simulados" : " · dados reais"}
               </p>
-              <div className="analytics-chart" role="img" aria-label="Gráfico de atividade por período">
-                {trend.map((point) => (
-                  <div key={point.label} className="analytics-chart__bar-wrap">
-                    <span className="analytics-chart__value">{point.value}</span>
-                    <div
-                      className="analytics-chart__bar"
-                      style={{ height: `${(point.value / maxTrend) * 100}%` }}
-                    />
-                    <span className="analytics-chart__label">{point.label}</span>
-                  </div>
-                ))}
-              </div>
+              <ActivityTrendChart data={view.activityTrend} />
             </article>
           ) : null}
 
@@ -168,36 +163,19 @@ export function AnalyticsPage() {
               <h2 className="analytics-panel__title">Solicitações por área</h2>
               <p className="analytics-panel__desc">
                 Distribuição de chamados nos serviços digitais do portal.
+                {view.serviceBreakdownIsMock ? " · dados simulados" : " · dados reais"}
               </p>
-              <div className="analytics-service-list">
-                {serviceBreakdown.map((item) => (
-                  <div key={item.label} className="analytics-service-row">
-                    <div>
-                      <div className="analytics-service-row__label">{item.label}</div>
-                      <div className="analytics-service-row__bar-wrap">
-                        <div
-                          className="analytics-service-row__bar"
-                          style={{
-                            width: `${(item.value / maxService) * 100}%`,
-                            background: item.color,
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <span className="analytics-service-row__value">{item.value}</span>
-                  </div>
-                ))}
-              </div>
+              <ServiceBreakdownChart data={view.serviceBreakdown} />
             </article>
           ) : null}
         </section>
       ) : null}
 
-      {modules.length > 0 ? (
+      {view.modules.length > 0 ? (
         <section aria-label="Métricas por módulo">
           <h2 className="analytics-page__section-title">Ecossistema do portal</h2>
           <div className="analytics-modules">
-            {modules.map((mod) => (
+            {view.modules.map((mod) => (
               <article key={mod.id} className="analytics-module-card">
                 <div className="analytics-module-card__head">
                   <div>
@@ -230,14 +208,15 @@ export function AnalyticsPage() {
       ) : null}
 
       <section className="analytics-grid-2" aria-label="Rankings e departamentos">
-        {topContent.length > 0 ? (
+        {view.topContent.length > 0 ? (
           <article className="analytics-panel">
             <h2 className="analytics-panel__title">Conteúdo em destaque</h2>
             <p className="analytics-panel__desc">
               Itens com maior engajamento no período selecionado.
+              {view.topContentIsMock ? " · dados simulados" : " · dados reais"}
             </p>
             <ol className="analytics-ranking">
-              {topContent.map((item) => (
+              {view.topContent.map((item) => (
                 <li key={item.rank}>
                   <Link className="analytics-ranking__item" to={item.href}>
                     <span className="analytics-ranking__rank">{item.rank}</span>
@@ -263,27 +242,15 @@ export function AnalyticsPage() {
             <h2 className="analytics-panel__title">Engajamento por departamento</h2>
             <p className="analytics-panel__desc">
               Taxa de participação ativa dos colaboradores por área.
+              {view.departmentsIsMock ? " · dados simulados" : " · dados reais"}
             </p>
-            <div className="analytics-dept-list">
-              {departments.map((dept) => (
-                <div key={dept.name} className="analytics-dept-row">
-                  <span className="analytics-dept-row__name">{dept.name}</span>
-                  <div className="analytics-dept-row__bar-wrap">
-                    <div
-                      className="analytics-dept-row__bar"
-                      style={{ width: `${dept.engagement}%` }}
-                    />
-                  </div>
-                  <span className="analytics-dept-row__pct">{dept.engagement}%</span>
-                </div>
-              ))}
-            </div>
+            <DepartmentEngagementChart data={view.departments} />
           </article>
         ) : null}
       </section>
 
       <p className="page-empty-note">
-        Dados simulados para demonstração · Período: {PERIOD_LABELS[period]}
+        {footerNote}
         {module !== "all" ? ` · Módulo: ${ANALYTICS_MODULES.find((m) => m.id === module)?.label}` : ""}
       </p>
     </main>

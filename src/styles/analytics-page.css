@@ -76,6 +76,15 @@
   background: #eef2ff;
 }
 
+.analytics-chart--recharts {
+  min-height: 260px;
+  margin-top: 8px;
+}
+
+.analytics-chart--recharts .recharts-wrapper {
+  font-family: inherit;
+}
+
 .analytics-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

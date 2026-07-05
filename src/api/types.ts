@@ -195,3 +195,50 @@ export interface CreateGroupRequest {
 export interface RejectGroupRequest {
   reason?: string | null;
 }
+
+export interface AnalyticsTrendPointDto {
+  label: string;
+  value: number;
+}
+
+export interface AnalyticsServiceSliceDto {
+  label: string;
+  value: number;
+  color: string;
+}
+
+export interface AnalyticsDepartmentDto {
+  name: string;
+  activeUsers: number;
+  engagement: number;
+}
+
+export interface AnalyticsTopItemDto {
+  title: string;
+  meta: string;
+  value: number;
+  href: string;
+  mod: string;
+}
+
+export interface AnalyticsSnapshotDto {
+  period: string;
+  activePeople: number;
+  activeUsersInPeriod: number;
+  feedPosts: number;
+  feedComments: number;
+  feedReactions: number;
+  comunicados: number;
+  comunicadoReads: number;
+  activeGroups: number;
+  groupMembers: number;
+  groupPosts: number;
+  notifications: number;
+  serviceRequests: number;
+  documents: number;
+  moodChecks: number;
+  activityTrend: AnalyticsTrendPointDto[];
+  serviceBreakdown: AnalyticsServiceSliceDto[];
+  departmentEngagement: AnalyticsDepartmentDto[];
+  topContent: AnalyticsTopItemDto[];
+}
