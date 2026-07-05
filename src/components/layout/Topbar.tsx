@@ -14,6 +14,7 @@ import {
   juridicoLinks,
   allServicosLinks,
 } from "../../config/navigation";
+import { MessagesTrigger } from "../chat/ChatWidget";
 import { closeOtherMenus } from "./NotificationsMenu";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { UserMenu } from "./UserMenu";
@@ -179,11 +180,7 @@ export function Topbar() {
 
       <div className="topbar__actions">
         <NotificationsMenu />
-        <div className="icon-btn-wrap" data-badge="2">
-          <button className="topbar-icon-btn" type="button" aria-label="Mensagens">
-            <i className="fa-regular fa-comment" aria-hidden="true" />
-          </button>
-        </div>
+        <MessagesTrigger />
         <UserMenu />
       </div>
     </header>
