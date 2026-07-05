@@ -673,3 +673,108 @@ export interface PagedAuditEventsDto {
   totalCount: number;
   totalPages: number;
 }
+
+export interface ObservabilitySummaryDto {
+  errorsLast24h: number;
+  httpErrorRate: number;
+  p95LatencyMs?: number | null;
+  requestsPerMinute: number;
+  dailyActiveUsers: number;
+  pageViews: number;
+  accessDenied: number;
+  authFailures: number;
+  topModule?: string | null;
+  topPage?: string | null;
+  observabilityEvents: number;
+  accessEvents: number;
+}
+
+export interface ObservabilityEventListItemDto {
+  id: string;
+  occurredAt: string;
+  eventType: string;
+  eventName: string;
+  severity: number;
+  userId?: string | null;
+  userName?: string | null;
+  correlationId: string;
+  routeTemplate?: string | null;
+  metadataJson?: string | null;
+}
+
+export interface PageViewListItemDto {
+  id: string;
+  occurredAt: string;
+  userId?: string | null;
+  userName?: string | null;
+  sessionId: string;
+  correlationId: string;
+  pageName: string;
+  routeTemplate: string;
+  module: string;
+  referrerTemplate?: string | null;
+  durationMs?: number | null;
+}
+
+export interface AccessEventListItemDto {
+  id: string;
+  occurredAt: string;
+  eventType: string;
+  eventName: string;
+  userId?: string | null;
+  userName?: string | null;
+  usernameSnapshot?: string | null;
+  correlationId: string;
+  resource?: string | null;
+  action?: string | null;
+  result: string;
+  reasonCode?: string | null;
+}
+
+export interface PagedObservabilityEventsDto {
+  items: ObservabilityEventListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PagedPageViewsDto {
+  items: PageViewListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PagedAccessEventsDto {
+  items: AccessEventListItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface ObservabilityMetricPointDto {
+  timestamp: string;
+  value: number;
+}
+
+export interface ObservabilityMetricsDto {
+  requestsPerMinute: ObservabilityMetricPointDto[];
+  errorRate: ObservabilityMetricPointDto[];
+  p95LatencyMs: ObservabilityMetricPointDto[];
+}
+
+export interface ObservabilityTimelineItemDto {
+  occurredAt: string;
+  source: string;
+  label: string;
+  detail?: string | null;
+  referenceId: string;
+}
+
+export interface ObservabilityTimelineDto {
+  correlationId: string;
+  items: ObservabilityTimelineItemDto[];
+}

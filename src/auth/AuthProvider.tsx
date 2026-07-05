@@ -1,7 +1,10 @@
 import { MsalProvider } from "@azure/msal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
-import { setTokenProvider } from "../api/client";
+import { setNetworkErrorTracker, setTokenProvider } from "../api/client";
+import { AppErrorBoundary } from "../components/telemetry/AppErrorBoundary";
+import { TelemetryProvider } from "../components/telemetry/TelemetryProvider";
+import { setTelemetryTokenProvider, trackNetworkError } from "../telemetry";
 import { isMsalEnabled, loginRequest, msalInstance } from "./msalConfig";
 
 const queryClient = new QueryClient({
@@ -14,7 +17,10 @@ const queryClient = new QueryClient({
 
 function DevAuthBridge({ children }: { children: ReactNode }) {
   useEffect(() => {
-    setTokenProvider(async () => null);
+    const provider = async () => null;
+    setTokenProvider(provider);
+    setTelemetryTokenProvider(provider);
+    setNetworkErrorTracker(trackNetworkError);
   }, []);
   return <>{children}</>;
 }
@@ -49,6 +55,23 @@ function MsalAuthBridge({ children }: { children: ReactNode }) {
         return null;
       }
     });
+
+    setTelemetryTokenProvider(async () => {
+      const account = instance.getActiveAccount() ?? instance.getAllAccounts()[0];
+      if (!account) return null;
+
+      try {
+        const result = await instance.acquireTokenSilent({
+          ...loginRequest,
+          account,
+        });
+        return result.accessToken;
+      } catch {
+        return null;
+      }
+    });
+
+    setNetworkErrorTracker(trackNetworkError);
   }, []);
 
   if (!msalInstance) {
@@ -65,5 +88,11 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <DevAuthBridge>{children}</DevAuthBridge>
   );
 
-  return <QueryClientProvider client={queryClient}>{content}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TelemetryProvider>
+        <AppErrorBoundary>{content}</AppErrorBoundary>
+      </TelemetryProvider>
+    </QueryClientProvider>
+  );
 }

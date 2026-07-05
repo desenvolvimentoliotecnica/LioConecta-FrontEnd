@@ -1,7 +1,9 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import { usePageViewTracking } from "../../telemetry";
 
 export function KioskShell() {
   const navigate = useNavigate();
+  usePageViewTracking();
 
   return (
     <div className="kiosk-shell">

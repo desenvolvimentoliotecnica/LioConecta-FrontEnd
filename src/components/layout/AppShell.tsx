@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useNotificationHubSync } from "../../api/hooks/useNotifications";
 import { useSidebar } from "../../hooks/useSidebar";
+import { usePageViewTracking } from "../../telemetry";
 import { ChatProvider, useChatWindowApi } from "../chat/ChatContext";
 import { ChatWidget } from "../chat/ChatWidget";
 import { Sidebar } from "./Sidebar";
@@ -24,6 +25,7 @@ export function AppShell() {
   const { leftExpanded, rightExpanded, toggleLeft, toggleRight, bodyClass } = useSidebar();
   const location = useLocation();
   useNotificationHubSync();
+  usePageViewTracking();
 
   return (
     <ChatProvider>

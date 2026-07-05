@@ -255,6 +255,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "Consulta paginada de eventos de mutações HTTP e alterações de entidades.",
         ),
         entry(
+          "Observabilidade",
+          "/admin/observabilidade",
+          "Hub de logs, métricas, acessos e investigação por correlation ID.",
+        ),
+        entry(
+          "Configurações observabilidade",
+          "/admin/configuracoes-backend?category=observability",
+          "Retenção, OTel, page views e access audit — seção observability do backend.",
+        ),
+        entry(
           "Aprovações de grupos",
           "/grupos/aprovacoes",
           "Fila de grupos aguardando aprovação de administrador.",

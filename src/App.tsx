@@ -26,6 +26,7 @@ import { SitemapPage } from "./components/pages/SitemapPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { BackendConfigPage } from "./components/pages/BackendConfigPage";
 import { AuditTrailPage } from "./components/pages/AuditTrailPage";
+import { ObservabilityHubPage } from "./components/pages/ObservabilityHubPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -74,6 +75,7 @@ function App() {
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
+        <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
         <Route path="/mapa-do-site" element={<SitemapPage />} />

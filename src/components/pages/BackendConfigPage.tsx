@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { isAdminUser } from "../../api/auth";
 import { useAppSettings, useUpdateAppSettings } from "../../api/hooks/useAppSettings";
 import { useMe } from "../../api/hooks/useMe";
@@ -109,6 +109,7 @@ function SettingField({
 }
 
 export function BackendConfigPage() {
+  const [searchParams] = useSearchParams();
   const { data: me, isLoading: meLoading } = useMe();
   const { data: categories = [], isLoading, isError } = useAppSettings();
   const updateSettings = useUpdateAppSettings();
@@ -123,11 +124,14 @@ export function BackendConfigPage() {
   useEffect(() => {
     if (categories.length > 0) {
       setDraft(buildDraft(categories));
-      if (!categories.some((c) => c.id === activeCategory)) {
+      const categoryFromUrl = searchParams.get("category");
+      if (categoryFromUrl && categories.some((category) => category.id === categoryFromUrl)) {
+        setActiveCategory(categoryFromUrl);
+      } else if (!categories.some((c) => c.id === activeCategory)) {
         setActiveCategory(categories[0]?.id ?? "database");
       }
     }
-  }, [categories, activeCategory]);
+  }, [categories, activeCategory, searchParams]);
 
   const activeSection = useMemo(
     () => categories.find((category) => category.id === activeCategory) ?? categories[0],

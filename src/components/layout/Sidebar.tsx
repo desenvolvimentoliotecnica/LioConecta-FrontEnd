@@ -39,6 +39,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     activePrefix: "/admin/trilha-auditoria",
     adminOnly: true,
   },
+  {
+    label: "Observabilidade",
+    icon: "fa-chart-line",
+    href: "/admin/observabilidade",
+    activePrefix: "/admin/observabilidade",
+    adminOnly: true,
+  },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
   { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
   { label: "Favoritos", icon: "fa-star", href: "/favoritos" },

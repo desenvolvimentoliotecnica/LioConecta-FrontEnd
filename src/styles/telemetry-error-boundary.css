@@ -1,0 +1,63 @@
+.telemetry-error-boundary {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: var(--bg-body, #f4f6f8);
+}
+
+.telemetry-error-boundary__card {
+  width: min(100%, 28rem);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px dashed rgba(15, 23, 42, 0.15);
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.telemetry-error-boundary__icon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+  font-size: 1.25rem;
+}
+
+.telemetry-error-boundary__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.telemetry-error-boundary__text,
+.telemetry-error-boundary__detail {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.telemetry-error-boundary__detail {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  word-break: break-word;
+}
+
+.telemetry-error-boundary__button {
+  margin-top: 1.25rem;
+  padding: 0.65rem 1.1rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: #0f766e;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.telemetry-error-boundary__button:hover {
+  background: #0d9488;
+}

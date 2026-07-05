@@ -1,0 +1,19 @@
+
+> lioconecta-frontend@1.0.0 test:e2e
+> playwright test
+
+
+Running 3 tests using 3 workers
+
+  ok 2 [chromium] › e2e\observability-hub.spec.ts:104:3 › Observability hub E2E › renders KPIs and errors tab for admin user (3.6s)
+  ok 3 [chromium] › e2e\observability-hub.spec.ts:114:3 › Observability hub E2E › investigate tab loads timeline for correlation id (3.9s)
+  ok 1 [chromium] › e2e\observability-hub.spec.ts:125:3 › Observability hub E2E › links tab exposes related admin destinations (4.0s)
+
+  3 passed (5.6s)
+
+(node:23116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
