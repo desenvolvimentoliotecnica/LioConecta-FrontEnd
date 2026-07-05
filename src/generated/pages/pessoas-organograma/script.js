@@ -92,10 +92,15 @@
 
       let avatarIndex = 0;
 
+      function avatarUrl(file) {
+        if (!file) return file;
+        return file.startsWith("/") ? file : "/" + file;
+      }
+
       function nextAvatar() {
         const avatar = avatars[avatarIndex % avatars.length];
         avatarIndex += 1;
-        return avatar;
+        return avatarUrl(avatar);
       }
 
       function getDeptColors(dept) {
@@ -112,7 +117,7 @@
           slug: OrgProfileModal.slugifyName(ceoData.name),
           name: ceoData.name,
           title: ceoData.role,
-          img: ceoData.avatar,
+          img: avatarUrl(ceoData.avatar),
           dept: "Executiva",
           tags: ["ceo"],
           profile: OrgProfileModal.buildProfileExtras(ceoData.name, "Executiva")
@@ -126,7 +131,7 @@
             pid: ceoId,
             name: branch.director.name,
             title: branch.director.role,
-            img: branch.director.avatar,
+            img: avatarUrl(branch.director.avatar),
             dept: branch.dept,
             tags: ["director"],
             profile: OrgProfileModal.buildProfileExtras(branch.director.name, branch.dept)
@@ -139,7 +144,7 @@
               pid: directorId,
               name: member.name,
               title: member.role,
-              img: member.avatar || avatarFn(),
+              img: avatarUrl(member.avatar || avatarFn()),
               dept: branch.dept,
               tags: ["member"],
               profile: OrgProfileModal.buildProfileExtras(member.name, branch.dept)
@@ -318,6 +323,23 @@
         return null;
       }
 
+      function pinOrgChartToTop(container, topPadding) {
+        const content = container.querySelector("[data-boc-content]");
+        const chartGroup = content?.querySelector("svg > g");
+        if (!chartGroup) return;
+
+        const transform = chartGroup.getAttribute("transform") || "";
+        const match = transform.match(/matrix\(([^)]+)\)/);
+        if (!match) return;
+
+        const parts = match[1].split(/[\s,]+/).map(Number);
+        if (parts.length < 6) return;
+
+        const box = chartGroup.getBBox();
+        parts[5] = topPadding - box.y;
+        chartGroup.setAttribute("transform", "matrix(" + parts.join(",") + ")");
+      }
+
       function getFocusSlug() {
         return new URLSearchParams(window.location.search).get("focus");
       }
@@ -383,6 +405,9 @@
 
       const chart = new OrgChart(treeEl, {
         template: "lio",
+        align: OrgChart.align.orientation,
+        orientation: OrgChart.orientation.top,
+        padding: 20,
         collapse: { level: 2, allChildren: true },
         nodeBinding: {
           field_0: "name",
@@ -402,6 +427,10 @@
         const focusSlug = getFocusSlug();
         if (focusSlug) {
           focusOrgChartNode(focusSlug);
+        } else {
+          requestAnimationFrame(function () {
+            pinOrgChartToTop(treeEl, 24);
+          });
         }
       });
 
