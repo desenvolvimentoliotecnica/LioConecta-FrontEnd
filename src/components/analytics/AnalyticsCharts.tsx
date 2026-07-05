@@ -33,6 +33,26 @@ export function ActivityTrendChart({ data }: ActivityTrendChartProps) {
   );
 }
 
+export function PollVotesTrendChart({ data }: ActivityTrendChartProps) {
+  return (
+    <div className="analytics-chart analytics-chart--recharts">
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+          <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+          <Tooltip
+            cursor={{ fill: "rgba(13, 148, 136, 0.08)" }}
+            contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+            formatter={(value) => [`${value} votos`, "Total"]}
+          />
+          <Bar dataKey="value" fill="#0d9488" radius={[6, 6, 0, 0]} maxBarSize={48} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 type ServiceBreakdownChartProps = {
   data: { label: string; value: number; color: string }[];
 };

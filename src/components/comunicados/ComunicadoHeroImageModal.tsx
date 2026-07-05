@@ -14,6 +14,7 @@ type Props = {
   initialUrl: string;
   onClose: () => void;
   onConfirm: (url: string) => void;
+  stacked?: boolean;
 };
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -24,7 +25,7 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function ComunicadoHeroImageModal({ open, initialUrl, onClose, onConfirm }: Props) {
+export function ComunicadoHeroImageModal({ open, initialUrl, onClose, onConfirm, stacked = false }: Props) {
   const titleId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -148,7 +149,11 @@ export function ComunicadoHeroImageModal({ open, initialUrl, onClose, onConfirm 
   const canConfirm = Boolean((manualUrl.trim() || selectedUrl.trim()) && !uploadImage.isPending);
 
   return (
-    <div className="hero-image-modal__backdrop" role="presentation" onClick={onClose}>
+    <div
+      className={`hero-image-modal__backdrop${stacked ? " hero-image-modal__backdrop--stacked" : ""}`}
+      role="presentation"
+      onClick={onClose}
+    >
       <div
         className="hero-image-modal"
         role="dialog"

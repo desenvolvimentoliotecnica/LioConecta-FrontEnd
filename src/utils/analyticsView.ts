@@ -6,13 +6,18 @@ import {
   getDepartmentEngagement,
   getKpis,
   getModuleInsights,
+  getPollActivityTrend,
+  getPollKpis,
+  getPollModuleInsight,
   getServiceBreakdown,
   getTopContent,
+  getTopPolls,
   type AnalyticsModule,
   type AnalyticsPeriod,
   type DepartmentEngagement,
   type KpiMetric,
   type ModuleInsight,
+  type PollSectionView,
   type RankedItem,
   type TrendPoint,
 } from "../config/analytics";
@@ -29,10 +34,20 @@ export type AnalyticsViewModel = {
   departments: DepartmentEngagement[];
   departmentsIsMock: boolean;
   mockSections: string[];
+  pollSection: PollSectionView | null;
 };
 
 function hasTrendData(points: TrendPoint[]): boolean {
   return points.some((point) => point.value > 0);
+}
+
+function formatTopItemValue(item: AnalyticsSnapshotDto["topContent"][number]): string {
+  if (item.value <= 0) return "Recente";
+  if (item.mod === "enquetes") return `${formatNumber(item.value)} votos`;
+  if (item.mod === "documentos") return `${formatNumber(item.value)} downloads`;
+  if (item.mod === "servicos") return `${formatNumber(item.value)} acessos`;
+  if (item.mod === "grupos") return `${formatNumber(item.value)} interações`;
+  return `${formatNumber(item.value)} leituras`;
 }
 
 function mapTopContent(snapshot: AnalyticsSnapshotDto): RankedItem[] {
@@ -42,9 +57,22 @@ function mapTopContent(snapshot: AnalyticsSnapshotDto): RankedItem[] {
     rank: index + 1,
     title: item.title,
     meta: item.meta,
-    value: item.value > 0 ? `${formatNumber(item.value)} leituras` : "Recente",
+    value: formatTopItemValue(item),
     href: item.href,
     mod: item.mod as RankedItem["mod"],
+  }));
+}
+
+function mapTopPolls(snapshot: AnalyticsSnapshotDto): RankedItem[] {
+  if (snapshot.topPolls.length === 0) return [];
+
+  return snapshot.topPolls.map((item, index) => ({
+    rank: index + 1,
+    title: item.title,
+    meta: item.meta,
+    value: formatTopItemValue(item),
+    href: item.href,
+    mod: "enquetes",
   }));
 }
 
@@ -242,19 +270,161 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
   return mockModules.map((mock) => realStats[mock.id] ?? mock);
 }
 
-export function buildMockAnalyticsView(period: AnalyticsPeriod, module: AnalyticsModule): AnalyticsViewModel {
+function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: AnalyticsPeriod): KpiMetric[] {
+  const mockKpis = getPollKpis(period);
+  const mockById = new Map(mockKpis.map((kpi) => [kpi.id, kpi]));
+
+  const realKpis: KpiMetric[] = [
+    {
+      id: "polls-created",
+      label: "Enquetes criadas",
+      value: formatNumber(snapshot.pollsCreated),
+      delta: mockById.get("polls-created")?.delta ?? "—",
+      trend: snapshot.pollsCreated > 0 ? "up" : "neutral",
+      icon: "fa-square-plus",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-votes",
+      label: "Total de votos",
+      value: formatNumber(snapshot.pollVotes),
+      delta: mockById.get("poll-votes")?.delta ?? "—",
+      trend: snapshot.pollVotes > 0 ? "up" : "neutral",
+      icon: "fa-check-to-slot",
+      mod: "enquetes",
+    },
+    {
+      id: "polls-active",
+      label: "Enquetes ativas",
+      value: formatNumber(snapshot.activePolls),
+      delta: "—",
+      trend: "neutral",
+      icon: "fa-circle-play",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-participation",
+      label: "Taxa de participação",
+      value: `${snapshot.pollParticipationRate}%`,
+      delta: mockById.get("poll-participation")?.delta ?? "—",
+      trend: snapshot.pollParticipationRate > 0 ? "up" : "neutral",
+      icon: "fa-users-viewfinder",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-avg-votes",
+      label: "Média de votos/enquete",
+      value: formatNumber(snapshot.pollAvgVotesPerPoll),
+      delta: mockById.get("poll-avg-votes")?.delta ?? "—",
+      trend: snapshot.pollAvgVotesPerPoll > 0 ? "up" : "neutral",
+      icon: "fa-chart-simple",
+      mod: "enquetes",
+    },
+    {
+      id: "polls-closed",
+      label: "Enquetes encerradas",
+      value: formatNumber(snapshot.pollsClosed),
+      delta: mockById.get("polls-closed")?.delta ?? "—",
+      trend: snapshot.pollsClosed > 0 ? "up" : "neutral",
+      icon: "fa-circle-stop",
+      mod: "enquetes",
+    },
+  ];
+
+  return realKpis.map((kpi) => {
+    const mock = mockById.get(kpi.id);
+    if (!mock) return kpi;
+    const hasRealData =
+      (kpi.id === "polls-created" && snapshot.pollsCreated >= 0) ||
+      (kpi.id === "poll-votes" && snapshot.pollVotes >= 0) ||
+      (kpi.id === "polls-active" && snapshot.activePolls >= 0) ||
+      (kpi.id === "poll-participation" && snapshot.pollParticipationRate >= 0) ||
+      (kpi.id === "poll-avg-votes" && snapshot.pollAvgVotesPerPoll >= 0) ||
+      (kpi.id === "polls-closed" && snapshot.pollsClosed >= 0);
+
+    return {
+      ...kpi,
+      delta: hasRealData ? "dado real" : mock.delta,
+      trend: hasRealData ? kpi.trend : mock.trend,
+    };
+  });
+}
+
+function buildPollSection(
+  snapshot: AnalyticsSnapshotDto | null | undefined,
+  period: AnalyticsPeriod,
+  mockSections: string[],
+): PollSectionView {
+  if (!snapshot) {
+    return {
+      kpis: getPollKpis(period),
+      activityTrend: getPollActivityTrend(period),
+      activityTrendIsMock: true,
+      topPolls: getTopPolls(period),
+      topPollsIsMock: true,
+      moduleInsight: getPollModuleInsight(period),
+    };
+  }
+
+  const pollTrend = snapshot.pollActivityTrend.map((point) => ({ label: point.label, value: point.value }));
+  const pollTrendIsMock = !hasTrendData(pollTrend);
+  if (pollTrendIsMock) mockSections.push("tendência de votos em enquetes");
+
+  const mappedTopPolls = mapTopPolls(snapshot);
+  const topPollsIsMock = mappedTopPolls.length === 0;
+  if (topPollsIsMock) mockSections.push("ranking de enquetes");
+
+  const mockInsight = getPollModuleInsight(period);
+  const kpis = buildPollKpisFromSnapshot(snapshot, period);
+  const byId = new Map(kpis.map((kpi) => [kpi.id, kpi]));
+
   return {
-    kpis: filterByModule(getKpis(period), module),
+    kpis,
+    activityTrend: pollTrendIsMock ? getPollActivityTrend(period) : pollTrend,
+    activityTrendIsMock: pollTrendIsMock,
+    topPolls: topPollsIsMock ? getTopPolls(period) : mappedTopPolls,
+    topPollsIsMock,
+    moduleInsight: {
+      ...mockInsight,
+      stats: [
+        { label: "Criadas", value: byId.get("polls-created")?.value ?? "—" },
+        { label: "Votos", value: byId.get("poll-votes")?.value ?? "—" },
+        { label: "Participação", value: byId.get("poll-participation")?.value ?? "—" },
+      ],
+      highlight:
+        snapshot.pollVotes > 0
+          ? `${formatNumber(snapshot.pollVotes)} votos registrados no período`
+          : mockInsight.highlight,
+    },
+  };
+}
+
+export function buildMockAnalyticsView(period: AnalyticsPeriod, module: AnalyticsModule): AnalyticsViewModel {
+  const pollSection = buildPollSection(null, period, []);
+  return {
+    kpis:
+      module === "enquetes"
+        ? pollSection.kpis
+        : filterByModule(getKpis(period), module),
     activityTrend: getActivityTrend(period),
     activityTrendIsMock: true,
-    modules: module === "all" ? getModuleInsights(period) : getModuleInsights(period).filter((m) => m.id === module),
-    topContent: filterByModule(getTopContent(period), module),
+    modules:
+      module === "all"
+        ? [...getModuleInsights(period), getPollModuleInsight(period)]
+        : module === "enquetes"
+          ? [pollSection.moduleInsight]
+          : getModuleInsights(period).filter((m) => m.id === module),
+    topContent:
+      module === "enquetes"
+        ? pollSection.topPolls
+        : filterByModule(getTopContent(period), module),
     topContentIsMock: true,
     serviceBreakdown: getServiceBreakdown(period),
     serviceBreakdownIsMock: true,
     departments: getDepartmentEngagement(),
     departmentsIsMock: true,
     mockSections: ["todos os indicadores"],
+    pollSection: module === "all" || module === "enquetes" ? pollSection : null,
   };
 }
 
@@ -299,22 +469,36 @@ export function buildAnalyticsView(
       );
   if (topContentIsMock) mockSections.push("conteúdo em destaque");
 
+  const pollSection =
+    module === "all" || module === "enquetes"
+      ? buildPollSection(snapshot, period, mockSections)
+      : null;
+
   const modules =
     module === "all"
-      ? buildModulesFromSnapshot(snapshot, period)
-      : buildModulesFromSnapshot(snapshot, period).filter((m) => m.id === module);
+      ? [...buildModulesFromSnapshot(snapshot, period), pollSection!.moduleInsight]
+      : module === "enquetes"
+        ? [pollSection!.moduleInsight]
+        : buildModulesFromSnapshot(snapshot, period).filter((m) => m.id === module);
 
   return {
-    kpis: filterByModule(buildKpisFromSnapshot(snapshot, period), module),
+    kpis:
+      module === "enquetes"
+        ? pollSection!.kpis
+        : filterByModule(buildKpisFromSnapshot(snapshot, period), module),
     activityTrend: trend,
     activityTrendIsMock,
     modules,
-    topContent,
-    topContentIsMock,
+    topContent:
+      module === "enquetes"
+        ? pollSection!.topPolls
+        : topContent,
+    topContentIsMock: module === "enquetes" ? pollSection!.topPollsIsMock : topContentIsMock,
     serviceBreakdown,
     serviceBreakdownIsMock,
     departments,
     departmentsIsMock,
     mockSections,
+    pollSection,
   };
 }

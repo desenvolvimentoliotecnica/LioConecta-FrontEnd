@@ -4,6 +4,7 @@ import { useAnalyticsSnapshot } from "../../api/hooks/useAnalytics";
 import {
   ActivityTrendChart,
   DepartmentEngagementChart,
+  PollVotesTrendChart,
   ServiceBreakdownChart,
 } from "../analytics/AnalyticsCharts";
 import {
@@ -33,17 +34,21 @@ export function AnalyticsPage() {
   );
 
   const showActivityTrend =
-    module === "all" ||
-    module === "feed" ||
-    module === "engajamento" ||
-    module === "comunicados" ||
-    module === "pessoas" ||
-    module === "grupos" ||
-    module === "documentos";
+    module !== "enquetes" &&
+    (module === "all" ||
+      module === "feed" ||
+      module === "engajamento" ||
+      module === "comunicados" ||
+      module === "pessoas" ||
+      module === "grupos" ||
+      module === "documentos");
   const showServiceBreakdown = module === "all" || module === "servicos";
   const showChartsSection = showActivityTrend || showServiceBreakdown;
   const showDepartmentEngagement =
-    module === "all" || module === "pessoas" || module === "engajamento";
+    module !== "enquetes" &&
+    (module === "all" || module === "pessoas" || module === "engajamento");
+  const showPollSection = view.pollSection != null;
+  const showPollKpisInSection = module === "all";
 
   const footerNote = isLoading
     ? "Carregando dados do analytics..."
@@ -65,7 +70,7 @@ export function AnalyticsPage() {
           <div>
             <h1 className="page-header__title">Analytics</h1>
             <p className="page-header__desc">
-              Painel unificado de métricas do ecossistema LioConecta — feed, comunicados, pessoas, grupos,
+              Painel unificado de métricas do ecossistema LioConecta — feed, enquetes, comunicados, pessoas, grupos,
               documentos, serviços digitais e engajamento.
             </p>
           </div>
@@ -145,6 +150,81 @@ export function AnalyticsPage() {
         </section>
       ) : null}
 
+      {showPollSection && view.pollSection ? (
+        <section className="analytics-polls-section" aria-label="Enquetes">
+          <div className="analytics-polls-section__head">
+            <div>
+              <h2 className="analytics-page__section-title analytics-polls-section__title">
+                <i className="fa-solid fa-square-poll-vertical" aria-hidden="true" />
+                Enquetes
+              </h2>
+              <p className="analytics-polls-section__desc">
+                Criação, participação, votos e encerramento das enquetes publicadas no feed corporativo.
+                {view.pollSection.activityTrendIsMock || view.pollSection.topPollsIsMock
+                  ? " · parcialmente simulado"
+                  : " · dados reais"}
+              </p>
+            </div>
+            <Link className="analytics-polls-section__link" to="/">
+              Ir ao feed
+              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+            </Link>
+          </div>
+
+          {showPollKpisInSection ? (
+            <div className="analytics-kpi-grid analytics-kpi-grid--polls">
+              {view.pollSection.kpis.map((kpi) => (
+                <article key={kpi.id} className={`analytics-kpi analytics-kpi--${kpi.mod}`}>
+                  <div className="analytics-kpi__head">
+                    <span className={`analytics-kpi__icon analytics-kpi__icon--${kpi.mod}`}>
+                      <i className={`fa-solid ${kpi.icon}`} aria-hidden="true" />
+                    </span>
+                    <span className={`analytics-kpi__delta analytics-kpi__delta--${kpi.trend}`}>
+                      {kpi.delta}
+                    </span>
+                  </div>
+                  <div className="analytics-kpi__value">{kpi.value}</div>
+                  <div className="analytics-kpi__label">{kpi.label}</div>
+                </article>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="analytics-grid-2 analytics-polls-section__charts">
+            <article className="analytics-panel">
+              <h3 className="analytics-panel__title">Votos no período</h3>
+              <p className="analytics-panel__desc">
+                Evolução de votos registrados nas enquetes do feed.
+                {view.pollSection.activityTrendIsMock ? " · dados simulados" : " · dados reais"}
+              </p>
+              <PollVotesTrendChart data={view.pollSection.activityTrend} />
+            </article>
+
+            <article className="analytics-panel">
+              <h3 className="analytics-panel__title">Enquetes em destaque</h3>
+              <p className="analytics-panel__desc">
+                Enquetes com maior volume de votos no período selecionado.
+                {view.pollSection.topPollsIsMock ? " · dados simulados" : " · dados reais"}
+              </p>
+              <ol className="analytics-ranking">
+                {view.pollSection.topPolls.map((item) => (
+                  <li key={item.rank}>
+                    <Link className="analytics-ranking__item" to={item.href}>
+                      <span className="analytics-ranking__rank">{item.rank}</span>
+                      <div>
+                        <div className="analytics-ranking__title">{item.title}</div>
+                        <div className="analytics-ranking__meta">{item.meta}</div>
+                      </div>
+                      <span className="analytics-ranking__value">{item.value}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          </div>
+        </section>
+      ) : null}
+
       {showChartsSection ? (
         <section className="analytics-grid-2" aria-label="Tendência e serviços">
           {showActivityTrend ? (
@@ -171,7 +251,7 @@ export function AnalyticsPage() {
         </section>
       ) : null}
 
-      {view.modules.length > 0 ? (
+      {view.modules.length > 0 && module !== "enquetes" ? (
         <section aria-label="Métricas por módulo">
           <h2 className="analytics-page__section-title">Ecossistema do portal</h2>
           <div className="analytics-modules">
@@ -208,7 +288,7 @@ export function AnalyticsPage() {
       ) : null}
 
       <section className="analytics-grid-2" aria-label="Rankings e departamentos">
-        {view.topContent.length > 0 ? (
+        {view.topContent.length > 0 && module !== "enquetes" ? (
           <article className="analytics-panel">
             <h2 className="analytics-panel__title">Conteúdo em destaque</h2>
             <p className="analytics-panel__desc">

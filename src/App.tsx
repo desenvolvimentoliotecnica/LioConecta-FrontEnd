@@ -13,6 +13,7 @@ import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
+import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
 import { TiHubPage } from "./components/pages/TiHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
@@ -86,6 +87,7 @@ function App() {
         <Route path="/grupos/aprovacoes" element={<GroupApprovalsPage />} />
         <Route path="/servicos/rh" element={<RhHubPage />} />
         <Route path="/servicos/contracheque" element={<ContrachequePage />} />
+        <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
@@ -99,7 +101,8 @@ function App() {
             page.id === "comunicados-arquivo" ||
             page.id === "grupos-criar-grupo" ||
             page.id === "grupos-explorar" ||
-            page.id === "servicos-contracheque"
+            page.id === "servicos-contracheque" ||
+            page.id === "servicos-beneficios"
           ) {
             return null;
           }

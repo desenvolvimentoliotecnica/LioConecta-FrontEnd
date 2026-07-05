@@ -83,6 +83,10 @@
   padding: 24px;
 }
 
+.hero-image-modal__backdrop--stacked {
+  z-index: 2100;
+}
+
 .hero-image-modal {
   width: min(760px, 100%);
   max-height: min(90vh, 860px);

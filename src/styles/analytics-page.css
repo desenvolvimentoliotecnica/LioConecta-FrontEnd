@@ -109,6 +109,7 @@
 .analytics-kpi--documentos { background: #ecfeff; border-color: #5eead4; }
 .analytics-kpi--servicos { background: #f0fdf4; border-color: #86efac; }
 .analytics-kpi--engajamento { background: #fef2f2; border-color: #fca5a5; }
+.analytics-kpi--enquetes { background: #f0fdfa; border-color: #5eead4; }
 
 .analytics-kpi__head {
   display: flex;
@@ -137,6 +138,7 @@
 .analytics-kpi__icon--documentos { background: #cffafe; color: #0f766e; }
 .analytics-kpi__icon--servicos { background: #dcfce7; color: #15803d; }
 .analytics-kpi__icon--engajamento { background: #fee2e2; color: #b91c1c; }
+.analytics-kpi__icon--enquetes { background: #ccfbf1; color: #0f766e; }
 
 .analytics-kpi__delta {
   font-size: 11px;
@@ -539,5 +541,75 @@
 
   .analytics-dept-row__pct {
     text-align: left;
+  }
+}
+
+.analytics-polls-section {
+  margin-bottom: var(--wf-gap);
+  padding: 20px;
+  background: linear-gradient(180deg, #f0fdfa 0%, #fff 120px);
+  border: 1px dashed #99f6e4;
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.analytics-polls-section__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.analytics-polls-section__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.analytics-polls-section__title i {
+  color: #0f766e;
+}
+
+.analytics-polls-section__desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.45;
+  max-width: 720px;
+}
+
+.analytics-polls-section__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f766e;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border: 1px dashed #99f6e4;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.analytics-polls-section__link:hover {
+  background: #ccfbf1;
+}
+
+.analytics-kpi-grid--polls {
+  margin-bottom: 18px;
+}
+
+.analytics-polls-section__charts {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .analytics-polls-section__head {
+    flex-direction: column;
   }
 }

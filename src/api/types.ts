@@ -306,6 +306,14 @@ export interface AnalyticsSnapshotDto {
   serviceRequests: number;
   documents: number;
   moodChecks: number;
+  pollsCreated: number;
+  pollVotes: number;
+  activePolls: number;
+  pollsClosed: number;
+  pollParticipationRate: number;
+  pollAvgVotesPerPoll: number;
+  pollActivityTrend: AnalyticsTrendPointDto[];
+  topPolls: AnalyticsTopItemDto[];
   activityTrend: AnalyticsTrendPointDto[];
   serviceBreakdown: AnalyticsServiceSliceDto[];
   departmentEngagement: AnalyticsDepartmentDto[];
@@ -465,6 +473,64 @@ export interface CreatePayslipRequestDto {
 }
 
 export interface PayslipRequestResultDto {
+  requestId: string;
+  status: string;
+  message: string;
+}
+
+export interface BenefitSummaryDto {
+  activeCount: number;
+  totalMonthlyValue: number;
+  dependentsCount: number;
+}
+
+export interface BenefitListItemDto {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  isActive: boolean;
+  portalUrl?: string | null;
+  monthlyValue?: number | null;
+}
+
+export interface BenefitDetailLineDto {
+  label: string;
+  amount?: number | null;
+  note?: string | null;
+}
+
+export interface BenefitDependentDto {
+  name: string;
+  relation: string;
+  monthlyValue?: number | null;
+}
+
+export interface BenefitDetailDto {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  portalUrl?: string | null;
+  helpText: string;
+  monthlyValue?: number | null;
+  lines: BenefitDetailLineDto[];
+  dependents: BenefitDependentDto[];
+  notes: string[];
+}
+
+export interface CreateBenefitRequestDto {
+  benefitId: string;
+  notes?: string | null;
+}
+
+export interface BenefitRequestResultDto {
   requestId: string;
   status: string;
   message: string;

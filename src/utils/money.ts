@@ -14,3 +14,7 @@ export function formatMoney(value: number, showValues: boolean): string {
 export function bookmarkIdForService(serviceId: string): string {
   return `bm-contracheque-${serviceId}`;
 }
+
+export function bookmarkIdForBenefit(benefitId: string): string {
+  return `bm-beneficios-${benefitId}`;
+}

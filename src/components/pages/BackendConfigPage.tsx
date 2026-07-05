@@ -61,6 +61,9 @@ function SettingField({
     setting.valueType === "secret" ||
     setting.key.includes("connection");
 
+  const inputType =
+    setting.isSecret ? "password" : setting.valueType === "url" ? "url" : "text";
+
   return (
     <div className="backend-config-page__field">
       <label htmlFor={inputId}>
@@ -88,11 +91,17 @@ function SettingField({
         <input
           id={inputId}
           className="backend-config-page__input"
-          type={setting.isSecret ? "password" : "text"}
+          type={inputType}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           autoComplete="off"
-          placeholder={setting.isSecret && !setting.hasValue ? "Informe o valor secreto" : undefined}
+          placeholder={
+            setting.valueType === "url"
+              ? "https://..."
+              : setting.isSecret && !setting.hasValue
+                ? "Informe o valor secreto"
+                : undefined
+          }
         />
       )}
     </div>

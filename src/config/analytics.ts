@@ -3,6 +3,7 @@ export type AnalyticsPeriod = "7d" | "30d" | "90d" | "12m";
 export type AnalyticsModule =
   | "all"
   | "feed"
+  | "enquetes"
   | "comunicados"
   | "pessoas"
   | "grupos"
@@ -20,6 +21,7 @@ export const ANALYTICS_PERIODS: { id: AnalyticsPeriod; label: string }[] = [
 export const ANALYTICS_MODULES: { id: AnalyticsModule; label: string; icon: string }[] = [
   { id: "all", label: "Visão geral", icon: "fa-chart-pie" },
   { id: "feed", label: "Feed", icon: "fa-rss" },
+  { id: "enquetes", label: "Enquetes", icon: "fa-square-poll-vertical" },
   { id: "comunicados", label: "Comunicados", icon: "fa-bullhorn" },
   { id: "pessoas", label: "Pessoas", icon: "fa-users" },
   { id: "grupos", label: "Grupos", icon: "fa-people-group" },
@@ -65,6 +67,15 @@ export type DepartmentEngagement = {
   name: string;
   activeUsers: number;
   engagement: number;
+};
+
+export type PollSectionView = {
+  kpis: KpiMetric[];
+  activityTrend: TrendPoint[];
+  activityTrendIsMock: boolean;
+  topPolls: RankedItem[];
+  topPollsIsMock: boolean;
+  moduleInsight: ModuleInsight;
 };
 
 const PERIOD_MULTIPLIER: Record<AnalyticsPeriod, number> = {
@@ -166,6 +177,179 @@ export function getKpis(period: AnalyticsPeriod): KpiMetric[] {
       trend: "up",
       icon: "fa-people-group",
       mod: "grupos",
+    },
+  ];
+}
+
+export function getPollKpis(period: AnalyticsPeriod): KpiMetric[] {
+  const created = scale(12, period);
+  const votes = scale(248, period);
+  const active = Math.max(2, Math.round(created * 0.4));
+  const closed = scale(8, period);
+  const participation = period === "7d" ? 34 : period === "30d" ? 41 : period === "90d" ? 46 : 44;
+  const avgVotes = created === 0 ? 0 : Math.round(votes / created);
+
+  return [
+    {
+      id: "polls-created",
+      label: "Enquetes criadas",
+      value: formatNumber(created),
+      delta: "+18%",
+      trend: "up",
+      icon: "fa-square-plus",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-votes",
+      label: "Total de votos",
+      value: formatNumber(votes),
+      delta: "+24%",
+      trend: "up",
+      icon: "fa-check-to-slot",
+      mod: "enquetes",
+    },
+    {
+      id: "polls-active",
+      label: "Enquetes ativas",
+      value: formatNumber(active),
+      delta: "—",
+      trend: "neutral",
+      icon: "fa-circle-play",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-participation",
+      label: "Taxa de participação",
+      value: `${participation}%`,
+      delta: "+3,2 p.p.",
+      trend: "up",
+      icon: "fa-users-viewfinder",
+      mod: "enquetes",
+    },
+    {
+      id: "poll-avg-votes",
+      label: "Média de votos/enquete",
+      value: formatNumber(avgVotes),
+      delta: "+6%",
+      trend: "up",
+      icon: "fa-chart-simple",
+      mod: "enquetes",
+    },
+    {
+      id: "polls-closed",
+      label: "Enquetes encerradas",
+      value: formatNumber(closed),
+      delta: "+2",
+      trend: "up",
+      icon: "fa-circle-stop",
+      mod: "enquetes",
+    },
+  ];
+}
+
+export function getPollActivityTrend(period: AnalyticsPeriod): TrendPoint[] {
+  if (period === "7d") {
+    return [
+      { label: "Seg", value: 8 },
+      { label: "Ter", value: 14 },
+      { label: "Qua", value: 11 },
+      { label: "Qui", value: 22 },
+      { label: "Sex", value: 18 },
+      { label: "Sáb", value: 4 },
+      { label: "Dom", value: 3 },
+    ];
+  }
+  if (period === "30d") {
+    return [
+      { label: "Sem 1", value: 42 },
+      { label: "Sem 2", value: 58 },
+      { label: "Sem 3", value: 71 },
+      { label: "Sem 4", value: 77 },
+    ];
+  }
+  if (period === "90d") {
+    return [
+      { label: "Abr", value: 168 },
+      { label: "Mai", value: 204 },
+      { label: "Jun", value: 248 },
+    ];
+  }
+  return [
+    { label: "Ago", value: 120 },
+    { label: "Set", value: 138 },
+    { label: "Out", value: 156 },
+    { label: "Nov", value: 172 },
+    { label: "Dez", value: 148 },
+    { label: "Jan", value: 164 },
+    { label: "Fev", value: 188 },
+    { label: "Mar", value: 210 },
+    { label: "Abr", value: 228 },
+    { label: "Mai", value: 236 },
+    { label: "Jun", value: 248 },
+    { label: "Jul", value: 252 },
+  ];
+}
+
+export function getPollModuleInsight(period: AnalyticsPeriod): ModuleInsight {
+  const kpis = getPollKpis(period);
+  const byId = new Map(kpis.map((kpi) => [kpi.id, kpi]));
+
+  return {
+    id: "enquetes",
+    title: "Enquetes no feed",
+    description: "Criação, votação, participação e encerramento das enquetes publicadas no feed corporativo.",
+    href: "/",
+    stats: [
+      { label: "Criadas", value: byId.get("polls-created")?.value ?? "—" },
+      { label: "Votos", value: byId.get("poll-votes")?.value ?? "—" },
+      { label: "Participação", value: byId.get("poll-participation")?.value ?? "—" },
+    ],
+    highlight: "Enquete sobre trabalho híbrido lidera com 78% de participação",
+  };
+}
+
+export function getTopPolls(period: AnalyticsPeriod): RankedItem[] {
+  const votes = (n: number) => formatNumber(scale(n, period));
+  return [
+    {
+      rank: 1,
+      title: "Modelo de trabalho híbrido",
+      meta: "Feed · Enquete · RH",
+      value: `${votes(248)} votos`,
+      href: "/",
+      mod: "enquetes",
+    },
+    {
+      rank: 2,
+      title: "Horário flexível na operação",
+      meta: "Feed · Enquete · Operações",
+      value: `${votes(186)} votos`,
+      href: "/",
+      mod: "enquetes",
+    },
+    {
+      rank: 3,
+      title: "Benefícios extras desejados",
+      meta: "Feed · Enquete · RH",
+      value: `${votes(142)} votos`,
+      href: "/",
+      mod: "enquetes",
+    },
+    {
+      rank: 4,
+      title: "Formato do evento de integração",
+      meta: "Feed · Enquete · Marketing",
+      value: `${votes(96)} votos`,
+      href: "/",
+      mod: "enquetes",
+    },
+    {
+      rank: 5,
+      title: "Prioridade de melhorias no portal",
+      meta: "Feed · Enquete · TI",
+      value: `${votes(74)} votos`,
+      href: "/",
+      mod: "enquetes",
     },
   ];
 }
@@ -328,7 +512,7 @@ export function getTopContent(period: AnalyticsPeriod): RankedItem[] {
       meta: "Feed · Enquete",
       value: `${views(248)} votos`,
       href: "/",
-      mod: "feed",
+      mod: "enquetes",
     },
     {
       rank: 4,
