@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
-import type { CreatePostRequest, FeedPostDto, PagedResult } from "../types";
+import type { CreateCommentRequest, CreatePostRequest, CommentDto, FeedPostDto, MeDto, PagedResult } from "../types";
 import { POST_TYPE_SOCIAL } from "../types";
 
 export const FEED_QUERY_KEY = ["feed"] as const;
@@ -17,6 +17,68 @@ function updatePostInFeedCache(
       ...current,
       items: current.items.map((post) => (post.id === postId ? updater(post) : post)),
     };
+  });
+}
+
+export function useAddPostComment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ postId, text }: { postId: string; text: string }): Promise<CommentDto> => {
+      if (config.useMock) {
+        throw new Error("Mock mode — API call skipped");
+      }
+      const body: CreateCommentRequest = { text: text.trim() };
+      return api.post<CommentDto>(`/feed/posts/${postId}/comments`, body);
+    },
+    onMutate: async ({ postId, text }) => {
+      await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
+      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      const trimmed = text.trim();
+      const me = queryClient.getQueryData<MeDto>(["me"]);
+
+      updatePostInFeedCache(queryClient, postId, (post) => ({
+        ...post,
+        commentCount: post.commentCount + 1,
+        comments: [
+          ...post.comments,
+          {
+            id: `optimistic-${Date.now()}`,
+            text: trimmed,
+            author: {
+              id: me?.id ?? "optimistic",
+              slug: me?.slug ?? "maria-silva",
+              name: me?.name ?? "Você",
+              title: me?.title,
+              photoUrl: me?.photoUrl ?? "/avatar-maria-silva.png",
+              departmentName: me?.departmentName,
+              isActive: true,
+            },
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      }));
+
+      return { previous };
+    },
+    onSuccess: (comment, { postId }) => {
+      updatePostInFeedCache(queryClient, postId, (post) => {
+        const withoutOptimistic = post.comments.filter((c) => !c.id.startsWith("optimistic-"));
+        const alreadyPresent = withoutOptimistic.some((c) => c.id === comment.id);
+        return {
+          ...post,
+          comments: alreadyPresent ? withoutOptimistic : [...withoutOptimistic, comment],
+        };
+      });
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
+      }
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+    },
   });
 }
 

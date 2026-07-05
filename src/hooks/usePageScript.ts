@@ -197,7 +197,7 @@ export function useFeedComments(containerRef: RefObject<HTMLElement | null>) {
     }
 
     let pool = shuffle(commentPool);
-    const cards = root.querySelectorAll(".feed-grid .card:not(.card--mood)");
+    const cards = root.querySelectorAll(".feed-grid .card:not(.card--mood):not([data-feed-post-id])");
 
     cards.forEach((card) => {
       if (card.querySelector(".comments")) return;

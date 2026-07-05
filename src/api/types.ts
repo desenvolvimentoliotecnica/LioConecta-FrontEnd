@@ -57,6 +57,13 @@ export interface PersonSummaryDto {
   isActive: boolean;
 }
 
+export interface CommentDto {
+  id: string;
+  text: string;
+  author: PersonSummaryDto;
+  createdAt: string;
+}
+
 export interface FeedPostDto {
   id: string;
   type: number;
@@ -68,7 +75,11 @@ export interface FeedPostDto {
   commentCount: number;
   reactionCount: number;
   viewerReaction?: string | null;
-  comments: unknown[];
+  comments: CommentDto[];
+}
+
+export interface CreateCommentRequest {
+  text: string;
 }
 
 export interface CreatePostRequest {
