@@ -115,7 +115,7 @@
     document.getElementById("org-profile-admission").textContent = profile.admission;
     document.getElementById("org-profile-email-link").href = "mailto:" + profile.email;
     document.getElementById("org-profile-full-link").href =
-      "pessoas-perfil.html?id=" + encodeURIComponent(slug);
+      "/pessoas/perfil?id=" + encodeURIComponent(slug);
 
     document.getElementById("org-profile-message-btn").onclick = function () {
       if (typeof onMessage === "function") {

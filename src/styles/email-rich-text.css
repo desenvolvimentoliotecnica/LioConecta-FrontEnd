@@ -1,0 +1,68 @@
+.email-rich-text {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.email-rich-text:focus-within {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+.email-rich-text__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.email-rich-text__toolbar button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.email-rich-text__toolbar button:hover,
+.email-rich-text__toolbar button.is-active {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #6d28d9;
+}
+
+.email-rich-text__editor {
+  min-height: 140px;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #0f172a;
+}
+
+.email-rich-text__editor:focus {
+  outline: none;
+}
+
+.email-rich-text__editor p {
+  margin: 0 0 0.65rem;
+}
+
+.email-rich-text__editor p.is-editor-empty:first-child::before {
+  color: #94a3b8;
+}
+
+.email-rich-text.is-disabled {
+  opacity: 0.7;
+}
+
+.email-rich-text.is-disabled .email-rich-text__editor {
+  pointer-events: none;
+  background: #f8fafc;
+}

@@ -52,7 +52,25 @@
   }
 
   function getProfileId() {
-    return new URLSearchParams(window.location.search).get("id");
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get("id");
+    if (id) return id;
+
+    params.forEach(function (value, key) {
+      if (id) return;
+      if (key.indexOf("id=") === 0) {
+        id = decodeURIComponent(key.slice(3));
+        return;
+      }
+      if (!value) {
+        var eq = key.indexOf("=");
+        if (eq > 0 && key.slice(0, eq) === "id") {
+          id = decodeURIComponent(key.slice(eq + 1));
+        }
+      }
+    });
+
+    return id;
   }
 
   function formatDate(isoDate) {
@@ -72,7 +90,9 @@
   function buildHierarchyChain(person, peopleIndex) {
     var chain = [];
     var managerId = person.managerId;
-    while (managerId && peopleIndex[managerId]) {
+    var visited = {};
+    while (managerId && peopleIndex[managerId] && !visited[managerId]) {
+      visited[managerId] = true;
       chain.unshift(peopleIndex[managerId]);
       managerId = peopleIndex[managerId].managerId;
     }
@@ -609,6 +629,9 @@
     if (modal) modal.hidden = true;
     if (activeEditModal === section) activeEditModal = null;
     setEditError(section, "");
+    if (!activeEditModal) {
+      document.body.style.overflow = "";
+    }
   }
 
   function renderSkillsEditor(skills) {
@@ -895,6 +918,8 @@
     activeEditModal = section;
     var modal = document.getElementById("profile-edit-" + section + "-modal");
     if (!modal) return;
+
+    document.body.style.overflow = "hidden";
 
     if (section === "about") {
       document.getElementById("profile-edit-about-input").value =
@@ -1197,7 +1222,27 @@
     document.getElementById("profile-related").innerHTML = renderRelatedPeople(person, allPeople);
 
     var contact = person.contact || {};
-    document.getElementById("profile-email-btn").href = "mailto:" + contact.email;
+    var emailBtn = document.getElementById("profile-email-btn");
+    if (emailBtn) {
+      if (!contact.email) {
+        emailBtn.hidden = true;
+      } else {
+        emailBtn.hidden = false;
+        emailBtn.onclick = function () {
+          if (global.LioEmailCompose && typeof global.LioEmailCompose.open === "function") {
+            global.LioEmailCompose.open({
+              to: [{ name: person.name, email: contact.email }],
+              recipientSlug: person.id,
+              lockedTo: true,
+              showExternalMailtoLink: true,
+              source: "profile",
+            });
+            return;
+          }
+          window.location.href = "mailto:" + contact.email;
+        };
+      }
+    }
     document.getElementById("profile-teams-btn").href =
       "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email || "");
     document.getElementById("profile-schedule-btn").href =
@@ -1381,17 +1426,47 @@
     mountProfileModalsToBody();
     setupProfileEditModals();
     var profileId = getProfileId();
-    if (!profileId) {
+
+    showLoading();
+
+    function finishLoad(id) {
+      return loadFromApi(id)
+        .then(function (result) {
+          if (loadId !== activeLoadId) return;
+          try {
+            renderProfile(result.person, result.allPeople);
+          } catch (error) {
+            console.error("[ProfilePage] renderProfile failed", error);
+            showError();
+          }
+        })
+        .catch(function () {
+          if (loadId !== activeLoadId) return;
+          showError();
+        });
+    }
+
+    if (profileId) {
+      return finishLoad(profileId);
+    }
+
+    if (!global.LioApi || global.LioApi.useMock) {
       showError();
       return Promise.resolve();
     }
 
-    showLoading();
-
-    return loadFromApi(profileId)
-      .then(function (result) {
+    return global.LioApi
+      .get("/me")
+      .then(function (me) {
         if (loadId !== activeLoadId) return;
-        renderProfile(result.person, result.allPeople);
+        if (!me || !me.slug) {
+          showError();
+          return;
+        }
+        var url = new URL(window.location.href);
+        url.searchParams.set("id", me.slug);
+        window.history.replaceState(null, "", url.pathname + "?" + url.searchParams.toString());
+        return finishLoad(me.slug);
       })
       .catch(function () {
         if (loadId !== activeLoadId) return;

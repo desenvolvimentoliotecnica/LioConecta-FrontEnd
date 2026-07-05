@@ -1,0 +1,391 @@
+/* Modal de e-mail — padrão portal (header/footer fixos, scroll no body) */
+
+.email-compose-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    16px
+    max(16px, env(safe-area-inset-bottom));
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.email-compose-modal__dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(640px, 100%);
+  height: min(680px, calc(100dvh - 32px));
+  max-height: min(680px, calc(100dvh - 32px));
+  border-radius: var(--wf-radius, 12px);
+  background: #fff;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.24);
+  overflow: hidden;
+  outline: none;
+}
+
+.email-compose-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--wf-border, #e2e8f0);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__header-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.email-compose-modal__header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f5f3ff;
+  color: #6d28d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+}
+
+.email-compose-modal__subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.email-compose-modal__close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.email-compose-modal__close:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.email-compose-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 20px 12px;
+}
+
+.email-compose-modal__feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.email-compose-modal__feedback i {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__feedback--error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.email-compose-modal__feedback--success {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #bbf7d0;
+}
+
+.email-compose-modal__field {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 8px 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.email-compose-modal__field--message,
+.email-compose-modal__field--attachments {
+  align-items: start;
+}
+
+.email-compose-modal__field--message {
+  flex: 1 1 auto;
+  min-height: 180px;
+  align-items: stretch;
+  margin-bottom: 10px;
+}
+
+.email-compose-modal__field--message .email-rich-text {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 180px;
+}
+
+.email-compose-modal__field--message .email-rich-text__editor {
+  flex: 1 1 auto;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.email-compose-modal__field--message .email-rich-text__editor .tiptap {
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+
+.email-compose-modal__field--message .email-compose-modal__label,
+.email-compose-modal__field--attachments .email-compose-modal__label {
+  padding-top: 9px;
+}
+
+.email-compose-modal__field--attachments {
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.email-compose-modal__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__label i {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.email-compose-modal__input {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.email-compose-modal__input::placeholder {
+  color: #94a3b8;
+}
+
+.email-compose-modal__input:focus {
+  outline: none;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+.email-compose-modal__input:disabled {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.email-compose-modal__attachments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.email-compose-modal__attach-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.email-compose-modal__attach-btn:hover:not(:disabled) {
+  background: #f5f3ff;
+  color: #6d28d9;
+  border-color: #a78bfa;
+}
+
+.email-compose-modal__attach-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.email-compose-modal__attach-hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.email-compose-modal__attachment-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  width: 100%;
+  align-self: stretch;
+  text-align: left;
+}
+
+.email-compose-modal__attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  color: #334155;
+}
+
+.email-compose-modal__attachment-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.email-compose-modal__attachment-meta i {
+  color: #7c3aed;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__attachment-meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-compose-modal__attachment-remove {
+  border: none;
+  background: #fef2f2;
+  color: #b91c1c;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__attachment-remove:hover:not(:disabled) {
+  background: #fee2e2;
+}
+
+.email-compose-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--wf-border, #e2e8f0);
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.email-compose-modal__footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #6d28d9;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.email-compose-modal__footer-link:hover {
+  color: #5b21b6;
+  text-decoration: underline;
+}
+
+.email-compose-modal__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.email-compose-modal__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+}
+
+.email-compose-modal__btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.email-compose-modal__btn--primary {
+  border: none;
+  background: #6d28d9;
+  color: #fff;
+}
+
+.email-compose-modal__btn--primary:hover:not(:disabled) {
+  background: #5b21b6;
+  color: #fff;
+}
+
+.email-compose-modal__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

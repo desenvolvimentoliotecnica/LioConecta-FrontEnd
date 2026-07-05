@@ -997,3 +997,44 @@ export interface PagedEmailMessagesDto {
   page: number;
   pageSize: number;
 }
+
+export interface EmailRecipient {
+  name?: string | null;
+  email: string;
+}
+
+export interface EmailAttachmentUploadDto {
+  id: string;
+  fileName: string;
+  sizeBytes: number;
+  contentType: string;
+}
+
+export interface SendEmailRequest {
+  to?: string[] | null;
+  recipientSlug?: string | null;
+  subject: string;
+  bodyHtml?: string | null;
+  cc?: string[] | null;
+  bcc?: string[] | null;
+  attachmentIds?: string[] | null;
+  source?: string | null;
+}
+
+export interface SendEmailResponse {
+  messageId: string;
+  status: string;
+}
+
+export type EmailComposeOpenOptions = {
+  to?: EmailRecipient[];
+  recipientSlug?: string;
+  cc?: string[];
+  bcc?: string[];
+  subject?: string;
+  bodyHtml?: string;
+  lockedTo?: boolean;
+  showBcc?: boolean;
+  showExternalMailtoLink?: boolean;
+  source?: string;
+};

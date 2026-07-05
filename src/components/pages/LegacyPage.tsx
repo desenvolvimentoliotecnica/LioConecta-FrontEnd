@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
 import { FeedComposer } from "../feed/FeedComposer";
 import { FeedPosts } from "../feed/FeedPosts";
@@ -33,12 +33,27 @@ function injectPageStyles(pageId: string): (() => void) | undefined {
   };
 }
 
+/** Injeta HTML legacy só quando contentKey muda — evita reset em re-renders do React. */
+function useLegacyMainHtml(
+  mainRef: RefObject<HTMLElement | null>,
+  contentKey: string,
+  html: string,
+) {
+  useLayoutEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    el.innerHTML = html;
+  }, [contentKey, html, mainRef]);
+}
+
 export function LegacyPage() {
   const location = useLocation();
   const page = getPageByRoute(location.pathname);
   const mainRef = useRef<HTMLElement>(null);
   const contentKey = `${location.pathname}${location.search}${location.hash}`;
+  const html = page ? (pageAssets[page.id]?.content ?? "") : "";
 
+  useLegacyMainHtml(mainRef, contentKey, html);
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page?.id === "feed", location.hash);
@@ -58,8 +73,6 @@ export function LegacyPage() {
     );
   }
 
-  const html = pageAssets[page.id]?.content ?? "";
-
   const feedParts = page.id === FEED_PAGE_ID ? splitFeedHtml(html) : null;
   if (feedParts) {
     return (
@@ -73,20 +86,16 @@ export function LegacyPage() {
     );
   }
 
-  return (
-    <main
-      className="main"
-      ref={mainRef}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
+  return <main key={contentKey} className="main" ref={mainRef} />;
 }
 
 export function LegacyPageById({ page }: { page: PageEntry }) {
   const location = useLocation();
   const mainRef = useRef<HTMLElement>(null);
   const contentKey = `${page.id}:${location.search}${location.hash}`;
+  const html = pageAssets[page.id]?.content ?? "";
 
+  useLegacyMainHtml(mainRef, contentKey, html);
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page.id === "feed", location.hash);
@@ -96,8 +105,6 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
     return injectPageStyles(page.id);
   }, [page.id]);
 
-  const html = pageAssets[page.id]?.content ?? "";
-
   const feedParts = page.id === FEED_PAGE_ID ? splitFeedHtml(html) : null;
   if (feedParts) {
     return (
@@ -111,12 +118,5 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
     );
   }
 
-  return (
-    <main
-      key={contentKey}
-      className="main"
-      ref={mainRef}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
+  return <main key={contentKey} className="main" ref={mainRef} />;
 }

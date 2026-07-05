@@ -411,7 +411,7 @@ Layout: `profile-layout` (sidebar 280px + coluna principal com abas). Cores por 
 | Avatar | `#profile-avatar` | `img` + cor do dept |
 | Nome / cargo / dept / pronomes | `#profile-name`, `#profile-role`, `#profile-dept`, `#profile-pronouns` | |
 | Badges | `#profile-badges` | `tags[]` mapeados |
-| E-mail | `#profile-email-btn` | `mailto:` |
+| E-mail | `#profile-email-btn` | Modal LioConecta (`LioEmailCompose`) — fallback `mailto:` |
 | Teams | `#profile-teams-btn` | Deep link M365 |
 | Agendar | `#profile-schedule-btn` | Outlook compose |
 | Mensagem | `#profile-message-btn` | Alert placeholder |
@@ -631,7 +631,7 @@ python -m http.server 8080
 | 4 | Slug inválido | `?id=nao-existe` | Erro + link organograma |
 | 5 | Sem id | `pessoas-perfil.html` | Erro |
 | 6 | Breadcrumb | CEO → subordinado | Cadeia hierárquica clicável |
-| 7 | E-mail / Teams / Agendar | Botões hero | mailto, chat Teams, compose Outlook |
+| 7 | E-mail / Teams / Agendar | Botões hero | modal compose (TipTap + fila SMTP), chat Teams, compose Outlook |
 | 8 | vCard / QR | Botão vCard | Modal com QR + download `.vcf` |
 | 9 | Impressão | Botão Imprimir | Layout limpo (sem topbar/sidebars) |
 | 10 | Organograma inverso | Org → Ver perfil → completo | Mesmo slug; botão Organograma com `?focus=` |

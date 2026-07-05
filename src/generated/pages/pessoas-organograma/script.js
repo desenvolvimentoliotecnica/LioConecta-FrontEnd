@@ -344,7 +344,73 @@
         return new URLSearchParams(window.location.search).get("focus");
       }
 
-      function focusOrgChartNode(slug) {
+      function buildNodesFromApi(apiNodes) {
+        const guidToNumeric = {};
+        let nextNum = 1;
+        apiNodes.forEach(function (node) {
+          guidToNumeric[node.id] = nextNum++;
+        });
+
+        return apiNodes.map(function (node) {
+          const dept = node.departmentName || "Sem departamento";
+          return {
+            id: guidToNumeric[node.id],
+            slug: node.slug,
+            name: node.name,
+            title: node.title || "Colaborador",
+            img: avatarUrl(node.photoUrl) || nextAvatar(),
+            dept: dept,
+            tags: node.tags || [],
+            pid: node.managerId && guidToNumeric[node.managerId]
+              ? guidToNumeric[node.managerId]
+              : undefined,
+            profile: OrgProfileModal.buildProfileExtras(node.name, dept)
+          };
+        });
+      }
+
+      function initOrgChart(nodes) {
+        const nodeIndex = {};
+        nodes.forEach(function (node) {
+          nodeIndex[node.id] = node;
+        });
+
+        const chart = new OrgChart(treeEl, {
+          template: "lio",
+          align: OrgChart.align.orientation,
+          orientation: OrgChart.orientation.top,
+          padding: 20,
+          collapse: { level: 2, allChildren: true },
+          nodeBinding: {
+            field_0: "name",
+            field_1: "title",
+            field_2: "dept",
+            img_0: "img"
+          }
+        });
+
+        setupOrgNodeMenu(nodeIndex);
+
+        chart.onInit(function () {
+          if (countEl) {
+            const areas = new Set(nodes.map(function (n) { return n.dept; })).size;
+            countEl.textContent =
+              nodes.length + " colaboradores · " + areas + " áreas · clique nos números abaixo dos diretores para expandir os times";
+          }
+          const focusSlug = getFocusSlug();
+          if (focusSlug) {
+            focusOrgChartNode(focusSlug, nodes, chart);
+          } else {
+            requestAnimationFrame(function () {
+              pinOrgChartToTop(treeEl, 24);
+            });
+          }
+        });
+
+        chart.load(nodes);
+      }
+
+      function focusOrgChartNode(slug, nodes, chart) {
         if (!slug || !chart) return;
         const target = nodes.find(function (node) {
           return node.slug === slug;
@@ -396,43 +462,24 @@
 
       setupLioTemplate();
 
-      const nodes = buildOrgChartNodes(ceo, branches, nextAvatar);
-      const nodeIndex = {};
-
-      nodes.forEach(function (node) {
-        nodeIndex[node.id] = node;
-      });
-
-      const chart = new OrgChart(treeEl, {
-        template: "lio",
-        align: OrgChart.align.orientation,
-        orientation: OrgChart.orientation.top,
-        padding: 20,
-        collapse: { level: 2, allChildren: true },
-        nodeBinding: {
-          field_0: "name",
-          field_1: "title",
-          field_2: "dept",
-          img_0: "img"
-        }
-      });
-
-      setupOrgNodeMenu(nodeIndex);
-
-      chart.onInit(function () {
+      if (!window.LioApi || window.LioApi.useMock) {
         if (countEl) {
-          countEl.textContent =
-            nodes.length + " colaboradores · 6 áreas · clique nos números abaixo dos diretores para expandir os times";
+          countEl.textContent = "API indisponível — ative o backend e desabilite VITE_USE_MOCK.";
         }
-        const focusSlug = getFocusSlug();
-        if (focusSlug) {
-          focusOrgChartNode(focusSlug);
-        } else {
-          requestAnimationFrame(function () {
-            pinOrgChartToTop(treeEl, 24);
-          });
-        }
-      });
+        return;
+      }
 
-      chart.load(nodes);
+      window.LioApi.get("/people/org-chart")
+        .then(function (payload) {
+          const apiNodes = payload && payload.nodes ? payload.nodes : [];
+          if (!apiNodes.length) {
+            if (countEl) countEl.textContent = "Nenhum colaborador no organograma. Execute o worker Graph.";
+            return;
+          }
+          const nodes = buildNodesFromApi(apiNodes);
+          initOrgChart(nodes);
+        })
+        .catch(function () {
+          if (countEl) countEl.textContent = "Não foi possível carregar o organograma.";
+        });
     })();

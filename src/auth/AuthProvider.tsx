@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import { setNetworkErrorTracker, setTokenProvider } from "../api/client";
 import { AppErrorBoundary } from "../components/telemetry/AppErrorBoundary";
 import { TelemetryProvider } from "../components/telemetry/TelemetryProvider";
+import { EmailComposeProvider } from "../components/email/EmailComposeProvider";
 import { setTelemetryTokenProvider, trackNetworkError } from "../telemetry";
 import { isMsalEnabled, loginRequest, msalInstance } from "./msalConfig";
 
@@ -91,7 +92,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <TelemetryProvider>
-        <AppErrorBoundary>{content}</AppErrorBoundary>
+        <AppErrorBoundary>
+          <EmailComposeProvider>{content}</EmailComposeProvider>
+        </AppErrorBoundary>
       </TelemetryProvider>
     </QueryClientProvider>
   );
