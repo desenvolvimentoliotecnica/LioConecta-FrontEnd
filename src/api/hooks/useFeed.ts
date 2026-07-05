@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, config } from "../client";
+import { api, apiUpload, config } from "../client";
 import type {
   CreateCommentRequest,
   CreatePollRequest,
@@ -9,6 +9,7 @@ import type {
   MeDto,
   PagedResult,
   PollDto,
+  UploadPostMediaResponseDto,
 } from "../types";
 import { POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../types";
 
@@ -147,19 +148,46 @@ export function useCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (content: string): Promise<FeedPostDto> => {
+    mutationFn: async (input: {
+      content: string;
+      mediaUrl?: string | null;
+      mediaType?: string | null;
+    }): Promise<FeedPostDto> => {
       if (config.useMock) {
         throw new Error("Mock mode — API call skipped");
       }
+
+      const metadata: Record<string, unknown> | null =
+        input.mediaUrl && input.mediaUrl.trim()
+          ? {
+              mediaUrl: input.mediaUrl.trim(),
+              ...(input.mediaType ? { mediaType: input.mediaType } : {}),
+            }
+          : null;
+
       const body: CreatePostRequest = {
         type: POST_TYPE_SOCIAL,
-        content: content.trim(),
-        metadata: null,
+        content: input.content.trim(),
+        metadata,
       };
       return api.post<FeedPostDto>("/feed/posts", body);
     },
     onSuccess: (post) => {
       prependPostToFeedCache(queryClient, post);
+    },
+  });
+}
+
+export function useUploadPostMedia() {
+  return useMutation({
+    mutationFn: async (file: File): Promise<UploadPostMediaResponseDto> => {
+      if (config.useMock) {
+        throw new Error("Mock mode — upload indisponível");
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      return apiUpload<UploadPostMediaResponseDto>("/feed/posts/media/upload", formData);
     },
   });
 }

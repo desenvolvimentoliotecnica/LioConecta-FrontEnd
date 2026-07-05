@@ -119,6 +119,14 @@ export interface CreatePostRequest {
   metadata?: Record<string, unknown> | null;
 }
 
+export interface UploadPostMediaResponseDto {
+  url: string;
+  contentType: string;
+  mediaType: "image" | "video" | string;
+  sizeBytes: number;
+  originalFileName?: string | null;
+}
+
 export const COMUNICADO_KIND_OFICIAL = 0 as const;
 export const COMUNICADO_KIND_DEPARTAMENTAL = 1 as const;
 export const COMUNICADO_KIND_URGENTE = 2 as const;

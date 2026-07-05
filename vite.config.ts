@@ -24,6 +24,10 @@ export default defineConfig({
         target: "http://localhost:5148",
         changeOrigin: true,
       },
+      "/posts": {
+        target: "http://localhost:5148",
+        changeOrigin: true,
+      },
     },
   },
 });
