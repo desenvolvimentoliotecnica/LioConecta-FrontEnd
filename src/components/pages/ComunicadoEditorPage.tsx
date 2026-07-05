@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCreateComunicado } from "../../api/hooks/useComunicados";
+import { ComunicadoHeroImagePicker } from "../comunicados/ComunicadoHeroImagePicker";
 import {
   type ComunicadosPageConfig,
   comunicadoReaderId,
@@ -243,16 +244,10 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
           <div className="comunicado-editor__panel">
             <div className="comunicado-editor__panel-header">Imagem de destaque</div>
             <div className="comunicado-editor__panel-body">
-              <div className="comunicado-editor__field">
-                <label htmlFor="hero-image-url">URL da imagem</label>
-                <input
-                  id="hero-image-url"
-                  type="url"
-                  value={heroImageUrl}
-                  onChange={(event) => setHeroImageUrl(event.target.value)}
-                  placeholder="/bg-announcement.png"
-                />
-              </div>
+              <ComunicadoHeroImagePicker
+                value={heroImageUrl}
+                onChange={setHeroImageUrl}
+              />
             </div>
           </div>
 

@@ -147,6 +147,35 @@ export interface CreateComunicadoRequest {
   publishedAt?: string | null;
 }
 
+export interface ComunicadoHeroTemplateDto {
+  id: string;
+  label: string;
+  url: string;
+  category?: string | null;
+}
+
+export interface ComunicadoHeroUploadDto {
+  id: string;
+  assetId: string;
+  version: number;
+  url: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+  uploadedAt: string;
+  uploadedBy?: PersonSummaryDto | null;
+}
+
+export interface UploadComunicadoHeroResponseDto {
+  id: string;
+  assetId: string;
+  version: number;
+  url: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+}
+
 export const GROUP_STATUS_PENDING = 0 as const;
 export const GROUP_STATUS_ACTIVE = 1 as const;
 export const GROUP_STATUS_REJECTED = 2 as const;

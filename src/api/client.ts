@@ -69,6 +69,37 @@ export async function apiFetch<T>(
   return (await response.json()) as T;
 }
 
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  if (config.useMock) {
+    throw new ApiError("Mock mode enabled — API call skipped", 0);
+  }
+
+  const token = await tokenProvider();
+  const headers = new Headers();
+
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(`${config.apiBaseUrl}${path}`, {
+    method: "POST",
+    headers,
+    body: formData,
+  });
+
+  if (!response.ok) {
+    let body: unknown;
+    try {
+      body = await response.json();
+    } catch {
+      body = await response.text();
+    }
+    throw new ApiError(`API ${response.status}: ${path}`, response.status, body);
+  }
+
+  return (await response.json()) as T;
+}
+
 export const api = {
   get: <T>(path: string) => apiFetch<T>(path),
   post: <T>(path: string, body?: unknown) =>
@@ -77,4 +108,5 @@ export const api = {
     apiFetch<T>(path, { method: "PUT", body: JSON.stringify(body) }),
   patch: <T>(path: string, body?: unknown) =>
     apiFetch<T>(path, { method: "PATCH", body: body ? JSON.stringify(body) : undefined }),
+  upload: <T>(path: string, formData: FormData) => apiUpload<T>(path, formData),
 };
