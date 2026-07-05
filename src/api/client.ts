@@ -109,4 +109,22 @@ export const api = {
   patch: <T>(path: string, body?: unknown) =>
     apiFetch<T>(path, { method: "PATCH", body: body ? JSON.stringify(body) : undefined }),
   upload: <T>(path: string, formData: FormData) => apiUpload<T>(path, formData),
+  getBlob: async (path: string): Promise<Blob> => {
+    if (config.useMock) {
+      throw new ApiError("Mock mode enabled — API call skipped", 0);
+    }
+
+    const token = await tokenProvider();
+    const headers = new Headers();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+
+    const response = await fetch(`${config.apiBaseUrl}${path}`, { headers });
+    if (!response.ok) {
+      throw new ApiError(`API ${response.status}: ${path}`, response.status);
+    }
+
+    return response.blob();
+  },
 };

@@ -1,0 +1,47 @@
+.feed-poll-card__status {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.feed-poll-card__status--closed {
+  color: #b45309;
+}
+
+.poll__option--interactive {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+}
+
+.poll__option--interactive:disabled {
+  cursor: default;
+}
+
+.poll__option--selected .poll__label {
+  font-weight: 700;
+}
+
+.poll__radio--checked {
+  border-color: #7c3aed;
+  background: radial-gradient(circle, #7c3aed 0 35%, transparent 36%);
+}
+
+.poll__vote-btn {
+  margin-top: 4px;
+}
+
+.poll__vote-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.poll__vote-error {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #b91c1c;
+}

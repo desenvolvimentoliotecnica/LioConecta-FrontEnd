@@ -2,7 +2,8 @@ import { useId, useState } from "react";
 import { useMe } from "../../api/hooks/useMe";
 import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
-import { POST_TYPE_COMUNICADO } from "../../api/types";
+import { POST_TYPE_COMUNICADO, POST_TYPE_POLL } from "../../api/types";
+import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
 import { formatFeedTime, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
 type Props = {
@@ -52,6 +53,7 @@ export function FeedPostCard({ post }: Props) {
   const canSubmitComment = trimmedComment.length > 0 && !isCommentPending;
 
   const isComunicado = post.type === POST_TYPE_COMUNICADO;
+  const isPoll = post.type === POST_TYPE_POLL;
   const heroImage =
     isComunicado && typeof post.metadata.heroImageUrl === "string"
       ? post.metadata.heroImageUrl
@@ -103,6 +105,10 @@ export function FeedPostCard({ post }: Props) {
       </div>
       {isComunicado ? (
         <div className="card__body" dangerouslySetInnerHTML={{ __html: post.content }} />
+      ) : isPoll && post.poll ? (
+        <FeedPollBody poll={post.poll} heroImageUrl={getPollHeroImage(post)} />
+      ) : isPoll ? (
+        <div className="card__body">{post.content}</div>
       ) : (
         <div className="card__body">{post.content}</div>
       )}

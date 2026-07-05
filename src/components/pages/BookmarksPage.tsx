@@ -1,17 +1,21 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  BOOKMARKS,
-  BOOKMARK_FILTERS,
-  filterBookmarks,
-  type BookmarkKind,
-} from "../../config/bookmarks";
+import { usePreferences, useUpdatePreferences } from "../../api/hooks/usePreferences";
+import { BOOKMARKS, BOOKMARK_FILTERS, DEFAULT_BOOKMARK_IDS, filterBookmarks, type BookmarkKind } from "../../config/bookmarks";
 import "../../styles/hub-pages.css";
+
+const DEFAULT_SAVED_IDS = DEFAULT_BOOKMARK_IDS;
 
 export function BookmarksPage() {
   const [kind, setKind] = useState<BookmarkKind>("all");
   const [query, setQuery] = useState("");
-  const [savedIds, setSavedIds] = useState(() => new Set(BOOKMARKS.map((item) => item.id)));
+  const { data: preferences } = usePreferences();
+  const updatePreferences = useUpdatePreferences();
+
+  const savedIds = useMemo(
+    () => new Set(preferences?.bookmarks.length ? preferences.bookmarks : DEFAULT_SAVED_IDS),
+    [preferences?.bookmarks],
+  );
 
   const filtered = useMemo(
     () => filterBookmarks(BOOKMARKS.filter((item) => savedIds.has(item.id)), kind, query),
@@ -19,11 +23,8 @@ export function BookmarksPage() {
   );
 
   const removeBookmark = (id: string) => {
-    setSavedIds((prev) => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
+    const next = [...savedIds].filter((entry) => entry !== id);
+    updatePreferences.mutate({ bookmarks: next });
   };
 
   return (

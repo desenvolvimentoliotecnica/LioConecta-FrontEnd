@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useCreatePost } from "../../api/hooks/useFeed";
 import { useMe } from "../../api/hooks/useMe";
 import { config } from "../../api/client";
+import { PollCreateModal } from "./PollCreateModal";
 import "./feed-composer.css";
 
 const FALLBACK_USER = {
@@ -26,6 +27,7 @@ export function FeedComposer() {
   const [text, setText] = useState("");
   const [attachment, setAttachment] = useState<Attachment | null>(null);
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [pollModalOpen, setPollModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -177,7 +179,7 @@ export function FeedComposer() {
               type="button"
               className="feed-composer__tool feed-composer__tool--poll"
               aria-label="Criar enquete"
-              onClick={handleExpand}
+              onClick={() => setPollModalOpen(true)}
               disabled={isPublishing}
             >
               <i className="fa-solid fa-chart-bar" aria-hidden="true" />
@@ -217,6 +219,13 @@ export function FeedComposer() {
           </div>
         </div>
       </article>
+
+      <PollCreateModal
+        open={pollModalOpen}
+        onClose={() => setPollModalOpen(false)}
+        onPublished={() => showToast("success", "Enquete publicada com sucesso!")}
+        onError={(message) => showToast("error", message)}
+      />
     </section>
   );
 }

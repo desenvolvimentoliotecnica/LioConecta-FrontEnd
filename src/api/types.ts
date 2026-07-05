@@ -46,6 +46,7 @@ export type PostType =
 
 export const POST_TYPE_SOCIAL = 0 as const;
 export const POST_TYPE_COMUNICADO = 1 as const;
+export const POST_TYPE_POLL = 2 as const;
 
 export interface PersonSummaryDto {
   id: string;
@@ -65,6 +66,23 @@ export interface CommentDto {
   createdAt: string;
 }
 
+export interface PollOptionDto {
+  id: string;
+  text: string;
+  voteCount: number;
+  sortOrder: number;
+  isSelectedByViewer: boolean;
+}
+
+export interface PollDto {
+  id: string;
+  postId: string;
+  question: string;
+  endsAt?: string | null;
+  hasViewerVoted: boolean;
+  options: PollOptionDto[];
+}
+
 export interface FeedPostDto {
   id: string;
   type: number;
@@ -77,6 +95,18 @@ export interface FeedPostDto {
   reactionCount: number;
   viewerReaction?: string | null;
   comments: CommentDto[];
+  poll?: PollDto | null;
+}
+
+export interface CreatePollRequest {
+  question: string;
+  options: string[];
+  heroImageUrl?: string | null;
+  endsAt?: string | null;
+}
+
+export interface VotePollRequest {
+  optionId: string;
 }
 
 export interface CreateCommentRequest {
@@ -315,4 +345,127 @@ export interface AppSettingsUpdateResultDto {
   categories: AppSettingCategoryDto[];
   requiresRestart: boolean;
   message?: string | null;
+}
+
+export interface UserPreferencesDto {
+  bookmarks: string[];
+  favorites: string[];
+  shortcuts: string[];
+}
+
+export interface UpdatePreferencesRequest {
+  bookmarks?: string[];
+  favorites?: string[];
+  shortcuts?: string[];
+}
+
+export interface PayslipSummaryDto {
+  latestCompetence: string;
+  latestNetAmount: number;
+  historyCount: number;
+}
+
+export interface PayslipServiceDto {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  sla: string;
+  online: boolean;
+  featured: boolean;
+  action: string;
+  helpText: string;
+}
+
+export interface PayslipLineDto {
+  code: string;
+  label: string;
+  amount: number;
+  quantity?: number | null;
+}
+
+export interface PayslipListItemDto {
+  year: number;
+  month: number;
+  competence: string;
+  grossAmount: number;
+  netAmount: number;
+  publishedAt: string;
+}
+
+export interface PayslipDetailDto {
+  year: number;
+  month: number;
+  competence: string;
+  grossAmount: number;
+  netAmount: number;
+  deductionsTotal: number;
+  earnings: PayslipLineDto[];
+  deductions: PayslipLineDto[];
+  publishedAt: string;
+}
+
+export interface PayslipComparativoDto {
+  from: PayslipDetailDto;
+  to: PayslipDetailDto;
+  netDifference: number;
+  grossDifference: number;
+}
+
+export interface FgtsDepositDto {
+  competence: string;
+  amount: number;
+  employerShare: number;
+}
+
+export interface FgtsConsultaDto {
+  totalBalance: number;
+  deposits: FgtsDepositDto[];
+}
+
+export interface DescontoItemDto {
+  code: string;
+  label: string;
+  amount: number;
+  competence: string;
+}
+
+export interface DescontosConsultaDto {
+  totalMonthly: number;
+  items: DescontoItemDto[];
+}
+
+export interface RubricaHelpDto {
+  code: string;
+  label: string;
+  description: string;
+}
+
+export interface RubricasConsultaDto {
+  items: RubricaHelpDto[];
+}
+
+export interface IncomeStatementLineDto {
+  month: number;
+  paid: number;
+  withheld: number;
+}
+
+export interface IncomeStatementDto {
+  year: number;
+  totalPaid: number;
+  totalWithheld: number;
+  lines: IncomeStatementLineDto[];
+}
+
+export interface CreatePayslipRequestDto {
+  serviceId: string;
+  competence?: string | null;
+  notes?: string | null;
+}
+
+export interface PayslipRequestResultDto {
+  requestId: string;
+  status: string;
+  message: string;
 }

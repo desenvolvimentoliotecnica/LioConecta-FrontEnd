@@ -1,7 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
-import type { CreateCommentRequest, CreatePostRequest, CommentDto, FeedPostDto, MeDto, PagedResult } from "../types";
-import { POST_TYPE_SOCIAL } from "../types";
+import type {
+  CreateCommentRequest,
+  CreatePollRequest,
+  CreatePostRequest,
+  CommentDto,
+  FeedPostDto,
+  MeDto,
+  PagedResult,
+  PollDto,
+} from "../types";
+import { POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../types";
 
 export const FEED_QUERY_KEY = ["feed"] as const;
 export const FEED_LIKE_REACTION = "like";
@@ -150,19 +159,114 @@ export function useCreatePost() {
       return api.post<FeedPostDto>("/feed/posts", body);
     },
     onSuccess: (post) => {
-      queryClient.setQueryData<PagedResult<FeedPostDto>>(
-        [...FEED_QUERY_KEY, 20],
-        (current) => {
-          if (!current) {
-            return { items: [post], hasMore: false, nextCursor: null };
-          }
-          const withoutDuplicate = current.items.filter((item) => item.id !== post.id);
-          return {
-            ...current,
-            items: [post, ...withoutDuplicate],
-          };
-        },
-      );
+      prependPostToFeedCache(queryClient, post);
     },
   });
+}
+
+function prependPostToFeedCache(
+  queryClient: ReturnType<typeof useQueryClient>,
+  post: FeedPostDto,
+) {
+  queryClient.setQueryData<PagedResult<FeedPostDto>>(
+    [...FEED_QUERY_KEY, 20],
+    (current) => {
+      if (!current) {
+        return { items: [post], hasMore: false, nextCursor: null };
+      }
+      const withoutDuplicate = current.items.filter((item) => item.id !== post.id);
+      return {
+        ...current,
+        items: [post, ...withoutDuplicate],
+      };
+    },
+  );
+}
+
+export function useCreatePoll() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: CreatePollRequest): Promise<FeedPostDto> => {
+      if (config.useMock) {
+        throw new Error("Mock mode — API call skipped");
+      }
+
+      const metadata: Record<string, unknown> = {
+        options: input.options.map((option) => option.trim()).filter(Boolean),
+      };
+
+      if (input.heroImageUrl) {
+        metadata.heroImageUrl = input.heroImageUrl;
+      }
+
+      if (input.endsAt) {
+        metadata.endsAt = input.endsAt;
+      }
+
+      const body: CreatePostRequest = {
+        type: POST_TYPE_POLL,
+        content: input.question.trim(),
+        metadata,
+      };
+
+      return api.post<FeedPostDto>("/feed/posts", body);
+    },
+    onSuccess: (post) => {
+      prependPostToFeedCache(queryClient, post);
+    },
+  });
+}
+
+export function useVotePoll() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      postId,
+      optionId,
+    }: {
+      postId: string;
+      optionId: string;
+    }): Promise<void> => {
+      if (config.useMock) {
+        throw new Error("Mock mode — API call skipped");
+      }
+      await api.post<void>(`/feed/posts/${postId}/poll/vote`, { optionId });
+    },
+    onMutate: async ({ postId, optionId }) => {
+      await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
+      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+
+      updatePostInFeedCache(queryClient, postId, (post) => {
+        if (!post.poll) return post;
+        return {
+          ...post,
+          poll: applyOptimisticVote(post.poll, optionId),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
+      }
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+    },
+  });
+}
+
+function applyOptimisticVote(poll: PollDto, optionId: string): PollDto {
+  return {
+    ...poll,
+    hasViewerVoted: true,
+    options: poll.options.map((option) => ({
+      ...option,
+      voteCount: option.id === optionId ? option.voteCount + 1 : option.voteCount,
+      isSelectedByViewer: option.id === optionId,
+    })),
+  };
 }
