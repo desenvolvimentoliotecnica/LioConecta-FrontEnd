@@ -5,7 +5,7 @@ const LEFT_ITEMS = [
   { label: "Feed", icon: "/icon-feed.png", href: "/" },
   { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas/diretorio" },
   { label: "Grupos", icon: "/icon-groups.png", href: "/grupos/meus-grupos" },
-  { label: "Calendário", icon: "/icon-calendar.png", href: "#" },
+  { label: "Calendário", icon: "/icon-calendar.png", href: "/calendario" },
   { label: "Documentos", icon: "/icon-documents.png", href: "/documentos/politicas-internas" },
 ];
 

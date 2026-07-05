@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { CalendarPage } from "./components/pages/CalendarPage";
 import { BookmarksPage } from "./components/pages/BookmarksPage";
 import { FavoritesPage } from "./components/pages/FavoritesPage";
 import { ShortcutsPage } from "./components/pages/ShortcutsPage";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/favoritos" element={<FavoritesPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/atalhos" element={<ShortcutsPage />} />
+        <Route path="/calendario" element={<CalendarPage />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
