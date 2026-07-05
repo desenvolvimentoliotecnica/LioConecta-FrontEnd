@@ -195,6 +195,17 @@
   color: #475569;
 }
 
+a.official-card__cta {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+a.official-card__cta:hover {
+  color: #2563eb;
+}
+
 .page-empty-note {
   margin-top: 8px;
   font-size: 12px;

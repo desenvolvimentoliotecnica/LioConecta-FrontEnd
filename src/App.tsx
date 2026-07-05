@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { LegacyPage, LegacyPageById } from "./components/pages/LegacyPage";
 import { pageRegistry } from "./config/routes";
 
@@ -9,6 +10,7 @@ function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
+        <Route path="/comunicados/leitura" element={<ComunicadoReader />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
