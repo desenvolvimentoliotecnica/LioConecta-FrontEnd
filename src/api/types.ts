@@ -907,3 +907,93 @@ export interface TotvsRmConnectionTestResponse {
   message: string;
   detail?: string | null;
 }
+
+export interface EmailConfigurationDto {
+  id: string;
+  isEnabled: boolean;
+  fromAddress: string;
+  fromName: string;
+  smtpHost: string;
+  smtpPort: number;
+  smtpUsername: string;
+  hasPassword: boolean;
+  useStartTls: boolean;
+  timeoutSeconds: number;
+  maxAttempts: number;
+  initialRetryDelaySeconds: number;
+  maxRetryDelaySeconds: number;
+  dispatchBatchSize: number;
+  dispatchIntervalSeconds: number;
+  updatedAt: string;
+}
+
+export interface UpsertEmailConfigurationRequest {
+  isEnabled: boolean;
+  fromAddress: string;
+  fromName: string;
+  smtpHost: string;
+  smtpPort: number;
+  smtpUsername: string;
+  smtpPassword?: string | null;
+  useStartTls: boolean;
+  timeoutSeconds: number;
+  maxAttempts: number;
+  initialRetryDelaySeconds: number;
+  maxRetryDelaySeconds: number;
+  dispatchBatchSize: number;
+  dispatchIntervalSeconds: number;
+}
+
+export interface EmailSmtpTestRequest extends UpsertEmailConfigurationRequest {
+  testRecipient?: string | null;
+}
+
+export interface EmailConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+}
+
+export interface EmailMessageDto {
+  id: string;
+  status: string;
+  to: string[];
+  cc: string[];
+  bcc: string[];
+  subject: string;
+  bodyHtml?: string | null;
+  bodyText?: string | null;
+  templateKey?: string | null;
+  metadataJson?: string | null;
+  priority: number;
+  idempotencyKey?: string | null;
+  correlationId?: string | null;
+  attemptCount: number;
+  maxAttempts: number;
+  lastError?: string | null;
+  providerMessageId?: string | null;
+  scheduledAt: string;
+  nextRetryAt?: string | null;
+  processingStartedAt?: string | null;
+  sentAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EmailMessageSummaryDto {
+  pending: number;
+  processing: number;
+  sent: number;
+  failed: number;
+  cancelled: number;
+  sentLast24Hours: number;
+  failedLast24Hours: number;
+  successRateLast24Hours: number;
+}
+
+export interface PagedEmailMessagesDto {
+  items: EmailMessageDto[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}

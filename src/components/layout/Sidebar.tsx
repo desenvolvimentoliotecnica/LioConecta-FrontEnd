@@ -46,6 +46,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     activePrefix: "/admin/observabilidade",
     adminOnly: true,
   },
+  {
+    label: "E-mail",
+    icon: "fa-envelope",
+    href: "/admin/email",
+    activePrefix: "/admin/email",
+    adminOnly: true,
+  },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
   { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
   { label: "Favoritos", icon: "fa-star", href: "/favoritos" },

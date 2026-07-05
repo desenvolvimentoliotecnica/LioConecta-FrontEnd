@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { resolveBackendAssetUrl } from "../../api/assetUrl";
 import { useMe } from "../../api/hooks/useMe";
 import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
@@ -58,7 +59,7 @@ export function FeedPostCard({ post }: Props) {
   const isPoll = post.type === POST_TYPE_POLL;
   const heroImage =
     isComunicado && typeof post.metadata.heroImageUrl === "string"
-      ? post.metadata.heroImageUrl
+      ? resolveBackendAssetUrl(post.metadata.heroImageUrl)
       : undefined;
   const postMedia = !isComunicado && !isPoll ? getPostMedia(post) : null;
 

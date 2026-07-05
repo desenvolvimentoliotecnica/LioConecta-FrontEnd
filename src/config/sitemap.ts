@@ -270,6 +270,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "Configuração SQL Server read-only para integração de espelho de ponto.",
         ),
         entry(
+          "E-mail — Fila",
+          "/admin/email",
+          "Observabilidade da fila transacional de e-mails — status, retry e falhas.",
+        ),
+        entry(
+          "E-mail — SMTP",
+          "/admin/email/config",
+          "Configuração SMTP persistida em banco — host, credenciais e parâmetros de retry.",
+        ),
+        entry(
           "Configurações observabilidade",
           "/admin/configuracoes-backend?category=observability",
           "Retenção, OTel, page views e access audit — seção observability do backend.",

@@ -30,6 +30,8 @@ import { AuditTrailPage } from "./components/pages/AuditTrailPage";
 import { ObservabilityHubPage } from "./components/pages/ObservabilityHubPage";
 import { WorkersHubPage } from "./components/admin/WorkersHubPage";
 import { TotvsRmConfigPage } from "./components/admin/TotvsRmConfigPage";
+import { EmailHubPage } from "./components/admin/EmailHubPage";
+import { EmailConfigPage } from "./components/admin/EmailConfigPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -81,6 +83,8 @@ function App() {
         <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
         <Route path="/admin/workers" element={<WorkersHubPage />} />
         <Route path="/admin/totvs-rm" element={<TotvsRmConfigPage />} />
+        <Route path="/admin/email" element={<EmailHubPage />} />
+        <Route path="/admin/email/config" element={<EmailConfigPage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
         <Route path="/mapa-do-site" element={<SitemapPage />} />

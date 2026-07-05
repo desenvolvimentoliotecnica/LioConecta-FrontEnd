@@ -30,6 +30,8 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/admin/observabilidade", { pageName: "ObservabilityHub", module: "admin" }),
   exact("/admin/workers", { pageName: "WorkersHub", module: "admin" }),
   exact("/admin/totvs-rm", { pageName: "TotvsRmConfig", module: "admin" }),
+  exact("/admin/email", { pageName: "EmailHub", module: "admin" }),
+  exact("/admin/email/config", { pageName: "EmailConfig", module: "admin" }),
   exact("/minhas-atividades", { pageName: "Activities", module: "home" }),
   exact("/ajuda", { pageName: "Help", module: "home" }),
   exact("/mapa-do-site", { pageName: "Sitemap", module: "home" }),

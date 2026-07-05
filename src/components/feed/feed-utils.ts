@@ -1,3 +1,5 @@
+import { resolveBackendAssetUrl } from "../../api/assetUrl";
+
 export function formatFeedTime(iso: string): string {
   const date = new Date(iso);
   const now = new Date();
@@ -62,7 +64,7 @@ export function getPostMedia(post: { metadata: Record<string, unknown> }): {
 
   const mediaType = post.metadata.mediaType;
   return {
-    url: rawUrl,
+    url: resolveBackendAssetUrl(rawUrl),
     type: mediaType === "video" ? "video" : "image",
   };
 }
