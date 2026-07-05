@@ -104,6 +104,12 @@ export const servicosHeadings = [
 
 export const pessoasSectionPrefix = "/pessoas/";
 
+export const documentosSectionPrefix = "/documentos/";
+
+export function isDocumentosSectionActive(pathname: string): boolean {
+  return pathname === "/documentos" || pathname.startsWith(documentosSectionPrefix);
+}
+
 export function isDropdownActive(pathname: string, items: NavLinkItem[]): boolean {
   return items.some((item) => item.path !== "#" && pathname.startsWith(item.path));
 }

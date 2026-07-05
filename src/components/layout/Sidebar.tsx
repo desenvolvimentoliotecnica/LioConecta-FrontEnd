@@ -6,8 +6,8 @@ const LEFT_ITEMS = [
   { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas/diretorio" },
   { label: "Grupos", icon: "/icon-groups.png", href: "/grupos/meus-grupos" },
   { label: "Calendário", icon: "/icon-calendar.png", href: "/calendario" },
-  { label: "Documentos", icon: "/icon-documents.png", href: "/documentos/politicas-internas" },
-];
+  { label: "Documentos", icon: "/icon-documents.png", href: "/documentos", activePrefix: "/documentos" },
+] as const;
 
 const RIGHT_ITEMS = [
   { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
@@ -69,7 +69,12 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
       {items.map((item, idx) => {
         const isHomeActive =
           side === "left" && idx === 0 && (activePath === "/" || activePath === "");
-        const isRouteActive = item.href !== "#" && activePath === item.href;
+        const isRouteActive =
+          item.href !== "#" &&
+          (activePath === item.href ||
+            ("activePrefix" in item &&
+              item.activePrefix &&
+              (activePath === item.activePrefix || activePath.startsWith(`${item.activePrefix}/`))));
         const isActive = isHomeActive || isRouteActive;
         return (
           <span key={item.label}>

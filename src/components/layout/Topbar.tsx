@@ -6,6 +6,7 @@ import {
   FEED_PATH,
   gruposLinks,
   isDropdownActive,
+  isDocumentosSectionActive,
   isPessoasSectionActive,
   pessoasLinks,
   servicosHeadings,
@@ -39,7 +40,9 @@ function Dropdown({
   const active =
     label === "Pessoas"
       ? isPessoasSectionActive(location.pathname)
-      : isDropdownActive(location.pathname, items);
+      : label === "Documentos"
+        ? isDocumentosSectionActive(location.pathname)
+        : isDropdownActive(location.pathname, items);
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
