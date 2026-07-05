@@ -240,10 +240,27 @@ export function buildSitemapSections(): SitemapSection[] {
       ],
     },
     {
+      id: "administracao",
+      label: "Administração",
+      icon: "fa-shield-halved",
+      items: [
+        entry(
+          "Configurações do Backend",
+          "/admin/configuracoes-backend",
+          "Credenciais, integrações e parâmetros operacionais — persistidos no banco.",
+        ),
+        entry(
+          "Aprovações de grupos",
+          "/grupos/aprovacoes",
+          "Fila de grupos aguardando aprovação de administrador.",
+        ),
+      ],
+    },
+    {
       id: "em-desenvolvimento",
       label: "Em desenvolvimento",
       icon: "fa-screwdriver-wrench",
-      items: [entry("Configurações", "#", "Preferências e personalização da conta.", true)],
+      items: [entry("Configurações da conta", "#", "Preferências e personalização do usuário.", true)],
     },
   ];
 }

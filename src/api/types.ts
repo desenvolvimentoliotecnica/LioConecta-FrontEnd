@@ -242,3 +242,38 @@ export interface AnalyticsSnapshotDto {
   departmentEngagement: AnalyticsDepartmentDto[];
   topContent: AnalyticsTopItemDto[];
 }
+
+export interface AppSettingDto {
+  key: string;
+  category: string;
+  label: string;
+  description?: string | null;
+  value: string;
+  valueType: string;
+  isSecret: boolean;
+  hasValue: boolean;
+  sortOrder: number;
+  updatedAt?: string | null;
+}
+
+export interface AppSettingCategoryDto {
+  id: string;
+  label: string;
+  description?: string | null;
+  settings: AppSettingDto[];
+}
+
+export interface UpdateAppSettingRequest {
+  key: string;
+  value: string;
+}
+
+export interface BulkUpdateAppSettingsRequest {
+  settings: UpdateAppSettingRequest[];
+}
+
+export interface AppSettingsUpdateResultDto {
+  categories: AppSettingCategoryDto[];
+  requiresRestart: boolean;
+  message?: string | null;
+}

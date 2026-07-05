@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { isAdminUser } from "../../api/auth";
+import { useMe } from "../../api/hooks/useMe";
 
 type SidebarItemConfig = {
   label: string;
@@ -7,6 +9,7 @@ type SidebarItemConfig = {
   activePrefix?: string;
   activeOn?: readonly string[];
   spacerBefore?: boolean;
+  adminOnly?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -21,6 +24,14 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
 const RIGHT_ITEMS: SidebarItemConfig[] = [
   { label: "Minhas atividades", icon: "fa-list-check", href: "/minhas-atividades" },
   { label: "Analytics", icon: "fa-chart-pie", href: "/analytics" },
+  {
+    label: "Config. Backend",
+    icon: "fa-server",
+    href: "/admin/configuracoes-backend",
+    activePrefix: "/admin/configuracoes-backend",
+    spacerBefore: true,
+    adminOnly: true,
+  },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
   { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
   { label: "Favoritos", icon: "fa-star", href: "/favoritos" },
@@ -62,7 +73,13 @@ function SidebarItem({ label, icon, href }: SidebarItemConfig) {
 }
 
 export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarProps) {
-  const items = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
+  const { data: me } = useMe();
+  const isAdmin = isAdminUser(me);
+  const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
+  const items =
+    side === "right"
+      ? baseItems.filter((item) => !item.adminOnly || isAdmin)
+      : baseItems;
   const id = side === "left" ? "sidebar-left" : "sidebar-right";
 
   return (
