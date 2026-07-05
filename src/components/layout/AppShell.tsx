@@ -36,7 +36,12 @@ export function AppShell() {
             activePath={location.pathname}
           />
           <Outlet />
-          <Sidebar side="right" expanded={rightExpanded} onToggle={toggleRight} />
+          <Sidebar
+            side="right"
+            expanded={rightExpanded}
+            onToggle={toggleRight}
+            activePath={location.pathname}
+          />
         </div>
       </div>
       <ChatWindowBridge />
