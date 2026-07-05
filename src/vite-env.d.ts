@@ -1,25 +1,17 @@
 /// <reference types="vite/client" />
 
-declare module "*.html?raw" {
-  const content: string;
-  export default content;
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_USE_MOCK: string;
+  readonly VITE_AZURE_CLIENT_ID: string;
+  readonly VITE_AZURE_TENANT_ID: string;
+  readonly VITE_AZURE_API_SCOPE: string;
 }
 
-declare module "*.css?inline" {
-  const content: string;
-  export default content;
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
 
-declare global {
-  interface Window {
-    ProfilePage?: {
-      init: () => void;
-      setViewerRole: (role: string) => void;
-    };
-    OrgProfileModal?: {
-      init: () => void;
-    };
-  }
+interface Window {
+  ProfilePage?: { init: () => void };
 }
-
-export {};

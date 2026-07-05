@@ -1,4 +1,5 @@
 import { useEffect, useRef, type RefObject } from "react";
+import { installLegacyApiBridge } from "../api/legacyBridge";
 import type { PageEntry } from "../types/pages";
 
 function loadScript(src: string): Promise<void> {
@@ -33,6 +34,8 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
     let cancelled = false;
 
     async function boot() {
+      installLegacyApiBridge();
+
       if (page!.profileAssets) {
         await loadScript("/assets/pessoas-perfil.js");
         if (cancelled) return;

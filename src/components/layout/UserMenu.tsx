@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useMe } from "../../api/hooks/useMe";
 import { closeOtherMenus, useMenuCloseSync } from "./NotificationsMenu";
 
+const FALLBACK = {
+  slug: "maria-silva",
+  name: "Maria Silva",
+  photoUrl: "/avatar-maria-silva.png",
+};
+
 export function UserMenu() {
+  const { data: me } = useMe();
+  const user = me ?? FALLBACK;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -27,7 +36,11 @@ export function UserMenu() {
 
   const profileActive =
     location.pathname === "/pessoas/perfil" &&
-    new URLSearchParams(location.search).get("id") === "maria-silva";
+    new URLSearchParams(location.search).get("id") === user.slug;
+
+  const avatarSrc = user.photoUrl?.startsWith("/")
+    ? user.photoUrl
+    : user.photoUrl ?? FALLBACK.photoUrl;
 
   return (
     <div className={`user-menu${open ? " is-open" : ""}`} ref={ref}>
@@ -37,22 +50,22 @@ export function UserMenu() {
         aria-expanded={open}
         aria-haspopup="true"
         aria-controls="user-menu-panel"
-        aria-label="Perfil de Maria Silva"
+        aria-label={`Perfil de ${user.name}`}
         onClick={(e) => {
           e.stopPropagation();
           closeOtherMenus("user");
           setOpen((v) => !v);
         }}
       >
-        <img className="avatar" src="/avatar-maria-silva.png" alt="" />
-        <span className="user-menu__name">Maria Silva</span>
+        <img className="avatar" src={avatarSrc} alt="" />
+        <span className="user-menu__name">{user.name}</span>
         <span className="user-menu__chevron" aria-hidden="true">
           <i className="fa-solid fa-chevron-down" />
         </span>
       </button>
       <div className="user-menu__panel" id="user-menu-panel" role="menu">
         <Link
-          to="/pessoas/perfil?id=maria-silva"
+          to={`/pessoas/perfil?id=${user.slug}`}
           role="menuitem"
           className={profileActive ? "is-active" : undefined}
           onClick={() => setOpen(false)}
