@@ -1,5 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { BookmarksPage } from "./components/pages/BookmarksPage";
+import { FavoritesPage } from "./components/pages/FavoritesPage";
+import { ShortcutsPage } from "./components/pages/ShortcutsPage";
 import { HelpPage } from "./components/pages/HelpPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
@@ -17,6 +20,9 @@ function App() {
         <Route path="/notificacoes" element={<NotificationsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
+        <Route path="/favoritos" element={<FavoritesPage />} />
+        <Route path="/bookmarks" element={<BookmarksPage />} />
+        <Route path="/atalhos" element={<ShortcutsPage />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
