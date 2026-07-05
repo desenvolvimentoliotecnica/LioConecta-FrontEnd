@@ -10,7 +10,7 @@ const LEFT_ITEMS = [
 ];
 
 const RIGHT_ITEMS = [
-  { label: "Analytics", icon: "/icon-analytics.png", href: "#" },
+  { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
   { label: "Ajuda", icon: "/icon-help.png", href: "#" },
   { label: "Favoritos", icon: "/icon-favorites.png", href: "#" },
   { label: "Bookmarks", icon: "/icon-bookmarks.png", href: "#" },
@@ -67,10 +67,10 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         <span className="sidebar__toggle-label">Recolher</span>
       </button>
       {items.map((item, idx) => {
-        const isActive =
-          side === "left" &&
-          idx === 0 &&
-          (activePath === "/" || activePath === "");
+        const isHomeActive =
+          side === "left" && idx === 0 && (activePath === "/" || activePath === "");
+        const isRouteActive = item.href !== "#" && activePath === item.href;
+        const isActive = isHomeActive || isRouteActive;
         return (
           <span key={item.label}>
             {"spacerBefore" in item && item.spacerBefore ? <div className="sidebar__spacer" /> : null}
