@@ -254,6 +254,77 @@
   color: #6d28d9;
 }
 
+/* RH hub */
+.docs-hub__summary-icon--rh { background: #eff6ff; color: #2563eb; }
+.docs-hub__summary-icon--comunicados { background: #fff7ed; color: #ea580c; }
+.docs-hub__summary-icon--ti { background: #f0fdf4; color: #16a34a; }
+
+.docs-hub__card--beneficios { background: #fdf2f8; border-color: #f9a8d4; }
+.docs-hub__card--contracheque { background: #eff6ff; border-color: #bfdbfe; }
+.docs-hub__card--ferias { background: #f0fdf4; border-color: #86efac; }
+.docs-hub__card--solicitacoes { background: #fff7ed; border-color: #fdba74; }
+.docs-hub__card--ponto { background: #f5f3ff; border-color: #c4b5fd; }
+.docs-hub__card--vale-transporte { background: #ecfeff; border-color: #5eead4; }
+
+.docs-hub__card-icon--beneficios { background: #fce7f3; color: #be185d; }
+.docs-hub__card-icon--contracheque { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__card-icon--ferias { background: #dcfce7; color: #15803d; }
+.docs-hub__card-icon--solicitacoes { background: #ffedd5; color: #c2410c; }
+.docs-hub__card-icon--ponto { background: #ede9fe; color: #6d28d9; }
+.docs-hub__card-icon--vale-transporte { background: #cffafe; color: #0f766e; }
+
+.docs-hub__card--oficiais { background: #fff7ed; border-color: #fdba74; }
+.docs-hub__card--departamentais { background: #fdf2f8; border-color: #f9a8d4; }
+.docs-hub__card--urgentes { background: #fef2f2; border-color: #fca5a5; }
+.docs-hub__card--arquivo { background: #f8fafc; border-color: #cbd5e1; }
+
+.docs-hub__card-icon--oficiais { background: #ffedd5; color: #c2410c; }
+.docs-hub__card-icon--departamentais { background: #fce7f3; color: #be185d; }
+.docs-hub__card-icon--urgentes { background: #fee2e2; color: #dc2626; }
+.docs-hub__card-icon--arquivo { background: #e2e8f0; color: #64748b; }
+
+.docs-hub__card--help-desk { background: #f0fdf4; border-color: #86efac; }
+.docs-hub__card--equipamento { background: #eff6ff; border-color: #bfdbfe; }
+.docs-hub__card--acesso { background: #f5f3ff; border-color: #c4b5fd; }
+.docs-hub__card--vpn { background: #ecfeff; border-color: #5eead4; }
+
+.docs-hub__card-icon--help-desk { background: #dcfce7; color: #15803d; }
+.docs-hub__card-icon--equipamento { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__card-icon--acesso { background: #ede9fe; color: #6d28d9; }
+.docs-hub__card-icon--vpn { background: #cffafe; color: #0f766e; }
+
+.docs-hub__recent-icon--rh { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__recent-icon--comunicados { background: #ffedd5; color: #c2410c; }
+.docs-hub__recent-icon--ti { background: #dcfce7; color: #15803d; }
+
+.docs-hub__summary-icon--enquetes { background: #f5f3ff; color: #7c3aed; }
+.docs-hub__summary-icon--parabenizacoes { background: #fffbeb; color: #d97706; }
+.docs-hub__summary-icon--noticias { background: #ecfeff; color: #0d9488; }
+
+.docs-hub__card--ativas { background: #f5f3ff; border-color: #c4b5fd; }
+.docs-hub__card--lideranca { background: #eff6ff; border-color: #bfdbfe; }
+.docs-hub__card--cultura { background: #f0fdf4; border-color: #86efac; }
+.docs-hub__card--atividades { background: #f8fafc; border-color: #cbd5e1; }
+
+.docs-hub__card-icon--ativas { background: #ede9fe; color: #6d28d9; }
+.docs-hub__card-icon--lideranca { background: #dbeafe; color: #1d4ed8; }
+.docs-hub__card-icon--cultura { background: #dcfce7; color: #15803d; }
+.docs-hub__card-icon--atividades { background: #e2e8f0; color: #64748b; }
+
+.docs-hub__card--feed { background: #ecfeff; border-color: #5eead4; }
+.docs-hub__card--aniversariantes { background: #fdf2f8; border-color: #f9a8d4; }
+.docs-hub__card--novos { background: #f0fdf4; border-color: #86efac; }
+.docs-hub__card--promocoes { background: #fffbeb; border-color: #fcd34d; }
+
+.docs-hub__card-icon--feed { background: #cffafe; color: #0f766e; }
+.docs-hub__card-icon--aniversariantes { background: #fce7f3; color: #be185d; }
+.docs-hub__card-icon--novos { background: #dcfce7; color: #15803d; }
+.docs-hub__card-icon--promocoes { background: #fef3c7; color: #b45309; }
+
+.docs-hub__recent-icon--enquetes { background: #ede9fe; color: #6d28d9; }
+.docs-hub__recent-icon--parabenizacoes { background: #fef3c7; color: #b45309; }
+.docs-hub__recent-icon--noticias { background: #cffafe; color: #0f766e; }
+
 .docs-hub__recent-body {
   display: grid;
   gap: 2px;

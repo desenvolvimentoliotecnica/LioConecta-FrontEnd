@@ -116,6 +116,10 @@ export function isDocumentosSectionActive(pathname: string): boolean {
   return pathname === "/documentos" || pathname.startsWith(documentosSectionPrefix);
 }
 
+export function isComunicadosSectionActive(pathname: string): boolean {
+  return pathname === "/comunicados" || pathname.startsWith("/comunicados/");
+}
+
 export function isDropdownActive(pathname: string, items: NavLinkItem[]): boolean {
   return items.some((item) => item.path !== "#" && pathname.startsWith(item.path));
 }

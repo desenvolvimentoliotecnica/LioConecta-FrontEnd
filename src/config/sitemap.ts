@@ -67,6 +67,21 @@ export function buildSitemapSections(): SitemapSection[] {
           FEED_PATH,
           "Página inicial com publicações, comunicados, enquetes e interações da rede corporativa.",
         ),
+        entry(
+          "Hub Enquetes",
+          "/enquetes",
+          "Central de enquetes ativas, temas em votação e participações no feed.",
+        ),
+        entry(
+          "Hub Parabenizações",
+          "/parabenizacoes",
+          "Celebrações no feed, aniversariantes, novos colaboradores e reconhecimentos.",
+        ),
+        entry(
+          "Hub Notícias",
+          "/noticias",
+          "Notícias editoriais do feed e atalhos para comunicados institucionais.",
+        ),
       ],
     },
     {
@@ -74,6 +89,11 @@ export function buildSitemapSections(): SitemapSection[] {
       label: "Comunicados",
       icon: "fa-bullhorn",
       items: [
+        entry(
+          "Hub Comunicados",
+          "/comunicados",
+          "Página central com atalhos para oficiais, departamentais, urgentes e arquivo.",
+        ),
         ...comunicadosLinks.map((item) => fromNav(item)),
         entry(
           "Leitor de comunicados",
@@ -134,7 +154,14 @@ export function buildSitemapSections(): SitemapSection[] {
         {
           heading: servicosHeadings[0].label,
           icon: servicosHeadings[0].icon,
-          items: servicosLinks.slice(0, 6).map((item) => fromNav(item)),
+          items: [
+            entry(
+              "Hub Recursos Humanos",
+              "/servicos/rh",
+              "Página central com atalhos para benefícios, contracheque, férias e solicitações.",
+            ),
+            ...servicosLinks.slice(0, 6).map((item) => fromNav(item)),
+          ],
         },
         {
           heading: servicosHeadings[1].label,
@@ -144,7 +171,14 @@ export function buildSitemapSections(): SitemapSection[] {
         {
           heading: servicosHeadings[2].label,
           icon: servicosHeadings[2].icon,
-          items: tiLinks.map((item) => fromNav(item)),
+          items: [
+            entry(
+              "Hub TI & Suporte",
+              "/servicos/ti",
+              "Página central com atalhos para Help Desk, equipamentos, acessos e VPN.",
+            ),
+            ...tiLinks.map((item) => fromNav(item)),
+          ],
         },
         {
           heading: servicosHeadings[3].label,

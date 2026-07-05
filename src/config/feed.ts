@@ -17,6 +17,13 @@ const FEED_SCROLL_OVERRIDES = `
   top: 0 !important;
   z-index: 25 !important;
 }
+#feed-enquetes,
+#feed-enquete-trabalho,
+#feed-noticias,
+#feed-parabenizacoes,
+#feed-parabenizacao-promocao {
+  scroll-margin-top: 88px;
+}
 `;
 
 export function getFeedHtml(): string {

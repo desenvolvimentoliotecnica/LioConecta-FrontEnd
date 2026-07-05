@@ -5,6 +5,7 @@ import {
   documentosLinks,
   FEED_PATH,
   gruposLinks,
+  isComunicadosSectionActive,
   isDropdownActive,
   isDocumentosSectionActive,
   isGruposSectionActive,
@@ -39,7 +40,9 @@ function Dropdown({
   useMenuCloseSync(setOpen, menuId);
 
   const active =
-    label === "Pessoas"
+    label === "Comunicados"
+      ? isComunicadosSectionActive(location.pathname)
+      : label === "Pessoas"
       ? isPessoasSectionActive(location.pathname)
       : label === "Documentos"
         ? isDocumentosSectionActive(location.pathname)
