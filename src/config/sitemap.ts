@@ -96,6 +96,21 @@ export function buildSitemapSections(): SitemapSection[] {
         ),
         ...comunicadosLinks.map((item) => fromNav(item)),
         entry(
+          "Novo comunicado oficial",
+          "/comunicados/oficiais/novo",
+          "Editor para redigir e publicar comunicados institucionais na área de oficiais.",
+        ),
+        entry(
+          "Novo comunicado departamental",
+          "/comunicados/departamentais/novo",
+          "Editor para publicar avisos e atualizações de áreas e departamentos.",
+        ),
+        entry(
+          "Novo comunicado urgente",
+          "/comunicados/urgentes/novo",
+          "Editor para publicar avisos prioritários com ação imediata.",
+        ),
+        entry(
           "Leitor de comunicados",
           "/comunicados/leitura",
           "Visualização completa de um comunicado selecionado (requer parâmetro id na URL).",

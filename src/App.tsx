@@ -19,6 +19,14 @@ import { HelpPage } from "./components/pages/HelpPage";
 import { SitemapPage } from "./components/pages/SitemapPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
+import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
+import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
+import {
+  COMUNICADOS_ARQUIVO_CONFIG,
+  COMUNICADOS_DEPARTAMENTAIS_CONFIG,
+  COMUNICADOS_OFICIAIS_CONFIG,
+  COMUNICADOS_URGENTES_CONFIG,
+} from "./config/comunicados-pages";
 import { NotificationsPage } from "./components/pages/NotificationsPage";
 import { KioskFeedPage } from "./components/pages/KioskFeedPage";
 import { LegacyPage, LegacyPageById } from "./components/pages/LegacyPage";
@@ -35,6 +43,25 @@ function App() {
       </Route>
       <Route element={<AppShell />}>
         <Route path="/comunicados/leitura" element={<ComunicadoReader />} />
+        <Route
+          path="/comunicados/oficiais/novo"
+          element={<ComunicadoEditorPage config={COMUNICADOS_OFICIAIS_CONFIG} />}
+        />
+        <Route path="/comunicados/oficiais" element={<ComunicadosKindPage config={COMUNICADOS_OFICIAIS_CONFIG} />} />
+        <Route
+          path="/comunicados/departamentais/novo"
+          element={<ComunicadoEditorPage config={COMUNICADOS_DEPARTAMENTAIS_CONFIG} />}
+        />
+        <Route
+          path="/comunicados/departamentais"
+          element={<ComunicadosKindPage config={COMUNICADOS_DEPARTAMENTAIS_CONFIG} />}
+        />
+        <Route
+          path="/comunicados/urgentes/novo"
+          element={<ComunicadoEditorPage config={COMUNICADOS_URGENTES_CONFIG} />}
+        />
+        <Route path="/comunicados/urgentes" element={<ComunicadosKindPage config={COMUNICADOS_URGENTES_CONFIG} />} />
+        <Route path="/comunicados/arquivo" element={<ComunicadosKindPage config={COMUNICADOS_ARQUIVO_CONFIG} />} />
         <Route path="/notificacoes" element={<NotificationsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
@@ -54,7 +81,15 @@ function App() {
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
         <Route path="/noticias" element={<NoticiasHubPage />} />
         {pageRegistry.map((page) => {
-          if (page.id === "pessoas-perfil") return null;
+          if (
+            page.id === "pessoas-perfil" ||
+            page.id === "comunicados-oficiais" ||
+            page.id === "comunicados-departamentais" ||
+            page.id === "comunicados-urgentes" ||
+            page.id === "comunicados-arquivo"
+          ) {
+            return null;
+          }
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;
         })}
         {perfilPage ? (

@@ -87,3 +87,52 @@ export interface CreatePostRequest {
   content: string;
   metadata?: Record<string, unknown> | null;
 }
+
+export const COMUNICADO_KIND_OFICIAL = 0 as const;
+export const COMUNICADO_KIND_DEPARTAMENTAL = 1 as const;
+export const COMUNICADO_KIND_URGENTE = 2 as const;
+export const COMUNICADO_KIND_ARQUIVO = 3 as const;
+
+export type ComunicadoKind =
+  | typeof COMUNICADO_KIND_OFICIAL
+  | typeof COMUNICADO_KIND_DEPARTAMENTAL
+  | typeof COMUNICADO_KIND_URGENTE
+  | typeof COMUNICADO_KIND_ARQUIVO;
+
+export interface ComunicadoDto {
+  id: string;
+  slug?: string | null;
+  kind: ComunicadoKind;
+  title: string;
+  excerpt?: string | null;
+  content: Record<string, unknown>;
+  author: PersonSummaryDto;
+  heroImageUrl?: string | null;
+  isMandatory: boolean;
+  publishedAt?: string | null;
+  isReadByViewer: boolean;
+}
+
+export interface ComunicadoListItemDto {
+  id: string;
+  slug?: string | null;
+  kind: ComunicadoKind;
+  title: string;
+  excerpt?: string | null;
+  author: PersonSummaryDto;
+  heroImageUrl?: string | null;
+  isMandatory: boolean;
+  publishedAt?: string | null;
+  archivedAt?: string | null;
+  isReadByViewer: boolean;
+}
+
+export interface CreateComunicadoRequest {
+  kind: ComunicadoKind;
+  title: string;
+  excerpt?: string | null;
+  content?: Record<string, unknown> | null;
+  heroImageUrl?: string | null;
+  isMandatory: boolean;
+  publishedAt?: string | null;
+}

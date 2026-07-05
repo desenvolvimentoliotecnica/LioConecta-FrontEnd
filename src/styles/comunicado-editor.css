@@ -1,0 +1,286 @@
+.comunicado-editor {
+  width: 100%;
+}
+
+.comunicado-editor__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+.comunicado-editor__main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comunicado-editor__title {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e2e8f0;
+  background: transparent;
+  padding: 8px 4px 12px;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.comunicado-editor__title:focus {
+  outline: none;
+  border-bottom-color: #2563eb;
+}
+
+.comunicado-editor__title::placeholder {
+  color: #94a3b8;
+}
+
+.comunicado-editor__excerpt {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #334155;
+  resize: vertical;
+  min-height: 72px;
+}
+
+.comunicado-editor__excerpt:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #93c5fd;
+}
+
+.comunicado-editor__canvas {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.comunicado-editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.comunicado-editor__tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+}
+
+.comunicado-editor__tool:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.comunicado-editor__tool:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+}
+
+.comunicado-editor__body {
+  min-height: 420px;
+  padding: 24px 28px 32px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+.comunicado-editor__body:focus {
+  outline: none;
+}
+
+.comunicado-editor__body:empty::before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.comunicado-editor__body h2 {
+  margin: 1.4em 0 0.6em;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.comunicado-editor__body p {
+  margin: 0 0 1em;
+}
+
+.comunicado-editor__body ul,
+.comunicado-editor__body ol {
+  margin: 0 0 1em 1.4em;
+}
+
+.comunicado-editor__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 88px;
+}
+
+.comunicado-editor__panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.comunicado-editor__panel-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+}
+
+.comunicado-editor__panel-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comunicado-editor__field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.comunicado-editor__field input[type="text"],
+.comunicado-editor__field input[type="url"] {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.comunicado-editor__field input:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #93c5fd;
+}
+
+.comunicado-editor__checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.comunicado-editor__checkbox input {
+  margin-top: 3px;
+}
+
+.comunicado-editor__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comunicado-editor__publish {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comunicado-editor__publish:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.comunicado-editor__publish:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.comunicado-editor__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.comunicado-editor__secondary:hover {
+  background: #f8fafc;
+  text-decoration: none;
+}
+
+.comunicado-editor__toast {
+  position: fixed;
+  top: 88px;
+  right: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 360px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.comunicado-editor__toast--success {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.comunicado-editor__toast--error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 960px) {
+  .comunicado-editor__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .comunicado-editor__sidebar {
+    position: static;
+  }
+}

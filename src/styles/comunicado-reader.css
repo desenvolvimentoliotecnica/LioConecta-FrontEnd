@@ -103,6 +103,13 @@
   margin-bottom: 20px;
 }
 
+.comunicado-reader__excerpt {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #475569;
+  margin: -8px 0 20px;
+}
+
 .comunicado-reader__body p {
   font-size: 15px;
   line-height: 1.7;
