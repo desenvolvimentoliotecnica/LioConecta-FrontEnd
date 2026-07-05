@@ -11,6 +11,7 @@
 @import "./documents-hub-page.css";
 @import "./user-menu.css";
 @import "./chat-widget.css";
+@import "./kiosk.css";
 
 #root {
   min-height: 100vh;

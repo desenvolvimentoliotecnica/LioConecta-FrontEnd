@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { KioskShell } from "./components/layout/KioskShell";
 import { ActivitiesPage } from "./components/pages/ActivitiesPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
@@ -12,6 +13,7 @@ import { HelpPage } from "./components/pages/HelpPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { NotificationsPage } from "./components/pages/NotificationsPage";
+import { KioskFeedPage } from "./components/pages/KioskFeedPage";
 import { LegacyPage, LegacyPageById } from "./components/pages/LegacyPage";
 import { pageRegistry } from "./config/routes";
 
@@ -20,6 +22,10 @@ function App() {
 
   return (
     <Routes>
+      <Route element={<KioskShell />}>
+        <Route path="/quiosque" element={<KioskFeedPage />} />
+        <Route path="/quiosque/comunicados/leitura" element={<ComunicadoReader variant="kiosk" />} />
+      </Route>
       <Route element={<AppShell />}>
         <Route path="/comunicados/leitura" element={<ComunicadoReader />} />
         <Route path="/notificacoes" element={<NotificationsPage />} />

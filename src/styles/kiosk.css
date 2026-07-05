@@ -1,0 +1,121 @@
+.kiosk-shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--wf-bg);
+}
+
+.kiosk-shell__exit {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 300;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--wf-border-strong);
+  border-radius: var(--wf-radius);
+  background: var(--wf-surface);
+  color: var(--wf-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.kiosk-shell__exit:hover {
+  background: #f8fafc;
+}
+
+.kiosk-shell__exit:focus-visible {
+  outline: 2px solid var(--wf-border-strong);
+  outline-offset: 2px;
+}
+
+.kiosk-feed {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 56px 24px 40px;
+}
+
+.kiosk-feed > :first-child {
+  padding-top: 8px;
+}
+
+.kiosk-feed .feed-composer,
+.kiosk-feed .mood,
+.kiosk-feed .poll,
+.kiosk-feed .card__actions,
+.kiosk-feed .quick-access,
+.kiosk-feed .comments__input {
+  display: none !important;
+}
+
+.kiosk-feed .card--mood .card__body > strong,
+.kiosk-feed .card--mood .card__body > p {
+  opacity: 1;
+}
+
+@media (orientation: landscape) and (min-width: 768px) {
+  .kiosk-feed .feed-grid {
+    column-count: 3;
+    column-gap: 20px;
+  }
+
+  .kiosk-feed .announcement__hero {
+    min-height: 200px;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 1024px) {
+  .kiosk-feed {
+    padding: 56px 32px 48px;
+  }
+
+  .kiosk-feed .feed-grid {
+    column-count: 3;
+    column-gap: 24px;
+  }
+}
+
+.kiosk-reader {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 56px 24px 40px;
+}
+
+.kiosk-reader .comunicado-reader {
+  max-width: 900px;
+}
+
+.kiosk-reader .comunicado-reader__back {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.kiosk-reader .comunicado-reader__panel {
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+}
+
+@media (orientation: landscape) and (min-width: 768px) {
+  .kiosk-reader {
+    padding: 56px 48px 48px;
+  }
+
+  .kiosk-reader .comunicado-reader__title {
+    font-size: 28px;
+  }
+}

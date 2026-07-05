@@ -16,6 +16,7 @@ const RIGHT_ITEMS = [
   { label: "Favoritos", icon: "/icon-favorites.png", href: "/favoritos" },
   { label: "Bookmarks", icon: "/icon-bookmarks.png", href: "/bookmarks" },
   { label: "Atalhos", icon: "/icon-shortcuts.png", href: "/atalhos", spacerBefore: true },
+  { label: "Quiosque", icon: "/icon-kiosk.png", href: "/quiosque", spacerBefore: true },
 ];
 
 type SidebarProps = {

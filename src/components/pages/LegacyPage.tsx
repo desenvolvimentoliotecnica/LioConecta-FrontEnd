@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
 import { FeedComposer } from "../feed/FeedComposer";
+import { FEED_PAGE_ID, injectFeedPageStyles, splitFeedHtml } from "../../config/feed";
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
 import { useFeedComments, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
@@ -8,9 +9,11 @@ import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
 
-const FEED_GRID_MARKER = '<div class="feed-grid">';
+function injectPageStyles(pageId: string): (() => void) | undefined {
+  if (pageId === FEED_PAGE_ID) {
+    return injectFeedPageStyles("default");
+  }
 
-function injectPageStyles(pageId: string) {
   const assets = pageAssets[pageId];
   const attr = `data-page-style="${pageId}"`;
   document.querySelector(`style[${attr}]`)?.remove();
@@ -19,26 +22,13 @@ function injectPageStyles(pageId: string) {
   let combined = assets?.styles ?? "";
   if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
   if (pageId === "pessoas-organograma") combined += "\n" + orgModalCss;
-  if (pageId === "feed") {
-    combined += `
-.main.main--feed-scroll {
-  max-height: calc(100vh - var(--wf-topbar-h, 72px)) !important;
-  overflow-y: auto !important;
-  padding: 0 24px 40px !important;
-}
-.main.main--feed-scroll > :first-child {
-  padding-top: 20px;
-}
-.feed-composer {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 25 !important;
-}
-`;
-  }
-  if (!combined) return;
+  if (!combined) return undefined;
   el.textContent = combined;
   document.head.appendChild(el);
+
+  return () => {
+    document.querySelector(`style[${attr}]`)?.remove();
+  };
 }
 
 export function LegacyPage() {
@@ -53,10 +43,7 @@ export function LegacyPage() {
 
   useEffect(() => {
     if (!page) return;
-    injectPageStyles(page.id);
-    return () => {
-      document.querySelector(`style[data-page-style="${page.id}"]`)?.remove();
-    };
+    return injectPageStyles(page.id);
   }, [page]);
 
   if (!page) {
@@ -70,16 +57,13 @@ export function LegacyPage() {
 
   const html = pageAssets[page.id]?.content ?? "";
 
-  if (page.id === "feed" && html.includes(FEED_GRID_MARKER)) {
-    const splitIndex = html.indexOf(FEED_GRID_MARKER);
-    const beforeFeedGrid = html.slice(0, splitIndex);
-    const feedGridAndAfter = html.slice(splitIndex);
-
+  const feedParts = page.id === FEED_PAGE_ID ? splitFeedHtml(html) : null;
+  if (feedParts) {
     return (
       <main className="main main--feed-scroll" ref={mainRef}>
-        <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
+        <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
-        <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
+        <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
     );
   }
@@ -103,24 +87,18 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
   useFeedComments(page.id === "feed" ? mainRef : ({ current: null } as RefObject<HTMLElement | null>));
 
   useEffect(() => {
-    injectPageStyles(page.id);
-    return () => {
-      document.querySelector(`style[data-page-style="${page.id}"]`)?.remove();
-    };
+    return injectPageStyles(page.id);
   }, [page.id]);
 
   const html = pageAssets[page.id]?.content ?? "";
 
-  if (page.id === "feed" && html.includes(FEED_GRID_MARKER)) {
-    const splitIndex = html.indexOf(FEED_GRID_MARKER);
-    const beforeFeedGrid = html.slice(0, splitIndex);
-    const feedGridAndAfter = html.slice(splitIndex);
-
+  const feedParts = page.id === FEED_PAGE_ID ? splitFeedHtml(html) : null;
+  if (feedParts) {
     return (
       <main className="main main--feed-scroll" ref={mainRef}>
-        <div dangerouslySetInnerHTML={{ __html: beforeFeedGrid }} />
+        <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
-        <div dangerouslySetInnerHTML={{ __html: feedGridAndAfter }} />
+        <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
     );
   }
