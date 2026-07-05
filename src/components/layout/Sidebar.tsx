@@ -10,6 +10,7 @@ const LEFT_ITEMS = [
 ] as const;
 
 const RIGHT_ITEMS = [
+  { label: "Minhas atividades", icon: "/icon-activities.png", href: "/minhas-atividades" },
   { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
   { label: "Ajuda", icon: "/icon-help.png", href: "/ajuda" },
   { label: "Favoritos", icon: "/icon-favorites.png", href: "/favoritos" },
