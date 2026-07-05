@@ -17,7 +17,7 @@ export interface MeDto {
   title?: string | null;
   photoUrl?: string | null;
   departmentName?: string | null;
-  roles: UserRole[];
+  roles: Array<UserRole | number>;
 }
 
 export interface PagedResult<T> {
@@ -135,4 +135,62 @@ export interface CreateComunicadoRequest {
   heroImageUrl?: string | null;
   isMandatory: boolean;
   publishedAt?: string | null;
+}
+
+export const GROUP_STATUS_PENDING = 0 as const;
+export const GROUP_STATUS_ACTIVE = 1 as const;
+export const GROUP_STATUS_REJECTED = 2 as const;
+
+export type GroupStatus =
+  | typeof GROUP_STATUS_PENDING
+  | typeof GROUP_STATUS_ACTIVE
+  | typeof GROUP_STATUS_REJECTED;
+
+export const GROUP_TYPE_DEPARTAMENTAL = 0 as const;
+export const GROUP_TYPE_PROJETO = 1 as const;
+export const GROUP_TYPE_INTERESSE = 2 as const;
+export const GROUP_TYPE_COMUNIDADE = 3 as const;
+
+export type GroupType =
+  | typeof GROUP_TYPE_DEPARTAMENTAL
+  | typeof GROUP_TYPE_PROJETO
+  | typeof GROUP_TYPE_INTERESSE
+  | typeof GROUP_TYPE_COMUNIDADE;
+
+export const GROUP_ACCESS_OPEN = 0 as const;
+export const GROUP_ACCESS_REQUIRES_APPROVAL = 1 as const;
+export const GROUP_ACCESS_PRIVATE = 2 as const;
+
+export type GroupAccessMode =
+  | typeof GROUP_ACCESS_OPEN
+  | typeof GROUP_ACCESS_REQUIRES_APPROVAL
+  | typeof GROUP_ACCESS_PRIVATE;
+
+export interface GroupDto {
+  id: string;
+  name: string;
+  description?: string | null;
+  type: GroupType;
+  accessMode: GroupAccessMode;
+  icon: string;
+  status: GroupStatus;
+  isPrivate: boolean;
+  owner: PersonSummaryDto;
+  memberCount: number;
+  isMember: boolean;
+  createdAt: string;
+  reviewedAt?: string | null;
+  rejectionReason?: string | null;
+}
+
+export interface CreateGroupRequest {
+  name: string;
+  description?: string | null;
+  type: GroupType;
+  accessMode: GroupAccessMode;
+  icon: string;
+}
+
+export interface RejectGroupRequest {
+  reason?: string | null;
 }
