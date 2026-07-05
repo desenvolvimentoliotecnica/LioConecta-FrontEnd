@@ -45,6 +45,7 @@ export type PostType =
   | "MoodCheck";
 
 export const POST_TYPE_SOCIAL = 0 as const;
+export const POST_TYPE_COMUNICADO = 1 as const;
 
 export interface PersonSummaryDto {
   id: string;

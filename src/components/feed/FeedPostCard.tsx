@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { useMe } from "../../api/hooks/useMe";
 import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
+import { POST_TYPE_COMUNICADO } from "../../api/types";
 import { formatFeedTime, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
 type Props = {
@@ -50,6 +51,12 @@ export function FeedPostCard({ post }: Props) {
   const trimmedComment = commentText.trim();
   const canSubmitComment = trimmedComment.length > 0 && !isCommentPending;
 
+  const isComunicado = post.type === POST_TYPE_COMUNICADO;
+  const heroImage =
+    isComunicado && typeof post.metadata.heroImageUrl === "string"
+      ? post.metadata.heroImageUrl
+      : undefined;
+
   function handleToggleLike() {
     if (isLikePending) return;
     toggleLike.mutate(post.id);
@@ -75,7 +82,15 @@ export function FeedPostCard({ post }: Props) {
   }
 
   return (
-    <article className="card" data-feed-post-id={post.id}>
+    <article
+      className={`card${isComunicado ? " card--comunicado" : ""}`}
+      data-feed-post-id={post.id}
+    >
+      {heroImage ? (
+        <div className="post-media post-media--banner">
+          <img src={heroImage} alt="" />
+        </div>
+      ) : null}
       <div className="card__header">
         <img className="avatar avatar--sm" src={avatar} alt={post.author.name} />
         <div className="card__meta">
@@ -86,7 +101,11 @@ export function FeedPostCard({ post }: Props) {
           {postTypeBadge(post.type)}
         </span>
       </div>
-      <div className="card__body">{post.content}</div>
+      {isComunicado ? (
+        <div className="card__body" dangerouslySetInnerHTML={{ __html: post.content }} />
+      ) : (
+        <div className="card__body">{post.content}</div>
+      )}
       <div className="card__footer">
         <button
           type="button"

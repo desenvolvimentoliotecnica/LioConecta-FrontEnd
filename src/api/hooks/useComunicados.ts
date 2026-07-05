@@ -4,6 +4,7 @@ import {
   NOTIFICATIONS_QUERY_KEY,
   NOTIFICATIONS_UNREAD_QUERY_KEY,
 } from "../../utils/notifications";
+import { FEED_QUERY_KEY } from "./useFeed";
 import type {
   ComunicadoDto,
   ComunicadoKind,
@@ -114,6 +115,7 @@ export function useCreateComunicado() {
       void queryClient.invalidateQueries({ queryKey: COMUNICADOS_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_UNREAD_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
     },
   });
 }
