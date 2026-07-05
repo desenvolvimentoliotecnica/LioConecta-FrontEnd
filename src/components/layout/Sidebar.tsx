@@ -3,31 +3,30 @@ import { Link } from "react-router-dom";
 type SidebarItemConfig = {
   label: string;
   href: string;
-  icon?: string;
-  iconFa?: string;
+  icon: string;
   activePrefix?: string;
   activeOn?: readonly string[];
   spacerBefore?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
-  { label: "Início", icon: "/icon-home.png", href: "/", activeOn: ["/"] },
-  { label: "Feed", icon: "/icon-feed.png", href: "/" },
-  { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas", activePrefix: "/pessoas" },
-  { label: "Grupos", icon: "/icon-groups.png", href: "/grupos", activePrefix: "/grupos" },
-  { label: "Calendário", icon: "/icon-calendar.png", href: "/calendario" },
-  { label: "Documentos", icon: "/icon-documents.png", href: "/documentos", activePrefix: "/documentos" },
+  { label: "Início", icon: "fa-house", href: "/", activeOn: ["/"] },
+  { label: "Feed", icon: "fa-rss", href: "/" },
+  { label: "Pessoas", icon: "fa-users", href: "/pessoas", activePrefix: "/pessoas" },
+  { label: "Grupos", icon: "fa-people-group", href: "/grupos", activePrefix: "/grupos" },
+  { label: "Calendário", icon: "fa-calendar-days", href: "/calendario" },
+  { label: "Documentos", icon: "fa-folder-open", href: "/documentos", activePrefix: "/documentos" },
 ];
 
 const RIGHT_ITEMS: SidebarItemConfig[] = [
-  { label: "Minhas atividades", icon: "/icon-activities.png", href: "/minhas-atividades" },
-  { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
-  { label: "Ajuda", icon: "/icon-help.png", href: "/ajuda" },
-  { label: "Mapa do site", iconFa: "fa-sitemap", href: "/mapa-do-site" },
-  { label: "Favoritos", icon: "/icon-favorites.png", href: "/favoritos" },
-  { label: "Bookmarks", icon: "/icon-bookmarks.png", href: "/bookmarks" },
-  { label: "Atalhos", icon: "/icon-shortcuts.png", href: "/atalhos", spacerBefore: true },
-  { label: "Quiosque", icon: "/icon-kiosk.png", href: "/quiosque", spacerBefore: true },
+  { label: "Minhas atividades", icon: "fa-list-check", href: "/minhas-atividades" },
+  { label: "Analytics", icon: "fa-chart-pie", href: "/analytics" },
+  { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
+  { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
+  { label: "Favoritos", icon: "fa-star", href: "/favoritos" },
+  { label: "Bookmarks", icon: "fa-bookmark", href: "/bookmarks" },
+  { label: "Atalhos", icon: "fa-bolt", href: "/atalhos", spacerBefore: true },
+  { label: "Quiosque", icon: "fa-tablet-screen-button", href: "/quiosque", spacerBefore: true },
 ];
 
 type SidebarProps = {
@@ -37,30 +36,26 @@ type SidebarProps = {
   activePath?: string;
 };
 
-function SidebarIcon({ icon, iconFa }: { icon?: string; iconFa?: string }) {
-  if (iconFa) {
-    return (
-      <span className="sidebar__fa-icon" aria-hidden="true">
-        <i className={`fa-solid ${iconFa}`} />
-      </span>
-    );
-  }
-
-  return <img src={icon} alt="" />;
+function SidebarIcon({ icon }: { icon: string }) {
+  return (
+    <span className="sidebar__fa-icon" aria-hidden="true">
+      <i className={`fa-solid ${icon}`} />
+    </span>
+  );
 }
 
-function SidebarItem({ label, icon, iconFa, href }: SidebarItemConfig) {
+function SidebarItem({ label, icon, href }: SidebarItemConfig) {
   if (href === "#") {
     return (
       <a className="sidebar__item" href="#" title={label}>
-        <SidebarIcon icon={icon} iconFa={iconFa} />
+        <SidebarIcon icon={icon} />
         <span className="sidebar__text">{label}</span>
       </a>
     );
   }
   return (
     <Link className="sidebar__item" to={href} title={label}>
-      <SidebarIcon icon={icon} iconFa={iconFa} />
+      <SidebarIcon icon={icon} />
       <span className="sidebar__text">{label}</span>
     </Link>
   );
@@ -85,9 +80,7 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         onClick={onToggle}
       >
         <span className="sidebar__toggle-icon" aria-hidden="true">
-          <svg>
-            <use href="#icon-chevron" />
-          </svg>
+          <i className="fa-solid fa-chevron-right" />
         </span>
         <span className="sidebar__toggle-label">Recolher</span>
       </button>
@@ -105,7 +98,7 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
             {item.spacerBefore ? <div className="sidebar__spacer" /> : null}
             {isActive ? (
               <Link className="sidebar__item is-active" to={item.href} title={item.label}>
-                <SidebarIcon icon={item.icon} iconFa={item.iconFa} />
+                <SidebarIcon icon={item.icon} />
                 <span className="sidebar__text">{item.label}</span>
               </Link>
             ) : (
@@ -118,21 +111,11 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         <>
           <div className="sidebar__spacer" />
           <a className="sidebar__item" href="#" title="Configurações">
-            <img src="/icon-settings.png" alt="" />
+            <SidebarIcon icon="fa-gear" />
             <span className="sidebar__text">Configurações</span>
           </a>
         </>
       ) : null}
     </aside>
-  );
-}
-
-export function ChevronSymbol() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }} aria-hidden="true">
-      <symbol id="icon-chevron" viewBox="0 0 24 24">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" fill="none" />
-      </symbol>
-    </svg>
   );
 }

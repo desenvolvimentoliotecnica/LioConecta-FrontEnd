@@ -3,7 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useSidebar } from "../../hooks/useSidebar";
 import { ChatProvider, useChatWindowApi } from "../chat/ChatContext";
 import { ChatWidget } from "../chat/ChatWidget";
-import { ChevronSymbol, Sidebar } from "./Sidebar";
+import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 
 function ChatWindowBridge() {
@@ -25,7 +25,6 @@ export function AppShell() {
 
   return (
     <ChatProvider>
-      <ChevronSymbol />
       <div className="app-shell">
         <Topbar />
         <div className={`body${bodyClass ? ` ${bodyClass}` : ""}`} id="app-body">
