@@ -4,7 +4,7 @@ import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../
 import type { CommentDto, FeedPostDto } from "../../api/types";
 import { POST_TYPE_COMUNICADO, POST_TYPE_POLL } from "../../api/types";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
-import { formatFeedTime, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
+import { formatFeedTime, getPostMedia, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
 type Props = {
   post: FeedPostDto;
@@ -58,6 +58,7 @@ export function FeedPostCard({ post }: Props) {
     isComunicado && typeof post.metadata.heroImageUrl === "string"
       ? post.metadata.heroImageUrl
       : undefined;
+  const postMedia = !isComunicado && !isPoll ? getPostMedia(post) : null;
 
   function handleToggleLike() {
     if (isLikePending) return;
@@ -109,9 +110,18 @@ export function FeedPostCard({ post }: Props) {
         <FeedPollBody poll={post.poll} heroImageUrl={getPollHeroImage(post)} />
       ) : isPoll ? (
         <div className="card__body">{post.content}</div>
-      ) : (
+      ) : post.content.trim() ? (
         <div className="card__body">{post.content}</div>
-      )}
+      ) : null}
+      {postMedia ? (
+        <div className={`post-media${postMedia.type === "video" ? " post-media--video" : ""}`}>
+          {postMedia.type === "video" ? (
+            <video src={postMedia.url} controls playsInline preload="metadata" />
+          ) : (
+            <img src={postMedia.url} alt="" loading="lazy" />
+          )}
+        </div>
+      ) : null}
       <div className="card__footer">
         <button
           type="button"

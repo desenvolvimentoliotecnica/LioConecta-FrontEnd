@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useCreatePost } from "../../api/hooks/useFeed";
+import { useCreatePost, useUploadPostMedia } from "../../api/hooks/useFeed";
 import { useMe } from "../../api/hooks/useMe";
 import { config } from "../../api/client";
 import { PollCreateModal } from "./PollCreateModal";
@@ -18,6 +18,7 @@ type Attachment = {
 export function FeedComposer() {
   const { data: me } = useMe();
   const createPost = useCreatePost();
+  const uploadPostMedia = useUploadPostMedia();
   const user = me ?? FALLBACK_USER;
   const avatar = user.photoUrl?.startsWith("/")
     ? user.photoUrl
@@ -31,8 +32,8 @@ export function FeedComposer() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const canPublish = text.trim().length > 0;
-  const isPublishing = createPost.isPending;
+  const canPublish = text.trim().length > 0 || attachment !== null;
+  const isPublishing = createPost.isPending || uploadPostMedia.isPending;
 
   function showToast(type: "success" | "error", message: string) {
     setToast({ type, message });
@@ -70,7 +71,20 @@ export function FeedComposer() {
     }
 
     try {
-      await createPost.mutateAsync(text.trim());
+      let mediaUrl: string | undefined;
+      let mediaType: string | undefined;
+
+      if (attachment) {
+        const uploaded = await uploadPostMedia.mutateAsync(attachment.file);
+        mediaUrl = uploaded.url;
+        mediaType = uploaded.mediaType;
+      }
+
+      await createPost.mutateAsync({
+        content: text.trim(),
+        mediaUrl,
+        mediaType,
+      });
       setText("");
       removeAttachment();
       setExpanded(false);
@@ -127,9 +141,13 @@ export function FeedComposer() {
           )}
         </div>
 
-        {attachment && (
+        {attachment ? (
           <div className="feed-composer__preview">
-            <img src={attachment.previewUrl} alt="Pré-visualização" />
+            {attachment.file.type.startsWith("video/") ? (
+              <video src={attachment.previewUrl} controls muted playsInline />
+            ) : (
+              <img src={attachment.previewUrl} alt="Pré-visualização" />
+            )}
             <button
               type="button"
               className="feed-composer__preview-remove"
@@ -140,7 +158,7 @@ export function FeedComposer() {
               <i className="fa-solid fa-xmark" aria-hidden="true" />
             </button>
           </div>
-        )}
+        ) : null}
 
         <div className="feed-composer__divider" />
 

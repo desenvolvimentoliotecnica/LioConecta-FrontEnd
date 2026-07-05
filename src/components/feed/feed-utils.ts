@@ -50,3 +50,19 @@ export function postTypeBadgeClass(type: number): string {
       return "badge--social";
   }
 }
+
+export function getPostMedia(post: { metadata: Record<string, unknown> }): {
+  url: string;
+  type: "image" | "video";
+} | null {
+  const rawUrl = post.metadata.mediaUrl;
+  if (typeof rawUrl !== "string" || !rawUrl.trim()) {
+    return null;
+  }
+
+  const mediaType = post.metadata.mediaType;
+  return {
+    url: rawUrl,
+    type: mediaType === "video" ? "video" : "image",
+  };
+}
