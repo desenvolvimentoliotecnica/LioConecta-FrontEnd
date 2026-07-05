@@ -113,6 +113,7 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
 
   return (
     <main
+      key={contentKey}
       className="main"
       ref={mainRef}
       dangerouslySetInnerHTML={{ __html: html }}

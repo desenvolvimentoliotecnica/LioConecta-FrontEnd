@@ -13,5 +13,9 @@ interface ImportMeta {
 }
 
 interface Window {
-  ProfilePage?: { init: () => void };
+  ProfilePage?: {
+    init: () => void | Promise<void>;
+    setViewerRole?: (role: string) => void;
+    bumpLoadGeneration?: () => void;
+  };
 }

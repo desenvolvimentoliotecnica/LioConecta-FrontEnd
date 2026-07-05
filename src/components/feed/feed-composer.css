@@ -228,6 +228,29 @@
   color: #b91c1c;
 }
 
+.action--button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.action--button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.action--button.action--liked,
+.action--button.action--liked i {
+  color: #2563eb;
+}
+
+.action--button:hover:not(:disabled) {
+  color: #1d4ed8;
+}
+
 @media (max-width: 640px) {
   .feed-composer__tool span {
     display: none;

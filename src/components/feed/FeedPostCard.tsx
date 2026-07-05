@@ -1,3 +1,4 @@
+import { FEED_LIKE_REACTION, useTogglePostLike } from "../../api/hooks/useFeed";
 import type { FeedPostDto } from "../../api/types";
 import { formatFeedTime, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
@@ -6,9 +7,18 @@ type Props = {
 };
 
 export function FeedPostCard({ post }: Props) {
+  const toggleLike = useTogglePostLike();
   const avatar = post.author.photoUrl?.startsWith("/")
     ? post.author.photoUrl
     : post.author.photoUrl ?? "/avatar-maria-silva.png";
+
+  const isLiked = post.viewerReaction?.toLowerCase() === FEED_LIKE_REACTION;
+  const isPending = toggleLike.isPending && toggleLike.variables === post.id;
+
+  function handleToggleLike() {
+    if (isPending) return;
+    toggleLike.mutate(post.id);
+  }
 
   return (
     <article className="card" data-feed-post-id={post.id}>
@@ -24,9 +34,20 @@ export function FeedPostCard({ post }: Props) {
       </div>
       <div className="card__body">{post.content}</div>
       <div className="card__footer">
-        <span className="action">
-          <i className="fa-regular fa-thumbs-up" aria-hidden="true" /> {post.reactionCount}
-        </span>
+        <button
+          type="button"
+          className={`action action--button${isLiked ? " action--liked" : ""}`}
+          aria-pressed={isLiked}
+          aria-label={isLiked ? "Descurtir publicação" : "Curtir publicação"}
+          disabled={isPending}
+          onClick={handleToggleLike}
+        >
+          <i
+            className={`${isLiked ? "fa-solid" : "fa-regular"} fa-thumbs-up`}
+            aria-hidden="true"
+          />
+          {post.reactionCount}
+        </button>
         <span className="action">
           <i className="fa-regular fa-comment" aria-hidden="true" /> {post.commentCount}
         </span>

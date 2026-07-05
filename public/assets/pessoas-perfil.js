@@ -538,6 +538,9 @@
   }
 
   function renderProfile(person, allPeople) {
+    var loading = document.getElementById("profile-loading");
+    if (loading) loading.hidden = true;
+
     var colors = getDeptColors(person.dept);
     var root = document.getElementById("profile-root");
     if (!root) {
@@ -607,13 +610,60 @@
     setupTabs();
   }
 
+  function showLoading() {
+    var errorEl = document.getElementById("profile-error");
+    var root = document.getElementById("profile-root");
+    var loading = document.getElementById("profile-loading");
+    if (errorEl) errorEl.hidden = true;
+    if (root) root.hidden = true;
+    if (loading) loading.hidden = false;
+  }
+
   function showError() {
+    var loading = document.getElementById("profile-loading");
+    if (loading) loading.hidden = true;
     document.getElementById("profile-error").hidden = false;
     var root = document.getElementById("profile-root");
     if (root) root.hidden = true;
   }
 
+  function parseJsonField(value, fallback) {
+    if (value == null) return fallback;
+    if (typeof value === "object") return value;
+    if (typeof value === "string") {
+      try {
+        return JSON.parse(value);
+      } catch (_error) {
+        return fallback;
+      }
+    }
+    return fallback;
+  }
+
+  function formatHireDate(isoDate) {
+    if (!isoDate) return "—";
+    var parts = String(isoDate).split("-");
+    if (parts.length !== 3) return isoDate;
+    var monthIndex = parseInt(parts[1], 10);
+    var monthLabel = monthNames[monthIndex] || parts[1];
+    return monthLabel.slice(0, 3) + " de " + parts[0];
+  }
+
   function mapApiProfileToLegacy(dto) {
+    var personalData = parseJsonField(dto.personalData, {}) || {};
+    var availability = parseJsonField(personalData.availability, personalData.availability) || {};
+    var stats = parseJsonField(personalData.stats, {}) || {};
+    var skills = (dto.skills || []).map(function (skill) {
+      if (typeof skill === "string") {
+        return { name: skill, level: 3, endorsements: 0 };
+      }
+      return {
+        name: skill.name || skill.Name || "",
+        level: skill.level || skill.Level || 3,
+        endorsements: skill.endorsements || skill.Endorsements || 0,
+      };
+    });
+
     return {
       id: dto.slug,
       orgChartId: dto.orgChartId,
@@ -621,7 +671,9 @@
       title: dto.title || "",
       dept: dto.departmentName || "",
       img: dto.photoUrl || "/avatar-maria-silva.png",
-      aboutMe: dto.personalData && dto.personalData.bio ? dto.personalData.bio : "",
+      aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
+      bio: personalData.bio || dto.bio || "",
+      pronouns: personalData.pronouns || dto.pronouns || "",
       tags: dto.tags || ["member"],
       tagLabels: (dto.tags || []).map(function (t) {
         if (t === "ceo") return "CEO";
@@ -631,26 +683,44 @@
       contact: {
         email: dto.email,
         phone: dto.phone || "",
-        location: dto.location || ""
+        location: dto.location || "",
+        teams: dto.teamsUpn || personalData.teams || dto.email,
       },
-      personal: dto.personalData || { visibility: "public" },
-      managerId: null,
+      personal: personalData.visibility ? personalData : { visibility: "public", fullName: dto.name },
+      availability: availability,
+      managerId: dto.managerSlug || null,
       managerName: dto.managerName || null,
-      skills: (dto.skills || []).map(function (name) {
-        return { name: name, level: 3, endorsements: 0 };
-      }),
-      groups: [],
-      languages: [],
-      links: {},
-      education: [],
-      certifications: [],
-      history: dto.hireDate ? [{ type: "admission", title: dto.title, period: dto.hireDate }] : [],
-      projects: [],
-      recognitions: [],
-      interactions: [],
-      documents: [],
-      communications: [],
-      stats: { recognitions: 0, projects: 0, groups: 0 }
+      admission: formatHireDate(dto.hireDate),
+      roleTenure: personalData.roleTenure || null,
+      skills: skills,
+      languages: parseJsonField(personalData.languages, []),
+      links: parseJsonField(personalData.links, {}),
+      education: parseJsonField(personalData.education, []),
+      certifications: parseJsonField(personalData.certifications, []),
+      history: parseJsonField(personalData.history, dto.hireDate
+        ? [{
+            type: "admission",
+            title: dto.title || "",
+            date: String(dto.hireDate).slice(0, 4),
+            dept: dto.departmentName || "",
+            note: "Admissão na LioTécnica.",
+          }]
+        : []),
+      projects: parseJsonField(personalData.projects, []),
+      recognitions: parseJsonField(personalData.recognitions, []),
+      interactions: parseJsonField(personalData.interactions, []),
+      documents: parseJsonField(personalData.documents, []),
+      communications: parseJsonField(personalData.communications, []),
+      groups: parseJsonField(personalData.groups, []),
+      mentor: personalData.mentor || null,
+      buddy: personalData.buddy || null,
+      stats: {
+        tenureYears: stats.tenureYears || 0,
+        directReports: stats.directReports || 0,
+        groups: stats.groups || (parseJsonField(personalData.groups, []).length || 0),
+        recognitions: stats.recognitions || 0,
+        projectsCount: stats.projectsCount || 0,
+      },
     };
   }
 
@@ -661,7 +731,7 @@
       title: summary.title || "",
       dept: summary.departmentName || "",
       img: summary.photoUrl || "/avatar-maria-silva.png",
-      managerId: null,
+      managerId: summary.managerSlug || null,
     };
   }
 
@@ -706,28 +776,38 @@
       });
   }
 
+  var activeLoadId = 0;
+
   function init() {
+    var loadId = ++activeLoadId;
     setupVCardModal();
     var profileId = getProfileId();
     if (!profileId) {
       showError();
-      return;
+      return Promise.resolve();
     }
 
-    loadFromApi(profileId)
+    showLoading();
+
+    return loadFromApi(profileId)
       .catch(function () {
         return loadFromJson(profileId);
       })
       .then(function (result) {
+        if (loadId !== activeLoadId) return;
         renderProfile(result.person, result.allPeople);
       })
       .catch(function () {
+        if (loadId !== activeLoadId) return;
         showError();
       });
   }
 
   global.ProfilePage = {
     init: init,
+    bumpLoadGeneration: function () {
+      activeLoadId += 1;
+    },
     setViewerRole: function (role) {
       VIEWER_ROLE = role;
     }

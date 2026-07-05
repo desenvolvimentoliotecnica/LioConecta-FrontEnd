@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { installLegacyApiBridge } from "../api/legacyBridge";
 import type { PageEntry } from "../types/pages";
 
@@ -36,11 +36,50 @@ function waitForProfileDom(): Promise<void> {
   });
 }
 
+async function bootProfilePage(): Promise<void> {
+  installLegacyApiBridge();
+  await loadScript("/assets/pessoas-perfil.js");
+  await waitForProfileDom();
+  const initResult = window.ProfilePage?.init();
+  if (initResult && typeof (initResult as Promise<void>).then === "function") {
+    await initResult;
+  }
+}
+
+function useProfilePageScript(page: PageEntry | undefined, contentKey: string) {
+  useLayoutEffect(() => {
+    if (!page?.profileAssets) return;
+
+    let cancelled = false;
+
+    void bootProfilePage().catch(() => {
+      if (cancelled) return;
+      const errorEl = document.getElementById("profile-error");
+      const loadingEl = document.getElementById("profile-loading");
+      const rootEl = document.getElementById("profile-root");
+      if (loadingEl) loadingEl.hidden = true;
+      if (errorEl) errorEl.hidden = false;
+      if (rootEl) rootEl.hidden = true;
+    });
+
+    return () => {
+      cancelled = true;
+      if (window.ProfilePage && "bumpLoadGeneration" in window.ProfilePage) {
+        (window.ProfilePage as { bumpLoadGeneration?: () => void }).bumpLoadGeneration?.();
+      }
+    };
+  }, [page, contentKey]);
+}
+
 export function usePageScript(page: PageEntry | undefined, contentKey: string) {
   const ranRef = useRef<string | null>(null);
 
+  useProfilePageScript(page, contentKey);
+
   useEffect(() => {
     if (!page) return;
+    if (page.profileAssets) return;
+
     const key = `${page.id}:${contentKey}`;
     if (ranRef.current === key) return;
 
@@ -48,16 +87,6 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
 
     async function boot() {
       installLegacyApiBridge();
-
-      if (page!.profileAssets) {
-        await loadScript("/assets/pessoas-perfil.js");
-        if (cancelled) return;
-        await waitForProfileDom();
-        if (cancelled) return;
-        window.ProfilePage?.init();
-        ranRef.current = key;
-        return;
-      }
 
       if (page!.organograma) {
         await loadScript("/assets/org-profile-modal.js");
