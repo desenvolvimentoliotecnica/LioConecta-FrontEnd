@@ -2,9 +2,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { KioskShell } from "./components/layout/KioskShell";
 import { ActivitiesPage } from "./components/pages/ActivitiesPage";
+import { ComunicadosHubPage } from "./components/pages/ComunicadosHubPage";
+import { EnquetesHubPage } from "./components/pages/EnquetesHubPage";
+import { NoticiasHubPage } from "./components/pages/NoticiasHubPage";
+import { ParabenizacoesHubPage } from "./components/pages/ParabenizacoesHubPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
+import { RhHubPage } from "./components/pages/RhHubPage";
+import { TiHubPage } from "./components/pages/TiHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
 import { BookmarksPage } from "./components/pages/BookmarksPage";
 import { FavoritesPage } from "./components/pages/FavoritesPage";
@@ -39,8 +45,14 @@ function App() {
         <Route path="/atalhos" element={<ShortcutsPage />} />
         <Route path="/calendario" element={<CalendarPage />} />
         <Route path="/documentos" element={<DocumentsHubPage />} />
+        <Route path="/comunicados" element={<ComunicadosHubPage />} />
         <Route path="/pessoas" element={<PessoasHubPage />} />
         <Route path="/grupos" element={<GruposHubPage />} />
+        <Route path="/servicos/rh" element={<RhHubPage />} />
+        <Route path="/servicos/ti" element={<TiHubPage />} />
+        <Route path="/enquetes" element={<EnquetesHubPage />} />
+        <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
+        <Route path="/noticias" element={<NoticiasHubPage />} />
         {pageRegistry.map((page) => {
           if (page.id === "pessoas-perfil") return null;
           return <Route key={page.id} path={page.route} element={<LegacyPage />} />;

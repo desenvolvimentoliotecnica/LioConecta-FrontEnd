@@ -4,7 +4,7 @@ import { FeedComposer } from "../feed/FeedComposer";
 import { FEED_PAGE_ID, injectFeedPageStyles, splitFeedHtml } from "../../config/feed";
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
-import { useFeedComments, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
+import { useFeedComments, useFeedHashScroll, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
 import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
@@ -35,10 +35,11 @@ export function LegacyPage() {
   const location = useLocation();
   const page = getPageByRoute(location.pathname);
   const mainRef = useRef<HTMLElement>(null);
-  const contentKey = `${location.pathname}${location.search}`;
+  const contentKey = `${location.pathname}${location.search}${location.hash}`;
 
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
+  useFeedHashScroll(mainRef, page?.id === "feed", location.hash);
   useFeedComments(page?.id === "feed" ? mainRef : ({ current: null } as RefObject<HTMLElement | null>));
 
   useEffect(() => {
@@ -80,10 +81,11 @@ export function LegacyPage() {
 export function LegacyPageById({ page }: { page: PageEntry }) {
   const location = useLocation();
   const mainRef = useRef<HTMLElement>(null);
-  const contentKey = `${page.id}:${location.search}`;
+  const contentKey = `${page.id}:${location.search}${location.hash}`;
 
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
+  useFeedHashScroll(mainRef, page.id === "feed", location.hash);
   useFeedComments(page.id === "feed" ? mainRef : ({ current: null } as RefObject<HTMLElement | null>));
 
   useEffect(() => {

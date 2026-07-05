@@ -99,6 +99,31 @@ export function useQuickAccessScroll(containerRef: RefObject<HTMLElement | null>
   }, [containerRef]);
 }
 
+export function useFeedHashScroll(
+  containerRef: RefObject<HTMLElement | null>,
+  enabled: boolean,
+  hash: string,
+) {
+  useEffect(() => {
+    if (!enabled) return;
+
+    const scrollToHash = () => {
+      const id = hash.replace(/^#/, "");
+      if (!id) return;
+      const root = containerRef.current;
+      if (!root) return;
+      const target = root.querySelector(`#${CSS.escape(id)}`);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const timer = window.setTimeout(scrollToHash, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [containerRef, enabled, hash]);
+}
+
 export function useFeedComments(containerRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const root = containerRef.current;
