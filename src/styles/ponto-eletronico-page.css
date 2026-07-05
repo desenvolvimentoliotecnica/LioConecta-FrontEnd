@@ -1,0 +1,231 @@
+.ponto-page {
+  max-width: 1200px;
+}
+
+.welcome-banner--ponto {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px dashed #fdba74;
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.welcome-banner--ponto .welcome-banner__icon {
+  border-color: #fdba74;
+  color: #ea580c;
+}
+
+.welcome-banner--ponto .welcome-banner__title {
+  color: #c2410c;
+}
+
+.welcome-banner--ponto .welcome-banner__text {
+  color: #9a3412;
+}
+
+.ponto-period-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: var(--wf-gap);
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.ponto-period-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wf-text-muted);
+}
+
+.ponto-period-field input,
+.ponto-period-field select {
+  min-width: 180px;
+  padding: 9px 11px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  background: #fff;
+}
+
+.ponto-sync-meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--wf-text-muted);
+}
+
+.ponto-period-help {
+  margin: 0;
+  font-size: 12px;
+  color: var(--wf-text-muted);
+}
+
+.ponto-alert {
+  margin-bottom: var(--wf-gap);
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fff7ed;
+  border: 1px dashed #fdba74;
+  color: #9a3412;
+  font-size: 13px;
+}
+
+.ponto-alert--error {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.ponto-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--wf-gap);
+  margin-bottom: var(--wf-gap);
+}
+
+.ponto-stat {
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  padding: 16px 18px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.ponto-stat__value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ea580c;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.ponto-stat__label {
+  font-size: 11px;
+  color: var(--wf-text-muted);
+  line-height: 1.35;
+}
+
+.ponto-table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  padding: 12px 14px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.ponto-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ponto-table th,
+.ponto-table td {
+  padding: 10px 12px;
+  border-bottom: 1px dashed var(--wf-border);
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: #334155;
+}
+
+.ponto-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--wf-text-muted);
+}
+
+.ponto-date-chips {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ponto-date-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ponto-date-chip--weekend {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #c2410c;
+}
+
+.ponto-status {
+  display: inline-flex;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ponto-status--success {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.ponto-status--warning {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.ponto-status--danger {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ponto-status--neutral {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.ponto-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--wf-text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .ponto-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .ponto-stats {
+    grid-template-columns: 1fr;
+  }
+}

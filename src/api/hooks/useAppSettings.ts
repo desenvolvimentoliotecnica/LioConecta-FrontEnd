@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
+import { WORKERS_QUERY_KEY } from "./useWorkers";
 import type {
   AppSettingCategoryDto,
   AppSettingsUpdateResultDto,
@@ -24,6 +25,7 @@ export function useUpdateAppSettings() {
       api.put<AppSettingsUpdateResultDto>("/admin/app-settings", body),
     onSuccess: (result) => {
       queryClient.setQueryData(APP_SETTINGS_QUERY_KEY, result.categories);
+      void queryClient.invalidateQueries({ queryKey: WORKERS_QUERY_KEY });
     },
   });
 }

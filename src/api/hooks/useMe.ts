@@ -3,13 +3,13 @@ import { api, config } from "../client";
 import type { MeDto } from "../types";
 
 const MOCK_ME: MeDto = {
-  id: "00000000-0000-0000-0000-000000000001",
-  slug: "maria-silva",
-  name: "Maria Silva",
-  email: "maria.silva@liotecnica.com.br",
-  title: "Gerente de Projetos",
-  photoUrl: "/avatar-maria-silva.png",
-  departmentName: "Produto",
+  id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+  slug: "leonardo-sabino-mendes",
+  name: "Leonardo Sabino Mendes",
+  email: "leonardo.mendes@liotecnica.com.br",
+  title: "Desenvolvedor Sr.",
+  photoUrl: "/avatar-carlos-mendes.png",
+  departmentName: "Sistemas",
   roles: ["Employee", "Manager", "Admin"],
 };
 

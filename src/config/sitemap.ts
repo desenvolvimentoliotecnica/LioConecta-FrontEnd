@@ -260,6 +260,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "Hub de logs, métricas, acessos e investigação por correlation ID.",
         ),
         entry(
+          "Workers",
+          "/admin/workers",
+          "Monitoramento de jobs em background — execuções, logs e disparo manual.",
+        ),
+        entry(
+          "TOTVS RM — Ponto",
+          "/admin/totvs-rm",
+          "Configuração SQL Server read-only para integração de espelho de ponto.",
+        ),
+        entry(
           "Configurações observabilidade",
           "/admin/configuracoes-backend?category=observability",
           "Retenção, OTel, page views e access audit — seção observability do backend.",

@@ -778,3 +778,118 @@ export interface ObservabilityTimelineDto {
   correlationId: string;
   items: ObservabilityTimelineItemDto[];
 }
+
+export interface PontoEntryDto {
+  date: string;
+  weekdayLabel: string;
+  clockIn: string;
+  lunchOut: string;
+  lunchIn: string;
+  clockOut: string;
+  breakMinutes: string;
+  workedHours: string;
+  balanceHours: string;
+  status: string;
+}
+
+export interface PontoSummaryDto {
+  periodLabel: string;
+  workedHours: string;
+  expectedHours: string;
+  balanceHours: string;
+  absences: number;
+  delays: number;
+}
+
+export interface PontoResponseDto {
+  title: string;
+  summary?: PontoSummaryDto | null;
+  entries: PontoEntryDto[];
+  provider: string;
+  isSimulated: boolean;
+  availabilityStatus?: string | null;
+  userMessage?: string | null;
+  dataSource?: string | null;
+  syncedAt?: string | null;
+}
+
+export interface WorkerDefinitionDto {
+  key: string;
+  label: string;
+  description: string;
+  intervalSettingKey?: string | null;
+  defaultIntervalMinutes?: number | null;
+}
+
+export interface WorkerRunDto {
+  id: string;
+  workerKey: string;
+  status: string;
+  triggerSource: string;
+  startedAtUtc: string;
+  finishedAtUtc?: string | null;
+  errorMessage?: string | null;
+}
+
+export interface WorkerRunLogDto {
+  id: string;
+  loggedAtUtc: string;
+  level: string;
+  message: string;
+}
+
+export interface WorkerRunDetailDto {
+  run: WorkerRunDto;
+  logs: WorkerRunLogDto[];
+}
+
+export interface WorkerTriggerResultDto {
+  runId: string;
+  workerKey: string;
+  status: string;
+  errorMessage?: string | null;
+}
+
+export interface TotvsRmConfigurationDto {
+  id: string;
+  isEnabled: boolean;
+  server: string;
+  port: number;
+  database: string;
+  userName: string;
+  hasPassword: boolean;
+  trustServerCertificate: boolean;
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+  updatedAt: string;
+}
+
+export interface UpsertTotvsRmConfigurationRequest {
+  isEnabled: boolean;
+  server: string;
+  port: number;
+  database: string;
+  userName: string;
+  password?: string | null;
+  trustServerCertificate: boolean;
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+}
+
+export interface PontoPeriodOptionDto {
+  endMonth: number;
+  endYear: number;
+  label: string;
+}
+
+export interface PontoPeriodSettingsDto {
+  timesheetPeriodStartDay: number;
+  timesheetPeriodEndDay: number;
+  options: PontoPeriodOptionDto[];
+}
+
+export interface TotvsRmConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+}

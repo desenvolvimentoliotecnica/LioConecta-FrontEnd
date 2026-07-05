@@ -15,6 +15,7 @@ import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
+import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
 import { TiHubPage } from "./components/pages/TiHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
@@ -27,6 +28,8 @@ import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { BackendConfigPage } from "./components/pages/BackendConfigPage";
 import { AuditTrailPage } from "./components/pages/AuditTrailPage";
 import { ObservabilityHubPage } from "./components/pages/ObservabilityHubPage";
+import { WorkersHubPage } from "./components/admin/WorkersHubPage";
+import { TotvsRmConfigPage } from "./components/admin/TotvsRmConfigPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -76,6 +79,8 @@ function App() {
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
         <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
+        <Route path="/admin/workers" element={<WorkersHubPage />} />
+        <Route path="/admin/totvs-rm" element={<TotvsRmConfigPage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
         <Route path="/mapa-do-site" element={<SitemapPage />} />
@@ -94,6 +99,7 @@ function App() {
         <Route path="/servicos/contracheque" element={<ContrachequePage />} />
         <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
         <Route path="/servicos/ferias-ausencias" element={<FeriasAusenciasPage />} />
+        <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
@@ -109,7 +115,8 @@ function App() {
             page.id === "grupos-explorar" ||
             page.id === "servicos-contracheque" ||
             page.id === "servicos-beneficios" ||
-            page.id === "servicos-ferias"
+            page.id === "servicos-ferias" ||
+            page.id === "servicos-ponto"
           ) {
             return null;
           }
