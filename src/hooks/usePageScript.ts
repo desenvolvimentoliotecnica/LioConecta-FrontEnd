@@ -24,10 +24,15 @@ function runInlineScript(code: string) {
 }
 
 function waitForProfileDom(): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    const started = performance.now();
     function check() {
       if (document.getElementById("profile-root")) {
         resolve();
+        return;
+      }
+      if (performance.now() - started > 5000) {
+        reject(new Error("profile-root not found"));
         return;
       }
       requestAnimationFrame(check);

@@ -67,7 +67,7 @@ export function UserMenu() {
       </button>
       <div className="user-menu__panel" id="user-menu-panel" role="menu">
         <Link
-          to={`/pessoas/perfil?id=${user.slug}`}
+          to={{ pathname: "/pessoas/perfil", search: `id=${encodeURIComponent(user.slug)}` }}
           role="menuitem"
           className={profileActive ? "is-active" : undefined}
           onClick={() => setOpen(false)}
