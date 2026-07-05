@@ -30,9 +30,15 @@ npm run preview
 | `src/components/layout/` | Topbar, sidebars, menus (React) |
 | `src/components/pages/` | Renderização das páginas migradas |
 | `src/generated/pages/` | HTML/CSS extraídos dos wireframes |
-| `src/config/` | Navegação e registro de rotas |
+| `src/config/` | Navegação, registro de rotas e **mapa do site** (`sitemap.ts`) |
 | `public/` | Imagens, scripts legados (perfil, organograma) |
 | `legacy/html/` | HTML estático original (referência) |
+
+## Diretrizes
+
+### Mapa do site
+
+A página `/mapa-do-site` lista todo o ecossistema navegável do portal. **Sempre revise e atualize** [`src/config/sitemap.ts`](src/config/sitemap.ts) quando adicionar, remover ou renomear rotas, menus ou itens de sidebar. A regra completa está em [`.cursor/rules/sitemap-maintenance.mdc`](.cursor/rules/sitemap-maintenance.mdc).
 
 ## Rotas
 

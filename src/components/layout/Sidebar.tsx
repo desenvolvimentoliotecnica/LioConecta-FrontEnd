@@ -1,18 +1,29 @@
 import { Link } from "react-router-dom";
 
-const LEFT_ITEMS = [
+type SidebarItemConfig = {
+  label: string;
+  href: string;
+  icon?: string;
+  iconFa?: string;
+  activePrefix?: string;
+  activeOn?: readonly string[];
+  spacerBefore?: boolean;
+};
+
+const LEFT_ITEMS: SidebarItemConfig[] = [
   { label: "Início", icon: "/icon-home.png", href: "/", activeOn: ["/"] },
   { label: "Feed", icon: "/icon-feed.png", href: "/" },
   { label: "Pessoas", icon: "/icon-people.png", href: "/pessoas", activePrefix: "/pessoas" },
   { label: "Grupos", icon: "/icon-groups.png", href: "/grupos", activePrefix: "/grupos" },
   { label: "Calendário", icon: "/icon-calendar.png", href: "/calendario" },
   { label: "Documentos", icon: "/icon-documents.png", href: "/documentos", activePrefix: "/documentos" },
-] as const;
+];
 
-const RIGHT_ITEMS = [
+const RIGHT_ITEMS: SidebarItemConfig[] = [
   { label: "Minhas atividades", icon: "/icon-activities.png", href: "/minhas-atividades" },
   { label: "Analytics", icon: "/icon-analytics.png", href: "/analytics" },
   { label: "Ajuda", icon: "/icon-help.png", href: "/ajuda" },
+  { label: "Mapa do site", iconFa: "fa-sitemap", href: "/mapa-do-site" },
   { label: "Favoritos", icon: "/icon-favorites.png", href: "/favoritos" },
   { label: "Bookmarks", icon: "/icon-bookmarks.png", href: "/bookmarks" },
   { label: "Atalhos", icon: "/icon-shortcuts.png", href: "/atalhos", spacerBefore: true },
@@ -26,18 +37,30 @@ type SidebarProps = {
   activePath?: string;
 };
 
-function SidebarItem({ label, icon, href }: { label: string; icon: string; href: string }) {
+function SidebarIcon({ icon, iconFa }: { icon?: string; iconFa?: string }) {
+  if (iconFa) {
+    return (
+      <span className="sidebar__fa-icon" aria-hidden="true">
+        <i className={`fa-solid ${iconFa}`} />
+      </span>
+    );
+  }
+
+  return <img src={icon} alt="" />;
+}
+
+function SidebarItem({ label, icon, iconFa, href }: SidebarItemConfig) {
   if (href === "#") {
     return (
       <a className="sidebar__item" href="#" title={label}>
-        <img src={icon} alt="" />
+        <SidebarIcon icon={icon} iconFa={iconFa} />
         <span className="sidebar__text">{label}</span>
       </a>
     );
   }
   return (
     <Link className="sidebar__item" to={href} title={label}>
-      <img src={icon} alt="" />
+      <SidebarIcon icon={icon} iconFa={iconFa} />
       <span className="sidebar__text">{label}</span>
     </Link>
   );
@@ -74,20 +97,19 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         const isRouteActive =
           item.href !== "#" &&
           (activePath === item.href ||
-            ("activePrefix" in item &&
-              item.activePrefix &&
+            (item.activePrefix &&
               (activePath === item.activePrefix || activePath.startsWith(`${item.activePrefix}/`))));
         const isActive = isHomeActive || isRouteActive;
         return (
           <span key={item.label}>
-            {"spacerBefore" in item && item.spacerBefore ? <div className="sidebar__spacer" /> : null}
+            {item.spacerBefore ? <div className="sidebar__spacer" /> : null}
             {isActive ? (
               <Link className="sidebar__item is-active" to={item.href} title={item.label}>
-                <img src={item.icon} alt="" />
+                <SidebarIcon icon={item.icon} iconFa={item.iconFa} />
                 <span className="sidebar__text">{item.label}</span>
               </Link>
             ) : (
-              <SidebarItem label={item.label} icon={item.icon} href={item.href} />
+              <SidebarItem {...item} />
             )}
           </span>
         );

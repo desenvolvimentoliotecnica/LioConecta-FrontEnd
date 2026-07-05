@@ -1,0 +1,40 @@
+---
+description: Manter o mapa do site sincronizado com rotas e navegação do portal
+alwaysApply: true
+---
+
+# Mapa do site — revisão obrigatória
+
+O mapa do site (`/mapa-do-site`) é o índice oficial do ecossistema LioConecta. **Sempre revise e atualize-o quando necessário em qualquer mudança no projeto** que afete navegação ou páginas.
+
+## Quando atualizar
+
+Revise `src/config/sitemap.ts` (e arquivos relacionados) se a mudança incluir:
+
+- Nova rota ou remoção de rota em `src/App.tsx`
+- Alteração em `src/config/navigation.ts` (menus, links, headings)
+- Novo item no sidebar (`src/components/layout/Sidebar.tsx`)
+- Página legacy adicionada/removida em `src/generated/pages.json`
+- Hub, utilitário, quiosque ou rota auxiliar (leitor, perfil, notificações)
+- Placeholder (`#`) que passou a ter rota real — remover badge "Em breve"
+- Renomeação de label ou path visível ao usuário
+
+## Onde editar
+
+| Arquivo | Responsabilidade |
+|---------|------------------|
+| `src/config/sitemap.ts` | Seções, entradas, descrições e filtros do mapa |
+| `src/components/layout/Sidebar.tsx` | Ícone/link no menu lateral direito |
+| `src/App.tsx` | Registrar rota da nova página React |
+
+Priorize **derivar** entradas de `navigation.ts` em vez de duplicar listas manualmente.
+
+## Checklist antes de concluir a tarefa
+
+1. Todas as rotas novas aparecem no mapa na seção correta
+2. Rotas removidas não permanecem listadas
+3. Contagem do rodapé ("Exibindo X de Y páginas") continua coerente
+4. Busca encontra páginas pelo label, path ou descrição
+5. `npm run build` passa sem erros
+
+Se a mudança for apenas cosmética (CSS/texto interno de uma página existente), revisão do mapa não é necessária.
