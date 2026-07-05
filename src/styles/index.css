@@ -4,6 +4,7 @@
 @import "./notifications.css";
 @import "./notifications-page.css";
 @import "./user-menu.css";
+@import "./chat-widget.css";
 
 #root {
   min-height: 100vh;
