@@ -169,6 +169,10 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/biblioteca/" + id + ".pdf";
+      }
+
       function renderItem(item) {
         const featuredClass = item.featured ? " is-featured" : "";
         const mediaClass = item.media === "video" ? "video" : item.media === "case" ? "case" : item.media === "acervo" ? "acervo" : item.media === "artigo" ? "artigo" : "ebook";
@@ -176,9 +180,10 @@
         const curatedBadge = item.curated ? '<span class="doc-card__updated">Curado</span>' : "";
         const primaryLabel = item.media === "video" ? "Assistir" : item.media === "acervo" ? "Explorar" : "Acessar";
         const primaryIcon = item.media === "video" ? "fa-play" : item.media === "acervo" ? "fa-folder-open" : "fa-book-open";
+        const url = pdfUrl(item.id);
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
+          <article class="doc-card${featuredClass}" data-area="${item.area}" data-id="${item.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${mediaClass}" aria-hidden="true">
                 <i class="fa-solid ${mediaIcons[item.media] || "fa-book"}"></i>
@@ -197,10 +202,11 @@
               <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Publicado ${item.date}</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>
+              <button type="button" class="doc-card__open" data-action="view"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</button>
               <div class="doc-card__actions">
+                <button type="button" class="doc-card__btn" data-action="view" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+                <a class="doc-card__btn" href="${url}" download aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
-                <a class="doc-card__btn" href="#" aria-label="Compartilhar ${item.title}"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -245,4 +251,110 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("library-pdf-modal");
+      var modalTitle = document.getElementById("library-pdf-title");
+      var modalMeta = document.getElementById("library-pdf-meta");
+      var modalFrame = document.getElementById("library-pdf-frame");
+      var modalDownload = document.getElementById("library-pdf-download");
+      var modalCloseBtn = document.getElementById("library-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "library-pdf-modal";
+        wrapper.className = "library-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="library-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="library-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="library-pdf-title">' +
+            '<header class="library-pdf-modal__header">' +
+              '<div class="library-pdf-modal__header-text">' +
+                '<h2 class="library-pdf-modal__title" id="library-pdf-title"></h2>' +
+                '<p class="library-pdf-modal__meta" id="library-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="library-pdf-modal__close" id="library-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="library-pdf-modal__frame" id="library-pdf-frame" title=""></iframe>' +
+            '<footer class="library-pdf-modal__footer">' +
+              '<a class="library-pdf-modal__download" id="library-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="library-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("library-pdf-title");
+        modalMeta = document.getElementById("library-pdf-meta");
+        modalFrame = document.getElementById("library-pdf-frame");
+        modalDownload = document.getElementById("library-pdf-download");
+        modalCloseBtn = document.getElementById("library-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closeLibraryModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeLibraryModal();
+          }
+        });
+      }
+
+      function findItem(id) {
+        for (var i = 0; i < items.length; i += 1) {
+          if (items[i].id === id) return items[i];
+        }
+        return null;
+      }
+
+      function openLibraryModal(id) {
+        var item = findItem(id);
+        if (!item) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = item.title;
+        modalMeta.textContent =
+          (mediaLabels[item.media] || item.media) + " · " +
+          (areaLabels[item.area] || item.area) + " · Publicado " + item.date;
+        modalFrame.title = item.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", item.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closeLibraryModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest("[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openLibraryModal(id);
+      });
     })();

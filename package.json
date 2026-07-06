@@ -15,6 +15,8 @@
     "generate:politicas-pdfs": "python scripts/generate-politicas-pdfs.py",
     "generate:manuais-pdfs": "python scripts/generate-manuais-pdfs.py",
     "generate:formularios-pdfs": "python scripts/generate-formularios-pdfs.py",
+    "generate:modelos-pdfs": "python scripts/generate-modelos-pdfs.py",
+    "generate:biblioteca-pdfs": "python scripts/generate-biblioteca-pdfs.py",
     "extract": "python scripts/migrate-to-react.py && python scripts/generate-pages-index.py && python scripts/fix-css-urls.py"
   },
   "dependencies": {
