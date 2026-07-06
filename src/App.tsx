@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { GuestOnly, RequireAuth } from "./components/auth/RequireAuth";
 import { LoginPage } from "./components/auth/LoginPage";
 import { AppShell } from "./components/layout/AppShell";
 import { KioskShell } from "./components/layout/KioskShell";
@@ -53,7 +54,15 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/acesso" element={<LoginPage />} />
+      <Route
+        path="/acesso"
+        element={
+          <GuestOnly>
+            <LoginPage />
+          </GuestOnly>
+        }
+      />
+      <Route element={<RequireAuth />}>
       <Route element={<KioskShell />}>
         <Route path="/quiosque" element={<KioskFeedPage />} />
         <Route path="/quiosque/comunicados/leitura" element={<ComunicadoReader variant="kiosk" />} />
@@ -135,6 +144,7 @@ function App() {
           <Route path="/pessoas/perfil" element={<LegacyPageById page={perfilPage} />} />
         ) : null}
         <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
       </Route>
     </Routes>
   );

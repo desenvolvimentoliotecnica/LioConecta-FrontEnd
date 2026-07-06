@@ -257,6 +257,19 @@
   gap: 10px;
 }
 
+.login-page__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: #b91c1c;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
 .login-page__field {
   display: flex;
   flex-direction: column;
@@ -328,6 +341,67 @@
   justify-content: space-between;
   gap: 12px;
   margin-top: 2px;
+}
+
+.login-page__form-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.login-page__api-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.login-page__api-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #d1d5db;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.login-page__api-status--checking .login-page__api-status-dot {
+  background: #f59e0b;
+  animation: login-api-pulse 1.2s ease-in-out infinite;
+}
+
+.login-page__api-status--online .login-page__api-status-dot {
+  background: #16a34a;
+}
+
+.login-page__api-status--offline .login-page__api-status-dot {
+  background: #dc2626;
+}
+
+.login-page__api-status--checking .login-page__api-status-label {
+  color: #b45309;
+}
+
+.login-page__api-status--online .login-page__api-status-label {
+  color: #15803d;
+}
+
+.login-page__api-status--offline .login-page__api-status-label {
+  color: #b91c1c;
+}
+
+@keyframes login-api-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 .login-page__forgot {

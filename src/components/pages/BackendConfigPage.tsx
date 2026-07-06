@@ -6,6 +6,7 @@ import { useAppSettings, useUpdateAppSettings } from "../../api/hooks/useAppSett
 import { useTestGraphConnection } from "../../api/hooks/useGraphConfig";
 import { useTestPlannerConnection } from "../../api/hooks/usePlannerConfig";
 import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
+import { useTestLdapConnection } from "../../api/hooks/useLdapConfig";
 import { useMe } from "../../api/hooks/useMe";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
@@ -17,6 +18,12 @@ const GRAPH_SECRET_KEY = "graph.client_secret";
 const GLPI_BASE_URL_KEY = "glpi.base_url";
 const GLPI_APP_TOKEN_KEY = "glpi.app_token";
 const GLPI_USER_TOKEN_KEY = "glpi.user_token";
+const LDAP_HOST_KEY = "ldap.host";
+const LDAP_PORT_KEY = "ldap.port";
+const LDAP_USE_SSL_KEY = "ldap.use_ssl";
+const LDAP_BIND_DN_KEY = "ldap.bind_dn";
+const LDAP_BIND_PASSWORD_KEY = "ldap.bind_password";
+const LDAP_SEARCH_BASE_KEY = "ldap.search_base";
 const INTEGRATIONS_MOCK_KEY = "integrations.use_dev_adapters";
 const PLANNER_ENABLED_KEY = "planner.enabled";
 const PLANNER_PLAN_ID_KEY = "planner.plan_id";
@@ -144,6 +151,7 @@ export function BackendConfigPage() {
   const testGraphConnection = useTestGraphConnection();
   const testPlannerConnection = useTestPlannerConnection();
   const testGlpiConnection = useTestGlpiConnection();
+  const testLdapConnection = useTestLdapConnection();
   const [activeCategory, setActiveCategory] = useState<string>("database");
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info" | "error"; text: string } | null>(
@@ -155,6 +163,12 @@ export function BackendConfigPage() {
     detail?: string | null;
   } | null>(null);
   const [glpiTestFeedback, setGlpiTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
+
+  const [ldapTestFeedback, setLdapTestFeedback] = useState<{
     type: "success" | "error";
     title: string;
     detail?: string | null;
@@ -229,6 +243,34 @@ export function BackendConfigPage() {
       setGlpiTestFeedback({
         type: "error",
         title: "Falha ao testar conexão com o GLPI.",
+        detail: apiErrorDetail(error),
+      });
+    }
+  }
+
+  async function handleTestLdapConnection() {
+    setLdapTestFeedback(null);
+    try {
+      const bindPassword = draft[LDAP_BIND_PASSWORD_KEY]?.trim();
+      const portRaw = draft[LDAP_PORT_KEY]?.trim();
+      const port = portRaw ? Number.parseInt(portRaw, 10) : null;
+      const result = await testLdapConnection.mutateAsync({
+        host: draft[LDAP_HOST_KEY]?.trim() || null,
+        port: Number.isFinite(port) ? port : null,
+        useSsl: (draft[LDAP_USE_SSL_KEY] ?? "false") === "true",
+        bindDn: draft[LDAP_BIND_DN_KEY]?.trim() || null,
+        bindPassword: bindPassword && bindPassword !== SECRET_MASK ? bindPassword : null,
+        searchBase: draft[LDAP_SEARCH_BASE_KEY]?.trim() || null,
+      });
+      setLdapTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch (error) {
+      setLdapTestFeedback({
+        type: "error",
+        title: "Falha ao testar conexão LDAP.",
         detail: apiErrorDetail(error),
       });
     }
@@ -437,6 +479,34 @@ export function BackendConfigPage() {
             </div>
           ) : null}
 
+          {activeCategory === "ldap" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              Configure o Active Directory corporativo. A conta de serviço (<code>ldap.bind_dn</code>) precisa de
+              permissão de leitura na base de busca. Usuários normais autenticam com credencial LDAP; o super-admin
+              local permanece disponível para bootstrap.
+            </div>
+          ) : null}
+
+          {ldapTestFeedback && activeCategory === "ldap" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${ldapTestFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{ldapTestFeedback.title}</strong>
+              {ldapTestFeedback.detail ? (
+                <p className="backend-config-page__alert-detail">{ldapTestFeedback.detail}</p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {activeCategory === "auth" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Em produção use <code>auth.provider=ldap</code>. A chave <code>auth.jwt_signing_key</code> e as chaves{" "}
+              <code>ldap.*</code> exigem reinício da API após alteração. E-mails em{" "}
+              <code>auth.super_admin_emails</code> recebem role Admin no primeiro login LDAP.
+            </div>
+          ) : null}
+
           {activeCategory === "planner" && usesDevAdapters ? (
             <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
               Modo mock ativo — Minhas Atividades usa tarefas fictícias. Desative o mock em{" "}
@@ -530,6 +600,24 @@ export function BackendConfigPage() {
               <p className="backend-config-page__actions-hint">
                 Valida <code>initSession</code> na API GLPI. Salve antes se alterou credenciais — o teste usa o
                 formulário ou valores já persistidos no banco.
+              </p>
+            </div>
+          ) : null}
+
+          {activeCategory === "ldap" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestLdapConnection()}
+                disabled={testLdapConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testLdapConnection.isPending ? "Testando…" : "Testar conexão LDAP"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida bind da conta de serviço em <code>{draft[LDAP_HOST_KEY] || "ldap.host"}</code>. Salve antes se
+                alterou credenciais — o teste usa o formulário ou valores já persistidos no banco.
               </p>
             </div>
           ) : null}

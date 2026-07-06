@@ -1,12 +1,11 @@
-import { MsalProvider } from "@azure/msal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { setNetworkErrorTracker, setTokenProvider } from "../api/client";
+import { getStoredToken } from "../api/hooks/useAuth";
 import { AppErrorBoundary } from "../components/telemetry/AppErrorBoundary";
 import { TelemetryProvider } from "../components/telemetry/TelemetryProvider";
 import { EmailComposeProvider } from "../components/email/EmailComposeProvider";
 import { setTelemetryTokenProvider, trackNetworkError } from "../telemetry";
-import { isMsalEnabled, loginRequest, msalInstance } from "./msalConfig";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +14,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const DEV_AUTH_MODE = import.meta.env.VITE_AUTH_MODE === "dev";
 
 function DevAuthBridge({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -26,67 +27,22 @@ function DevAuthBridge({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-function MsalAuthBridge({ children }: { children: ReactNode }) {
+function PortalAuthBridge({ children }: { children: ReactNode }) {
   useEffect(() => {
-    const instance = msalInstance;
-    if (!instance) return;
-
-    void instance.initialize().then(async () => {
-      const accounts = instance.getAllAccounts();
-      if (accounts.length === 0) {
-        await instance.loginRedirect(loginRequest);
-        return;
-      }
-
-      instance.setActiveAccount(accounts[0]);
-    });
-
-    setTokenProvider(async () => {
-      const account = instance.getActiveAccount() ?? instance.getAllAccounts()[0];
-      if (!account) return null;
-
-      try {
-        const result = await instance.acquireTokenSilent({
-          ...loginRequest,
-          account,
-        });
-        return result.accessToken;
-      } catch {
-        await instance.acquireTokenRedirect(loginRequest);
-        return null;
-      }
-    });
-
-    setTelemetryTokenProvider(async () => {
-      const account = instance.getActiveAccount() ?? instance.getAllAccounts()[0];
-      if (!account) return null;
-
-      try {
-        const result = await instance.acquireTokenSilent({
-          ...loginRequest,
-          account,
-        });
-        return result.accessToken;
-      } catch {
-        return null;
-      }
-    });
-
+    const provider = async () => getStoredToken();
+    setTokenProvider(provider);
+    setTelemetryTokenProvider(provider);
     setNetworkErrorTracker(trackNetworkError);
   }, []);
 
-  if (!msalInstance) {
-    return <DevAuthBridge>{children}</DevAuthBridge>;
-  }
-
-  return <MsalProvider instance={msalInstance}>{children}</MsalProvider>;
+  return <>{children}</>;
 }
 
 export function AppProviders({ children }: { children: ReactNode }) {
-  const content = isMsalEnabled() ? (
-    <MsalAuthBridge>{children}</MsalAuthBridge>
-  ) : (
+  const content = DEV_AUTH_MODE ? (
     <DevAuthBridge>{children}</DevAuthBridge>
+  ) : (
+    <PortalAuthBridge>{children}</PortalAuthBridge>
   );
 
   return (

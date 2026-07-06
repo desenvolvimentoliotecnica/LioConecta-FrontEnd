@@ -20,6 +20,32 @@ export interface MeDto {
   roles: Array<UserRole | number>;
 }
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+  expiresInSeconds: number;
+  user: MeDto;
+}
+
+export interface TestLdapConnectionRequest {
+  host?: string | null;
+  port?: number | null;
+  useSsl?: boolean | null;
+  bindDn?: string | null;
+  bindPassword?: string | null;
+  searchBase?: string | null;
+}
+
+export interface LdapConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+}
+
 export interface PagedResult<T> {
   items: T[];
   nextCursor?: string | null;

@@ -1,15 +1,19 @@
-import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+﻿import { useState, type FormEvent } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ApiError } from "../../api/client";
+import { useApiHealth } from "../../api/hooks/useApiHealth";
+import { useLogin } from "../../api/hooks/useAuth";
+import { ApiStatusIndicator } from "./ApiStatusIndicator";
 import "../../styles/login-page.css";
 
 const STEPS = [
   {
     title: "Informe suas credenciais",
-    text: "Use seu e-mail @liotecnica.com.br e senha Microsoft 365.",
+    text: "Use seu e-mail @liotecnica.com.br e senha corporativa (Active Directory).",
   },
   {
     title: "Autenticação segura",
-    text: "Validação via Microsoft Entra ID com MFA quando habilitado.",
+    text: "Validação via LDAP corporativo com políticas de senha do domínio.",
   },
   {
     title: "Acesse o portal",
@@ -22,20 +26,70 @@ const STEPS = [
 ] as const;
 
 const QUICK_FACTS = [
-  { icon: "fa-shield-halved", label: "Acesso seguro", value: "Microsoft 365" },
+  { icon: "fa-shield-halved", label: "Acesso seguro", value: "LDAP corporativo" },
   { icon: "fa-clock", label: "Disponibilidade", value: "24 horas" },
   { icon: "fa-headset", label: "Suporte", value: "Help Desk TI" },
 ] as const;
 
+function loginErrorMessage(error: unknown, apiOnline: boolean): string {
+  if (error instanceof ApiError) {
+    if (error.status === 401) {
+      if (error.body && typeof error.body === "object") {
+        const message = (error.body as Record<string, unknown>).message;
+        if (typeof message === "string" && message.trim()) {
+          return apiOnline
+            ? `${message} Verifique e-mail e senha — conta local de bootstrap ou credencial LDAP.`
+            : message;
+        }
+      }
+      return apiOnline
+        ? "E-mail ou senha inválidos. Use a conta local de bootstrap ou credencial LDAP corporativa."
+        : "E-mail ou senha inválidos.";
+    }
+    if (error.status === 0) {
+      return "Não foi possível conectar à API. Verifique se o backend está em execução.";
+    }
+    return "Falha ao autenticar. Tente novamente.";
+  }
+
+  return "Falha ao autenticar. Tente novamente.";
+}
+
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const login = useLogin();
+  const { isOnline, isOffline } = useApiHealth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const redirectTo =
+    (location.state as { from?: string } | null)?.from && (location.state as { from?: string }).from !== "/acesso"
+      ? (location.state as { from: string }).from
+      : "/";
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate("/");
+    setError(null);
+
+    if (!email.trim() || !password) {
+      setError("Informe e-mail e senha.");
+      return;
+    }
+
+    if (isOffline) {
+      setError("A API está offline. Aguarde o indicador ficar verde ou reinicie o backend.");
+      return;
+    }
+
+    try {
+      await login.mutateAsync({ email: email.trim(), password });
+      navigate(redirectTo, { replace: true });
+    } catch (submitError) {
+      setError(loginErrorMessage(submitError, isOnline));
+    }
   };
 
   return (
@@ -45,7 +99,7 @@ export function LoginPage() {
           <img src="/logo-lioconecta.png" alt="LioConecta" className="login-page__logo" />
           <span className="login-page__brand-text">LioConecta</span>
         </div>
-        <a className="login-page__help-link" href="#">
+        <a className="login-page__help-link" href="/ajuda">
           <i className="fa-regular fa-circle-question" aria-hidden="true" />
           Precisa de ajuda?
         </a>
@@ -65,8 +119,8 @@ export function LoginPage() {
               <i className="fa-solid fa-shield-halved" />
             </div>
             <p className="login-page__security-text">
-              <strong>Seus dados estão protegidos.</strong> Autenticação Microsoft 365 com criptografia
-              corporativa.
+              <strong>Seus dados estão protegidos.</strong> Autenticação LDAP corporativa com criptografia em
+              trânsito.
             </p>
           </div>
 
@@ -76,7 +130,14 @@ export function LoginPage() {
               Acesso ao portal
             </h2>
 
-            <form className="login-page__form" onSubmit={handleSubmit} noValidate>
+            <form className="login-page__form" onSubmit={(event) => void handleSubmit(event)} noValidate>
+              {error ? (
+                <div className="login-page__error" role="alert">
+                  <i className="fa-solid fa-circle-exclamation" aria-hidden="true" />
+                  {error}
+                </div>
+              ) : null}
+
               <label className="login-page__field">
                 <span>E-mail corporativo</span>
                 <input
@@ -86,6 +147,8 @@ export function LoginPage() {
                   placeholder="seu.nome@liotecnica.com.br"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
+                  disabled={login.isPending}
+                  required
                 />
               </label>
 
@@ -99,12 +162,15 @@ export function LoginPage() {
                     placeholder="Digite sua senha"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
+                    disabled={login.isPending}
+                    required
                   />
                   <button
                     type="button"
                     className="login-page__password-toggle"
                     onClick={() => setShowPassword((current) => !current)}
                     aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                    disabled={login.isPending}
                   >
                     <i className={showPassword ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"} aria-hidden="true" />
                   </button>
@@ -112,11 +178,14 @@ export function LoginPage() {
               </label>
 
               <div className="login-page__form-actions">
-                <a className="login-page__forgot" href="#">
-                  Esqueci minha senha
-                </a>
-                <button type="submit" className="login-page__submit">
-                  Entrar
+                <div className="login-page__form-links">
+                  <a className="login-page__forgot" href="/ajuda">
+                    Esqueci minha senha
+                  </a>
+                  <ApiStatusIndicator />
+                </div>
+                <button type="submit" className="login-page__submit" disabled={login.isPending || isOffline}>
+                  {login.isPending ? "Entrando…" : "Entrar"}
                   <i className="fa-solid fa-arrow-right" aria-hidden="true" />
                 </button>
               </div>
