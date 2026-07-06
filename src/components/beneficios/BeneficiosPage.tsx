@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   useBenefitList,
   useBenefitRequest,
@@ -8,6 +7,8 @@ import {
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { BenefitListItemDto } from "../../api/types";
 import { bookmarkIdForBenefit, formatMoney } from "../../utils/money";
+import { RhPageHead } from "../servicos/RhPageHead";
+import { sectionMainClass } from "../layout/SectionPageHead";
 import { BeneficioCard, filterBenefits } from "./BeneficioCard";
 import { BenefitDetailModal } from "./BenefitDetailModal";
 import { BenefitRequestResultModal } from "./BenefitRequestResultModal";
@@ -61,27 +62,49 @@ export function BeneficiosPage() {
   const activeCount = summaryQuery.data?.activeCount ?? listQuery.data?.length ?? 0;
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span>Serviços</span>
-          <span className="breadcrumb__sep">/</span>
-          <span>RH &amp; Pessoas</span>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Benefícios</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Benefícios</h1>
-            <p className="page-header__desc">
-              Consulte os benefícios disponíveis no seu contrato, elegibilidade, operadoras parceiras
-              e canais para solicitar inclusão ou alterações.
-            </p>
+    <main className={sectionMainClass("rh")}>
+      <RhPageHead
+        title="Benefícios"
+        current="Benefícios"
+        description="Consulte os benefícios disponíveis no seu contrato, elegibilidade, operadoras parceiras e canais para solicitar inclusão ou alterações."
+        toolbar={
+          <div className="pay-toolbar">
+            <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  className={`filter-chip${category === filter.id ? " is-active" : ""}`}
+                  onClick={() => setCategory(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+            <div className="pay-toolbar__actions">
+              <button
+                type="button"
+                className={`pay-toggle-values${showValues ? " is-active" : ""}`}
+                aria-pressed={showValues}
+                onClick={() => setShowValues((value) => !value)}
+              >
+                <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
+                {showValues ? "Ocultar valores" : "Mostrar valores"}
+              </button>
+              <label className="pay-search page-search">
+                <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscar benefícios..."
+                  aria-label="Buscar benefícios"
+                />
+              </label>
+            </div>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <div className="welcome-banner welcome-banner--benefits">
         <div className="welcome-banner__icon" aria-hidden="true">
@@ -121,42 +144,6 @@ export function BeneficiosPage() {
             {summaryQuery.isLoading ? "…" : (summaryQuery.data?.dependentsCount ?? 0)}
           </div>
           <div className="pay-stat__label">Dependentes cobertos</div>
-        </div>
-      </div>
-
-      <div className="pay-toolbar">
-        <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter.id}
-              type="button"
-              className={`filter-chip${category === filter.id ? " is-active" : ""}`}
-              onClick={() => setCategory(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
-        <div className="pay-toolbar__actions">
-          <button
-            type="button"
-            className={`pay-toggle-values${showValues ? " is-active" : ""}`}
-            aria-pressed={showValues}
-            onClick={() => setShowValues((value) => !value)}
-          >
-            <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
-            {showValues ? "Ocultar valores" : "Mostrar valores"}
-          </button>
-          <label className="pay-search page-search">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar benefícios..."
-              aria-label="Buscar benefícios"
-            />
-          </label>
         </div>
       </div>
 

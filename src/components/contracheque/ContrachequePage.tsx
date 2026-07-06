@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   downloadPayslipPdf,
   usePayslipHistory,
@@ -21,6 +20,8 @@ import { PayslipHistoryModal } from "./PayslipHistoryModal";
 import { PayslipInformeModal } from "./PayslipInformeModal";
 import { PayslipRequestResultModal } from "./PayslipRequestResultModal";
 import { PayslipViewerModal } from "./PayslipViewerModal";
+import { RhPageHead } from "../servicos/RhPageHead";
+import { sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/contracheque-page.css";
 
 const FILTERS = [
@@ -120,27 +121,50 @@ export function ContrachequePage() {
   };
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span>Serviços</span>
-          <span className="breadcrumb__sep">/</span>
-          <span>RH &amp; Pessoas</span>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Contracheque</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Contracheque</h1>
-            <p className="page-header__desc">
-              Consulte holerites, baixe comprovantes, emita informes de rendimentos e acompanhe sua
-              remuneração com segurança.
-            </p>
+    <main className={sectionMainClass("rh")}>
+      <RhPageHead
+        title="Contracheque"
+        current="Contracheque"
+        description="Consulte holerites, baixe comprovantes, emita informes de rendimentos e acompanhe sua remuneração com segurança."
+        toolbar={
+          <div className="pay-toolbar">
+            <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  className={`filter-chip${category === filter.id ? " is-active" : ""}`}
+                  data-filter={filter.id}
+                  onClick={() => setCategory(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+            <div className="pay-toolbar__actions">
+              <button
+                type="button"
+                className={`pay-toggle-values${showValues ? " is-active" : ""}`}
+                aria-pressed={showValues}
+                onClick={toggleShowValues}
+              >
+                <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
+                {showValues ? "Ocultar valores" : "Mostrar valores"}
+              </button>
+              <label className="pay-search page-search">
+                <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscar serviços de contracheque..."
+                  aria-label="Buscar serviços de contracheque"
+                />
+              </label>
+            </div>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">
@@ -188,43 +212,6 @@ export function ContrachequePage() {
             {summaryQuery.isLoading ? "…" : (summaryQuery.data?.historyCount ?? 0)}
           </div>
           <div className="pay-stat__label">Holerites no histórico</div>
-        </div>
-      </div>
-
-      <div className="pay-toolbar">
-        <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter.id}
-              type="button"
-              className={`filter-chip${category === filter.id ? " is-active" : ""}`}
-              data-filter={filter.id}
-              onClick={() => setCategory(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
-        <div className="pay-toolbar__actions">
-          <button
-            type="button"
-            className={`pay-toggle-values${showValues ? " is-active" : ""}`}
-            aria-pressed={showValues}
-            onClick={toggleShowValues}
-          >
-            <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
-            {showValues ? "Ocultar valores" : "Mostrar valores"}
-          </button>
-          <label className="pay-search page-search">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar serviços de contracheque..."
-              aria-label="Buscar serviços de contracheque"
-            />
-          </label>
         </div>
       </div>
 

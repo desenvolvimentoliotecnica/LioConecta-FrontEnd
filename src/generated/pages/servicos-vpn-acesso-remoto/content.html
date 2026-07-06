@@ -1,10 +1,9 @@
-<header class="page-header">
+<div class="section-page-head section-page-head--ti">
+<header class="page-header page-header--ti">
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href="/">Início</a>
     <span class="breadcrumb__sep">/</span>
-    <span>Serviços</span>
-    <span class="breadcrumb__sep">/</span>
-    <span>TI &amp; Suporte</span>
+    <a href="/servicos/ti">TI &amp; Suporte</a>
     <span class="breadcrumb__sep">/</span>
     <span class="breadcrumb__current">VPN e acesso remoto</span>
   </nav>
@@ -16,6 +15,16 @@
   </div>
 </header>
 
+<div class="page-toolbar">
+  <div class="page-filters" id="ti-vpn-filters" role="group" aria-label="Filtros">
+    <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+    <button class="filter-chip" type="button" data-filter="vpn">VPN</button>
+    <button class="filter-chip" type="button" data-filter="remoto">Remoto</button>
+    <button class="filter-chip" type="button" data-filter="doc">Documentação</button>
+  </div>
+</div>
+
+
 <div class="welcome-banner">
   <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-shield-virus"></i></div>
   <div>
@@ -24,13 +33,7 @@
   </div>
 </div>
 
-<div class="page-toolbar">
-  <div class="page-filters" id="ti-vpn-filters" role="group" aria-label="Filtros">
-    <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-    <button class="filter-chip" type="button" data-filter="vpn">VPN</button>
-    <button class="filter-chip" type="button" data-filter="remoto">Remoto</button>
-    <button class="filter-chip" type="button" data-filter="doc">Documentação</button>
-  </div>
+
   <div class="page-search">
     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
     Buscar guias e configurações...

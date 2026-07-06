@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { useExploreGroups } from "../../api/hooks/useGroups";
 import {
   GROUP_ACCESS_OPEN,
@@ -16,6 +15,7 @@ import {
   groupTypeLabel,
   injectGroupExplorePageStyles,
 } from "../../config/groups";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 
 type ExploreFilter =
   | "all"
@@ -179,25 +179,39 @@ export function GroupExplorePage() {
   }, [filter, groups, query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <Link to="/grupos">Grupos</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Explorar grupos</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Explorar Grupos</h1>
-            <p className="page-header__desc">
-              Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender
-              com outros times e participar de novas iniciativas.
-            </p>
+    <main className={sectionMainClass("grupos")}>
+      <SectionPageHead
+        section="grupos"
+        title="Explorar Grupos"
+        current="Explorar grupos"
+        description="Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender com outros times e participar de novas iniciativas."
+        toolbar={
+          <div className="page-toolbar">
+            <div className="page-filters" role="group" aria-label="Filtros">
+              {EXPLORE_FILTERS.map((entry) => (
+                <button
+                  key={entry.id}
+                  className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
+                  type="button"
+                  onClick={() => setFilter(entry.id)}
+                >
+                  {entry.label}
+                </button>
+              ))}
+            </div>
+            <label className="page-search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar grupos para participar..."
+                aria-label="Buscar grupos para participar"
+              />
+            </label>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">
@@ -213,31 +227,6 @@ export function GroupExplorePage() {
             exigem aprovação do administrador.
           </p>
         </div>
-      </div>
-
-      <div className="page-toolbar">
-        <div className="page-filters" role="group" aria-label="Filtros">
-          {EXPLORE_FILTERS.map((entry) => (
-            <button
-              key={entry.id}
-              className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
-              type="button"
-              onClick={() => setFilter(entry.id)}
-            >
-              {entry.label}
-            </button>
-          ))}
-        </div>
-        <label className="page-search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar grupos para participar..."
-            aria-label="Buscar grupos para participar"
-          />
-        </label>
       </div>
 
       {isLoading ? (

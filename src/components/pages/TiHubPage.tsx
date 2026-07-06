@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { TI_HUB_PATH, TI_RECENT, filterTiSections } from "../../config/ti-hub";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function TiHubPage() {
@@ -8,47 +9,37 @@ export function TiHubPage() {
   const sections = useMemo(() => filterTiSections(query), [query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Tecnologia da Informação</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Tecnologia da Informação</h1>
-            <p className="page-header__desc">
-              Help Desk, equipamentos, acessos e VPN — o mesmo conteúdo disponível na seção TI
-              &amp; Suporte do menu Serviços.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="docs-hub__controls" aria-label="Busca">
-        <div className="docs-hub__summary">
-          <div className="docs-hub__summary-icon docs-hub__summary-icon--ti" aria-hidden="true">
-            <i className="fa-solid fa-laptop-code" />
-          </div>
-          <div>
-            <div className="docs-hub__summary-title">Hub de TI &amp; Suporte</div>
-            <p className="docs-hub__summary-text">
-              Abra chamados, solicite equipamentos e gerencie acessos aos sistemas corporativos.
-            </p>
-          </div>
-        </div>
-        <label className="page-search docs-hub__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar serviços de TI..."
-            aria-label="Buscar serviços de TI"
-          />
-        </label>
-      </section>
+    <main className={sectionMainClass("ti")}>
+      <SectionPageHead
+        section="ti"
+        title="TI & Suporte"
+        description="Help Desk, equipamentos, acessos e VPN — o mesmo conteúdo disponível na seção TI & Suporte do menu Serviços."
+        toolbar={
+          <section className="docs-hub__controls" aria-label="Busca">
+            <div className="docs-hub__summary">
+              <div className="docs-hub__summary-icon docs-hub__summary-icon--ti" aria-hidden="true">
+                <i className="fa-solid fa-laptop-code" />
+              </div>
+              <div>
+                <div className="docs-hub__summary-title">Hub de TI &amp; Suporte</div>
+                <p className="docs-hub__summary-text">
+                  Abra chamados, solicite equipamentos e gerencie acessos aos sistemas corporativos.
+                </p>
+              </div>
+            </div>
+            <label className="page-search docs-hub__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar serviços de TI..."
+                aria-label="Buscar serviços de TI"
+              />
+            </label>
+          </section>
+        }
+      />
 
       {sections.length > 0 ? (
         <section className="docs-hub__grid docs-hub__grid--quad" aria-label="Serviços de TI">

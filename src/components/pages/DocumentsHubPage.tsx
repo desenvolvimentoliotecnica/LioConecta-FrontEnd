@@ -4,6 +4,7 @@ import {
   RECENT_DOCUMENTS,
   filterDocumentSections,
 } from "../../config/documents-hub";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function DocumentsHubPage() {
@@ -12,48 +13,38 @@ export function DocumentsHubPage() {
   const sections = useMemo(() => filterDocumentSections(query), [query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Documentos</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Documentos</h1>
-            <p className="page-header__desc">
-              Central de acesso a políticas, manuais, formulários, modelos e biblioteca corporativa
-              — o mesmo conteúdo disponível no menu Documentos da barra superior.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="docs-hub__controls" aria-label="Busca">
-        <div className="docs-hub__summary">
-          <div className="docs-hub__summary-icon" aria-hidden="true">
-            <i className="fa-solid fa-folder-open" />
-          </div>
-          <div>
-            <div className="docs-hub__summary-title">Hub de Documentos</div>
-            <p className="docs-hub__summary-text">
-              Escolha uma categoria abaixo para navegar pelo acervo institucional ou busque por nome
-              da seção.
-            </p>
-          </div>
-        </div>
-        <label className="page-search docs-hub__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar seções de documentos..."
-            aria-label="Buscar seções de documentos"
-          />
-        </label>
-      </section>
+    <main className={sectionMainClass("documentos")}>
+      <SectionPageHead
+        section="documentos"
+        title="Documentos"
+        description="Central de acesso a políticas, manuais, formulários, modelos e biblioteca corporativa — o mesmo conteúdo disponível no menu Documentos da barra superior."
+        toolbar={
+          <section className="docs-hub__controls" aria-label="Busca">
+            <div className="docs-hub__summary">
+              <div className="docs-hub__summary-icon" aria-hidden="true">
+                <i className="fa-solid fa-folder-open" />
+              </div>
+              <div>
+                <div className="docs-hub__summary-title">Hub de Documentos</div>
+                <p className="docs-hub__summary-text">
+                  Escolha uma categoria abaixo para navegar pelo acervo institucional ou busque por nome
+                  da seção.
+                </p>
+              </div>
+            </div>
+            <label className="page-search docs-hub__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar seções de documentos..."
+                aria-label="Buscar seções de documentos"
+              />
+            </label>
+          </section>
+        }
+      />
 
       {sections.length > 0 ? (
         <section className="docs-hub__grid" aria-label="Categorias de documentos">

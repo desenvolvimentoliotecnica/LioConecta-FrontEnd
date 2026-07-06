@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PESSOAS_RECENT, filterPessoasSections } from "../../config/pessoas-hub";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function PessoasHubPage() {
@@ -8,47 +9,37 @@ export function PessoasHubPage() {
   const sections = useMemo(() => filterPessoasSections(query), [query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Pessoas</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Pessoas</h1>
-            <p className="page-header__desc">
-              Diretório, novos colaboradores, aniversariantes e organograma — o mesmo conteúdo
-              disponível no menu Pessoas da barra superior.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="docs-hub__controls" aria-label="Busca">
-        <div className="docs-hub__summary">
-          <div className="docs-hub__summary-icon docs-hub__summary-icon--pessoas" aria-hidden="true">
-            <i className="fa-solid fa-users" />
-          </div>
-          <div>
-            <div className="docs-hub__summary-title">Hub de Pessoas</div>
-            <p className="docs-hub__summary-text">
-              Encontre colegas, conheça novos integrantes e explore a estrutura da empresa.
-            </p>
-          </div>
-        </div>
-        <label className="page-search docs-hub__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar seções de pessoas..."
-            aria-label="Buscar seções de pessoas"
-          />
-        </label>
-      </section>
+    <main className={sectionMainClass("pessoas")}>
+      <SectionPageHead
+        section="pessoas"
+        title="Pessoas"
+        description="Diretório, novos colaboradores, aniversariantes e organograma — o mesmo conteúdo disponível no menu Pessoas da barra superior."
+        toolbar={
+          <section className="docs-hub__controls" aria-label="Busca">
+            <div className="docs-hub__summary">
+              <div className="docs-hub__summary-icon docs-hub__summary-icon--pessoas" aria-hidden="true">
+                <i className="fa-solid fa-users" />
+              </div>
+              <div>
+                <div className="docs-hub__summary-title">Hub de Pessoas</div>
+                <p className="docs-hub__summary-text">
+                  Encontre colegas, conheça novos integrantes e explore a estrutura da empresa.
+                </p>
+              </div>
+            </div>
+            <label className="page-search docs-hub__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar seções de pessoas..."
+                aria-label="Buscar seções de pessoas"
+              />
+            </label>
+          </section>
+        }
+      />
 
       {sections.length > 0 ? (
         <section className="docs-hub__grid docs-hub__grid--quad" aria-label="Seções de pessoas">

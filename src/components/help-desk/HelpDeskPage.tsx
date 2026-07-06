@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   useHelpDeskCreateTicket,
   useHelpDeskServices,
   useHelpDeskSummary,
 } from "../../api/hooks/useHelpDesk";
+import { ApiError } from "../../api/client";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/types";
 import { bookmarkIdForHelpDesk } from "../../utils/money";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import { useEmailCompose } from "../email/EmailComposeProvider";
 import { filterHelpDeskServices, HelpDeskServiceCard } from "./HelpDeskServiceCard";
 import { HelpDeskKnowledgeModal } from "./HelpDeskKnowledgeModal";
@@ -29,6 +30,34 @@ const FILTERS = [
   { id: "urgente", label: "Urgente" },
 ] as const;
 
+function apiErrorDetail(error: unknown): string {
+  if (!(error instanceof ApiError)) {
+    return "Não foi possível registrar o chamado. Tente novamente.";
+  }
+
+  if (error.body && typeof error.body === "object") {
+    const record = error.body as Record<string, unknown>;
+    const detail = record.detail ?? record.title ?? record.message;
+    if (typeof detail === "string" && detail.trim()) {
+      return detail;
+    }
+  }
+
+  if (typeof error.body === "string" && error.body.trim()) {
+    return error.body;
+  }
+
+  if (error.status === 422) {
+    return "Seu usuário não está cadastrado no GLPI. Solicite ao TI o cadastro com o mesmo e-mail corporativo.";
+  }
+
+  if (error.status === 502) {
+    return "Falha na integração com o GLPI. Verifique a configuração ou tente novamente em instantes.";
+  }
+
+  return error.message;
+}
+
 export function HelpDeskPage() {
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
@@ -38,6 +67,7 @@ export function HelpDeskPage() {
   const [chatService, setChatService] = useState<HelpDeskServiceDto | null>(null);
   const [phoneService, setPhoneService] = useState<HelpDeskServiceDto | null>(null);
   const [ticketResult, setTicketResult] = useState<HelpDeskTicketResultDto | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   const summaryQuery = useHelpDeskSummary();
   const servicesQuery = useHelpDeskServices();
@@ -95,13 +125,18 @@ export function HelpDeskPage() {
   const handleCreateTicket = (payload: {
     subject: string;
     priority: string;
-    category: string;
+    categoryId: number;
     description: string;
   }) => {
+    setCreateError(null);
     createMutation.mutate(payload, {
       onSuccess: (result) => {
         setOpenTicket(false);
+        setCreateError(null);
         setTicketResult(result);
+      },
+      onError: (error) => {
+        setCreateError(apiErrorDetail(error));
       },
     });
   };
@@ -110,27 +145,42 @@ export function HelpDeskPage() {
   const avgResponse = summaryQuery.data?.avgResponseLabel ?? "2h críticos · 8h solicitações";
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span>Serviços</span>
-          <span className="breadcrumb__sep">/</span>
-          <span>TI &amp; Suporte</span>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Help Desk</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Help Desk</h1>
-            <p className="page-header__desc">
-              Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da
-              Liotécnica.
-            </p>
+    <main className={sectionMainClass("ti")}>
+      <SectionPageHead
+        section="ti"
+        title="Help Desk"
+        current="Help Desk"
+        description="Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da Liotécnica."
+        toolbar={
+          <div className="page-toolbar">
+            <label className="page-search page-search--wide">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                className="page-search__input"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar chamados e artigos..."
+                aria-label="Buscar chamados e artigos"
+              />
+            </label>
+            <div className="page-toolbar__filters">
+              <div className="page-filters" role="group" aria-label="Filtros">
+                {FILTERS.map((filter) => (
+                  <button
+                    key={filter.id}
+                    type="button"
+                    className={`filter-chip${category === filter.id ? " is-active" : ""}`}
+                    onClick={() => setCategory(filter.id)}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <div className="welcome-banner welcome-banner--help-desk">
         <div className="welcome-banner__icon" aria-hidden="true">
@@ -146,31 +196,6 @@ export function HelpDeskPage() {
             Tempo médio de resposta: {avgResponse}. Use o chat interno ou abra um ticket pelo portal.
           </p>
         </div>
-      </div>
-
-      <div className="pay-toolbar">
-        <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter.id}
-              type="button"
-              className={`filter-chip${category === filter.id ? " is-active" : ""}`}
-              onClick={() => setCategory(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
-        <label className="pay-search page-search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar chamados e artigos..."
-            aria-label="Buscar chamados e artigos"
-          />
-        </label>
       </div>
 
       {servicesQuery.isError ? (
@@ -205,7 +230,11 @@ export function HelpDeskPage() {
       <HelpDeskOpenTicketModal
         open={openTicket}
         pending={createMutation.isPending}
-        onClose={() => setOpenTicket(false)}
+        errorMessage={createError}
+        onClose={() => {
+          setOpenTicket(false);
+          setCreateError(null);
+        }}
         onSubmit={handleCreateTicket}
       />
       <HelpDeskTrackTicketModal

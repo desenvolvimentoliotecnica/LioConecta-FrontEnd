@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { RH_RECENT, RH_HUB_PATH, filterRhSections } from "../../config/rh-hub";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function RhHubPage() {
@@ -8,47 +9,37 @@ export function RhHubPage() {
   const sections = useMemo(() => filterRhSections(query), [query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Recursos Humanos</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Recursos Humanos</h1>
-            <p className="page-header__desc">
-              Benefícios, contracheque, férias, solicitações e demais serviços de RH — o mesmo
-              conteúdo disponível na seção RH &amp; Pessoas do menu Serviços.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="docs-hub__controls" aria-label="Busca">
-        <div className="docs-hub__summary">
-          <div className="docs-hub__summary-icon docs-hub__summary-icon--rh" aria-hidden="true">
-            <i className="fa-solid fa-user-tie" />
-          </div>
-          <div>
-            <div className="docs-hub__summary-title">Hub de Recursos Humanos</div>
-            <p className="docs-hub__summary-text">
-              Centralize solicitações, consultas e benefícios em um só lugar.
-            </p>
-          </div>
-        </div>
-        <label className="page-search docs-hub__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar serviços de RH..."
-            aria-label="Buscar serviços de RH"
-          />
-        </label>
-      </section>
+    <main className={sectionMainClass("rh")}>
+      <SectionPageHead
+        section="rh"
+        title="RH & Pessoas"
+        description="Benefícios, contracheque, férias, solicitações e demais serviços de RH — o mesmo conteúdo disponível na seção RH & Pessoas do menu Serviços."
+        toolbar={
+          <section className="docs-hub__controls" aria-label="Busca">
+            <div className="docs-hub__summary">
+              <div className="docs-hub__summary-icon docs-hub__summary-icon--rh" aria-hidden="true">
+                <i className="fa-solid fa-user-tie" />
+              </div>
+              <div>
+                <div className="docs-hub__summary-title">Hub de Recursos Humanos</div>
+                <p className="docs-hub__summary-text">
+                  Centralize solicitações, consultas e benefícios em um só lugar.
+                </p>
+              </div>
+            </div>
+            <label className="page-search docs-hub__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar serviços de RH..."
+                aria-label="Buscar serviços de RH"
+              />
+            </label>
+          </section>
+        }
+      />
 
       {sections.length > 0 ? (
         <section className="docs-hub__grid docs-hub__grid--quad" aria-label="Serviços de RH">

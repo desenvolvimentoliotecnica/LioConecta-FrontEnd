@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { GRUPOS_RECENT, filterGruposSections } from "../../config/grupos-hub";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function GruposHubPage() {
@@ -8,47 +9,37 @@ export function GruposHubPage() {
   const sections = useMemo(() => filterGruposSections(query), [query]);
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Grupos</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Grupos</h1>
-            <p className="page-header__desc">
-              Meus grupos, explorar comunidades e criar novos espaços de colaboração — o mesmo
-              conteúdo disponível no menu Grupos da barra superior.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="docs-hub__controls" aria-label="Busca">
-        <div className="docs-hub__summary">
-          <div className="docs-hub__summary-icon docs-hub__summary-icon--grupos" aria-hidden="true">
-            <i className="fa-solid fa-people-group" />
-          </div>
-          <div>
-            <div className="docs-hub__summary-title">Hub de Grupos</div>
-            <p className="docs-hub__summary-text">
-              Participe de comunidades internas, acompanhe publicações e conecte-se com outras áreas.
-            </p>
-          </div>
-        </div>
-        <label className="page-search docs-hub__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar seções de grupos..."
-            aria-label="Buscar seções de grupos"
-          />
-        </label>
-      </section>
+    <main className={sectionMainClass("grupos")}>
+      <SectionPageHead
+        section="grupos"
+        title="Grupos"
+        description="Meus grupos, explorar comunidades e criar novos espaços de colaboração — o mesmo conteúdo disponível no menu Grupos da barra superior."
+        toolbar={
+          <section className="docs-hub__controls" aria-label="Busca">
+            <div className="docs-hub__summary">
+              <div className="docs-hub__summary-icon docs-hub__summary-icon--grupos" aria-hidden="true">
+                <i className="fa-solid fa-people-group" />
+              </div>
+              <div>
+                <div className="docs-hub__summary-title">Hub de Grupos</div>
+                <p className="docs-hub__summary-text">
+                  Participe de comunidades internas, acompanhe publicações e conecte-se com outras áreas.
+                </p>
+              </div>
+            </div>
+            <label className="page-search docs-hub__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar seções de grupos..."
+                aria-label="Buscar seções de grupos"
+              />
+            </label>
+          </section>
+        }
+      />
 
       {sections.length > 0 ? (
         <section className="docs-hub__grid docs-hub__grid--quad" aria-label="Seções de grupos">

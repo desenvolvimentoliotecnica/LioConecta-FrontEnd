@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { isAdminUser } from "../../api/auth";
 import { useApproveGroup, usePendingGroups, useRejectGroup } from "../../api/hooks/useGroups";
 import { useMe } from "../../api/hooks/useMe";
@@ -9,6 +9,7 @@ import {
   injectGroupCreatePageStyles,
 } from "../../config/groups";
 import { useEffect, useState } from "react";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/comunicados-oficiais-page.css";
 
 function formatDate(value?: string | null): string {
@@ -75,25 +76,13 @@ export function GroupApprovalsPage() {
   }
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <Link to="/grupos">Grupos</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Aprovações</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Aprovação de Grupos</h1>
-            <p className="page-header__desc">
-              Revise solicitações de criação de grupos e libere ou rejeite antes de ficarem ativos na
-              plataforma.
-            </p>
-          </div>
-        </div>
-      </header>
+    <main className={sectionMainClass("grupos")}>
+      <SectionPageHead
+        section="grupos"
+        title="Aprovação de Grupos"
+        current="Aprovações"
+        description="Revise solicitações de criação de grupos e libere ou rejeite antes de ficarem ativos na plataforma."
+      />
 
       {toast ? (
         <p className="page-empty-note" style={{ color: "#15803d", marginBottom: 16 }} role="status">
