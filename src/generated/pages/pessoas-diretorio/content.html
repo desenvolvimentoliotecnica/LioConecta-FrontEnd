@@ -26,12 +26,30 @@
             <button class="filter-chip" type="button" data-filter="comercial">Comercial</button>
             <button class="filter-chip" type="button" data-filter="financeiro">Financeiro</button>
           </div>
-          <div class="page-search">
+          <label class="page-search" for="directory-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar por nome ou cargo...
-          </div>
+            <input
+              id="directory-search"
+              class="page-search__input"
+              type="search"
+              placeholder="Buscar por nome ou cargo..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </label>
         </div>
 
         <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
 
         <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
+
+        <button
+          type="button"
+          class="directory-scroll-top"
+          id="directory-scroll-top"
+          aria-label="Ir para o topo"
+          hidden
+        >
+          <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+          <span>Ir para o topo</span>
+        </button>

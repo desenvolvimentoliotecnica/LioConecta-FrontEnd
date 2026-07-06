@@ -908,6 +908,21 @@ export interface TotvsRmConnectionTestResponse {
   detail?: string | null;
 }
 
+export interface TestGraphConnectionRequest {
+  tenantId?: string | null;
+  clientId?: string | null;
+  clientSecret?: string | null;
+}
+
+export interface GraphConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+  usesDevAdapters: boolean;
+  domainUserCount?: number | null;
+  tenantUserCount?: number | null;
+}
+
 export interface EmailConfigurationDto {
   id: string;
   isEnabled: boolean;

@@ -2,11 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { isAdminUser } from "../../api/auth";
 import { useAppSettings, useUpdateAppSettings } from "../../api/hooks/useAppSettings";
+import { useTestGraphConnection } from "../../api/hooks/useGraphConfig";
 import { useMe } from "../../api/hooks/useMe";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
 
 const SECRET_MASK = "********";
+const GRAPH_TENANT_KEY = "graph.tenant_id";
+const GRAPH_CLIENT_KEY = "graph.client_id";
+const GRAPH_SECRET_KEY = "graph.client_secret";
+const INTEGRATIONS_MOCK_KEY = "integrations.use_dev_adapters";
 
 function buildDraft(categories: AppSettingCategoryDto[]): Record<string, string> {
   const draft: Record<string, string> = {};
@@ -113,11 +118,17 @@ export function BackendConfigPage() {
   const { data: me, isLoading: meLoading } = useMe();
   const { data: categories = [], isLoading, isError } = useAppSettings();
   const updateSettings = useUpdateAppSettings();
+  const testGraphConnection = useTestGraphConnection();
   const [activeCategory, setActiveCategory] = useState<string>("database");
   const [draft, setDraft] = useState<Record<string, string>>({});
-  const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info"; text: string } | null>(
+  const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info" | "error"; text: string } | null>(
     null,
   );
+  const [testFeedback, setTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
 
   const isAdmin = isAdminUser(me);
 
@@ -137,6 +148,31 @@ export function BackendConfigPage() {
     () => categories.find((category) => category.id === activeCategory) ?? categories[0],
     [categories, activeCategory],
   );
+
+  const usesDevAdapters = (draft[INTEGRATIONS_MOCK_KEY] ?? "true") === "true";
+
+  async function handleTestGraphConnection() {
+    setTestFeedback(null);
+    try {
+      const clientSecret = draft[GRAPH_SECRET_KEY]?.trim();
+      const result = await testGraphConnection.mutateAsync({
+        tenantId: draft[GRAPH_TENANT_KEY]?.trim() || null,
+        clientId: draft[GRAPH_CLIENT_KEY]?.trim() || null,
+        clientSecret:
+          clientSecret && clientSecret !== SECRET_MASK ? clientSecret : null,
+      });
+      setTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch {
+      setTestFeedback({
+        type: "error",
+        title: "Falha ao testar conexão com o Microsoft Graph.",
+      });
+    }
+  }
 
   async function handleSave() {
     if (!activeSection) return;
@@ -255,8 +291,43 @@ export function BackendConfigPage() {
               <p className="backend-config-page__section-desc">{activeSection.description}</p>
             ) : null}
           </div>
+
+          {activeCategory === "integrations" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              Esta seção controla se a API chama sistemas reais. Com «Modo mock» em Sim, o worker{" "}
+              <strong>graph-directory-sync</strong> sincroniza apenas <strong>3 usuários fictícios</strong>.
+              Defina Não (false), salve e <strong>reinicie a API</strong> antes de rodar o worker novamente.
+            </div>
+          ) : null}
+
+          {activeCategory === "graph" && usesDevAdapters ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Modo mock ativo — credenciais Graph abaixo são ignoradas pelo worker até desativar o mock em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("integrations")}
+              >
+                Integrações
+              </button>
+              , reiniciar a API e executar o sync novamente.
+            </div>
+          ) : null}
+
+          {testFeedback && activeCategory === "graph" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${testFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{testFeedback.title}</strong>
+              {testFeedback.detail ? <p className="backend-config-page__alert-detail">{testFeedback.detail}</p> : null}
+            </div>
+          ) : null}
+
           <div className="backend-config-page__fields">
-            {activeSection.settings.map((setting) => (
+            {activeSection.settings
+              .filter((setting) => setting.key !== "graph.directory_last_sync_utc")
+              .map((setting) => (
               <SettingField
                 key={setting.key}
                 setting={setting}
@@ -265,6 +336,24 @@ export function BackendConfigPage() {
               />
             ))}
           </div>
+
+          {activeCategory === "graph" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestGraphConnection()}
+                disabled={testGraphConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testGraphConnection.isPending ? "Testando…" : "Testar conexão Graph"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida OAuth e conta usuários <code>@liotecnica.com.br</code> no tenant. Salve antes se alterou
+                credenciais — o teste usa o formulário ou valores já persistidos.
+              </p>
+            </div>
+          ) : null}
         </section>
       ) : !isLoading && !isError ? (
         <div className="backend-config-page__empty">

@@ -83,6 +83,14 @@ function WorkerCard({
             Configurar RM
           </Link>
         ) : null}
+        {worker.key === "graph-directory-sync" ? (
+          <Link
+            className="workers-btn workers-btn--ghost"
+            to="/admin/configuracoes-backend?category=graph"
+          >
+            Configurar Graph
+          </Link>
+        ) : null}
         <button type="button" className="workers-btn workers-btn--ghost" onClick={onSelect}>
           Ver histórico
         </button>
