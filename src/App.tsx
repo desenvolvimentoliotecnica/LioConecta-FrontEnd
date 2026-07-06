@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { LoginPage } from "./components/auth/LoginPage";
 import { AppShell } from "./components/layout/AppShell";
 import { KioskShell } from "./components/layout/KioskShell";
 import { ActivitiesPage } from "./components/pages/ActivitiesPage";
@@ -51,6 +52,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/acesso" element={<LoginPage />} />
       <Route element={<KioskShell />}>
         <Route path="/quiosque" element={<KioskFeedPage />} />
         <Route path="/quiosque/comunicados/leitura" element={<ComunicadoReader variant="kiosk" />} />
