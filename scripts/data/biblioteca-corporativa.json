@@ -1,0 +1,286 @@
+{
+  "company": "LioTécnica",
+  "portal": "LioConecta",
+  "items": [
+    {
+      "id": "guia-cultura",
+      "title": "Guia de Cultura Organizacional Lio",
+      "media": "ebook",
+      "mediaLabel": "E-book",
+      "area": "conhecimento",
+      "areaLabel": "Conhecimento",
+      "date": "Mar/2026",
+      "desc": "E-book interativo com missão, visão, valores, comportamentos esperados e histórias que definem a identidade da companhia.",
+      "audience": "Todos os colaboradores, especialmente novos integrantes e líderes que conduzem a integração cultural.",
+      "highlights": [
+        "Missão, visão e valores com exemplos práticos",
+        "Comportamentos esperados e anti-padrões",
+        "Histórias de colaboradores e marcos da empresa",
+        "Rituais internos e canais de reconhecimento",
+        "Quiz de autoavaliação cultural"
+      ],
+      "howToUse": "Leia na integração e revise anualmente. Líderes podem utilizar capítulos em reuniões de equipe e programas de desenvolvimento.",
+      "contacts": "rh.cultura@liotecnica.com.br"
+    },
+    {
+      "id": "historia-30-anos",
+      "title": "História da Lio — 30 Anos de Trajetória",
+      "media": "publicacao",
+      "mediaLabel": "Publicação",
+      "area": "historia",
+      "areaLabel": "História",
+      "date": "Jan/2026",
+      "desc": "Linha do tempo ilustrada com marcos, fundadores, expansão e evolução dos negócios ao longo de três décadas.",
+      "audience": "Colaboradores, visitantes institucionais e equipes comerciais que apresentam a trajetória da empresa.",
+      "highlights": [
+        "Fundação e primeiros projetos",
+        "Expansão geográfica e diversificação",
+        "Marcos de inovação e certificações",
+        "Depoimentos de fundadores e veteranos",
+        "Linha do tempo visual 1996–2026"
+      ],
+      "howToUse": "Consulte para apresentações institucionais. Versão impressa disponível mediante solicitação à comunicação.",
+      "contacts": "comunicacao@liotecnica.com.br"
+    },
+    {
+      "id": "identidade-visual",
+      "title": "Manual de Identidade Visual",
+      "media": "ebook",
+      "mediaLabel": "E-book",
+      "area": "marca",
+      "areaLabel": "Marca",
+      "date": "Fev/2026",
+      "desc": "Diretrizes oficiais de logo, cores, tipografia, aplicações e usos incorretos da marca Lio Tecnica.",
+      "audience": "Marketing, comunicação, fornecedores de design e qualquer área que produza materiais com a marca Lio.",
+      "highlights": [
+        "Versões do logo e área de proteção",
+        "Paleta de cores institucional (CMYK, RGB, HEX)",
+        "Tipografia primária e secundária",
+        "Aplicações em papelaria, digital e uniformes",
+        "Galeria de usos incorretos"
+      ],
+      "howToUse": "Obrigatório antes de criar qualquer peça externa. Solicite aprovação de marketing para exceções.",
+      "contacts": "marketing.brand@liotecnica.com.br"
+    },
+    {
+      "id": "brandbook",
+      "title": "Brandbook Completo",
+      "media": "ebook",
+      "mediaLabel": "E-book",
+      "area": "marca",
+      "areaLabel": "Marca",
+      "date": "Nov/2025",
+      "desc": "Documento ampliado de posicionamento de marca, tom de voz, arquétipos e exemplos de comunicação institucional.",
+      "audience": "Marketing, comunicação, liderança e agências parceiras em campanhas institucionais.",
+      "highlights": [
+        "Posicionamento e proposta de valor",
+        "Tom de voz e arquétipo de marca",
+        "Personas e jornadas de comunicação",
+        "Exemplos de copy para canais digitais",
+        "Diretrizes para parceiros e imprensa"
+      ],
+      "howToUse": "Complementa o manual de identidade visual com narrativa de marca. Use em briefings de campanha e treinamentos de comunicação.",
+      "contacts": "marketing.brand@liotecnica.com.br"
+    },
+    {
+      "id": "case-rh-digital",
+      "title": "Case: Transformação Digital no RH",
+      "media": "case",
+      "mediaLabel": "Case",
+      "area": "cases",
+      "areaLabel": "Cases",
+      "date": "Dez/2025",
+      "desc": "Estudo de caso sobre digitalização de processos de admissão, folha e gestão de pessoas com resultados mensuráveis.",
+      "audience": "RH, TI, liderança e áreas interessadas em transformação digital de processos administrativos.",
+      "highlights": [
+        "Diagnóstico inicial e objetivos do projeto",
+        "Soluções implementadas (portal, integrações, self-service)",
+        "Indicadores antes e depois (tempo, erros, satisfação)",
+        "Lições aprendidas e fatores críticos de sucesso",
+        "Roadmap de evolução contínua"
+      ],
+      "howToUse": "Referência para projetos similares. Compartilhe com stakeholders em comitês de transformação digital.",
+      "contacts": "rh.transformacao@liotecnica.com.br"
+    },
+    {
+      "id": "case-expansao",
+      "title": "Case: Expansão Comercial 2025",
+      "media": "case",
+      "mediaLabel": "Case",
+      "area": "cases",
+      "areaLabel": "Cases",
+      "date": "Mar/2026",
+      "desc": "Relato da estratégia de crescimento regional, metas batidas, lições aprendidas e indicadores de performance.",
+      "audience": "Equipe comercial, diretoria e novos gestores regionais.",
+      "highlights": [
+        "Estratégia de expansão por região",
+        "Metas, investimentos e estrutura de equipe",
+        "Resultados de receita e market share",
+        "Desafios operacionais e soluções adotadas",
+        "Recomendações para ciclos futuros"
+      ],
+      "howToUse": "Utilize em kick-offs comerciais e treinamentos de novos representantes. Dados confidenciais restritos a uso interno.",
+      "contacts": "comercial@liotecnica.com.br"
+    },
+    {
+      "id": "ebook-lideranca",
+      "title": "E-book: Liderança Colaborativa",
+      "media": "ebook",
+      "mediaLabel": "E-book",
+      "area": "treinamentos",
+      "areaLabel": "Treinamentos",
+      "date": "Out/2025",
+      "desc": "Material de desenvolvimento sobre feedback, delegação, conversas difíceis e construção de times de alta performance.",
+      "audience": "Gestores, coordenadores e participantes de programas de liderança da Lio.",
+      "highlights": [
+        "Fundamentos de liderança colaborativa",
+        "Técnicas de feedback estruturado",
+        "Delegação eficaz e acompanhamento",
+        "Condução de conversas difíceis",
+        "Exercícios práticos e roteiros de 1:1"
+      ],
+      "howToUse": "Material de apoio ao programa de liderança. Gestores devem completar exercícios com seus times em 90 dias.",
+      "contacts": "rh.desenvolvimento@liotecnica.com.br"
+    },
+    {
+      "id": "trilha-onboarding",
+      "title": "Trilha de Onboarding — Vídeos",
+      "media": "video",
+      "mediaLabel": "Vídeo",
+      "area": "treinamentos",
+      "areaLabel": "Treinamentos",
+      "date": "Mar/2026",
+      "desc": "Playlist com boas-vindas, tour virtual, apresentação das áreas e primeiros passos para novos colaboradores.",
+      "audience": "Novos colaboradores nos primeiros 30 dias e buddies de integração.",
+      "highlights": [
+        "Mensagem de boas-vindas da liderança",
+        "Tour virtual pelas instalações",
+        "Apresentação das principais áreas",
+        "Primeiros passos no LioConecta e sistemas",
+        "FAQ de integração"
+      ],
+      "howToUse": "PDF de referência descreve a trilha completa. Acesse os vídeos pelo link interno indicado no documento ou via RH na integração.",
+      "contacts": "rh.integracao@liotecnica.com.br"
+    },
+    {
+      "id": "artigo-inovacao",
+      "title": "Artigo: Inovação e Sustentabilidade",
+      "media": "artigo",
+      "mediaLabel": "Artigo",
+      "area": "publicacoes",
+      "areaLabel": "Publicações",
+      "date": "Fev/2026",
+      "desc": "Publicação interna sobre práticas ESG, projetos verdes e iniciativas de inovação aberta na Lio Tecnica.",
+      "audience": "Todos os colaboradores e parceiros em projetos de sustentabilidade e inovação.",
+      "highlights": [
+        "Compromissos ESG da Lio Tecnica",
+        "Projetos de eficiência energética e resíduos",
+        "Programa de inovação aberta com startups",
+        "Indicadores de sustentabilidade 2025",
+        "Como propor novas iniciativas"
+      ],
+      "howToUse": "Leitura recomendada para squads de inovação. Submeta propostas pelo formulário de solicitação geral no portal.",
+      "contacts": "inovacao@liotecnica.com.br"
+    },
+    {
+      "id": "revista-lioconecta",
+      "title": "Revista LioConnecta — Edição 12",
+      "media": "publicacao",
+      "mediaLabel": "Publicação",
+      "area": "publicacoes",
+      "areaLabel": "Publicações",
+      "date": "Mar/2026",
+      "desc": "Edição trimestral com entrevistas, destaques de colaboradores, novidades da empresa e agenda de eventos internos.",
+      "audience": "Toda a companhia; material de engajamento e comunicação interna.",
+      "highlights": [
+        "Entrevista com liderança executiva",
+        "Colaborador destaque do trimestre",
+        "Novidades de produtos e projetos",
+        "Agenda de eventos e ações internas",
+        "Seção cultural e bem-estar"
+      ],
+      "howToUse": "Distribuída trimestralmente no feed do LioConecta. Versão PDF para leitura offline e arquivo histórico.",
+      "contacts": "comunicacao@liotecnica.com.br"
+    },
+    {
+      "id": "fotos-institucionais",
+      "title": "Repositório de Fotos Institucionais",
+      "media": "acervo",
+      "mediaLabel": "Acervo",
+      "area": "marca",
+      "areaLabel": "Marca",
+      "date": "Jan/2026",
+      "desc": "Banco de imagens oficiais de eventos, sede, equipes e campanhas internas para uso autorizado em materiais.",
+      "audience": "Marketing, comunicação, RH e áreas que produzem materiais visuais internos ou externos.",
+      "highlights": [
+        "Fotos da sede e unidades regionais",
+        "Eventos corporativos e integrações",
+        "Retratos institucionais de equipes",
+        "Campanhas internas aprovadas",
+        "Metadados e créditos de autoria"
+      ],
+      "howToUse": "PDF lista categorias e política de uso. Download de imagens via link interno após aceite dos termos de uso.",
+      "contacts": "marketing.brand@liotecnica.com.br"
+    },
+    {
+      "id": "apresentacoes-historicas",
+      "title": "Acervo de Apresentações Históricas",
+      "media": "acervo",
+      "mediaLabel": "Acervo",
+      "area": "historia",
+      "areaLabel": "História",
+      "date": "Ago/2025",
+      "desc": "Coleção de decks estratégicos, resultados anuais e comunicados de liderança arquivados para consulta.",
+      "audience": "Liderança, estratégia, comunicação e pesquisadores internos de história corporativa.",
+      "highlights": [
+        "Resultados anuais 2015–2025",
+        "Comunicados de liderança em momentos-chave",
+        "Decks de planejamento estratégico",
+        "Apresentações de lançamentos históricos",
+        "Índice por ano e tema"
+      ],
+      "howToUse": "Consulta somente leitura. Solicite acesso a decks específicos à comunicação institucional.",
+      "contacts": "comunicacao@liotecnica.com.br"
+    },
+    {
+      "id": "icones-logos",
+      "title": "Biblioteca de Ícones e Logos",
+      "media": "acervo",
+      "mediaLabel": "Acervo",
+      "area": "marca",
+      "areaLabel": "Marca",
+      "date": "Mar/2026",
+      "desc": "Download centralizado de logos, ícones, selos e variações aprovadas para apresentações e documentos internos.",
+      "audience": "Todas as áreas que produzem apresentações, documentos e materiais digitais.",
+      "highlights": [
+        "Logos em PNG, SVG e EPS",
+        "Ícones do design system Lio",
+        "Selos de certificação e parceria",
+        "Variações monocromáticas e negativas",
+        "Guia rápido de nomenclatura de arquivos"
+      ],
+      "howToUse": "Utilize apenas arquivos desta biblioteca. Não recrie logos manualmente. Dúvidas de aplicação: marketing.brand.",
+      "contacts": "marketing.brand@liotecnica.com.br"
+    },
+    {
+      "id": "glossario",
+      "title": "Glossário Corporativo",
+      "media": "artigo",
+      "mediaLabel": "Artigo",
+      "area": "conhecimento",
+      "areaLabel": "Conhecimento",
+      "date": "Set/2025",
+      "desc": "Artigo de referência com siglas, termos técnicos, nomenclaturas de produtos e vocabulário usado na organização.",
+      "audience": "Novos colaboradores, áreas de apoio e equipes que interagem com múltiplas unidades de negócio.",
+      "highlights": [
+        "Siglas internas e departamentais",
+        "Termos técnicos por área (TI, RH, Comercial)",
+        "Nomenclatura oficial de produtos e serviços",
+        "Glossário de siglas do setor",
+        "Índice alfabético pesquisável"
+      ],
+      "howToUse": "Consulte antes de documentos formais. Sugira inclusões de novos termos via help desk (categoria Comunicação).",
+      "contacts": "comunicacao@liotecnica.com.br"
+    }
+  ]
+}

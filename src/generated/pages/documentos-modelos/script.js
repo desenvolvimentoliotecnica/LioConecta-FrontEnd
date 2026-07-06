@@ -192,15 +192,20 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/modelos/" + id + ".pdf";
+      }
+
       function renderTemplate(item) {
         const featuredClass = item.featured ? " is-featured" : "";
         const formatClass = item.format;
         const formatBadgeClass = item.format === "doc" ? " doc-card__format--doc" : item.format === "xlsx" ? " doc-card__format--xlsx" : item.format === "pptx" ? " doc-card__format--pptx" : "";
         const categoryClass = item.category === "apresentacao" ? " doc-card__category--apresentacao" : item.category === "contrato" ? " doc-card__category--contrato" : item.category === "comunicado" || item.category === "carta" || item.category === "memorando" || item.category === "ata" ? " doc-card__category--comunicacao" : "";
         const officialBadge = item.official ? '<span class="doc-card__updated">Oficial</span>' : "";
+        const url = pdfUrl(item.id);
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
+          <article class="doc-card${featuredClass}" data-area="${item.area}" data-id="${item.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${formatClass}" aria-hidden="true">
                 <i class="fa-solid ${formatIcons[item.format] || "fa-file"}"></i>
@@ -221,9 +226,9 @@
               <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Atualizado ${item.date}</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-solid fa-download" aria-hidden="true"></i> Baixar modelo</a>
+              <a class="doc-card__open" href="${url}" download><i class="fa-solid fa-download" aria-hidden="true"></i> Baixar modelo</a>
               <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
+                <button type="button" class="doc-card__btn" data-action="view" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>
@@ -269,4 +274,112 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("template-pdf-modal");
+      var modalTitle = document.getElementById("template-pdf-title");
+      var modalMeta = document.getElementById("template-pdf-meta");
+      var modalFrame = document.getElementById("template-pdf-frame");
+      var modalDownload = document.getElementById("template-pdf-download");
+      var modalCloseBtn = document.getElementById("template-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "template-pdf-modal";
+        wrapper.className = "template-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="template-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="template-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="template-pdf-title">' +
+            '<header class="template-pdf-modal__header">' +
+              '<div class="template-pdf-modal__header-text">' +
+                '<h2 class="template-pdf-modal__title" id="template-pdf-title"></h2>' +
+                '<p class="template-pdf-modal__meta" id="template-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="template-pdf-modal__close" id="template-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="template-pdf-modal__frame" id="template-pdf-frame" title=""></iframe>' +
+            '<footer class="template-pdf-modal__footer">' +
+              '<a class="template-pdf-modal__download" id="template-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="template-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("template-pdf-title");
+        modalMeta = document.getElementById("template-pdf-meta");
+        modalFrame = document.getElementById("template-pdf-frame");
+        modalDownload = document.getElementById("template-pdf-download");
+        modalCloseBtn = document.getElementById("template-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closeTemplateModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeTemplateModal();
+          }
+        });
+      }
+
+      function findTemplate(id) {
+        for (var i = 0; i < templates.length; i += 1) {
+          if (templates[i].id === id) return templates[i];
+        }
+        return null;
+      }
+
+      function openTemplateModal(id) {
+        var item = findTemplate(id);
+        if (!item) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = item.title;
+        modalMeta.textContent =
+          (categoryLabels[item.category] || item.category) + " · " +
+          (formatLabels[item.format] || item.format) + " · " +
+          (areaLabels[item.area] || item.area) + " · " +
+          item.version + " · Atualizado " + item.date;
+        modalFrame.title = item.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", item.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closeTemplateModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest("[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openTemplateModal(id);
+      });
     })();
