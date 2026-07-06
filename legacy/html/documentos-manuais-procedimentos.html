@@ -757,11 +757,157 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1.2;
     }
 
     .doc-card__open:hover {
       background: #0f766e;
       border-color: #0f766e;
+    }
+
+    /* PDF viewer lightbox */
+    .manual-pdf-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .manual-pdf-modal[hidden] {
+      display: none;
+    }
+
+    .manual-pdf-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(2px);
+    }
+
+    .manual-pdf-modal__dialog {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: min(960px, 96vw);
+      height: min(90vh, 900px);
+      overflow: hidden;
+      background: #fff;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 14px;
+      box-shadow:
+        0 4px 10px rgba(15, 23, 42, 0.08),
+        0 16px 40px rgba(15, 23, 42, 0.2);
+    }
+
+    .manual-pdf-modal__header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px dashed #e2e8f0;
+      background: linear-gradient(135deg, #fff 0%, #f0fdfa 100%);
+    }
+
+    .manual-pdf-modal__header-text {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .manual-pdf-modal__title {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #134e4a;
+      line-height: 1.3;
+    }
+
+    .manual-pdf-modal__meta {
+      margin: 0;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .manual-pdf-modal__close {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .manual-pdf-modal__close:hover {
+      background: #f0fdfa;
+      color: #0f766e;
+      border-color: #5eead4;
+    }
+
+    .manual-pdf-modal__frame {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: none;
+      background: #f8fafc;
+    }
+
+    .manual-pdf-modal__footer {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 12px 20px;
+      border-top: 1px dashed #e2e8f0;
+      background: #fff;
+    }
+
+    .manual-pdf-modal__download {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0d9488;
+      text-decoration: none;
+      padding: 8px 14px;
+      border: 1px dashed #5eead4;
+      border-radius: 8px;
+      background: #f0fdfa;
+    }
+
+    .manual-pdf-modal__download:hover {
+      background: #ccfbf1;
+      color: #0f766e;
+    }
+
+    .manual-pdf-modal__btn-close {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .manual-pdf-modal__btn-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
     }
 
     .page-empty-note {
@@ -1925,14 +2071,19 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/manuais-procedimentos/" + id + ".pdf";
+      }
+
       function renderManual(item) {
         const featuredClass = item.featured ? " is-featured" : "";
         const typeClass = item.type === "procedimento" ? "procedimento" : item.type === "guia" ? "guia" : "manual";
         const typeBadgeClass = item.type === "procedimento" ? " doc-card__type--procedimento" : item.type === "guia" ? " doc-card__type--guia" : "";
         const updatedBadge = item.updated ? '<span class="doc-card__updated">Atualizado</span>' : "";
+        const url = pdfUrl(item.id);
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
+          <article class="doc-card${featuredClass}" data-area="${item.area}" data-id="${item.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${typeClass}" aria-hidden="true">
                 <i class="fa-solid ${typeIcons[item.type] || "fa-book"}"></i>
@@ -1953,9 +2104,9 @@
               <span><i class="fa-regular fa-file-lines" aria-hidden="true"></i> ${item.pages} páginas</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</a>
+              <button type="button" class="doc-card__open" data-action="view"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</button>
               <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="${url}" download aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>
@@ -2001,6 +2152,113 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("manual-pdf-modal");
+      var modalTitle = document.getElementById("manual-pdf-title");
+      var modalMeta = document.getElementById("manual-pdf-meta");
+      var modalFrame = document.getElementById("manual-pdf-frame");
+      var modalDownload = document.getElementById("manual-pdf-download");
+      var modalCloseBtn = document.getElementById("manual-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "manual-pdf-modal";
+        wrapper.className = "manual-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="manual-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="manual-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="manual-pdf-title">' +
+            '<header class="manual-pdf-modal__header">' +
+              '<div class="manual-pdf-modal__header-text">' +
+                '<h2 class="manual-pdf-modal__title" id="manual-pdf-title"></h2>' +
+                '<p class="manual-pdf-modal__meta" id="manual-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="manual-pdf-modal__close" id="manual-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="manual-pdf-modal__frame" id="manual-pdf-frame" title=""></iframe>' +
+            '<footer class="manual-pdf-modal__footer">' +
+              '<a class="manual-pdf-modal__download" id="manual-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="manual-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("manual-pdf-title");
+        modalMeta = document.getElementById("manual-pdf-meta");
+        modalFrame = document.getElementById("manual-pdf-frame");
+        modalDownload = document.getElementById("manual-pdf-download");
+        modalCloseBtn = document.getElementById("manual-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closeManualModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeManualModal();
+          }
+        });
+      }
+
+      function findManual(id) {
+        for (var i = 0; i < manuals.length; i += 1) {
+          if (manuals[i].id === id) return manuals[i];
+        }
+        return null;
+      }
+
+      function openManualModal(id) {
+        var item = findManual(id);
+        if (!item) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = item.title;
+        modalMeta.textContent =
+          (typeLabels[item.type] || item.type) + " · " +
+          (areaLabels[item.area] || item.area) + " · " +
+          item.version + " · Revisão " + item.date;
+        modalFrame.title = item.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", item.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closeManualModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest(".doc-card__open[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openManualModal(id);
+      });
     })();
   </script>
   <script src="assets/user-menu.js"></script>

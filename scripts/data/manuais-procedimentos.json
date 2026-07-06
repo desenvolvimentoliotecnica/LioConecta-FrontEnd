@@ -1,0 +1,330 @@
+{
+  "company": "LioTécnica",
+  "portal": "LioConecta",
+  "manuals": [
+    {
+      "id": "manual-colaborador",
+      "title": "Manual do Colaborador",
+      "type": "manual",
+      "typeLabel": "Manual",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v7.0",
+      "date": "Mar/2026",
+      "desc": "Guia completo de integração: cultura, estrutura organizacional, benefícios, rotinas internas e canais oficiais de comunicação.",
+      "scope": "Destinado a todos os colaboradores CLT, estagiários e novos integrantes nos primeiros 90 dias e como referência permanente.",
+      "guidelines": [
+        "Conhecer a missão, visão e valores da LioTécnica descritos no capítulo de cultura organizacional.",
+        "Identificar a estrutura de áreas, gestores e canais oficiais (LioConecta, e-mail corporativo, help desk).",
+        "Solicitar benefícios e atualizar cadastro conforme instruções do RH no portal.",
+        "Cumprir normas de conduta, ponto eletrônico e uso de recursos de TI desde o primeiro dia.",
+        "Participar do programa de integração e treinamentos obrigatórios indicados pelo gestor.",
+        "Utilizar o organograma e diretório de pessoas para localizar colegas e áreas de apoio.",
+        "Em dúvidas sobre rotinas internas, consultar este manual antes de acionar o help desk."
+      ],
+      "responsibilities": {
+        "colaborador": "Ler o manual na integração e consultá-lo quando necessário.",
+        "gestor": "Garantir que novos membros da equipe recebam orientação sobre rotinas e canais.",
+        "area": "O RH mantém o manual atualizado e conduz a integração institucional."
+      },
+      "contacts": "Integração e dúvidas gerais: rh.integracao@liotecnica.com.br"
+    },
+    {
+      "id": "proc-admissao",
+      "title": "Procedimento de Admissão",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v3.2",
+      "date": "Jan/2026",
+      "desc": "Fluxo de contratação: documentação, exames, assinaturas, provisionamento de acessos e checklist de integração do novo colaborador.",
+      "scope": "Aplica-se a admissões CLT e estagiários, conduzidas pelo RH com apoio de TI, Facilities e gestor contratante.",
+      "guidelines": [
+        "RH valida documentação (RG, CPF, CTPS, comprovantes) e envia kit admissional digital.",
+        "Agendar exame admissional com clínica credenciada; liberar início somente com ASO apto.",
+        "Assinatura de contrato, termos de benefícios e políticas via plataforma de assinatura eletrônica.",
+        "TI provisiona e-mail, AD, VPN e equipamento conforme perfil de acesso aprovado pelo gestor.",
+        "Gestor define buddy e agenda reunião de boas-vindas nos primeiros 2 dias.",
+        "Checklist de integração deve ser concluído em até 10 dias úteis no portal LioConecta.",
+        "Arquivar cópia do dossiê admissional no prontuário digital do colaborador."
+      ],
+      "responsibilities": {
+        "colaborador": "Entregar documentação completa e assinar termos no prazo.",
+        "gestor": "Solicitar acessos, indicar buddy e acompanhar integração.",
+        "area": "RH coordena o fluxo ponta a ponta e registra etapas no sistema."
+      },
+      "contacts": "Admissões: rh.admissao@liotecnica.com.br"
+    },
+    {
+      "id": "guia-ponto",
+      "title": "Guia Rápido: Registro de Ponto",
+      "type": "guia",
+      "typeLabel": "Guia rápido",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v1.5",
+      "date": "Fev/2026",
+      "desc": "Como registrar entrada, saída, intervalos e solicitar ajustes no sistema de ponto eletrônico.",
+      "scope": "Colaboradores CLT em regime presencial, híbrido ou remoto com registro obrigatório no LioConecta.",
+      "guidelines": [
+        "Acesse Serviços > Ponto eletrônico no portal ou o app homologado.",
+        "Registre entrada ao iniciar a jornada e saída ao encerrar; não acumule marcações pendentes.",
+        "Intervalo intrajornada: registre início e fim do intervalo para jornadas acima de 6 horas.",
+        "Ajuste de esquecimento: solicite em até 48h com justificativa; gestor deve aprovar.",
+        "Horas extras só contam se previamente autorizadas pelo gestor no sistema.",
+        "Em falha técnica, registre manualmente via formulário de contingência e abra chamado TI.",
+        "Consulte saldo de banco de horas antes de solicitar compensação ou folga."
+      ],
+      "responsibilities": {
+        "colaborador": "Registrar corretamente e solicitar ajustes no prazo.",
+        "gestor": "Aprovar ajustes e horas extras da equipe.",
+        "area": "RH processa folha e orienta sobre legislação de jornada."
+      },
+      "contacts": "Ponto eletrônico: rh.ponto@liotecnica.com.br"
+    },
+    {
+      "id": "proc-chamados-ti",
+      "title": "Procedimento de Abertura de Chamados TI",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v4.1",
+      "date": "Dez/2025",
+      "desc": "Classificação de incidentes, prioridades, SLA por categoria e encaminhamento no help desk corporativo.",
+      "scope": "Todos os colaboradores que necessitem suporte a hardware, software, rede, acessos e serviços corporativos.",
+      "guidelines": [
+        "Abrir chamado exclusivamente pelo Help Desk no LioConecta ou e-mail helpdesk@liotecnica.com.br.",
+        "Classificar: Incidente (indisponibilidade), Requisição (acesso/software), Dúvida (orientação).",
+        "Prioridade Crítica: sistemas de produção parados — SLA resposta 1h; Alta: 4h; Média: 8h; Baixa: 24h.",
+        "Descrever sintoma, horário, equipamento, prints e passos para reproduzir o problema.",
+        "Não compartilhar senhas no chamado; TI nunca solicita credenciais por ticket.",
+        "Acompanhar status no portal; reabrir somente se solução não resolver após reteste.",
+        "Mudanças planejadas são registradas como RFC, não como incidente."
+      ],
+      "responsibilities": {
+        "colaborador": "Fornecer informações completas e validar solução ao encerrar.",
+        "gestor": "Aprovar requisições de acesso e investimentos da equipe.",
+        "area": "TI classifica, atende conforme SLA e documenta solução na base de conhecimento."
+      },
+      "contacts": "Help Desk: helpdesk@liotecnica.com.br | Ramal interno 3333"
+    },
+    {
+      "id": "guia-vpn",
+      "title": "Guia Rápido: VPN e Acesso Remoto",
+      "type": "guia",
+      "typeLabel": "Guia rápido",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v2.0",
+      "date": "Mar/2026",
+      "desc": "Instalação do cliente VPN, autenticação multifator e resolução dos erros mais comuns de conexão remota.",
+      "scope": "Colaboradores autorizados a acessar recursos internos fora da rede corporativa.",
+      "guidelines": [
+        "Baixar cliente VPN homologado via portal TI (não usar versões não aprovadas).",
+        "Login com credenciais corporativas + MFA (Microsoft Authenticator).",
+        "Conectar antes de acessar ERP, drives de rede e sistemas restritos.",
+        "Erro de certificado: verificar data/hora do sistema e reiniciar o cliente.",
+        "Desconectar VPN ao encerrar o expediente em redes públicas.",
+        "Não compartilhar perfil VPN; cada usuário possui credencial individual.",
+        "Falhas persistentes: abrir chamado TI categoria Rede/VPN com log de erro."
+      ],
+      "responsibilities": {
+        "colaborador": "Manter MFA ativo e usar apenas dispositivos gerenciados.",
+        "gestor": "Solicitar perfil de acesso remoto quando necessário à função.",
+        "area": "TI distribui cliente, perfis e monitora conexões ativas."
+      },
+      "contacts": "Suporte VPN: ti.rede@liotecnica.com.br"
+    },
+    {
+      "id": "proc-backup",
+      "title": "Procedimento de Backup e Restore",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v3.4",
+      "date": "Out/2025",
+      "desc": "Rotinas de backup, retenção, testes de restauração e responsabilidades em caso de perda de dados.",
+      "scope": "Servidores, bancos de dados, arquivos corporativos e estações críticas definidas no inventário de TI.",
+      "guidelines": [
+        "Backup completo semanal e incremental diário conforme janela aprovada (22h–06h).",
+        "Retenção: 30 dias online, 12 meses em armazenamento secundário.",
+        "Teste de restore trimestral documentado com evidência de integridade.",
+        "Dados classificados como Restritos exigem backup criptografado.",
+        "Solicitação de restore: gestor da área + aprovação TI; prazo até 8h úteis.",
+        "Colaboradores devem salvar arquivos de trabalho em drives corporativos (não apenas disco local).",
+        "Ransomware ou perda massiva: acionar plano de continuidade e comunicar CISO imediatamente."
+      ],
+      "responsibilities": {
+        "colaborador": "Utilizar repositórios corporativos para arquivos de trabalho.",
+        "gestor": "Aprovar pedidos de restauração da sua área.",
+        "area": "TI executa backups, testes e restaurações conforme este procedimento."
+      },
+      "contacts": "Backup e restore: ti.infra@liotecnica.com.br"
+    },
+    {
+      "id": "manual-iso9001",
+      "title": "Manual de Qualidade ISO 9001",
+      "type": "manual",
+      "typeLabel": "Manual",
+      "area": "qualidade",
+      "areaLabel": "Qualidade",
+      "version": "v6.3",
+      "date": "Nov/2025",
+      "desc": "Sistema de gestão da qualidade, escopo, mapa de processos e referências normativas aplicáveis à organização.",
+      "scope": "Todas as áreas abrangidas pelo SGQ certificado ISO 9001:2015 da LioTécnica.",
+      "guidelines": [
+        "O SGQ define política da qualidade, objetivos mensuráveis e indicadores por processo.",
+        "Mapa de processos: Operacionais (core), de Apoio (TI, RH, Financeiro) e Gestão (diretoria).",
+        "Documentos controlados possuem código, revisão e lista de distribuição.",
+        "Auditorias internas semestrais e externas anuais conforme programa da qualidade.",
+        "Não conformidades registradas no módulo CAPA com prazo de tratamento definido.",
+        "Melhoria contínua via planos de ação, análise de dados e revisão pela direção.",
+        "Registros de qualidade retidos pelo período definido na matriz de documentos."
+      ],
+      "responsibilities": {
+        "colaborador": "Seguir procedimentos do SGQ e registrar evidências quando aplicável.",
+        "gestor": "Monitorar indicadores e apoiar auditorias na sua área.",
+        "area": "Qualidade mantém o SGQ, conduz auditorias e certificação ISO."
+      },
+      "contacts": "Qualidade e ISO: qualidade@liotecnica.com.br"
+    },
+    {
+      "id": "proc-nc-capa",
+      "title": "Procedimento de NC e CAPA",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "qualidade",
+      "areaLabel": "Qualidade",
+      "version": "v2.9",
+      "date": "Jan/2026",
+      "desc": "Registro de não conformidades, análise de causa raiz, plano de ação corretiva e verificação de eficácia.",
+      "scope": "Desvios de requisitos do SGQ, contratos, normas ou especificações de produto/serviço.",
+      "guidelines": [
+        "Registrar NC no sistema em até 24h da identificação com descrição objetiva e evidências.",
+        "Classificar impacto: Crítica (cliente/regulatório), Maior, Menor.",
+        "Análise de causa raiz: 5 Porquês ou Ishikawa — obrigatória para NC Crítica e Maior.",
+        "Plano CAPA com ação corretiva, responsável, prazo e critério de eficácia.",
+        "Implementação acompanhada pela Qualidade; prorrogação exige justificativa aprovada.",
+        "Verificação de eficácia em até 90 dias após conclusão das ações.",
+        "NC recorrente (3x mesmo tema): escalar para revisão de processo e treinamento."
+      ],
+      "responsibilities": {
+        "colaborador": "Reportar desvios e cooperar com análise de causa.",
+        "gestor": "Aprovar ações e garantir recursos para correção.",
+        "area": "Qualidade conduz CAPA, valida eficácia e mantém registros."
+      },
+      "contacts": "NC e CAPA: qualidade.nc@liotecnica.com.br"
+    },
+    {
+      "id": "manual-atendimento",
+      "title": "Manual de Boas Práticas de Atendimento",
+      "type": "manual",
+      "typeLabel": "Manual",
+      "area": "comercial",
+      "areaLabel": "Comercial",
+      "version": "v3.0",
+      "date": "Fev/2026",
+      "desc": "Padrões de comunicação, SLA comercial, scripts de abordagem e tratamento de objeções no relacionamento com clientes.",
+      "scope": "Equipes comercial, pré-vendas, customer success e suporte ao cliente externo.",
+      "guidelines": [
+        "Responder leads em até 2h úteis; propostas enviadas em até 3 dias após diagnóstico.",
+        "Utilizar tom profissional, empático e alinhado ao guia de voz da marca LioTécnica.",
+        "Registrar todas as interações no CRM no mesmo dia da ocorrência.",
+        "Scripts de abordagem: diagnóstico antes de oferta; foco em valor, não apenas preço.",
+        "Objeções frequentes documentadas na base comercial com respostas homologadas.",
+        "Escalonar reclamações graves ao gestor comercial em até 1h.",
+        "NPS e pesquisa pós-atendimento enviados conforme calendário do CS."
+      ],
+      "responsibilities": {
+        "colaborador": "Cumprir SLA de resposta e registrar interações no CRM.",
+        "gestor": "Revisar pipeline, coaching e tratamento de escalonamentos.",
+        "area": "Comercial mantém scripts, treinamentos e indicadores de satisfação."
+      },
+      "contacts": "Comercial: comercial@liotecnica.com.br"
+    },
+    {
+      "id": "proc-onboarding-comercial",
+      "title": "Procedimento de Onboarding Comercial",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "comercial",
+      "areaLabel": "Comercial",
+      "version": "v1.8",
+      "date": "Ago/2025",
+      "desc": "Handoff de leads, cadastro no CRM, definição de carteira e acompanhamento dos primeiros 90 dias de novos vendedores.",
+      "scope": "Novos colaboradores das áreas de vendas internas e externas.",
+      "guidelines": [
+        "Semana 1: treinamento de produto, CRM, política comercial e shadowing com buddy.",
+        "Semana 2–4: carteira piloto supervisionada; gestor aprova primeiras propostas.",
+        "Dia 30: revisão de metas parciais e feedback estruturado.",
+        "Dia 60: autonomia em carteira com acompanhamento quinzenal.",
+        "Dia 90: avaliação formal de performance e plano de desenvolvimento.",
+        "Leads inbound distribuídos por rodízio documentado no CRM.",
+        "Certificação interna de produto obrigatória antes de atendimento solo."
+      ],
+      "responsibilities": {
+        "colaborador": "Concluir trilha de onboarding e metas acordadas.",
+        "gestor": "Designar buddy, revisar propostas e conduzir avaliações 30/60/90.",
+        "area": "Comercial define trilha, materiais e critérios de certificação."
+      },
+      "contacts": "Onboarding comercial: comercial.rh@liotecnica.com.br"
+    },
+    {
+      "id": "proc-compras",
+      "title": "Procedimento de Compras e Cotações",
+      "type": "procedimento",
+      "typeLabel": "Procedimento",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v4.5",
+      "date": "Set/2025",
+      "desc": "Solicitação de compras, alçadas de aprovação, cotação com fornecedores e registro no ERP financeiro.",
+      "scope": "Solicitações de materiais, serviços e contratos de fornecedores em todas as áreas.",
+      "guidelines": [
+        "Abrir requisição no ERP com centro de custo, especificação e quantidade estimada.",
+        "Cotação mínima de 3 fornecedores para valores acima de R$ 5.000,00.",
+        "Alçadas: até R$ 2.000 gestor; até R$ 20.000 diretor de área; acima disso diretoria executiva.",
+        "Prazo de cotação: 5 dias úteis para compras padrão; urgência exige justificativa.",
+        "Pedido de compra emitido somente após aprovação formal no workflow.",
+        "Recebimento conferido pelo solicitante; divergências reportadas em até 48h.",
+        "Fornecedores devem estar cadastrados e homologados antes do primeiro pedido."
+      ],
+      "responsibilities": {
+        "colaborador": "Especificar necessidade com clareza e conferir entrega.",
+        "gestor": "Aprovar requisições dentro da sua alçada.",
+        "area": "Financeiro/Compras conduz cotação, negociação e registro no ERP."
+      },
+      "contacts": "Compras: financeiro.compras@liotecnica.com.br"
+    },
+    {
+      "id": "manual-seguranca-operacional",
+      "title": "Manual de Segurança Operacional",
+      "type": "manual",
+      "typeLabel": "Manual",
+      "area": "operacional",
+      "areaLabel": "Operacional",
+      "version": "v5.1",
+      "date": "Mar/2026",
+      "desc": "Instruções de EPI, sinalização, permissão de trabalho e resposta a emergências em áreas operacionais e planta.",
+      "scope": "Colaboradores, terceiros e visitantes em planta industrial, depósitos e áreas de manutenção.",
+      "guidelines": [
+        "EPI obrigatório conforme sinalização da área: capacete, óculos, calçado e luvas quando indicado.",
+        "Permissão de Trabalho (PT) exigida para serviços em altura, espaço confinado e energia elétrica.",
+        "Sinalização de risco e rotas de fuga devem permanecer visíveis e desobstruídas.",
+        "Reportar condições inseguras imediatamente ao supervisor e ao SESMT.",
+        "Bloqueio e etiquetagem (LOTO) obrigatório em manutenção de equipamentos energizados.",
+        "Simulados de emergência e evacuação semestrais com participação obrigatória.",
+        "Acidentes com afastamento: comunicar SESMT e RH em até 1h."
+      ],
+      "responsibilities": {
+        "colaborador": "Usar EPIs, seguir PT e participar de treinamentos de segurança.",
+        "gestor": "Autorizar PT, interromper atividades inseguras e apoiar investigações.",
+        "area": "SESMT define normas, inspeciona áreas e investiga incidentes."
+      },
+      "contacts": "Segurança operacional: sst@liotecnica.com.br | Emergência planta: ramal 9911"
+    }
+  ]
+}
