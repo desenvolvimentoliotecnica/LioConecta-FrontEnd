@@ -125,6 +125,7 @@ export function HelpDeskPage() {
   const handleCreateTicket = (payload: {
     subject: string;
     priority: string;
+    entityId: number;
     categoryId: number;
     description: string;
   }) => {
