@@ -167,14 +167,19 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/manuais-procedimentos/" + id + ".pdf";
+      }
+
       function renderManual(item) {
         const featuredClass = item.featured ? " is-featured" : "";
         const typeClass = item.type === "procedimento" ? "procedimento" : item.type === "guia" ? "guia" : "manual";
         const typeBadgeClass = item.type === "procedimento" ? " doc-card__type--procedimento" : item.type === "guia" ? " doc-card__type--guia" : "";
         const updatedBadge = item.updated ? '<span class="doc-card__updated">Atualizado</span>' : "";
+        const url = pdfUrl(item.id);
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
+          <article class="doc-card${featuredClass}" data-area="${item.area}" data-id="${item.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${typeClass}" aria-hidden="true">
                 <i class="fa-solid ${typeIcons[item.type] || "fa-book"}"></i>
@@ -195,9 +200,9 @@
               <span><i class="fa-regular fa-file-lines" aria-hidden="true"></i> ${item.pages} páginas</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</a>
+              <button type="button" class="doc-card__open" data-action="view"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</button>
               <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="${url}" download aria-label="Baixar ${item.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>
@@ -243,4 +248,111 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("manual-pdf-modal");
+      var modalTitle = document.getElementById("manual-pdf-title");
+      var modalMeta = document.getElementById("manual-pdf-meta");
+      var modalFrame = document.getElementById("manual-pdf-frame");
+      var modalDownload = document.getElementById("manual-pdf-download");
+      var modalCloseBtn = document.getElementById("manual-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "manual-pdf-modal";
+        wrapper.className = "manual-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="manual-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="manual-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="manual-pdf-title">' +
+            '<header class="manual-pdf-modal__header">' +
+              '<div class="manual-pdf-modal__header-text">' +
+                '<h2 class="manual-pdf-modal__title" id="manual-pdf-title"></h2>' +
+                '<p class="manual-pdf-modal__meta" id="manual-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="manual-pdf-modal__close" id="manual-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="manual-pdf-modal__frame" id="manual-pdf-frame" title=""></iframe>' +
+            '<footer class="manual-pdf-modal__footer">' +
+              '<a class="manual-pdf-modal__download" id="manual-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="manual-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("manual-pdf-title");
+        modalMeta = document.getElementById("manual-pdf-meta");
+        modalFrame = document.getElementById("manual-pdf-frame");
+        modalDownload = document.getElementById("manual-pdf-download");
+        modalCloseBtn = document.getElementById("manual-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closeManualModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeManualModal();
+          }
+        });
+      }
+
+      function findManual(id) {
+        for (var i = 0; i < manuals.length; i += 1) {
+          if (manuals[i].id === id) return manuals[i];
+        }
+        return null;
+      }
+
+      function openManualModal(id) {
+        var item = findManual(id);
+        if (!item) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = item.title;
+        modalMeta.textContent =
+          (typeLabels[item.type] || item.type) + " · " +
+          (areaLabels[item.area] || item.area) + " · " +
+          item.version + " · Revisão " + item.date;
+        modalFrame.title = item.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", item.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closeManualModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest(".doc-card__open[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openManualModal(id);
+      });
     })();

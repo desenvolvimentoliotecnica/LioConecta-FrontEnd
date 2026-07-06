@@ -13,6 +13,7 @@
     "test:e2e:ui": "playwright test --ui",
     "report:observability": "node tools/generate-observability-e2e-report.mjs",
     "generate:politicas-pdfs": "python scripts/generate-politicas-pdfs.py",
+    "generate:manuais-pdfs": "python scripts/generate-manuais-pdfs.py",
     "extract": "python scripts/migrate-to-react.py && python scripts/generate-pages-index.py && python scripts/fix-css-urls.py"
   },
   "dependencies": {
