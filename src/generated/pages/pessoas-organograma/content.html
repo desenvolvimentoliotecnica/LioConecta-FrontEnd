@@ -16,6 +16,31 @@
           </div>
         </header>
 
+        <div class="page-toolbar org-page-toolbar">
+          <p class="org-view-hint" id="org-view-hint">Sua árvore hierárquica</p>
+          <div class="org-toolbar-actions">
+            <label class="page-search" for="org-people-search">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input
+                id="org-people-search"
+                class="page-search__input"
+                type="search"
+                placeholder="Buscar pessoa para focar..."
+                autocomplete="off"
+                spellcheck="false"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="org-search-results"
+                aria-autocomplete="list"
+              />
+            </label>
+            <button type="button" class="org-view-toggle" id="org-view-full-toggle" hidden>
+              Ver organograma completo
+            </button>
+          </div>
+        </div>
+        <div class="org-search-results" id="org-search-results" hidden role="listbox" aria-label="Resultados da busca"></div>
+
         <div class="org-chart-panel">
           <div id="org-tree" aria-label="Organograma da empresa"></div>
         </div>
