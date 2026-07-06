@@ -38,12 +38,14 @@ function useLegacyMainHtml(
   mainRef: RefObject<HTMLElement | null>,
   contentKey: string,
   html: string,
+  enabled = true,
 ) {
   useLayoutEffect(() => {
+    if (!enabled) return;
     const el = mainRef.current;
     if (!el) return;
     el.innerHTML = html;
-  }, [contentKey, html, mainRef]);
+  }, [contentKey, html, mainRef, enabled]);
 }
 
 export function LegacyPage() {
@@ -52,8 +54,9 @@ export function LegacyPage() {
   const mainRef = useRef<HTMLElement>(null);
   const contentKey = `${location.pathname}${location.search}${location.hash}`;
   const html = page ? (pageAssets[page.id]?.content ?? "") : "";
+  const isFeedPage = page?.id === FEED_PAGE_ID;
 
-  useLegacyMainHtml(mainRef, contentKey, html);
+  useLegacyMainHtml(mainRef, contentKey, html, !isFeedPage);
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page?.id === "feed", location.hash);
@@ -94,8 +97,9 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
   const mainRef = useRef<HTMLElement>(null);
   const contentKey = `${page.id}:${location.search}${location.hash}`;
   const html = pageAssets[page.id]?.content ?? "";
+  const isFeedPage = page.id === FEED_PAGE_ID;
 
-  useLegacyMainHtml(mainRef, contentKey, html);
+  useLegacyMainHtml(mainRef, contentKey, html, !isFeedPage);
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page.id === "feed", location.hash);

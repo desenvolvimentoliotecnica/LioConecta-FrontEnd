@@ -92,7 +92,7 @@ test.describe("Organograma level add buttons", () => {
   });
 
   test("exibe botoes (+) nas laterais da fileira de diretores", async ({ page }) => {
-    await page.goto("/pessoas/organograma?focus=julio");
+    await page.goto("/pessoas/organograma?view=full&focus=julio");
     await waitForOrganogram(page);
 
     const metrics = await readLevelButtonMetrics(page);
@@ -135,7 +135,7 @@ test.describe("Organograma level add buttons", () => {
   });
 
   test("clique no botao (+) abre modal Nova posicao", async ({ page }) => {
-    await page.goto("/pessoas/organograma?focus=julio");
+    await page.goto("/pessoas/organograma?view=full&focus=julio");
     await waitForOrganogram(page);
 
     const btn = page.locator("#lio-org-level-actions-overlay .lio-level-add-btn").first();
@@ -152,7 +152,7 @@ test.describe("Organograma level add buttons", () => {
   });
 
   test("botoes (+) acompanham zoom do organograma", async ({ page }) => {
-    await page.goto("/pessoas/organograma?focus=julio");
+    await page.goto("/pessoas/organograma?view=full&focus=julio");
     await waitForOrganogram(page);
 
     const before = await page.evaluate(() => {
@@ -209,7 +209,7 @@ test.describe("Organograma level add buttons", () => {
   });
 
   test("oculta botao (+) da direita quando ultimo card sai da visao", async ({ page }) => {
-    await page.goto("/pessoas/organograma?focus=julio");
+    await page.goto("/pessoas/organograma?view=full&focus=julio");
     await waitForOrganogram(page);
 
     const content = page.locator("#org-tree [data-boc-content]");
@@ -246,7 +246,7 @@ test.describe("Organograma level add buttons", () => {
   });
 
   test("oculta botao (+) da esquerda quando primeiro card sai da visao", async ({ page }) => {
-    await page.goto("/pessoas/organograma?focus=julio");
+    await page.goto("/pessoas/organograma?view=full&focus=julio");
     await waitForOrganogram(page);
 
     const content = page.locator("#org-tree [data-boc-content]");

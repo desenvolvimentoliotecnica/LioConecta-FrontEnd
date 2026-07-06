@@ -563,6 +563,7 @@
         }
 
         if (action === "solicitar-posicao") {
+          if (!canRequestPositionOnNode(window.__lioOrgChart, nodeId)) return;
           closeOrgNodeMenu();
           const chart = window.__lioOrgChart;
           const layoutNode = chart && chart.getNode ? chart.getNode(nodeId) : null;
@@ -579,6 +580,44 @@
         if (action === "promover") {
           showOrgAction("Promover " + person.name + " — fluxo em breve para gestores e RH.");
         }
+      }
+
+      function getOrgPositionPolicy() {
+        const ctx = window.__lioOrgBootContext || {};
+        const directReportsCount =
+          typeof ctx.directReportsCount === "number" ? ctx.directReportsCount : 0;
+        return {
+          enabled: directReportsCount > 0,
+          minLevel:
+            typeof ctx.focusChartLevel === "number" ? ctx.focusChartLevel : null
+        };
+      }
+
+      function canUseOrgPositionRequests() {
+        const policy = getOrgPositionPolicy();
+        return policy.enabled && policy.minLevel !== null;
+      }
+
+      function isChartLevelAllowedForPositionRequest(level) {
+        const policy = getOrgPositionPolicy();
+        if (!policy.enabled || policy.minLevel === null) return false;
+        return level >= policy.minLevel;
+      }
+
+      function canRequestPositionOnNode(chart, nodeId) {
+        if (!canUseOrgPositionRequests() || !chart || typeof chart.getNode !== "function") {
+          return false;
+        }
+        const node = chart.getNode(nodeId);
+        if (!node || typeof node.level !== "number") return false;
+        return isChartLevelAllowedForPositionRequest(node.level);
+      }
+
+      function rememberFocusChartLevel(bootContext, chart, nodeId) {
+        if (!bootContext || !chart || typeof chart.getNode !== "function") return;
+        const node = chart.getNode(nodeId);
+        if (!node || typeof node.level !== "number") return;
+        bootContext.focusChartLevel = node.level;
       }
 
       function getChartRootIds(chart) {
@@ -793,6 +832,11 @@
         const overlay = ensureLevelActionsOverlay(container);
         if (!overlay || !chart) return;
 
+        if (!canUseOrgPositionRequests()) {
+          overlay.innerHTML = "";
+          return;
+        }
+
         const bounds = getVisibleLevelBounds(chart);
         const minLevel = getMinVisibleLevel(bounds);
         const treeRect = container.getBoundingClientRect();
@@ -810,6 +854,7 @@
             if (!row || !row.count) return;
             const level = Number(levelKey);
             if (level <= minLevel) return;
+            if (!isChartLevelAllowedForPositionRequest(level)) return;
 
             const viewportNodes = getViewportVisibleRowNodes(chart, container, row);
             if (!viewportNodes.length) return;
@@ -996,10 +1041,11 @@
       }
 
       function setupOrgLevelAddButtons(chart, nodeIndex) {
+        const chartBootId = window.__lioOrgBootId;
         let refreshLevelButtonsTimer;
 
         function renderLevelButtonsNow() {
-          if (orgBootId !== window.__lioOrgBootId) return;
+          if (chartBootId !== window.__lioOrgBootId) return;
           renderOrgLevelAddButtons(chart, treeEl);
         }
 
@@ -1030,6 +1076,7 @@
           event.stopPropagation();
           event.preventDefault();
           const level = Number(target.getAttribute("data-org-level") || "0");
+          if (!isChartLevelAllowedForPositionRequest(level)) return;
           const side = target.getAttribute("data-org-level-side") || "left";
           const anchorNodeId = Number(target.getAttribute("data-org-level-anchor") || "0");
           openOrgPositionRequestModal({
@@ -1066,6 +1113,13 @@
 
         menu.style.left = left + "px";
         menu.style.top = top + "px";
+
+        const positionItem = menu.querySelector('[data-action="solicitar-posicao"]');
+        if (positionItem) {
+          const allowed = canRequestPositionOnNode(window.__lioOrgChart, nodeId);
+          positionItem.hidden = !allowed;
+          positionItem.disabled = !allowed;
+        }
       }
 
       function findMenuButton(el) {
@@ -1088,14 +1142,24 @@
         const node = chart.getNode(nodeId);
         if (!node || typeof chart.setViewBox !== "function") return false;
 
+        const nx = Number(node.x);
+        const ny = Number(node.y);
+        const nw = Number(node.w);
+        const nh = Number(node.h);
+        if (![nx, ny, nw, nh].every(function (value) {
+          return Number.isFinite(value);
+        })) {
+          return false;
+        }
+
         chart.config.scaleInitial = OrgChart.match.none;
 
-        const viewW = (node.w + ORG_FOCUS_PAD_X * 2) / ORG_FOCUS_ZOOM;
-        const viewH = (node.h + ORG_FOCUS_PAD_Y * 2 + 100) / ORG_FOCUS_ZOOM;
+        const viewW = (nw + ORG_FOCUS_PAD_X * 2) / ORG_FOCUS_ZOOM;
+        const viewH = (nh + ORG_FOCUS_PAD_Y * 2 + 100) / ORG_FOCUS_ZOOM;
 
         chart.setViewBox([
-          node.x + node.w / 2 - viewW / 2,
-          node.y - ORG_FOCUS_TOP_PAD / ORG_FOCUS_ZOOM,
+          nx + nw / 2 - viewW / 2,
+          ny - ORG_FOCUS_TOP_PAD / ORG_FOCUS_ZOOM,
           viewW,
           viewH
         ]);
@@ -1117,25 +1181,38 @@
       }
 
       function scheduleFocusViewport(chart, nodeId, container, onDone) {
-        const delays = [0, 80, 200, 450, 800];
+        const delays = [0, 80, 200, 450, 800, 1200, 1800];
+        let doneCalled = false;
+
+        function tryApply() {
+          let applied = false;
+          withFocusGuard(chart, function () {
+            applied = applyFocusViewport(chart, nodeId, container);
+          });
+          if (applied && onDone && !doneCalled) {
+            doneCalled = true;
+            onDone();
+          }
+          return applied;
+        }
 
         delays.forEach(function (delay) {
-          setTimeout(function () {
-            withFocusGuard(chart, function () {
-              applyFocusViewport(chart, nodeId, container);
-            });
-          }, delay);
+          setTimeout(tryApply, delay);
         });
 
         setTimeout(function () {
-          withFocusGuard(chart, function () {
-            applyFocusViewport(chart, nodeId, container);
-          });
+          const applied = tryApply();
+          if (!applied) {
+            fitOrgChartInPanel(chart, container);
+          }
           if (typeof window.__lioRefreshOrgLevelButtons === "function") {
             window.__lioRefreshOrgLevelButtons();
           }
-          if (onDone) onDone();
-        }, delays[delays.length - 1] + 100);
+          if (onDone && !doneCalled) {
+            doneCalled = true;
+            onDone();
+          }
+        }, 2000);
       }
 
       function pinOrgChartToTop(container, topPadding) {
@@ -1245,19 +1322,366 @@
         return new URLSearchParams(window.location.search).get("focus");
       }
 
+      function getViewMode() {
+        return new URLSearchParams(window.location.search).get("view") === "full" ? "full" : "scoped";
+      }
+
+      function isAdminOrHr(me) {
+        if (!me || !Array.isArray(me.roles)) return false;
+        return me.roles.some(function (role) {
+          return role === "Admin" || role === "HR" || role === 1 || role === 3;
+        });
+      }
+
+      function resolveBootContext() {
+        const viewMode = getViewMode();
+        const fromQuery = getFocusSlug();
+        if (!window.LioApi || window.LioApi.useMock) {
+          return Promise.resolve({
+            focusSlug: fromQuery || "leonardo-mendes",
+            viewMode: viewMode,
+            isAdminOrHr: false,
+            meSlug: null,
+            meName: null
+          });
+        }
+        return window.LioApi.get("/me")
+          .then(function (me) {
+            return {
+              focusSlug: fromQuery || (me && me.slug) || null,
+              viewMode: viewMode,
+              isAdminOrHr: isAdminOrHr(me),
+              meSlug: me && me.slug,
+              meName: me && me.name
+            };
+          })
+          .catch(function () {
+            return {
+              focusSlug: fromQuery || "leonardo-mendes",
+              viewMode: viewMode,
+              isAdminOrHr: false,
+              meSlug: null,
+              meName: null
+            };
+          });
+      }
+
+      function getApiNodeSlug(node) {
+        return node.slug || node.Slug || "";
+      }
+
+      function getApiNodeId(node) {
+        return node.id || node.Id;
+      }
+
+      function getApiNodeManagerId(node) {
+        return node.managerId !== undefined ? node.managerId : node.ManagerId;
+      }
+
+      function buildChildrenIndexByManagerId(apiNodes) {
+        const children = {};
+        apiNodes.forEach(function (node) {
+          const managerId = getApiNodeManagerId(node);
+          if (!managerId) return;
+          if (!children[managerId]) children[managerId] = [];
+          children[managerId].push(node);
+        });
+        return children;
+      }
+
+      function collectDescendantSlugSet(focusSlug, apiNodes) {
+        const slugToId = {};
+        apiNodes.forEach(function (node) {
+          const slug = getApiNodeSlug(node);
+          if (slug) slugToId[normalizeSlugKey(slug)] = getApiNodeId(node);
+        });
+        const focusId = slugToId[normalizeSlugKey(focusSlug)];
+        if (!focusId) return new Set();
+
+        const children = buildChildrenIndexByManagerId(apiNodes);
+        const slugs = new Set();
+        const stack = [focusId];
+        const visited = {};
+
+        while (stack.length) {
+          const id = stack.pop();
+          if (visited[id]) continue;
+          visited[id] = true;
+          (children[id] || []).forEach(function (child) {
+            const slug = getApiNodeSlug(child);
+            if (!slug) return;
+            slugs.add(slug);
+            stack.push(getApiNodeId(child));
+          });
+        }
+        return slugs;
+      }
+
+      function apiHasSlug(apiNodes, slug) {
+        const key = normalizeSlugKey(slug);
+        return apiNodes.some(function (node) {
+          return normalizeSlugKey(getApiNodeSlug(node)) === key;
+        });
+      }
+
+      function repairFilteredApiNodeManagers(filteredNodes, allApiNodes) {
+        const visibleIds = new Set();
+        filteredNodes.forEach(function (node) {
+          visibleIds.add(getApiNodeId(node));
+        });
+        const nodeById = {};
+        allApiNodes.forEach(function (node) {
+          nodeById[getApiNodeId(node)] = node;
+        });
+
+        return filteredNodes.map(function (node) {
+          let managerId = getApiNodeManagerId(node);
+          const visited = {};
+          while (managerId && !visibleIds.has(managerId) && !visited[managerId]) {
+            visited[managerId] = true;
+            const manager = nodeById[managerId];
+            managerId = manager ? getApiNodeManagerId(manager) : null;
+          }
+          if (!managerId || !visibleIds.has(managerId)) {
+            return Object.assign({}, node, { managerId: null, ManagerId: null });
+          }
+          return Object.assign({}, node, { managerId: managerId, ManagerId: managerId });
+        });
+      }
+
+      function buildVisibleSlugSet(focusSlug, hierarchy, allApiNodes) {
+        const set = new Set();
+        if (!focusSlug) return set;
+
+        const chain = hierarchy ? hierarchy.chain || hierarchy.Chain || [] : [];
+        chain.forEach(function (member) {
+          const slug = member.slug || member.Slug || member.id || member.Id;
+          if (slug && apiHasSlug(allApiNodes, slug)) set.add(slug);
+        });
+        if (apiHasSlug(allApiNodes, focusSlug)) set.add(focusSlug);
+        collectDescendantSlugSet(focusSlug, allApiNodes).forEach(function (slug) {
+          if (apiHasSlug(allApiNodes, slug)) set.add(slug);
+        });
+        return set;
+      }
+
+      function filterApiNodesToVisible(apiNodes, slugSet) {
+        const normalized = new Set();
+        slugSet.forEach(function (slug) {
+          normalized.add(normalizeSlugKey(slug));
+        });
+        return apiNodes.filter(function (node) {
+          return normalized.has(normalizeSlugKey(getApiNodeSlug(node)));
+        });
+      }
+
+      function formatScopedOrgCount(nodes, focusName) {
+        const label = focusName ? "Árvore de " + focusName : "Sua árvore hierárquica";
+        return label + " · " + nodes.length + (nodes.length === 1 ? " pessoa" : " pessoas");
+      }
+
+      function updateOrgToolbar(bootContext) {
+        const hint = document.getElementById("org-view-hint");
+        const toggle = document.getElementById("org-view-full-toggle");
+        const searchInput = document.getElementById("org-people-search");
+        if (!bootContext) return;
+
+        if (hint) {
+          if (bootContext.viewMode === "full") {
+            hint.textContent = "Organograma completo da empresa";
+          } else if (bootContext.focusSlug && bootContext.meSlug === bootContext.focusSlug && bootContext.meName) {
+            hint.textContent = "Sua árvore hierárquica";
+          } else if (bootContext.focusName) {
+            hint.textContent = "Árvore de " + bootContext.focusName;
+          } else {
+            hint.textContent = "Sua árvore hierárquica";
+          }
+        }
+
+        if (toggle) {
+          if (bootContext.isAdminOrHr) {
+            toggle.hidden = false;
+            toggle.textContent =
+              bootContext.viewMode === "full" ? "Ver minha árvore" : "Ver organograma completo";
+          } else {
+            toggle.hidden = true;
+          }
+        }
+
+        if (searchInput && bootContext.focusName && !searchInput.value) {
+          searchInput.placeholder = "Buscar pessoa para focar...";
+        }
+      }
+
+      function reloadOrganogram() {
+        window.__lioOrgBootId = (window.__lioOrgBootId || 0) + 1;
+        window.__lioOrgFocusReady = null;
+        bootOrganogram();
+      }
+
+      function navigateOrgChartUrl(mutator) {
+        const url = new URL(window.location.href);
+        mutator(url);
+        window.history.pushState(null, "", url.pathname + url.search);
+        reloadOrganogram();
+      }
+
+      function setupOrgPeopleSearch() {
+        const input = document.getElementById("org-people-search");
+        const results = document.getElementById("org-search-results");
+        if (!input || !results || input.__lioOrgSearchBound) return;
+        input.__lioOrgSearchBound = true;
+
+        let debounceTimer = null;
+        let activeIndex = -1;
+        let lastItems = [];
+
+        function hideResults() {
+          results.hidden = true;
+          results.innerHTML = "";
+          input.setAttribute("aria-expanded", "false");
+          activeIndex = -1;
+          lastItems = [];
+        }
+
+        function normalizePeopleList(raw) {
+          if (Array.isArray(raw)) return raw;
+          if (raw && Array.isArray(raw.items)) return raw.items;
+          if (raw && Array.isArray(raw.value)) return raw.value;
+          return [];
+        }
+
+        function selectPerson(slug) {
+          if (!slug) return;
+          hideResults();
+          input.value = "";
+          navigateOrgChartUrl(function (url) {
+            url.searchParams.set("focus", slug);
+            url.searchParams.delete("view");
+          });
+        }
+
+        function renderResults(items) {
+          lastItems = items;
+          activeIndex = -1;
+          if (!items.length) {
+            results.innerHTML = '<div class="org-search-results__empty">Nenhuma pessoa encontrada.</div>';
+            results.hidden = false;
+            input.setAttribute("aria-expanded", "true");
+            return;
+          }
+          results.innerHTML = items
+            .map(function (person, index) {
+              const slug = person.slug || person.Slug || "";
+              const name = person.name || person.Name || "";
+              const title = person.title || person.Title || "";
+              const dept = person.departmentName || person.DepartmentName || "";
+              const meta = [title, dept].filter(Boolean).join(" · ");
+              return (
+                '<button type="button" class="org-search-results__item" role="option" data-org-search-index="' +
+                index +
+                '" data-org-search-slug="' +
+                escapeAttr(slug) +
+                '"><span class="org-search-results__name">' +
+                escapeHtml(name) +
+                '</span><span class="org-search-results__meta">' +
+                escapeHtml(meta) +
+                "</span></button>"
+              );
+            })
+            .join("");
+          results.hidden = false;
+          input.setAttribute("aria-expanded", "true");
+        }
+
+        function runSearch() {
+          const term = input.value.trim();
+          if (term.length < 2) {
+            hideResults();
+            return;
+          }
+          if (!window.LioApi || window.LioApi.useMock) return;
+          window.LioApi.get("/people?limit=8&q=" + encodeURIComponent(term))
+            .then(function (raw) {
+              renderResults(normalizePeopleList(raw));
+            })
+            .catch(function () {
+              hideResults();
+            });
+        }
+
+        input.addEventListener("input", function () {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(runSearch, 300);
+        });
+
+        input.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            hideResults();
+            return;
+          }
+          if (results.hidden || !lastItems.length) return;
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            activeIndex = Math.min(activeIndex + 1, lastItems.length - 1);
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            activeIndex = Math.max(activeIndex - 1, 0);
+          } else if (event.key === "Enter" && activeIndex >= 0) {
+            event.preventDefault();
+            const person = lastItems[activeIndex];
+            selectPerson(person.slug || person.Slug);
+            return;
+          } else {
+            return;
+          }
+          results.querySelectorAll(".org-search-results__item").forEach(function (btn, index) {
+            btn.classList.toggle("is-active", index === activeIndex);
+          });
+        });
+
+        results.addEventListener("click", function (event) {
+          const item = event.target.closest("[data-org-search-slug]");
+          if (!item) return;
+          selectPerson(item.getAttribute("data-org-search-slug"));
+        });
+
+        document.addEventListener("click", function (event) {
+          if (!event.target.closest(".org-page-toolbar") && !event.target.closest("#org-search-results")) {
+            hideResults();
+          }
+        });
+      }
+
+      function setupOrgViewToggle() {
+        const toggle = document.getElementById("org-view-full-toggle");
+        if (!toggle || toggle.__lioOrgToggleBound) return;
+        toggle.__lioOrgToggleBound = true;
+        toggle.addEventListener("click", function () {
+          const isFull = getViewMode() === "full";
+          navigateOrgChartUrl(function (url) {
+            if (isFull) url.searchParams.delete("view");
+            else url.searchParams.set("view", "full");
+          });
+        });
+      }
+
       function resolveDefaultFocusSlug(nodes) {
         const found = findChartNode(nodes, "julio");
         return found ? found.slug : null;
       }
 
-      function resolveChartFocusSlug(nodes, unassignedPeople) {
-        const fromQuery = getFocusSlug();
-        if (fromQuery) {
-          const chartNode = findChartNode(nodes, fromQuery);
+      function resolveChartFocusSlug(nodes, unassignedPeople, bootContext) {
+        const preferred =
+          bootContext && bootContext.focusSlug
+            ? bootContext.focusSlug
+            : getFocusSlug();
+        if (preferred) {
+          const chartNode = findChartNode(nodes, preferred);
           if (chartNode) return chartNode.slug;
-          const unassigned = findUnassignedPerson(unassignedPeople, fromQuery);
+          const unassigned = findUnassignedPerson(unassignedPeople, preferred);
           if (unassigned) return unassigned.slug;
-          return fromQuery;
+          return preferred;
         }
         return resolveDefaultFocusSlug(nodes);
       }
@@ -1455,9 +1879,10 @@
         return text;
       }
 
-      function initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection) {
-        if (orgBootId !== window.__lioOrgBootId) return;
+      function initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection, bootContext, bootId) {
+        if (bootId !== window.__lioOrgBootId) return;
         patchOrgChartCommunityStubs();
+        bootContext = bootContext || { viewMode: "scoped" };
         const nodeIndex = {};
         nodes.forEach(function (node) {
           nodeIndex[node.id] = node;
@@ -1466,10 +1891,15 @@
           nodeIndex["unassigned:" + person.slug] = person;
         });
 
-        const focusSlug = resolveChartFocusSlug(nodes, unassignedPeople);
+        const focusSlug = resolveChartFocusSlug(nodes, unassignedPeople, bootContext);
         const focusInUnassigned = isChartFocusInUnassigned(nodes, unassignedPeople, focusSlug);
         const unassignedCount = getUnassignedCount(payload || {});
         const hasChartFocus = !!focusSlug && !focusInUnassigned;
+        const focusNode = focusSlug ? findChartNode(nodes, focusSlug) : null;
+        if (focusNode && bootContext) {
+          bootContext.focusName = focusNode.name;
+          updateOrgToolbar(bootContext);
+        }
 
         if (!nodes.length) {
           if (countEl) {
@@ -1495,7 +1925,10 @@
           padding: 20,
           mouseScroll: OrgChart.action.zoom,
           scaleInitial: hasChartFocus ? OrgChart.match.none : OrgChart.match.boundary,
-          collapse: { level: 2, allChildren: true },
+          collapse:
+            bootContext.viewMode === "scoped"
+              ? { level: 20, allChildren: false }
+              : { level: 2, allChildren: true },
           nodeBinding: {
             field_0: "name",
             field_1: "title",
@@ -1511,16 +1944,19 @@
         setupOrgLevelAddButtons(chart, nodeIndex);
 
         chart.onInit(function () {
-          if (countEl) {
-            countEl.textContent = formatOrgCount(payload || {}, nodes, unassignedCount);
+          if (!countEl) return;
+          if (bootContext.viewMode === "scoped") {
+            countEl.textContent = formatScopedOrgCount(nodes, bootContext.focusName || bootContext.meName);
+            return;
           }
+          countEl.textContent = formatOrgCount(payload || {}, nodes, unassignedCount);
         });
 
         let chartLoadedHandled = false;
 
         function onChartLoaded() {
           if (chartLoadedHandled) return;
-          if (orgBootId !== window.__lioOrgBootId) return;
+          if (bootId !== window.__lioOrgBootId) return;
           if (window.__lioOrgFocusReady) return;
           chartLoadedHandled = true;
 
@@ -1531,7 +1967,7 @@
             return;
           }
           if (focusSlug) {
-            focusOrgChartNode(focusSlug, nodes, chart);
+            focusOrgChartNode(focusSlug, nodes, chart, bootContext.viewMode);
             scheduleOrgLevelButtonRefresh();
             return;
           }
@@ -1544,7 +1980,7 @@
         setTimeout(onChartLoaded, 1500);
       }
 
-      function focusOrgChartNode(slug, nodes, chart) {
+      function focusOrgChartNode(slug, nodes, chart, viewMode) {
         if (!slug || !chart) return;
         const target = findChartNode(nodes, slug);
         if (!target) {
@@ -1554,6 +1990,7 @@
         }
 
         function markFocusReady() {
+          rememberFocusChartLevel(window.__lioOrgBootContext, chart, target.id);
           window.__lioOrgFocusReady = {
             slug: normalizeSlugKey(slug),
             nodeId: target.id,
@@ -1566,7 +2003,7 @@
           scheduleFocusViewport(chart, target.id, treeEl, markFocusReady);
         }
 
-        if (typeof chart.changeRoots === "function") {
+        if (viewMode === "full" && typeof chart.changeRoots === "function") {
           chart.changeRoots(target.id, [target.id], applyFocusAfterRootChange);
           setTimeout(function () {
             if (!window.__lioOrgFocusReady) {
@@ -1577,6 +2014,81 @@
         }
 
         applyFocusAfterRootChange();
+      }
+
+      function bootOrganogram() {
+        const bootId = window.__lioOrgBootId;
+        return resolveBootContext()
+          .then(function (bootContext) {
+            if (bootId !== window.__lioOrgBootId) return;
+            window.__lioOrgBootContext = bootContext;
+            updateOrgToolbar(bootContext);
+            return Promise.all([
+              window.LioApi.get("/people/org-chart"),
+              bootContext.focusSlug
+                ? window.LioApi.get("/people/" + encodeURIComponent(bootContext.focusSlug) + "/hierarchy").catch(
+                    function () {
+                      return null;
+                    }
+                  )
+                : Promise.resolve(null)
+            ]).then(function (results) {
+              return { bootContext: bootContext, payload: results[0], hierarchy: results[1] };
+            });
+          })
+          .then(function (bundle) {
+            if (!bundle || bootId !== window.__lioOrgBootId) return;
+            const bootContext = bundle.bootContext;
+            const payload = bundle.payload || {};
+            if (bundle.hierarchy) {
+              bootContext.directReportsCount =
+                bundle.hierarchy.directReportsCount !== undefined &&
+                bundle.hierarchy.directReportsCount !== null
+                  ? bundle.hierarchy.directReportsCount
+                  : bundle.hierarchy.DirectReportsCount || 0;
+            } else {
+              bootContext.directReportsCount = 0;
+            }
+            window.__lioOrgBootContext = bootContext;
+            const allApiNodes = getChartApiNodes(payload);
+            let apiNodes = allApiNodes;
+
+            if (bootContext.viewMode === "scoped" && bootContext.focusSlug) {
+              const slugSet = buildVisibleSlugSet(bootContext.focusSlug, bundle.hierarchy, allApiNodes);
+              apiNodes = filterApiNodesToVisible(allApiNodes, slugSet);
+              apiNodes = repairFilteredApiNodeManagers(apiNodes, allApiNodes);
+            }
+
+            const unassignedApi =
+              bootContext.viewMode === "full" ? getUnassignedNodes(payload) : [];
+
+            if (!apiNodes.length && !unassignedApi.length) {
+              if (countEl) countEl.textContent = "Nenhum colaborador no organograma. Execute o worker Graph.";
+              return;
+            }
+
+            const unassignedPeople = unassignedApi.map(buildUnassignedPerson);
+            const nodeIndexBySlug = {};
+            unassignedPeople.forEach(function (person) {
+              nodeIndexBySlug[person.slug] = person;
+            });
+
+            const nodes = buildNodesFromApi(apiNodes);
+            nodes.forEach(function (node) {
+              nodeIndexBySlug[node.slug] = node;
+            });
+
+            const unassignedSection = renderUnassignedSection(
+              unassignedPeople,
+              bootContext.focusSlug,
+              nodeIndexBySlug
+            );
+            initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection, bootContext, bootId);
+          })
+          .catch(function () {
+            if (bootId !== window.__lioOrgBootId) return;
+            if (countEl) countEl.textContent = "Não foi possível carregar o organograma.";
+          });
       }
 
       function setupOrgNodeMenu(nodeIndex) {
@@ -1620,6 +2132,9 @@
 
       setupLioTemplate();
 
+      setupOrgPeopleSearch();
+      setupOrgViewToggle();
+
       if (!window.LioApi || window.LioApi.useMock) {
         if (countEl) {
           countEl.textContent = "API indisponível — ative o backend e desabilite VITE_USE_MOCK.";
@@ -1627,37 +2142,5 @@
         return;
       }
 
-      window.LioApi.get("/people/org-chart")
-        .then(function (payload) {
-          if (orgBootId !== window.__lioOrgBootId) return;
-          const apiNodes = getChartApiNodes(payload);
-          const unassignedApi = getUnassignedNodes(payload || {});
-
-          if (!apiNodes.length && !unassignedApi.length) {
-            if (countEl) countEl.textContent = "Nenhum colaborador no organograma. Execute o worker Graph.";
-            return;
-          }
-
-          const unassignedPeople = unassignedApi.map(buildUnassignedPerson);
-          const nodeIndexBySlug = {};
-          unassignedPeople.forEach(function (person) {
-            nodeIndexBySlug[person.slug] = person;
-          });
-
-          const nodes = buildNodesFromApi(apiNodes);
-          nodes.forEach(function (node) {
-            nodeIndexBySlug[node.slug] = node;
-          });
-
-          const focusSlug = getFocusSlug();
-          const unassignedSection = renderUnassignedSection(
-            unassignedPeople,
-            focusSlug,
-            nodeIndexBySlug
-          );
-          initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection);
-        })
-        .catch(function () {
-          if (countEl) countEl.textContent = "Não foi possível carregar o organograma.";
-        });
+      bootOrganogram();
     })();
