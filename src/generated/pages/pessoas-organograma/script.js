@@ -1,18 +1,17 @@
 (function () {
+      const orgBootId = (window.__lioOrgBootId = (window.__lioOrgBootId || 0) + 1);
       OrgProfileModal.init();
-      const avatars = [
-        "avatar-maria-silva.png",
-        "avatar-carlos-mendes.png",
-        "avatar-julia-santos.png",
-        "avatar-rh.png",
-        "avatar-marketing.png",
-        "avatar-ti.png",
-        "avatar-alejandro-lopez.png",
-        "avatar-nexora-news.png"
-      ];
+      const DEFAULT_ORG_FOCUS_SLUGS = ["julio", "julio-schwartzman"];
+      /** >1 aproxima o card; <1 mostra mais contexto ao redor do nó focado. */
+      const ORG_FOCUS_ZOOM = 0.65;
+      const ORG_FOCUS_TOP_PAD = 36;
+      const ORG_FOCUS_PAD_X = 180;
+      const ORG_FOCUS_PAD_Y = 160;
 
       const deptColors = {
         Executiva: { fill: "#f5f3ff", stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
+        Diretoria: { fill: "#f5f3ff", stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
+        Administrativo: { fill: "#f8fafc", stroke: "#94a3b8", badge: "#f1f5f9", text: "#475569" },
         Produto: { fill: "#eff6ff", stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
         "Recursos Humanos": { fill: "#fdf2f8", stroke: "#f9a8d4", badge: "#fce7f3", text: "#be185d" },
         Marketing: { fill: "#f0fdf4", stroke: "#86efac", badge: "#dcfce7", text: "#15803d" },
@@ -20,6 +19,39 @@
         Comercial: { fill: "#fff7ed", stroke: "#fdba74", badge: "#ffedd5", text: "#c2410c" },
         Financeiro: { fill: "#fffbeb", stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
       };
+
+      const deptPaletteAliases = {
+        diretoria: "Diretoria",
+        administrativo: "Administrativo",
+        financeiro: "Financeiro",
+        comercial: "Comercial",
+        marketing: "Marketing",
+        produto: "Produto",
+        ti: "TI",
+        tecnologia: "TI",
+        rh: "Recursos Humanos",
+        "recursos humanos": "Recursos Humanos",
+        executiva: "Executiva"
+      };
+
+      function resolveDeptPaletteKey(dept) {
+        const base = String(dept || "")
+          .split(" · ")[0]
+          .trim();
+        if (!base) return "Executiva";
+        if (deptColors[base]) return base;
+
+        const normalized = base.toLowerCase();
+        if (deptPaletteAliases[normalized]) return deptPaletteAliases[normalized];
+
+        for (const key of Object.keys(deptColors)) {
+          if (normalized.indexOf(key.toLowerCase()) >= 0) return key;
+        }
+        for (const alias of Object.keys(deptPaletteAliases)) {
+          if (normalized.indexOf(alias) >= 0) return deptPaletteAliases[alias];
+        }
+        return "Executiva";
+      }
 
       const ceo = {
         name: "Júlio Schwartzman",
@@ -90,21 +122,232 @@
         }
       ];
 
-      let avatarIndex = 0;
+      function resolvePhotoUrl(url) {
+        if (!url || !String(url).trim()) return "";
+        const trimmed = String(url).trim();
+        if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
+        return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+      }
 
-      function avatarUrl(file) {
-        if (!file) return file;
+      function renderOrgNodeAvatar(node, data) {
+        const colors = getDeptColors(data.dept);
+        const layout = getCardLayout(node, data);
+        const r = 26;
+        const clipId = "lioClip" + node.id;
+        const placeholderId = "lioAvatarPh" + node.id;
+        const photo = data.img ? String(data.img).trim() : "";
+
+        if (!photo) {
+          return renderOrgAvatarPlaceholder(layout, colors, r, placeholderId, false);
+        }
+
+        const safePhoto = String(photo).replace(/"/g, "&quot;");
+        return (
+          renderOrgAvatarPlaceholder(layout, colors, r, placeholderId, true) +
+          '<clipPath id="' + clipId + '"><circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '"></circle></clipPath>' +
+          '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#' + clipId + ')" ' +
+          'xlink:href="' + safePhoto + '" href="' + safePhoto + '" x="' + (layout.cx - r) + '" y="' + layout.imgY + '" width="' + (r * 2) + '" height="' + (r * 2) + '" ' +
+          'onload="var p=document.getElementById(\'' + placeholderId + '\');if(p){p.setAttribute(\'visibility\',\'hidden\');}" ' +
+          'onerror="this.setAttribute(\'visibility\',\'hidden\');var p=document.getElementById(\'' + placeholderId + '\');if(p){p.removeAttribute(\'visibility\');}" />' +
+          '<circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '" fill="none" stroke="' + colors.stroke + '" stroke-width="2.5"></circle>'
+        );
+      }
+
+      function renderOrgAvatarPlaceholder(layout, colors, r, id, hidden) {
+        const size = r * 2;
+        const x = layout.cx - r;
+        const y = layout.imgY;
+        const visibility = hidden ? ' visibility="hidden"' : "";
+        return (
+          '<g id="' + id + '"' + visibility + ">" +
+          '<circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '" fill="' + colors.badge + '"></circle>' +
+          '<foreignObject x="' + x + '" y="' + y + '" width="' + size + '" height="' + size + '">' +
+          '<div xmlns="http://www.w3.org/1999/xhtml" class="lio-node-avatar-placeholder">' +
+          '<i class="fa-solid fa-user" aria-hidden="true"></i></div></foreignObject>' +
+          '<circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '" fill="none" stroke="' + colors.stroke + '" stroke-width="2.5"></circle>' +
+          "</g>"
+        );
+      }
+
+      function renderUnassignedAvatarMarkup(photoUrlValue) {
+        const src = resolvePhotoUrl(photoUrlValue);
+        if (!src) {
+          return (
+            '<span class="org-unassigned__avatar org-unassigned__avatar--placeholder" aria-hidden="true">' +
+            '<i class="fa-solid fa-user"></i></span>'
+          );
+        }
+        return (
+          '<img class="org-unassigned__avatar" src="' +
+          escapeAttr(src) +
+          '" alt="" loading="lazy" data-org-avatar-img />'
+        );
+      }
+
+      function bindUnassignedAvatarFallbacks(root) {
+        if (!root) return;
+        root.querySelectorAll("img[data-org-avatar-img]").forEach(function (img) {
+          if (img.dataset.fallbackBound === "1") return;
+          img.dataset.fallbackBound = "1";
+          img.addEventListener("error", function () {
+            const placeholder = document.createElement("span");
+            placeholder.className = "org-unassigned__avatar org-unassigned__avatar--placeholder";
+            placeholder.setAttribute("aria-hidden", "true");
+            placeholder.innerHTML = '<i class="fa-solid fa-user"></i>';
+            img.replaceWith(placeholder);
+          });
+        });
+      }
+
+      function localAvatarUrl(file) {
+        if (!file) return "";
         return file.startsWith("/") ? file : "/" + file;
       }
 
-      function nextAvatar() {
-        const avatar = avatars[avatarIndex % avatars.length];
-        avatarIndex += 1;
-        return avatarUrl(avatar);
+      function getDeptColors(dept) {
+        return deptColors[resolveDeptPaletteKey(dept)] || deptColors.Executiva;
       }
 
-      function getDeptColors(dept) {
-        return deptColors[dept] || deptColors.Executiva;
+      const ORG_CARD_WIDTH = 268;
+      const ORG_CARD_HEIGHT = 184;
+      const ORG_CARD_TEXT_PAD = 24;
+
+      function orgTextWidth(node) {
+        return Math.max(120, node.w - ORG_CARD_TEXT_PAD);
+      }
+
+      function escapeXmlText(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      var orgTextMeasureCanvas;
+
+      function measureOrgText(text, fontSize, fontWeight) {
+        if (!orgTextMeasureCanvas) {
+          orgTextMeasureCanvas = document.createElement("canvas");
+        }
+        const ctx = orgTextMeasureCanvas.getContext("2d");
+        ctx.font = (fontWeight || 400) + " " + fontSize + "px system-ui, -apple-system, sans-serif";
+        return ctx.measureText(text).width;
+      }
+
+      function truncateOrgTextWithEllipsis(text, maxWidth, fontSize, fontWeight) {
+        const src = String(text || "");
+        if (!src) return "";
+        if (measureOrgText(src, fontSize, fontWeight) <= maxWidth) return src;
+        const ellipsis = "…";
+        let out = src;
+        while (out.length > 1 && measureOrgText(out + ellipsis, fontSize, fontWeight) > maxWidth) {
+          out = out.slice(0, -1);
+        }
+        return out + ellipsis;
+      }
+
+      function wrapOrgTextLines(text, maxWidth, maxLines, fontSize, fontWeight) {
+        const words = String(text || "").trim().split(/\s+/).filter(Boolean);
+        if (!words.length) return [];
+
+        const lines = [];
+        let line = "";
+
+        for (let wi = 0; wi < words.length; wi++) {
+          const word = words[wi];
+          const candidate = line ? line + " " + word : word;
+
+          if (measureOrgText(candidate, fontSize, fontWeight) <= maxWidth) {
+            line = candidate;
+            continue;
+          }
+
+          if (line) {
+            lines.push(line);
+            line = word;
+            if (lines.length >= maxLines) {
+              let rest = word;
+              for (let j = wi + 1; j < words.length; j++) rest += " " + words[j];
+              lines[maxLines - 1] = truncateOrgTextWithEllipsis(
+                lines[maxLines - 1] + " " + rest,
+                maxWidth,
+                fontSize,
+                fontWeight
+              );
+              return lines.slice(0, maxLines);
+            }
+          } else {
+            lines.push(truncateOrgTextWithEllipsis(word, maxWidth, fontSize, fontWeight));
+            line = "";
+            if (lines.length >= maxLines) return lines.slice(0, maxLines);
+          }
+        }
+
+        if (line) {
+          if (lines.length < maxLines) {
+            lines.push(line);
+          } else {
+            lines[maxLines - 1] = truncateOrgTextWithEllipsis(
+              lines[maxLines - 1] + " " + line,
+              maxWidth,
+              fontSize,
+              fontWeight
+            );
+          }
+        }
+
+        return lines.slice(0, maxLines);
+      }
+
+      function renderOrgSvgText(value, opts) {
+        const text = String(value || "");
+        if (!text) return "";
+
+        const fontSize = opts.fontSize || 13;
+        const fontWeight = opts.fontWeight || 400;
+        const maxWidth = opts.maxWidth || 200;
+        const maxLines = opts.maxLines || 1;
+        const x = opts.x;
+        const y = opts.y;
+        const fill = opts.fill || "#4a5568";
+        const lineHeight = opts.lineHeight || Math.ceil(fontSize * 1.2);
+        const styleParts = ["font-size:" + fontSize + "px"];
+        if (fontWeight) styleParts.push("font-weight:" + fontWeight);
+        const strokeBits = opts.stroke
+          ? ' stroke="' + opts.stroke + '" stroke-width="' + (opts.strokeWidth || 2.5) +
+            '" paint-order="stroke fill" stroke-linejoin="round"'
+          : "";
+        const baseTemplate =
+          '<text style="' + styleParts.join(";") + ';" fill="' + fill + '"' + strokeBits +
+          ' x="' + x + '" y="' + y + '" text-anchor="middle"></text>';
+
+        if (typeof OrgChart !== "undefined" && typeof OrgChart.wrapText === "function") {
+          try {
+            const wrapped = OrgChart.wrapText(text, baseTemplate, maxWidth, maxLines);
+            if (wrapped) return wrapped;
+          } catch (e) {}
+        }
+
+        const lines = maxLines === 1
+          ? [truncateOrgTextWithEllipsis(text, maxWidth, fontSize, fontWeight)]
+          : wrapOrgTextLines(text, maxWidth, maxLines, fontSize, fontWeight);
+        if (!lines.length) return "";
+
+        let svg = baseTemplate.replace(/<\/text>$/, ">");
+        lines.forEach(function (line, index) {
+          svg += '<tspan x="' + x + '" dy="' + (index === 0 ? 0 : lineHeight) + '">' +
+            escapeXmlText(line) + "</tspan>";
+        });
+        svg += "</text>";
+        return svg;
+      }
+
+      function isJulioSchwartzmanNode(data) {
+        const slug = normalizeSlugKey(data && data.slug);
+        if (slug === "julio" || slug === "julio-schwartzman") return true;
+        const name = String((data && data.name) || "").toUpperCase();
+        return name.indexOf("JULIO") >= 0 && name.indexOf("SCHWARTZMAN") >= 0;
       }
 
       function buildOrgChartNodes(ceoData, branchList, avatarFn) {
@@ -117,7 +360,7 @@
           slug: OrgProfileModal.slugifyName(ceoData.name),
           name: ceoData.name,
           title: ceoData.role,
-          img: avatarUrl(ceoData.avatar),
+          img: localAvatarUrl(ceoData.avatar),
           dept: "Executiva",
           tags: ["ceo"],
           profile: OrgProfileModal.buildProfileExtras(ceoData.name, "Executiva")
@@ -131,7 +374,7 @@
             pid: ceoId,
             name: branch.director.name,
             title: branch.director.role,
-            img: avatarUrl(branch.director.avatar),
+            img: localAvatarUrl(branch.director.avatar),
             dept: branch.dept,
             tags: ["director"],
             profile: OrgProfileModal.buildProfileExtras(branch.director.name, branch.dept)
@@ -144,7 +387,7 @@
               pid: directorId,
               name: member.name,
               title: member.role,
-              img: avatarUrl(member.avatar || avatarFn()),
+              img: localAvatarUrl(member.avatar || avatarFn()),
               dept: branch.dept,
               tags: ["member"],
               profile: OrgProfileModal.buildProfileExtras(member.name, branch.dept)
@@ -155,8 +398,9 @@
         return nodes;
       }
 
-      function getCardLayout(node) {
-        const contentH = 108;
+      function getCardLayout(node, data) {
+        const isJulio = isJulioSchwartzmanNode(data);
+        const contentH = isJulio ? 88 : 116;
         const top = Math.max(8, Math.round((node.h - contentH) / 2));
         const cx = node.w / 2;
         return {
@@ -164,16 +408,35 @@
           cx: cx,
           imgY: top,
           imgCy: top + 26,
-          nameY: top + 62,
-          titleY: top + 78,
-          badgeY: top + 88,
-          badgeTextY: top + 103
+          nameY: top + (isJulio ? 58 : 60),
+          titleY: top + (isJulio ? 76 : 76),
+          badgeY: top + 92,
+          badgeTextY: top + 107
+        };
+      }
+
+      function patchOrgChartCommunityStubs() {
+        if (!window.OrgChart || OrgChart.__lioCommunityPatched) return;
+        OrgChart.__lioCommunityPatched = true;
+        OrgChart._communityMessages = [];
+
+        if (OrgChart.exportUI && OrgChart.exportUI.prototype) {
+          OrgChart.exportUI.prototype.isVisible = function () {
+            return false;
+          };
+          OrgChart.exportUI.prototype.show = function () {};
+          OrgChart.exportUI.prototype.refresh = function () {};
+        }
+
+        OrgChart._communityAlert = function () {
+          OrgChart._communityMessages = [];
         };
       }
 
       function setupLioTemplate() {
+        patchOrgChartCommunityStubs();
         OrgChart.templates.lio = Object.assign({}, OrgChart.templates.ana);
-        OrgChart.templates.lio.size = [220, 168];
+        OrgChart.templates.lio.size = [ORG_CARD_WIDTH, ORG_CARD_HEIGHT];
         OrgChart.templates.lio.expandCollapseSize = 28;
 
         OrgChart.templates.lio.node = function (node, data) {
@@ -182,6 +445,7 @@
             '<rect x="0" y="0" height="' + node.h + '" width="' + node.w +
             '" fill="' + colors.fill + '" stroke-width="1.5" stroke="' + colors.stroke +
             '" rx="10" ry="10"></rect>' +
+            renderOrgNodeAvatar(node, data) +
             '<g class="lio-node-menu-btn" style="cursor:pointer;" transform="matrix(1,0,0,1,' + (node.w - 22) + ', 10)" data-lio-node-menu="' + node.id + '" aria-label="Ações">' +
             '<rect x="-4" y="-2" width="22" height="16" rx="6" fill="#ffffff" fill-opacity="0.9"></rect>' +
             '<circle cx="2" cy="6" r="1.7" fill="' + colors.text + '"></circle>' +
@@ -191,44 +455,59 @@
           );
         };
 
-        OrgChart.templates.lio.img_0 = function (node, data, template, config, value) {
-          const colors = getDeptColors(data.dept);
-          const layout = getCardLayout(node);
-          const r = 26;
-          const clipId = "lioClip" + node.id;
-          return (
-            '<clipPath id="' + clipId + '"><circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '"></circle></clipPath>' +
-            '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#' + clipId + ')" ' +
-            'xlink:href="' + value + '" x="' + (layout.cx - r) + '" y="' + layout.imgY + '" width="' + (r * 2) + '" height="' + (r * 2) + '"></image>' +
-            '<circle cx="' + layout.cx + '" cy="' + layout.imgCy + '" r="' + r + '" fill="none" stroke="' + colors.stroke + '" stroke-width="2.5"></circle>'
-          );
+        OrgChart.templates.lio.img_0 = function () {
+          return "";
         };
 
         OrgChart.templates.lio.field_0 = function (node, data, template, config, value) {
-          const layout = getCardLayout(node);
-          return (
-            '<text data-width="' + (node.w - 20) + '" data-text-overflow="multiline" ' +
-            'style="font-size:15px;font-weight:700;" fill="#1e293b" stroke="#ffffff" stroke-width="2.5" ' +
-            'paint-order="stroke fill" stroke-linejoin="round" x="' + layout.cx + '" y="' + layout.nameY + '" text-anchor="middle">' + value + '</text>'
-          );
+          const isJulio = isJulioSchwartzmanNode(data);
+          const layout = getCardLayout(node, data);
+          return renderOrgSvgText(value, {
+            x: layout.cx,
+            y: layout.nameY,
+            maxWidth: orgTextWidth(node),
+            maxLines: 2,
+            fontSize: isJulio ? 16 : 14,
+            fontWeight: 700,
+            fill: "#1e293b",
+            stroke: "#ffffff",
+            strokeWidth: 2.5
+          });
         };
 
         OrgChart.templates.lio.field_1 = function (node, data, template, config, value) {
-          const layout = getCardLayout(node);
-          return (
-            '<text data-width="' + (node.w - 20) + '" data-text-overflow="multiline" style="font-size:12px;" ' +
-            'fill="#4a5568" x="' + layout.cx + '" y="' + layout.titleY + '" text-anchor="middle">' + value + '</text>'
-          );
+          const isJulio = isJulioSchwartzmanNode(data);
+          const layout = getCardLayout(node, data);
+          return renderOrgSvgText(value, {
+            x: layout.cx,
+            y: layout.titleY,
+            maxWidth: orgTextWidth(node),
+            maxLines: 2,
+            fontSize: isJulio ? 15 : 13,
+            fill: "#4a5568"
+          });
         };
 
         OrgChart.templates.lio.field_2 = function (node, data, template, config, value) {
+          if (isJulioSchwartzmanNode(data)) return "";
           const colors = getDeptColors(data.dept);
-          const layout = getCardLayout(node);
-          const badgeW = Math.min(node.w - 16, Math.max(104, String(value).length * 8 + 28));
+          const layout = getCardLayout(node, data);
+          const deptFontSize = 11;
+          const measured = measureOrgText(String(value || ""), deptFontSize, 700) + 16;
+          const badgeW = Math.min(node.w - 16, Math.max(104, measured));
           const badgeX = (node.w - badgeW) / 2;
+          const textW = Math.max(72, badgeW - 16);
           return (
             '<rect x="' + badgeX + '" y="' + layout.badgeY + '" width="' + badgeW + '" height="22" rx="11" ry="11" fill="' + colors.badge + '"></rect>' +
-            '<text style="font-size:12px;font-weight:700;" fill="' + colors.text + '" x="' + layout.cx + '" y="' + layout.badgeTextY + '" text-anchor="middle">' + value + '</text>'
+            renderOrgSvgText(value, {
+              x: layout.cx,
+              y: layout.badgeTextY,
+              maxWidth: textW,
+              maxLines: 1,
+              fontSize: deptFontSize,
+              fontWeight: 700,
+              fill: colors.text
+            })
           );
         };
 
@@ -283,9 +562,483 @@
           return;
         }
 
+        if (action === "solicitar-posicao") {
+          closeOrgNodeMenu();
+          const chart = window.__lioOrgChart;
+          const layoutNode = chart && chart.getNode ? chart.getNode(nodeId) : null;
+          openOrgPositionRequestModal({
+            level: layoutNode && typeof layoutNode.level === "number" ? layoutNode.level : 0,
+            side: "card",
+            anchorNodeId: nodeId,
+            person: person,
+            nodeIndex: nodeIndex
+          });
+          return;
+        }
+
         if (action === "promover") {
           showOrgAction("Promover " + person.name + " — fluxo em breve para gestores e RH.");
         }
+      }
+
+      function getChartRootIds(chart) {
+        if (chart.config.roots && chart.config.roots.length) {
+          return chart.config.roots.slice();
+        }
+        const nodes = chart.config.nodes || [];
+        const idSet = new Set(nodes.map(function (n) {
+          return n.id;
+        }));
+        return nodes
+          .filter(function (n) {
+            return !n.pid || !idSet.has(n.pid);
+          })
+          .map(function (n) {
+            return n.id;
+          });
+      }
+
+      function getVisibleLevelBounds(chart) {
+        const byLevel = {};
+        const visibleIds = Array.isArray(chart.visibleNodeIds) ? chart.visibleNodeIds : [];
+
+        function addNode(node) {
+          if (!node) return;
+          const level = typeof node.level === "number" ? node.level : 0;
+          if (!byLevel[level]) {
+            byLevel[level] = {
+              minX: Infinity,
+              maxX: -Infinity,
+              minY: Infinity,
+              maxY: -Infinity,
+              centerY: 0,
+              count: 0,
+              nodes: []
+            };
+          }
+          const row = byLevel[level];
+          row.minX = Math.min(row.minX, node.x);
+          row.maxX = Math.max(row.maxX, node.x + node.w);
+          row.minY = Math.min(row.minY, node.y);
+          row.maxY = Math.max(row.maxY, node.y + node.h);
+          row.centerY += node.y + node.h / 2;
+          row.count += 1;
+          row.nodes.push(node);
+        }
+
+        if (visibleIds.length) {
+          visibleIds.forEach(function (nodeId) {
+            addNode(chart.getNode(nodeId));
+          });
+        } else {
+          function visit(nodeId) {
+            const node = chart.getNode(nodeId);
+            if (!node) return;
+            addNode(node);
+            if (node.collapsed) return;
+            (node.childrenIds || []).forEach(visit);
+          }
+          getChartRootIds(chart).forEach(visit);
+        }
+
+        Object.keys(byLevel).forEach(function (key) {
+          const row = byLevel[key];
+          row.centerY = row.centerY / row.count;
+          row.connectorY = resolveLevelConnectorY(row);
+        });
+
+        return byLevel;
+      }
+
+      function resolveLevelConnectorY(row) {
+        if (!row || !row.nodes.length) return 0;
+        const sample = row.nodes[0];
+        if (typeof sample.py === "number" && sample.py > 0 && sample.py < sample.y) {
+          return sample.py;
+        }
+        return row.minY - 36;
+      }
+
+      function getMinVisibleLevel(bounds) {
+        const levels = Object.keys(bounds).map(Number);
+        if (!levels.length) return 0;
+        return Math.min.apply(null, levels);
+      }
+
+      function getOrgNodeElement(chart, nodeId) {
+        if (!chart || typeof chart.getNodeElement !== "function") return null;
+        return (
+          chart.getNodeElement(nodeId) ||
+          chart.getNodeElement(String(nodeId)) ||
+          chart.getNodeElement(Number(nodeId))
+        );
+      }
+
+      function rectsOverlap(a, b) {
+        return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      }
+
+      function getViewportVisibleRowNodes(chart, container, row) {
+        const treeRect = container.getBoundingClientRect();
+        return row.nodes.filter(function (node) {
+          const el = getOrgNodeElement(chart, node.id);
+          if (!el) return false;
+          const rect = el.getBoundingClientRect();
+          return rectsOverlap(rect, treeRect) && rect.width > 6 && rect.height > 6;
+        });
+      }
+
+      function getRowExtremeNodes(row) {
+        let leftNode = row.nodes[0];
+        let rightNode = row.nodes[0];
+        row.nodes.forEach(function (node) {
+          if (node.x < leftNode.x) leftNode = node;
+          if (node.x + node.w > rightNode.x + rightNode.w) rightNode = node;
+        });
+        return { leftNode: leftNode, rightNode: rightNode };
+      }
+
+      function getNodeScreenRect(chart, node) {
+        const el = getOrgNodeElement(chart, node.id);
+        return el ? el.getBoundingClientRect() : null;
+      }
+
+      function isNodeVisibleInTree(rect, treeRect) {
+        if (!rect || rect.width < 6 || rect.height < 6) return false;
+        return rectsOverlap(rect, treeRect);
+      }
+
+      function isExtremeCardVisibleForSide(rect, treeRect, side) {
+        if (!isNodeVisibleInTree(rect, treeRect)) return false;
+        const edgeMargin = 3;
+        if (side === "left") {
+          return rect.left >= treeRect.left + edgeMargin;
+        }
+        return rect.right <= treeRect.right - edgeMargin;
+      }
+
+      function canPlaceLeftLevelButton(rect, treeRect, btnSize, gap) {
+        if (!isExtremeCardVisibleForSide(rect, treeRect, "left")) return false;
+        return rect.left - treeRect.left - btnSize - gap >= 4;
+      }
+
+      function canPlaceRightLevelButton(rect, treeRect, btnSize, gap) {
+        if (!isExtremeCardVisibleForSide(rect, treeRect, "right")) return false;
+        return rect.right - treeRect.left + gap + btnSize <= treeRect.width - 4;
+      }
+
+      function getOrgChartScale(chart) {
+        if (!chart || typeof chart.getScale !== "function") return 1;
+        const scale = chart.getScale();
+        return typeof scale === "number" && scale > 0 ? scale : 1;
+      }
+
+      function buildLevelAddBtnHtml(left, top, size, level, side, anchorId) {
+        return (
+          '<button type="button" class="lio-level-add-btn" data-org-level="' + level +
+          '" data-org-level-side="' + side + '" data-org-level-anchor="' + anchorId +
+          '" style="left:' + Math.round(left) + "px;top:" + Math.round(top) +
+          "px;width:" + Math.round(size) + "px;height:" + Math.round(size) + 'px"' +
+          ' title="Adicionar posição neste nível" aria-label="Adicionar posição neste nível">' +
+          '<span class="lio-level-add-btn__icon" aria-hidden="true" style="font-size:' +
+          Math.round(size * 0.5) + 'px">+</span></button>'
+        );
+      }
+
+      function ensureLevelActionsOverlay(container) {
+        let overlay = container.querySelector("#lio-org-level-actions-overlay");
+        if (!overlay) {
+          overlay = document.createElement("div");
+          overlay.id = "lio-org-level-actions-overlay";
+          overlay.className = "lio-org-level-actions-overlay";
+          container.appendChild(overlay);
+        }
+        const legacySvgLayer = container.querySelector("#lio-org-level-actions");
+        if (legacySvgLayer) legacySvgLayer.remove();
+        return overlay;
+      }
+
+      function collectLevelButtonDebug(chart, container) {
+        const bounds = getVisibleLevelBounds(chart);
+        const minLevel = getMinVisibleLevel(bounds);
+        const rows = [];
+
+        Object.keys(bounds)
+          .sort(function (a, b) {
+            return Number(a) - Number(b);
+          })
+          .forEach(function (levelKey) {
+            const level = Number(levelKey);
+            const row = bounds[levelKey];
+            if (!row || !row.count) return;
+            rows.push({
+              level: level,
+              skipped: level <= minLevel,
+              count: row.count,
+              viewportNodes: getViewportVisibleRowNodes(chart, container, row).length
+            });
+          });
+
+        const buttons = container.querySelectorAll("#lio-org-level-actions-overlay .lio-level-add-btn");
+        return {
+          minLevel: minLevel,
+          rows: rows,
+          buttonCount: buttons.length,
+          chartScale: getOrgChartScale(chart),
+          visibleNodeIds: Array.isArray(chart.visibleNodeIds) ? chart.visibleNodeIds.length : 0
+        };
+      }
+
+      function renderOrgLevelAddButtons(chart, container) {
+        const overlay = ensureLevelActionsOverlay(container);
+        if (!overlay || !chart) return;
+
+        const bounds = getVisibleLevelBounds(chart);
+        const minLevel = getMinVisibleLevel(bounds);
+        const treeRect = container.getBoundingClientRect();
+        const chartScale = getOrgChartScale(chart);
+        const btnSize = Math.max(28, Math.min(56, Math.round(52 * chartScale)));
+        const gap = Math.max(6, Math.round(10 * chartScale));
+        const parts = [];
+
+        Object.keys(bounds)
+          .sort(function (a, b) {
+            return Number(a) - Number(b);
+          })
+          .forEach(function (levelKey) {
+            const row = bounds[levelKey];
+            if (!row || !row.count) return;
+            const level = Number(levelKey);
+            if (level <= minLevel) return;
+
+            const viewportNodes = getViewportVisibleRowNodes(chart, container, row);
+            if (!viewportNodes.length) return;
+
+            const extremes = getRowExtremeNodes(row);
+            const leftRect = getNodeScreenRect(chart, extremes.leftNode);
+            const rightRect = getNodeScreenRect(chart, extremes.rightNode);
+            const showLeft = canPlaceLeftLevelButton(leftRect, treeRect, btnSize, gap);
+            const showRight = canPlaceRightLevelButton(rightRect, treeRect, btnSize, gap);
+            if (!showLeft && !showRight) return;
+
+            let rowTop = Infinity;
+            let rowBottom = -Infinity;
+
+            viewportNodes.forEach(function (node) {
+              const rect = getOrgNodeElement(chart, node.id).getBoundingClientRect();
+              rowTop = Math.min(rowTop, rect.top);
+              rowBottom = Math.max(rowBottom, rect.bottom);
+            });
+
+            const anchorId = viewportNodes[0].id;
+            const rowCenterY = (rowTop + rowBottom) / 2;
+            const top = Math.max(4, Math.min(treeRect.height - btnSize - 4, rowCenterY - treeRect.top - btnSize / 2));
+
+            if (showLeft && leftRect) {
+              const leftX = leftRect.left - treeRect.left - btnSize - gap;
+              parts.push(buildLevelAddBtnHtml(leftX, top, btnSize, level, "left", anchorId));
+            }
+
+            if (showRight && rightRect) {
+              const rightX = rightRect.right - treeRect.left + gap;
+              parts.push(buildLevelAddBtnHtml(rightX, top, btnSize, level, "right", anchorId));
+            }
+          });
+
+        overlay.innerHTML = parts.join("");
+        window.__lioOrgLevelButtonsDebug = function () {
+          return collectLevelButtonDebug(chart, container);
+        };
+      }
+
+      function resolveLevelManagerLabel(chart, nodeIndex, row) {
+        if (!row || !row.nodes.length) return "A definir pelo RH";
+        const first = row.nodes[0];
+        const person = nodeIndex[first.id];
+        if (!person || !person.pid) return "A definir pelo RH";
+        const manager = nodeIndex[person.pid] || nodeIndex[String(person.pid)] || nodeIndex[Number(person.pid)];
+        if (!manager) return "A definir pelo RH";
+        return manager.name + " · " + (manager.title || "Gestor");
+      }
+
+      let orgPositionRequestContext = null;
+      let orgPositionModalBodyOverflow = "";
+
+      function ensurePositionRequestModalOnBody() {
+        const modal = document.getElementById("org-position-request-modal");
+        if (!modal) return null;
+        if (modal.parentNode !== document.body) {
+          document.body.appendChild(modal);
+        }
+        return modal;
+      }
+
+      function lockBodyForPositionModal() {
+        orgPositionModalBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+      }
+
+      function unlockBodyForPositionModal() {
+        document.body.style.overflow = orgPositionModalBodyOverflow;
+      }
+
+      function closeOrgPositionRequestModal() {
+        const modal = document.getElementById("org-position-request-modal");
+        if (modal) modal.hidden = true;
+        unlockBodyForPositionModal();
+        orgPositionRequestContext = null;
+      }
+
+      function openOrgPositionRequestModal(context) {
+        const modal = ensurePositionRequestModalOnBody();
+        const titleInput = document.getElementById("org-position-request-job-title");
+        const deptInput = document.getElementById("org-position-request-dept");
+        const managerInput = document.getElementById("org-position-request-manager");
+        const notesInput = document.getElementById("org-position-request-notes");
+        if (!modal || !titleInput || !deptInput || !managerInput || !notesInput) return;
+
+        const chart = window.__lioOrgChart;
+        const row = chart ? getVisibleLevelBounds(chart)[context.level] : null;
+        let managerLabel = "A definir pelo RH";
+        let deptHint = "";
+
+        if (context.person && context.side === "card") {
+          const person = context.person;
+          if (person.pid && context.nodeIndex) {
+            const manager =
+              context.nodeIndex[person.pid] ||
+              context.nodeIndex[String(person.pid)] ||
+              context.nodeIndex[Number(person.pid)];
+            if (manager) {
+              managerLabel = manager.name + " · " + (manager.title || "Gestor");
+            }
+          }
+          deptHint = String(person.dept || "").split(" · ")[0];
+        } else if (row && context.nodeIndex) {
+          managerLabel = resolveLevelManagerLabel(chart, context.nodeIndex, row);
+          const sample = context.nodeIndex[row.nodes[0].id];
+          deptHint = sample ? String(sample.dept || "").split(" · ")[0] : "";
+        }
+
+        orgPositionRequestContext = context;
+        titleInput.value = "";
+        deptInput.value = deptHint;
+        managerInput.value = managerLabel;
+        notesInput.value = "";
+        modal.hidden = false;
+        lockBodyForPositionModal();
+        titleInput.focus();
+      }
+
+      function setupOrgPositionRequestModal() {
+        const modal = ensurePositionRequestModalOnBody();
+        const form = document.getElementById("org-position-request-form");
+        if (!modal || !form || modal.dataset.bound === "1") return;
+        modal.dataset.bound = "1";
+
+        modal.querySelectorAll("[data-close-position-request]").forEach(function (el) {
+          el.addEventListener("click", closeOrgPositionRequestModal);
+        });
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const title = document.getElementById("org-position-request-job-title");
+          const jobTitle = title ? String(title.value || "").trim() : "";
+          if (!jobTitle) return;
+          closeOrgPositionRequestModal();
+          showOrgAction(
+            "Solicitação de nova posição (“" +
+              jobTitle +
+              "”) registrada — fluxo de aprovação com RH em breve."
+          );
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeOrgPositionRequestModal();
+          }
+        });
+      }
+
+      function bindOrgLevelButtonViewportSync(chart, container, refresh) {
+        let syncRaf = 0;
+
+        function scheduleViewportSync() {
+          if (syncRaf) return;
+          syncRaf = requestAnimationFrame(function () {
+            syncRaf = 0;
+            refresh();
+          });
+        }
+
+        const content = container.querySelector("[data-boc-content]");
+        if (content) {
+          content.addEventListener("wheel", scheduleViewportSync, { passive: true });
+          content.addEventListener("pointerdown", scheduleViewportSync, { passive: true });
+          content.addEventListener("pointermove", scheduleViewportSync, { passive: true });
+          content.addEventListener("pointerup", scheduleViewportSync, { passive: true });
+        }
+
+        const chartGroup = container.querySelector("[data-boc-content] svg > g");
+        if (chartGroup && typeof MutationObserver !== "undefined") {
+          const observer = new MutationObserver(scheduleViewportSync);
+          observer.observe(chartGroup, { attributes: true, attributeFilter: ["transform"] });
+        }
+
+        window.addEventListener("resize", scheduleViewportSync, { passive: true });
+      }
+
+      function scheduleOrgLevelButtonRefresh() {
+        if (typeof window.__lioRefreshOrgLevelButtons !== "function") return;
+        [0, 120, 400, 900].forEach(function (delay) {
+          setTimeout(window.__lioRefreshOrgLevelButtons, delay);
+        });
+      }
+
+      function setupOrgLevelAddButtons(chart, nodeIndex) {
+        let refreshLevelButtonsTimer;
+
+        function renderLevelButtonsNow() {
+          if (orgBootId !== window.__lioOrgBootId) return;
+          renderOrgLevelAddButtons(chart, treeEl);
+        }
+
+        function refreshLevelButtonsDebounced() {
+          clearTimeout(refreshLevelButtonsTimer);
+          refreshLevelButtonsTimer = setTimeout(renderLevelButtonsNow, 16);
+        }
+
+        window.__lioRefreshOrgLevelButtons = renderLevelButtonsNow;
+
+        if (typeof chart.onRedraw === "function") {
+          chart.onRedraw(refreshLevelButtonsDebounced);
+        }
+        if (typeof chart.onExpandCollapseButtonClick === "function") {
+          chart.onExpandCollapseButtonClick(function () {
+            refreshLevelButtonsDebounced();
+          });
+        }
+        if (typeof chart.onInit === "function") {
+          chart.onInit(refreshLevelButtonsDebounced);
+        }
+
+        bindOrgLevelButtonViewportSync(chart, treeEl, renderLevelButtonsNow);
+
+        treeEl.addEventListener("click", function (event) {
+          const target = event.target.closest(".lio-level-add-btn");
+          if (!target) return;
+          event.stopPropagation();
+          event.preventDefault();
+          const level = Number(target.getAttribute("data-org-level") || "0");
+          const side = target.getAttribute("data-org-level-side") || "left";
+          const anchorNodeId = Number(target.getAttribute("data-org-level-anchor") || "0");
+          openOrgPositionRequestModal({
+            level: level,
+            side: side,
+            anchorNodeId: anchorNodeId,
+            nodeIndex: nodeIndex
+          });
+        });
       }
 
       function closeOrgNodeMenu() {
@@ -323,10 +1076,72 @@
         return null;
       }
 
+      function getOrgChartPanelSize(container) {
+        const panel = container.querySelector("[data-boc-content]") || container;
+        return {
+          width: panel.clientWidth || container.clientWidth || 960,
+          height: panel.clientHeight || container.clientHeight || 560
+        };
+      }
+
+      function applyFocusViewport(chart, nodeId, container) {
+        const node = chart.getNode(nodeId);
+        if (!node || typeof chart.setViewBox !== "function") return false;
+
+        chart.config.scaleInitial = OrgChart.match.none;
+
+        const viewW = (node.w + ORG_FOCUS_PAD_X * 2) / ORG_FOCUS_ZOOM;
+        const viewH = (node.h + ORG_FOCUS_PAD_Y * 2 + 100) / ORG_FOCUS_ZOOM;
+
+        chart.setViewBox([
+          node.x + node.w / 2 - viewW / 2,
+          node.y - ORG_FOCUS_TOP_PAD / ORG_FOCUS_ZOOM,
+          viewW,
+          viewH
+        ]);
+        return true;
+      }
+
+      function withFocusGuard(chart, fn) {
+        window.__lioOrgFocusing = true;
+        const originalFit = chart.fit;
+        chart.fit = function () {
+          return chart;
+        };
+        try {
+          fn();
+        } finally {
+          chart.fit = originalFit;
+          window.__lioOrgFocusing = false;
+        }
+      }
+
+      function scheduleFocusViewport(chart, nodeId, container, onDone) {
+        const delays = [0, 80, 200, 450, 800];
+
+        delays.forEach(function (delay) {
+          setTimeout(function () {
+            withFocusGuard(chart, function () {
+              applyFocusViewport(chart, nodeId, container);
+            });
+          }, delay);
+        });
+
+        setTimeout(function () {
+          withFocusGuard(chart, function () {
+            applyFocusViewport(chart, nodeId, container);
+          });
+          if (typeof window.__lioRefreshOrgLevelButtons === "function") {
+            window.__lioRefreshOrgLevelButtons();
+          }
+          if (onDone) onDone();
+        }, delays[delays.length - 1] + 100);
+      }
+
       function pinOrgChartToTop(container, topPadding) {
         const content = container.querySelector("[data-boc-content]");
         const chartGroup = content?.querySelector("svg > g");
-        if (!chartGroup) return;
+        if (!chartGroup || !content) return;
 
         const transform = chartGroup.getAttribute("transform") || "";
         const match = transform.match(/matrix\(([^)]+)\)/);
@@ -336,12 +1151,255 @@
         if (parts.length < 6) return;
 
         const box = chartGroup.getBBox();
+        const scale = parts[0] || 1;
+        const sidePadding = 24;
+        const contentWidth = content.clientWidth || container.clientWidth || 0;
+        parts[4] = sidePadding + Math.max(0, contentWidth / scale - box.width) / 2 - box.x;
         parts[5] = topPadding - box.y;
         chartGroup.setAttribute("transform", "matrix(" + parts.join(",") + ")");
       }
 
+      function fitOrgChartInPanel(chart, container) {
+        if (chart && typeof chart.fit === "function") {
+          chart.fit();
+        }
+        requestAnimationFrame(function () {
+          pinOrgChartToTop(container, 24);
+          if (typeof window.__lioRefreshOrgLevelButtons === "function") {
+            window.__lioRefreshOrgLevelButtons();
+          }
+        });
+      }
+
+      function normalizeSlugKey(slug) {
+        return String(slug || "").trim().toLowerCase();
+      }
+
+      function slugTokens(slug) {
+        return normalizeSlugKey(slug).split(/[-_]+/).filter(Boolean);
+      }
+
+      function findChartNode(nodes, slug) {
+        if (!nodes || !nodes.length || !slug) return null;
+
+        const key = normalizeSlugKey(slug);
+        let found = nodes.find(function (node) {
+          return normalizeSlugKey(node.slug) === key;
+        });
+        if (found) return found;
+
+        const tokens = slugTokens(slug);
+        if (tokens.length) {
+          found = nodes.find(function (node) {
+            const name = normalizeSlugKey(node.name);
+            return tokens.every(function (token) {
+              return name.indexOf(token) >= 0;
+            });
+          });
+          if (found) return found;
+        }
+
+        for (var i = 0; i < DEFAULT_ORG_FOCUS_SLUGS.length; i++) {
+          const preferred = DEFAULT_ORG_FOCUS_SLUGS[i];
+          found = nodes.find(function (node) {
+            return normalizeSlugKey(node.slug) === preferred;
+          });
+          if (found) return found;
+        }
+
+        return null;
+      }
+
+      function findUnassignedPersonBySlug(unassignedPeople, slug) {
+        if (!unassignedPeople || !unassignedPeople.length || !slug) return null;
+        const key = normalizeSlugKey(slug);
+        return (
+          unassignedPeople.find(function (person) {
+            return normalizeSlugKey(person.slug) === key;
+          }) || null
+        );
+      }
+
+      function findUnassignedPerson(unassignedPeople, slug) {
+        const exact = findUnassignedPersonBySlug(unassignedPeople, slug);
+        if (exact) return exact;
+        if (!unassignedPeople || !unassignedPeople.length || !slug) return null;
+
+        const tokens = slugTokens(slug);
+        if (!tokens.length) return null;
+        return unassignedPeople.find(function (person) {
+          const name = normalizeSlugKey(person.name);
+          return tokens.every(function (token) {
+            return name.indexOf(token) >= 0;
+          });
+        });
+      }
+
+      function isChartFocusInUnassigned(nodes, unassignedPeople, focusSlug) {
+        if (!focusSlug) return false;
+        if (findChartNode(nodes, focusSlug)) return false;
+        return !!findUnassignedPersonBySlug(unassignedPeople, focusSlug);
+      }
+
       function getFocusSlug() {
         return new URLSearchParams(window.location.search).get("focus");
+      }
+
+      function resolveDefaultFocusSlug(nodes) {
+        const found = findChartNode(nodes, "julio");
+        return found ? found.slug : null;
+      }
+
+      function resolveChartFocusSlug(nodes, unassignedPeople) {
+        const fromQuery = getFocusSlug();
+        if (fromQuery) {
+          const chartNode = findChartNode(nodes, fromQuery);
+          if (chartNode) return chartNode.slug;
+          const unassigned = findUnassignedPerson(unassignedPeople, fromQuery);
+          if (unassigned) return unassigned.slug;
+          return fromQuery;
+        }
+        return resolveDefaultFocusSlug(nodes);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function escapeAttr(value) {
+        return escapeHtml(value).replace(/'/g, "&#39;");
+      }
+
+      function getUnassignedNodes(payload) {
+        const explicit = payload.unassignedNodes || payload.UnassignedNodes;
+        if (explicit) return explicit;
+        const nodes = payload.nodes || payload.Nodes || [];
+        return nodes.filter(function (node) {
+          const managerId = node.managerId !== undefined ? node.managerId : node.ManagerId;
+          return managerId == null;
+        });
+      }
+
+      function getChartApiNodes(payload) {
+        const apiNodes = payload && payload.nodes ? payload.nodes : [];
+        if (payload.unassignedNodes || payload.UnassignedNodes) {
+          return apiNodes;
+        }
+        return apiNodes.filter(function (node) {
+          const managerId = node.managerId !== undefined ? node.managerId : node.ManagerId;
+          return managerId != null;
+        });
+      }
+
+      function getUnassignedCount(payload) {
+        if (payload.unassignedCount !== undefined) return payload.unassignedCount;
+        if (payload.UnassignedCount !== undefined) return payload.UnassignedCount;
+        return getUnassignedNodes(payload).length;
+      }
+
+      function buildUnassignedPerson(apiNode) {
+        const dept = apiNode.departmentName || apiNode.DepartmentName || "Sem departamento";
+        const name = apiNode.name || apiNode.Name || "";
+        return {
+          slug: apiNode.slug || apiNode.Slug || "",
+          name: name,
+          title: apiNode.title || apiNode.Title || "Colaborador",
+          img: resolvePhotoUrl(apiNode.photoUrl || apiNode.PhotoUrl),
+          dept: dept,
+          profile: OrgProfileModal.buildProfileExtras(name, dept)
+        };
+      }
+
+      function renderUnassignedSection(unassignedPeople, focusSlug, nodeIndexBySlug) {
+        const section = document.getElementById("org-unassigned-section");
+        const tbody = document.getElementById("org-unassigned-body");
+        const desc = document.getElementById("org-unassigned-desc");
+        if (!section || !tbody) return null;
+
+        if (!unassignedPeople.length) {
+          section.hidden = true;
+          tbody.innerHTML = "";
+          return null;
+        }
+
+        section.hidden = false;
+        if (desc) {
+          desc.textContent =
+            unassignedPeople.length +
+            (unassignedPeople.length === 1
+              ? " colaborador sem gestor definido no diretório Graph."
+              : " colaboradores sem gestor definido no diretório Graph.") +
+            " Eles não aparecem no organograma acima.";
+        }
+
+        tbody.innerHTML = unassignedPeople
+          .slice()
+          .sort(function (a, b) {
+            return a.name.localeCompare(b.name, "pt-BR");
+          })
+          .map(function (person) {
+            const profileHref = "/pessoas/perfil?id=" + encodeURIComponent(person.slug);
+            const focused =
+              focusSlug && normalizeSlugKey(person.slug) === normalizeSlugKey(focusSlug)
+                ? " is-focused"
+                : "";
+            return (
+              '<tr class="org-unassigned__row' +
+              focused +
+              '" data-unassigned-slug="' +
+              escapeAttr(person.slug) +
+              '">' +
+              '<td><div class="org-unassigned__person">' +
+              renderUnassignedAvatarMarkup(person.img) +
+              '<span class="org-unassigned__name">' +
+              escapeHtml(person.name) +
+              "</span></div></td>" +
+              "<td>" +
+              escapeHtml(person.title) +
+              "</td>" +
+              '<td><span class="org-unassigned__dept">' +
+              escapeHtml(person.dept) +
+              "</span></td>" +
+              '<td><div class="org-unassigned__actions">' +
+              '<button type="button" class="org-unassigned__btn" data-unassigned-profile="' +
+              escapeAttr(person.slug) +
+              '">Ver perfil</button>' +
+              '<a class="org-unassigned__btn" href="' +
+              escapeAttr(profileHref) +
+              '" aria-label="Abrir perfil completo de ' +
+              escapeAttr(person.name) +
+              '"><i class="fa-regular fa-user" aria-hidden="true"></i></a>' +
+              "</div></td></tr>"
+            );
+          })
+          .join("");
+
+        tbody.querySelectorAll("[data-unassigned-profile]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const slug = btn.getAttribute("data-unassigned-profile");
+            const person = nodeIndexBySlug[slug];
+            if (!person) return;
+            OrgProfileModal.open(person, nodeIndexBySlug, function (p) {
+              showOrgAction("Mensagem para " + p.name + " — chat interno em breve.");
+            });
+          });
+        });
+
+        bindUnassignedAvatarFallbacks(tbody);
+
+        return section;
+      }
+
+      function focusUnassignedRow(slug, section) {
+        if (!slug || !section) return;
+        const row = section.querySelector('[data-unassigned-slug="' + CSS.escape(slug) + '"]');
+        if (!row) return;
+        row.classList.add("is-focused");
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
       }
 
       function buildNodesFromApi(apiNodes) {
@@ -353,33 +1411,90 @@
 
         return apiNodes.map(function (node) {
           const dept = node.departmentName || "Sem departamento";
+          const isOrphan = node.isOrphan === true || node.IsOrphan === true;
+          const managerNumeric =
+            !isOrphan && node.managerId && guidToNumeric[node.managerId]
+              ? guidToNumeric[node.managerId]
+              : undefined;
+          const deptLabel = isOrphan ? dept + " · Gestor ext." : dept;
           return {
             id: guidToNumeric[node.id],
             slug: node.slug,
             name: node.name,
             title: node.title || "Colaborador",
-            img: avatarUrl(node.photoUrl) || nextAvatar(),
-            dept: dept,
+            img: resolvePhotoUrl(node.photoUrl || node.PhotoUrl),
+            dept: deptLabel,
             tags: node.tags || [],
-            pid: node.managerId && guidToNumeric[node.managerId]
-              ? guidToNumeric[node.managerId]
-              : undefined,
-            profile: OrgProfileModal.buildProfileExtras(node.name, dept)
+            isOrphan: isOrphan,
+            pid: managerNumeric,
+            profile: OrgProfileModal.buildProfileExtras(node.name, deptLabel)
           };
         });
       }
 
-      function initOrgChart(nodes) {
+      function formatOrgCount(payload, nodes, unassignedCount) {
+        const total = payload.total !== undefined ? payload.total : payload.Total || nodes.length + unassignedCount;
+        const areas = new Set(nodes.map(function (n) { return n.dept; })).size;
+        const orphanCount =
+          payload.orphanCount !== undefined ? payload.orphanCount : payload.OrphanCount || 0;
+        let text =
+          total +
+          " colaboradores · " +
+          areas +
+          " áreas no organograma · clique nos números abaixo dos diretores para expandir os times";
+        if (unassignedCount > 0) {
+          text += " · " + unassignedCount + " listados abaixo sem reporte definido";
+        }
+        if (orphanCount > 0) {
+          text += " · " + orphanCount + " com gestor externo";
+        }
+        const syncedAt = payload.syncedAtUtc || payload.SyncedAtUtc;
+        if (syncedAt) {
+          text += " · atualizado em " + new Date(syncedAt).toLocaleString("pt-BR");
+        }
+        return text;
+      }
+
+      function initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection) {
+        if (orgBootId !== window.__lioOrgBootId) return;
+        patchOrgChartCommunityStubs();
         const nodeIndex = {};
         nodes.forEach(function (node) {
           nodeIndex[node.id] = node;
         });
+        unassignedPeople.forEach(function (person) {
+          nodeIndex["unassigned:" + person.slug] = person;
+        });
+
+        const focusSlug = resolveChartFocusSlug(nodes, unassignedPeople);
+        const focusInUnassigned = isChartFocusInUnassigned(nodes, unassignedPeople, focusSlug);
+        const unassignedCount = getUnassignedCount(payload || {});
+        const hasChartFocus = !!focusSlug && !focusInUnassigned;
+
+        if (!nodes.length) {
+          if (countEl) {
+            countEl.textContent =
+              unassignedPeople.length > 0
+                ? "Nenhum colaborador com linha de reporte no organograma. Veja a lista abaixo."
+                : "Nenhum colaborador no organograma. Execute o worker Graph.";
+          }
+          if (focusInUnassigned) {
+            focusUnassignedRow(focusSlug, unassignedSection);
+          }
+          return;
+        }
+
+        if (window.__lioOrgChart && typeof window.__lioOrgChart.destroy === "function") {
+          window.__lioOrgChart.destroy();
+        }
 
         const chart = new OrgChart(treeEl, {
           template: "lio",
-          align: OrgChart.align.orientation,
+          align: OrgChart.align.center,
           orientation: OrgChart.orientation.top,
           padding: 20,
+          mouseScroll: OrgChart.action.zoom,
+          scaleInitial: hasChartFocus ? OrgChart.match.none : OrgChart.match.boundary,
           collapse: { level: 2, allChildren: true },
           nodeBinding: {
             field_0: "name",
@@ -389,36 +1504,79 @@
           }
         });
 
+        window.__lioOrgChart = chart;
+
         setupOrgNodeMenu(nodeIndex);
+        setupOrgPositionRequestModal();
+        setupOrgLevelAddButtons(chart, nodeIndex);
 
         chart.onInit(function () {
           if (countEl) {
-            const areas = new Set(nodes.map(function (n) { return n.dept; })).size;
-            countEl.textContent =
-              nodes.length + " colaboradores · " + areas + " áreas · clique nos números abaixo dos diretores para expandir os times";
-          }
-          const focusSlug = getFocusSlug();
-          if (focusSlug) {
-            focusOrgChartNode(focusSlug, nodes, chart);
-          } else {
-            requestAnimationFrame(function () {
-              pinOrgChartToTop(treeEl, 24);
-            });
+            countEl.textContent = formatOrgCount(payload || {}, nodes, unassignedCount);
           }
         });
 
-        chart.load(nodes);
+        let chartLoadedHandled = false;
+
+        function onChartLoaded() {
+          if (chartLoadedHandled) return;
+          if (orgBootId !== window.__lioOrgBootId) return;
+          if (window.__lioOrgFocusReady) return;
+          chartLoadedHandled = true;
+
+          if (focusInUnassigned) {
+            focusUnassignedRow(focusSlug, unassignedSection);
+            window.__lioOrgFocusReady = { slug: normalizeSlugKey(focusSlug), mode: "unassigned" };
+            scheduleOrgLevelButtonRefresh();
+            return;
+          }
+          if (focusSlug) {
+            focusOrgChartNode(focusSlug, nodes, chart);
+            scheduleOrgLevelButtonRefresh();
+            return;
+          }
+          fitOrgChartInPanel(chart, treeEl);
+          window.__lioOrgFocusReady = { slug: "", mode: "fit-all" };
+          scheduleOrgLevelButtonRefresh();
+        }
+
+        chart.load(nodes, onChartLoaded);
+        setTimeout(onChartLoaded, 1500);
       }
 
       function focusOrgChartNode(slug, nodes, chart) {
         if (!slug || !chart) return;
-        const target = nodes.find(function (node) {
-          return node.slug === slug;
-        });
-        if (!target) return;
-        chart.expand(target.id, target.id, function () {
-          chart.center(target.id);
-        });
+        const target = findChartNode(nodes, slug);
+        if (!target) {
+          fitOrgChartInPanel(chart, treeEl);
+          window.__lioOrgFocusReady = { slug: "", mode: "not-found" };
+          return;
+        }
+
+        function markFocusReady() {
+          window.__lioOrgFocusReady = {
+            slug: normalizeSlugKey(slug),
+            nodeId: target.id,
+            zoom: ORG_FOCUS_ZOOM
+          };
+          scheduleOrgLevelButtonRefresh();
+        }
+
+        function applyFocusAfterRootChange() {
+          scheduleFocusViewport(chart, target.id, treeEl, markFocusReady);
+        }
+
+        if (typeof chart.changeRoots === "function") {
+          chart.changeRoots(target.id, [target.id], applyFocusAfterRootChange);
+          setTimeout(function () {
+            if (!window.__lioOrgFocusReady) {
+              applyFocusAfterRootChange();
+            }
+          }, 3000);
+          return;
+        }
+
+        applyFocusAfterRootChange();
       }
 
       function setupOrgNodeMenu(nodeIndex) {
@@ -471,13 +1629,33 @@
 
       window.LioApi.get("/people/org-chart")
         .then(function (payload) {
-          const apiNodes = payload && payload.nodes ? payload.nodes : [];
-          if (!apiNodes.length) {
+          if (orgBootId !== window.__lioOrgBootId) return;
+          const apiNodes = getChartApiNodes(payload);
+          const unassignedApi = getUnassignedNodes(payload || {});
+
+          if (!apiNodes.length && !unassignedApi.length) {
             if (countEl) countEl.textContent = "Nenhum colaborador no organograma. Execute o worker Graph.";
             return;
           }
+
+          const unassignedPeople = unassignedApi.map(buildUnassignedPerson);
+          const nodeIndexBySlug = {};
+          unassignedPeople.forEach(function (person) {
+            nodeIndexBySlug[person.slug] = person;
+          });
+
           const nodes = buildNodesFromApi(apiNodes);
-          initOrgChart(nodes);
+          nodes.forEach(function (node) {
+            nodeIndexBySlug[node.slug] = node;
+          });
+
+          const focusSlug = getFocusSlug();
+          const unassignedSection = renderUnassignedSection(
+            unassignedPeople,
+            focusSlug,
+            nodeIndexBySlug
+          );
+          initOrgChart(nodes, payload, unassignedPeople, nodeIndexBySlug, unassignedSection);
         })
         .catch(function () {
           if (countEl) countEl.textContent = "Não foi possível carregar o organograma.";

@@ -16,23 +16,76 @@
           </div>
         </header>
 
-        <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-sitemap"></i></div>
-          <div>
-            <div class="welcome-banner__title">Estrutura organizacional</div>
-            <p class="welcome-banner__text">6 áreas de negócio, 1 diretoria executiva e 50 colaboradores distribuídos em times multidisciplinares.</p>
-          </div>
-        </div>
-
         <div class="org-chart-panel">
           <div id="org-tree" aria-label="Organograma da empresa"></div>
         </div>
 
         <p class="page-empty-note" id="org-count"></p>
+
+        <section class="org-unassigned" id="org-unassigned-section" hidden aria-labelledby="org-unassigned-title">
+          <div class="org-unassigned__header">
+            <h2 class="org-unassigned__title" id="org-unassigned-title">
+              <i class="fa-solid fa-user-slash" aria-hidden="true"></i>
+              Sem linha de reporte
+            </h2>
+            <p class="org-unassigned__desc" id="org-unassigned-desc">
+              Colaboradores sem gestor definido no diretório Graph. Eles não aparecem no organograma acima.
+            </p>
+          </div>
+          <div class="org-unassigned__table-wrap">
+            <table class="org-unassigned__table">
+              <thead>
+                <tr>
+                  <th scope="col">Colaborador</th>
+                  <th scope="col">Cargo</th>
+                  <th scope="col">Departamento</th>
+                  <th scope="col"><span class="sr-only">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody id="org-unassigned-body"></tbody>
+            </table>
+          </div>
+        </section>
+
         <p class="org-action-toast" id="org-action-toast" hidden role="status"></p>
 
         <div class="org-node-menu" id="org-node-menu" hidden role="menu" aria-label="Ações do colaborador">
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="perfil">Ver perfil</button>
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="ferias">Solicitar férias</button>
+          <button class="org-node-menu__item" type="button" role="menuitem" data-action="solicitar-posicao">Solicitar nova posição</button>
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="promover">Promover</button>
+        </div>
+
+        <div class="org-profile-modal" id="org-position-request-modal" hidden>
+          <div class="org-profile-modal__backdrop" data-close-position-request></div>
+          <div class="org-profile-modal__dialog org-position-request__dialog" role="dialog" aria-modal="true" aria-labelledby="org-position-request-title">
+            <button class="org-profile-modal__close" type="button" data-close-position-request aria-label="Fechar">&times;</button>
+            <header class="org-profile-modal__header org-position-request__header">
+              <h2 class="org-profile-modal__name" id="org-position-request-title">Nova posição</h2>
+            </header>
+            <form class="org-position-request__form" id="org-position-request-form">
+              <div class="org-position-request__body">
+                <label class="org-position-request__field">
+                  <span>Título da posição</span>
+                  <input type="text" name="title" id="org-position-request-job-title" placeholder="Ex.: Analista de RH Pleno" required />
+                </label>
+                <label class="org-position-request__field">
+                  <span>Departamento / área</span>
+                  <input type="text" name="department" id="org-position-request-dept" placeholder="Ex.: Recursos Humanos" />
+                </label>
+                <label class="org-position-request__field">
+                  <span>Reporta-se a</span>
+                  <input type="text" name="manager" id="org-position-request-manager" readonly />
+                </label>
+                <label class="org-position-request__field">
+                  <span>Justificativa</span>
+                  <textarea name="notes" id="org-position-request-notes" rows="3" placeholder="Descreva a necessidade da nova posição"></textarea>
+                </label>
+              </div>
+              <footer class="org-position-request__footer">
+                <button type="button" class="org-position-request__btn org-position-request__btn--ghost" data-close-position-request>Cancelar</button>
+                <button type="submit" class="org-position-request__btn">Enviar solicitação</button>
+              </footer>
+            </form>
+          </div>
         </div>
