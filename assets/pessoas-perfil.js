@@ -122,9 +122,8 @@
       person.personal.visibility !== "rh-only";
   }
 
-  function renderBreadcrumb(person, allPeople) {
-    var peopleIndex = buildPeopleIndex(allPeople);
-    var chain = buildHierarchyChain(person, peopleIndex);
+  function renderBreadcrumb(person, chain) {
+    chain = chain || [];
     var html = '<a href="' + orgChartHref() + '">Organograma</a>';
     chain.forEach(function (ancestor) {
       html +=
@@ -171,11 +170,10 @@
     container.innerHTML = html;
   }
 
-  function renderMiniOrg(person, allPeople) {
+  function renderMiniOrg(person, chain) {
     var container = document.getElementById("profile-mini-org");
     if (!container) return;
-    var peopleIndex = buildPeopleIndex(allPeople);
-    var chain = buildHierarchyChain(person, peopleIndex);
+    chain = chain || [];
     var html = '<span class="profile-mini-org__label">Cadeia hierárquica:</span>';
     html += '<a class="profile-mini-org__item" href="' + orgChartHref(person.id) + '"><i class="fa-solid fa-sitemap"></i> Organograma</a>';
     chain.forEach(function (node) {
@@ -236,9 +234,18 @@
   function renderContact(person) {
     var contact = person.contact || {};
     var avail = person.availability || {};
-    var managerHtml = person.managerId
-      ? '<a href="' + profileHref(person.managerId) + '">' + (person.managerName || "—") + "</a>"
-      : (person.managerName || "—");
+    var managerHtml = "—";
+    if (person.managerId || person.managerName) {
+      managerHtml = person.managerId
+        ? '<a href="' + profileHref(person.managerId) + '">' + (person.managerName || "—") + "</a>"
+        : (person.managerName || "—");
+      if (person.managerId) {
+        managerHtml +=
+          ' <a class="profile-contact-item__link-secondary" href="' +
+          orgChartHref(person.managerId) +
+          '">Ver no organograma</a>';
+      }
+    }
     return (
       '<div class="profile-contact-item"><span class="profile-contact-item__label">E-mail</span><span class="profile-contact-item__value"><a href="mailto:' + contact.email + '">' + contact.email + "</a></span></div>" +
       '<div class="profile-contact-item"><span class="profile-contact-item__label">Telefone / Ramal</span><span class="profile-contact-item__value">' + (contact.phone || "—") + "</span></div>" +
@@ -447,15 +454,15 @@
     );
   }
 
-  function renderDirectReports(person, allPeople) {
-    var reports = allPeople.filter(function (p) {
-      return p.managerId === person.id;
-    });
+  function renderDirectReports(person, reports) {
+    reports = reports || [];
     if (!reports.length) return '<p class="profile-empty">Nenhum subordinado direto registrado.</p>';
     return reports.map(function (report) {
       return (
         '<a class="profile-report" href="' + profileHref(report.id) + '">' +
-        '<img class="profile-report__avatar" src="' + report.img + '" alt="" />' +
+        (report.img
+          ? '<img class="profile-report__avatar" src="' + report.img + '" alt="" />'
+          : '<span class="profile-report__avatar profile-report__avatar--placeholder" aria-hidden="true"><i class="fa-solid fa-user"></i></span>') +
         "<div>" +
         '<div class="profile-report__name">' + report.name + "</div>" +
         '<div class="profile-report__role">' + report.title + "</div>" +
@@ -464,16 +471,18 @@
     }).join("");
   }
 
-  function renderPeers(person, allPeople) {
-    if (!person.managerId) return '<p class="profile-empty">Sem colegas de mesmo gestor.</p>';
-    var peers = allPeople.filter(function (p) {
-      return p.managerId === person.managerId && p.id !== person.id;
-    });
+  function renderPeers(person, peers) {
+    peers = peers || [];
+    if (!person.managerId && !person.managerName) {
+      return '<p class="profile-empty">Sem colegas de mesmo gestor.</p>';
+    }
     if (!peers.length) return '<p class="profile-empty">Nenhum colega direto registrado.</p>';
     return peers.map(function (peer) {
       return (
         '<a class="profile-peer" href="' + profileHref(peer.id) + '">' +
-        '<img class="profile-peer__avatar" src="' + peer.img + '" alt="" />' +
+        (peer.img
+          ? '<img class="profile-peer__avatar" src="' + peer.img + '" alt="" />'
+          : '<span class="profile-peer__avatar profile-peer__avatar--placeholder" aria-hidden="true"><i class="fa-solid fa-user"></i></span>') +
         "<div>" +
         '<div class="profile-peer__name">' + peer.name + "</div>" +
         '<div class="profile-peer__role">' + peer.title + "</div>" +
@@ -1160,9 +1169,10 @@
     }
   }
 
-  function renderProfile(person, allPeople) {
+  function renderProfile(person, hierarchy, relatedPeople) {
     currentPerson = person;
-    currentAllPeople = allPeople;
+    currentAllPeople = relatedPeople || [];
+    hierarchy = hierarchy || { chain: [], peers: [], directReports: [], directReportsCount: 0 };
     var loading = document.getElementById("profile-loading");
     if (loading) loading.hidden = true;
 
@@ -1179,7 +1189,7 @@
     root.style.setProperty("--profile-badge-text", colors.text);
 
     document.title = "LioConecta — " + person.name;
-    renderBreadcrumb(person, allPeople);
+    renderBreadcrumb(person, hierarchy.chain);
     renderBirthdayBanner(person);
 
     var avatarEl = document.getElementById("profile-avatar");
@@ -1198,15 +1208,15 @@
     document.getElementById("profile-bio").textContent = person.aboutMe || person.bio || "";
 
     renderHeroBadges(person);
-    renderMiniOrg(person, allPeople);
+    renderMiniOrg(person, hierarchy.chain);
 
     document.getElementById("profile-stats").innerHTML = renderStats(person);
     document.getElementById("profile-personal").innerHTML = renderPersonalData(person);
     document.getElementById("profile-contact").innerHTML = renderContact(person);
     document.getElementById("profile-availability").innerHTML = renderAvailability(person);
     document.getElementById("profile-mentor").innerHTML = renderMentorBuddy(person);
-    document.getElementById("profile-reports").innerHTML = renderDirectReports(person, allPeople);
-    document.getElementById("profile-peers").innerHTML = renderPeers(person, allPeople);
+    document.getElementById("profile-reports").innerHTML = renderDirectReports(person, hierarchy.directReports);
+    document.getElementById("profile-peers").innerHTML = renderPeers(person, hierarchy.peers);
     document.getElementById("profile-groups").innerHTML = renderGroups(person.groups);
     document.getElementById("profile-skills").innerHTML = renderSkills(person.skills);
     document.getElementById("profile-languages").innerHTML = renderLanguages(person.languages);
@@ -1219,7 +1229,7 @@
     document.getElementById("profile-interactions").innerHTML = renderInteractions(person.interactions);
     document.getElementById("profile-documents").innerHTML = renderDocuments(person.documents);
     document.getElementById("profile-communications").innerHTML = renderCommunications(person.communications);
-    document.getElementById("profile-related").innerHTML = renderRelatedPeople(person, allPeople);
+    document.getElementById("profile-related").innerHTML = renderRelatedPeople(person, relatedPeople);
 
     var contact = person.contact || {};
     var emailBtn = document.getElementById("profile-email-btn");
@@ -1382,6 +1392,33 @@
     };
   }
 
+  function mapHierarchyMember(member) {
+    if (!member) return null;
+    return {
+      id: member.slug || member.Slug || "",
+      name: member.name || member.Name || "",
+      title: member.title || member.Title || "",
+      img: member.photoUrl || member.PhotoUrl || "",
+      dept: member.departmentName || member.DepartmentName || "",
+    };
+  }
+
+  function mapApiHierarchyToLegacy(dto) {
+    if (!dto) {
+      return { manager: null, chain: [], peers: [], directReports: [], directReportsCount: 0 };
+    }
+    return {
+      manager: mapHierarchyMember(dto.manager || dto.Manager),
+      chain: (dto.chain || dto.Chain || []).map(mapHierarchyMember),
+      peers: (dto.peers || dto.Peers || []).map(mapHierarchyMember),
+      directReports: (dto.directReports || dto.DirectReports || []).map(mapHierarchyMember),
+      directReportsCount:
+        dto.directReportsCount !== undefined && dto.directReportsCount !== null
+          ? dto.directReportsCount
+          : dto.DirectReportsCount || 0,
+    };
+  }
+
   function mapApiSummaryToLegacy(summary) {
     return {
       id: summary.slug,
@@ -1409,18 +1446,38 @@
       .get("/people/" + encodeURIComponent(profileId) + "/profile")
       .then(function (dto) {
         var person = mapApiProfileToLegacy(dto);
-        return global.LioApi
-          .get("/people?limit=100")
-          .then(function (peopleList) {
-            var allPeople = normalizePeopleList(peopleList).map(mapApiSummaryToLegacy);
+        var hierarchyPromise = global.LioApi
+          .get("/people/" + encodeURIComponent(profileId) + "/hierarchy")
+          .then(mapApiHierarchyToLegacy)
+          .catch(function () {
+            return { manager: null, chain: [], peers: [], directReports: [], directReportsCount: 0 };
+          });
+        var relatedPromise = person.dept
+          ? global.LioApi
+              .get("/people?limit=20&q=" + encodeURIComponent(person.dept))
+              .then(function (peopleList) {
+                return normalizePeopleList(peopleList)
+                  .map(mapApiSummaryToLegacy)
+                  .filter(function (p) {
+                    return p.id !== person.id;
+                  });
+              })
+              .catch(function () {
+                return [];
+              })
+          : Promise.resolve([]);
+
+        return hierarchyPromise.then(function (hierarchy) {
+          person.stats = person.stats || {};
+          person.stats.directReports = hierarchy.directReportsCount;
+          return relatedPromise.then(function (relatedPeople) {
             return {
               person: person,
-              allPeople: allPeople.length ? allPeople : [person],
+              hierarchy: hierarchy,
+              relatedPeople: relatedPeople,
             };
-          })
-          .catch(function () {
-            return { person: person, allPeople: [person] };
           });
+        });
       });
   }
 
@@ -1440,7 +1497,7 @@
         .then(function (result) {
           if (loadId !== activeLoadId) return;
           try {
-            renderProfile(result.person, result.allPeople);
+            renderProfile(result.person, result.hierarchy, result.relatedPeople);
           } catch (error) {
             console.error("[ProfilePage] renderProfile failed", error);
             showError();

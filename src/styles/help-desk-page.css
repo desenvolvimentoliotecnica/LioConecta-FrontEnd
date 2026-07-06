@@ -1,0 +1,103 @@
+/* Help Desk page — tema cyan/teal (portado de servicos-help-desk legacy) */
+
+.welcome-banner--help-desk {
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  border-color: #67e8f9;
+}
+
+.welcome-banner--help-desk .welcome-banner__icon {
+  border-color: #67e8f9;
+  color: #0891b2;
+  background: #cffafe;
+}
+
+.welcome-banner--help-desk .welcome-banner__title {
+  color: #0e7490;
+}
+
+.welcome-banner--help-desk .welcome-banner__text {
+  color: #155e75;
+}
+
+.benefit-card.is-featured {
+  border-color: #67e8f9;
+  background: linear-gradient(135deg, #fff 0%, #ecfeff 100%);
+}
+
+.benefit-card__icon--incidente {
+  background: #ecfeff;
+  color: #0891b2;
+  border-color: #67e8f9;
+}
+
+.benefit-card__icon--solicitacao {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #7dd3fc;
+}
+
+.benefit-card__icon--duvida {
+  background: #f0fdf4;
+  color: #16a34a;
+  border-color: #86efac;
+}
+
+.benefit-card__icon--urgente {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+
+.benefit-card__cat--incidente {
+  background: #cffafe;
+  color: #0e7490;
+}
+
+.benefit-card__cat--solicitacao {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.benefit-card__cat--duvida {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.benefit-card__cat--urgente {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.benefit-card__status--disponivel {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.benefit-card__status--sob_analise {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.benefit-card__status--indisponivel {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.benefit-card__open {
+  border-color: #67e8f9;
+  color: #0e7490;
+}
+
+.benefit-card__open:hover {
+  background: #ecfeff;
+}
+
+@media (max-width: 900px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benefit-card.is-featured {
+    grid-column: auto;
+  }
+}

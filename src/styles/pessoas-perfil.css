@@ -400,6 +400,20 @@
   text-decoration: underline;
 }
 
+.profile-contact-item__link-secondary {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.profile-contact-item__link-secondary:hover {
+  color: #6d28d9;
+  text-decoration: underline;
+}
+
 .profile-rh-notice {
   font-size: 12px;
   color: #64748b;
@@ -441,6 +455,17 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.profile-report__avatar--placeholder,
+.profile-peer__avatar--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .profile-report__name,

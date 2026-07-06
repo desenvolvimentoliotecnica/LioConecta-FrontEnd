@@ -295,7 +295,8 @@ export function BackendConfigPage() {
           {activeCategory === "integrations" ? (
             <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
               Esta seção controla se a API chama sistemas reais. Com «Modo mock» em Sim, o worker{" "}
-              <strong>graph-directory-sync</strong> sincroniza apenas <strong>3 usuários fictícios</strong>.
+              <strong>graph-directory-sync</strong> sincroniza usuários fictícios do Graph dev
+              (incluindo o perfil de Leonardo em Sistemas).
               Defina Não (false), salve e <strong>reinicie a API</strong> antes de rodar o worker novamente.
             </div>
           ) : null}

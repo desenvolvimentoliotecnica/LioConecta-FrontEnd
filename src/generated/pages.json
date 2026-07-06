@@ -39,7 +39,8 @@
     "htmlFile": "pessoas-diretorio.html",
     "route": "/pessoas/diretorio",
     "hasScript": true,
-    "externals": []
+    "externals": [],
+    "profileModal": true
   },
   {
     "id": "pessoas-novos-colaboradores",
@@ -64,7 +65,8 @@
       "assets/org-profile-modal.js",
       "https://cdn.balkan.app/orgchart-community.js"
     ],
-    "organograma": true
+    "organograma": true,
+    "profileModal": true
   },
   {
     "id": "pessoas-perfil",

@@ -93,8 +93,12 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
     async function boot() {
       installLegacyApiBridge();
 
-      if (page!.organograma) {
+      if (page!.organograma || page!.profileModal) {
         await loadScript("/assets/org-profile-modal.js");
+        if (cancelled) return;
+      }
+
+      if (page!.organograma) {
         await loadScript("https://cdn.balkan.app/orgchart-community.js");
         if (cancelled) return;
       }
