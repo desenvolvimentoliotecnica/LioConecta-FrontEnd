@@ -1,3 +1,5 @@
+import type { PlannerTaskDto } from "../api/types";
+
 export type ActivityTask = {
   id: string;
   text: string;
@@ -14,9 +16,14 @@ export type Activity = {
   percentComplete: number;
   createdAt: string;
   updatedAt: string;
+  bucketId?: string;
+  bucketName?: string;
+  assignees?: { id: string; name: string; email: string }[];
+  canEdit?: boolean;
+  plannerUrl?: string;
 };
 
-export type ActivityFilter = "all" | "today" | "week" | "open";
+export type ActivityFilter = "mine" | "all" | "today" | "week" | "open";
 
 export type DiaryGroup = {
   dateKey: string;
@@ -24,95 +31,106 @@ export type DiaryGroup = {
   activities: Activity[];
 };
 
-const STORAGE_KEY = "lioconecta-activities";
-
 export const ACTIVITY_FILTERS: { id: ActivityFilter; label: string }[] = [
+  { id: "mine", label: "Minhas atividades" },
   { id: "all", label: "Todas" },
   { id: "today", label: "Hoje" },
   { id: "week", label: "Esta semana" },
   { id: "open", label: "Em andamento" },
 ];
 
-export const SEED_ACTIVITIES: Activity[] = [
-  {
-    id: "act-1",
-    title: "Revisão do organograma de TI",
-    description:
-      "Atualizar cargos e vínculos no módulo Pessoas após reorganização do time de infraestrutura.",
-    startDate: "2026-07-04T09:00",
-    endDate: "2026-07-04T11:30",
-    tasks: [
-      { id: "t1", text: "Conferir dados com RH", done: true },
-      { id: "t2", text: "Validar hierarquia no organograma", done: true },
-      { id: "t3", text: "Publicar versão final", done: false },
-    ],
-    percentComplete: 67,
-    createdAt: "2026-07-04T08:45",
-    updatedAt: "2026-07-04T10:15",
-  },
-  {
-    id: "act-2",
-    title: "Preparação da reunião de alinhamento",
-    description: "Montar pauta, slides e checklist de follow-ups para reunião semanal da diretoria.",
-    startDate: "2026-07-04T14:00",
-    endDate: "2026-07-04T16:00",
-    tasks: [
-      { id: "t4", text: "Definir pauta com stakeholders", done: false },
-      { id: "t5", text: "Enviar convite no calendário", done: false },
-    ],
-    percentComplete: 20,
-    createdAt: "2026-07-04T13:10",
-    updatedAt: "2026-07-04T13:10",
-  },
-  {
-    id: "act-3",
-    title: "Documentação de políticas internas",
-    description: "Revisar versão draft das políticas de segurança da informação no hub Documentos.",
-    startDate: "2026-07-03T10:00",
-    endDate: "2026-07-03T12:00",
-    tasks: [
-      { id: "t6", text: "Comparar com versão anterior", done: true },
-      { id: "t7", text: "Registrar comentários da área jurídica", done: true },
-      { id: "t8", text: "Submeter para aprovação", done: true },
-    ],
-    percentComplete: 100,
-    createdAt: "2026-07-03T09:30",
-    updatedAt: "2026-07-03T11:50",
-  },
-  {
-    id: "act-4",
-    title: "Onboarding — novos colaboradores",
-    description: "Acompanhar integração de dois novos membros do time comercial na semana passada.",
-    startDate: "2026-07-01T08:30",
-    endDate: "2026-07-01T17:30",
-    tasks: [
-      { id: "t9", text: "Apresentação institucional", done: true },
-      { id: "t10", text: "Tour pelos grupos internos", done: true },
-      { id: "t11", text: "Checklist de acessos", done: false },
-    ],
-    percentComplete: 75,
-    createdAt: "2026-07-01T08:00",
-    updatedAt: "2026-07-01T16:40",
-  },
-];
+export function currentTodayKey(): string {
+  const now = new Date();
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+/** Interpreta valor de `<input type="datetime-local">` como horário local do navegador. */
+export function parseDatetimeLocal(value: string): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value.trim());
+  if (!match) return null;
+
+  const [, year, month, day, hour, minute] = match;
+  return new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(minute),
+    0,
+    0,
+  );
+}
+
+/** Converte datetime-local → ISO UTC para a API. */
+export function datetimeLocalToApi(value: string | null | undefined): string | null {
+  if (!value?.trim()) return null;
+  const parsed = parseDatetimeLocal(value);
+  return parsed && !Number.isNaN(parsed.getTime()) ? parsed.toISOString() : null;
+}
+
+/** Converte ISO da API → datetime-local no fuso do navegador. */
+export function apiDatetimeToLocalInput(value: string | null | undefined): string {
+  if (!value?.trim()) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value.slice(0, 16);
+
+  const pad = (part: number) => String(part).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+export function parseActivityDate(value: string): Date | null {
+  const local = parseDatetimeLocal(value);
+  if (local) return local;
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+export function plannerTaskToActivity(task: PlannerTaskDto): Activity {
+  const start = task.startDate ?? task.dueDate ?? task.createdAt;
+  const end = task.dueDate ?? task.startDate ?? task.createdAt;
+
+  return {
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    startDate: apiDatetimeToLocalInput(start),
+    endDate: apiDatetimeToLocalInput(end),
+    tasks: task.checklist.map((item) => ({
+      id: item.id,
+      text: item.text,
+      done: item.done,
+    })),
+    percentComplete: task.percentComplete,
+    createdAt: task.createdAt,
+    updatedAt: task.updatedAt,
+    bucketId: task.bucketId,
+    bucketName: task.bucketName,
+    assignees: task.assignees,
+    canEdit: task.canEdit,
+    plannerUrl: task.plannerUrl,
+  };
+}
+
+export function activityToPlannerRequest(activity: Activity) {
+  return {
+    title: activity.title,
+    description: activity.description,
+    startDate: datetimeLocalToApi(activity.startDate),
+    dueDate: datetimeLocalToApi(activity.endDate),
+    percentComplete: activity.percentComplete,
+    bucketId: activity.bucketId ?? null,
+    checklist: activity.tasks.map((task) => ({
+      id: task.id,
+      text: task.text,
+      done: task.done,
+    })),
+  };
+}
 
 export function newId(prefix = "id"): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-}
-
-export function loadActivities(): Activity[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return SEED_ACTIVITIES;
-    const parsed = JSON.parse(raw) as Activity[];
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : SEED_ACTIVITIES;
-  } catch {
-    return SEED_ACTIVITIES;
-  }
-}
-
-export function saveActivities(activities: Activity[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
 }
 
 export function computePercentFromTasks(tasks: ActivityTask[]): number {
@@ -122,7 +140,11 @@ export function computePercentFromTasks(tasks: ActivityTask[]): number {
 }
 
 export function toDateKey(iso: string): string {
-  return iso.slice(0, 10);
+  const date = parseActivityDate(iso);
+  if (!date) return iso.slice(0, 10);
+
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 export function parseDateKey(key: string): { year: number; month: number; day: number } {
@@ -131,7 +153,8 @@ export function parseDateKey(key: string): { year: number; month: number; day: n
 }
 
 export function formatTime(iso: string): string {
-  const date = new Date(iso);
+  const date = parseActivityDate(iso);
+  if (!date) return iso.slice(11, 16);
   return date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
@@ -139,7 +162,7 @@ export function formatTimeRange(start: string, end: string): string {
   return `${formatTime(start)} – ${formatTime(end)}`;
 }
 
-export function formatDiaryDateLabel(dateKey: string, todayKey = "2026-07-04"): string {
+export function formatDiaryDateLabel(dateKey: string, todayKey = currentTodayKey()): string {
   const parsed = parseDateKey(dateKey);
   const date = new Date(parsed.year, parsed.month, parsed.day);
   const today = parseDateKey(todayKey);
@@ -158,7 +181,7 @@ export function formatDiaryDateLabel(dateKey: string, todayKey = "2026-07-04"): 
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${full}`;
 }
 
-export function isSameWeek(dateKey: string, todayKey = "2026-07-04"): boolean {
+export function isSameWeek(dateKey: string, todayKey = currentTodayKey()): boolean {
   const date = new Date(parseDateKey(dateKey).year, parseDateKey(dateKey).month, parseDateKey(dateKey).day);
   const today = new Date(parseDateKey(todayKey).year, parseDateKey(todayKey).month, parseDateKey(todayKey).day);
   const day = today.getDay() || 7;
@@ -173,13 +196,14 @@ export function filterActivities(
   activities: Activity[],
   filter: ActivityFilter,
   query: string,
-  todayKey = "2026-07-04",
+  todayKey = currentTodayKey(),
 ): Activity[] {
   const normalized = query.trim().toLowerCase();
 
   return activities.filter((activity) => {
     const dateKey = toDateKey(activity.startDate);
 
+    if (filter === "mine" && !activity.canEdit) return false;
     if (filter === "today" && dateKey !== todayKey) return false;
     if (filter === "week" && !isSameWeek(dateKey, todayKey)) return false;
     if (filter === "open" && activity.percentComplete >= 100) return false;
@@ -189,6 +213,8 @@ export function filterActivities(
     const haystack = [
       activity.title,
       activity.description,
+      activity.bucketName ?? "",
+      ...(activity.assignees?.map((assignee) => assignee.name) ?? []),
       ...activity.tasks.map((task) => task.text),
     ]
       .join(" ")
@@ -198,9 +224,11 @@ export function filterActivities(
   });
 }
 
-export function groupActivitiesByDate(activities: Activity[], todayKey = "2026-07-04"): DiaryGroup[] {
+export function groupActivitiesByDate(activities: Activity[], todayKey = currentTodayKey()): DiaryGroup[] {
   const sorted = [...activities].sort(
-    (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+    (a, b) =>
+      (parseActivityDate(a.startDate)?.getTime() ?? 0) -
+      (parseActivityDate(b.startDate)?.getTime() ?? 0),
   );
 
   const map = new Map<string, Activity[]>();
@@ -217,12 +245,14 @@ export function groupActivitiesByDate(activities: Activity[], todayKey = "2026-0
       dateKey,
       label: formatDiaryDateLabel(dateKey, todayKey),
       activities: groupActivities.sort(
-        (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+        (a, b) =>
+          (parseActivityDate(a.startDate)?.getTime() ?? 0) -
+          (parseActivityDate(b.startDate)?.getTime() ?? 0),
       ),
     }));
 }
 
-export function createActivityDraft(now = new Date()): Activity {
+export function createActivityDraft(now = new Date(), defaultBucketId?: string): Activity {
   const start = new Date(now);
   start.setMinutes(0, 0, 0);
   const end = new Date(start);
@@ -245,6 +275,8 @@ export function createActivityDraft(now = new Date()): Activity {
     percentComplete: 0,
     createdAt: timestamp,
     updatedAt: timestamp,
+    bucketId: defaultBucketId,
+    canEdit: true,
   };
 }
 

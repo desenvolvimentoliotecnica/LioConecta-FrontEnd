@@ -59,6 +59,15 @@ export interface PersonSummaryDto {
   isActive: boolean;
 }
 
+export interface BirthdayPersonDto {
+  slug: string;
+  name: string;
+  title?: string | null;
+  departmentName?: string | null;
+  birthDate: string;
+  photoUrl?: string | null;
+}
+
 export interface CommentDto {
   id: string;
   text: string;
@@ -923,6 +932,98 @@ export interface GraphConnectionTestResponse {
   tenantUserCount?: number | null;
 }
 
+export interface PlannerAssigneeDto {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface PlannerChecklistItemDto {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
+export interface PlannerTaskDto {
+  id: string;
+  title: string;
+  description: string;
+  startDate: string | null;
+  dueDate: string | null;
+  percentComplete: number;
+  bucketId: string;
+  bucketName: string;
+  assignees: PlannerAssigneeDto[];
+  checklist: PlannerChecklistItemDto[];
+  isOwnedByCurrentUser: boolean;
+  canEdit: boolean;
+  plannerUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PlannerTasksResponseDto {
+  tasks: PlannerTaskDto[];
+  usesDevAdapters: boolean;
+  plannerEnabled: boolean;
+  planTitle?: string | null;
+}
+
+export interface PlannerBucketDto {
+  id: string;
+  name: string;
+  orderHint: number;
+}
+
+export interface CreatePlannerTaskRequest {
+  title: string;
+  description?: string | null;
+  startDate?: string | null;
+  dueDate?: string | null;
+  percentComplete: number;
+  bucketId?: string | null;
+  checklist?: PlannerChecklistItemDto[] | null;
+}
+
+export interface UpdatePlannerTaskRequest {
+  title: string;
+  description?: string | null;
+  startDate?: string | null;
+  dueDate?: string | null;
+  percentComplete: number;
+  bucketId?: string | null;
+  checklist?: PlannerChecklistItemDto[] | null;
+}
+
+export interface TestPlannerConnectionRequest {
+  planId?: string | null;
+}
+
+export interface PlannerConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+  usesDevAdapters: boolean;
+  plannerEnabled: boolean;
+  planId?: string | null;
+  planTitle?: string | null;
+  bucketCount?: number | null;
+  taskCount?: number | null;
+}
+
+export interface TestGlpiConnectionRequest {
+  baseUrl?: string | null;
+  appToken?: string | null;
+  userToken?: string | null;
+}
+
+export interface GlpiConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+  usesDevAdapters: boolean;
+}
+
 export interface EmailConfigurationDto {
   id: string;
   isEnabled: boolean;
@@ -1098,6 +1199,7 @@ export interface CreateServiceRequestRequestDto {
 export interface HelpDeskSummaryDto {
   openTickets: number;
   avgResponseLabel: string;
+  canViewAllTickets?: boolean;
 }
 
 export interface HelpDeskServiceDto {
@@ -1135,4 +1237,28 @@ export interface HelpDeskTicketResultDto {
   message: string;
   externalRef?: string | null;
   externalUrl?: string | null;
+}
+
+export interface HelpDeskTicketListItemDto {
+  ticketId: string;
+  subject: string;
+  status: string;
+  statusLabel: string;
+  priorityLabel: string;
+  createdAt: string;
+  externalUrl?: string | null;
+  requesterLabel?: string | null;
+}
+
+export interface HelpDeskTicketEventDto {
+  eventType: string;
+  createdAt: string;
+  author?: string | null;
+}
+
+export interface HelpDeskTicketDetailDto {
+  summary: HelpDeskTicketListItemDto;
+  description: string;
+  assignee?: string | null;
+  events: HelpDeskTicketEventDto[];
 }

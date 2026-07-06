@@ -1,4 +1,5 @@
-<header class="page-header">
+        <div class="pessoas-page-head">
+        <header class="page-header page-header--pessoas">
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="/">Início</a>
             <span class="breadcrumb__sep">/</span>
@@ -15,22 +16,19 @@
             </div>
           </div>
         </header>
+        </div>
 
         <div class="welcome-banner">
           <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></div>
           <div>
             <div class="welcome-banner__title">Boas-vindas aos novos membros!</div>
-            <p class="welcome-banner__text">Este mês entraram 7 colaboradores. Envie uma mensagem de acolhimento e ajude na integração.</p>
+            <p class="welcome-banner__text" id="newcomers-banner-text">Carregando admissões do mês...</p>
           </div>
         </div>
 
         <div class="page-toolbar">
           <div class="page-filters" id="newcomers-filters" role="group" aria-label="Filtros">
             <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="jul-2026">Julho 2026</button>
-            <button class="filter-chip" type="button" data-filter="jun-2026">Junho 2026</button>
-            <button class="filter-chip" type="button" data-filter="produto">Produto</button>
-            <button class="filter-chip" type="button" data-filter="ti">TI</button>
           </div>
           <div class="page-search">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -40,4 +38,4 @@
 
         <div class="directory" id="newcomers-root" aria-label="Novos colaboradores por mês"></div>
 
-        <p class="page-empty-note" id="newcomers-count">Exibindo 13 novos colaboradores</p>
+        <p class="page-empty-note" id="newcomers-count">Carregando...</p>

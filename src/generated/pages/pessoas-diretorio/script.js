@@ -99,18 +99,31 @@
           .join(" ");
       }
 
+      function normalizeSearch(value) {
+        return String(value || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+      }
+
       function deptKey(dept) {
         return dept.id || dept.Id || "";
       }
 
       function resolvePhotoUrl(url) {
+        if (window.PersonAvatar) {
+          return window.PersonAvatar.resolveGraphPhotoUrl(url);
+        }
         if (!url || !String(url).trim()) return null;
         var trimmed = String(url).trim();
-        if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
-        return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+        var path = (trimmed.startsWith("/") ? trimmed : "/" + trimmed).split("?")[0].toLowerCase();
+        return path.indexOf("/media/people/") === 0 ? path : null;
       }
 
       function renderAvatarMarkup(photoUrlValue) {
+        if (window.PersonAvatar) {
+          return window.PersonAvatar.renderAvatarMarkup(photoUrlValue, { escapeAttr: escapeAttr });
+        }
         var src = resolvePhotoUrl(photoUrlValue);
         if (!src) {
           return (
@@ -126,7 +139,10 @@
       }
 
       function replaceBrokenAvatar(img) {
-        if (!img || !img.parentNode) return;
+        if (window.PersonAvatar) {
+          window.PersonAvatar.replaceBroken(img, "person-card__avatar");
+          return;
+        }
         var placeholder = document.createElement("span");
         placeholder.className = "person-card__avatar person-card__avatar--placeholder";
         placeholder.setAttribute("aria-hidden", "true");
@@ -163,22 +179,25 @@
         var dept = toTitleCase(person.departmentName || person.DepartmentName || deptName || "Sem departamento");
         var email = person.email || person.Email || "";
         var teamsUpn = person.teamsUpn || person.TeamsUpn || email;
-        var extras =
-          window.OrgProfileModal && typeof window.OrgProfileModal.buildProfileExtras === "function"
-            ? window.OrgProfileModal.buildProfileExtras(name, dept)
-            : { email: email, phone: "—", location: "Campinas, SP · " + dept, admission: "—" };
-        var location = person.location || person.Location;
+        var phone = person.phone || person.Phone || "";
+        var location = person.location || person.Location || "";
+        var hireDate = person.hireDate || person.HireDate || null;
         return {
           slug: slug,
           name: name,
           title: title,
           dept: dept,
           img: resolvePhotoUrl(person.photoUrl || person.PhotoUrl) || "",
+          email: email,
+          phone: phone,
+          location: location,
+          hireDate: hireDate,
+          teamsUpn: teamsUpn,
           profile: {
-            email: email || extras.email,
-            phone: extras.phone,
-            location: location ? String(location) : extras.location,
-            admission: extras.admission,
+            email: email,
+            phone: phone,
+            location: location,
+            hireDate: hireDate,
             managerLabel: resolveManagerLabel(person, peopleIndex),
             teamsUpn: teamsUpn
           }
@@ -225,12 +244,14 @@
         var teamsHref = teamsUpn
           ? "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsUpn)
           : "#";
-        var searchText = (name + " " + title).toLowerCase();
+        var searchText = normalizeSearch(name + " " + title);
         var emailDisabled = email ? "" : " disabled";
 
         return (
           '<article class="person-card" data-search="' +
           escapeAttr(searchText) +
+          '" data-person-slug="' +
+          escapeAttr(slug) +
           '">' +
           renderAvatarMarkup(person.photoUrl || person.PhotoUrl) +
           '<h2 class="person-card__name">' +
@@ -272,12 +293,12 @@
         var people = dept.people || dept.People || [];
         var cards = people.map(renderPerson).join("");
         return (
-          '<section class="dept-group dept-group--open" data-dept="' +
+          '<section class="dept-group" data-dept="' +
           escapeAttr(id) +
           '" aria-label="' +
           escapeAttr(name) +
           '">' +
-          '<button type="button" class="dept-group__header" aria-expanded="true" aria-controls="' +
+          '<button type="button" class="dept-group__header" aria-expanded="false" aria-controls="' +
           escapeAttr(panelId) +
           '">' +
           '<span class="dept-group__header-main">' +
@@ -299,25 +320,28 @@
         );
       }
 
-      function renderFilters(departments) {
-        const filters = document.getElementById("directory-filters");
-        if (!filters) return;
+      function renderDepartmentSelect(departments) {
+        var select = document.getElementById("directory-dept-select");
+        if (!select) return;
 
-        const chips = ['<button class="filter-chip is-active" type="button" data-filter="all">Todos</button>'];
+        var options = ['<option value="all">Todos os departamentos</option>'];
         departments.forEach(function (dept) {
-          chips.push(
-            '<button class="filter-chip" type="button" data-filter="' +
-              escapeAttr(deptKey(dept)) +
+          var id = deptKey(dept);
+          var name = toTitleCase(dept.name || dept.Name || "Sem departamento");
+          var count = dept.count || (dept.people || dept.People || []).length;
+          options.push(
+            '<option value="' +
+              escapeAttr(id) +
               '">' +
-              escapeHtml(toTitleCase(dept.name || dept.Name || "Sem departamento")) +
-              "</button>"
+              escapeHtml(name) +
+              " (" +
+              count +
+              ")</option>"
           );
         });
-        filters.innerHTML = chips.join("");
-
-        filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-          btn.classList.toggle("is-active", (btn.getAttribute("data-filter") || "all") === activeFilter);
-        });
+        select.innerHTML = options.join("");
+        select.value = activeFilter;
+        select.classList.toggle("is-active", activeFilter !== "all");
       }
 
       function updateCount(visibleTotal, groupCount) {
@@ -350,7 +374,7 @@
       function applyFilters() {
         var visibleTotal = 0;
         var groupCount = 0;
-        var normalizedQuery = searchQuery.trim().toLowerCase();
+        var normalizedQuery = normalizeSearch(searchQuery.trim());
         var shouldExpandVisible = activeFilter !== "all" || normalizedQuery.length > 0;
 
         root.querySelectorAll(".dept-group").forEach(function (group) {
@@ -391,22 +415,22 @@
         toolbarController = new AbortController();
         var signal = toolbarController.signal;
 
-        var filters = document.getElementById("directory-filters");
+        var filters = document.getElementById("directory-dept-select");
         var searchInput = document.getElementById("directory-search");
 
         if (filters) {
           filters.addEventListener(
-            "click",
+            "change",
             function (event) {
-              var chip = event.target.closest(".filter-chip");
-              if (!chip || !filters.contains(chip)) return;
-              event.preventDefault();
-              filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-                btn.classList.remove("is-active");
-              });
-              chip.classList.add("is-active");
-              activeFilter = chip.getAttribute("data-filter") || "all";
+              activeFilter = event.target.value || "all";
+              filters.classList.toggle("is-active", activeFilter !== "all");
               applyFilters();
+              if (activeFilter !== "all") {
+                var target = root.querySelector('.dept-group[data-dept="' + activeFilter + '"]');
+                if (target) {
+                  target.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }
             },
             { signal }
           );
@@ -441,6 +465,12 @@
             if (profileBtn && root.contains(profileBtn)) {
               event.preventDefault();
               openDirectoryProfile(profileBtn.getAttribute("data-person-slug") || "");
+              return;
+            }
+
+            var card = event.target.closest(".person-card");
+            if (card && root.contains(card) && !event.target.closest(".person-card__btn")) {
+              openDirectoryProfile(card.getAttribute("data-person-slug") || "");
               return;
             }
 
@@ -481,16 +511,6 @@
         updateScrollTopVisibility();
       }
 
-      function ensureSearchInput() {
-        var searchWrap = document.querySelector(".page-toolbar .page-search");
-        if (!searchWrap || document.getElementById("directory-search")) return;
-
-        searchWrap.innerHTML =
-          '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>' +
-          '<input id="directory-search" class="page-search__input" type="search" ' +
-          'placeholder="Buscar por nome ou cargo..." autocomplete="off" spellcheck="false" />';
-      }
-
       function showLoading() {
         root.innerHTML = '<p class="page-empty-note">Carregando diretório...</p>';
       }
@@ -510,15 +530,13 @@
           return;
         }
 
-        ensureSearchInput();
-        renderFilters(departments);
+        renderDepartmentSelect(departments);
         directoryPeopleBySlug = buildDirectoryPeopleIndex(departments);
         root.innerHTML = departments.map(renderDepartment).join("");
         bindToolbarEvents();
         applyFilters();
       }
 
-      ensureSearchInput();
       bindToolbarEvents();
       bindScrollTopButton();
       showLoading();

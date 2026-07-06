@@ -47,14 +47,18 @@
     "htmlFile": "pessoas-novos-colaboradores.html",
     "route": "/pessoas/novos-colaboradores",
     "hasScript": true,
-    "externals": []
+    "externals": [
+      "assets/person-avatar.js"
+    ]
   },
   {
     "id": "pessoas-aniversariantes",
     "htmlFile": "pessoas-aniversariantes.html",
     "route": "/pessoas/aniversariantes",
     "hasScript": true,
-    "externals": []
+    "externals": [
+      "assets/person-avatar.js"
+    ]
   },
   {
     "id": "pessoas-organograma",

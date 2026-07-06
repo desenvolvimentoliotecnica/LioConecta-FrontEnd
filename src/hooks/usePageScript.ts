@@ -94,6 +94,8 @@ export function usePageScript(page: PageEntry | undefined, contentKey: string) {
       installLegacyApiBridge();
 
       if (page!.organograma || page!.profileModal) {
+        await loadScript("/assets/person-avatar.js");
+        if (cancelled) return;
         await loadScript("/assets/org-profile-modal.js");
         if (cancelled) return;
       }

@@ -351,6 +351,11 @@
   padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
 }
 
+.pay-modal__backdrop--stacked {
+  z-index: 2100;
+  background: rgba(15, 23, 42, 0.55);
+}
+
 .pay-modal {
   background: #fff;
   border-radius: 12px;

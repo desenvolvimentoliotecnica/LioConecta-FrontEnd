@@ -10,6 +10,14 @@ import { useFeedComments, useFeedHashScroll, usePageScript, useQuickAccessScroll
 import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
+import pessoasPageHeadCss from "../../styles/pessoas-page-head.css?inline";
+
+const PESSOAS_PAGE_HEAD_IDS = new Set([
+  "pessoas-organograma",
+  "pessoas-diretorio",
+  "pessoas-novos-colaboradores",
+  "pessoas-aniversariantes",
+]);
 
 function injectPageStyles(pageId: string): (() => void) | undefined {
   if (pageId === FEED_PAGE_ID) {
@@ -24,6 +32,7 @@ function injectPageStyles(pageId: string): (() => void) | undefined {
   let combined = assets?.styles ?? "";
   if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
   if (pageId === "pessoas-organograma" || pageId === "pessoas-diretorio") combined += "\n" + orgModalCss;
+  if (PESSOAS_PAGE_HEAD_IDS.has(pageId)) combined += "\n" + pessoasPageHeadCss;
   if (!combined) return undefined;
   el.textContent = combined;
   document.head.appendChild(el);
@@ -67,6 +76,8 @@ export function LegacyPage() {
     return injectPageStyles(page.id);
   }, [page]);
 
+  const pessoasHubPage = page && PESSOAS_PAGE_HEAD_IDS.has(page.id);
+
   if (!page) {
     return (
       <main className="main">
@@ -89,7 +100,7 @@ export function LegacyPage() {
     );
   }
 
-  return <main key={contentKey} className="main" ref={mainRef} />;
+  return <main key={contentKey} className={pessoasHubPage ? "main main--pessoas-hub" : "main"} ref={mainRef} />;
 }
 
 export function LegacyPageById({ page }: { page: PageEntry }) {
@@ -122,5 +133,5 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
     );
   }
 
-  return <main key={contentKey} className="main" ref={mainRef} />;
+  return <main key={contentKey} className={PESSOAS_PAGE_HEAD_IDS.has(page.id) ? "main main--pessoas-hub" : "main"} ref={mainRef} />;
 }

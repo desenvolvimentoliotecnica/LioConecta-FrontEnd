@@ -21,6 +21,95 @@
   background: #1d4ed8;
 }
 
+.activities-page__new-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.activities-page__banner {
+  margin-bottom: var(--wf-gap);
+  padding: 12px 16px;
+  border-radius: var(--wf-radius);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.activities-page__banner a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.activities-page__banner--warn {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+}
+
+.activities-page__banner--info {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  color: #1e40af;
+}
+
+.activities-page__banner--error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.activities-page__entry.is-readonly .activities-page__entry-card {
+  opacity: 0.92;
+}
+
+.activities-page__entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.activities-page__bucket {
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.activities-page__assignees {
+  font-style: italic;
+}
+
+.activities-page__planner-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.activities-page__entry-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.activities-page__empty-detail {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.activities-page__field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--wf-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+
 .activities-page__controls {
   margin-bottom: var(--wf-gap);
   padding: 18px 20px;
@@ -339,48 +428,157 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  z-index: 1000;
+  padding:
+    max(24px, env(safe-area-inset-top))
+    16px
+    max(24px, env(safe-area-inset-bottom));
+  z-index: 2000;
+  overflow-y: auto;
 }
 
 .activities-page__modal {
-  width: min(560px, 100%);
-  max-height: calc(100vh - 40px);
-  overflow: auto;
+  width: min(500px, 100%);
+  height: min(480px, calc(100dvh - 48px));
+  max-height: min(480px, calc(100dvh - 48px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: #fff;
   border-radius: 12px;
+  border: 1px dashed var(--wf-border);
   box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  flex-shrink: 0;
 }
 
 .activities-page__modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px;
+  gap: 10px;
+  padding: 12px 16px;
   border-bottom: 1px dashed var(--wf-border);
+  flex-shrink: 0;
+  background: #fff;
 }
 
 .activities-page__modal-header h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #1e293b;
+  margin: 0;
 }
 
 .activities-page__modal-close {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border: 1px dashed var(--wf-border);
   border-radius: 8px;
   background: #f8fafc;
   color: #64748b;
   cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.activities-page__form {
-  padding: 18px 20px 20px;
+.activities-page__modal-close:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.activities-page__modal-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.activities-page__modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px;
   display: grid;
-  gap: 14px;
+  gap: 10px;
+  align-content: start;
+}
+
+.activities-page__modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px dashed var(--wf-border);
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.activities-page__modal .activities-page__field {
+  display: grid;
+  gap: 4px;
+}
+
+.activities-page__modal .activities-page__field > span,
+.activities-page__modal .activities-page__field-label-row span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.activities-page__modal .activities-page__field input[type="text"],
+.activities-page__modal .activities-page__field input[type="datetime-local"],
+.activities-page__modal .activities-page__field textarea,
+.activities-page__modal .activities-page__field select {
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 13px;
+  color: #1e293b;
+  background: #fff;
+}
+
+.activities-page__modal .activities-page__field textarea {
+  resize: vertical;
+  min-height: 52px;
+  max-height: 120px;
+}
+
+.activities-page__modal .activities-page__field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.activities-page__modal .activities-page__form-tasks {
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.activities-page__modal .activities-page__form-tasks li {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.activities-page__modal .activities-page__task-add input {
+  padding: 7px 10px;
+  font-size: 13px;
+}
+
+.activities-page__modal .activities-page__task-add button {
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.activities-page__modal .activities-page__btn {
+  padding: 7px 14px;
+  font-size: 12px;
 }
 
 .activities-page__field {
@@ -492,13 +690,7 @@
 .activities-page__form-error {
   font-size: 12px;
   color: #dc2626;
-}
-
-.activities-page__form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding-top: 4px;
+  margin: 0;
 }
 
 .activities-page__btn {
@@ -520,6 +712,11 @@
   background: #2563eb;
   border-color: #2563eb;
   color: #fff;
+}
+
+.activities-page__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 @media (max-width: 1100px) {

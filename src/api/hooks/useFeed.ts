@@ -30,6 +30,46 @@ function updatePostInFeedCache(
   });
 }
 
+function removePostFromFeedCache(
+  queryClient: ReturnType<typeof useQueryClient>,
+  postId: string,
+) {
+  queryClient.setQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20], (current) => {
+    if (!current) return current;
+    return {
+      ...current,
+      items: current.items.filter((post) => post.id !== postId),
+    };
+  });
+}
+
+export function useDeletePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (postId: string) => {
+      if (config.useMock) {
+        throw new Error("Mock mode — API call skipped");
+      }
+      await api.delete<void>(`/feed/posts/${postId}`);
+    },
+    onMutate: async (postId) => {
+      await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
+      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      removePostFromFeedCache(queryClient, postId);
+      return { previous };
+    },
+    onError: (_error, _postId, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
+      }
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+    },
+  });
+}
+
 export function useAddPostComment() {
   const queryClient = useQueryClient();
 

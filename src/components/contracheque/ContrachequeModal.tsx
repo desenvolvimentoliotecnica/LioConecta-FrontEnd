@@ -5,9 +5,12 @@ type Props = {
   open: boolean;
   title: string;
   wide?: boolean;
+  stacked?: boolean;
+  closeOnEscape?: boolean;
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  footerStart?: ReactNode;
   showValues?: boolean;
   onToggleShowValues?: () => void;
 };
@@ -44,53 +47,74 @@ export function ContrachequeModal({
   open,
   title,
   wide,
+  stacked = false,
+  closeOnEscape = true,
   onClose,
   children,
   footer,
+  footerStart,
   showValues = false,
   onToggleShowValues,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = stacked ? "pay-modal-title-stacked" : "pay-modal-title";
+
+  useEffect(() => {
+    if (!open || !closeOnEscape) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (stacked) {
+          event.stopImmediatePropagation();
+        }
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown, stacked);
+    dialogRef.current?.focus();
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, stacked);
+    };
+  }, [open, closeOnEscape, stacked, onClose]);
 
   useEffect(() => {
     if (!open) {
       return;
     }
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", onKeyDown);
-    dialogRef.current?.focus();
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) {
     return null;
   }
 
   return createPortal(
-    <div className="pay-modal__backdrop" role="presentation" onClick={onClose}>
+    <div
+      className={`pay-modal__backdrop${stacked ? " pay-modal__backdrop--stacked" : ""}`}
+      role="presentation"
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
         className={`pay-modal${wide ? " pay-modal--wide" : ""}`}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="pay-modal-title"
+        aria-labelledby={titleId}
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="pay-modal__header">
-          <h2 className="pay-modal__title" id="pay-modal-title">
+          <h2 className="pay-modal__title" id={titleId}>
             {title}
           </h2>
           <button type="button" className="pay-modal__close" onClick={onClose} aria-label="Fechar">
@@ -100,6 +124,7 @@ export function ContrachequeModal({
         <div className="pay-modal__body">{children}</div>
         <footer className="pay-modal__footer">
           <div className="pay-modal__footer-start">
+            {footerStart}
             {onToggleShowValues ? (
               <ValuesToggle showValues={showValues} onToggle={onToggleShowValues} />
             ) : null}

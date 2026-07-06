@@ -282,17 +282,65 @@
 
 .page-toolbar {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
   margin-bottom: var(--wf-gap);
+}
+
+.page-toolbar__filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .page-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.page-filters__month {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-filters__month-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.birthday-month-select {
+  appearance: none;
+  border: 1px dashed var(--wf-border);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  height: 36px;
+  min-width: 160px;
+  padding: 0 34px 0 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.birthday-month-select:focus {
+  outline: none;
+  border-color: #f9a8d4;
+}
+
+.birthday-month-select.is-active {
+  background-color: #fce7f3;
+  border-color: #f9a8d4;
+  color: #be185d;
 }
 
 .filter-chip {
@@ -308,7 +356,7 @@
 }
 
 .page-search {
-  min-width: 220px;
+  min-width: 240px;
   height: 36px;
   border: 1px dashed var(--wf-border);
   border-radius: 999px;
@@ -319,6 +367,25 @@
   padding: 0 14px;
   color: var(--wf-text-muted);
   font-size: 13px;
+}
+
+.page-search__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: #334155;
+}
+
+.page-search__input::placeholder {
+  color: var(--wf-text-muted);
+}
+
+.dept-group[hidden],
+.person-card[hidden] {
+  display: none !important;
 }
 
 .official-list {
@@ -439,6 +506,15 @@
   object-fit: cover;
   grid-row: 1 / 5;
   align-self: center;
+}
+
+.person-card__avatar--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 18px;
 }
 
 .person-card__name {

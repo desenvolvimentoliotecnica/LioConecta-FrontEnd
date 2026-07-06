@@ -213,7 +213,7 @@ export function buildSitemapSections(): SitemapSection[] {
       icon: "fa-toolbox",
       items: [
         entry("Notificações", "/notificacoes", "Central de alertas e avisos do portal."),
-        entry("Minhas atividades", "/minhas-atividades", "Diário de tarefas e pendências."),
+        entry("Minhas atividades", "/minhas-atividades", "Tarefas do plano Microsoft Planner da equipe."),
         entry("Analytics", "/analytics", "Indicadores e métricas de uso do portal."),
         entry("Ajuda", "/ajuda", "Central de ajuda e perguntas frequentes."),
         entry("Mapa do site", "/mapa-do-site", "Visão completa de todas as páginas do LioConecta."),

@@ -9,6 +9,11 @@
     Financeiro: { stroke: "#fcd34d", badge: "#fef3c7", text: "#b45309" }
   };
 
+  const monthLabels = [
+    "jan", "fev", "mar", "abr", "mai", "jun",
+    "jul", "ago", "set", "out", "nov", "dez"
+  ];
+
   let returnFocus = null;
   let initialized = false;
 
@@ -49,16 +54,78 @@
     return slugifyName(name).replace(/-/g, ".");
   }
 
+  function formatHireDate(value) {
+    if (!value) return "—";
+    var parts = String(value).slice(0, 10).split("-");
+    if (parts.length !== 3) return String(value);
+    var month = Number(parts[1]);
+    if (!month || month < 1 || month > 12) return String(value);
+    return parts[2].padStart(2, "0") + " " + monthLabels[month - 1] + " de " + parts[0];
+  }
+
+  function pickField(source, keys) {
+    if (!source) return "";
+    for (var i = 0; i < keys.length; i += 1) {
+      var value = source[keys[i]];
+      if (value !== undefined && value !== null && String(value).trim() !== "") {
+        return String(value).trim();
+      }
+    }
+    return "";
+  }
+
+  function buildProfileFromApiNode(node, managerNode) {
+    var email = pickField(node, ["email", "Email"]);
+    var phone = pickField(node, ["phone", "Phone"]);
+    var location = pickField(node, ["location", "Location"]);
+    var hireDate = pickField(node, ["hireDate", "HireDate"]);
+    var teamsUpn = pickField(node, ["teamsUpn", "TeamsUpn"]) || email;
+    var managerLabel = "—";
+    if (managerNode) {
+      var managerName = pickField(managerNode, ["name", "Name"]);
+      var managerTitle = pickField(managerNode, ["title", "Title"]) || "Colaborador";
+      if (managerName) managerLabel = managerName + " · " + managerTitle;
+    }
+    return {
+      email: email,
+      phone: phone || "—",
+      location: location || "—",
+      admission: hireDate ? formatHireDate(hireDate) : "—",
+      managerLabel: managerLabel,
+      teamsUpn: teamsUpn
+    };
+  }
+
+  /** @deprecated Usado apenas por dados estáticos legados do organograma demo. */
   function buildProfileExtras(name, dept) {
-    const seed = name.split("").reduce(function (sum, char) {
-      return sum + char.charCodeAt(0);
-    }, 0);
-    const months = ["jan", "mar", "mai", "jul", "set", "nov"];
     return {
       email: slugifyEmailLocal(name) + "@liotecnica.com.br",
-      phone: "(19) 3" + String(1000 + (seed % 9000)).padStart(4, "0"),
+      phone: "—",
       location: dept === "Executiva" ? "Campinas, SP · Matriz" : "Campinas, SP · " + dept,
-      admission: months[seed % months.length] + " de " + (2018 + (seed % 7))
+      admission: "—"
+    };
+  }
+
+  function resolveProfile(person) {
+    var provided = person.profile || {};
+    var email = pickField(provided, ["email"]) || pickField(person, ["email", "Email"]);
+    var phone = pickField(provided, ["phone"]) || pickField(person, ["phone", "Phone"]);
+    var location = pickField(provided, ["location"]) || pickField(person, ["location", "Location"]);
+    var hireDate =
+      pickField(provided, ["hireDate"]) ||
+      pickField(person, ["hireDate", "HireDate"]);
+    var admission = pickField(provided, ["admission"]);
+    if (!admission && hireDate) admission = formatHireDate(hireDate);
+    if (!email && person.name && person.dept) {
+      email = buildProfileExtras(person.name, person.dept).email;
+    }
+    return {
+      email: email || "—",
+      phone: phone || "—",
+      location: location || "—",
+      admission: admission || "—",
+      managerLabel: provided.managerLabel,
+      teamsUpn: pickField(provided, ["teamsUpn"]) || pickField(person, ["teamsUpn", "TeamsUpn"]) || email
     };
   }
 
@@ -91,40 +158,122 @@
     }
   }
 
+  function renderProfileFields(person, profile, nodeIndex) {
+    var emailEl = document.getElementById("org-profile-email");
+    var phoneEl = document.getElementById("org-profile-phone");
+    var locationEl = document.getElementById("org-profile-location");
+    var managerEl = document.getElementById("org-profile-manager");
+    var admissionEl = document.getElementById("org-profile-admission");
+    var emailLink = document.getElementById("org-profile-email-link");
+
+    if (profile.email && profile.email !== "—") {
+      emailEl.innerHTML = '<a href="mailto:' + profile.email + '">' + profile.email + "</a>";
+      emailLink.href = "mailto:" + profile.email;
+      emailLink.removeAttribute("aria-disabled");
+    } else {
+      emailEl.textContent = "—";
+      emailLink.href = "#";
+      emailLink.setAttribute("aria-disabled", "true");
+    }
+
+    phoneEl.textContent = profile.phone || "—";
+    locationEl.textContent = profile.location || "—";
+    managerEl.textContent = profile.managerLabel || getManagerLabel(person, nodeIndex || {});
+    admissionEl.textContent = profile.admission || "—";
+  }
+
+  function maybeFetchProfileDetails(slug, person, profile, nodeIndex) {
+    if (!slug || !global.LioApi || global.LioApi.useMock) return;
+    if (profile.admission && profile.admission !== "—") return;
+
+    global.LioApi.get("/people/" + encodeURIComponent(slug) + "/profile")
+      .then(function (data) {
+        if (!data) return;
+        var hireDate = data.hireDate || data.HireDate;
+        if (hireDate) {
+          profile.admission = formatHireDate(hireDate);
+        }
+        if ((!profile.phone || profile.phone === "—") && (data.phone || data.Phone)) {
+          profile.phone = data.phone || data.Phone;
+        }
+        if ((!profile.location || profile.location === "—") && (data.location || data.Location)) {
+          profile.location = data.location || data.Location;
+        }
+        renderProfileFields(person, profile, nodeIndex);
+      })
+      .catch(function () {});
+  }
+
+  function insertModalAvatarPlaceholder(header, beforeEl) {
+    if (!header || header.querySelector(".org-profile-modal__avatar--placeholder")) return;
+    var placeholder = document.createElement("span");
+    placeholder.className = "org-profile-modal__avatar org-profile-modal__avatar--placeholder";
+    placeholder.setAttribute("aria-hidden", "true");
+    placeholder.innerHTML = '<i class="fa-solid fa-user"></i>';
+    header.insertBefore(placeholder, beforeEl || header.firstChild);
+  }
+
+  function applyModalAvatar(person) {
+    var avatarEl = document.getElementById("org-profile-avatar");
+    var header = avatarEl && avatarEl.parentElement;
+    if (!avatarEl || !header) return;
+
+    header.querySelectorAll(".org-profile-modal__avatar--placeholder").forEach(function (el) {
+      el.remove();
+    });
+
+    var src = global.PersonAvatar
+      ? global.PersonAvatar.resolveGraphPhotoUrl(person.img)
+      : null;
+
+    if (src) {
+      avatarEl.hidden = false;
+      avatarEl.src = src;
+      avatarEl.alt = "Foto de " + person.name;
+      avatarEl.onerror = function () {
+        avatarEl.hidden = true;
+        avatarEl.removeAttribute("src");
+        insertModalAvatarPlaceholder(header, avatarEl);
+      };
+      return;
+    }
+
+    avatarEl.hidden = true;
+    avatarEl.removeAttribute("src");
+    insertModalAvatarPlaceholder(header, avatarEl);
+  }
+
   function open(person, nodeIndex, onMessage) {
     ensureModal();
     const modal = document.getElementById("org-profile-modal");
     if (!modal || !person) return;
 
     const colors = getDeptColors(person.dept);
-    const profile = Object.assign({}, buildProfileExtras(person.name, person.dept), person.profile || {});
+    const profile = resolveProfile(person);
     const slug = person.slug || slugifyName(person.name);
 
     modal.style.setProperty("--org-profile-accent", colors.stroke);
     modal.style.setProperty("--org-profile-badge-bg", colors.badge);
     modal.style.setProperty("--org-profile-badge-text", colors.text);
 
-    document.getElementById("org-profile-avatar").src = person.img;
-    document.getElementById("org-profile-avatar").alt = "Foto de " + person.name;
+    applyModalAvatar(person);
     document.getElementById("org-profile-name").textContent = person.name;
     document.getElementById("org-profile-role").textContent = person.title;
     document.getElementById("org-profile-dept").textContent = person.dept;
-    document.getElementById("org-profile-email").innerHTML =
-      '<a href="mailto:' + profile.email + '">' + profile.email + "</a>";
-    document.getElementById("org-profile-phone").textContent = profile.phone;
-    document.getElementById("org-profile-location").textContent = profile.location;
-    document.getElementById("org-profile-manager").textContent = getManagerLabel(person, nodeIndex || {});
-    document.getElementById("org-profile-admission").textContent = profile.admission;
-    document.getElementById("org-profile-email-link").href = "mailto:" + profile.email;
+
+    renderProfileFields(person, profile, nodeIndex || {});
+
     document.getElementById("org-profile-full-link").href =
       "/pessoas/perfil?id=" + encodeURIComponent(slug);
 
     document.getElementById("org-profile-message-btn").onclick = function () {
       if (typeof onMessage === "function") {
-        onMessage(person);
+        onMessage(Object.assign({}, person, { profile: profile }));
       }
       close();
     };
+
+    maybeFetchProfileDetails(slug, person, profile, nodeIndex);
 
     returnFocus = document.activeElement;
     modal.hidden = false;
@@ -158,6 +307,8 @@
     close: close,
     slugifyName: slugifyName,
     slugifyEmailLocal: slugifyEmailLocal,
+    formatHireDate: formatHireDate,
+    buildProfileFromApiNode: buildProfileFromApiNode,
     buildProfileExtras: buildProfileExtras
   };
 })(window);

@@ -208,7 +208,11 @@ export function HelpDeskPage() {
         onClose={() => setOpenTicket(false)}
         onSubmit={handleCreateTicket}
       />
-      <HelpDeskTrackTicketModal open={trackOpen} onClose={() => setTrackOpen(false)} />
+      <HelpDeskTrackTicketModal
+        open={trackOpen}
+        canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false}
+        onClose={() => setTrackOpen(false)}
+      />
       <HelpDeskKnowledgeModal
         open={knowledgeService !== null}
         service={knowledgeService}
