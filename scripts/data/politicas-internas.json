@@ -1,0 +1,281 @@
+{
+  "company": "LioTécnica",
+  "portal": "LioConecta",
+  "policies": [
+    {
+      "id": "codigo-conduta",
+      "title": "Código de Conduta e Ética",
+      "area": "compliance",
+      "areaLabel": "Compliance",
+      "version": "v4.2",
+      "date": "Jan/2026",
+      "desc": "Princípios éticos, condutas esperadas, conflitos de interesse e canal de denúncias. Documento obrigatório para todos os colaboradores.",
+      "scope": "Aplica-se a todos os colaboradores, estagiários, terceiros e prestadores de serviço que atuem em nome da LioTécnica, em qualquer unidade ou modalidade de trabalho.",
+      "guidelines": [
+        "Agir com integridade, honestidade e respeito em todas as relações profissionais e com clientes, fornecedores e parceiros.",
+        "Evitar situações de conflito de interesse; quando inevitáveis, declarar imediatamente ao gestor e à área de Compliance.",
+        "Não aceitar ou oferecer vantagens indevidas, presentes ou hospitalidade que possam influenciar decisões corporativas.",
+        "Proteger informações confidenciais da empresa e de terceiros, utilizando-as apenas para fins autorizados.",
+        "Promover ambiente de trabalho livre de assédio, discriminação e qualquer forma de violência.",
+        "Utilizar os canais oficiais de denúncia para reportar violações deste Código, com garantia de não retaliação.",
+        "Cumprir leis, regulamentos e políticas internas aplicáveis à atividade desempenhada."
+      ],
+      "responsibilities": {
+        "colaborador": "Ler, compreender e cumprir este Código; buscar orientação em caso de dúvida; reportar condutas inadequadas.",
+        "gestor": "Ser exemplo de conduta ética; acolher denúncias da equipe; escalar situações graves à Compliance.",
+        "area": "A área de Compliance mantém este documento, conduz investigações e propõe medidas corretivas."
+      },
+      "contacts": "Dúvidas e denúncias: compliance@liotecnica.com.br | Canal confidencial no portal LioConecta."
+    },
+    {
+      "id": "privacidade-lgpd",
+      "title": "Política de Privacidade e LGPD",
+      "area": "compliance",
+      "areaLabel": "Compliance",
+      "version": "v3.1",
+      "date": "Nov/2025",
+      "desc": "Tratamento de dados pessoais, direitos dos titulares, bases legais e responsabilidades no ciclo de vida da informação.",
+      "scope": "Aplica-se ao tratamento de dados pessoais de colaboradores, candidatos, clientes, fornecedores e demais titulares cujos dados são processados pela LioTécnica.",
+      "guidelines": [
+        "Tratar dados pessoais apenas com base legal válida (consentimento, execução de contrato, obrigação legal, legítimo interesse etc.).",
+        "Coletar somente dados necessários e adequados à finalidade informada ao titular.",
+        "Garantir aos titulares os direitos previstos na LGPD: acesso, correção, eliminação, portabilidade e revogação de consentimento.",
+        "Manter registros de operações de tratamento e relatórios de impacto quando exigidos.",
+        "Contratar fornecedores que demonstrem conformidade e assinar cláusulas de proteção de dados.",
+        "Notificar incidentes de segurança com dados pessoais ao DPO e à ANPD conforme procedimentos internos.",
+        "Eliminar ou anonimizar dados ao término do prazo de retenção definido."
+      ],
+      "responsibilities": {
+        "colaborador": "Tratar dados pessoais apenas conforme autorizado; não compartilhar dados sem necessidade; reportar incidentes.",
+        "gestor": "Garantir que sua equipe conheça as regras de privacidade aplicáveis às suas atividades.",
+        "area": "O Encarregado de Dados (DPO) e Compliance orientam tratamentos, atendem titulares e fiscalizam conformidade."
+      },
+      "contacts": "Titulares e dúvidas sobre privacidade: dpo@liotecnica.com.br"
+    },
+    {
+      "id": "seguranca-informacao",
+      "title": "Política de Segurança da Informação",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v5.0",
+      "date": "Mar/2026",
+      "desc": "Classificação de dados, controles de acesso, senhas, dispositivos móveis e resposta a incidentes de segurança.",
+      "scope": "Aplica-se a todos os sistemas, redes, dados e dispositivos corporativos ou utilizados para acesso a recursos da LioTécnica.",
+      "guidelines": [
+        "Classificar informações conforme níveis Público, Interno, Confidencial e Restrito; aplicar controles proporcionais.",
+        "Utilizar autenticação multifator (MFA) em sistemas críticos e credenciais individuais e intransferíveis.",
+        "Manter senhas com complexidade mínima, renovação periódica e proibição de reutilização.",
+        "Criptografar dados sensíveis em trânsito e em repouso quando tecnicamente viável.",
+        "Registrar e revisar acessos privilegiados trimestralmente; revogar acessos de desligados no mesmo dia.",
+        "Reportar imediatamente suspeitas de phishing, malware ou acesso não autorizado à Central de TI.",
+        "Seguir o plano de resposta a incidentes: contenção, erradicação, recuperação e lições aprendidas."
+      ],
+      "responsibilities": {
+        "colaborador": "Proteger credenciais e dispositivos; aplicar patches; não instalar software não autorizado.",
+        "gestor": "Aprovar acessos da equipe conforme necessidade; validar desligamentos e mudanças de função.",
+        "area": "A área de TI define controles técnicos, monitora ameaças e conduz resposta a incidentes."
+      },
+      "contacts": "Incidentes de segurança: ti-seguranca@liotecnica.com.br | Help Desk interno."
+    },
+    {
+      "id": "uso-recursos-ti",
+      "title": "Política de Uso de Recursos de TI",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v2.4",
+      "date": "Ago/2025",
+      "desc": "Uso aceitável de e-mail, internet, software corporativo, equipamentos e redes da organização.",
+      "scope": "Aplica-se ao uso de computadores, notebooks, celulares corporativos, e-mail, internet, VPN e software licenciado pela empresa.",
+      "guidelines": [
+        "Utilizar recursos de TI prioritariamente para atividades profissionais; uso pessoal deve ser esporádico e não interferir no trabalho.",
+        "É proibido acessar, armazenar ou distribuir conteúdo ilegal, ofensivo, discriminatório ou que viole direitos autorais.",
+        "Não instalar software sem aprovação da TI; utilizar apenas versões licenciadas e atualizadas.",
+        "E-mail corporativo não deve ser usado para campanhas políticas, religiosas ou fins comerciais pessoais.",
+        "Conectar à rede corporativa apenas dispositivos autorizados e com antivírus ativo.",
+        "A empresa pode monitorar o uso dos recursos para fins de segurança e conformidade, respeitando a privacidade legal.",
+        "Devolver equipamentos e revogar acessos no desligamento ou transferência de função."
+      ],
+      "responsibilities": {
+        "colaborador": "Usar recursos de forma responsável; reportar perda ou roubo de equipamentos imediatamente.",
+        "gestor": "Orientar a equipe sobre uso aceitável; solicitar provisionamento e desprovisionamento via TI.",
+        "area": "TI provisiona equipamentos, aplica políticas de rede e responde a violações de uso."
+      },
+      "contacts": "Suporte e solicitações: helpdesk@liotecnica.com.br"
+    },
+    {
+      "id": "viagens-corporativas",
+      "title": "Política de Viagens Corporativas",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v3.0",
+      "date": "Fev/2026",
+      "desc": "Reservas, classes de passagem, hospedagem, adiantamentos e prestação de contas em deslocamentos a trabalho.",
+      "scope": "Aplica-se a viagens nacionais e internacionais realizadas por colaboradores a serviço da LioTécnica, incluindo eventos, visitas a clientes e unidades.",
+      "guidelines": [
+        "Toda viagem deve ser previamente aprovada pelo gestor e registrada no sistema de solicitações do portal.",
+        "Reservas de passagem e hotel devem ser feitas pelos canais corporativos homologados, salvo exceções aprovadas.",
+        "Classe econômica é padrão para voos até 4 horas; executiva requer aprovação da diretoria para voos acima de 6 horas.",
+        "Diárias de hospedagem seguem teto por cidade conforme tabela vigente no Financeiro.",
+        "Adiantamento de viagem pode ser solicitado até 5 dias úteis antes da partida, com prestação de contas em até 5 dias após o retorno.",
+        "Despesas não previstas (táxi, refeições extras) exigem justificativa e comprovante fiscal legível.",
+        "Viagens internacionais exigem seguro viagem corporativo e registro no RH para questões de mobilidade."
+      ],
+      "responsibilities": {
+        "colaborador": "Planejar viagem com antecedência; guardar comprovantes; prestar contas no prazo.",
+        "gestor": "Aprovar necessidade e custo-benefício da viagem; validar prestação de contas.",
+        "area": "O Financeiro processa adiantamentos, reembolsos e audita conformidade com esta política."
+      },
+      "contacts": "Viagens e adiantamentos: financeiro.viagens@liotecnica.com.br"
+    },
+    {
+      "id": "reembolso-despesas",
+      "title": "Política de Reembolso de Despesas",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v2.8",
+      "date": "Out/2025",
+      "desc": "Tipos de despesas elegíveis, limites, comprovantes exigidos e prazos para solicitação de reembolso.",
+      "scope": "Aplica-se a despesas corporativas pagas pelo colaborador com recursos próprios e passíveis de reembolso pela empresa.",
+      "guidelines": [
+        "Somente despesas com finalidade profissional, aprovadas previamente quando exigido, são reembolsáveis.",
+        "Apresentar nota fiscal ou cupom fiscal em nome da LioTécnica ou com dados que permitam identificação da despesa.",
+        "Prazo máximo para solicitação: 30 dias corridos após a data da despesa.",
+        "Refeições em viagem: até R$ 80,00 por refeição em capitais; R$ 60,00 em demais localidades.",
+        "Transporte urbano (táxi, app): reembolso integral com comprovante e justificativa de necessidade.",
+        "Material de escritório e suprimentos: somente com aprovação do gestor e cotação quando acima de R$ 500,00.",
+        "Despesas pessoais, multas de trânsito e bebidas alcoólicas não são reembolsáveis."
+      ],
+      "responsibilities": {
+        "colaborador": "Anexar comprovantes legíveis; classificar corretamente a despesa no portal; informar centro de custo.",
+        "gestor": "Validar elegibilidade e alinhamento com orçamento da área.",
+        "area": "O Financeiro analisa documentação, processa pagamento em até 10 dias úteis após aprovação."
+      },
+      "contacts": "Reembolsos: financeiro.reembolso@liotecnica.com.br"
+    },
+    {
+      "id": "jornada-ponto",
+      "title": "Política de Jornada e Registro de Ponto",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v4.0",
+      "date": "Jan/2026",
+      "desc": "Horários, banco de horas, horas extras, registro eletrônico e procedimentos para ajustes de marcação.",
+      "scope": "Aplica-se a todos os colaboradores regidos pela CLT, inclusive em regime híbrido ou home office, conforme acordo individual.",
+      "guidelines": [
+        "Jornada padrão: 8 horas diárias e 44 horas semanais, com intervalo intrajornada mínimo de 1 hora para jornadas acima de 6 horas.",
+        "Registro de ponto eletrônico é obrigatório no sistema LioConecta ou REP homologado, inclusive em trabalho remoto.",
+        "Banco de horas: saldo positivo limitado a 2 horas diárias; compensação em até 6 meses conforme acordo coletivo.",
+        "Horas extras somente com autorização prévia do gestor; adicional mínimo de 50% sobre a hora normal.",
+        "Ajustes de marcação (esquecimento, falha técnica) devem ser solicitados em até 48 horas com justificativa.",
+        "Plantões e sobreaviso seguem escala aprovada pelo gestor e registrada no RH.",
+        "O não registro injustificado pode caracterizar falta e está sujeito a medidas disciplinares."
+      ],
+      "responsibilities": {
+        "colaborador": "Registrar entrada, saída e intervalos corretamente; solicitar ajustes no prazo.",
+        "gestor": "Autorizar horas extras e validar ajustes; monitorar banco de horas da equipe.",
+        "area": "O RH administra o ponto eletrônico, calcula folha e orienta sobre legislação trabalhista."
+      },
+      "contacts": "Ponto e jornada: rh.ponto@liotecnica.com.br"
+    },
+    {
+      "id": "beneficios",
+      "title": "Política de Benefícios",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v6.1",
+      "date": "Dez/2025",
+      "desc": "Plano de saúde, vale-refeição, auxílio home office, licenças e demais benefícios oferecidos aos colaboradores.",
+      "scope": "Aplica-se a colaboradores CLT em regime ativo, conforme elegibilidade de cada benefício e período de carência definido em contrato ou acordo coletivo.",
+      "guidelines": [
+        "Plano de saúde: cobertura conforme ANS; dependentes elegíveis com coparticipação conforme tabela do plano.",
+        "Vale-refeição/alimentação: crédito mensal em cartão; uso exclusivo em estabelecimentos credenciados; sem conversão em dinheiro.",
+        "Auxílio home office: R$ 150,00 mensais para colaboradores em regime remoto ou híbrido, mediante termo assinado.",
+        "Seguro de vida em grupo: cobertura automática a partir do 30º dia de admissão.",
+        "Licenças: maternidade, paternidade, gala e outras conforme CLT e acordos coletivos; comunicar RH com antecedência.",
+        "Day off de aniversário: 1 dia de folga no mês do aniversário, a combinar com o gestor.",
+        "Alterações de dependentes ou plano devem ser solicitadas em até 30 dias do evento (casamento, nascimento etc.)."
+      ],
+      "responsibilities": {
+        "colaborador": "Manter cadastro de dependentes atualizado; utilizar benefícios conforme regras de cada programa.",
+        "gestor": "Aprovar day off e licenças curtas; apoiar comunicação de mudanças de regime de trabalho.",
+        "area": "O RH gerencia operadoras, créditos e esclarece dúvidas sobre elegibilidade e carências."
+      },
+      "contacts": "Benefícios: rh.beneficios@liotecnica.com.br"
+    },
+    {
+      "id": "anticorrupcao",
+      "title": "Política Anticorrupção",
+      "area": "compliance",
+      "areaLabel": "Compliance",
+      "version": "v2.2",
+      "date": "Jun/2025",
+      "desc": "Práticas proibidas, brindes e hospitalidade, due diligence de terceiros e conformidade com a Lei 12.846/2013.",
+      "scope": "Aplica-se a todos os colaboradores e terceiros que representem a LioTécnica perante órgãos públicos, clientes corporativos ou em negociações comerciais.",
+      "guidelines": [
+        "É vedado oferecer, prometer ou autorizar qualquer vantagem indevida a agente público ou privado.",
+        "Brindes corporativos: limite de R$ 100,00 por item e R$ 300,00 por destinatário/ano; registrar em planilha de Compliance.",
+        "Hospitalidade (refeições, eventos): deve ter caráter institucional; valores acima de R$ 500,00 exigem aprovação prévia.",
+        "Due diligence obrigatória para fornecedores, parceiros e intermediários em contratos acima de R$ 50.000,00.",
+        "Contribuições políticas em nome da empresa são proibidas; doações filantrópicas exigem aprovação da diretoria.",
+        "Manter livros e registros contábeis precisos; proibida omissão ou falsificação de transações.",
+        "Violações podem resultar em rescisão contratual, sanções administrativas e responsabilização civil e penal."
+      ],
+      "responsibilities": {
+        "colaborador": "Recusar solicitações de pagamento irregular; registrar brindes recebidos; reportar suspeitas.",
+        "gestor": "Garantir que negociações da equipe sigam esta política; escalar situações de risco.",
+        "area": "Compliance conduz due diligence, treinamentos e investigações relacionadas à anticorrupção."
+      },
+      "contacts": "Compliance e anticorrupção: compliance@liotecnica.com.br"
+    },
+    {
+      "id": "sst",
+      "title": "Política de Saúde e Segurança no Trabalho",
+      "area": "geral",
+      "areaLabel": "Geral",
+      "version": "v3.3",
+      "date": "Set/2025",
+      "desc": "Normas de SST, EPIs, ergonomia, reporte de riscos e responsabilidades em ambientes presenciais e híbridos.",
+      "scope": "Aplica-se a todas as atividades laborais da LioTécnica, incluindo escritórios, instalações de clientes, home office e deslocamentos a trabalho.",
+      "guidelines": [
+        "Cumprir normas regulamentadoras (NRs) aplicáveis e instruções do SESMT e da CIPA.",
+        "Utilizar EPIs fornecidos pela empresa quando exigidos; comunicar defeitos ou necessidade de reposição.",
+        "Manter postura ergonômica; solicitar avaliação do posto de trabalho em caso de desconforto repetitivo.",
+        "Reportar imediatamente acidentes, quase-acidentes e condições inseguras ao gestor e ao SESMT.",
+        "Em home office: garantir ambiente com iluminação adequada, cadeira com apoio lombar e pausas regulares.",
+        "Participar de treinamentos obrigatórios de SST e simulados de emergência (incêndio, evacuação).",
+        "É proibido improvisar soluções elétricas ou bloquear saídas de emergência em qualquer instalação."
+      ],
+      "responsibilities": {
+        "colaborador": "Cuidar da própria segurança e da de colegas; usar EPIs; participar de treinamentos.",
+        "gestor": "Identificar riscos na equipe; permitir pausas; apoiar investigação de incidentes.",
+        "area": "O SESMT assessora, inspeciona ambientes e propõe medidas preventivas e corretivas."
+      },
+      "contacts": "SST e emergências: sst@liotecnica.com.br | Ramal de emergência nas unidades."
+    },
+    {
+      "id": "home-office",
+      "title": "Política de Home Office",
+      "area": "geral",
+      "areaLabel": "Geral",
+      "version": "v2.0",
+      "date": "Mar/2026",
+      "desc": "Elegibilidade, requisitos de infraestrutura, acordo individual, reembolsos e regras para trabalho remoto.",
+      "scope": "Aplica-se a colaboradores em regime de teletrabalho total ou híbrido, mediante adesão formal e aprovação do gestor e do RH.",
+      "guidelines": [
+        "Elegibilidade: funções compatíveis com trabalho remoto; desempenho satisfatório; infraestrutura domiciliar adequada.",
+        "Termo de teletrabalho individual deve ser assinado antes do início do regime remoto.",
+        "Infraestrutura mínima: internet banda larga estável (mín. 50 Mbps), computador com webcam, ambiente silencioso e seguro.",
+        "A empresa fornece notebook e auxílio home office conforme Política de Benefícios; mobiliário é responsabilidade do colaborador.",
+        "Horário e disponibilidade seguem jornada acordada; registro de ponto permanece obrigatório.",
+        "Dados corporativos devem ser acessados apenas via VPN e dispositivos gerenciados pela TI.",
+        "O gestor pode convocar presencialmente com aviso prévio mínimo de 48 horas para reuniões presenciais obrigatórias."
+      ],
+      "responsibilities": {
+        "colaborador": "Manter ambiente seguro; estar disponível nos horários acordados; proteger equipamentos corporativos.",
+        "gestor": "Definir metas e ritmo de encontros; avaliar produtividade; aprovar ou revisar regime remoto semestralmente.",
+        "area": "O RH formaliza acordos; a TI provisiona acesso remoto; SST orienta ergonomia domiciliar."
+      },
+      "contacts": "Teletrabalho: rh.teletrabalho@liotecnica.com.br"
+    }
+  ]
+}

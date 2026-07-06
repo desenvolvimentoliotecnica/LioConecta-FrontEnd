@@ -739,11 +739,157 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1.2;
     }
 
     .doc-card__open:hover {
       background: #3730a3;
       border-color: #3730a3;
+    }
+
+    /* PDF viewer lightbox */
+    .policy-pdf-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .policy-pdf-modal[hidden] {
+      display: none;
+    }
+
+    .policy-pdf-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(2px);
+    }
+
+    .policy-pdf-modal__dialog {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: min(960px, 96vw);
+      height: min(90vh, 900px);
+      overflow: hidden;
+      background: #fff;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 14px;
+      box-shadow:
+        0 4px 10px rgba(15, 23, 42, 0.08),
+        0 16px 40px rgba(15, 23, 42, 0.2);
+    }
+
+    .policy-pdf-modal__header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px dashed #e2e8f0;
+      background: linear-gradient(135deg, #fff 0%, #eef2ff 100%);
+    }
+
+    .policy-pdf-modal__header-text {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .policy-pdf-modal__title {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #312e81;
+      line-height: 1.3;
+    }
+
+    .policy-pdf-modal__meta {
+      margin: 0;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .policy-pdf-modal__close {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .policy-pdf-modal__close:hover {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #a78bfa;
+    }
+
+    .policy-pdf-modal__frame {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: none;
+      background: #f8fafc;
+    }
+
+    .policy-pdf-modal__footer {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 12px 20px;
+      border-top: 1px dashed #e2e8f0;
+      background: #fff;
+    }
+
+    .policy-pdf-modal__download {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4338ca;
+      text-decoration: none;
+      padding: 8px 14px;
+      border: 1px dashed #a5b4fc;
+      border-radius: 8px;
+      background: #eef2ff;
+    }
+
+    .policy-pdf-modal__download:hover {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .policy-pdf-modal__btn-close {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px dashed var(--wf-border, #b8c0cc);
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .policy-pdf-modal__btn-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
     }
 
     .page-empty-note {
@@ -1881,14 +2027,19 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/politicas-internas/" + id + ".pdf";
+      }
+
       function renderPolicy(policy) {
         const featuredClass = policy.featured ? " is-featured" : "";
         const iconClass = policy.format === "doc" ? "doc" : "pdf";
         const iconFa = policy.format === "doc" ? "fa-file-word" : "fa-file-pdf";
         const updatedBadge = policy.updated ? '<span class="doc-card__updated">Atualizada</span>' : "";
+        const url = pdfUrl(policy.id);
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${policy.area}">
+          <article class="doc-card${featuredClass}" data-area="${policy.area}" data-id="${policy.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${iconClass}" aria-hidden="true">
                 <i class="fa-solid ${iconFa}"></i>
@@ -1908,9 +2059,9 @@
               <span><i class="fa-regular fa-file-lines" aria-hidden="true"></i> ${policy.pages} páginas</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</a>
+              <button type="button" class="doc-card__open" data-action="view"><i class="fa-regular fa-eye" aria-hidden="true"></i> Visualizar</button>
               <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Baixar ${policy.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
+                <a class="doc-card__btn" href="${url}" download aria-label="Baixar ${policy.title}"><i class="fa-solid fa-download" aria-hidden="true"></i></a>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${policy.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>
@@ -1956,6 +2107,110 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("policy-pdf-modal");
+      var modalTitle = document.getElementById("policy-pdf-title");
+      var modalMeta = document.getElementById("policy-pdf-meta");
+      var modalFrame = document.getElementById("policy-pdf-frame");
+      var modalDownload = document.getElementById("policy-pdf-download");
+      var modalCloseBtn = document.getElementById("policy-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "policy-pdf-modal";
+        wrapper.className = "policy-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="policy-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="policy-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="policy-pdf-title">' +
+            '<header class="policy-pdf-modal__header">' +
+              '<div class="policy-pdf-modal__header-text">' +
+                '<h2 class="policy-pdf-modal__title" id="policy-pdf-title"></h2>' +
+                '<p class="policy-pdf-modal__meta" id="policy-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="policy-pdf-modal__close" id="policy-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="policy-pdf-modal__frame" id="policy-pdf-frame" title=""></iframe>' +
+            '<footer class="policy-pdf-modal__footer">' +
+              '<a class="policy-pdf-modal__download" id="policy-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="policy-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("policy-pdf-title");
+        modalMeta = document.getElementById("policy-pdf-meta");
+        modalFrame = document.getElementById("policy-pdf-frame");
+        modalDownload = document.getElementById("policy-pdf-download");
+        modalCloseBtn = document.getElementById("policy-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closePolicyModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closePolicyModal();
+          }
+        });
+      }
+
+      function findPolicy(id) {
+        for (var i = 0; i < policies.length; i += 1) {
+          if (policies[i].id === id) return policies[i];
+        }
+        return null;
+      }
+
+      function openPolicyModal(id) {
+        var policy = findPolicy(id);
+        if (!policy) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = policy.title;
+        modalMeta.textContent = (areaLabels[policy.area] || policy.area) + " · " + policy.version + " · Revisão " + policy.date;
+        modalFrame.title = policy.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", policy.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closePolicyModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest(".doc-card__open[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openPolicyModal(id);
+      });
     })();
   </script>
   <script src="assets/user-menu.js"></script>
