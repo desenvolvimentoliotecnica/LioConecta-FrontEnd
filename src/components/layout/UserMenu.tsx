@@ -4,7 +4,7 @@ import { useMe } from "../../api/hooks/useMe";
 import { closeOtherMenus, useMenuCloseSync } from "./NotificationsMenu";
 
 const FALLBACK = {
-  slug: "leonardo-sabino-mendes",
+  slug: "leonardo-mendes",
   name: "Leonardo Sabino Mendes",
   photoUrl: "/avatar-carlos-mendes.png",
 };

@@ -129,6 +129,21 @@
         img.replaceWith(placeholder);
       }
 
+      function openPersonEmail(slug, name, email) {
+        if (!email) return;
+        if (window.LioEmailCompose && typeof window.LioEmailCompose.open === "function") {
+          window.LioEmailCompose.open({
+            to: [{ name: name, email: email }],
+            recipientSlug: slug || undefined,
+            lockedTo: true,
+            showExternalMailtoLink: true,
+            source: "directory",
+          });
+          return;
+        }
+        window.location.href = "mailto:" + email;
+      }
+
       function renderPerson(person) {
         var name = toTitleCase(person.name || person.Name || "");
         var title = toTitleCase(person.title || person.Title || "Colaborador");
@@ -136,11 +151,11 @@
         var email = person.email || person.Email || "";
         var teamsUpn = person.teamsUpn || person.TeamsUpn || email;
         var profileHref = "/pessoas/perfil?id=" + encodeURIComponent(slug);
-        var mailHref = email ? "mailto:" + encodeURIComponent(email) : "#";
         var teamsHref = teamsUpn
           ? "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsUpn)
           : "#";
         var searchText = (name + " " + title).toLowerCase();
+        var emailDisabled = email ? "" : " disabled";
 
         return (
           '<article class="person-card" data-search="' +
@@ -154,11 +169,17 @@
           escapeHtml(title) +
           "</p>" +
           '<div class="person-card__actions">' +
-          '<a class="person-card__btn" href="' +
-          escapeAttr(mailHref) +
+          '<button type="button" class="person-card__btn" data-directory-email' +
+          emailDisabled +
+          ' data-person-slug="' +
+          escapeAttr(slug) +
+          '" data-person-email="' +
+          escapeAttr(email) +
+          '" data-person-name="' +
+          escapeAttr(name) +
           '" aria-label="Enviar e-mail para ' +
           escapeAttr(name) +
-          '"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a>' +
+          '"><i class="fa-regular fa-envelope" aria-hidden="true"></i></button>' +
           '<a class="person-card__btn" href="' +
           escapeAttr(teamsHref) +
           '" target="_blank" rel="noopener noreferrer" aria-label="Enviar mensagem para ' +
@@ -334,6 +355,17 @@
         root.addEventListener(
           "click",
           function (event) {
+            var emailBtn = event.target.closest("[data-directory-email]");
+            if (emailBtn && root.contains(emailBtn) && !emailBtn.disabled) {
+              event.preventDefault();
+              openPersonEmail(
+                emailBtn.getAttribute("data-person-slug") || "",
+                emailBtn.getAttribute("data-person-name") || "",
+                emailBtn.getAttribute("data-person-email") || ""
+              );
+              return;
+            }
+
             var header = event.target.closest(".dept-group__header");
             if (!header || !root.contains(header)) return;
             var group = header.closest(".dept-group");

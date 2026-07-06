@@ -4,7 +4,7 @@ import type { MeDto } from "../types";
 
 const MOCK_ME: MeDto = {
   id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
-  slug: "leonardo-sabino-mendes",
+  slug: "leonardo-mendes",
   name: "Leonardo Sabino Mendes",
   email: "leonardo.mendes@liotecnica.com.br",
   title: "Desenvolvedor Sr.",

@@ -1408,13 +1408,19 @@
     return global.LioApi
       .get("/people/" + encodeURIComponent(profileId) + "/profile")
       .then(function (dto) {
-        return global.LioApi.get("/people?limit=100").then(function (peopleList) {
-          var allPeople = normalizePeopleList(peopleList).map(mapApiSummaryToLegacy);
-          return {
-            person: mapApiProfileToLegacy(dto),
-            allPeople: allPeople.length ? allPeople : [mapApiProfileToLegacy(dto)]
-          };
-        });
+        var person = mapApiProfileToLegacy(dto);
+        return global.LioApi
+          .get("/people?limit=100")
+          .then(function (peopleList) {
+            var allPeople = normalizePeopleList(peopleList).map(mapApiSummaryToLegacy);
+            return {
+              person: person,
+              allPeople: allPeople.length ? allPeople : [person],
+            };
+          })
+          .catch(function () {
+            return { person: person, allPeople: [person] };
+          });
       });
   }
 
