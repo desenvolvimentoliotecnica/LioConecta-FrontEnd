@@ -1,0 +1,300 @@
+{
+  "company": "LioTécnica",
+  "portal": "LioConecta",
+  "forms": [
+    {
+      "id": "req-ferias",
+      "title": "Requisição de Férias",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v3.1",
+      "date": "Mar/2026",
+      "desc": "Formulário oficial para solicitar férias, informar período desejado e encaminhar aprovação ao gestor e RH.",
+      "whenToUse": "Quando o colaborador desejar agendar férias, fracionar períodos ou alterar datas já aprovadas.",
+      "fields": [
+        "Nome completo, matrícula e centro de custo",
+        "Período aquisitivo e saldo de dias disponíveis",
+        "Data de início e fim do período solicitado",
+        "Opção de abono pecuniário (se aplicável)",
+        "Assinatura do colaborador e aprovação do gestor"
+      ],
+      "instructions": "Preencher todos os campos, anexar ao fluxo no portal em Serviços > Férias ou enviar PDF assinado ao RH. Solicitar com antecedência mínima de 30 dias.",
+      "contacts": "rh.ferias@liotecnica.com.br"
+    },
+    {
+      "id": "solic-reembolso",
+      "title": "Solicitação de Reembolso",
+      "format": "xlsx",
+      "formatLabel": "Excel",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v2.6",
+      "date": "Jan/2026",
+      "desc": "Planilha para lançamento de despesas corporativas, comprovantes e centro de custo para análise financeira.",
+      "whenToUse": "Após despesas pagas com recursos próprios em viagens, representação ou compras emergenciais autorizadas.",
+      "fields": [
+        "Data da despesa e tipo (transporte, refeição, hospedagem, material)",
+        "Valor, moeda e centro de custo",
+        "Finalidade e vínculo com projeto/cliente",
+        "Comprovante fiscal (NF ou cupom) em anexo",
+        "Dados bancários para crédito"
+      ],
+      "instructions": "Preencher uma linha por despesa na planilha oficial. Anexar comprovantes legíveis e submeter em até 30 dias no portal Financeiro.",
+      "contacts": "financeiro.reembolso@liotecnica.com.br"
+    },
+    {
+      "id": "termo-equipamento",
+      "title": "Termo de Responsabilidade de Equipamento",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v1.9",
+      "date": "Nov/2025",
+      "desc": "Registro de entrega de notebook, celular ou periféricos corporativos com responsabilidade do colaborador.",
+      "whenToUse": "Na entrega ou devolução de equipamentos de TI ao colaborador, estagiário ou terceiro.",
+      "fields": [
+        "Identificação do colaborador e gestor",
+        "Tipo de equipamento, patrimônio e número de série",
+        "Acessórios entregues (carregador, mochila, cabos)",
+        "Estado de conservação na entrega",
+        "Data de entrega e previsão de devolução"
+      ],
+      "instructions": "Preencher em duas vias no ato da entrega. Colaborador e TI assinam. Cópia digital arquivada no help desk.",
+      "contacts": "helpdesk@liotecnica.com.br"
+    },
+    {
+      "id": "conflito-interesse",
+      "title": "Declaração de Conflito de Interesse",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v2.0",
+      "date": "Dez/2025",
+      "desc": "Formulário anual de transparência sobre vínculos, participações e situações que possam gerar conflito.",
+      "whenToUse": "Anualmente por todos os colaboradores e sempre que surgir nova situação de potencial conflito.",
+      "fields": [
+        "Participação societária em empresas do setor",
+        "Parentesco com fornecedores, clientes ou concorrentes",
+        "Atividades paralelas remuneradas",
+        "Recebimento de benefícios de terceiros relacionados ao trabalho",
+        "Declaração de inexistência de conflito (quando aplicável)"
+      ],
+      "instructions": "Entregar até 31 de janeiro de cada ano. Situações novas devem ser declaradas em até 5 dias úteis ao RH e Compliance.",
+      "contacts": "compliance@liotecnica.com.br"
+    },
+    {
+      "id": "pedido-compra",
+      "title": "Pedido de Compra",
+      "format": "xlsx",
+      "formatLabel": "Excel",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v4.2",
+      "date": "Fev/2026",
+      "desc": "Modelo para requisição de materiais e serviços com descrição, quantidade, fornecedor e alçada de aprovação.",
+      "whenToUse": "Para solicitar compra de materiais, serviços ou contratos não recorrentes.",
+      "fields": [
+        "Descrição detalhada do item ou serviço",
+        "Quantidade, unidade e valor estimado",
+        "Fornecedor sugerido e cotações anexas",
+        "Centro de custo e projeto",
+        "Justificativa e urgência"
+      ],
+      "instructions": "Preencher planilha, anexar cotações quando valor > R$ 5.000. Submeter no ERP ou enviar ao time de Compras.",
+      "contacts": "financeiro.compras@liotecnica.com.br"
+    },
+    {
+      "id": "autorizacao-viagem",
+      "title": "Autorização de Viagem",
+      "format": "doc",
+      "formatLabel": "Word",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v3.0",
+      "date": "Out/2025",
+      "desc": "Documento para solicitar viagens a trabalho: destino, datas, motivo, estimativa de custos e aprovadores.",
+      "whenToUse": "Antes de qualquer deslocamento a trabalho que envolva passagem, hospedagem ou diárias.",
+      "fields": [
+        "Solicitante, área e centro de custo",
+        "Destino, datas de ida e volta",
+        "Motivo da viagem e clientes/eventos envolvidos",
+        "Estimativa de custos (passagem, hotel, alimentação)",
+        "Aprovação do gestor e diretoria (quando exigido)"
+      ],
+      "instructions": "Obter aprovação prévia do gestor. Após autorização, reservas via canal corporativo. Prestação de contas em até 5 dias após retorno.",
+      "contacts": "financeiro.viagens@liotecnica.com.br"
+    },
+    {
+      "id": "cadastro-fornecedor",
+      "title": "Cadastro de Fornecedor",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "financeiro",
+      "areaLabel": "Financeiro",
+      "version": "v2.3",
+      "date": "Ago/2025",
+      "desc": "Ficha completa para inclusão de novos fornecedores no ERP com dados fiscais, bancários e contatos.",
+      "whenToUse": "Antes do primeiro pedido de compra ou contrato com fornecedor não cadastrado.",
+      "fields": [
+        "Razão social, CNPJ e inscrições",
+        "Endereço, contatos e responsável comercial",
+        "Dados bancários para pagamento",
+        "Certidões negativas e documentos fiscais",
+        "CNAE e descrição dos serviços/produtos"
+      ],
+      "instructions": "Preencher ficha completa e anexar documentos. Análise de compliance para contratos acima de R$ 50.000. Prazo de cadastro: 5 dias úteis.",
+      "contacts": "financeiro.fornecedores@liotecnica.com.br"
+    },
+    {
+      "id": "relatorio-horas",
+      "title": "Relatório de Horas — Projeto",
+      "format": "xlsx",
+      "formatLabel": "Excel",
+      "area": "comercial",
+      "areaLabel": "Comercial",
+      "version": "v1.7",
+      "date": "Mar/2026",
+      "desc": "Planilha de apontamento de horas por cliente, projeto e atividade para times comerciais e de delivery.",
+      "whenToUse": "Semanalmente por consultores, analistas e equipes de projeto faturáveis.",
+      "fields": [
+        "Data e total de horas por dia",
+        "Cliente, projeto e código de atividade",
+        "Descrição resumida da atividade",
+        "Horas faturáveis vs. internas",
+        "Assinatura do gestor do projeto"
+      ],
+      "instructions": "Apontar diariamente. Fechamento semanal até sexta-feira 18h. Planilha consolidada enviada ao PMO.",
+      "contacts": "pmo@liotecnica.com.br"
+    },
+    {
+      "id": "acesso-sistema",
+      "title": "Solicitação de Acesso a Sistema",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "ti",
+      "areaLabel": "TI",
+      "version": "v5.1",
+      "date": "Jan/2026",
+      "desc": "Formulário para criar, alterar ou revogar permissões em sistemas corporativos e perfis de acesso.",
+      "whenToUse": "Admissão, mudança de função, projeto temporário ou desligamento (revogação).",
+      "fields": [
+        "Colaborador, matrícula e gestor solicitante",
+        "Sistema(s) e perfil de acesso desejado",
+        "Tipo: criação, alteração ou revogação",
+        "Justificativa e prazo de acesso (se temporário)",
+        "Aceite da política de segurança da informação"
+      ],
+      "instructions": "Gestor deve aprovar no portal ou assinar PDF. SLA: 2 dias úteis para criação; revogação no mesmo dia do desligamento.",
+      "contacts": "helpdesk@liotecnica.com.br"
+    },
+    {
+      "id": "termo-epi",
+      "title": "Termo de Entrega de EPI",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "administrativo",
+      "areaLabel": "Administrativo",
+      "version": "v1.4",
+      "date": "Set/2025",
+      "desc": "Registro de entrega e recebimento de equipamentos de proteção individual conforme normas de SST.",
+      "whenToUse": "Na entrega de EPIs a colaboradores de áreas operacionais, visitantes de planta ou manutenção.",
+      "fields": [
+        "Colaborador, função e área de atuação",
+        "Lista de EPIs entregues (tipo, CA, quantidade)",
+        "Data de entrega e periodicidade de troca",
+        "Treinamento de uso orientado (sim/não)",
+        "Assinatura de recebimento e responsabilidade"
+      ],
+      "instructions": "Registrar cada entrega. Colaborador compromete-se a usar EPI conforme treinamento. Devolver EPIs no desligamento.",
+      "contacts": "sst@liotecnica.com.br"
+    },
+    {
+      "id": "checklist-integracao",
+      "title": "Check-list de Integração",
+      "format": "pdf",
+      "formatLabel": "PDF",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v2.2",
+      "date": "Fev/2026",
+      "desc": "Lista de verificação para onboarding: documentos, treinamentos, acessos e entregas do primeiro dia.",
+      "whenToUse": "Primeiro dia e primeira semana de todo novo colaborador ou transferência entre unidades.",
+      "fields": [
+        "Documentação admissional entregue",
+        "Crachá, e-mail e acessos provisionados",
+        "Treinamentos obrigatórios agendados (SST, compliance, TI)",
+        "Equipamentos e kit de boas-vindas",
+        "Reunião com gestor e buddy concluída"
+      ],
+      "instructions": "RH e gestor preenchem em conjunto nos primeiros 5 dias. Pendências escaladas ao coordenador de integração.",
+      "contacts": "rh.integracao@liotecnica.com.br"
+    },
+    {
+      "id": "avaliacao-desempenho",
+      "title": "Avaliação de Desempenho",
+      "format": "online",
+      "formatLabel": "Online",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "2026.1",
+      "date": "Mar/2026",
+      "desc": "Formulário online do ciclo semestral de avaliação com metas, competências e feedback estruturado.",
+      "whenToUse": "Ciclos de avaliação de junho e dezembro, ou avaliação de experiência (90 dias).",
+      "fields": [
+        "Metas do período e percentual de atingimento",
+        "Competências comportamentais (escala 1–5)",
+        "Feedback do gestor e autoavaliação",
+        "Plano de desenvolvimento individual",
+        "Calibragem com RH (etapa gestores)"
+      ],
+      "instructions": "Preencher exclusivamente no módulo RH do LioConecta durante a janela do ciclo. Impressão deste PDF serve apenas como referência das seções.",
+      "contacts": "rh.desempenho@liotecnica.com.br"
+    },
+    {
+      "id": "reserva-sala",
+      "title": "Reserva de Sala de Reunião",
+      "format": "online",
+      "formatLabel": "Online",
+      "area": "administrativo",
+      "areaLabel": "Administrativo",
+      "version": "v1.0",
+      "date": "Mar/2026",
+      "desc": "Formulário online para agendar salas, informar participantes e solicitar recursos audiovisuais.",
+      "whenToUse": "Para reservar salas de reunião, auditório ou espaços de treinamento nas unidades.",
+      "fields": [
+        "Data, horário de início e fim",
+        "Sala desejada e capacidade",
+        "Responsável e lista de participantes",
+        "Recursos extras (projetor, videoconferência, coffee)",
+        "Observações para facilities"
+      ],
+      "instructions": "Agendar pelo calendário de salas no LioConecta. Cancelar com 2h de antecedência se não utilizar. Este PDF resume o fluxo de reserva.",
+      "contacts": "facilities@liotecnica.com.br"
+    },
+    {
+      "id": "solic-geral",
+      "title": "Solicitação Geral ao RH",
+      "format": "online",
+      "formatLabel": "Online",
+      "area": "rh",
+      "areaLabel": "RH",
+      "version": "v2.0",
+      "date": "Jan/2026",
+      "desc": "Canal unificado para dúvidas, declarações, alterações cadastrais e demais demandas ao time de RH.",
+      "whenToUse": "Declarações de vínculo, alteração de dados cadastrais, dependentes, dúvidas sobre benefícios ou outros pedidos ao RH.",
+      "fields": [
+        "Tipo de solicitação (lista padronizada)",
+        "Descrição detalhada do pedido",
+        "Documentos comprobatórios em anexo",
+        "Prazo desejado para resposta",
+        "Canal de retorno preferencial"
+      ],
+      "instructions": "Abrir ticket em Serviços > Solicitações RH no portal. SLA médio: 3 dias úteis. Urgências devem ser sinalizadas na descrição.",
+      "contacts": "rh.atendimento@liotecnica.com.br"
+    }
+  ]
+}

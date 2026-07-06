@@ -178,16 +178,25 @@
         }
       ];
 
+      function pdfUrl(id) {
+        return "/documents/formularios/" + id + ".pdf";
+      }
+
       function renderForm(item) {
         const featuredClass = item.featured ? " is-featured" : "";
         const formatClass = item.format;
         const formatBadgeClass = item.format === "doc" ? " doc-card__format--doc" : item.format === "xlsx" ? " doc-card__format--xlsx" : item.format === "online" ? " doc-card__format--online" : "";
         const popularBadge = item.popular ? '<span class="doc-card__updated">Mais usado</span>' : "";
-        const primaryLabel = item.format === "online" ? "Preencher" : "Baixar";
-        const primaryIcon = item.format === "online" ? "fa-arrow-up-right-from-square" : "fa-download";
+        const isOnline = item.format === "online";
+        const primaryLabel = isOnline ? "Preencher" : "Baixar";
+        const primaryIcon = isOnline ? "fa-arrow-up-right-from-square" : "fa-download";
+        const url = pdfUrl(item.id);
+        const primaryAction = isOnline
+          ? `<button type="button" class="doc-card__open" data-action="view"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</button>`
+          : `<a class="doc-card__open" href="${url}" download><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>`;
 
         return `
-          <article class="doc-card${featuredClass}" data-area="${item.area}">
+          <article class="doc-card${featuredClass}" data-area="${item.area}" data-id="${item.id}">
             <div class="doc-card__head">
               <div class="doc-card__icon doc-card__icon--${formatClass}" aria-hidden="true">
                 <i class="fa-solid ${formatIcons[item.format] || "fa-file"}"></i>
@@ -207,9 +216,9 @@
               <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Atualizado ${item.date}</span>
             </div>
             <div class="doc-card__footer">
-              <a class="doc-card__open" href="#"><i class="fa-solid ${primaryIcon}" aria-hidden="true"></i> ${primaryLabel}</a>
+              ${primaryAction}
               <div class="doc-card__actions">
-                <a class="doc-card__btn" href="#" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></a>
+                <button type="button" class="doc-card__btn" data-action="view" aria-label="Visualizar ${item.title}"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                 <a class="doc-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>
@@ -255,4 +264,111 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      var modal = document.getElementById("form-pdf-modal");
+      var modalTitle = document.getElementById("form-pdf-title");
+      var modalMeta = document.getElementById("form-pdf-meta");
+      var modalFrame = document.getElementById("form-pdf-frame");
+      var modalDownload = document.getElementById("form-pdf-download");
+      var modalCloseBtn = document.getElementById("form-pdf-close");
+
+      function ensureModal() {
+        if (modal) return;
+
+        var wrapper = document.createElement("div");
+        wrapper.id = "form-pdf-modal";
+        wrapper.className = "form-pdf-modal";
+        wrapper.hidden = true;
+        wrapper.innerHTML =
+          '<div class="form-pdf-modal__backdrop" data-close aria-hidden="true"></div>' +
+          '<div class="form-pdf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="form-pdf-title">' +
+            '<header class="form-pdf-modal__header">' +
+              '<div class="form-pdf-modal__header-text">' +
+                '<h2 class="form-pdf-modal__title" id="form-pdf-title"></h2>' +
+                '<p class="form-pdf-modal__meta" id="form-pdf-meta"></p>' +
+              '</div>' +
+              '<button type="button" class="form-pdf-modal__close" id="form-pdf-close" aria-label="Fechar visualizador">' +
+                '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+              '</button>' +
+            '</header>' +
+            '<iframe class="form-pdf-modal__frame" id="form-pdf-frame" title=""></iframe>' +
+            '<footer class="form-pdf-modal__footer">' +
+              '<a class="form-pdf-modal__download" id="form-pdf-download" href="#" download>' +
+                '<i class="fa-solid fa-download" aria-hidden="true"></i> Baixar PDF' +
+              '</a>' +
+              '<button type="button" class="form-pdf-modal__btn-close" data-close>Fechar</button>' +
+            '</footer>' +
+          '</div>';
+
+        document.body.appendChild(wrapper);
+        modal = wrapper;
+        modalTitle = document.getElementById("form-pdf-title");
+        modalMeta = document.getElementById("form-pdf-meta");
+        modalFrame = document.getElementById("form-pdf-frame");
+        modalDownload = document.getElementById("form-pdf-download");
+        modalCloseBtn = document.getElementById("form-pdf-close");
+
+        modal.addEventListener("click", function (event) {
+          if (event.target.closest("[data-close]")) {
+            closeFormModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && !modal.hidden) {
+            closeFormModal();
+          }
+        });
+      }
+
+      function findForm(id) {
+        for (var i = 0; i < forms.length; i += 1) {
+          if (forms[i].id === id) return forms[i];
+        }
+        return null;
+      }
+
+      function openFormModal(id) {
+        var item = findForm(id);
+        if (!item) return;
+
+        ensureModal();
+
+        var url = pdfUrl(id);
+        modalTitle.textContent = item.title;
+        modalMeta.textContent =
+          (formatLabels[item.format] || item.format) + " · " +
+          (areaLabels[item.area] || item.area) + " · " +
+          item.version + " · Atualizado " + item.date;
+        modalFrame.title = item.title;
+        modalFrame.src = url;
+        modalDownload.href = url;
+        modalDownload.setAttribute("download", item.id + ".pdf");
+
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modalCloseBtn.focus();
+      }
+
+      function closeFormModal() {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modalFrame.removeAttribute("src");
+        modalFrame.src = "about:blank";
+        document.body.style.overflow = "";
+      }
+
+      root.addEventListener("click", function (event) {
+        var viewBtn = event.target.closest("[data-action='view']");
+        if (!viewBtn) return;
+
+        var card = viewBtn.closest(".doc-card");
+        if (!card) return;
+
+        var id = card.getAttribute("data-id");
+        if (!id) return;
+
+        event.preventDefault();
+        openFormModal(id);
+      });
     })();
