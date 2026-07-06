@@ -216,6 +216,11 @@ export function buildSitemapSections(): SitemapSection[] {
         entry("Minhas atividades", "/minhas-atividades", "Tarefas do plano Microsoft Planner da equipe."),
         entry("Analytics", "/analytics", "Indicadores e métricas de uso do portal."),
         entry("Ajuda", "/ajuda", "Central de ajuda e perguntas frequentes."),
+        entry(
+          "Acesso ao portal",
+          "/acesso",
+          "Login corporativo por LDAP — página pública de autenticação.",
+        ),
         entry("Mapa do site", "/mapa-do-site", "Visão completa de todas as páginas do LioConecta."),
         entry("Favoritos", "/favoritos", "Conteúdos marcados com estrela."),
         entry("Bookmarks", "/bookmarks", "Links e conteúdos salvos para consulta."),

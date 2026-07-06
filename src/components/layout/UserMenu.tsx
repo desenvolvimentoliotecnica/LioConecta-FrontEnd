@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLogout } from "../../api/hooks/useAuth";
 import { useMe } from "../../api/hooks/useMe";
 import { closeOtherMenus, useMenuCloseSync } from "./NotificationsMenu";
 
@@ -11,6 +12,8 @@ const FALLBACK = {
 
 export function UserMenu() {
   const { data: me } = useMe();
+  const logout = useLogout();
+  const navigate = useNavigate();
   const user = me ?? FALLBACK;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -77,9 +80,20 @@ export function UserMenu() {
         <a href="#" role="menuitem" onClick={() => setOpen(false)}>
           <i className="fa-solid fa-gear" aria-hidden="true" /> Configurações
         </a>
-        <a href="#" role="menuitem" onClick={() => setOpen(false)}>
+        <button
+          type="button"
+          role="menuitem"
+          className="user-menu__logout"
+          disabled={logout.isPending}
+          onClick={() => {
+            setOpen(false);
+            logout.mutate(undefined, {
+              onSettled: () => navigate("/acesso", { replace: true }),
+            });
+          }}
+        >
           <i className="fa-solid fa-right-from-bracket" aria-hidden="true" /> Sair
-        </a>
+        </button>
       </div>
     </div>
   );
