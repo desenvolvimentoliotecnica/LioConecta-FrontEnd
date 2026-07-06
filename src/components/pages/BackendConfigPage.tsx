@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { isAdminUser } from "../../api/auth";
+import { ApiError } from "../../api/client";
 import { useAppSettings, useUpdateAppSettings } from "../../api/hooks/useAppSettings";
 import { useTestGraphConnection } from "../../api/hooks/useGraphConfig";
+import { useTestPlannerConnection } from "../../api/hooks/usePlannerConfig";
+import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
 import { useMe } from "../../api/hooks/useMe";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
@@ -11,7 +14,27 @@ const SECRET_MASK = "********";
 const GRAPH_TENANT_KEY = "graph.tenant_id";
 const GRAPH_CLIENT_KEY = "graph.client_id";
 const GRAPH_SECRET_KEY = "graph.client_secret";
+const GLPI_BASE_URL_KEY = "glpi.base_url";
+const GLPI_APP_TOKEN_KEY = "glpi.app_token";
+const GLPI_USER_TOKEN_KEY = "glpi.user_token";
 const INTEGRATIONS_MOCK_KEY = "integrations.use_dev_adapters";
+const PLANNER_ENABLED_KEY = "planner.enabled";
+const PLANNER_PLAN_ID_KEY = "planner.plan_id";
+const PLANNER_DEFAULT_BUCKET_KEY = "planner.default_bucket_id";
+
+function apiErrorDetail(error: unknown): string | undefined {
+  if (!(error instanceof ApiError)) return undefined;
+  if (error.status === 404) {
+    return "Endpoint /admin/glpi/test não encontrado — recompile e reinicie a API LioConecta com a versão mais recente.";
+  }
+  if (typeof error.body === "string" && error.body.trim()) return error.body;
+  if (error.body && typeof error.body === "object") {
+    const record = error.body as Record<string, unknown>;
+    const title = record.title ?? record.message ?? record.detail;
+    if (typeof title === "string" && title.trim()) return title;
+  }
+  return error.message;
+}
 
 function buildDraft(categories: AppSettingCategoryDto[]): Record<string, string> {
   const draft: Record<string, string> = {};
@@ -119,12 +142,25 @@ export function BackendConfigPage() {
   const { data: categories = [], isLoading, isError } = useAppSettings();
   const updateSettings = useUpdateAppSettings();
   const testGraphConnection = useTestGraphConnection();
+  const testPlannerConnection = useTestPlannerConnection();
+  const testGlpiConnection = useTestGlpiConnection();
   const [activeCategory, setActiveCategory] = useState<string>("database");
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info" | "error"; text: string } | null>(
     null,
   );
   const [testFeedback, setTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
+  const [glpiTestFeedback, setGlpiTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
+
+  const [plannerTestFeedback, setPlannerTestFeedback] = useState<{
     type: "success" | "error";
     title: string;
     detail?: string | null;
@@ -170,6 +206,49 @@ export function BackendConfigPage() {
       setTestFeedback({
         type: "error",
         title: "Falha ao testar conexão com o Microsoft Graph.",
+      });
+    }
+  }
+
+  async function handleTestGlpiConnection() {
+    setGlpiTestFeedback(null);
+    try {
+      const appToken = draft[GLPI_APP_TOKEN_KEY]?.trim();
+      const userToken = draft[GLPI_USER_TOKEN_KEY]?.trim();
+      const result = await testGlpiConnection.mutateAsync({
+        baseUrl: draft[GLPI_BASE_URL_KEY]?.trim() || null,
+        appToken: appToken && appToken !== SECRET_MASK ? appToken : null,
+        userToken: userToken && userToken !== SECRET_MASK ? userToken : null,
+      });
+      setGlpiTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch (error) {
+      setGlpiTestFeedback({
+        type: "error",
+        title: "Falha ao testar conexão com o GLPI.",
+        detail: apiErrorDetail(error),
+      });
+    }
+  }
+
+  async function handleTestPlannerConnection() {
+    setPlannerTestFeedback(null);
+    try {
+      const result = await testPlannerConnection.mutateAsync({
+        planId: draft[PLANNER_PLAN_ID_KEY]?.trim() || null,
+      });
+      setPlannerTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch {
+      setPlannerTestFeedback({
+        type: "error",
+        title: "Falha ao testar conexão com o Microsoft Planner.",
       });
     }
   }
@@ -301,6 +380,37 @@ export function BackendConfigPage() {
             </div>
           ) : null}
 
+          {activeCategory === "glpi" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              <strong>Mapeamento dos tokens (infra):</strong>
+              <ul className="backend-config-page__token-map">
+                <li>
+                  <strong>App token (Lioconecta)</strong> → header <code>App-Token</code> — token rotulado
+                  «Lioconecta» pela infra
+                </li>
+                <li>
+                  <strong>User token (glpi_system_service)</strong> → header{" "}
+                  <code>Authorization: user_token …</code> — token do usuário de serviço
+                </li>
+              </ul>
+              Não inverta os dois campos. Salve e teste a conexão antes de desativar o modo mock em Integrações.
+            </div>
+          ) : null}
+
+          {activeCategory === "glpi" && usesDevAdapters ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Modo mock ativo — credenciais GLPI abaixo são ignoradas até desativar o mock em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("integrations")}
+              >
+                Integrações
+              </button>
+              , reiniciar a API e testar novamente.
+            </div>
+          ) : null}
+
           {activeCategory === "graph" && usesDevAdapters ? (
             <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
               Modo mock ativo — credenciais Graph abaixo são ignoradas pelo worker até desativar o mock em{" "}
@@ -312,6 +422,69 @@ export function BackendConfigPage() {
                 Integrações
               </button>
               , reiniciar a API e executar o sync novamente.
+            </div>
+          ) : null}
+
+          {glpiTestFeedback && activeCategory === "glpi" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${glpiTestFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{glpiTestFeedback.title}</strong>
+              {glpiTestFeedback.detail ? (
+                <p className="backend-config-page__alert-detail">{glpiTestFeedback.detail}</p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {activeCategory === "planner" && usesDevAdapters ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Modo mock ativo — Minhas Atividades usa tarefas fictícias. Desative o mock em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("integrations")}
+              >
+                Integrações
+              </button>
+              , reinicie a API e habilite o Planner abaixo.
+            </div>
+          ) : null}
+
+          {activeCategory === "planner" && (draft[PLANNER_ENABLED_KEY] ?? "false") !== "true" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              Integração Planner desabilitada — a página Minhas Atividades ficará vazia até ativar «Planner —
+              integração habilitada».
+            </div>
+          ) : null}
+
+          {activeCategory === "planner" &&
+          (!(draft[GRAPH_TENANT_KEY]?.trim()) ||
+            !(draft[GRAPH_CLIENT_KEY]?.trim()) ||
+            !(draft[GRAPH_SECRET_KEY]?.trim() && draft[GRAPH_SECRET_KEY] !== SECRET_MASK)) ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Credenciais Microsoft Graph não configuradas — o Planner reutiliza a mesma app registration. Configure
+              em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("graph")}
+              >
+                Microsoft Graph
+              </button>
+              .
+            </div>
+          ) : null}
+
+          {plannerTestFeedback && activeCategory === "planner" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${plannerTestFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{plannerTestFeedback.title}</strong>
+              {plannerTestFeedback.detail ? (
+                <p className="backend-config-page__alert-detail">{plannerTestFeedback.detail}</p>
+              ) : null}
             </div>
           ) : null}
 
@@ -327,7 +500,12 @@ export function BackendConfigPage() {
 
           <div className="backend-config-page__fields">
             {activeSection.settings
-              .filter((setting) => setting.key !== "graph.directory_last_sync_utc")
+              .filter(
+                (setting) =>
+                  setting.key !== "graph.directory_last_sync_utc" &&
+                  setting.key !== "planner.last_sync_utc" &&
+                  setting.key !== "planner.plan_title",
+              )
               .map((setting) => (
               <SettingField
                 key={setting.key}
@@ -337,6 +515,43 @@ export function BackendConfigPage() {
               />
             ))}
           </div>
+
+          {activeCategory === "glpi" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestGlpiConnection()}
+                disabled={testGlpiConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testGlpiConnection.isPending ? "Testando…" : "Testar conexão GLPI"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida <code>initSession</code> na API GLPI. Salve antes se alterou credenciais — o teste usa o
+                formulário ou valores já persistidos no banco.
+              </p>
+            </div>
+          ) : null}
+
+          {activeCategory === "planner" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestPlannerConnection()}
+                disabled={testPlannerConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testPlannerConnection.isPending ? "Testando…" : "Testar conexão Planner"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida acesso ao plano <code>{draft[PLANNER_PLAN_ID_KEY] || "…"}</code> via Graph. Requer permissão{" "}
+                <code>Tasks.ReadWrite.All</code> (application). Salve antes se alterou o plan_id ou bucket padrão (
+                <code>{PLANNER_DEFAULT_BUCKET_KEY}</code>).
+              </p>
+            </div>
+          ) : null}
 
           {activeCategory === "graph" ? (
             <div className="backend-config-page__actions">

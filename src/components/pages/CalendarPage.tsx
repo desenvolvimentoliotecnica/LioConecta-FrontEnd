@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useBirthdays } from "../../api/hooks/useBirthdays";
 import {
   CALENDAR_EVENTS,
   CALENDAR_FILTERS,
@@ -10,26 +11,37 @@ import {
   formatEventTime,
   formatLongDate,
   getDailyMenu,
+  getTodayDateKey,
+  mapBirthdaysToCalendarEvents,
   parseDateKey,
   toDateKey,
   upcomingEvents,
+  type CalendarEvent,
   type CalendarEventKind,
 } from "../../config/calendar";
 import "../../styles/calendar-page.css";
 
-const TODAY = toDateKey(2026, 6, 4);
-
 export function CalendarPage() {
-  const [viewYear, setViewYear] = useState(2026);
-  const [viewMonth, setViewMonth] = useState(6);
-  const [selectedDate, setSelectedDate] = useState(TODAY);
+  const todayKey = useMemo(() => getTodayDateKey(), []);
+  const todayParts = useMemo(() => parseDateKey(todayKey), [todayKey]);
+
+  const [viewYear, setViewYear] = useState(todayParts.year);
+  const [viewMonth, setViewMonth] = useState(todayParts.month);
+  const [selectedDate, setSelectedDate] = useState(todayKey);
   const [kind, setKind] = useState<CalendarEventKind>("all");
+
+  const { data: birthdays = [] } = useBirthdays(365);
+
+  const allEvents = useMemo(() => {
+    const birthdayEvents = mapBirthdaysToCalendarEvents(birthdays);
+    return [...CALENDAR_EVENTS, ...birthdayEvents];
+  }, [birthdays]);
 
   const weeks = useMemo(() => buildMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
 
   const filteredEvents = useMemo(
-    () => (kind === "all" ? CALENDAR_EVENTS : CALENDAR_EVENTS.filter((e) => e.kind === kind)),
-    [kind],
+    () => (kind === "all" ? allEvents : allEvents.filter((e) => e.kind === kind)),
+    [allEvents, kind],
   );
 
   const selectedEvents = useMemo(
@@ -41,17 +53,17 @@ export function CalendarPage() {
 
   const upcoming = useMemo(
     () => upcomingEvents(
-      kind === "all" ? CALENDAR_EVENTS : CALENDAR_EVENTS.filter((e) => e.kind === kind),
-      TODAY,
+      kind === "all" ? allEvents : allEvents.filter((e) => e.kind === kind),
+      todayKey,
     ),
-    [kind],
+    [allEvents, kind, todayKey],
   );
 
   const eventsByDate = useMemo(() => {
     const map = new Map<string, number>();
     const source = kind === "all"
-      ? CALENDAR_EVENTS
-      : CALENDAR_EVENTS.filter((e) => e.kind === kind);
+      ? allEvents
+      : allEvents.filter((e) => e.kind === kind);
     source.forEach((event) => {
       const parsed = parseDateKey(event.date);
       if (parsed.year === viewYear && parsed.month === viewMonth) {
@@ -59,7 +71,7 @@ export function CalendarPage() {
       }
     });
     return map;
-  }, [kind, viewYear, viewMonth]);
+  }, [allEvents, kind, viewYear, viewMonth]);
 
   const goPrevMonth = () => {
     if (viewMonth === 0) {
@@ -80,9 +92,11 @@ export function CalendarPage() {
   };
 
   const goToday = () => {
-    setViewYear(2026);
-    setViewMonth(6);
-    setSelectedDate(TODAY);
+    const key = getTodayDateKey();
+    const parts = parseDateKey(key);
+    setViewYear(parts.year);
+    setViewMonth(parts.month);
+    setSelectedDate(key);
   };
 
   return (
@@ -149,7 +163,7 @@ export function CalendarPage() {
               }
               const { day } = parseDateKey(dateKey);
               const count = eventsByDate.get(dateKey) ?? 0;
-              const isToday = dateKey === TODAY;
+              const isToday = dateKey === todayKey;
               const isSelected = dateKey === selectedDate;
               return (
                 <button
@@ -241,7 +255,7 @@ function AgendaItem({
   event,
   compact = false,
 }: {
-  event: (typeof CALENDAR_EVENTS)[number];
+  event: CalendarEvent;
   compact?: boolean;
 }) {
   const content = (

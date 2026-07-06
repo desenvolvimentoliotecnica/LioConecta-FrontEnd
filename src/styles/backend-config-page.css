@@ -195,6 +195,17 @@
   line-height: 1.5;
 }
 
+.backend-config-page__token-map {
+  margin: 8px 0;
+  padding-left: 1.2rem;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.backend-config-page__token-map li + li {
+  margin-top: 4px;
+}
+
 .backend-config-page__inline-link {
   padding: 0;
   border: none;

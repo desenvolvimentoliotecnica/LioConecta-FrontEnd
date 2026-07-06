@@ -2,6 +2,7 @@
       const root = document.getElementById("newcomers-root");
       const countEl = document.getElementById("newcomers-count");
       const filters = document.getElementById("newcomers-filters");
+      const bannerTextEl = document.getElementById("newcomers-banner-text");
       let activeFilter = "all";
       const monthNames = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -17,10 +18,15 @@
           .replace(/"/g, "&quot;");
       }
 
-      function photoUrl(url) {
-        if (!url) return "/avatar-ti.png";
-        if (/^(https?:|data:|blob:)/i.test(url)) return url;
-        return url.startsWith("/") ? url : "/" + url;
+      function renderAvatar(person) {
+        if (window.PersonAvatar) {
+          return window.PersonAvatar.renderAvatarMarkup(person.photoUrl, {
+            escapeAttr: function (value) {
+              return escapeHtml(value);
+            }
+          });
+        }
+        return '<span class="person-card__avatar person-card__avatar--placeholder" aria-hidden="true"><i class="fa-solid fa-user"></i></span>';
       }
 
       function slugify(value) {
@@ -67,11 +73,11 @@
       }
 
       function renderPerson(person) {
-        var avatar = photoUrl(person.photoUrl);
+        var avatarMarkup = renderAvatar(person);
         var profileHref = "/pessoas/perfil?id=" + encodeURIComponent(person.slug);
         return (
           '<article class="person-card" data-dept="' + person.deptId + '">' +
-          '<img class="person-card__avatar" src="' + avatar + '" alt="" />' +
+          avatarMarkup +
           '<h2 class="person-card__name">' + escapeHtml(person.name) + "</h2>" +
           '<p class="person-card__role">' + escapeHtml(person.role) + "</p>" +
           '<span class="person-card__dept">' + escapeHtml(person.dept) + "</span>" +
@@ -123,7 +129,52 @@
         updateCount(visibleTotal, groupCount);
       }
 
-      if (filters) {
+      function updateWelcomeBanner(people) {
+        if (!bannerTextEl) return;
+        var now = new Date();
+        var monthKey = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        var thisMonthCount = (people || []).filter(function (person) {
+          return person.hireDate && String(person.hireDate).slice(0, 7) === monthKey;
+        }).length;
+        if (thisMonthCount === 0) {
+          bannerTextEl.textContent = "Nenhuma admissão neste mês. Envie acolhimento quando novos membros chegarem.";
+        } else if (thisMonthCount === 1) {
+          bannerTextEl.textContent = "Este mês entrou 1 colaborador. Envie uma mensagem de acolhimento e ajude na integração.";
+        } else {
+          bannerTextEl.textContent = "Este mês entraram " + thisMonthCount + " colaboradores. Envie uma mensagem de acolhimento e ajude na integração.";
+        }
+      }
+
+      function renderFilters(cohorts, people) {
+        if (!filters) return;
+        var chips = [
+          '<button class="filter-chip is-active" type="button" data-filter="all">Todos</button>'
+        ];
+        cohorts.forEach(function (cohort) {
+          chips.push(
+            '<button class="filter-chip" type="button" data-filter="' + cohort.id + '">' +
+            escapeHtml(cohort.name) + "</button>"
+          );
+        });
+        var departments = {};
+        (people || []).forEach(function (person) {
+          if (!person.departmentName) return;
+          var deptId = slugify(person.departmentName);
+          if (!departments[deptId]) departments[deptId] = person.departmentName;
+        });
+        Object.keys(departments).sort(function (a, b) {
+          return departments[a].localeCompare(departments[b], "pt-BR");
+        }).forEach(function (deptId) {
+          chips.push(
+            '<button class="filter-chip" type="button" data-filter="' + deptId + '">' +
+            escapeHtml(departments[deptId]) + "</button>"
+          );
+        });
+        filters.innerHTML = chips.join("");
+      }
+
+      function wireFilters() {
+        if (!filters) return;
         filters.addEventListener("click", function (event) {
           var chip = event.target.closest(".filter-chip");
           if (!chip) return;
@@ -135,18 +186,26 @@
         });
       }
 
+      wireFilters();
+
       root.innerHTML = '<p class="page-empty-note">Carregando novos colaboradores...</p>';
 
       if (!window.LioApi || window.LioApi.useMock) {
         root.innerHTML = '<p class="page-empty-note">API indisponível. Ative o backend e desabilite VITE_USE_MOCK.</p>';
+        if (countEl) countEl.textContent = "";
+        if (bannerTextEl) bannerTextEl.textContent = "Conecte-se ao backend para ver admissões reais do diretório.";
         return;
       }
 
       window.LioApi.get("/people/new-hires?days=180")
         .then(function (people) {
-          var cohorts = buildCohorts(people || []);
+          people = people || [];
+          updateWelcomeBanner(people);
+          var cohorts = buildCohorts(people);
+          renderFilters(cohorts, people);
           if (!cohorts.length) {
-            root.innerHTML = '<p class="page-empty-note">Nenhuma admissão recente. Execute os workers Graph e TOTVS.</p>';
+            root.innerHTML = '<p class="page-empty-note">Nenhuma admissão recente com data de entrada registrada. Execute o sync do AD (Graph).</p>';
+            if (countEl) countEl.textContent = "Exibindo 0 novos colaboradores";
             return;
           }
           root.innerHTML = cohorts.map(renderCohort).join("");
@@ -154,5 +213,7 @@
         })
         .catch(function () {
           root.innerHTML = '<p class="page-empty-note">Não foi possível carregar novos colaboradores.</p>';
+          if (countEl) countEl.textContent = "";
+          if (bannerTextEl) bannerTextEl.textContent = "Não foi possível carregar as admissões do mês.";
         });
     })();

@@ -2,10 +2,18 @@
       const root = document.getElementById("birthday-root");
       const countEl = document.getElementById("birthday-count");
       const filters = document.getElementById("birthday-filters");
+      const monthSelect = document.getElementById("birthday-month-select");
+      const searchInput = document.getElementById("birthday-search");
+      const bannerTextEl = document.getElementById("birthday-banner-text");
       let activeFilter = "all";
+      let searchQuery = "";
       const monthNames = [
         "janeiro", "fevereiro", "março", "abril", "maio", "junho",
         "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+      ];
+      const monthNamesTitle = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
       ];
 
       if (!root) return;
@@ -17,10 +25,22 @@
           .replace(/"/g, "&quot;");
       }
 
-      function photoUrl(url) {
-        if (!url) return "/avatar-ti.png";
-        if (/^(https?:|data:|blob:)/i.test(url)) return url;
-        return url.startsWith("/") ? url : "/" + url;
+      function normalizeSearch(value) {
+        return String(value || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+      }
+
+      function renderAvatar(person) {
+        if (window.PersonAvatar) {
+          return window.PersonAvatar.renderAvatarMarkup(person.photoUrl, {
+            escapeAttr: function (value) {
+              return escapeHtml(value);
+            }
+          });
+        }
+        return '<span class="person-card__avatar person-card__avatar--placeholder" aria-hidden="true"><i class="fa-solid fa-user"></i></span>';
       }
 
       function formatBirthLabel(birthDate) {
@@ -41,51 +61,9 @@
         return Math.round((next - today) / 86400000);
       }
 
-      function buildGroups(people) {
+      function getNextCalendarMonth() {
         var today = new Date();
-        today.setHours(0, 0, 0, 0);
-        var groups = [
-          { id: "today", name: "Hoje", people: [] },
-          { id: "week", name: "Esta semana", people: [] },
-          { id: "month", name: "Este mês", people: [] }
-        ];
-        var byMonth = {};
-
-        people.forEach(function (person) {
-          if (!person.birthDate) return;
-          var days = daysUntilBirthday(person.birthDate, today);
-          var entry = {
-            name: person.name,
-            role: person.title || "Colaborador",
-            dept: person.departmentName || "",
-            deptId: slugify(person.departmentName || "sem-departamento"),
-            day: Number(person.birthDate.split("-")[2]),
-            month: Number(person.birthDate.split("-")[1]),
-            label: formatBirthLabel(person.birthDate),
-            slug: person.slug,
-            photoUrl: person.photoUrl
-          };
-
-          if (days === 0) groups[0].people.push(entry);
-          else if (days <= 7) groups[1].people.push(entry);
-          else if (days <= 30) groups[2].people.push(entry);
-
-          var monthKey = person.birthDate.slice(0, 7);
-          if (!byMonth[monthKey]) {
-            byMonth[monthKey] = {
-              id: "month-" + monthKey,
-              name: monthNames[entry.month - 1] + " (aniversários)",
-              people: []
-            };
-          }
-          byMonth[monthKey].people.push(entry);
-        });
-
-        var result = groups.filter(function (g) { return g.people.length; });
-        Object.keys(byMonth).sort().forEach(function (key) {
-          if (byMonth[key].people.length) result.push(byMonth[key]);
-        });
-        return result;
+        return (today.getMonth() + 1) % 12 + 1;
       }
 
       function slugify(value) {
@@ -102,15 +80,70 @@
         return person.day === today.getDate() && person.month === today.getMonth() + 1;
       }
 
+      function buildGroups(people) {
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var groups = [
+          { id: "today", name: "Hoje", people: [] },
+          { id: "week", name: "Esta semana", people: [] },
+          { id: "month", name: "Este mês", people: [] }
+        ];
+        var byCalendarMonth = {};
+
+        people.forEach(function (person) {
+          if (!person.birthDate) return;
+          var days = daysUntilBirthday(person.birthDate, today);
+          var entry = {
+            name: person.name,
+            role: person.title || "Colaborador",
+            dept: person.departmentName || "",
+            deptId: slugify(person.departmentName || "sem-departamento"),
+            day: Number(person.birthDate.split("-")[2]),
+            month: Number(person.birthDate.split("-")[1]),
+            days: days,
+            label: formatBirthLabel(person.birthDate),
+            slug: person.slug,
+            photoUrl: person.photoUrl,
+            searchName: normalizeSearch(person.name)
+          };
+
+          if (days === 0) {
+            groups[0].people.push(entry);
+          } else if (days <= 7) {
+            groups[1].people.push(entry);
+          } else if (days <= 30) {
+            groups[2].people.push(entry);
+          } else {
+            var calKey = "cal-" + entry.month;
+            if (!byCalendarMonth[calKey]) {
+              byCalendarMonth[calKey] = {
+                id: calKey,
+                name: monthNamesTitle[entry.month - 1],
+                people: []
+              };
+            }
+            byCalendarMonth[calKey].people.push(entry);
+          }
+        });
+
+        var result = groups.filter(function (g) { return g.people.length; });
+        Object.keys(byCalendarMonth)
+          .sort(function (a, b) { return Number(a.slice(4)) - Number(b.slice(4)); })
+          .forEach(function (key) {
+            if (byCalendarMonth[key].people.length) result.push(byCalendarMonth[key]);
+          });
+        return result;
+      }
+
       function renderPerson(person) {
-        var avatar = photoUrl(person.photoUrl);
+        var avatarMarkup = renderAvatar(person);
         var todayClass = isToday(person) ? " is-today" : "";
         var todayBadge = isToday(person) ? '<span class="person-card__today-badge">Hoje</span>' : "";
         var profileHref = "/pessoas/perfil?id=" + encodeURIComponent(person.slug);
         return (
-          '<article class="person-card' + todayClass + '" data-day="' + person.day + '" data-month="' + person.month + '">' +
+          '<article class="person-card' + todayClass + '" data-day="' + person.day + '" data-month="' + person.month + '" data-days="' + person.days + '" data-name="' + escapeHtml(person.searchName) + '">' +
           todayBadge +
-          '<img class="person-card__avatar" src="' + avatar + '" alt="" />' +
+          avatarMarkup +
           '<h2 class="person-card__name">' + escapeHtml(person.name) + "</h2>" +
           '<p class="person-card__role">' + escapeHtml(person.role) + "</p>" +
           '<span class="person-card__dept">' + escapeHtml(person.dept) + "</span>" +
@@ -133,39 +166,67 @@
         );
       }
 
+      function cardMatchesPeriod(card) {
+        var day = Number(card.getAttribute("data-day"));
+        var month = Number(card.getAttribute("data-month"));
+        var days = Number(card.getAttribute("data-days"));
+        var today = new Date();
+        var currentMonth = today.getMonth() + 1;
+        var nextMonth = getNextCalendarMonth();
+
+        if (activeFilter === "all") return true;
+        if (activeFilter === "today") return days === 0;
+        if (activeFilter === "week") return days >= 0 && days <= 7;
+        if (activeFilter === "month") return month === currentMonth;
+        if (activeFilter === "next-month") return month === nextMonth;
+        if (activeFilter.indexOf("cal-") === 0) {
+          return month === Number(activeFilter.slice(4));
+        }
+        return true;
+      }
+
+      function cardMatchesSearch(card) {
+        if (!searchQuery) return true;
+        var name = card.getAttribute("data-name") || "";
+        return name.indexOf(searchQuery) !== -1;
+      }
+
       function updateCount(visibleTotal, groupCount) {
         if (!countEl) return;
-        countEl.textContent = activeFilter === "all"
-          ? "Exibindo " + visibleTotal + " aniversariantes em " + groupCount + " períodos"
-          : "Exibindo " + visibleTotal + " aniversariantes";
+        if (searchQuery) {
+          countEl.textContent = visibleTotal === 0
+            ? "Nenhum aniversariante encontrado para \"" + searchQuery + "\""
+            : "Exibindo " + visibleTotal + " resultado" + (visibleTotal === 1 ? "" : "s");
+          return;
+        }
+        if (activeFilter === "all") {
+          countEl.textContent = "Exibindo " + visibleTotal + " aniversariantes em " + groupCount + " períodos";
+          return;
+        }
+        countEl.textContent = "Exibindo " + visibleTotal + " aniversariante" + (visibleTotal === 1 ? "" : "s");
       }
 
-      function cardMatchesFilter(card, filter, groupId) {
-        if (filter === "all") return true;
-        if (filter === groupId) return true;
-        if (filter === "today") {
-          var today = new Date();
-          return Number(card.getAttribute("data-day")) === today.getDate()
-            && Number(card.getAttribute("data-month")) === today.getMonth() + 1;
-        }
-        if (filter === "week") {
-          return groupId === "week" || groupId === "today";
-        }
-        if (filter === "month") {
-          return groupId === "month" || groupId === "week" || groupId === "today";
-        }
-        return false;
+      function setActiveChip(filter) {
+        if (!filters) return;
+        filters.querySelectorAll(".filter-chip").forEach(function (btn) {
+          var match = filter && btn.getAttribute("data-filter") === filter;
+          btn.classList.toggle("is-active", match);
+        });
       }
 
-      function applyFilter(filter) {
-        activeFilter = filter;
+      function setMonthSelectValue(value) {
+        if (!monthSelect) return;
+        monthSelect.value = value || "";
+        monthSelect.classList.toggle("is-active", Boolean(value));
+      }
+
+      function applyFilters() {
         var visibleTotal = 0;
         var groupCount = 0;
         root.querySelectorAll(".dept-group").forEach(function (group) {
-          var groupId = group.getAttribute("data-group");
           var visibleInGroup = 0;
           group.querySelectorAll(".person-card").forEach(function (card) {
-            var match = cardMatchesFilter(card, filter, groupId);
+            var match = cardMatchesPeriod(card) && cardMatchesSearch(card);
             card.hidden = !match;
             if (match) visibleInGroup += 1;
           });
@@ -178,36 +239,128 @@
         updateCount(visibleTotal, groupCount);
       }
 
-      if (filters) {
-        filters.addEventListener("click", function (event) {
-          var chip = event.target.closest(".filter-chip");
-          if (!chip) return;
-          filters.querySelectorAll(".filter-chip").forEach(function (btn) {
-            btn.classList.remove("is-active");
-          });
-          chip.classList.add("is-active");
-          applyFilter(chip.getAttribute("data-filter") || "all");
+      function updateWelcomeBanner(people) {
+        if (!bannerTextEl) return;
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var todayCount = 0;
+        (people || []).forEach(function (person) {
+          if (!person.birthDate) return;
+          var days = daysUntilBirthday(person.birthDate, today);
+          if (days === 0) todayCount += 1;
         });
+        var total = (people || []).length;
+        if (total === 0) {
+          bannerTextEl.textContent = "Nenhum aniversariante nos próximos dias. Execute o sync do RM (TOTVS).";
+          return;
+        }
+        if (todayCount === 0) {
+          bannerTextEl.textContent =
+            "Nenhum aniversariante hoje. Nos próximos 60 dias, " +
+            total + " colaborador" + (total === 1 ? "" : "es") + " comemoram mais um ano de vida.";
+        } else if (todayCount === 1) {
+          bannerTextEl.textContent =
+            "Hoje é aniversário de 1 colaborador. Nos próximos 60 dias, " + total + " celebrações no total.";
+        } else {
+          bannerTextEl.textContent =
+            "Hoje são " + todayCount + " aniversariantes. Nos próximos 60 dias, " + total + " celebrações no total.";
+        }
       }
+
+      function renderMonthSelect(people) {
+        if (!monthSelect) return;
+        var today = new Date();
+        var year = today.getFullYear();
+        var counts = {};
+        (people || []).forEach(function (person) {
+          if (!person.birthDate) return;
+          var month = Number(person.birthDate.split("-")[1]);
+          counts[month] = (counts[month] || 0) + 1;
+        });
+
+        var options = ['<option value="">Todos os meses</option>'];
+        for (var m = 1; m <= 12; m += 1) {
+          var count = counts[m] || 0;
+          var label = monthNamesTitle[m - 1] + " " + year;
+          if (count > 0) label += " (" + count + ")";
+          options.push(
+            '<option value="cal-' + m + '"' + (count === 0 ? ' disabled' : '') + ">" +
+            escapeHtml(label) +
+            "</option>"
+          );
+        }
+        monthSelect.innerHTML = options.join("");
+      }
+
+      function wireToolbar() {
+        if (filters) {
+          filters.addEventListener("click", function (event) {
+            var chip = event.target.closest(".filter-chip");
+            if (!chip) return;
+            activeFilter = chip.getAttribute("data-filter") || "all";
+            setActiveChip(activeFilter);
+            setMonthSelectValue("");
+            applyFilters();
+          });
+        }
+
+        if (monthSelect) {
+          monthSelect.addEventListener("change", function () {
+            var value = monthSelect.value;
+            if (value) {
+              activeFilter = value;
+              setActiveChip("");
+              setMonthSelectValue(value);
+            } else {
+              activeFilter = "all";
+              setActiveChip("all");
+              setMonthSelectValue("");
+            }
+            applyFilters();
+          });
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener("input", function () {
+            searchQuery = normalizeSearch(searchInput.value.trim());
+            applyFilters();
+          });
+        }
+      }
+
+      wireToolbar();
 
       root.innerHTML = '<p class="page-empty-note">Carregando aniversariantes...</p>';
 
       if (!window.LioApi || window.LioApi.useMock) {
         root.innerHTML = '<p class="page-empty-note">API indisponível. Ative o backend e desabilite VITE_USE_MOCK.</p>';
+        if (countEl) countEl.textContent = "";
+        if (bannerTextEl) bannerTextEl.textContent = "Conecte-se ao backend para ver aniversariantes reais.";
         return;
       }
 
       window.LioApi.get("/people/birthdays?days=60")
         .then(function (people) {
-          var groups = buildGroups(people || []);
+          people = people || [];
+          updateWelcomeBanner(people);
+          renderMonthSelect(people);
+          if (!people.length) {
+            root.innerHTML = '<p class="page-empty-note">Nenhum aniversariante nos próximos 60 dias com data de nascimento registrada. Execute o sync do RM (TOTVS).</p>';
+            if (countEl) countEl.textContent = "Exibindo 0 aniversariantes";
+            return;
+          }
+          var groups = buildGroups(people);
           if (!groups.length) {
-            root.innerHTML = '<p class="page-empty-note">Nenhum aniversariante nos próximos 60 dias. Execute os workers Graph e TOTVS.</p>';
+            root.innerHTML = '<p class="page-empty-note">Nenhum aniversariante nos próximos 60 dias.</p>';
+            if (countEl) countEl.textContent = "Exibindo 0 aniversariantes";
             return;
           }
           root.innerHTML = groups.map(renderGroup).join("");
-          applyFilter("all");
+          applyFilters();
         })
         .catch(function () {
           root.innerHTML = '<p class="page-empty-note">Não foi possível carregar aniversariantes.</p>';
+          if (countEl) countEl.textContent = "";
+          if (bannerTextEl) bannerTextEl.textContent = "Não foi possível carregar os aniversariantes.";
         });
     })();

@@ -61,14 +61,6 @@ export const CALENDAR_EVENTS: CalendarEvent[] = [
     href: "/servicos/reservas-salas",
   },
   {
-    id: "ev-aniv-julia",
-    kind: "aniversario",
-    title: "Aniversário — Julia Santos",
-    date: "2026-07-04",
-    description: "Parabenize Julia Santos no feed ou via diretório.",
-    href: "/pessoas/aniversariantes",
-  },
-  {
     id: "ev-prazo-estrategia",
     kind: "comunicado",
     title: "Prazo: socializar estratégia 2026",
@@ -138,13 +130,6 @@ export const CALENDAR_EVENTS: CalendarEvent[] = [
     href: "/servicos/reservas-salas",
   },
   {
-    id: "ev-aniv-carlos",
-    kind: "aniversario",
-    title: "Aniversário — Carlos Mendes",
-    date: "2026-07-15",
-    href: "/pessoas/aniversariantes",
-  },
-  {
     id: "ev-workshop-inovacao",
     kind: "evento",
     title: "Workshop de inovação aberta",
@@ -211,13 +196,6 @@ export const CALENDAR_EVENTS: CalendarEvent[] = [
     href: "/",
   },
   {
-    id: "ev-aniv-maria",
-    kind: "aniversario",
-    title: "Aniversário — Maria Silva",
-    date: "2026-08-02",
-    href: "/pessoas/aniversariantes",
-  },
-  {
     id: "ev-reuniao-ti",
     kind: "reuniao",
     title: "Review sprint TI",
@@ -227,6 +205,49 @@ export const CALENDAR_EVENTS: CalendarEvent[] = [
     location: "Sala Dev",
   },
 ];
+
+export function getTodayDateKey(reference = new Date()): string {
+  return toDateKey(reference.getFullYear(), reference.getMonth(), reference.getDate());
+}
+
+export function birthdayToNextDateKey(birthDate: string, reference = new Date()): string {
+  const parts = birthDate.split("-");
+  if (parts.length !== 3) return birthDate;
+
+  const month = Number(parts[1]);
+  const day = Number(parts[2]);
+  const year = reference.getFullYear();
+  const today = new Date(reference);
+  today.setHours(0, 0, 0, 0);
+
+  let next = new Date(year, month - 1, day);
+  if (next < today) {
+    next = new Date(year + 1, month - 1, day);
+  }
+
+  return toDateKey(next.getFullYear(), next.getMonth(), next.getDate());
+}
+
+export function mapBirthdaysToCalendarEvents(
+  people: { slug: string; name: string; title?: string | null; departmentName?: string | null; birthDate: string }[],
+): CalendarEvent[] {
+  return people
+    .filter((person) => person.birthDate)
+    .map((person) => {
+      const date = birthdayToNextDateKey(person.birthDate);
+      const role = person.title ? ` — ${person.title}` : "";
+      const dept = person.departmentName ? ` · ${person.departmentName}` : "";
+
+      return {
+        id: `aniv-${person.slug}-${date}`,
+        kind: "aniversario",
+        title: `Aniversário — ${person.name}`,
+        date,
+        description: `Parabenize ${person.name}${role}${dept}.`,
+        href: `/pessoas/perfil?id=${encodeURIComponent(person.slug)}`,
+      };
+    });
+}
 
 export function toDateKey(year: number, month: number, day: number): string {
   const m = String(month + 1).padStart(2, "0");

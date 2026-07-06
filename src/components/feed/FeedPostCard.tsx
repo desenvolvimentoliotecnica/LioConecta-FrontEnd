@@ -1,9 +1,15 @@
 import { useId, useState } from "react";
 import { resolveBackendAssetUrl } from "../../api/assetUrl";
 import { useMe } from "../../api/hooks/useMe";
-import { FEED_LIKE_REACTION, useAddPostComment, useTogglePostLike } from "../../api/hooks/useFeed";
+import {
+  FEED_LIKE_REACTION,
+  useAddPostComment,
+  useDeletePost,
+  useTogglePostLike,
+} from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
-import { POST_TYPE_COMUNICADO, POST_TYPE_POLL } from "../../api/types";
+import { POST_TYPE_COMUNICADO, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../../api/types";
+import { FeedPostActionsMenu } from "./FeedPostActionsMenu";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
 import { ImageLightbox } from "./ImageLightbox";
 import { formatFeedTime, getPostMedia, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
@@ -40,6 +46,7 @@ export function FeedPostCard({ post }: Props) {
   const { data: me } = useMe();
   const toggleLike = useTogglePostLike();
   const addComment = useAddPostComment();
+  const deletePost = useDeletePost();
   const formId = useId();
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -62,6 +69,15 @@ export function FeedPostCard({ post }: Props) {
       ? resolveBackendAssetUrl(post.metadata.heroImageUrl)
       : undefined;
   const postMedia = !isComunicado && !isPoll ? getPostMedia(post) : null;
+  const isOwner = Boolean(me?.id && post.author.id === me.id);
+  const canDelete =
+    isOwner && (post.type === POST_TYPE_SOCIAL || post.type === POST_TYPE_POLL);
+  const isDeletePending = deletePost.isPending && deletePost.variables === post.id;
+
+  function handleDeletePost() {
+    if (isDeletePending) return;
+    deletePost.mutate(post.id);
+  }
 
   function handleToggleLike() {
     if (isLikePending) return;
@@ -113,6 +129,9 @@ export function FeedPostCard({ post }: Props) {
         <span className={`badge ${postTypeBadgeClass(post.type)}`}>
           {postTypeBadge(post.type)}
         </span>
+        {canDelete ? (
+          <FeedPostActionsMenu onDelete={handleDeletePost} disabled={isDeletePending} />
+        ) : null}
       </div>
       {isComunicado ? (
         <div className="card__body" dangerouslySetInnerHTML={{ __html: post.content }} />

@@ -83,15 +83,6 @@
   color: #b91c1c;
 }
 
-.benefit-card__open {
-  border-color: #67e8f9;
-  color: #0e7490;
-}
-
-.benefit-card__open:hover {
-  background: #ecfeff;
-}
-
 @media (max-width: 900px) {
   .benefits-grid {
     grid-template-columns: 1fr;

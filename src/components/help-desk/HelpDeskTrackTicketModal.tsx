@@ -1,20 +1,15 @@
 import { useMemo, useState } from "react";
-import { useHelpDeskTicketDetail, useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
-import type { ServiceRequestDto } from "../../api/types";
+import { useHelpDeskAllTickets, useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
+import type { HelpDeskTicketListItemDto } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
+import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
+import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
-const STATUS_LABELS: Record<string, string> = {
-  Draft: "Rascunho",
-  Submitted: "Enviado",
-  InReview: "Em análise",
-  Approved: "Aprovado",
-  Rejected: "Rejeitado",
-  Completed: "Concluído",
-  Cancelled: "Cancelado",
-};
+type TicketView = "mine" | "all";
 
 type Props = {
   open: boolean;
+  canViewAllTickets?: boolean;
   onClose: () => void;
 };
 
@@ -23,137 +18,158 @@ function formatDate(value: string): string {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
 }
 
-function payloadText(ticket: ServiceRequestDto, key: string): string {
-  const value = ticket.payload[key];
-  return value != null ? String(value) : "—";
-}
-
-export function HelpDeskTrackTicketModal({ open, onClose }: Props) {
+export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onClose }: Props) {
   const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const ticketsQuery = useHelpDeskTickets(open);
-  const detailQuery = useHelpDeskTicketDetail(selectedId, open && selectedId !== null);
+  const [view, setView] = useState<TicketView>("mine");
+  const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
+  const scope = "90d";
+
+  const mineQuery = useHelpDeskTickets(open && view === "mine", scope);
+  const allQuery = useHelpDeskAllTickets(open && view === "all" && canViewAllTickets, scope);
+  const ticketsQuery = view === "all" ? allQuery : mineQuery;
 
   const filtered = useMemo(() => {
     const items = ticketsQuery.data ?? [];
     const normalized = query.trim().toLowerCase();
     if (!normalized) return items;
     return items.filter((ticket) => {
-      const subject = payloadText(ticket, "subject").toLowerCase();
-      const ref = (ticket.externalRef ?? "").toLowerCase();
-      return subject.includes(normalized) || ref.includes(normalized) || ticket.id.includes(normalized);
+      const subject = ticket.subject.toLowerCase();
+      const ref = ticket.ticketId.toLowerCase();
+      const requester = (ticket.requesterLabel ?? "").toLowerCase();
+      return subject.includes(normalized) || ref.includes(normalized) || requester.includes(normalized);
     });
   }, [ticketsQuery.data, query]);
 
   const handleClose = () => {
     setQuery("");
-    setSelectedId(null);
+    setDetailTicket(null);
+    setView("mine");
     onClose();
   };
 
+  const showRequester = view === "all";
+
   return (
-    <ContrachequeModal
-      open={open}
-      title="Acompanhar ticket"
-      wide
-      onClose={handleClose}
-      footer={
-        <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={handleClose}>
-          Fechar
-        </button>
-      }
-    >
-      <div className="hd-track">
-        <label className="hd-modal-form__field hd-modal-form__field--search">
-          <span className="hd-modal-form__label">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" /> Buscar chamado
-          </span>
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Protocolo, assunto ou ID"
-          />
-        </label>
+    <>
+      <ContrachequeModal
+        open={open}
+        title={view === "all" ? "Fila completa GLPI" : "Acompanhar ticket"}
+        wide
+        closeOnEscape={detailTicket === null}
+        onClose={handleClose}
+        footer={
+          <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={handleClose}>
+            Fechar
+          </button>
+        }
+      >
+        <div className="hd-track">
+          {canViewAllTickets ? (
+            <div className="hd-track__view-toggle" role="tablist" aria-label="Visão dos chamados">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === "mine"}
+                className={`filter-chip${view === "mine" ? " is-active" : ""}`}
+                onClick={() => {
+                  setView("mine");
+                  setDetailTicket(null);
+                }}
+              >
+                Meus chamados
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === "all"}
+                className={`filter-chip${view === "all" ? " is-active" : ""}`}
+                onClick={() => {
+                  setView("all");
+                  setDetailTicket(null);
+                }}
+              >
+                Fila completa
+              </button>
+            </div>
+          ) : null}
 
-        {ticketsQuery.isLoading ? <p>Carregando chamados…</p> : null}
-        {ticketsQuery.isError ? (
-          <p className="hd-modal__error" role="alert">
-            Não foi possível carregar seus chamados.
-          </p>
-        ) : null}
+          <label className="hd-modal-form__field hd-modal-form__field--search">
+            <span className="hd-modal-form__label">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" /> Buscar chamado
+            </span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={showRequester ? "Protocolo, assunto ou solicitante" : "Protocolo ou assunto"}
+            />
+          </label>
 
-        {!ticketsQuery.isLoading && filtered.length === 0 ? (
-          <p className="hd-modal__empty">Nenhum chamado encontrado nos últimos 90 dias.</p>
-        ) : null}
+          {ticketsQuery.isLoading ? <p>Carregando chamados…</p> : null}
+          {ticketsQuery.isError ? (
+            <p className="hd-modal__error" role="alert">
+              Não foi possível carregar os chamados.
+            </p>
+          ) : null}
 
-        {filtered.length > 0 ? (
-          <table className="pay-table hd-track__table">
-            <thead>
-              <tr>
-                <th>Protocolo</th>
-                <th>Assunto</th>
-                <th>Prioridade</th>
-                <th>Status</th>
-                <th>Abertura</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((ticket) => (
-                <tr
-                  key={ticket.id}
-                  className={selectedId === ticket.id ? "is-selected" : undefined}
-                  onClick={() => setSelectedId(ticket.id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <td>{ticket.externalRef ? `#${ticket.externalRef}` : ticket.id.slice(0, 8)}</td>
-                  <td>{payloadText(ticket, "subject")}</td>
-                  <td>{payloadText(ticket, "priority")}</td>
-                  <td>{STATUS_LABELS[ticket.status] ?? ticket.status}</td>
-                  <td>{formatDate(ticket.createdAt)}</td>
+          {!ticketsQuery.isLoading && filtered.length === 0 ? (
+            <p className="hd-modal__empty">
+              {view === "all"
+                ? "Nenhum chamado encontrado na fila (últimos 90 dias)."
+                : "Nenhum chamado encontrado nos últimos 90 dias."}
+            </p>
+          ) : null}
+
+          {filtered.length > 0 ? (
+            <table className="pay-table hd-track__table">
+              <thead>
+                <tr>
+                  <th>Protocolo</th>
+                  <th>Assunto</th>
+                  {showRequester ? <th>Solicitante</th> : null}
+                  <th>Prioridade</th>
+                  <th>Status</th>
+                  <th>Abertura</th>
+                  <th className="hd-track__actions-col">Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : null}
+              </thead>
+              <tbody>
+                {filtered.map((ticket: HelpDeskTicketListItemDto) => (
+                  <tr key={ticket.ticketId}>
+                    <td>#{ticket.ticketId}</td>
+                    <td>{ticket.subject}</td>
+                    {showRequester ? <td>{ticket.requesterLabel ?? "—"}</td> : null}
+                    <td>{ticket.priorityLabel}</td>
+                    <td>
+                      <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
+                    </td>
+                    <td>{formatDate(ticket.createdAt)}</td>
+                    <td className="hd-track__actions-col">
+                      <button
+                        type="button"
+                        className="hd-track__view-btn"
+                        aria-label={`Visualizar chamado #${ticket.ticketId}`}
+                        title="Visualizar detalhes"
+                        onClick={() => setDetailTicket(ticket)}
+                      >
+                        <i className="fa-solid fa-eye" aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : null}
+        </div>
+      </ContrachequeModal>
 
-        {selectedId && detailQuery.data ? (
-          <div className="hd-track__detail">
-            <h3 className="hd-modal__section-title">
-              <i className="fa-solid fa-circle-info" aria-hidden="true" /> Detalhes
-            </h3>
-            <dl className="hd-track__meta">
-              <div>
-                <dt>Assunto</dt>
-                <dd>{payloadText(detailQuery.data, "subject")}</dd>
-              </div>
-              <div>
-                <dt>Descrição</dt>
-                <dd>{payloadText(detailQuery.data, "description")}</dd>
-              </div>
-              <div>
-                <dt>Equipe</dt>
-                <dd>{detailQuery.data.assigneeTeam ?? "TI — Service Desk"}</dd>
-              </div>
-            </dl>
-            {detailQuery.data.events.length > 0 ? (
-              <>
-                <h3 className="hd-modal__section-title">
-                  <i className="fa-solid fa-clock-rotate-left" aria-hidden="true" /> Histórico
-                </h3>
-                <ul className="hd-track__events">
-                  {detailQuery.data.events.map((event) => (
-                    <li key={event.id}>
-                      <strong>{event.eventType}</strong>
-                      <span>{formatDate(event.createdAt)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-    </ContrachequeModal>
+      <HelpDeskTicketDetailModal
+        open={detailTicket !== null}
+        ticketId={detailTicket?.ticketId ?? null}
+        preview={detailTicket}
+        showRequester={showRequester}
+        onClose={() => setDetailTicket(null)}
+      />
+    </>
   );
 }

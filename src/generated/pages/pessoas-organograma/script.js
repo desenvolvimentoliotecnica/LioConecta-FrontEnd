@@ -123,10 +123,13 @@
       ];
 
       function resolvePhotoUrl(url) {
+        if (window.PersonAvatar) {
+          return window.PersonAvatar.resolveGraphPhotoUrl(url) || "";
+        }
         if (!url || !String(url).trim()) return "";
         const trimmed = String(url).trim();
-        if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
-        return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+        const path = (trimmed.startsWith("/") ? trimmed : "/" + trimmed).split("?")[0].toLowerCase();
+        return path.indexOf("/media/people/") === 0 ? path : "";
       }
 
       function renderOrgNodeAvatar(node, data) {
@@ -1725,16 +1728,30 @@
         return getUnassignedNodes(payload).length;
       }
 
-      function buildUnassignedPerson(apiNode) {
+      function indexApiNodesById(apiNodes) {
+        var map = {};
+        apiNodes.forEach(function (node) {
+          var id = node.id || node.Id;
+          if (id) map[id] = node;
+        });
+        return map;
+      }
+
+      function buildUnassignedPerson(apiNode, apiNodesById) {
         const dept = apiNode.departmentName || apiNode.DepartmentName || "Sem departamento";
         const name = apiNode.name || apiNode.Name || "";
+        var managerId = apiNode.managerId || apiNode.ManagerId;
+        var managerNode = managerId && apiNodesById ? apiNodesById[managerId] : null;
         return {
           slug: apiNode.slug || apiNode.Slug || "",
           name: name,
           title: apiNode.title || apiNode.Title || "Colaborador",
           img: resolvePhotoUrl(apiNode.photoUrl || apiNode.PhotoUrl),
           dept: dept,
-          profile: OrgProfileModal.buildProfileExtras(name, dept)
+          profile:
+            OrgProfileModal && typeof OrgProfileModal.buildProfileFromApiNode === "function"
+              ? OrgProfileModal.buildProfileFromApiNode(apiNode, managerNode)
+              : OrgProfileModal.buildProfileExtras(name, dept)
         };
       }
 
@@ -1828,6 +1845,7 @@
 
       function buildNodesFromApi(apiNodes) {
         const guidToNumeric = {};
+        const apiNodesById = indexApiNodesById(apiNodes);
         let nextNum = 1;
         apiNodes.forEach(function (node) {
           guidToNumeric[node.id] = nextNum++;
@@ -1841,6 +1859,8 @@
               ? guidToNumeric[node.managerId]
               : undefined;
           const deptLabel = isOrphan ? dept + " · Gestor ext." : dept;
+          var managerId = node.managerId || node.ManagerId;
+          var managerNode = managerId ? apiNodesById[managerId] : null;
           return {
             id: guidToNumeric[node.id],
             slug: node.slug,
@@ -1851,7 +1871,10 @@
             tags: node.tags || [],
             isOrphan: isOrphan,
             pid: managerNumeric,
-            profile: OrgProfileModal.buildProfileExtras(node.name, deptLabel)
+            profile:
+              OrgProfileModal && typeof OrgProfileModal.buildProfileFromApiNode === "function"
+                ? OrgProfileModal.buildProfileFromApiNode(node, managerNode)
+                : OrgProfileModal.buildProfileExtras(node.name, deptLabel)
           };
         });
       }
@@ -2067,7 +2090,10 @@
               return;
             }
 
-            const unassignedPeople = unassignedApi.map(buildUnassignedPerson);
+            const apiNodesById = indexApiNodesById(payload.nodes || payload.Nodes || allApiNodes);
+            const unassignedPeople = unassignedApi.map(function (apiNode) {
+              return buildUnassignedPerson(apiNode, apiNodesById);
+            });
             const nodeIndexBySlug = {};
             unassignedPeople.forEach(function (person) {
               nodeIndexBySlug[person.slug] = person;

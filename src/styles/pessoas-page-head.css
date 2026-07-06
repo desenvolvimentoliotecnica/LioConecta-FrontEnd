@@ -1,0 +1,106 @@
+/* Shared header shell for Pessoas hub pages */
+.main.main--pessoas-hub {
+  background: transparent;
+}
+
+.pessoas-page-head {
+  position: relative;
+  z-index: 2;
+  margin-bottom: var(--wf-gap);
+  padding: 18px 20px 14px;
+  border-radius: var(--wf-radius);
+  border: 1px solid rgba(196, 181, 253, 0.55);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.86) 0%,
+      rgba(248, 250, 252, 0.8) 48%,
+      rgba(245, 243, 255, 0.84) 100%
+    ),
+    url("/org-header-pattern.svg") center / 180px repeat,
+    #f5f3ff;
+  box-shadow:
+    0 1px 2px rgba(91, 33, 182, 0.06),
+    0 10px 28px rgba(15, 23, 42, 0.07);
+  overflow: hidden;
+}
+
+.pessoas-page-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 42%);
+}
+
+.pessoas-page-head .page-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+}
+
+.pessoas-page-head .page-header--pessoas .breadcrumb {
+  margin-bottom: 12px;
+}
+
+.pessoas-page-head .page-header--pessoas .breadcrumb a {
+  color: #64748b;
+}
+
+.pessoas-page-head .page-header--pessoas .breadcrumb a:hover {
+  color: #334155;
+}
+
+.pessoas-page-head .page-header--pessoas .breadcrumb__sep {
+  color: #94a3b8;
+}
+
+.pessoas-page-head .page-header--pessoas .breadcrumb__current {
+  color: #334155;
+  font-weight: 600;
+}
+
+.pessoas-page-head .page-header--pessoas .page-header__title {
+  color: #0f172a;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.pessoas-page-head .page-header--pessoas .page-header__desc {
+  color: #475569;
+  line-height: 1.5;
+}
+
+.pessoas-page-head .page-toolbar {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.pessoas-page-head .page-search {
+  min-width: 260px;
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.pessoas-page-head .page-search__input {
+  color: #0f172a;
+}
+
+.pessoas-page-head .filter-chip {
+  border-style: solid;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.pessoas-page-head .filter-chip.is-active {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #6d28d9;
+}
