@@ -439,6 +439,14 @@ export function BackendConfigPage() {
             </div>
           ) : null}
 
+          {activeCategory === "glpi" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Para abrir chamados pelo portal, cada colaborador precisa existir como usuário no GLPI com o{" "}
+              <strong>mesmo e-mail corporativo</strong> cadastrado no LioConecta. Sem esse cadastro, a API retorna
+              erro 422 ao criar ticket.
+            </div>
+          ) : null}
+
           {activeCategory === "glpi" && usesDevAdapters ? (
             <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
               Modo mock ativo — credenciais GLPI abaixo são ignoradas até desativar o mock em{" "}

@@ -36,4 +36,19 @@ describe("sessionCorrelation", () => {
     expect(headers.get(CORRELATION_HEADER)).toBe(getCorrelationId());
     expect(headers.get(SESSION_HEADER)).toBe(getSessionId());
   });
+
+  it("falls back when crypto.randomUUID is unavailable (HTTP dev hosts)", () => {
+    const original = crypto.randomUUID;
+    // @ts-expect-error simulate insecure context
+    crypto.randomUUID = undefined;
+
+    try {
+      sessionStorage.removeItem("lio.sessionId");
+      sessionStorage.removeItem("lio.correlationId");
+      const sessionId = getSessionId();
+      expect(sessionId).toMatch(/^[0-9a-f-]{36}$/i);
+    } finally {
+      crypto.randomUUID = original;
+    }
+  });
 });

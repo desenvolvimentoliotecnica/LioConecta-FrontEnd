@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useBirthdays } from "../../api/hooks/useBirthdays";
 import {
@@ -14,7 +14,6 @@ import {
   getTodayDateKey,
   mapBirthdaysToCalendarEvents,
   parseDateKey,
-  toDateKey,
   upcomingEvents,
   type CalendarEvent,
   type CalendarEventKind,
@@ -103,16 +102,16 @@ export function CalendarPage() {
     <main className="main">
       <header className="page-header">
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
+          <Link to="/">InÃ­cio</Link>
           <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Calendário</span>
+          <span className="breadcrumb__current">CalendÃ¡rio</span>
         </nav>
         <div className="page-header__row">
           <div>
-            <h1 className="page-header__title">Calendário</h1>
+            <h1 className="page-header__title">CalendÃ¡rio</h1>
             <p className="page-header__desc">
-              Reuniões, eventos, prazos de comunicados, aniversários, reservas e atividades de grupos
-              — tudo integrado ao ecossistema LioConecta.
+              ReuniÃµes, eventos, prazos de comunicados, aniversÃ¡rios, reservas e atividades de grupos
+              â€” tudo integrado ao ecossistema LioConecta.
             </p>
           </div>
           <button className="calendar-page__today-btn" type="button" onClick={goToday}>
@@ -121,7 +120,7 @@ export function CalendarPage() {
         </div>
       </header>
 
-      <section className="calendar-page__controls" aria-label="Filtros do calendário">
+      <section className="calendar-page__controls" aria-label="Filtros do calendÃ¡rio">
         <div className="page-filters" role="group" aria-label="Filtrar eventos">
           {CALENDAR_FILTERS.map((entry) => (
             <button
@@ -138,20 +137,20 @@ export function CalendarPage() {
       </section>
 
       <div className="calendar-page__layout">
-        <section className="calendar-page__month" aria-label="Visão mensal">
+        <section className="calendar-page__month" aria-label="VisÃ£o mensal">
           <div className="calendar-page__month-header">
-            <button className="calendar-page__nav" type="button" onClick={goPrevMonth} aria-label="Mês anterior">
+            <button className="calendar-page__nav" type="button" onClick={goPrevMonth} aria-label="MÃªs anterior">
               <i className="fa-solid fa-chevron-left" aria-hidden="true" />
             </button>
             <h2 className="calendar-page__month-title">
               {MONTH_NAMES[viewMonth]} {viewYear}
             </h2>
-            <button className="calendar-page__nav" type="button" onClick={goNextMonth} aria-label="Próximo mês">
+            <button className="calendar-page__nav" type="button" onClick={goNextMonth} aria-label="PrÃ³ximo mÃªs">
               <i className="fa-solid fa-chevron-right" aria-hidden="true" />
             </button>
           </div>
 
-          <div className="calendar-grid" role="grid" aria-label={`Calendário de ${MONTH_NAMES[viewMonth]} ${viewYear}`}>
+          <div className="calendar-grid" role="grid" aria-label={`CalendÃ¡rio de ${MONTH_NAMES[viewMonth]} ${viewYear}`}>
             {WEEKDAY_LABELS.map((label) => (
               <div key={label} className="calendar-grid__weekday" role="columnheader">
                 {label}
@@ -204,17 +203,17 @@ export function CalendarPage() {
             )}
           </section>
 
-          <section className="calendar-panel calendar-panel--menu" aria-label="Cardápio do dia">
+          <section className="calendar-panel calendar-panel--menu" aria-label="CardÃ¡pio do dia">
             <div className="calendar-menu__header">
-              <h2 className="calendar-panel__title">Cardápio do dia</h2>
+              <h2 className="calendar-panel__title">CardÃ¡pio do dia</h2>
               <Link className="calendar-menu__link" to="/servicos/refeitorio">
-                Refeitório
+                RefeitÃ³rio
                 <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
               </Link>
             </div>
             <p className="calendar-menu__meta">
               <i className="fa-solid fa-location-dot" aria-hidden="true" /> {dailyMenu.location}
-              <span className="calendar-menu__meta-sep">·</span>
+              <span className="calendar-menu__meta-sep">Â·</span>
               <i className="fa-regular fa-clock" aria-hidden="true" /> {dailyMenu.hours}
             </p>
             <ul className="calendar-menu">
@@ -235,8 +234,8 @@ export function CalendarPage() {
             </ul>
           </section>
 
-          <section className="calendar-panel" aria-label="Próximos eventos">
-            <h2 className="calendar-panel__title">Próximos eventos</h2>
+          <section className="calendar-panel" aria-label="PrÃ³ximos eventos">
+            <h2 className="calendar-panel__title">PrÃ³ximos eventos</h2>
             <ul className="calendar-upcoming">
               {upcoming.map((event) => (
                 <li key={event.id}>
@@ -289,3 +288,4 @@ function AgendaItem({
 
   return <article className={`calendar-event${compact ? " calendar-event--compact" : ""}`}>{content}</article>;
 }
+

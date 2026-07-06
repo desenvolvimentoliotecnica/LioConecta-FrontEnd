@@ -1253,8 +1253,14 @@ export interface HelpDeskKnowledgeArticleDto {
 export interface CreateHelpDeskTicketRequestDto {
   subject: string;
   priority: string;
-  category: string;
+  categoryId: number;
   description: string;
+}
+
+export interface HelpDeskItilCategoryDto {
+  id: number;
+  name: string;
+  fullName?: string | null;
 }
 
 export interface HelpDeskTicketResultDto {

@@ -57,7 +57,10 @@ export function ContrachequeModal({
   onToggleShowValues,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
   const titleId = stacked ? "pay-modal-title-stacked" : "pay-modal-title";
+
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open || !closeOnEscape) {
@@ -69,17 +72,24 @@ export function ContrachequeModal({
         if (stacked) {
           event.stopImmediatePropagation();
         }
-        onClose();
+        onCloseRef.current();
       }
     };
 
     document.addEventListener("keydown", onKeyDown, stacked);
-    dialogRef.current?.focus();
 
     return () => {
       document.removeEventListener("keydown", onKeyDown, stacked);
     };
-  }, [open, closeOnEscape, stacked, onClose]);
+  }, [open, closeOnEscape, stacked]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    dialogRef.current?.focus();
+  }, [open]);
 
   useEffect(() => {
     if (!open) {

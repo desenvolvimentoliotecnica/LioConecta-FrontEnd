@@ -16,6 +16,8 @@ import type {
 
   HelpDeskTicketListItemDto,
 
+  HelpDeskItilCategoryDto,
+
   HelpDeskTicketResultDto,
 
 } from "../types";
@@ -149,6 +151,16 @@ export function useHelpDeskTicketDetail(ticketId: string | null, enabled: boolea
 }
 
 
+
+export function useHelpDeskCategories(enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "categories"],
+    queryFn: () => api.get<HelpDeskItilCategoryDto[]>("/ti/help-desk/categories"),
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
 
 export function useHelpDeskCreateTicket() {
 

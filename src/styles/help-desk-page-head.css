@@ -1,0 +1,127 @@
+/* Shared header shell for Help Desk (same pattern as pessoas-page-head) */
+.main.main--help-desk-hub {
+  background: transparent;
+}
+
+.help-desk-page-head {
+  position: relative;
+  z-index: 2;
+  margin-bottom: var(--wf-gap);
+  padding: 18px 20px 14px;
+  border-radius: var(--wf-radius);
+  border: 1px solid rgba(103, 232, 249, 0.55);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.86) 0%,
+      rgba(248, 250, 252, 0.8) 48%,
+      rgba(236, 254, 255, 0.84) 100%
+    ),
+    url("/org-header-pattern.svg") center / 180px repeat,
+    #ecfeff;
+  box-shadow:
+    0 1px 2px rgba(8, 145, 178, 0.06),
+    0 10px 28px rgba(15, 23, 42, 0.07);
+  overflow: hidden;
+}
+
+.help-desk-page-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 42%);
+}
+
+.help-desk-page-head .page-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+}
+
+.help-desk-page-head .page-header--help-desk .breadcrumb {
+  margin-bottom: 12px;
+}
+
+.help-desk-page-head .page-header--help-desk .breadcrumb a {
+  color: #64748b;
+}
+
+.help-desk-page-head .page-header--help-desk .breadcrumb a:hover {
+  color: #334155;
+}
+
+.help-desk-page-head .page-header--help-desk .breadcrumb__sep {
+  color: #94a3b8;
+}
+
+.help-desk-page-head .page-header--help-desk .breadcrumb__current {
+  color: #334155;
+  font-weight: 600;
+}
+
+.help-desk-page-head .page-header--help-desk .page-header__title {
+  color: #0f172a;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.help-desk-page-head .page-header--help-desk .page-header__desc {
+  color: #475569;
+  line-height: 1.5;
+}
+
+.help-desk-page-head .page-toolbar {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.help-desk-page-head .page-toolbar__filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.help-desk-page-head .page-search {
+  min-width: 260px;
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.help-desk-page-head .page-search--wide {
+  min-width: min(100%, 480px);
+}
+
+.help-desk-page-head .page-search__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: #0f172a;
+}
+
+.help-desk-page-head .page-search__input::placeholder {
+  color: var(--wf-text-muted);
+}
+
+.help-desk-page-head .filter-chip {
+  border-style: solid;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.help-desk-page-head .filter-chip.is-active {
+  background: #cffafe;
+  border-color: #67e8f9;
+  color: #0e7490;
+}

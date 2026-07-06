@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useHelpDeskCategories } from "../../api/hooks/useHelpDesk";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 
 const PRIORITIES = [
@@ -8,38 +9,53 @@ const PRIORITIES = [
   { value: "critica", label: "Crítica" },
 ];
 
-const CATEGORIES = [
-  { value: "hardware", label: "Hardware" },
-  { value: "software", label: "Software" },
-  { value: "acesso", label: "Acesso / Senha" },
-  { value: "rede", label: "Rede / VPN" },
-  { value: "outros", label: "Outros" },
-];
-
 type Props = {
   open: boolean;
   pending: boolean;
+  errorMessage?: string | null;
   onClose: () => void;
   onSubmit: (payload: {
     subject: string;
     priority: string;
-    category: string;
+    categoryId: number;
     description: string;
   }) => void;
 };
 
-export function HelpDeskOpenTicketModal({ open, pending, onClose, onSubmit }: Props) {
+export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, onSubmit }: Props) {
   const [subject, setSubject] = useState("");
   const [priority, setPriority] = useState("media");
-  const [category, setCategory] = useState("software");
+  const [categoryId, setCategoryId] = useState<number | null>(null);
   const [description, setDescription] = useState("");
 
+  const categoriesQuery = useHelpDeskCategories(open);
+  const categories = useMemo(() => {
+    const seen = new Set<string>();
+    const items = categoriesQuery.data ?? [];
+    return items.filter((item) => {
+      const label = (item.fullName ?? item.name).trim().toLowerCase();
+      if (seen.has(label)) return false;
+      seen.add(label);
+      return true;
+    });
+  }, [categoriesQuery.data]);
+
+  useEffect(() => {
+    if (!open || categories.length === 0) return;
+    setCategoryId((current) => {
+      if (current !== null && categories.some((item) => item.id === current)) {
+        return current;
+      }
+      return categories[0]?.id ?? null;
+    });
+  }, [open, categories]);
+
   const handleSubmit = () => {
-    if (!subject.trim() || !description.trim()) return;
+    if (!subject.trim() || !description.trim() || categoryId === null) return;
     onSubmit({
       subject: subject.trim(),
       priority,
-      category,
+      categoryId,
       description: description.trim(),
     });
   };
@@ -47,10 +63,13 @@ export function HelpDeskOpenTicketModal({ open, pending, onClose, onSubmit }: Pr
   const handleClose = () => {
     setSubject("");
     setPriority("media");
-    setCategory("software");
+    setCategoryId(null);
     setDescription("");
     onClose();
   };
+
+  const categoryDisabled =
+    categoriesQuery.isLoading || categoriesQuery.isError || categories.length === 0 || categoryId === null;
 
   return (
     <ContrachequeModal
@@ -65,7 +84,7 @@ export function HelpDeskOpenTicketModal({ open, pending, onClose, onSubmit }: Pr
           <button
             type="button"
             className="pay-modal__btn"
-            disabled={pending || !subject.trim() || !description.trim()}
+            disabled={pending || !subject.trim() || !description.trim() || categoryDisabled}
             onClick={handleSubmit}
           >
             {pending ? "Enviando…" : "Enviar chamado"}
@@ -77,6 +96,13 @@ export function HelpDeskOpenTicketModal({ open, pending, onClose, onSubmit }: Pr
         <i className="fa-solid fa-ticket" aria-hidden="true" />
         Registre incidente ou solicitação. A equipe de TI receberá o protocolo automaticamente.
       </p>
+
+      {errorMessage ? (
+        <p className="hd-modal__error" role="alert">
+          <i className="fa-solid fa-circle-exclamation" aria-hidden="true" /> {errorMessage}
+        </p>
+      ) : null}
+
       <div className="hd-modal-form">
         <label className="hd-modal-form__field">
           <span className="hd-modal-form__label">
@@ -107,12 +133,24 @@ export function HelpDeskOpenTicketModal({ open, pending, onClose, onSubmit }: Pr
             <span className="hd-modal-form__label">
               <i className="fa-solid fa-layer-group" aria-hidden="true" /> Categoria
             </span>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              {CATEGORIES.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.label}
-                </option>
-              ))}
+            <select
+              value={categoryId ?? ""}
+              disabled={categoryDisabled}
+              onChange={(e) => setCategoryId(Number(e.target.value))}
+            >
+              {categoriesQuery.isLoading ? (
+                <option value="">Carregando categorias…</option>
+              ) : categoriesQuery.isError ? (
+                <option value="">Erro ao carregar categorias</option>
+              ) : categories.length === 0 ? (
+                <option value="">Nenhuma categoria disponível</option>
+              ) : (
+                categories.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.fullName ?? item.name}
+                  </option>
+                ))
+              )}
             </select>
           </label>
         </div>
