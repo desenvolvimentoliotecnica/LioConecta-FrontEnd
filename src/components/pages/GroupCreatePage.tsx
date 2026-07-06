@@ -18,6 +18,7 @@ import {
   groupTypeLabel,
   injectGroupCreatePageStyles,
 } from "../../config/groups";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 
 type ToastState = { type: "success" | "error"; message: string } | null;
 
@@ -99,25 +100,13 @@ export function GroupCreatePage() {
     description.trim() || "A descrição aparecerá aqui conforme você preenche o formulário.";
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <Link to="/grupos">Grupos</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Criar grupo</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Criar Grupo</h1>
-            <p className="page-header__desc">
-              Configure um novo espaço de colaboração. Após o envio, um administrador precisa aprovar o grupo
-              antes de ele ficar ativo.
-            </p>
-          </div>
-        </div>
-      </header>
+    <main className={sectionMainClass("grupos")}>
+      <SectionPageHead
+        section="grupos"
+        title="Criar Grupo"
+        current="Criar grupo"
+        description="Configure um novo espaço de colaboração. Após o envio, um administrador precisa aprovar o grupo antes de ele ficar ativo."
+      />
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">

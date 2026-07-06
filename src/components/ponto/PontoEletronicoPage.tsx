@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Link } from "react-router-dom";
-
 import { usePonto, usePontoPeriods } from "../../api/hooks/usePonto";
 
 import type { PontoEntryDto } from "../../api/types";
+
+import { RhPageHead } from "../servicos/RhPageHead";
+import { sectionMainClass } from "../layout/SectionPageHead";
 
 import "../../styles/contracheque-page.css";
 
@@ -213,41 +214,13 @@ export function PontoEletronicoPage() {
 
   return (
 
-    <main className="main">
+    <main className={sectionMainClass("rh")}>
 
-      <header className="page-header">
-
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-
-          <Link to="/">Início</Link>
-
-          <span className="breadcrumb__sep">/</span>
-
-          <Link to="/servicos/rh">Serviços</Link>
-
-          <span className="breadcrumb__sep">/</span>
-
-          <span className="breadcrumb__current">Ponto eletrônico</span>
-
-        </nav>
-
-        <div className="page-header__row">
-
-          <div>
-
-            <h1 className="page-header__title">Espelho de Ponto</h1>
-
-            <p className="page-header__desc">
-
-              Consulte batidas e totais do período integrados ao {data?.provider ?? "TOTVS RM"}.
-
-            </p>
-
-          </div>
-
-        </div>
-
-      </header>
+      <RhPageHead
+        title="Espelho de Ponto"
+        current="Ponto eletrônico"
+        description={`Consulte batidas e totais do período integrados ao ${data?.provider ?? "TOTVS RM"}.`}
+      />
 
 
 

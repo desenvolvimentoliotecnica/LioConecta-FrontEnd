@@ -70,7 +70,35 @@ function ComunicadoCard({
   );
 }
 
-export function ComunicadosList({ config }: { config: ComunicadosPageConfig }) {
+export function ComunicadosListToolbar({ config }: { config: ComunicadosPageConfig }) {
+  return (
+    <div className="page-toolbar">
+      <div className="page-filters" role="group" aria-label="Filtros">
+        {config.filterChips.map((chip, index) => (
+          <button
+            key={chip}
+            className={`filter-chip${index === 0 ? " is-active" : ""}`}
+            type="button"
+          >
+            {chip}
+          </button>
+        ))}
+      </div>
+      <div className="page-search">
+        <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+        Buscar comunicados...
+      </div>
+    </div>
+  );
+}
+
+export function ComunicadosList({
+  config,
+  showToolbar = true,
+}: {
+  config: ComunicadosPageConfig;
+  showToolbar?: boolean;
+}) {
   const isArchive = config.listMode === "archived";
   const kindQuery = useComunicadosList(config.kind);
   const archiveQuery = useComunicadosArchivedList();
@@ -78,23 +106,7 @@ export function ComunicadosList({ config }: { config: ComunicadosPageConfig }) {
   const items = isArchive ? (archiveQuery.data ?? []) : (kindQuery.data?.items ?? []);
   return (
     <>
-      <div className="page-toolbar">
-        <div className="page-filters" role="group" aria-label="Filtros">
-          {config.filterChips.map((chip, index) => (
-            <button
-              key={chip}
-              className={`filter-chip${index === 0 ? " is-active" : ""}`}
-              type="button"
-            >
-              {chip}
-            </button>
-          ))}
-        </div>
-        <div className="page-search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          Buscar comunicados...
-        </div>
-      </div>
+      {showToolbar ? <ComunicadosListToolbar config={config} /> : null}
 
       {isLoading ? (
         <p className="page-empty-note">Carregando comunicados...</p>
