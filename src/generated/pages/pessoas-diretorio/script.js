@@ -5,7 +5,12 @@
       let activeFilter = "all";
       let searchQuery = "";
       let directoryData = null;
+      let directoryPeopleBySlug = {};
       let toolbarController = null;
+
+      if (window.OrgProfileModal && typeof window.OrgProfileModal.init === "function") {
+        window.OrgProfileModal.init();
+      }
 
       var PT_LOWER_WORDS = {
         de: true,
@@ -129,6 +134,73 @@
         img.replaceWith(placeholder);
       }
 
+      function buildDirectoryPeopleIndex(departments) {
+        var index = {};
+        departments.forEach(function (dept) {
+          var deptName = toTitleCase(dept.name || dept.Name || "Sem departamento");
+          (dept.people || dept.People || []).forEach(function (person) {
+            var slug = person.slug || person.Slug;
+            if (!slug) return;
+            index[slug] = { person: person, deptName: deptName };
+          });
+        });
+        return index;
+      }
+
+      function resolveManagerLabel(person, peopleIndex) {
+        var managerSlug = person.managerSlug || person.ManagerSlug;
+        if (!managerSlug || !peopleIndex[managerSlug]) return "—";
+        var manager = peopleIndex[managerSlug].person;
+        var managerName = toTitleCase(manager.name || manager.Name || "");
+        var managerTitle = toTitleCase(manager.title || manager.Title || "Colaborador");
+        return managerName + " · " + managerTitle;
+      }
+
+      function mapPersonToProfileModal(person, deptName, peopleIndex) {
+        var name = toTitleCase(person.name || person.Name || "");
+        var title = toTitleCase(person.title || person.Title || "Colaborador");
+        var slug = person.slug || person.Slug || "";
+        var dept = toTitleCase(person.departmentName || person.DepartmentName || deptName || "Sem departamento");
+        var email = person.email || person.Email || "";
+        var teamsUpn = person.teamsUpn || person.TeamsUpn || email;
+        var extras =
+          window.OrgProfileModal && typeof window.OrgProfileModal.buildProfileExtras === "function"
+            ? window.OrgProfileModal.buildProfileExtras(name, dept)
+            : { email: email, phone: "—", location: "Campinas, SP · " + dept, admission: "—" };
+        var location = person.location || person.Location;
+        return {
+          slug: slug,
+          name: name,
+          title: title,
+          dept: dept,
+          img: resolvePhotoUrl(person.photoUrl || person.PhotoUrl) || "",
+          profile: {
+            email: email || extras.email,
+            phone: extras.phone,
+            location: location ? String(location) : extras.location,
+            admission: extras.admission,
+            managerLabel: resolveManagerLabel(person, peopleIndex),
+            teamsUpn: teamsUpn
+          }
+        };
+      }
+
+      function openDirectoryProfile(slug) {
+        if (!slug || !window.OrgProfileModal || typeof window.OrgProfileModal.open !== "function") return;
+        var entry = directoryPeopleBySlug[slug];
+        if (!entry) return;
+        var modalPerson = mapPersonToProfileModal(entry.person, entry.deptName, directoryPeopleBySlug);
+        window.OrgProfileModal.open(modalPerson, {}, function (p) {
+          var teamsUpn = p.profile && p.profile.teamsUpn;
+          if (!teamsUpn) return;
+          window.open(
+            "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsUpn),
+            "_blank",
+            "noopener,noreferrer"
+          );
+        });
+      }
+
       function openPersonEmail(slug, name, email) {
         if (!email) return;
         if (window.LioEmailCompose && typeof window.LioEmailCompose.open === "function") {
@@ -150,7 +222,6 @@
         var slug = person.slug || person.Slug || "";
         var email = person.email || person.Email || "";
         var teamsUpn = person.teamsUpn || person.TeamsUpn || email;
-        var profileHref = "/pessoas/perfil?id=" + encodeURIComponent(slug);
         var teamsHref = teamsUpn
           ? "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsUpn)
           : "#";
@@ -185,11 +256,11 @@
           '" target="_blank" rel="noopener noreferrer" aria-label="Enviar mensagem para ' +
           escapeAttr(name) +
           '"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>' +
-          '<a class="person-card__btn" href="' +
-          escapeAttr(profileHref) +
+          '<button type="button" class="person-card__btn" data-directory-profile data-person-slug="' +
+          escapeAttr(slug) +
           '" aria-label="Ver perfil de ' +
           escapeAttr(name) +
-          '"><i class="fa-regular fa-user" aria-hidden="true"></i></a>' +
+          '"><i class="fa-regular fa-user" aria-hidden="true"></i></button>' +
           "</div></article>"
         );
       }
@@ -366,6 +437,13 @@
               return;
             }
 
+            var profileBtn = event.target.closest("[data-directory-profile]");
+            if (profileBtn && root.contains(profileBtn)) {
+              event.preventDefault();
+              openDirectoryProfile(profileBtn.getAttribute("data-person-slug") || "");
+              return;
+            }
+
             var header = event.target.closest(".dept-group__header");
             if (!header || !root.contains(header)) return;
             var group = header.closest(".dept-group");
@@ -434,6 +512,7 @@
 
         ensureSearchInput();
         renderFilters(departments);
+        directoryPeopleBySlug = buildDirectoryPeopleIndex(departments);
         root.innerHTML = departments.map(renderDepartment).join("");
         bindToolbarEvents();
         applyFilters();

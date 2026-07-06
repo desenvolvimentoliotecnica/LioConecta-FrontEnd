@@ -17,6 +17,7 @@ import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
 import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
+import { HelpDeskPage } from "./components/help-desk/HelpDeskPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
 import { TiHubPage } from "./components/pages/TiHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
@@ -106,6 +107,7 @@ function App() {
         <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
         <Route path="/servicos/ferias-ausencias" element={<FeriasAusenciasPage />} />
         <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />
+        <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
@@ -122,7 +124,8 @@ function App() {
             page.id === "servicos-contracheque" ||
             page.id === "servicos-beneficios" ||
             page.id === "servicos-ferias" ||
-            page.id === "servicos-ponto"
+            page.id === "servicos-ponto" ||
+            page.id === "servicos-help-desk"
           ) {
             return null;
           }

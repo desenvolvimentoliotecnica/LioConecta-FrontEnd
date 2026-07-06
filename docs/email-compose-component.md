@@ -74,3 +74,5 @@ CC/CCO restritos a `@liotecnica.com.br`.
 ## Primeiro consumidor
 
 Perfil de pessoas (`/pessoas/perfil?id={slug}`) — botão **E-mail** chama `LioEmailCompose.open` com `lockedTo: true` e `recipientSlug`.
+
+Diretório (`/pessoas/diretorio`) — ícone de envelope em cada card abre o mesmo modal com `source: "directory"`.

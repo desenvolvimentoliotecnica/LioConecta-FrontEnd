@@ -23,6 +23,10 @@ export function bookmarkIdForLeave(serviceId: string): string {
   return `bm-ferias-${serviceId}`;
 }
 
+export function bookmarkIdForHelpDesk(serviceId: string): string {
+  return `bm-help-desk-${serviceId}`;
+}
+
 export function formatSensitiveCount(value: number | string, showValues: boolean): string {
   if (!showValues) {
     return "•••";

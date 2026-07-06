@@ -88,24 +88,22 @@ function isWeekendWeekday(weekdayLabel: string): boolean {
 
 
 
-function DateChip({ date, weekdayLabel }: { date: string; weekdayLabel: string }) {
-
+function DateCell({ date, weekdayLabel }: { date: string; weekdayLabel: string }) {
   const weekend = isWeekendWeekday(weekdayLabel);
-
   const chipClass = `ponto-date-chip${weekend ? " ponto-date-chip--weekend" : ""}`;
 
   return (
-
-    <span className="ponto-date-chips">
-
-      <span className={chipClass}>{formatDate(date)}</span>
-
-      <span className={chipClass}>{weekdayLabel}</span>
-
-    </span>
-
+    <td>
+      <div className="ponto-date-cell">
+        <div className="ponto-date-cell__part">
+          <span className={chipClass}>{formatDate(date)}</span>
+        </div>
+        <div className="ponto-date-cell__part">
+          <span className={chipClass}>{weekdayLabel}</span>
+        </div>
+      </div>
+    </td>
   );
-
 }
 
 
@@ -115,12 +113,7 @@ function EntryRow({ entry }: { entry: PontoEntryDto }) {
   return (
 
     <tr>
-
-      <td>
-
-        <DateChip date={entry.date} weekdayLabel={entry.weekdayLabel} />
-
-      </td>
+      <DateCell date={entry.date} weekdayLabel={entry.weekdayLabel} />
 
       <td>{entry.clockIn}</td>
 
@@ -220,7 +213,7 @@ export function PontoEletronicoPage() {
 
   return (
 
-    <main className="main ponto-page">
+    <main className="main">
 
       <header className="page-header">
 

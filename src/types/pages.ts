@@ -5,5 +5,6 @@ export type PageEntry = {
   hasScript: boolean;
   externals: string[];
   profileAssets?: boolean;
+  profileModal?: boolean;
   organograma?: boolean;
 };

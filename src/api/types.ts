@@ -1053,3 +1053,86 @@ export type EmailComposeOpenOptions = {
   showExternalMailtoLink?: boolean;
   source?: string;
 };
+
+// --- Help Desk / Service Requests ---
+
+export type ServiceRequestStatus =
+  | "Draft"
+  | "Submitted"
+  | "InReview"
+  | "Approved"
+  | "Rejected"
+  | "Completed"
+  | "Cancelled";
+
+export type ServiceCategory = "RH" | "Financeiro" | "TI" | "Facilities" | "Juridico";
+
+export interface ServiceRequestEventDto {
+  id: string;
+  eventType: string;
+  actor?: PersonSummaryDto | null;
+  createdAt: string;
+  details?: Record<string, unknown> | null;
+}
+
+export interface ServiceRequestDto {
+  id: string;
+  type: string;
+  category: ServiceCategory;
+  status: ServiceRequestStatus;
+  requester: PersonSummaryDto;
+  payload: Record<string, unknown>;
+  assigneeTeam?: string | null;
+  externalRef?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  events: ServiceRequestEventDto[];
+}
+
+export interface CreateServiceRequestRequestDto {
+  type: string;
+  category: ServiceCategory;
+  payload: Record<string, unknown>;
+}
+
+export interface HelpDeskSummaryDto {
+  openTickets: number;
+  avgResponseLabel: string;
+}
+
+export interface HelpDeskServiceDto {
+  id: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  action: string;
+  helpText: string;
+  portalUrl?: string | null;
+}
+
+export interface HelpDeskKnowledgeArticleDto {
+  id: string;
+  title: string;
+  summary: string;
+  category: string;
+  updatedAt: string;
+  url: string;
+}
+
+export interface CreateHelpDeskTicketRequestDto {
+  subject: string;
+  priority: string;
+  category: string;
+  description: string;
+}
+
+export interface HelpDeskTicketResultDto {
+  requestId: string;
+  status: string;
+  message: string;
+  externalRef?: string | null;
+  externalUrl?: string | null;
+}

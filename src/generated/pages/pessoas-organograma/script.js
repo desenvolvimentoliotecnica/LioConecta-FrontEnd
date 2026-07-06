@@ -601,7 +601,7 @@
       function isChartLevelAllowedForPositionRequest(level) {
         const policy = getOrgPositionPolicy();
         if (!policy.enabled || policy.minLevel === null) return false;
-        return level >= policy.minLevel;
+        return level > policy.minLevel;
       }
 
       function canRequestPositionOnNode(chart, nodeId) {

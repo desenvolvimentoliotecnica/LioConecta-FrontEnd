@@ -1,7 +1,3 @@
-.ponto-page {
-  max-width: 1200px;
-}
-
 .welcome-banner--ponto {
   background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   border: 1px dashed #fdba74;
@@ -154,11 +150,20 @@
   color: var(--wf-text-muted);
 }
 
-.ponto-date-chips {
-  display: inline-flex;
-  align-items: center;
+.ponto-date-cell {
+  display: grid;
+  grid-template-columns: 96px 120px;
+  gap: 8px;
   justify-content: center;
-  gap: 6px;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.ponto-date-cell__part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ponto-date-chip {

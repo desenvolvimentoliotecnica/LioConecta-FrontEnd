@@ -23,7 +23,7 @@ function injectPageStyles(pageId: string): (() => void) | undefined {
   el.setAttribute("data-page-style", pageId);
   let combined = assets?.styles ?? "";
   if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
-  if (pageId === "pessoas-organograma") combined += "\n" + orgModalCss;
+  if (pageId === "pessoas-organograma" || pageId === "pessoas-diretorio") combined += "\n" + orgModalCss;
   if (!combined) return undefined;
   el.textContent = combined;
   document.head.appendChild(el);

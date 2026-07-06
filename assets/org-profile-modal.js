@@ -67,6 +67,8 @@
   }
 
   function getManagerLabel(person, nodeIndex) {
+    const profile = person.profile || {};
+    if (profile.managerLabel) return profile.managerLabel;
     if (!person.pid) return "—";
     const manager = nodeIndex[person.pid] || nodeIndex[String(person.pid)] || nodeIndex[Number(person.pid)];
     return manager ? manager.name + " · " + manager.title : "—";
@@ -95,7 +97,7 @@
     if (!modal || !person) return;
 
     const colors = getDeptColors(person.dept);
-    const profile = person.profile || buildProfileExtras(person.name, person.dept);
+    const profile = Object.assign({}, buildProfileExtras(person.name, person.dept), person.profile || {});
     const slug = person.slug || slugifyName(person.name);
 
     modal.style.setProperty("--org-profile-accent", colors.stroke);
