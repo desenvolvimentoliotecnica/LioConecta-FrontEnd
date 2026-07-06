@@ -1250,17 +1250,37 @@ export interface HelpDeskKnowledgeArticleDto {
   url: string;
 }
 
+export interface HelpDeskAreaDto {
+  id: string;
+  name: string;
+  icon: string;
+  serviceCount: number;
+  entityId: number;
+}
+
 export interface CreateHelpDeskTicketRequestDto {
   subject: string;
   priority: string;
+  entityId: number;
   categoryId: number;
   description: string;
+}
+
+export interface HelpDeskGlpiEntityDto {
+  id: number;
+  name: string;
+  fullName?: string | null;
+  parentId?: number | null;
+  hasChildren: boolean;
 }
 
 export interface HelpDeskItilCategoryDto {
   id: number;
   name: string;
   fullName?: string | null;
+  parentId?: number | null;
+  hasChildren: boolean;
+  entityId: number;
 }
 
 export interface HelpDeskTicketResultDto {

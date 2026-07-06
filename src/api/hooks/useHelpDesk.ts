@@ -18,6 +18,10 @@ import type {
 
   HelpDeskItilCategoryDto,
 
+  HelpDeskAreaDto,
+
+  HelpDeskGlpiEntityDto,
+
   HelpDeskTicketResultDto,
 
 } from "../types";
@@ -152,11 +156,34 @@ export function useHelpDeskTicketDetail(ticketId: string | null, enabled: boolea
 
 
 
-export function useHelpDeskCategories(enabled: boolean) {
+export function useHelpDeskAreas(enabled: boolean) {
   return useQuery({
-    queryKey: [...HELP_DESK_QUERY_KEY, "categories"],
-    queryFn: () => api.get<HelpDeskItilCategoryDto[]>("/ti/help-desk/categories"),
+    queryKey: [...HELP_DESK_QUERY_KEY, "areas"],
+    queryFn: () => api.get<HelpDeskAreaDto[]>("/ti/help-desk/areas"),
     enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHelpDeskEntities(enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "entities"],
+    queryFn: () => api.get<HelpDeskGlpiEntityDto[]>("/ti/help-desk/entities"),
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHelpDeskCategories(areaId: string | null, enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "categories", areaId],
+    queryFn: () =>
+      api.get<HelpDeskItilCategoryDto[]>(
+        `/ti/help-desk/categories?areaId=${encodeURIComponent(String(areaId))}`,
+      ),
+    enabled: enabled && areaId !== null && areaId.length > 0,
     staleTime: 5 * 60 * 1000,
     retry: config.useMock ? 0 : 1,
   });

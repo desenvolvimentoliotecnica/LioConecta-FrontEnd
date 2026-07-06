@@ -427,15 +427,16 @@ export function BackendConfigPage() {
               <strong>Mapeamento dos tokens (infra):</strong>
               <ul className="backend-config-page__token-map">
                 <li>
-                  <strong>App token (Lioconecta)</strong> → header <code>App-Token</code> — token rotulado
-                  «Lioconecta» pela infra
+                  <strong>Token API / App token (Lioconecta)</strong> → campo <strong>App token</strong> — header{" "}
+                  <code>App-Token</code>
                 </li>
                 <li>
-                  <strong>User token (glpi_system_service)</strong> → header{" "}
-                  <code>Authorization: user_token …</code> — token do usuário de serviço
+                  <strong>Token serviço / User token (glpi_system_service)</strong> → campo <strong>User token</strong>{" "}
+                  — header <code>Authorization: user_token …</code>
                 </li>
               </ul>
-              Não inverta os dois campos. Salve e teste a conexão antes de desativar o modo mock em Integrações.
+              Não inverta os dois campos (o rótulo «API» da infra vai no App token, «serviço» no User token). Salve e
+              teste a conexão antes de desativar o modo mock em Integrações.
             </div>
           ) : null}
 
