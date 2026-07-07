@@ -1619,10 +1619,81 @@ export interface CalendarEventDto {
   canEdit: boolean;
 }
 
-export interface CafeteriaMenuDto {
-  date: string;
-  items: string[];
+export interface MenuSectionDto {
+  key: string;
+  label: string;
+  value: string;
 }
+
+export type MenuMealType = "breakfast" | "lunch" | "afternoon_coffee" | "dinner" | "shift";
+
+export type MenuDayStatus = "normal" | "holiday" | "closed";
+
+export interface MealMenuDto {
+  mealType: MenuMealType;
+  sections: MenuSectionDto[];
+}
+
+export interface DailyMenuDto {
+  date: string;
+  dayStatus: MenuDayStatus;
+  dayStatusLabel?: string | null;
+  meals: MealMenuDto[];
+  notes?: string | null;
+  published: boolean;
+  updatedAt?: string;
+  updatedBy?: string;
+}
+
+export interface WeeklyMenuDto {
+  weekStart: string;
+  days: DailyMenuDto[];
+}
+
+export interface MenuEditorSettingsDto {
+  allowedEmails: string[];
+  allowedRoles: UserRole[];
+  emailRecipients: string[];
+}
+
+export interface MenuEditorBootstrapDto {
+  canEdit: boolean;
+  templates: {
+    lunchSections: Array<{ key: string; label: string }>;
+    mealTypes: MenuMealType[];
+  };
+}
+
+export interface SaveDailyMenuRequest {
+  dayStatus?: MenuDayStatus;
+  dayStatusLabel?: string | null;
+  meals: MealMenuDto[];
+  notes?: string | null;
+  published?: boolean;
+}
+
+export interface CopyMenuDayRequest {
+  sourceDate: string;
+}
+
+export interface CopyMenuWeekRequest {
+  sourceWeekStart: string;
+}
+
+export interface SendMenuEmailRequest {
+  weekStart: string;
+  recipients?: string[];
+  includePdf?: boolean;
+}
+
+export interface SendMenuEmailResponse {
+  success: boolean;
+  message: string;
+  recipientCount: number;
+}
+
+/** @deprecated Use DailyMenuDto — kept as alias for calendar hooks */
+export type CafeteriaMenuDto = DailyMenuDto;
 
 export interface LinkCalendarAccountRequest {
   accessToken: string;

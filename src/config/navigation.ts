@@ -71,6 +71,7 @@ export const facilitiesLinks: NavLinkItem[] = [
   { label: "Copiadora e impressão", path: "/servicos/copiadora" },
   { label: "Estacionamento", path: "/servicos/estacionamento" },
   { label: "Refeitório e copa", path: "/servicos/refeitorio" },
+  { label: "Gestão de cardápio", path: "/servicos/cardapio" },
   { label: "Climatização", path: "/servicos/climatizacao" },
   { label: "Gestão de resíduos", path: "/servicos/gestao-residuos" },
 ];

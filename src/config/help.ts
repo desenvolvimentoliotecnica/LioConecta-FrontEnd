@@ -167,6 +167,15 @@ export const HELP_ARTICLES: HelpArticle[] = [
     hrefLabel: "Reservar sala",
   },
   {
+    id: "facilities-cardapio",
+    category: "servicos",
+    question: "Onde consulto o cardápio do refeitório?",
+    answer:
+      "Acesse Serviços > Facilities > Gestão de cardápio para ver a semana completa. O cardápio do dia também aparece no painel lateral do Calendário ao selecionar uma data.",
+    href: "/servicos/cardapio",
+    hrefLabel: "Ver cardápio",
+  },
+  {
     id: "notificacoes-ajuda",
     category: "conta",
     question: "Como gerencio minhas notificações?",

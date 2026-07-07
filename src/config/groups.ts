@@ -1,4 +1,5 @@
 import { pageAssets } from "../generated/pagesIndex";
+import { injectScopedPageStyle } from "../utils/pageInjectedStyles";
 import {
   GROUP_ACCESS_OPEN,
   GROUP_ACCESS_PRIVATE,
@@ -129,35 +130,13 @@ export function groupAccessLabel(accessMode: GroupAccessMode): string {
 }
 
 export function injectGroupCreatePageStyles(): () => void {
-  const attr = `data-page-style="${GROUP_CREATE_PAGE_ID}"`;
-  document.querySelector(`style[${attr}]`)?.remove();
-
   const assets = pageAssets[GROUP_CREATE_PAGE_ID];
   if (!assets?.styles) return () => undefined;
-
-  const el = document.createElement("style");
-  el.setAttribute("data-page-style", GROUP_CREATE_PAGE_ID);
-  el.textContent = assets.styles;
-  document.head.appendChild(el);
-
-  return () => {
-    document.querySelector(`style[${attr}]`)?.remove();
-  };
+  return injectScopedPageStyle(GROUP_CREATE_PAGE_ID, assets.styles);
 }
 
 export function injectGroupExplorePageStyles(): () => void {
-  const attr = `data-page-style="${GROUP_EXPLORE_PAGE_ID}"`;
-  document.querySelector(`style[${attr}]`)?.remove();
-
   const assets = pageAssets[GROUP_EXPLORE_PAGE_ID];
   if (!assets?.styles) return () => undefined;
-
-  const el = document.createElement("style");
-  el.setAttribute("data-page-style", GROUP_EXPLORE_PAGE_ID);
-  el.textContent = assets.styles;
-  document.head.appendChild(el);
-
-  return () => {
-    document.querySelector(`style[${attr}]`)?.remove();
-  };
+  return injectScopedPageStyle(GROUP_EXPLORE_PAGE_ID, assets.styles);
 }

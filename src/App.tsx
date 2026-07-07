@@ -19,6 +19,7 @@ import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
 import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
 import { HelpDeskPage } from "./components/help-desk/HelpDeskPage";
+import { CardapioPage } from "./components/facilities/CardapioPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
 import { TiHubPage } from "./components/pages/TiHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
@@ -179,6 +180,7 @@ function App() {
         <Route path="/servicos/ferias-ausencias" element={<FeriasAusenciasPage />} />
         <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
+        <Route path="/servicos/cardapio" element={<CardapioPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />

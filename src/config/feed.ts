@@ -1,4 +1,5 @@
 import { pageAssets } from "../generated/pagesIndex";
+import { injectScopedPageStyle } from "../utils/pageInjectedStyles";
 
 export const FEED_PAGE_ID = "feed";
 export const FEED_GRID_MARKER = '<div class="feed-grid">';
@@ -44,8 +45,8 @@ export function rewriteFeedLinksForKiosk(html: string): string {
 }
 
 export function injectFeedPageStyles(mode: "default" | "kiosk" = "default"): () => void {
-  const attr = `data-page-style="${FEED_PAGE_ID}${mode === "kiosk" ? "-kiosk" : ""}"`;
-  document.querySelector(`style[${attr}]`)?.remove();
+  const styleId = `${FEED_PAGE_ID}${mode === "kiosk" ? "-kiosk" : ""}`;
+  document.querySelector(`style[data-page-style="${styleId}"]`)?.remove();
 
   const assets = pageAssets[FEED_PAGE_ID];
   let combined = assets?.styles ?? "";
@@ -55,14 +56,7 @@ export function injectFeedPageStyles(mode: "default" | "kiosk" = "default"): () 
 
   if (!combined) return () => undefined;
 
-  const el = document.createElement("style");
-  el.setAttribute("data-page-style", `${FEED_PAGE_ID}${mode === "kiosk" ? "-kiosk" : ""}`);
-  el.textContent = combined;
-  document.head.appendChild(el);
-
-  return () => {
-    document.querySelector(`style[${attr}]`)?.remove();
-  };
+  return injectScopedPageStyle(styleId, combined);
 }
 
 export function isKioskAllowedLink(href: string): boolean {

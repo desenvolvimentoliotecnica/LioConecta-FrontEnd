@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, config } from "../client";
+import { api, ApiError, config } from "../client";
 import type {
   CalendarBootstrapDto,
   CalendarConnectionTestResponse,
@@ -93,14 +93,17 @@ export function useCafeteriaMenu(date: string | null, enabled: boolean) {
   return useQuery({
     queryKey: ["calendar", "menu", date] as const,
     queryFn: async (): Promise<CafeteriaMenuDto | null> => {
-      if (config.useMock || !date) return null;
+      if (!date) return null;
       try {
         return await api.get<CafeteriaMenuDto>(`/calendar/menu/${date}`);
-      } catch {
-        return null;
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          return null;
+        }
+        throw error;
       }
     },
-    enabled: enabled && Boolean(date) && !config.useMock,
+    enabled: enabled && Boolean(date),
   });
 }
 
