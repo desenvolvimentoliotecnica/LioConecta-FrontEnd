@@ -496,6 +496,10 @@
   color: #64748b;
 }
 
+.calendar-page__inline-error {
+  margin-top: 8px;
+}
+
 .calendar-page__actions {
   margin-top: 12px;
   display: flex;
@@ -521,44 +525,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1200;
-  padding: 16px;
+  z-index: 2000;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
 }
 
-.calendar-modal {
-  width: min(520px, 100%);
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
-  max-height: 90vh;
-  overflow: auto;
-}
-
-.calendar-modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.calendar-modal__header h2 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1e293b;
-}
-
-.calendar-modal__close {
-  border: none;
-  background: transparent;
-  color: #64748b;
-  cursor: pointer;
-  font-size: 18px;
+.calendar-modal__error {
+  margin: 0 0 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
 }
 
 .calendar-modal__form {
-  padding: 16px 18px 18px;
   display: grid;
   gap: 12px;
 }
@@ -626,16 +605,6 @@
   padding: 8px 12px;
   font-family: inherit;
   cursor: pointer;
-}
-
-.calendar-modal__cancel,
-.calendar-modal__save {
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-family: inherit;
-  cursor: pointer;
-  border: 1px solid #cbd5e1;
-  background: #fff;
 }
 
 .calendar-modal__save {

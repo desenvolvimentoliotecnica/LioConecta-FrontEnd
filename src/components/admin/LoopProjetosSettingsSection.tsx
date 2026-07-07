@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { config } from "../../api/client";
 import { useLoopSettings, useSaveLoopSettings } from "../../api/hooks/useLoopSettings";
 import type { UserRole } from "../../api/types";
-import { DEFAULT_LOOP_SETTINGS, type LoopSettings } from "../../config/loop/settings";
+import { DEFAULT_LOOP_SETTINGS, loopSettingsFingerprint, type LoopSettings } from "../../config/loop/settings";
 import "../../styles/organogram-governance-page.css";
 
 const ROLE_OPTIONS: UserRole[] = [
@@ -25,17 +25,21 @@ function parseEmails(value: string): string[] {
 }
 
 export function LoopProjetosSettingsSection() {
-  const { data: settings, isLoading, isError } = useLoopSettings();
+  const { data: settings, fingerprint, isLoading, isError } = useLoopSettings();
   const saveMutation = useSaveLoopSettings();
   const [form, setForm] = useState<LoopSettings>(DEFAULT_LOOP_SETTINGS);
   const [extraEmails, setExtraEmails] = useState("");
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error" | "warn"; message: string } | null>(null);
+  const hydratedFingerprint = useRef<string | null>(null);
 
   useEffect(() => {
     if (isLoading) return;
+    if (hydratedFingerprint.current === fingerprint) return;
+
     setForm(settings);
     setExtraEmails(settings.allowedEmails.join("\n"));
-  }, [settings, isLoading]);
+    hydratedFingerprint.current = fingerprint;
+  }, [fingerprint, isLoading, settings]);
 
   const toggleRole = (role: UserRole) => {
     setForm((current) => {
@@ -52,13 +56,17 @@ export function LoopProjetosSettingsSection() {
     const next: LoopSettings = { ...form, allowedEmails: parseEmails(extraEmails) };
 
     try {
-      await saveMutation.mutateAsync(next);
-      setForm(next);
+      const { settings: saved, persistedToServer } = await saveMutation.mutateAsync(next);
+      setForm(saved);
+      setExtraEmails(saved.allowedEmails.join("\n"));
+      hydratedFingerprint.current = loopSettingsFingerprint(saved);
       setFeedback({
-        type: "success",
+        type: persistedToServer ? "success" : "warn",
         message: config.useMock
           ? "Configurações do Loop salvas localmente (modo mock)."
-          : "Configurações do Loop salvas no servidor.",
+          : persistedToServer
+            ? "Configurações do Loop salvas no servidor."
+            : "Configurações guardadas neste navegador. Reinicie a API com a versão que inclui as chaves loop.* para persistir no banco.",
       });
     } catch {
       setFeedback({
@@ -129,7 +137,7 @@ export function LoopProjetosSettingsSection() {
         </div>
 
         <label className="org-governance__field org-governance__field--full">
-          <span>E-mails adicionais (um por linha)</span>
+          <span>E-mails adicionais com acesso (um por linha)</span>
           <textarea
             rows={4}
             value={extraEmails}
@@ -137,6 +145,9 @@ export function LoopProjetosSettingsSection() {
             onChange={(e) => setExtraEmails(e.target.value)}
             placeholder="gestor@empresa.com.br"
           />
+          <small className="backend-config-page__field-hint">
+            Lista de permissão: estes e-mails entram no Loop mesmo sem o perfil marcado acima.
+          </small>
         </label>
 
         <div className="org-governance__toolbar">

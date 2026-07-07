@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { subscribeToChatHub } from "../chatHub";
 import { config } from "../client";
+import { hasPortalSession } from "../hubAuth";
 import {
   CHAT_CONVERSATIONS_QUERY_KEY,
   CHAT_STATUS_QUERY_KEY,
@@ -14,7 +15,7 @@ export function useChatHubSync() {
   const { data: bootstrap } = useChatBootstrap();
 
   useEffect(() => {
-    if (config.useMock || !bootstrap?.enabled || !bootstrap.signalREnabled) {
+    if (config.useMock || !hasPortalSession() || !bootstrap?.enabled || !bootstrap.signalREnabled) {
       return;
     }
 

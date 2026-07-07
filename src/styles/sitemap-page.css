@@ -227,6 +227,21 @@
   color: #b45309;
 }
 
+.sitemap-page__badge--integrated {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.sitemap-page__badge--partial {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sitemap-page__badge--prototype {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
 .sitemap-page__empty {
   text-align: center;
   padding: 40px 20px;

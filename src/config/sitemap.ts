@@ -6,6 +6,7 @@
  * Ver também `.cursor/rules/sitemap-maintenance.mdc`.
  */
 import type { NavLinkItem } from "./navigation";
+import { getPageMaturity, type PageMaturity } from "./page-maturity";
 import {
   FEED_PATH,
   comunicadosLinks,
@@ -24,6 +25,7 @@ export type SitemapEntry = {
   path: string;
   description?: string;
   disabled?: boolean;
+  maturity?: PageMaturity;
 };
 
 export type SitemapSubsection = {
@@ -48,11 +50,24 @@ function fromNav(item: NavLinkItem, description?: string): SitemapEntry {
     path: item.path,
     description,
     disabled: item.path === "#",
+    maturity: getPageMaturity(item.path),
   };
 }
 
-function entry(label: string, path: string, description?: string, disabled = false): SitemapEntry {
-  return { label, path, description, disabled };
+function entry(
+  label: string,
+  path: string,
+  description?: string,
+  disabled = false,
+  maturity?: PageMaturity,
+): SitemapEntry {
+  return {
+    label,
+    path,
+    description,
+    disabled,
+    maturity: maturity ?? (path === "#" ? "soon" : getPageMaturity(path)),
+  };
 }
 
 export function buildSitemapSections(): SitemapSection[] {

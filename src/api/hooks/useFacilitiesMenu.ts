@@ -135,3 +135,13 @@ export function useSendMenuEmail() {
       api.post<SendMenuEmailResponse>("/facilities/menu/week/send-email", body),
   });
 }
+
+export async function downloadWeeklyMenuPdf(weekStart: string): Promise<void> {
+  const blob = await api.getBlob(`/facilities/menu/week/pdf?start=${weekStart}`);
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `cardapio-semanal-${weekStart}.pdf`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}

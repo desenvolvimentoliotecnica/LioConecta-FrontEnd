@@ -107,6 +107,84 @@ body {
   font-weight: 600;
 }
 
+.topbar__dropdown-menu .topbar__menu-item.is-active {
+  background: #fff7ed;
+  color: #c2410c;
+  font-weight: 600;
+}
+
+.topbar__menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.topbar__menu-item--feed {
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wf-text);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.topbar__menu-label {
+  min-width: 0;
+  flex: 1;
+}
+
+.topbar__maturity-badge {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.topbar__maturity-badge--integrated {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.topbar__maturity-badge--partial {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.topbar__maturity-badge--prototype {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.topbar__maturity-badge--soon {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.topbar__dropdown-menu .topbar__menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.topbar__dropdown-menu .topbar__menu-item:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
 .topbar__dropdown {
   position: relative;
 }
@@ -203,15 +281,19 @@ body {
   border-top: 1px dashed #e2e8f0;
 }
 
-.topbar__dropdown-menu--services a {
+.topbar__dropdown-menu--services a,
+.topbar__dropdown-menu--services .topbar__menu-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+  width: 100%;
   padding: 7px 10px 7px 16px;
   font-size: 12px;
 }
 
-.topbar__dropdown-menu--services a::before {
+.topbar__dropdown-menu--services a::before,
+.topbar__dropdown-menu--services .topbar__menu-item::before {
   content: "";
   width: 4px;
   height: 4px;
@@ -220,7 +302,8 @@ body {
   flex-shrink: 0;
 }
 
-.topbar__dropdown-menu--services a:hover::before {
+.topbar__dropdown-menu--services a:hover::before,
+.topbar__dropdown-menu--services .topbar__menu-item:hover::before {
   background: #64748b;
 }
 

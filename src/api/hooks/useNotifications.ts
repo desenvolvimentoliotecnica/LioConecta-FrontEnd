@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { api, config } from "../client";
+import { hasPortalSession } from "../hubAuth";
 import type { NotificationDto, PagedResult } from "../types";
 import { subscribeToNotificationHub } from "../notificationHub";
 import {
@@ -68,7 +69,7 @@ export function useNotificationHubSync() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (config.useMock) return;
+    if (config.useMock || !hasPortalSession()) return;
 
     return subscribeToNotificationHub(() => {
       void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });

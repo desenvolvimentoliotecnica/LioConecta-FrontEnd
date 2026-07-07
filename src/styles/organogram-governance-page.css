@@ -297,6 +297,12 @@
   border: 1px solid #bbf7d0;
 }
 
+.org-governance__alert--warn {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
 .org-governance__empty {
   color: var(--wf-text-muted);
   font-size: 14px;
@@ -356,9 +362,167 @@
   margin-bottom: 0;
 }
 
+.loop-settings .org-governance__alert {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.portal-ui-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--wf-border);
+}
+
+.portal-ui-roadmap__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.portal-ui-roadmap__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.portal-ui-roadmap__desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.portal-ui-roadmap__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.portal-ui-roadmap__column {
+  background: #f8fafc;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.portal-ui-roadmap__column-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.portal-ui-roadmap__empty {
+  font-size: 12px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.portal-ui-roadmap__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.portal-ui-roadmap__item {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.portal-ui-roadmap__item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.portal-ui-roadmap__label-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.portal-ui-roadmap__item-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.portal-ui-roadmap__action-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.portal-ui-roadmap__action-btn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.portal-ui-roadmap__action-btn--danger:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.portal-ui-roadmap__path {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #94a3b8;
+  font-family: ui-monospace, monospace;
+}
+
+.portal-ui-roadmap__notes {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 12px;
+  resize: vertical;
+}
+
+.portal-ui-roadmap__add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.portal-ui-roadmap__add-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+}
+
 @media (max-width: 900px) {
   .org-governance__grid,
   .org-governance__split {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-ui-roadmap__grid {
     grid-template-columns: 1fr;
   }
 }

@@ -15,6 +15,15 @@ Retorna o cardápio publicado de um dia (formato `DailyMenuDto`).
 
 Retorna a semana completa (segunda a domingo) para gestão/consulta.
 
+### `GET /facilities/menu/week/pdf?start={YYYY-MM-DD}`
+
+Gera e retorna o PDF da semana (A4 paisagem, grade Seg–Dom).
+
+- Autenticação: usuário logado
+- `Content-Type`: `application/pdf`
+- `Content-Disposition`: attachment com nome `cardapio-semanal-{start}.pdf`
+- `start` deve ser uma segunda-feira (`400` se inválido)
+
 ### `GET /facilities/menu/bootstrap`
 
 Retorna `{ canEdit: boolean, templates: { lunchSections, mealTypes } }`.
@@ -36,6 +45,8 @@ Body: `{ sourceWeekStart: string, targetWeekStart?: string }`
 ### `POST /facilities/menu/week/send-email`
 
 Body: `{ weekStart, recipients?: string[], includePdf?: boolean }`
+
+Quando `includePdf: true`, anexa o PDF gerado pela mesma lógica de `GET /facilities/menu/week/pdf`.
 
 ### `DELETE /facilities/menu/{date}`
 

@@ -118,6 +118,7 @@ export function useLinkCalendarAccount() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: CALENDAR_STATUS_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: CALENDAR_LIST_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: ["calendar", "events"] });
     },
   });
 }

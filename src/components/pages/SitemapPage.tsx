@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { usePortalUiSettings } from "../../api/hooks/usePortalUiSettings";
+import { MATURITY_META } from "../../config/page-maturity";
+import type { PageMaturity } from "../../config/page-maturity";
 import {
   SITEMAP_DEFAULT_EXPANDED,
   buildSitemapSections,
@@ -14,7 +17,16 @@ import "../../styles/sitemap-page.css";
 const ALL_SECTIONS = buildSitemapSections();
 const TOTAL_ENTRIES = countSitemapEntries(ALL_SECTIONS);
 
-function SitemapLink({ entry }: { entry: SitemapEntry }) {
+function MaturityBadge({ maturity }: { maturity: PageMaturity }) {
+  const meta = MATURITY_META[maturity];
+  return (
+    <span className={`sitemap-page__badge sitemap-page__badge--${maturity}`}>
+      {meta.label}
+    </span>
+  );
+}
+
+function SitemapLink({ entry, showBadges }: { entry: SitemapEntry; showBadges: boolean }) {
   if (entry.disabled) {
     return (
       <span className="sitemap-page__link sitemap-page__link--disabled">
@@ -22,7 +34,11 @@ function SitemapLink({ entry }: { entry: SitemapEntry }) {
         {entry.description ? (
           <span className="sitemap-page__link-desc">{entry.description}</span>
         ) : null}
-        <span className="sitemap-page__badge sitemap-page__badge--soon">Em breve</span>
+        {showBadges && entry.maturity ? (
+          <MaturityBadge maturity={entry.maturity} />
+        ) : (
+          <span className="sitemap-page__badge sitemap-page__badge--soon">Em breve</span>
+        )}
       </span>
     );
   }
@@ -34,11 +50,12 @@ function SitemapLink({ entry }: { entry: SitemapEntry }) {
       {entry.description ? (
         <span className="sitemap-page__link-desc">{entry.description}</span>
       ) : null}
+      {showBadges && entry.maturity ? <MaturityBadge maturity={entry.maturity} /> : null}
     </Link>
   );
 }
 
-function SectionBody({ section }: { section: SitemapSection }) {
+function SectionBody({ section, showBadges }: { section: SitemapSection; showBadges: boolean }) {
   if (section.subsections) {
     return (
       <div className="sitemap-page__subsections">
@@ -50,7 +67,7 @@ function SectionBody({ section }: { section: SitemapSection }) {
             </h3>
             <div className="sitemap-page__links">
               {sub.items.map((item) => (
-                <SitemapLink key={`${sub.heading}-${item.path}-${item.label}`} entry={item} />
+                <SitemapLink key={`${sub.heading}-${item.path}-${item.label}`} entry={item} showBadges={showBadges} />
               ))}
             </div>
           </div>
@@ -62,13 +79,15 @@ function SectionBody({ section }: { section: SitemapSection }) {
   return (
     <div className="sitemap-page__links">
       {section.items?.map((item) => (
-        <SitemapLink key={`${item.path}-${item.label}`} entry={item} />
+        <SitemapLink key={`${item.path}-${item.label}`} entry={item} showBadges={showBadges} />
       ))}
     </div>
   );
 }
 
 export function SitemapPage() {
+  const { data: portalUi } = usePortalUiSettings();
+  const showBadges = portalUi.maturityBadgesEnabled;
   const [query, setQuery] = useState("");
   const [openSections, setOpenSections] = useState<Set<string>>(
     () => new Set(SITEMAP_DEFAULT_EXPANDED),
@@ -180,7 +199,7 @@ export function SitemapPage() {
                 </button>
                 {isOpen ? (
                   <div className="sitemap-page__section-body">
-                    <SectionBody section={section} />
+                    <SectionBody section={section} showBadges={showBadges} />
                   </div>
                 ) : null}
               </article>

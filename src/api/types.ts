@@ -1518,6 +1518,12 @@ export interface ChatBootstrapDto {
   msalAuthority: string;
 }
 
+export interface LoopBootstrapDto {
+  enabled: boolean;
+  allowedRoles: UserRole[];
+  allowedEmails: string[];
+}
+
 export interface ChatStatusDto {
   enabled: boolean;
   linked: boolean;

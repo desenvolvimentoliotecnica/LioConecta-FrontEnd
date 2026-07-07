@@ -3,7 +3,7 @@ import {
   useChatBootstrap,
   useLinkTeamsAccount,
 } from "../../api/hooks/useChat";
-import { formatMsalErrorForUser } from "../../auth/msalErrors";
+import { formatLinkAccountError } from "../../auth/linkAccountErrors";
 import { acquireTeamsChatToken } from "./chatMsal";
 
 export function ChatTeamsLinkBanner() {
@@ -26,7 +26,7 @@ export function ChatTeamsLinkBanner() {
         scopes: result.scopes,
       });
     } catch (linkError) {
-      setError(formatMsalErrorForUser(linkError));
+      setError(formatLinkAccountError(linkError));
     }
   }
 
