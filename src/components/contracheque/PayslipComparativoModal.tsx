@@ -41,6 +41,11 @@ export function PayslipComparativoModal({
     >
       {isLoading ? <p className="pay-status">Calculando comparativo…</p> : null}
       {isError ? <p className="pay-status">Não foi possível gerar o comparativo.</p> : null}
+      {!isLoading && !isError && !data ? (
+        <p className="pay-status">
+          São necessários pelo menos dois holerites de folha mensal distintos para comparar.
+        </p>
+      ) : null}
       {data ? (
         <>
           <div className="pay-summary-row">

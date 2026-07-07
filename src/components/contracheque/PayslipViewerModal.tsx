@@ -12,6 +12,8 @@ type Props = {
   title: string;
   year: number | null;
   month: number | null;
+  paymentType?: string | null;
+  stacked?: boolean;
   showValues: boolean;
   onToggleShowValues: () => void;
   onClose: () => void;
@@ -87,11 +89,17 @@ export function PayslipViewerModal({
   title,
   year,
   month,
+  paymentType,
+  stacked = false,
   showValues,
   onToggleShowValues,
   onClose,
 }: Props) {
-  const { data, isLoading, isError } = usePayslipDetail(open ? year : null, open ? month : null);
+  const { data, isLoading, isError } = usePayslipDetail(
+    open ? year : null,
+    open ? month : null,
+    open ? paymentType : null,
+  );
 
   const canExport = year !== null && month !== null;
 
@@ -100,6 +108,7 @@ export function PayslipViewerModal({
       open={open}
       title={title}
       wide
+      stacked={stacked}
       onClose={onClose}
       showValues={showValues}
       onToggleShowValues={onToggleShowValues}
@@ -110,14 +119,14 @@ export function PayslipViewerModal({
               <button
                 type="button"
                 className="pay-modal__btn pay-modal__btn--ghost"
-                onClick={() => void downloadPayslipPdf(year, month)}
+                onClick={() => void downloadPayslipPdf(year, month, paymentType ?? undefined)}
               >
                 <i className="fa-regular fa-file-pdf" aria-hidden="true" /> Baixar PDF
               </button>
               <button
                 type="button"
                 className="pay-modal__btn pay-modal__btn--ghost"
-                onClick={() => void openPayslipPdfForPrint(year, month)}
+                onClick={() => void openPayslipPdfForPrint(year, month, paymentType ?? undefined)}
               >
                 <i className="fa-solid fa-print" aria-hidden="true" /> Imprimir
               </button>
@@ -129,7 +138,7 @@ export function PayslipViewerModal({
         </>
       }
     >
-      {isLoading ? <p className="pay-status">Carregando holerite…</p> : null}
+      {isLoading && !data ? <p className="pay-status">Carregando holerite…</p> : null}
       {isError ? <p className="pay-status">Não foi possível carregar o holerite.</p> : null}
       {data ? <PayslipContent detail={data} showValues={showValues} /> : null}
     </ContrachequeModal>

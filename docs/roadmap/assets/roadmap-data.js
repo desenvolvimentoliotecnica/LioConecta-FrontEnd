@@ -299,7 +299,7 @@ window.ROADMAP_DATA = {
   ],
 
   maturityMatrix: [
-    { route: "/servicos/contracheque", label: "Contracheque (Holerite)", maturity: "integrated", file: "ContrachequePage.tsx", api: "/rh/payslips/*", gestor: "G-RM-07", gap: "Regressão QA" },
+    { route: "/servicos/contracheque", label: "Contracheque (Holerite)", maturity: "integrated", file: "ContrachequePage.tsx", api: "/rh/payslips/*", gestor: "G-RM-07", gap: "—" },
     { route: "/servicos/ferias-ausencias", label: "Férias e ausências", maturity: "integrated", file: "FeriasAusenciasPage.tsx", api: "/rh/leave/*", gestor: "G-RM-05", gap: "Write-back RM validar" },
     { route: "/servicos/ponto-eletronico", label: "Ponto eletrônico", maturity: "integrated", file: "PontoEletronicoPage.tsx", api: "/rh/ponto/*", gestor: "G-RM-06", gap: "Ajuste ponto (write) ausente" },
     { route: "/servicos/solicitacoes-rh", label: "Solicitações RH", maturity: "prototype", file: "servicos-rh/ (legacy)", api: "—", gestor: "G-RM-01..03", gap: "Greenfield React+API" },

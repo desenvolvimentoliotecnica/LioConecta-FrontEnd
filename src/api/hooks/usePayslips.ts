@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
+import { downloadBlobWithToast } from "../../utils/payslipToast";
 import type {
   CreatePayslipRequestDto,
   DescontosConsultaDto,
@@ -15,12 +16,14 @@ import type {
 } from "../types";
 
 export const PAYSLIPS_QUERY_KEY = ["payslips"] as const;
+const PAYSLIP_CACHE_MS = 24 * 60 * 60 * 1000;
 
 export function usePayslipSummary() {
   return useQuery({
     queryKey: [...PAYSLIPS_QUERY_KEY, "summary"],
     queryFn: () => api.get<PayslipSummaryDto>("/rh/payslips/summary"),
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -37,15 +40,29 @@ export function usePayslipHistory(limit = 24) {
     queryKey: [...PAYSLIPS_QUERY_KEY, "history", limit],
     queryFn: () => api.get<PayslipListItemDto[]>(`/rh/payslips?limit=${limit}`),
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
-export function usePayslipDetail(year: number | null, month: number | null) {
+export function usePayslipDetail(
+  year: number | null,
+  month: number | null,
+  paymentType?: string | null,
+) {
+  const paymentQuery =
+    paymentType && paymentType !== "FOLHA"
+      ? `?paymentType=${encodeURIComponent(paymentType)}`
+      : "";
+
   return useQuery({
-    queryKey: [...PAYSLIPS_QUERY_KEY, "detail", year, month],
-    queryFn: () => api.get<PayslipDetailDto>(`/rh/payslips/${year}/${month}`),
+    queryKey: [...PAYSLIPS_QUERY_KEY, "detail", year, month, paymentType ?? "FOLHA"],
+    queryFn: () =>
+      api.get<PayslipDetailDto>(`/rh/payslips/${year}/${month}${paymentQuery}`),
     enabled: year !== null && month !== null,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
+    gcTime: PAYSLIP_CACHE_MS,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -63,6 +80,7 @@ export function usePayslipComparativo(
       ),
     enabled: fromYear !== null && fromMonth !== null && toYear !== null && toMonth !== null,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -72,6 +90,7 @@ export function useFgtsConsulta(enabled: boolean) {
     queryFn: () => api.get<FgtsConsultaDto>("/rh/payslips/consultas/fgts"),
     enabled,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -81,6 +100,7 @@ export function useDescontosConsulta(enabled: boolean) {
     queryFn: () => api.get<DescontosConsultaDto>("/rh/payslips/consultas/descontos"),
     enabled,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -90,6 +110,7 @@ export function useRubricasConsulta(enabled: boolean) {
     queryFn: () => api.get<RubricasConsultaDto>("/rh/payslips/consultas/rubricas"),
     enabled,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -99,6 +120,7 @@ export function useIncomeStatement(year: number | null, enabled: boolean) {
     queryFn: () => api.get<IncomeStatementDto>(`/rh/payslips/informe/${year}`),
     enabled: enabled && year !== null,
     retry: config.useMock ? 0 : 1,
+    staleTime: PAYSLIP_CACHE_MS,
   });
 }
 
@@ -113,18 +135,49 @@ export function usePayslipRequest() {
   });
 }
 
-export async function downloadPayslipPdf(year: number, month: number): Promise<void> {
-  const blob = await api.getBlob(`/rh/payslips/${year}/${month}/pdf`);
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `contracheque-${year}-${String(month).padStart(2, "0")}.pdf`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+export async function downloadPayslipPdf(
+  year: number,
+  month: number,
+  paymentType?: string,
+): Promise<void> {
+  const paymentQuery =
+    paymentType && paymentType !== "FOLHA"
+      ? `?paymentType=${encodeURIComponent(paymentType)}`
+      : "";
+
+  await downloadBlobWithToast(
+    api.getBlob(`/rh/payslips/${year}/${month}/pdf${paymentQuery}`),
+    `contracheque-${year}-${String(month).padStart(2, "0")}.pdf`,
+    `O PDF do holerite ${String(month).padStart(2, "0")}/${year} foi salvo com sucesso.`,
+  );
 }
 
-export async function openPayslipPdfForPrint(year: number, month: number): Promise<void> {
-  const blob = await api.getBlob(`/rh/payslips/${year}/${month}/pdf`);
+export async function downloadComprovantePdf(): Promise<void> {
+  await downloadBlobWithToast(
+    api.getBlob("/rh/payslips/comprovante/pdf"),
+    "comprovante-rendimentos.pdf",
+    "Comprovante de rendimentos emitido com sucesso.",
+  );
+}
+
+export async function downloadCartaConsignacaoPdf(): Promise<void> {
+  await downloadBlobWithToast(
+    api.getBlob("/rh/payslips/carta-consignacao/pdf"),
+    "carta-consignacao.pdf",
+    "Carta de consignação emitida com sucesso.",
+  );
+}
+
+export async function openPayslipPdfForPrint(
+  year: number,
+  month: number,
+  paymentType?: string,
+): Promise<void> {
+  const paymentQuery =
+    paymentType && paymentType !== "FOLHA"
+      ? `?paymentType=${encodeURIComponent(paymentType)}`
+      : "";
+  const blob = await api.getBlob(`/rh/payslips/${year}/${month}/pdf${paymentQuery}`);
   const url = URL.createObjectURL(blob);
   const printWindow = window.open(url, "_blank", "noopener,noreferrer");
 

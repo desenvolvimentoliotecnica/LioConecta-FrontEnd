@@ -2,7 +2,7 @@
 type: lioconecta-spec
 specId: spec-holerite
 roadmapVersion: 1.2
-exportedAt: 2026-07-07T21:45:00.000Z
+exportedAt: 2026-07-07T23:35:00.000Z
 source: docs/roadmap/assets/roadmap-data.js
 pendingTasks: 0
 totalTasks: 8
@@ -29,7 +29,7 @@ totalTasks: 8
 | Status gestor | integrated |
 | Epic | EPIC-RM — Integração RM |
 | Tasks pendentes | 0 / 8 |
-| Exportado em | 07/07/2026, 18:45:00 |
+| Exportado em | 07/07/2026, 20:35:00 |
 
 ## Especificação funcional
 
@@ -44,11 +44,14 @@ Colaborador consulta holerite mensal, histórico, PDF, comparativo e informe IR.
 - React ContrachequePage.tsx integrado via /rh/payslips/*
 - Sync RM: worker totvs-payslip-sync (SQL read-only)
 - Informe IR, FGTS, rubricas e descontos alimentados por dados reais do RM
-- Regressão e2e Playwright sem mock (`e2e/contracheque.spec.ts`)
+- Cache holerite 24h on-demand; modais leem Postgres (sem RM live)
+- PDF comprovante/carta consignação E2E; card 2ª via removido
+- Informe IR filtrado por admissão; retidos via rubrica IRF (cod. 561)
+- Grid 3 colunas em telas largas; UAT manual B4–B9 + Obs 1–4 validados
 
 ### Gaps / tasks restantes
 
-Nenhum — spec fechada em 07/07/2026.
+Nenhum — spec fechada em 07/07/2026 (UAT manual concluído às 20:30).
 
 ### API
 
@@ -108,6 +111,22 @@ GET /rh/payslips/consultas/fgts|descontos|rubricas
 
 > Implementado em 07/07/2026 · repos: LioConecta-FrontEnd + LioConecta.Backend
 
+### Rodada UAT manual (07/07 — 20:30)
+
+| Item | Resultado |
+|------|-----------|
+| B4 — Viewer empilhado / histórico | OK |
+| B5 — Comparativo 2 meses FOLHA distintos | OK |
+| B6 — Toast download PDF | OK |
+| B7 — FGTS e encargos | OK |
+| B8 — Adiantamento 404 fora dos descontos | OK |
+| B9 — Glossário amigável de rubricas | OK |
+| Obs 1 — Cache/sync 1×/dia | OK |
+| Obs 2 — Remover card 2ª via | OK |
+| Obs 3 — Comprovante/carta PDF real | OK |
+| Obs 4 — Informe IR (retidos IRF cod. 561) | OK |
+| UX — Grid 3 cards em telas largas | OK |
+
 ### Entregas por task
 
 - **TS-FE-RM-001a:** Metadados `syncedAt`/`dataSource` no header via `RhPageHead` + `src/utils/syncMeta.ts`
@@ -121,8 +140,8 @@ GET /rh/payslips/consultas/fgts|descontos|rubricas
 
 ### Arquivos alterados
 
-- **FrontEnd:** `ContrachequePage.tsx`, `SectionPageHead.tsx`, `syncMeta.ts`, `PayslipHistoryModal.tsx`, `e2e/contracheque.spec.ts`, `playwright.config.ts`, `roadmap-data.js`
-- **Backend:** `PayslipService.cs`, `PayslipSyncService.cs`, `TotvsRmPayslipRepository.cs`, `PayslipRepository.cs`, `PayslipCompetenceRules.cs`, testes unitários e integração
+- **FrontEnd:** `ContrachequePage.tsx`, modais payslip, `usePayslips.ts`, `payslipHelpers.ts`, `payslipToast.ts`, `contracheque-page.css`, `e2e/contracheque.spec.ts`
+- **Backend:** `PayslipService.cs`, `PayslipSyncService.cs`, `PayslipRubricCatalog.cs`, `PayslipIncomeStatementRules.cs`, `PayslipDeductionRules.cs`, `PayslipRhDocumentPdfGenerator.cs`, `TotvsRmPayslipRepository.cs`, migrations FGTS
 
 ### Testes executados
 
@@ -130,7 +149,7 @@ GET /rh/payslips/consultas/fgts|descontos|rubricas
 - `npx playwright test e2e/contracheque.spec.ts` — OK (2/2, API `localhost:5148`, página `127.0.0.1:5174`)
 - `dotnet test` PayslipCompetenceRules — OK (8/8)
 - `dotnet test` PayslipRmConsistencyTests — OK (4/4)
-- Ambiente: `leonardo.mendes@liotecnica.com.br`, API local :5148, RM SQL configurado
+- UAT manual colaborador real — OK (07/07/2026 20:30)
 
 ## Checklist pós-implementação
 

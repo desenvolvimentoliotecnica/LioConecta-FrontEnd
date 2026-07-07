@@ -47,7 +47,15 @@ export function PayslipConsultaModal({
       {kind === "fgts" ? (
         <>
           {fgts.isLoading ? <p className="pay-status">Carregando FGTS…</p> : null}
-          {fgts.data ? (
+          {fgts.isError ? (
+            <p className="pay-status">Não foi possível carregar os depósitos de FGTS.</p>
+          ) : null}
+          {fgts.data && fgts.data.deposits.length === 0 ? (
+            <p className="pay-status">
+              Nenhum depósito de FGTS encontrado no cache. Aguarde a próxima sincronização da folha.
+            </p>
+          ) : null}
+          {fgts.data && fgts.data.deposits.length > 0 ? (
             <>
               <div className="pay-summary-box" style={{ marginBottom: 16 }}>
                 <div className="pay-summary-box__label">Saldo acumulado (6 meses)</div>
@@ -81,7 +89,13 @@ export function PayslipConsultaModal({
       {kind === "descontos" ? (
         <>
           {descontos.isLoading ? <p className="pay-status">Carregando descontos…</p> : null}
-          {descontos.data ? (
+          {descontos.isError ? (
+            <p className="pay-status">Não foi possível carregar os descontos.</p>
+          ) : null}
+          {descontos.data && descontos.data.items.length === 0 ? (
+            <p className="pay-status">Nenhum desconto de folha na última competência.</p>
+          ) : null}
+          {descontos.data && descontos.data.items.length > 0 ? (
             <>
               <div className="pay-summary-box" style={{ marginBottom: 16 }}>
                 <div className="pay-summary-box__label">Total de descontos (última competência)</div>
@@ -117,7 +131,13 @@ export function PayslipConsultaModal({
       {kind === "rubricas" ? (
         <>
           {rubricas.isLoading ? <p className="pay-status">Carregando glossário…</p> : null}
-          {rubricas.data ? (
+          {rubricas.isError ? (
+            <p className="pay-status">Não foi possível carregar as rubricas.</p>
+          ) : null}
+          {rubricas.data && rubricas.data.items.length === 0 ? (
+            <p className="pay-status">Nenhuma rubrica disponível no holerite atual.</p>
+          ) : null}
+          {rubricas.data && rubricas.data.items.length > 0 ? (
             <table className="pay-table">
               <thead>
                 <tr>

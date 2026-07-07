@@ -8,7 +8,7 @@ type Props = {
   showValues: boolean;
   onToggleShowValues: () => void;
   onClose: () => void;
-  onSelect: (year: number, month: number) => void;
+  onSelect: (year: number, month: number, paymentType?: string) => void;
 };
 
 function formatCompetenceLabel(competence: string, paymentType?: string) {
@@ -32,18 +32,20 @@ export function PayslipHistoryModal({
     event: MouseEvent,
     year: number,
     month: number,
+    paymentType?: string,
   ) => {
     event.stopPropagation();
-    await downloadPayslipPdf(year, month);
+    await downloadPayslipPdf(year, month, paymentType);
   };
 
   const handlePrint = async (
     event: MouseEvent,
     year: number,
     month: number,
+    paymentType?: string,
   ) => {
     event.stopPropagation();
-    await openPayslipPdfForPrint(year, month);
+    await openPayslipPdfForPrint(year, month, paymentType);
   };
 
   return (
@@ -72,7 +74,7 @@ export function PayslipHistoryModal({
               <tr
                 key={`${item.year}-${item.month}-${item.paymentType ?? "FOLHA"}`}
                 className="is-clickable"
-                onClick={() => onSelect(item.year, item.month)}
+                onClick={() => onSelect(item.year, item.month, item.paymentType)}
               >
                 <td>{formatCompetenceLabel(item.competence, item.paymentType)}</td>
                 <td>{formatMoney(item.grossAmount, showValues)}</td>
@@ -95,7 +97,7 @@ export function PayslipHistoryModal({
                     className="pay-row-action"
                     title="Baixar PDF"
                     aria-label={`Baixar PDF de ${item.competence}`}
-                    onClick={(event) => void handleDownload(event, item.year, item.month)}
+                    onClick={(event) => void handleDownload(event, item.year, item.month, item.paymentType)}
                   >
                     <i className="fa-regular fa-file-pdf" aria-hidden="true" />
                   </button>
@@ -104,7 +106,7 @@ export function PayslipHistoryModal({
                     className="pay-row-action"
                     title="Imprimir PDF"
                     aria-label={`Imprimir holerite de ${item.competence}`}
-                    onClick={(event) => void handlePrint(event, item.year, item.month)}
+                    onClick={(event) => void handlePrint(event, item.year, item.month, item.paymentType)}
                   >
                     <i className="fa-solid fa-print" aria-hidden="true" />
                   </button>
