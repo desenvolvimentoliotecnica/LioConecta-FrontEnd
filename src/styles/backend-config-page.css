@@ -93,6 +93,18 @@
   margin-bottom: 16px;
 }
 
+.backend-config-page__section-head--with-help {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.backend-config-page__section-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
 .backend-config-page__section-title {
   margin: 0 0 4px;
   font-size: 16px;
@@ -204,6 +216,115 @@
 
 .backend-config-page__token-map li + li {
   margin-top: 4px;
+}
+
+.backend-config-page__alert--with-action {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.backend-config-page__help-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.backend-config-page__help-btn:hover {
+  background: #f8fafc;
+  border-color: #64748b;
+}
+
+.backend-config-page__help {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.backend-config-page__help-lead {
+  margin: 0 0 16px;
+}
+
+.backend-config-page__help-heading {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.backend-config-page__help-list {
+  margin: 0 0 12px;
+  padding-left: 1.25rem;
+}
+
+.backend-config-page__help-list--ordered {
+  list-style: decimal;
+}
+
+.backend-config-page__help-list li + li {
+  margin-top: 4px;
+}
+
+.backend-config-page__help-note {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--wf-text-muted);
+}
+
+.backend-config-page__help-code {
+  margin: 8px 0 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.backend-config-page__help-note--warn {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.backend-config-page__help-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.backend-config-page__help-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.backend-config-page__help-table th,
+.backend-config-page__help-table td {
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.backend-config-page__help-table th {
+  background: #f8fafc;
+  font-weight: 600;
 }
 
 .backend-config-page__inline-link {

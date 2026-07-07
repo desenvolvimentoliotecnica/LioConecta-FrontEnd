@@ -8,8 +8,10 @@ import { useTestPlannerConnection } from "../../api/hooks/usePlannerConfig";
 import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
 import { useTestLdapConnection } from "../../api/hooks/useLdapConfig";
 import { useTestChatConnection } from "../../api/hooks/useChat";
+import { useTestCalendarConnection } from "../../api/hooks/useCalendar";
 import { useMe } from "../../api/hooks/useMe";
 import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
+import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
@@ -30,6 +32,10 @@ const LDAP_SEARCH_BASE_KEY = "ldap.search_base";
 const PLANNER_ENABLED_KEY = "planner.enabled";
 const PLANNER_PLAN_ID_KEY = "planner.plan_id";
 const PLANNER_DEFAULT_BUCKET_KEY = "planner.default_bucket_id";
+const CALENDAR_ENABLED_KEY = "calendar.enabled";
+const CALENDAR_TOKEN_ENCRYPTION_KEY = "calendar.token_encryption_key";
+const AZURE_AD_CLIENT_KEY = "azure_ad.client_id";
+const AZURE_AD_TENANT_KEY = "azure_ad.tenant_id";
 const ORGANOGRAM_MODULE_ID = "organogram";
 const LOOP_MODULE_ID = "loop";
 
@@ -162,6 +168,7 @@ export function BackendConfigPage() {
   const testGlpiConnection = useTestGlpiConnection();
   const testLdapConnection = useTestLdapConnection();
   const testChatConnection = useTestChatConnection();
+  const testCalendarConnection = useTestCalendarConnection();
   const [activeCategory, setActiveCategory] = useState<string>("database");
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info" | "error"; text: string } | null>(
@@ -195,6 +202,14 @@ export function BackendConfigPage() {
     title: string;
     detail?: string | null;
   } | null>(null);
+
+  const [calendarTestFeedback, setCalendarTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
+
+  const [helpCategory, setHelpCategory] = useState<string | null>(null);
 
   const isAdmin = isAdminUser(me);
 
@@ -324,7 +339,13 @@ export function BackendConfigPage() {
   async function handleTestChatConnection() {
     setChatTestFeedback(null);
     try {
-      const result = await testChatConnection.mutateAsync();
+      const clientSecret = draft[GRAPH_SECRET_KEY]?.trim();
+      const result = await testChatConnection.mutateAsync({
+        tenantId: draft[GRAPH_TENANT_KEY]?.trim() || null,
+        clientId: draft[GRAPH_CLIENT_KEY]?.trim() || null,
+        clientSecret:
+          clientSecret && clientSecret !== SECRET_MASK ? clientSecret : null,
+      });
       setChatTestFeedback({
         type: result.success ? "success" : "error",
         title: result.message,
@@ -334,6 +355,28 @@ export function BackendConfigPage() {
       setChatTestFeedback({
         type: "error",
         title: "Falha ao testar integração do chat Teams.",
+        detail: apiErrorDetail(error),
+      });
+    }
+  }
+
+  async function handleTestCalendarConnection() {
+    setCalendarTestFeedback(null);
+    try {
+      const tokenEncryptionKey = draft[CALENDAR_TOKEN_ENCRYPTION_KEY]?.trim();
+      const result = await testCalendarConnection.mutateAsync({
+        tokenEncryptionKey:
+          tokenEncryptionKey && tokenEncryptionKey !== SECRET_MASK ? tokenEncryptionKey : null,
+      });
+      setCalendarTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch (error) {
+      setCalendarTestFeedback({
+        type: "error",
+        title: "Falha ao testar integração do calendário Outlook.",
         detail: apiErrorDetail(error),
       });
     }
@@ -498,15 +541,18 @@ export function BackendConfigPage() {
 
       {activeCategory === ORGANOGRAM_MODULE_ID ? (
         <section className="backend-config-page__section" aria-labelledby="organogram-module-title">
-          <div className="backend-config-page__section-head">
-            <h2 id="organogram-module-title" className="backend-config-page__section-title">
-              Organograma — governança manual
-            </h2>
-            <p className="backend-config-page__section-desc">
-              O organograma exibido no portal pode divergir do Microsoft Graph/AD. As regras de edição, importação e
-              posições são configuradas no painel dedicado abaixo — não nesta tabela <code>app_settings</code>.
-            </p>
-          </div>
+          <ConfigSectionHead
+            titleId="organogram-module-title"
+            title="Organograma — governança manual"
+            description={
+              <>
+                O organograma exibido no portal pode divergir do Microsoft Graph/AD. As regras de edição, importação e
+                posições são configuradas no painel dedicado abaixo — não nesta tabela <code>app_settings</code>.
+              </>
+            }
+            helpCategoryId={ORGANOGRAM_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
 
           <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
             Após importar do Graph, alterações manuais são preservadas nas reimportações. Ative a governança e defina
@@ -540,15 +586,13 @@ export function BackendConfigPage() {
 
       {activeCategory === LOOP_MODULE_ID ? (
         <section className="backend-config-page__section" aria-labelledby="loop-module-title">
-          <div className="backend-config-page__section-head">
-            <h2 id="loop-module-title" className="backend-config-page__section-title">
-              Loop de Projetos — acesso e permissões
-            </h2>
-            <p className="backend-config-page__section-desc">
-              Controle quem visualiza o módulo Loop (∞) no menu lateral esquerdo. Em modo mock, as configurações
-              são salvas localmente no navegador.
-            </p>
-          </div>
+          <ConfigSectionHead
+            titleId="loop-module-title"
+            title="Loop de Projetos — acesso e permissões"
+            description="Controle quem visualiza o módulo Loop (∞) no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            helpCategoryId={LOOP_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
 
           <div className="backend-config-page__module-actions">
             <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/loop">
@@ -563,14 +607,13 @@ export function BackendConfigPage() {
 
       {activeSection ? (
         <section className="backend-config-page__section" aria-labelledby="config-section-title">
-          <div className="backend-config-page__section-head">
-            <h2 id="config-section-title" className="backend-config-page__section-title">
-              {activeSection.label}
-            </h2>
-            {activeSection.description ? (
-              <p className="backend-config-page__section-desc">{activeSection.description}</p>
-            ) : null}
-          </div>
+          <ConfigSectionHead
+            titleId="config-section-title"
+            title={activeSection.label}
+            description={activeSection.description}
+            helpCategoryId={activeCategory}
+            onOpenHelp={setHelpCategory}
+          />
 
           {activeCategory === "glpi" ? (
             <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
@@ -718,6 +761,56 @@ export function BackendConfigPage() {
             </div>
           ) : null}
 
+          {activeCategory === "azure_ad" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              <p>
+                Credenciais MSAL do portal (chat Teams e calendário Outlook) vêm desta seção — não use variáveis{" "}
+                <code>VITE_AZURE_*</code> no frontend. Preencha tenant e client ID da app registration SPA.
+              </p>
+            </div>
+          ) : null}
+
+          {activeCategory === "calendar" && (draft[CALENDAR_ENABLED_KEY] ?? "false") !== "true" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              Integração de calendário desabilitada — a página <code>/calendario</code> exibirá aviso até ativar
+              «Calendário Outlook — habilitado».
+            </div>
+          ) : null}
+
+          {activeCategory === "calendar" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              A chave <code>calendar.token_encryption_key</code> é obrigatória para armazenar tokens Outlook dos
+              usuários — independente da configuração do Teams Chat.
+            </div>
+          ) : null}
+
+          {activeCategory === "calendar" &&
+          (!(draft[AZURE_AD_TENANT_KEY]?.trim()) || !(draft[AZURE_AD_CLIENT_KEY]?.trim())) ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              Azure AD não configurado — configure tenant e client ID em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("azure_ad")}
+              >
+                Azure AD
+              </button>
+              . O calendário usa permissões delegadas <code>Calendars.ReadWrite</code>.
+            </div>
+          ) : null}
+
+          {calendarTestFeedback && activeCategory === "calendar" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${calendarTestFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{calendarTestFeedback.title}</strong>
+              {calendarTestFeedback.detail ? (
+                <p className="backend-config-page__alert-detail">{calendarTestFeedback.detail}</p>
+              ) : null}
+            </div>
+          ) : null}
+
           {testFeedback && activeCategory === "graph" ? (
             <div
               className={`backend-config-page__alert backend-config-page__alert--${testFeedback.type === "success" ? "success" : "error"}`}
@@ -735,7 +828,8 @@ export function BackendConfigPage() {
                   setting.key !== "graph.directory_last_sync_utc" &&
                   setting.key !== "planner.last_sync_utc" &&
                   setting.key !== "planner.plan_title" &&
-                  !setting.key.startsWith("chat.last_test"),
+                  !setting.key.startsWith("chat.teams.last_test") &&
+                  !setting.key.startsWith("calendar.last_test"),
               )
               .map((setting) => (
               <SettingField
@@ -837,6 +931,25 @@ export function BackendConfigPage() {
               </p>
             </div>
           ) : null}
+
+          {activeCategory === "calendar" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestCalendarConnection()}
+                disabled={testCalendarConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testCalendarConnection.isPending ? "Testando…" : "Testar conexão Calendário"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida Azure AD, scopes delegados e <code>calendar.token_encryption_key</code>. O teste usa o formulário
+                ou valores já persistidos — salve após validar. Usuários vinculam a conta Microsoft em{" "}
+                <code>/calendario</code>.
+              </p>
+            </div>
+          ) : null}
         </section>
       ) : !isLoading && !isError ? (
         <div className="backend-config-page__empty">
@@ -849,6 +962,12 @@ export function BackendConfigPage() {
         Fonte: tabela <code>app_settings</code> · bootstrap via variável{" "}
         <code>LIOSNECTA_BOOTSTRAP_DB</code>
       </p>
+
+      <BackendConfigHelpModal
+        categoryId={helpCategory}
+        open={helpCategory !== null}
+        onClose={() => setHelpCategory(null)}
+      />
     </main>
   );
 }

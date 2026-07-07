@@ -4,7 +4,4 @@ const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 export const apiConfig = {
   apiBaseUrl: API_BASE.replace(/\/$/, ""),
   useMock: USE_MOCK,
-  azureClientId: import.meta.env.VITE_AZURE_CLIENT_ID ?? "",
-  azureTenantId: import.meta.env.VITE_AZURE_TENANT_ID ?? "",
-  azureApiScope: import.meta.env.VITE_AZURE_API_SCOPE ?? "",
 };

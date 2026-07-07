@@ -9,6 +9,7 @@ import type {
   CreateChatConversationRequest,
   LinkTeamsAccountRequest,
   SendMessageRequest,
+  TestChatConnectionRequest,
 } from "../types";
 
 export const CHAT_BOOTSTRAP_QUERY_KEY = ["chat", "bootstrap"] as const;
@@ -155,14 +156,7 @@ export function useSendChatMessage() {
 
 export function useTestChatConnection() {
   return useMutation({
-    mutationFn: async (): Promise<ChatConnectionTestResponse> => {
-      if (config.useMock) {
-        return {
-          success: false,
-          message: "Chat indisponível em modo mock.",
-        };
-      }
-      return api.post<ChatConnectionTestResponse>("/admin/chat/test");
-    },
+    mutationFn: (body: TestChatConnectionRequest = {}) =>
+      api.post<ChatConnectionTestResponse>("/admin/chat/test", body),
   });
 }

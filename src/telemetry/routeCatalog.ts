@@ -26,6 +26,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/", { pageName: "Home", module: "home" }),
   exact("/analytics", { pageName: "Analytics", module: "analytics" }),
   exact("/loop", { pageName: "LoopDashboard", module: "loop" }),
+  exact("/pulse", { pageName: "PulseDashboard", module: "pulse" }),
   exact("/admin/configuracoes-backend", { pageName: "BackendConfig", module: "admin" }),
   exact("/admin/trilha-auditoria", { pageName: "AuditTrail", module: "admin" }),
   exact("/admin/observabilidade", { pageName: "ObservabilityHub", module: "admin" }),

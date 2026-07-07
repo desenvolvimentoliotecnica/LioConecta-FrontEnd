@@ -3,6 +3,7 @@ import {
   useChatBootstrap,
   useLinkTeamsAccount,
 } from "../../api/hooks/useChat";
+import { formatMsalErrorForUser } from "../../auth/msalErrors";
 import { acquireTeamsChatToken } from "./chatMsal";
 
 export function ChatTeamsLinkBanner() {
@@ -25,11 +26,7 @@ export function ChatTeamsLinkBanner() {
         scopes: result.scopes,
       });
     } catch (linkError) {
-      const message =
-        linkError instanceof Error
-          ? linkError.message
-          : "Não foi possível vincular sua conta do Teams.";
-      setError(message);
+      setError(formatMsalErrorForUser(linkError));
     }
   }
 

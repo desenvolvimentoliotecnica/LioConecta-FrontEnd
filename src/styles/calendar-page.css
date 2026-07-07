@@ -384,3 +384,272 @@
     display: none;
   }
 }
+
+/* FullCalendar + Outlook integration */
+
+.calendar-page__layout--fc {
+  grid-template-columns: 1fr 320px;
+  align-items: start;
+}
+
+.calendar-page__main {
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  padding: 16px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.calendar-page__banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--wf-radius);
+  margin-bottom: var(--wf-gap);
+  border: 1px dashed var(--wf-border);
+}
+
+.calendar-page__banner--info {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.calendar-page__banner--warn {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #9a3412;
+}
+
+.calendar-page__banner-error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+.calendar-page__link-btn,
+.calendar-page__create-btn {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.calendar-page__link-btn:hover,
+.calendar-page__create-btn:hover {
+  background: #1d4ed8;
+}
+
+.calendar-page__calendar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.calendar-page__calendar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 999px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.calendar-page__calendar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.calendar-page__fc-wrap {
+  --fc-border-color: #e2e8f0;
+  --fc-button-bg-color: #f8fafc;
+  --fc-button-border-color: #cbd5e1;
+  --fc-button-text-color: #334155;
+  --fc-button-hover-bg-color: #eff6ff;
+  --fc-button-hover-border-color: #93c5fd;
+  --fc-button-active-bg-color: #2563eb;
+  --fc-button-active-border-color: #2563eb;
+  --fc-today-bg-color: #eff6ff;
+}
+
+.calendar-page__fc-wrap .fc {
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.calendar-page__loading {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.calendar-page__actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.calendar-page__placeholder {
+  text-align: center;
+  padding: 48px 24px;
+  color: #64748b;
+}
+
+.calendar-page__placeholder i {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.calendar-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 16px;
+}
+
+.calendar-modal {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.calendar-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-modal__header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.calendar-modal__close {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.calendar-modal__form {
+  padding: 16px 18px 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.calendar-modal__field {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.calendar-modal__field input,
+.calendar-modal__field textarea,
+.calendar-modal__field select {
+  font: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.calendar-modal__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.calendar-modal__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.calendar-modal__outlook-link,
+.calendar-modal__teams-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.calendar-modal__footer-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.calendar-modal__delete {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.calendar-modal__cancel,
+.calendar-modal__save {
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+}
+
+.calendar-modal__save {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+@media (max-width: 1100px) {
+  .calendar-page__layout--fc {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-modal__row {
+    grid-template-columns: 1fr;
+  }
+}
