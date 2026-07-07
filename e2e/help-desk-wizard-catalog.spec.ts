@@ -161,6 +161,7 @@ test.describe("Help Desk wizard — catálogo Área TI", () => {
     });
 
     await wizard.getByRole("listitem").filter({ hasText: "Incidentes" }).first().click();
+    await expect(wizard.getByText("Catálogo").first()).toBeVisible();
     await expect(wizard.getByRole("listitem").filter({ hasText: /Incidentes — Solicitação/i })).toBeVisible();
     await page.screenshot({
       path: path.join(evidenceDir, "02-area-ti-drill-down.png"),

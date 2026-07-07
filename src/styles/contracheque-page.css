@@ -370,6 +370,13 @@
 
 .pay-modal--wide {
   width: min(900px, 100%);
+  min-height: min(560px, calc(100dvh - 32px));
+}
+
+.pay-modal--wide .pay-modal__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
 }
 
 .pay-modal__header {
