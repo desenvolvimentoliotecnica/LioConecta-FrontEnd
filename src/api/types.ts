@@ -1505,3 +1505,67 @@ export interface ImportDepartmentsFromDirectoryResultDto {
   departmentsLinked: number;
   unmappedCount: number;
 }
+
+export interface ChatBootstrapDto {
+  enabled: boolean;
+  authMode: string;
+  delegatedScopes: string[];
+  includeGroupChats: boolean;
+  pollingIntervalSeconds: number;
+  signalREnabled: boolean;
+  msalClientId: string;
+  msalTenantId: string;
+  msalAuthority: string;
+}
+
+export interface ChatStatusDto {
+  enabled: boolean;
+  linked: boolean;
+  needsConsent: boolean;
+}
+
+export interface ChatAuthorDto {
+  id: string;
+  displayName: string;
+  email?: string | null;
+  photoUrl?: string | null;
+}
+
+export interface ChatConversationDto {
+  id: string;
+  title: string;
+  chatType: string;
+  lastMessageAuthor?: string | null;
+  lastMessagePreview?: string | null;
+  lastMessageAt?: string | null;
+  unreadCount: number;
+  participants: ChatAuthorDto[];
+}
+
+export interface ChatMessageDto {
+  id: string;
+  author: ChatAuthorDto;
+  text: string;
+  createdAt: string;
+}
+
+export interface LinkTeamsAccountRequest {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+  scopes: string[];
+}
+
+export interface CreateChatConversationRequest {
+  targetEmail: string;
+}
+
+export interface SendMessageRequest {
+  text: string;
+}
+
+export interface ChatConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+}

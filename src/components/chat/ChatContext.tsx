@@ -1,5 +1,14 @@
 import { createContext, useCallback, useContext, useMemo, useReducer, useState, type ReactNode } from "react";
-import { CURRENT_USER_ID, MOCK_CONVERSATIONS, type ChatConversation, type ChatMessage } from "./mockData";
+import {
+  useChatBootstrap,
+  useChatConversations,
+  useChatStatus,
+  useCreateChatConversation,
+  useSendChatMessage,
+} from "../../api/hooks/useChat";
+import { useMe } from "../../api/hooks/useMe";
+import { mapConversationDto } from "./chatMappers";
+import type { ChatConversation } from "./chatTypes";
 
 type ListView = "hidden" | "minimized" | "expanded";
 
@@ -34,7 +43,13 @@ function listReducer(state: ListState, action: ListAction): ListState {
 }
 
 type ChatContextValue = {
+  enabled: boolean;
+  needsConsent: boolean;
+  linked: boolean;
+  currentUserId?: string;
   conversations: ChatConversation[];
+  conversationsLoading: boolean;
+  conversationsError: boolean;
   listOpen: boolean;
   listMinimized: boolean;
   activeTab: "priority" | "other";
@@ -48,6 +63,7 @@ type ChatContextValue = {
   setActiveTab: (tab: "priority" | "other") => void;
   setSearchQuery: (q: string) => void;
   openConversation: (id: string) => void;
+  openConversationByEmail: (email: string) => Promise<void>;
   closeConversation: (id: string) => void;
   sendMessage: (conversationId: string, text: string) => void;
   getConversation: (id: string) => ChatConversation | undefined;
@@ -57,17 +73,41 @@ type ChatContextValue = {
 const ChatContext = createContext<ChatContextValue | null>(null);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const [conversations, setConversations] = useState(MOCK_CONVERSATIONS);
+  const { data: bootstrap } = useChatBootstrap();
+  const { data: status } = useChatStatus();
+  const {
+    data: conversationDtos = [],
+    isLoading: conversationsLoading,
+    isError: conversationsError,
+  } = useChatConversations();
+  const { data: me } = useMe();
+  const sendChatMessage = useSendChatMessage();
+  const createConversation = useCreateChatConversation();
+
+  const enabled = Boolean(bootstrap?.enabled);
+  const needsConsent = Boolean(status?.needsConsent);
+  const linked = Boolean(status?.linked);
+
+  const conversations = useMemo(
+    () => conversationDtos.map(mapConversationDto),
+    [conversationDtos],
+  );
+
   const [{ view: listView }, dispatchList] = useReducer(listReducer, { view: "hidden" });
   const listOpen = listView !== "hidden";
   const listMinimized = listView === "minimized";
   const [activeTab, setActiveTab] = useState<"priority" | "other">("priority");
   const [searchQuery, setSearchQuery] = useState("");
   const [openWindows, setOpenWindows] = useState<string[]>([]);
+  const [readConversationIds, setReadConversationIds] = useState<Set<string>>(() => new Set());
 
   const totalUnread = useMemo(
-    () => conversations.reduce((sum, c) => sum + c.unreadCount, 0),
-    [conversations]
+    () =>
+      conversations.reduce(
+        (sum, c) => sum + (readConversationIds.has(c.id) ? 0 : c.unreadCount),
+        0,
+      ),
+    [conversations, readConversationIds],
   );
 
   const toggleList = useCallback(() => {
@@ -89,45 +129,48 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const openConversation = useCallback((id: string) => {
     dispatchList({ type: "open" });
     setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id].slice(-3)));
-    setConversations((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c))
-    );
+    setReadConversationIds((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
   }, []);
+
+  const openConversationByEmail = useCallback(
+    async (email: string) => {
+      const normalized = email.trim().toLowerCase();
+      if (!normalized) return;
+
+      const existing = conversations.find((c) =>
+        c.participantEmails.some((participantEmail) => participantEmail.toLowerCase() === normalized),
+      );
+      if (existing) {
+        openConversation(existing.id);
+        return;
+      }
+
+      const created = await createConversation.mutateAsync({ targetEmail: normalized });
+      openConversation(created.id);
+    },
+    [conversations, createConversation, openConversation],
+  );
 
   const closeConversation = useCallback((id: string) => {
     setOpenWindows((prev) => prev.filter((w) => w !== id));
   }, []);
 
-  const sendMessage = useCallback((conversationId: string, text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-
-    const now = new Date();
-    const timestamp = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-    const newMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      senderId: CURRENT_USER_ID,
-      text: trimmed,
-      timestamp,
-    };
-
-    setConversations((prev) =>
-      prev.map((c) =>
-        c.id === conversationId
-          ? {
-              ...c,
-              messages: [...c.messages, newMsg],
-              lastMessage: trimmed,
-              lastMessageDate: "Agora",
-            }
-          : c
-      )
-    );
-  }, []);
+  const sendMessage = useCallback(
+    (conversationId: string, text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      sendChatMessage.mutate({ conversationId, text: trimmed });
+    },
+    [sendChatMessage],
+  );
 
   const getConversation = useCallback(
     (id: string) => conversations.find((c) => c.id === id),
-    [conversations]
+    [conversations],
   );
 
   const filteredConversations = useMemo(() => {
@@ -135,16 +178,20 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     return conversations.filter((c) => {
       const matchesTab = activeTab === "priority" ? c.priority : !c.priority;
       const matchesSearch =
-        !q ||
-        c.name.toLowerCase().includes(q) ||
-        c.lastMessage.toLowerCase().includes(q);
+        !q || c.name.toLowerCase().includes(q) || c.lastMessage.toLowerCase().includes(q);
       return matchesTab && matchesSearch;
     });
   }, [conversations, activeTab, searchQuery]);
 
   const value = useMemo<ChatContextValue>(
     () => ({
+      enabled,
+      needsConsent,
+      linked,
+      currentUserId: me?.id,
       conversations,
+      conversationsLoading,
+      conversationsError,
       listOpen,
       listMinimized,
       activeTab,
@@ -158,13 +205,20 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       setActiveTab,
       setSearchQuery,
       openConversation,
+      openConversationByEmail,
       closeConversation,
       sendMessage,
       getConversation,
       filteredConversations,
     }),
     [
+      enabled,
+      needsConsent,
+      linked,
+      me?.id,
       conversations,
+      conversationsLoading,
+      conversationsError,
       listOpen,
       listMinimized,
       activeTab,
@@ -174,12 +228,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       toggleList,
       openList,
       closeList,
+      setListMinimized,
       openConversation,
+      openConversationByEmail,
       closeConversation,
       sendMessage,
       getConversation,
       filteredConversations,
-    ]
+    ],
   );
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
@@ -194,20 +250,33 @@ export function useChat() {
 declare global {
   interface Window {
     LioChat?: {
+      enabled: boolean;
       open: () => void;
       openConversation: (id: string) => void;
+      openConversationByEmail: (email: string) => void;
     };
   }
 }
 
 export function useChatWindowApi() {
-  const { openList, openConversation } = useChat();
+  const { openList, openConversation, openConversationByEmail, enabled } = useChat();
 
   return useMemo(
     () => ({
-      open: openList,
-      openConversation,
+      enabled,
+      open: () => {
+        if (!enabled) return;
+        openList();
+      },
+      openConversation: (id: string) => {
+        if (!enabled) return;
+        openConversation(id);
+      },
+      openConversationByEmail: (email: string) => {
+        if (!enabled) return;
+        void openConversationByEmail(email);
+      },
     }),
-    [openList, openConversation]
+    [enabled, openList, openConversation, openConversationByEmail],
   );
 }

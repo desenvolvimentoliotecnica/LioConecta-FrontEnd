@@ -204,19 +204,30 @@
         };
       }
 
+      function openPersonChat(email, teamsUpn) {
+        var chatEmail = email || teamsUpn;
+        if (!chatEmail) return;
+        var chat = window.LioChat;
+        if (chat && chat.enabled && typeof chat.openConversationByEmail === "function") {
+          chat.openConversationByEmail(chatEmail);
+          return;
+        }
+        var teamsTarget = teamsUpn || email;
+        if (!teamsTarget) return;
+        window.open(
+          "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsTarget),
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+
       function openDirectoryProfile(slug) {
         if (!slug || !window.OrgProfileModal || typeof window.OrgProfileModal.open !== "function") return;
         var entry = directoryPeopleBySlug[slug];
         if (!entry) return;
         var modalPerson = mapPersonToProfileModal(entry.person, entry.deptName, directoryPeopleBySlug);
         window.OrgProfileModal.open(modalPerson, {}, function (p) {
-          var teamsUpn = p.profile && p.profile.teamsUpn;
-          if (!teamsUpn) return;
-          window.open(
-            "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsUpn),
-            "_blank",
-            "noopener,noreferrer"
-          );
+          openPersonChat(p.email, (p.profile && p.profile.teamsUpn) || p.teamsUpn);
         });
       }
 
