@@ -1,5 +1,14 @@
-.loop-kpi-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+.analytics-kpi-grid.loop-kpi-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-bottom: var(--wf-gap);
+}
+
+.analytics-kpi-grid.loop-kpi-grid > .loop-kpi-link,
+.analytics-kpi-grid.loop-kpi-grid > .analytics-kpi {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .loop-kpi-link {
@@ -9,6 +18,18 @@
 
 .loop-kpi-grid .analytics-kpi {
   height: 100%;
+  padding: 12px 14px;
+}
+
+.loop-kpi-grid .analytics-kpi__delta {
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.loop-kpi-grid .analytics-kpi__label {
+  font-size: 0.8rem;
+  line-height: 1.25;
 }
 
 .loop-kpi-grid .analytics-kpi--projetos { background: #eef2ff; border-color: #c7d2fe; }
@@ -17,22 +38,15 @@
 .loop-kpi-grid .analytics-kpi--equipes { background: #f5f3ff; border-color: #c4b5fd; }
 .loop-kpi-grid .analytics-kpi--entregas { background: #f0fdf4; border-color: #86efac; }
 
-@media (max-width: 1200px) {
-  .loop-kpi-grid {
-    grid-template-columns: repeat(5, minmax(140px, 1fr));
+@media (max-width: 900px) {
+  .analytics-kpi-grid.loop-kpi-grid {
     overflow-x: auto;
+    padding-bottom: 4px;
   }
-}
 
-@media (max-width: 1100px) {
-  .loop-kpi-grid {
-    grid-template-columns: repeat(5, minmax(140px, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .loop-kpi-grid {
-    grid-template-columns: repeat(5, minmax(120px, 1fr));
+  .analytics-kpi-grid.loop-kpi-grid > .loop-kpi-link,
+  .analytics-kpi-grid.loop-kpi-grid > .analytics-kpi {
+    flex: 0 0 160px;
   }
 }
 

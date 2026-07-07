@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { LoopKpi } from "../../config/loop/types";
+import "../../styles/loop-dashboard.css";
 
 export function LoopKpiGrid({ kpis }: { kpis: LoopKpi[] }) {
   return (
