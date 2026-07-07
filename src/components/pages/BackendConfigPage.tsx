@@ -442,6 +442,15 @@ export function BackendConfigPage() {
 
           {activeCategory === "glpi" ? (
             <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
+              <strong>Perfil GLPI (profiles_id):</strong> use <code>0</code> para não trocar perfil, ou o ID que o
+              usuário de serviço realmente possui (ex.: Gestor = <code>7</code>). Super-Admin (<code>4</code>) só
+              funciona se esse perfil estiver atribuído ao usuário do token — caso contrário o teste de conexão falhava
+              com «Item não encontrado».
+            </div>
+          ) : null}
+
+          {activeCategory === "glpi" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
               Para abrir chamados pelo portal, cada colaborador precisa existir como usuário no GLPI com o{" "}
               <strong>mesmo e-mail corporativo</strong> cadastrado no LioConecta. Sem esse cadastro, a API retorna
               erro 422 ao criar ticket.

@@ -7,6 +7,7 @@ import {
   formatAreaServiceCount,
   getAreaIconClass,
 } from "./helpDeskAreaCatalog";
+import { helpDeskQueryErrorMessage } from "./helpDeskQueryError";
 import {
   buildCategoryPath,
   findCategoryById,
@@ -206,7 +207,10 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
             <p className="hd-modal__empty">Carregando áreas…</p>
           ) : areasQuery.isError ? (
             <p className="hd-modal__error" role="alert">
-              Não foi possível carregar as áreas do catálogo GLPI.
+              {helpDeskQueryErrorMessage(
+                areasQuery.error,
+                "Não foi possível carregar as áreas do catálogo GLPI.",
+              )}
             </p>
           ) : areas.length === 0 ? (
             <p className="hd-modal__empty">Nenhuma área configurada.</p>
