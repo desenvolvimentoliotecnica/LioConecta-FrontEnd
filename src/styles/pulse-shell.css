@@ -245,3 +245,19 @@
     grid-template-columns: 64px minmax(0, 1fr);
   }
 }
+
+
+.pulse-shell--module-focus {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.pulse-shell--module-focus .pulse-nav {
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.pulse-shell--module-focus .pulse-shell__main {
+  background: var(--wf-bg, #eceff3);
+}

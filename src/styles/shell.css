@@ -11,9 +11,10 @@
   --wf-announce: #f3e8d8;
   --wf-announce-border: #d4b896;
   --wf-topbar-h: 72px;
-  --wf-sidebar-w-left: 56px;
-  --wf-sidebar-w-right: 56px;
-  --wf-sidebar-w-expanded: 196px;
+  --wf-sidebar-w-left: 40px;
+  --wf-sidebar-w-right: 40px;
+  --wf-sidebar-w-expanded: 138px;
+  --wf-sidebar-btn-size: 28px;
   --wf-radius: 10px;
   --wf-gap: 16px;
 }
@@ -47,7 +48,7 @@ body {
   grid-template-columns: minmax(0, auto) minmax(260px, 1fr) auto;
   align-items: center;
   gap: 16px;
-  padding: 0 20px 0 calc((var(--wf-sidebar-w-left) - 40px) / 2);
+  padding: 0 20px 0 calc((var(--wf-sidebar-w-left) - var(--wf-sidebar-btn-size)) / 2);
   background: var(--wf-surface);
   border-bottom: 1px dashed var(--wf-border-strong);
   position: sticky;

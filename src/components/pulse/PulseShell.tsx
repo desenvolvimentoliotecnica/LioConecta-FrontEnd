@@ -1,18 +1,25 @@
-import { useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useMe } from "../../api/hooks/useMe";
 import { PERSONA_LABELS } from "../../config/pulse/constants";
+import { useModuleFocus } from "../../context/ModuleFocusContext";
 import { getPulseData, resolvePulsePersona } from "../../utils/pulseView";
+import { ModuleFocusButton } from "../shared/ModuleFocusButton";
 import { usePulseFilters } from "./PulseAccessGate";
 import { PulseNav } from "./PulseNav";
 import "../../styles/pulse-shell.css";
 
 export function PulseShell() {
   const [navCollapsed, setNavCollapsed] = useState(false);
+  const { focusMode } = useModuleFocus();
   const { filters, setTeamId, setSprintId, setSearch, resetFilters } = usePulseFilters();
   const { data: me } = useMe();
   const data = getPulseData();
   const persona = useMemo(() => resolvePulsePersona(me), [me]);
+
+  useEffect(() => {
+    if (focusMode) setNavCollapsed(true);
+  }, [focusMode]);
 
   const openImpediments = useMemo(
     () => data.impediments.filter((i) => i.status !== "resolvido").length,
@@ -32,10 +39,12 @@ export function PulseShell() {
     });
   }, [data.sprints, filters.teamId, persona]);
 
+  const navIsCollapsed = navCollapsed || focusMode;
+
   return (
-    <div className={`pulse-shell${navCollapsed ? " pulse-shell--nav-collapsed" : ""}`}>
+    <div className={`pulse-shell${navIsCollapsed ? " pulse-shell--nav-collapsed" : ""}${focusMode ? " pulse-shell--module-focus" : ""}`}>
       <PulseNav
-        collapsed={navCollapsed}
+        collapsed={navIsCollapsed}
         onToggle={() => setNavCollapsed((c) => !c)}
         openImpediments={openImpediments}
       />
@@ -48,10 +57,13 @@ export function PulseShell() {
               <span className="breadcrumb__sep">/</span>
               <span className="breadcrumb__current">Pulse Ágil</span>
             </nav>
-            <span className="pulse-shell__persona" title={PERSONA_LABELS[persona.persona]}>
-              <i className="fa-solid fa-user-tag" aria-hidden="true" />
-              {persona.label}
-            </span>
+            <div className="pulse-shell__header-actions">
+              <ModuleFocusButton />
+              <span className="pulse-shell__persona" title={PERSONA_LABELS[persona.persona]}>
+                <i className="fa-solid fa-user-tag" aria-hidden="true" />
+                {persona.label}
+              </span>
+            </div>
           </div>
 
           <div className="pulse-shell__toolbar">

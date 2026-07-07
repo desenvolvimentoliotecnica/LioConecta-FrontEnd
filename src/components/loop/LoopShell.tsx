@@ -1,25 +1,34 @@
-import { useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { LOOP_PERIODS } from "../../config/loop/constants";
+import { useModuleFocus } from "../../context/ModuleFocusContext";
 import { getLoopData } from "../../utils/loopView";
+import { ModuleFocusButton } from "../shared/ModuleFocusButton";
 import { useLoopFilters } from "./LoopAccessGate";
 import { LoopNav } from "./LoopNav";
 import "../../styles/loop-shell.css";
 
 export function LoopShell() {
   const [navCollapsed, setNavCollapsed] = useState(false);
+  const { focusMode } = useModuleFocus();
   const { filters, setPeriod, setTeamId, setProjectId, setSearch, resetFilters } = useLoopFilters();
   const data = getLoopData();
+
+  useEffect(() => {
+    if (focusMode) setNavCollapsed(true);
+  }, [focusMode]);
 
   const pendingApprovals = useMemo(
     () => data.approvals.filter((a) => a.status === "pendente").length,
     [data.approvals],
   );
 
+  const navIsCollapsed = navCollapsed || focusMode;
+
   return (
-    <div className={`loop-shell${navCollapsed ? " loop-shell--nav-collapsed" : ""}`}>
+    <div className={`loop-shell${navIsCollapsed ? " loop-shell--nav-collapsed" : ""}${focusMode ? " loop-shell--module-focus" : ""}`}>
       <LoopNav
-        collapsed={navCollapsed}
+        collapsed={navIsCollapsed}
         onToggle={() => setNavCollapsed((c) => !c)}
         pendingApprovals={pendingApprovals}
       />
@@ -32,6 +41,7 @@ export function LoopShell() {
               <span className="breadcrumb__sep">/</span>
               <span className="breadcrumb__current">Loop de Projetos</span>
             </nav>
+            <ModuleFocusButton />
           </div>
 
           <div className="loop-shell__toolbar">
