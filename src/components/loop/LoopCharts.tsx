@@ -92,3 +92,47 @@ export function LoopRiskDonutChart({ data, total }: DonutChartProps) {
     </div>
   );
 }
+
+type CategoryBarChartProps = {
+  data: { label: string; value: number; color: string }[];
+};
+
+function consolidateCategories(
+  data: { label: string; value: number; color: string }[],
+  limit = 6,
+) {
+  if (data.length <= limit) return data;
+
+  const top = data.slice(0, limit - 1);
+  const rest = data.slice(limit - 1);
+  const otrosValue = rest.reduce((sum, item) => sum + item.value, 0);
+
+  return [...top, { label: "Outros", value: otrosValue, color: "#94a3b8" }];
+}
+
+export function LoopRiskCategoryChart({ data }: CategoryBarChartProps) {
+  const items = consolidateCategories(data);
+  const max = Math.max(...items.map((item) => item.value), 1);
+
+  return (
+    <ul className="loop-risk-category-list" aria-label="Riscos por categoria">
+      {items.map((item) => (
+        <li key={item.label} className="loop-risk-category-list__item">
+          <div className="loop-risk-category-list__head">
+            <span className="loop-risk-category-list__label">{item.label}</span>
+            <span className="loop-risk-category-list__value">{item.value}</span>
+          </div>
+          <div className="loop-risk-category-list__track" aria-hidden="true">
+            <div
+              className="loop-risk-category-list__bar"
+              style={{
+                width: `${(item.value / max) * 100}%`,
+                backgroundColor: item.color,
+              }}
+            />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}

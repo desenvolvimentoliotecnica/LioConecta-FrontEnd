@@ -17,8 +17,8 @@ export function LoopActivitiesPage() {
         <p className="loop-page__desc">Acompanhamento operacional de tarefas e próximos passos.</p>
       </div>
 
-      <div className="audit-trail-page__controls">
-        <div className="audit-trail-page__filters" role="group" aria-label="Status">
+      <div className="audit-trail-page__controls loop-activities-controls">
+        <div className="audit-trail-page__filters loop-activities-filters" role="group" aria-label="Status">
           <button
             type="button"
             className={`filter-chip${!filters.status ? " is-active" : ""}`}
