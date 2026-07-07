@@ -206,3 +206,19 @@
     grid-template-columns: 64px minmax(0, 1fr);
   }
 }
+
+
+.loop-shell--module-focus {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.loop-shell--module-focus .loop-nav {
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.loop-shell--module-focus .loop-shell__main {
+  background: var(--wf-bg, #eceff3);
+}
