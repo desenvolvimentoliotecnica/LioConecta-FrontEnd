@@ -3,7 +3,7 @@ import type { LoopKpi } from "../../config/loop/types";
 
 export function LoopKpiGrid({ kpis }: { kpis: LoopKpi[] }) {
   return (
-    <section className="analytics-kpi-grid" aria-label="Indicadores do Loop">
+    <section className="analytics-kpi-grid loop-kpi-grid" aria-label="Indicadores do Loop">
       {kpis.map((kpi) => {
         const inner = (
           <>
