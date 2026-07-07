@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { buildLoopRisksView, formatLoopDate } from "../../../utils/loopView";
 import { useLoopFilters } from "../LoopAccessGate";
-import { LoopRiskDonutChart } from "../LoopCharts";
+import { LoopRiskCategoryChart, LoopRiskDonutChart } from "../LoopCharts";
 import "../../../styles/audit-trail-page.css";
 import "../../../styles/loop-dashboard.css";
 
@@ -16,12 +16,22 @@ export function LoopRisksPage() {
         <p className="loop-page__desc">Gestão e visualização de riscos por severidade e projeto.</p>
       </div>
 
-      <div className="loop-dashboard__grid">
-        <article className="loop-panel">
-          <LoopRiskDonutChart data={risks.bySeverity} total={risks.total} />
-        </article>
-        <article className="loop-panel">
+      <div className="loop-risks-layout">
+        <div className="loop-risks-layout__charts">
+          <article className="loop-panel">
+            <h2 className="loop-panel__title">Distribuição por severidade</h2>
+            <LoopRiskDonutChart data={risks.bySeverity} total={risks.total} />
+          </article>
+          <article className="loop-panel">
+            <h2 className="loop-panel__title">Riscos por categoria</h2>
+            <p className="loop-panel__desc">Volume de riscos abertos agrupados por área de origem.</p>
+            <LoopRiskCategoryChart data={risks.byCategory} />
+          </article>
+        </div>
+
+        <article className="loop-panel loop-risks-layout__matrix">
           <h2 className="loop-panel__title">Matriz de risco</h2>
+          <p className="loop-panel__desc">Probabilidade (eixo vertical) × impacto (eixo horizontal).</p>
           <div className="loop-risk-matrix" aria-label="Matriz probabilidade x impacto">
             {[5, 4, 3, 2, 1].map((prob) => (
               <div key={prob} className="loop-risk-matrix__row">
@@ -40,7 +50,11 @@ export function LoopRisksPage() {
             ))}
             <div className="loop-risk-matrix__footer">
               <span />
-              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
             </div>
           </div>
         </article>

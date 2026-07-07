@@ -9,19 +9,15 @@ export function LoopProjectList({ projects }: { projects: EnrichedProject[] }) {
         {projects.map((p) => (
           <li key={p.id} className="loop-project-card">
             <div className="loop-project-card__head">
-              <div>
-                <div className="loop-project-card__name">{p.name}</div>
-                <div className="loop-project-card__meta">
-                  {p.teamName} · {p.ownerName}
-                </div>
-              </div>
-              <LoopHealthBadge health={p.computedHealth} />
-            </div>
-            <LoopProgressBar value={p.computedProgress} />
-            <div className="loop-project-card__footer">
-              <span className={`loop-priority loop-priority--${p.priority}`}>{p.priority}</span>
+              <div className="loop-project-card__name">{p.name}</div>
               <span className="loop-project-card__code">{p.code}</span>
             </div>
+            <div className="loop-project-card__meta">{p.teamName} · {p.ownerName}</div>
+            <div className="loop-project-card__tags">
+              <LoopHealthBadge health={p.computedHealth} />
+              <span className={`loop-priority loop-priority--${p.priority}`}>{p.priority}</span>
+            </div>
+            <LoopProgressBar value={p.computedProgress} />
           </li>
         ))}
       </ul>

@@ -362,8 +362,25 @@ export function buildLoopTeamsView(filters: LoopFilters, data: LoopDataset = LOO
 export type RiskSummary = {
   total: number;
   bySeverity: { label: string; value: number; color: string }[];
+  byCategory: { label: string; value: number; color: string }[];
   items: (LoopRisk & { projectName: string; ownerName: string })[];
 };
+
+const RISK_CATEGORY_COLORS: Record<string, string> = {
+  Técnico: "#6366f1",
+  Integração: "#0ea5e9",
+  Dados: "#8b5cf6",
+  Organizacional: "#ec4899",
+  Financeiro: "#f59e0b",
+  Processo: "#64748b",
+  Recursos: "#14b8a6",
+  Escopo: "#f97316",
+  Compliance: "#dc2626",
+  Externo: "#84cc16",
+  Operacional: "#a855f7",
+};
+
+const FALLBACK_CATEGORY_COLORS = ["#6366f1", "#0ea5e9", "#8b5cf6", "#f59e0b", "#10b981", "#ec4899"];
 
 export function buildLoopRisksView(filters: LoopFilters, data: LoopDataset = LOOP_MOCK_DATA): RiskSummary {
   const projectIds = new Set(filterProjects(data, filters).map((p) => p.id));
@@ -385,6 +402,19 @@ export function buildLoopRisksView(filters: LoopFilters, data: LoopDataset = LOO
   const counts = { critico: 0, alto: 0, medio: 0, baixo: 0 };
   for (const r of items) counts[r.severity]++;
 
+  const categoryCounts = new Map<string, number>();
+  for (const r of items) {
+    categoryCounts.set(r.category, (categoryCounts.get(r.category) ?? 0) + 1);
+  }
+
+  const byCategory = [...categoryCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([label, value], index) => ({
+      label,
+      value,
+      color: RISK_CATEGORY_COLORS[label] ?? FALLBACK_CATEGORY_COLORS[index % FALLBACK_CATEGORY_COLORS.length],
+    }));
+
   return {
     total: items.length,
     bySeverity: (["critico", "alto", "medio", "baixo"] as const).map((s) => ({
@@ -392,6 +422,7 @@ export function buildLoopRisksView(filters: LoopFilters, data: LoopDataset = LOO
       value: counts[s],
       color: severityMap[s].color,
     })),
+    byCategory,
     items,
   };
 }

@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { HEALTH_LABELS } from "../../config/loop/constants";
 import type { LoopAlert } from "../../config/loop/types";
 
+const ALERT_ICONS: Record<string, string> = {
+  projetos_criticos: "fa-triangle-exclamation",
+  itens_atrasados: "fa-clock",
+  aprovacoes_pendentes: "fa-clipboard-check",
+  equipe_sobrecarregada: "fa-users",
+};
+
 export function LoopAlertsPanel({ alerts }: { alerts: LoopAlert[] }) {
   if (alerts.length === 0) {
     return (
@@ -19,8 +26,11 @@ export function LoopAlertsPanel({ alerts }: { alerts: LoopAlert[] }) {
         {alerts.map((alert) => (
           <li key={alert.id}>
             <Link to={alert.link} className={`loop-alert loop-alert--${alert.severity}`}>
+              <div className="loop-alert__accent" aria-hidden="true">
+                <i className={`fa-solid ${ALERT_ICONS[alert.type] ?? "fa-bell"}`} />
+              </div>
               <div className="loop-alert__qty">{alert.quantity}</div>
-              <div>
+              <div className="loop-alert__content">
                 <div className="loop-alert__title">{alert.title}</div>
                 <div className="loop-alert__desc">{alert.description}</div>
               </div>
