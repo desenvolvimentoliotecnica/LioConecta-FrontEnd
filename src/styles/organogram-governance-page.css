@@ -337,6 +337,25 @@
   font-size: 13px;
 }
 
+.loop-settings__icon {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.loop-settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--wf-border);
+}
+
+.loop-settings .org-governance__alert {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
 @media (max-width: 900px) {
   .org-governance__grid,
   .org-governance__split {
