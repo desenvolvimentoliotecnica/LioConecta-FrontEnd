@@ -1,0 +1,129 @@
+.pulse-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.pulse-board__column {
+  background: #f8fafc;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 0.75rem;
+  min-height: 400px;
+}
+
+.pulse-board__column-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #0d9488;
+}
+
+.pulse-board__column-head h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #0f766e;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pulse-board__count {
+  background: #ccfbf1;
+  color: #0f766e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.pulse-board__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pulse-board__card {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: grab;
+  transition: box-shadow 0.15s ease;
+}
+
+.pulse-board__card:hover {
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.12);
+}
+
+.pulse-board__card:active {
+  cursor: grabbing;
+}
+
+.pulse-board__card-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.pulse-board__card-desc {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pulse-board__card-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+}
+
+.pulse-board__points {
+  background: #f0fdfa;
+  color: #0f766e;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.pulse-board__assignee {
+  color: #64748b;
+}
+
+.pulse-board__labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.pulse-board__label {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.35rem;
+  background: #e2e8f0;
+  border-radius: 4px;
+  color: #475569;
+}
+
+@media (max-width: 1100px) {
+  .pulse-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .pulse-board {
+    grid-template-columns: 1fr;
+  }
+}

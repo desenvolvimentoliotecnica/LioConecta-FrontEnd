@@ -28,6 +28,12 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     activePrefix: "/loop",
     loopAccessOnly: true,
   },
+  {
+    label: "Pulse",
+    icon: "fa-heart-pulse",
+    href: "/pulse",
+    activePrefix: "/pulse",
+  },
 ];
 
 const RIGHT_ITEMS: SidebarItemConfig[] = [

@@ -1,0 +1,103 @@
+.pulse-dailys__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--wf-border, #e2e8f0);
+  padding-bottom: 0.5rem;
+}
+
+.pulse-dailys__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  background: transparent;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font: inherit;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pulse-dailys__tab:hover {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.pulse-dailys__tab.is-active {
+  background: #ccfbf1;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.pulse-dailys__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.pulse-dailys__async {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.pulse-dailys__meeting-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f0fdfa;
+  border-radius: var(--wf-radius, 12px);
+  margin-bottom: 1rem;
+}
+
+.pulse-dailys__meeting-icon {
+  font-size: 2rem;
+  color: #0d9488;
+}
+
+.pulse-dailys__meeting-info h3 {
+  margin: 0 0 0.25rem;
+}
+
+.pulse-dailys__meeting-info p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.pulse-dailys__meeting-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pulse-dailys__meeting-list > li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.pulse-dailys__meeting-order {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #0d9488;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pulse-dailys__meeting-list .pulse-standup-card {
+  flex: 1;
+}

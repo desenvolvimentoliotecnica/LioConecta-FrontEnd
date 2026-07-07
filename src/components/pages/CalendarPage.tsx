@@ -1,291 +1,411 @@
-﻿import { useMemo, useState } from "react";
+﻿import type { DateSelectArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import ptBrLocale from "@fullcalendar/core/locales/pt-br";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useBirthdays } from "../../api/hooks/useBirthdays";
 import {
-  CALENDAR_EVENTS,
-  CALENDAR_FILTERS,
-  MONTH_NAMES,
-  WEEKDAY_LABELS,
-  buildMonthGrid,
-  eventsForDay,
-  formatEventTime,
-  formatLongDate,
-  getDailyMenu,
-  getTodayDateKey,
-  mapBirthdaysToCalendarEvents,
-  parseDateKey,
-  upcomingEvents,
-  type CalendarEvent,
-  type CalendarEventKind,
-} from "../../config/calendar";
+  useCalendarBootstrap,
+  useCalendarEvents,
+  useCalendars,
+  useCalendarStatus,
+  useCafeteriaMenu,
+  useCreateCalendarEvent,
+  useDeleteCalendarEvent,
+  useLinkCalendarAccount,
+  useUpdateCalendarEvent,
+} from "../../api/hooks/useCalendar";
+import { useBirthdays } from "../../api/hooks/useBirthdays";
+import { acquireDelegatedToken } from "../../auth/azureMsal";
+import { formatMsalErrorForUser } from "../../auth/msalErrors";
+import { mapBirthdaysToCalendarEvents } from "../../config/calendar";
+import { CalendarEventModal } from "../calendar/CalendarEventModal";
+import {
+  dtoToModalEvent,
+  mapBirthdayToFullCalendar,
+  mapOutlookEventToFullCalendar,
+  type CalendarModalEvent,
+} from "../calendar/calendarMappers";
 import "../../styles/calendar-page.css";
 
+type ModalState =
+  | { open: false }
+  | { open: true; mode: "create" | "edit" | "view"; event: CalendarModalEvent | null };
+
+function formatDateKey(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export function CalendarPage() {
-  const todayKey = useMemo(() => getTodayDateKey(), []);
-  const todayParts = useMemo(() => parseDateKey(todayKey), [todayKey]);
+  const calendarRef = useRef<FullCalendar | null>(null);
+  const [range, setRange] = useState<{ from: string; to: string } | null>(null);
+  const [selectedCalendarIds, setSelectedCalendarIds] = useState<string[]>([]);
+  const [selectedMenuDate, setSelectedMenuDate] = useState(formatDateKey(new Date()));
+  const [modal, setModal] = useState<ModalState>({ open: false });
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const [linking, setLinking] = useState(false);
 
-  const [viewYear, setViewYear] = useState(todayParts.year);
-  const [viewMonth, setViewMonth] = useState(todayParts.month);
-  const [selectedDate, setSelectedDate] = useState(todayKey);
-  const [kind, setKind] = useState<CalendarEventKind>("all");
+  const { data: bootstrap } = useCalendarBootstrap();
+  const { data: status } = useCalendarStatus();
+  const linkAccount = useLinkCalendarAccount();
+  const createEvent = useCreateCalendarEvent();
+  const updateEvent = useUpdateCalendarEvent();
+  const deleteEvent = useDeleteCalendarEvent();
 
-  const { data: birthdays = [] } = useBirthdays(365);
+  const calendarEnabled = Boolean(bootstrap?.enabled);
+  const linked = Boolean(status?.linked);
+  const needsConsent = Boolean(status?.needsConsent);
+  const canLoadOutlook = calendarEnabled && linked && !needsConsent;
 
-  const allEvents = useMemo(() => {
-    const birthdayEvents = mapBirthdaysToCalendarEvents(birthdays);
-    return [...CALENDAR_EVENTS, ...birthdayEvents];
-  }, [birthdays]);
+  const { data: calendars = [] } = useCalendars(canLoadOutlook);
+  const activeCalendarIds = useMemo(() => {
+    if (selectedCalendarIds.length > 0) return selectedCalendarIds;
+    return calendars.map((c) => c.id);
+  }, [calendars, selectedCalendarIds]);
 
-  const weeks = useMemo(() => buildMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
-
-  const filteredEvents = useMemo(
-    () => (kind === "all" ? allEvents : allEvents.filter((e) => e.kind === kind)),
-    [allEvents, kind],
+  const { data: outlookEvents = [], isLoading: eventsLoading } = useCalendarEvents(
+    range?.from ?? null,
+    range?.to ?? null,
+    activeCalendarIds,
+    canLoadOutlook,
   );
 
-  const selectedEvents = useMemo(
-    () => eventsForDay(filteredEvents, selectedDate),
-    [filteredEvents, selectedDate],
+  const showBirthdays = bootstrap?.showBirthdays ?? true;
+  const showMenu = bootstrap?.showCafeteriaMenu ?? true;
+  const { data: birthdays = [] } = useBirthdays(showBirthdays ? 365 : 0);
+  const { data: cafeteriaMenu } = useCafeteriaMenu(
+    showMenu ? selectedMenuDate : null,
+    showMenu && canLoadOutlook,
   );
 
-  const dailyMenu = useMemo(() => getDailyMenu(selectedDate), [selectedDate]);
+  const birthdayFcEvents = useMemo(() => {
+    if (!showBirthdays) return [];
+    return mapBirthdaysToCalendarEvents(birthdays).map(mapBirthdayToFullCalendar);
+  }, [birthdays, showBirthdays]);
 
-  const upcoming = useMemo(
-    () => upcomingEvents(
-      kind === "all" ? allEvents : allEvents.filter((e) => e.kind === kind),
-      todayKey,
-    ),
-    [allEvents, kind, todayKey],
+  const outlookFcEvents = useMemo(
+    () => outlookEvents.map(mapOutlookEventToFullCalendar),
+    [outlookEvents],
   );
 
-  const eventsByDate = useMemo(() => {
-    const map = new Map<string, number>();
-    const source = kind === "all"
-      ? allEvents
-      : allEvents.filter((e) => e.kind === kind);
-    source.forEach((event) => {
-      const parsed = parseDateKey(event.date);
-      if (parsed.year === viewYear && parsed.month === viewMonth) {
-        map.set(event.date, (map.get(event.date) ?? 0) + 1);
-      }
+  const fcEvents = useMemo(
+    () => [...outlookFcEvents, ...birthdayFcEvents] as EventInput[],
+    [outlookFcEvents, birthdayFcEvents],
+  );
+
+  const defaultCalendarId = useMemo(
+    () => calendars.find((c) => c.isDefaultCalendar && c.canEdit)?.id
+      ?? calendars.find((c) => c.canEdit)?.id
+      ?? calendars[0]?.id
+      ?? "",
+    [calendars],
+  );
+
+  const handleDatesSet = useCallback((arg: { start: Date; end: Date }) => {
+    setRange({ from: arg.start.toISOString(), to: arg.end.toISOString() });
+    setSelectedMenuDate(formatDateKey(arg.start));
+  }, []);
+
+  const handleLinkAccount = async () => {
+    if (!bootstrap) return;
+    setLinkError(null);
+    setLinking(true);
+    try {
+      const result = await acquireDelegatedToken(
+        {
+          msalClientId: bootstrap.msalClientId,
+          msalTenantId: bootstrap.msalTenantId,
+          msalAuthority: bootstrap.msalAuthority,
+          delegatedScopes: bootstrap.delegatedScopes,
+        },
+        ["Calendars.ReadWrite", "User.Read", "offline_access"],
+      );
+
+      await linkAccount.mutateAsync({
+        accessToken: result.accessToken,
+        refreshToken: "",
+        expiresAt: result.expiresOn?.toISOString() ?? new Date(Date.now() + 3600_000).toISOString(),
+        scopes: result.scopes,
+      });
+    } catch (error) {
+      setLinkError(formatMsalErrorForUser(error));
+    } finally {
+      setLinking(false);
+    }
+  };
+
+  const openCreateModal = (start?: Date, end?: Date, allDay?: boolean) => {
+    const startIso = (start ?? new Date()).toISOString();
+    const endIso = (end ?? new Date((start ?? new Date()).getTime() + 60 * 60 * 1000)).toISOString();
+    setModal({
+      open: true,
+      mode: "create",
+      event: {
+        graphId: "",
+        calendarId: defaultCalendarId,
+        title: "",
+        startAt: startIso,
+        endAt: endIso,
+        isAllDay: Boolean(allDay),
+        location: "",
+        description: "",
+        webLink: "",
+        onlineMeetingUrl: "",
+        canEdit: true,
+      },
     });
-    return map;
-  }, [allEvents, kind, viewYear, viewMonth]);
+  };
 
-  const goPrevMonth = () => {
-    if (viewMonth === 0) {
-      setViewYear((y) => y - 1);
-      setViewMonth(11);
+  const handleEventClick = (arg: EventClickArg) => {
+    const source = arg.event.extendedProps.source as string | undefined;
+    if (source === "birthday") {
+      const href = arg.event.extendedProps.href as string | undefined;
+      if (href) window.location.href = href;
       return;
     }
-    setViewMonth((m) => m - 1);
+
+    const dto = outlookEvents.find((e) => e.graphId === arg.event.id);
+    if (!dto) return;
+    setModal({ open: true, mode: dto.canEdit ? "edit" : "view", event: dtoToModalEvent(dto) });
   };
 
-  const goNextMonth = () => {
-    if (viewMonth === 11) {
-      setViewYear((y) => y + 1);
-      setViewMonth(0);
-      return;
+  const handleDateSelect = (arg: DateSelectArg) => {
+    if (!canLoadOutlook) return;
+    openCreateModal(arg.start, arg.end, arg.allDay);
+    arg.view.calendar.unselect();
+  };
+
+  const handleSave = async (payload: {
+    calendarId: string;
+    title: string;
+    startAt: string;
+    endAt: string;
+    isAllDay: boolean;
+    location: string;
+    description: string;
+  }) => {
+    if (!modal.open) return;
+
+    if (modal.mode === "create") {
+      await createEvent.mutateAsync({
+        calendarId: payload.calendarId,
+        title: payload.title,
+        startAt: payload.startAt,
+        endAt: payload.endAt,
+        isAllDay: payload.isAllDay,
+        location: payload.location || null,
+        description: payload.description || null,
+      });
+    } else if (modal.mode === "edit" && modal.event?.graphId) {
+      await updateEvent.mutateAsync({
+        eventId: modal.event.graphId,
+        body: {
+          title: payload.title,
+          startAt: payload.startAt,
+          endAt: payload.endAt,
+          isAllDay: payload.isAllDay,
+          location: payload.location || null,
+          description: payload.description || null,
+        },
+      });
     }
-    setViewMonth((m) => m + 1);
+
+    setModal({ open: false });
   };
 
-  const goToday = () => {
-    const key = getTodayDateKey();
-    const parts = parseDateKey(key);
-    setViewYear(parts.year);
-    setViewMonth(parts.month);
-    setSelectedDate(key);
+  const handleDelete = async () => {
+    if (!modal.open || modal.mode !== "edit" || !modal.event?.graphId) return;
+    await deleteEvent.mutateAsync(modal.event.graphId);
+    setModal({ open: false });
   };
+
+  const toggleCalendar = (id: string) => {
+    setSelectedCalendarIds((current) => {
+      const base = current.length > 0 ? current : calendars.map((c) => c.id);
+      return base.includes(id) ? base.filter((item) => item !== id) : [...base, id];
+    });
+  };
+
+  const initialView = bootstrap?.defaultView ?? "dayGridMonth";
+  const saving = createEvent.isPending || updateEvent.isPending || deleteEvent.isPending;
 
   return (
     <main className="main">
       <header className="page-header">
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">InÃ­cio</Link>
+          <Link to="/">Início</Link>
           <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">CalendÃ¡rio</span>
+          <span className="breadcrumb__current">Calendário</span>
         </nav>
         <div className="page-header__row">
           <div>
-            <h1 className="page-header__title">CalendÃ¡rio</h1>
+            <h1 className="page-header__title">Calendário</h1>
             <p className="page-header__desc">
-              ReuniÃµes, eventos, prazos de comunicados, aniversÃ¡rios, reservas e atividades de grupos
-              â€” tudo integrado ao ecossistema LioConecta.
+              Agenda integrada ao Microsoft Outlook — reuniões, compromissos e aniversários corporativos.
             </p>
           </div>
-          <button className="calendar-page__today-btn" type="button" onClick={goToday}>
-            Hoje
-          </button>
+          {canLoadOutlook ? (
+            <button
+              type="button"
+              className="calendar-page__today-btn"
+              onClick={() => calendarRef.current?.getApi().today()}
+            >
+              Hoje
+            </button>
+          ) : null}
         </div>
       </header>
 
-      <section className="calendar-page__controls" aria-label="Filtros do calendÃ¡rio">
-        <div className="page-filters" role="group" aria-label="Filtrar eventos">
-          {CALENDAR_FILTERS.map((entry) => (
-            <button
-              key={entry.id}
-              className={`filter-chip${kind === entry.id ? " is-active" : ""}`}
-              type="button"
-              onClick={() => setKind(entry.id)}
-            >
-              <i className={`fa-solid ${entry.icon}`} aria-hidden="true" style={{ marginRight: 6 }} />
-              {entry.label}
-            </button>
-          ))}
+      {!calendarEnabled ? (
+        <div className="calendar-page__banner calendar-page__banner--info" role="status">
+          <i className="fa-solid fa-circle-info" aria-hidden="true" />
+          <div>
+            <strong>Calendário Outlook desabilitado</strong>
+            <p>Um administrador pode ativar em Config. Backend → Calendário Outlook.</p>
+          </div>
         </div>
-      </section>
+      ) : null}
 
-      <div className="calendar-page__layout">
-        <section className="calendar-page__month" aria-label="VisÃ£o mensal">
-          <div className="calendar-page__month-header">
-            <button className="calendar-page__nav" type="button" onClick={goPrevMonth} aria-label="MÃªs anterior">
-              <i className="fa-solid fa-chevron-left" aria-hidden="true" />
-            </button>
-            <h2 className="calendar-page__month-title">
-              {MONTH_NAMES[viewMonth]} {viewYear}
-            </h2>
-            <button className="calendar-page__nav" type="button" onClick={goNextMonth} aria-label="PrÃ³ximo mÃªs">
-              <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-            </button>
+      {calendarEnabled && needsConsent ? (
+        <div className="calendar-page__banner calendar-page__banner--warn" role="status">
+          <i className="fa-brands fa-microsoft" aria-hidden="true" />
+          <div>
+            <strong>Vincule sua conta Microsoft</strong>
+            <p>Para ver e gerenciar sua agenda Outlook, conceda permissão de calendário.</p>
+            {linkError ? <p className="calendar-page__banner-error">{linkError}</p> : null}
           </div>
+          <button
+            type="button"
+            className="calendar-page__link-btn"
+            onClick={() => void handleLinkAccount()}
+            disabled={linking}
+          >
+            {linking ? "Conectando…" : "Vincular conta"}
+          </button>
+        </div>
+      ) : null}
 
-          <div className="calendar-grid" role="grid" aria-label={`CalendÃ¡rio de ${MONTH_NAMES[viewMonth]} ${viewYear}`}>
-            {WEEKDAY_LABELS.map((label) => (
-              <div key={label} className="calendar-grid__weekday" role="columnheader">
-                {label}
+      <div className="calendar-page__layout calendar-page__layout--fc">
+        <section className="calendar-page__main" aria-label="Agenda Outlook">
+          {canLoadOutlook ? (
+            <>
+              <div className="calendar-page__calendar-filters" aria-label="Calendários visíveis">
+                {calendars.map((calendar) => {
+                  const checked =
+                    selectedCalendarIds.length === 0 || selectedCalendarIds.includes(calendar.id);
+                  return (
+                    <label key={calendar.id} className="calendar-page__calendar-chip">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleCalendar(calendar.id)}
+                      />
+                      <span
+                        className="calendar-page__calendar-dot"
+                        style={{ background: calendar.color ?? "#2563eb" }}
+                      />
+                      {calendar.name}
+                    </label>
+                  );
+                })}
               </div>
-            ))}
-            {weeks.flat().map((dateKey, index) => {
-              if (!dateKey) {
-                return <div key={`empty-${index}`} className="calendar-grid__cell calendar-grid__cell--empty" />;
-              }
-              const { day } = parseDateKey(dateKey);
-              const count = eventsByDate.get(dateKey) ?? 0;
-              const isToday = dateKey === todayKey;
-              const isSelected = dateKey === selectedDate;
-              return (
-                <button
-                  key={dateKey}
-                  type="button"
-                  className={`calendar-grid__cell${isToday ? " is-today" : ""}${isSelected ? " is-selected" : ""}`}
-                  onClick={() => setSelectedDate(dateKey)}
-                  aria-label={`${day} de ${MONTH_NAMES[viewMonth]}${count ? `, ${count} evento${count === 1 ? "" : "s"}` : ""}`}
-                  aria-pressed={isSelected}
-                >
-                  <span className="calendar-grid__day">{day}</span>
-                  {count > 0 ? (
-                    <span className="calendar-grid__dots" aria-hidden="true">
-                      {Array.from({ length: Math.min(count, 3) }).map((_, i) => (
-                        <span key={i} className="calendar-grid__dot" />
-                      ))}
-                    </span>
-                  ) : null}
+
+              <div className="calendar-page__fc-wrap">
+                <FullCalendar
+                  ref={calendarRef}
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                  locale={ptBrLocale}
+                  initialView={initialView}
+                  headerToolbar={{
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+                  }}
+                  height="auto"
+                  selectable
+                  selectMirror
+                  editable={false}
+                  events={fcEvents}
+                  datesSet={handleDatesSet}
+                  eventClick={handleEventClick}
+                  select={handleDateSelect}
+                  dateClick={(arg) => setSelectedMenuDate(formatDateKey(arg.date))}
+                  eventTimeFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+                  slotLabelFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+                  buttonText={{
+                    today: "Hoje",
+                    month: "Mês",
+                    week: "Semana",
+                    day: "Dia",
+                    list: "Lista",
+                  }}
+                />
+                {eventsLoading ? (
+                  <p className="calendar-page__loading" aria-live="polite">
+                    Carregando eventos do Outlook…
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="calendar-page__actions">
+                <button type="button" className="calendar-page__create-btn" onClick={() => openCreateModal()}>
+                  <i className="fa-solid fa-plus" aria-hidden="true" /> Novo evento
                 </button>
-              );
-            })}
-          </div>
+              </div>
+            </>
+          ) : (
+            <div className="calendar-page__placeholder">
+              <i className="fa-regular fa-calendar" aria-hidden="true" />
+              <p>Conecte sua conta Microsoft para visualizar a agenda Outlook.</p>
+            </div>
+          )}
         </section>
 
-        <aside className="calendar-page__aside">
-          <section className="calendar-panel" aria-label="Agenda do dia selecionado">
-            <h2 className="calendar-panel__title">{formatLongDate(selectedDate)}</h2>
-            {selectedEvents.length > 0 ? (
-              <ul className="calendar-agenda">
-                {selectedEvents.map((event) => (
-                  <li key={event.id}>
-                    <AgendaItem event={event} />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="calendar-panel__empty">Nenhum evento neste dia para os filtros selecionados.</p>
-            )}
-          </section>
-
-          <section className="calendar-panel calendar-panel--menu" aria-label="CardÃ¡pio do dia">
-            <div className="calendar-menu__header">
-              <h2 className="calendar-panel__title">CardÃ¡pio do dia</h2>
-              <Link className="calendar-menu__link" to="/servicos/refeitorio">
-                RefeitÃ³rio
-                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-              </Link>
-            </div>
-            <p className="calendar-menu__meta">
-              <i className="fa-solid fa-location-dot" aria-hidden="true" /> {dailyMenu.location}
-              <span className="calendar-menu__meta-sep">Â·</span>
-              <i className="fa-regular fa-clock" aria-hidden="true" /> {dailyMenu.hours}
-            </p>
-            <ul className="calendar-menu">
-              {dailyMenu.items.map((item) => (
-                <li key={`${item.category}-${item.name}`} className="calendar-menu__item">
-                  <span className="calendar-menu__category">{item.category}</span>
-                  <div className="calendar-menu__content">
-                    <strong className="calendar-menu__name">
-                      {item.name}
-                      {item.vegetarian ? (
-                        <span className="calendar-menu__tag">Veg</span>
-                      ) : null}
-                    </strong>
-                    {item.detail ? <span className="calendar-menu__detail">{item.detail}</span> : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="calendar-panel" aria-label="PrÃ³ximos eventos">
-            <h2 className="calendar-panel__title">PrÃ³ximos eventos</h2>
-            <ul className="calendar-upcoming">
-              {upcoming.map((event) => (
-                <li key={event.id}>
-                  <AgendaItem event={event} compact />
-                </li>
-              ))}
-            </ul>
-          </section>
-        </aside>
+        {showMenu ? (
+          <aside className="calendar-page__aside">
+            <section className="calendar-panel calendar-panel--menu" aria-label="Cardápio do dia">
+              <div className="calendar-menu__header">
+                <h2 className="calendar-panel__title">Cardápio do dia</h2>
+                <Link className="calendar-menu__link" to="/servicos/refeitorio">
+                  Refeitório
+                  <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                </Link>
+              </div>
+              {cafeteriaMenu && cafeteriaMenu.items.length > 0 ? (
+                <ul className="calendar-menu">
+                  {cafeteriaMenu.items.map((item) => (
+                    <li key={item} className="calendar-menu__item">
+                      <div className="calendar-menu__content">
+                        <strong className="calendar-menu__name">{item}</strong>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="calendar-panel__empty">Cardápio não disponível para esta data.</p>
+              )}
+            </section>
+          </aside>
+        ) : null}
       </div>
+
+      <CalendarEventModal
+        open={modal.open}
+        mode={modal.open ? modal.mode : "view"}
+        event={modal.open ? modal.event : null}
+        defaultCalendarId={defaultCalendarId}
+        calendars={calendars}
+        saving={saving}
+        onClose={() => setModal({ open: false })}
+        onSave={(payload) => void handleSave(payload)}
+        onDelete={modal.open && modal.mode === "edit" ? () => void handleDelete() : undefined}
+      />
     </main>
   );
 }
-
-function AgendaItem({
-  event,
-  compact = false,
-}: {
-  event: CalendarEvent;
-  compact?: boolean;
-}) {
-  const content = (
-    <>
-      <span className={`calendar-event__kind calendar-event__kind--${event.kind}`}>
-        {CALENDAR_FILTERS.find((f) => f.id === event.kind)?.label}
-      </span>
-      <strong className="calendar-event__title">{event.title}</strong>
-      <span className="calendar-event__time">
-        <i className="fa-regular fa-clock" aria-hidden="true" /> {formatEventTime(event)}
-      </span>
-      {!compact && event.location ? (
-        <span className="calendar-event__location">
-          <i className="fa-solid fa-location-dot" aria-hidden="true" /> {event.location}
-        </span>
-      ) : null}
-      {!compact && event.description ? (
-        <p className="calendar-event__desc">{event.description}</p>
-      ) : null}
-    </>
-  );
-
-  if (event.href) {
-    return (
-      <Link className={`calendar-event${compact ? " calendar-event--compact" : ""}`} to={event.href}>
-        {content}
-        <i className="fa-solid fa-chevron-right calendar-event__chevron" aria-hidden="true" />
-      </Link>
-    );
-  }
-
-  return <article className={`calendar-event${compact ? " calendar-event--compact" : ""}`}>{content}</article>;
-}
-

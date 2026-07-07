@@ -1564,8 +1564,101 @@ export interface SendMessageRequest {
   text: string;
 }
 
+export interface TestChatConnectionRequest {
+  tenantId?: string | null;
+  clientId?: string | null;
+  clientSecret?: string | null;
+}
+
 export interface ChatConnectionTestResponse {
   success: boolean;
   message: string;
   detail?: string | null;
+}
+
+export interface CalendarBootstrapDto {
+  enabled: boolean;
+  delegatedScopes: string[];
+  defaultView: string;
+  showBirthdays: boolean;
+  showCafeteriaMenu: boolean;
+  msalClientId: string;
+  msalTenantId: string;
+  msalAuthority: string;
+}
+
+export interface CalendarStatusDto {
+  enabled: boolean;
+  linked: boolean;
+  needsConsent: boolean;
+}
+
+export interface CalendarListItemDto {
+  id: string;
+  name: string;
+  color?: string | null;
+  canEdit: boolean;
+  isDefaultCalendar: boolean;
+}
+
+export interface CalendarEventDto {
+  graphId: string;
+  calendarId: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  isAllDay: boolean;
+  location?: string | null;
+  description?: string | null;
+  onlineMeetingUrl?: string | null;
+  webLink?: string | null;
+  organizerName?: string | null;
+  organizerEmail?: string | null;
+  source: string;
+  color?: string | null;
+  canEdit: boolean;
+}
+
+export interface CafeteriaMenuDto {
+  date: string;
+  items: string[];
+}
+
+export interface LinkCalendarAccountRequest {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+  scopes: string[];
+}
+
+export interface CreateCalendarEventRequest {
+  calendarId: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  isAllDay: boolean;
+  location?: string | null;
+  description?: string | null;
+}
+
+export interface UpdateCalendarEventRequest {
+  title?: string | null;
+  startAt?: string | null;
+  endAt?: string | null;
+  isAllDay?: boolean | null;
+  location?: string | null;
+  description?: string | null;
+}
+
+export interface TestCalendarConnectionRequest {
+  tokenEncryptionKey?: string | null;
+}
+
+export interface CalendarConnectionTestResponse {
+  success: boolean;
+  message: string;
+  detail?: string | null;
+  calendarEnabled: boolean;
+  tenantId?: string | null;
+  clientId?: string | null;
 }

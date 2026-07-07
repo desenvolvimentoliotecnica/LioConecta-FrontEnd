@@ -60,6 +60,18 @@ import { LoopRisksPage } from "./components/loop/pages/LoopRisksPage";
 import { LoopApprovalsPage } from "./components/loop/pages/LoopApprovalsPage";
 import { LoopLessonsPage } from "./components/loop/pages/LoopLessonsPage";
 import { LoopReportsPage } from "./components/loop/pages/LoopReportsPage";
+import { PulseAccessGate } from "./components/pulse/PulseAccessGate";
+import { PulseShell } from "./components/pulse/PulseShell";
+import { PulseDashboardPage } from "./components/pulse/pages/PulseDashboardPage";
+import { PulseDailysPage } from "./components/pulse/pages/PulseDailysPage";
+import { PulseSprintPage } from "./components/pulse/pages/PulseSprintPage";
+import { PulseBacklogPage } from "./components/pulse/pages/PulseBacklogPage";
+import { PulseBoardPage } from "./components/pulse/pages/PulseBoardPage";
+import { PulsePlanningPage } from "./components/pulse/pages/PulsePlanningPage";
+import { PulseReviewPage } from "./components/pulse/pages/PulseReviewPage";
+import { PulseRetroPage } from "./components/pulse/pages/PulseRetroPage";
+import { PulseImpedimentsPage } from "./components/pulse/pages/PulseImpedimentsPage";
+import { PulseMeetingsPage } from "./components/pulse/pages/PulseMeetingsPage";
 
 function App() {
   const perfilPage = pageRegistry.find((p) => p.id === "pessoas-perfil");
@@ -119,6 +131,25 @@ function App() {
           <Route path="aprovacoes" element={<LoopApprovalsPage />} />
           <Route path="aprendizados" element={<LoopLessonsPage />} />
           <Route path="relatorios" element={<LoopReportsPage />} />
+        </Route>
+        <Route
+          path="/pulse"
+          element={
+            <PulseAccessGate>
+              <PulseShell />
+            </PulseAccessGate>
+          }
+        >
+          <Route index element={<PulseDashboardPage />} />
+          <Route path="dailys" element={<PulseDailysPage />} />
+          <Route path="sprint" element={<PulseSprintPage />} />
+          <Route path="backlog" element={<PulseBacklogPage />} />
+          <Route path="board" element={<PulseBoardPage />} />
+          <Route path="planning" element={<PulsePlanningPage />} />
+          <Route path="review" element={<PulseReviewPage />} />
+          <Route path="retro" element={<PulseRetroPage />} />
+          <Route path="impedimentos" element={<PulseImpedimentsPage />} />
+          <Route path="meetings" element={<PulseMeetingsPage />} />
         </Route>
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />

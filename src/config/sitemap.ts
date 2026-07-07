@@ -157,7 +157,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry(
           "Calendário corporativo",
           "/calendario",
-          "Eventos, feriados e cardápio do refeitório.",
+          "Agenda integrada ao Microsoft Outlook com reuniões, eventos e aniversários.",
         ),
       ],
     },
@@ -225,6 +225,23 @@ export function buildSitemapSections(): SitemapSection[] {
         entry("Aprovações", "/loop/aprovacoes", "Pendências aguardando decisão."),
         entry("Aprendizados", "/loop/aprendizados", "Lições aprendidas por projeto."),
         entry("Relatórios", "/loop/relatorios", "Exportações executivas (em breve)."),
+      ],
+    },
+    {
+      id: "pulse",
+      label: "Pulse",
+      icon: "fa-heart-pulse",
+      items: [
+        entry("Visão Geral", "/pulse", "Dashboard ágil com sprints, KPIs e alertas."),
+        entry("Dailys", "/pulse/dailys", "Atualizações diárias do squad."),
+        entry("Sprint", "/pulse/sprint", "Acompanhamento de sprint e burndown."),
+        entry("Backlog", "/pulse/backlog", "Histórias priorizadas fora do sprint."),
+        entry("Board", "/pulse/board", "Quadro Kanban com 4 colunas Scrum."),
+        entry("Planning", "/pulse/planning", "Planejamento e refinamento de backlog."),
+        entry("Review", "/pulse/review", "Demonstração de entregas do sprint."),
+        entry("Retro", "/pulse/retro", "Retrospectiva e plano de ação."),
+        entry("Impedimentos", "/pulse/impedimentos", "Bloqueios reportados pelo squad."),
+        entry("Reuniões", "/pulse/meetings", "Calendário de rituais ágeis."),
       ],
     },
     {
