@@ -14,6 +14,7 @@ import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmen
 import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
 import { MenuEditorSettingsSection } from "../admin/MenuEditorSettingsSection";
+import { PortalUiSettingsSection } from "../admin/PortalUiSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
 
@@ -40,11 +41,13 @@ const AZURE_AD_TENANT_KEY = "azure_ad.tenant_id";
 const ORGANOGRAM_MODULE_ID = "organogram";
 const LOOP_MODULE_ID = "loop";
 const CARDAPIO_MODULE_ID = "cardapio";
+const PORTAL_UI_MODULE_ID = "portal-ui";
 
 const DOMAIN_MODULE_TABS = [
   { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
   { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
   { id: CARDAPIO_MODULE_ID, label: "Cardápio" },
+  { id: PORTAL_UI_MODULE_ID, label: "Portal UI" },
 ] as const;
 
 function apiErrorDetail(error: unknown): string | undefined {
@@ -217,13 +220,16 @@ export function BackendConfigPage() {
   const isAdmin = isAdminUser(me);
 
   useEffect(() => {
+    const categoryFromUrl = searchParams.get("category");
+    if (categoryFromUrl && DOMAIN_MODULE_TABS.some((tab) => tab.id === categoryFromUrl)) {
+      setActiveCategory(categoryFromUrl);
+    }
+
     if (categories.length > 0) {
       setDraft(buildDraft(categories));
-      const categoryFromUrl = searchParams.get("category");
       if (
         categoryFromUrl &&
-        (categories.some((category) => category.id === categoryFromUrl) ||
-          DOMAIN_MODULE_TABS.some((tab) => tab.id === categoryFromUrl))
+        categories.some((category) => category.id === categoryFromUrl)
       ) {
         setActiveCategory(categoryFromUrl);
       } else if (
@@ -626,6 +632,20 @@ export function BackendConfigPage() {
           </div>
 
           <MenuEditorSettingsSection />
+        </section>
+      ) : null}
+
+      {activeCategory === PORTAL_UI_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="portal-ui-module-title">
+          <ConfigSectionHead
+            titleId="portal-ui-module-title"
+            title="Portal UI — maturidade e roadmap"
+            description="Controle os badges de maturidade na topbar e o roadmap do que já foi implementado versus pendências."
+            helpCategoryId={PORTAL_UI_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
+
+          <PortalUiSettingsSection />
         </section>
       ) : null}
 

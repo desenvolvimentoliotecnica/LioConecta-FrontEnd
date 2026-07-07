@@ -1,4 +1,4 @@
-import type { UpdateAppSettingRequest, UserRole } from "../../api/types";
+import type { LoopBootstrapDto, UpdateAppSettingRequest, UserRole } from "../../api/types";
 
 export type LoopSettings = {
   enabled: boolean;
@@ -65,6 +65,47 @@ export function readLoopSettingsFromStorage(): LoopSettings {
 
 export function writeLoopSettingsToStorage(settings: LoopSettings): void {
   localStorage.setItem(LOOP_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+}
+
+export function loopSettingsFingerprint(settings: LoopSettings): string {
+  return JSON.stringify({
+    enabled: settings.enabled,
+    allowedRoles: [...settings.allowedRoles].sort(),
+    allowedEmails: [...settings.allowedEmails].sort(),
+  });
+}
+
+export function loopSettingsPresentInMap(map: Record<string, string>): boolean {
+  return Object.values(LOOP_SETTING_KEYS).some((key) => key in map);
+}
+
+export function resolveLoopSettingsFromSources(
+  map: Record<string, string>,
+  fallback: LoopSettings,
+): LoopSettings {
+  if (!loopSettingsPresentInMap(map)) {
+    return fallback;
+  }
+
+  return parseLoopSettingsFromAppSettings(map, false);
+}
+
+export function loopSettingsPresentInCategories(
+  categories: { settings: { key: string; value: string }[] }[],
+): boolean {
+  return loopSettingsPresentInMap(flattenAppSettingsMap(categories));
+}
+
+export function parseLoopSettingsFromBootstrap(bootstrap: LoopBootstrapDto): LoopSettings {
+  return {
+    enabled: bootstrap.enabled,
+    allowedRoles: Array.isArray(bootstrap.allowedRoles)
+      ? bootstrap.allowedRoles
+      : DEFAULT_LOOP_SETTINGS.allowedRoles,
+    allowedEmails: Array.isArray(bootstrap.allowedEmails)
+      ? bootstrap.allowedEmails.filter((email): email is string => typeof email === "string")
+      : DEFAULT_LOOP_SETTINGS.allowedEmails,
+  };
 }
 
 export function parseLoopSettingsFromAppSettings(

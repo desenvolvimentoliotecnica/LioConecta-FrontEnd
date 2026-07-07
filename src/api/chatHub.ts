@@ -1,4 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { getHubAccessToken } from "./hubAuth";
 import type { ChatConversationDto, ChatMessageDto } from "./types";
 
 const HUB_URL = "/hubs/chat";
@@ -16,7 +17,7 @@ const conversationListeners = new Set<ConversationListener>();
 function buildConnection(): HubConnection {
   return new HubConnectionBuilder()
     .withUrl(HUB_URL, {
-      withCredentials: true,
+      accessTokenFactory: getHubAccessToken,
     })
     .withAutomaticReconnect([0, 2000, 5000, 10_000, 30_000])
     .configureLogging(import.meta.env.DEV ? LogLevel.Error : LogLevel.Warning)

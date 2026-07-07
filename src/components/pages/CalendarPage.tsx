@@ -5,7 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   useCalendarBootstrap,
@@ -19,8 +19,10 @@ import {
   useUpdateCalendarEvent,
 } from "../../api/hooks/useCalendar";
 import { useBirthdays } from "../../api/hooks/useBirthdays";
+import { useMe } from "../../api/hooks/useMe";
 import { acquireDelegatedToken } from "../../auth/azureMsal";
-import { formatMsalErrorForUser } from "../../auth/msalErrors";
+import { formatCalendarApiError } from "../../auth/calendarErrors";
+import { formatLinkAccountError } from "../../auth/linkAccountErrors";
 import { mapBirthdaysToCalendarEvents } from "../../config/calendar";
 import { CalendarEventModal } from "../calendar/CalendarEventModal";
 import { CafeteriaMenuPanel } from "../calendar/CafeteriaMenuPanel";
@@ -49,10 +51,13 @@ export function CalendarPage() {
   const [selectedCalendarIds, setSelectedCalendarIds] = useState<string[]>([]);
   const [selectedMenuDate, setSelectedMenuDate] = useState(formatDateKey(new Date()));
   const [modal, setModal] = useState<ModalState>({ open: false });
+  const [modalError, setModalError] = useState<string | null>(null);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [linkError, setLinkError] = useState<string | null>(null);
   const [linking, setLinking] = useState(false);
 
   const { data: bootstrap } = useCalendarBootstrap();
+  const { data: me } = useMe();
   const { data: status } = useCalendarStatus();
   const linkAccount = useLinkCalendarAccount();
   const createEvent = useCreateCalendarEvent();
@@ -64,13 +69,13 @@ export function CalendarPage() {
   const needsConsent = Boolean(status?.needsConsent);
   const canLoadOutlook = calendarEnabled && linked && !needsConsent;
 
-  const { data: calendars = [] } = useCalendars(canLoadOutlook);
+  const { data: calendars = [], isError: calendarsError, error: calendarsQueryError } = useCalendars(canLoadOutlook);
   const activeCalendarIds = useMemo(() => {
     if (selectedCalendarIds.length > 0) return selectedCalendarIds;
     return calendars.map((c) => c.id);
   }, [calendars, selectedCalendarIds]);
 
-  const { data: outlookEvents = [], isLoading: eventsLoading } = useCalendarEvents(
+  const { data: outlookEvents = [], isLoading: eventsLoading, isError: eventsError, error: eventsQueryError } = useCalendarEvents(
     range?.from ?? null,
     range?.to ?? null,
     activeCalendarIds,
@@ -100,6 +105,19 @@ export function CalendarPage() {
     [outlookFcEvents, birthdayFcEvents],
   );
 
+  const graphAccessError = useMemo(() => {
+    const sourceError = calendarsError ? calendarsQueryError : eventsError ? eventsQueryError : null;
+    return sourceError ? formatCalendarApiError(sourceError) : null;
+  }, [calendarsError, calendarsQueryError, eventsError, eventsQueryError]);
+
+  const showReLinkBanner = needsConsent || Boolean(graphAccessError);
+
+  useEffect(() => {
+    if (!actionMessage) return;
+    const timer = window.setTimeout(() => setActionMessage(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [actionMessage]);
+
   const defaultCalendarId = useMemo(
     () => calendars.find((c) => c.isDefaultCalendar && c.canEdit)?.id
       ?? calendars.find((c) => c.canEdit)?.id
@@ -126,6 +144,11 @@ export function CalendarPage() {
           delegatedScopes: bootstrap.delegatedScopes,
         },
         ["Calendars.ReadWrite", "User.Read", "offline_access"],
+        {
+          forceInteractive: true,
+          prompt: "consent",
+          loginHint: me?.email,
+        },
       );
 
       await linkAccount.mutateAsync({
@@ -134,8 +157,9 @@ export function CalendarPage() {
         expiresAt: result.expiresOn?.toISOString() ?? new Date(Date.now() + 3600_000).toISOString(),
         scopes: result.scopes,
       });
+      setActionMessage("Conta Microsoft vinculada. Carregando calendários…");
     } catch (error) {
-      setLinkError(formatMsalErrorForUser(error));
+      setLinkError(formatLinkAccountError(error));
     } finally {
       setLinking(false);
     }
@@ -144,6 +168,7 @@ export function CalendarPage() {
   const openCreateModal = (start?: Date, end?: Date, allDay?: boolean) => {
     const startIso = (start ?? new Date()).toISOString();
     const endIso = (end ?? new Date((start ?? new Date()).getTime() + 60 * 60 * 1000)).toISOString();
+    setModalError(null);
     setModal({
       open: true,
       mode: "create",
@@ -173,6 +198,7 @@ export function CalendarPage() {
 
     const dto = outlookEvents.find((e) => e.graphId === arg.event.id);
     if (!dto) return;
+    setModalError(null);
     setModal({ open: true, mode: dto.canEdit ? "edit" : "view", event: dtoToModalEvent(dto) });
   };
 
@@ -193,37 +219,51 @@ export function CalendarPage() {
   }) => {
     if (!modal.open) return;
 
-    if (modal.mode === "create") {
-      await createEvent.mutateAsync({
-        calendarId: payload.calendarId,
-        title: payload.title,
-        startAt: payload.startAt,
-        endAt: payload.endAt,
-        isAllDay: payload.isAllDay,
-        location: payload.location || null,
-        description: payload.description || null,
-      });
-    } else if (modal.mode === "edit" && modal.event?.graphId) {
-      await updateEvent.mutateAsync({
-        eventId: modal.event.graphId,
-        body: {
+    try {
+      if (modal.mode === "create") {
+        await createEvent.mutateAsync({
+          calendarId: payload.calendarId,
           title: payload.title,
           startAt: payload.startAt,
           endAt: payload.endAt,
           isAllDay: payload.isAllDay,
           location: payload.location || null,
           description: payload.description || null,
-        },
-      });
-    }
+        });
+        setActionMessage("Evento criado no Outlook.");
+      } else if (modal.mode === "edit" && modal.event?.graphId) {
+        await updateEvent.mutateAsync({
+          eventId: modal.event.graphId,
+          body: {
+            title: payload.title,
+            startAt: payload.startAt,
+            endAt: payload.endAt,
+            isAllDay: payload.isAllDay,
+            location: payload.location || null,
+            description: payload.description || null,
+          },
+        });
+        setActionMessage("Evento atualizado no Outlook.");
+      }
 
-    setModal({ open: false });
+      setModal({ open: false });
+      setModalError(null);
+    } catch (error) {
+      setModalError(formatCalendarApiError(error));
+    }
   };
 
   const handleDelete = async () => {
     if (!modal.open || modal.mode !== "edit" || !modal.event?.graphId) return;
-    await deleteEvent.mutateAsync(modal.event.graphId);
-    setModal({ open: false });
+
+    try {
+      await deleteEvent.mutateAsync(modal.event.graphId);
+      setModal({ open: false });
+      setModalError(null);
+      setActionMessage("Evento excluído do Outlook.");
+    } catch (error) {
+      setModalError(formatCalendarApiError(error));
+    }
   };
 
   const toggleCalendar = (id: string) => {
@@ -273,12 +313,15 @@ export function CalendarPage() {
         </div>
       ) : null}
 
-      {calendarEnabled && needsConsent ? (
+      {calendarEnabled && showReLinkBanner ? (
         <div className="calendar-page__banner calendar-page__banner--warn" role="status">
           <i className="fa-brands fa-microsoft" aria-hidden="true" />
           <div>
-            <strong>Vincule sua conta Microsoft</strong>
-            <p>Para ver e gerenciar sua agenda Outlook, conceda permissão de calendário.</p>
+            <strong>{graphAccessError ? "Reconecte sua conta Microsoft" : "Vincule sua conta Microsoft"}</strong>
+            <p>
+              {graphAccessError
+                ?? "Para ver e gerenciar sua agenda Outlook, conceda permissão de calendário."}
+            </p>
             {linkError ? <p className="calendar-page__banner-error">{linkError}</p> : null}
           </div>
           <button
@@ -289,6 +332,15 @@ export function CalendarPage() {
           >
             {linking ? "Conectando…" : "Vincular conta"}
           </button>
+        </div>
+      ) : null}
+
+      {actionMessage ? (
+        <div className="calendar-page__banner calendar-page__banner--info" role="status">
+          <i className="fa-solid fa-circle-check" aria-hidden="true" />
+          <div>
+            <strong>{actionMessage}</strong>
+          </div>
         </div>
       ) : null}
 
@@ -352,6 +404,11 @@ export function CalendarPage() {
                     Carregando eventos do Outlook…
                   </p>
                 ) : null}
+                {graphAccessError && !eventsLoading ? (
+                  <p className="calendar-page__banner-error calendar-page__inline-error" role="alert">
+                    {graphAccessError}
+                  </p>
+                ) : null}
               </div>
 
               <div className="calendar-page__actions">
@@ -382,7 +439,11 @@ export function CalendarPage() {
         defaultCalendarId={defaultCalendarId}
         calendars={calendars}
         saving={saving}
-        onClose={() => setModal({ open: false })}
+        error={modalError}
+        onClose={() => {
+          setModal({ open: false });
+          setModalError(null);
+        }}
         onSave={(payload) => void handleSave(payload)}
         onDelete={modal.open && modal.mode === "edit" ? () => void handleDelete() : undefined}
       />

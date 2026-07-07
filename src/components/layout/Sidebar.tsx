@@ -33,6 +33,7 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     icon: "fa-heart-pulse",
     href: "/pulse",
     activePrefix: "/pulse",
+    loopAccessOnly: true,
   },
 ];
 

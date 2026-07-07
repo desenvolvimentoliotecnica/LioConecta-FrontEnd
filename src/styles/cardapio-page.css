@@ -353,6 +353,56 @@
   padding: 12px 16px 16px;
 }
 
+.cardapio-result-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1300;
+  padding: 16px;
+}
+
+.cardapio-result-modal {
+  width: min(400px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+  padding: 28px 24px 24px;
+  text-align: center;
+}
+
+.cardapio-result-modal__icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.cardapio-result-modal__icon--success {
+  color: #16a34a;
+}
+
+.cardapio-result-modal__icon--error {
+  color: #dc2626;
+}
+
+.cardapio-result-modal__title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.cardapio-result-modal__message {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.cardapio-result-modal__btn {
+  min-width: 120px;
+  justify-content: center;
+}
+
 .calendar-menu__holiday {
   margin: 0 0 10px;
   font-weight: 700;

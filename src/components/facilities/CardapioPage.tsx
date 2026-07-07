@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   useCopyMenuWeek,
+  downloadWeeklyMenuPdf,
   useSaveDailyMenu,
   useSendMenuEmail,
   useWeeklyMenu,
@@ -18,6 +19,7 @@ import {
   getWeekDates,
 } from "../../config/facilities/menu";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
+import { CardapioActionResultModal } from "./CardapioActionResultModal";
 import { CardapioDayCards } from "./CardapioDayCards";
 import { CardapioSendEmailModal } from "./CardapioSendEmailModal";
 import {
@@ -30,6 +32,12 @@ import "../../styles/cardapio-page.css";
 
 type Toast = { type: "success" | "error"; message: string } | null;
 
+type ActionResult = {
+  variant: "success" | "error";
+  title: string;
+  message: string;
+} | null;
+
 export function CardapioPage() {
   const { data: me } = useMe();
   const { data: editorSettings, isError: editorSettingsError } = useMenuEditorSettings();
@@ -39,6 +47,8 @@ export function CardapioPage() {
   const [draftDays, setDraftDays] = useState<DailyMenuDto[]>([]);
   const [toast, setToast] = useState<Toast>(null);
   const [emailOpen, setEmailOpen] = useState(false);
+  const [actionResult, setActionResult] = useState<ActionResult>(null);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const weekQuery = useWeeklyMenu(weekStart);
   const saveMutation = useSaveDailyMenu();
@@ -127,10 +137,39 @@ export function CardapioPage() {
         recipients: payload.recipients,
         includePdf: payload.includePdf,
       });
-      showToast("success", result.message);
       setEmailOpen(false);
+      setActionResult({
+        variant: "success",
+        title: "E-mail enviado",
+        message: result.message,
+      });
     } catch {
-      showToast("error", "Não foi possível enviar o e-mail.");
+      setEmailOpen(false);
+      setActionResult({
+        variant: "error",
+        title: "Falha no envio",
+        message: "Não foi possível enviar o e-mail. Verifique os destinatários e tente novamente.",
+      });
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    setDownloadingPdf(true);
+    try {
+      await downloadWeeklyMenuPdf(weekStart);
+      setActionResult({
+        variant: "success",
+        title: "PDF baixado",
+        message: "O cardápio semanal foi gerado e salvo no seu dispositivo.",
+      });
+    } catch {
+      setActionResult({
+        variant: "error",
+        title: "Falha ao gerar PDF",
+        message: "Não foi possível gerar o PDF. Tente novamente em instantes.",
+      });
+    } finally {
+      setDownloadingPdf(false);
     }
   };
 
@@ -142,8 +181,17 @@ export function CardapioPage() {
         description="Consulte e edite o cardápio semanal do refeitório. Publicações aparecem automaticamente no Calendário."
         current="Cardápio"
         actions={
-          canEdit ? (
-            <div className="cardapio-page__actions">
+          <div className="cardapio-page__actions">
+            <button
+              type="button"
+              className="cardapio-page__btn"
+              disabled={downloadingPdf || weekQuery.isLoading}
+              onClick={() => void handleDownloadPdf()}
+            >
+              <i className="fa-solid fa-file-pdf" aria-hidden="true" /> Baixar PDF
+            </button>
+            {canEdit ? (
+              <>
               <button
                 type="button"
                 className="cardapio-page__btn"
@@ -176,12 +224,13 @@ export function CardapioPage() {
               >
                 Enviar por e-mail
               </button>
-            </div>
-          ) : (
-            <Link className="cardapio-page__btn cardapio-page__btn--primary" to="/calendario">
-              Ver no calendário
-            </Link>
-          )
+              </>
+            ) : (
+              <Link className="cardapio-page__btn cardapio-page__btn--primary" to="/calendario">
+                Ver no calendário
+              </Link>
+            )}
+          </div>
         }
       />
 
@@ -244,6 +293,14 @@ export function CardapioPage() {
         sending={sendEmailMutation.isPending}
         onClose={() => setEmailOpen(false)}
         onSend={handleSendEmail}
+      />
+
+      <CardapioActionResultModal
+        open={actionResult !== null}
+        variant={actionResult?.variant ?? "success"}
+        title={actionResult?.title ?? ""}
+        message={actionResult?.message ?? ""}
+        onClose={() => setActionResult(null)}
       />
     </main>
   );

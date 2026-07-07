@@ -417,7 +417,7 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
 
   calendar: {
     title: "Ajuda — Calendário Outlook",
-    render: () => (
+    render: (ctx) => (
       <>
         <HelpLead>
           Página <code>/calendario</code> com eventos reais do Outlook via Graph. Tokens delegados por usuário (MSAL).
@@ -428,10 +428,17 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
             <code>azure_ad.tenant_id</code> e <code>azure_ad.client_id</code> preenchidos
           </li>
           <li>
+            Redirect URI SPA no Azure: <code>{ctx.devOrigin}</code> (dev) e <code>{ctx.portalOrigin}</code> (deploy)
+          </li>
+          <li>
             <code>calendar.token_encryption_key</code> — obrigatória, independente do Chat
           </li>
           <li>Permissão delegada <code>Calendars.ReadWrite</code> na app SPA</li>
         </HelpList>
+        <HelpNote warn>
+          Erro <code>AADSTS500113</code> no popup = falta registrar a redirect URI exata do ambiente em Authentication →
+          SPA (ex.: <code>http://localhost:5173</code> no dev local).
+        </HelpNote>
         <HelpHeading>Chave de criptografia (<code>calendar.token_encryption_key</code>)</HelpHeading>
         <HelpLead>
           Esta chave <strong>não vem do Azure</strong> nem do Microsoft 365. É um segredo que <strong>você gera</strong>{" "}
