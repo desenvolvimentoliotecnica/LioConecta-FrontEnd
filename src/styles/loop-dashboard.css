@@ -1,3 +1,41 @@
+.loop-kpi-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.loop-kpi-link {
+  min-width: 0;
+  display: block;
+}
+
+.loop-kpi-grid .analytics-kpi {
+  height: 100%;
+}
+
+.loop-kpi-grid .analytics-kpi--projetos { background: #eef2ff; border-color: #c7d2fe; }
+.loop-kpi-grid .analytics-kpi--atividades { background: #eff6ff; border-color: #bfdbfe; }
+.loop-kpi-grid .analytics-kpi--alertas { background: #fff7ed; border-color: #fdba74; }
+.loop-kpi-grid .analytics-kpi--equipes { background: #f5f3ff; border-color: #c4b5fd; }
+.loop-kpi-grid .analytics-kpi--entregas { background: #f0fdf4; border-color: #86efac; }
+
+@media (max-width: 1200px) {
+  .loop-kpi-grid {
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .loop-kpi-grid {
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .loop-kpi-grid {
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+  }
+}
+
 .loop-page {
   max-width: 1400px;
 }
