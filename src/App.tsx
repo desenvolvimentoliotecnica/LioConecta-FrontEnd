@@ -35,6 +35,7 @@ import { WorkersHubPage } from "./components/admin/WorkersHubPage";
 import { TotvsRmConfigPage } from "./components/admin/TotvsRmConfigPage";
 import { EmailHubPage } from "./components/admin/EmailHubPage";
 import { EmailConfigPage } from "./components/admin/EmailConfigPage";
+import { OrganogramGovernancePage } from "./components/admin/OrganogramGovernancePage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -48,6 +49,17 @@ import { NotificationsPage } from "./components/pages/NotificationsPage";
 import { KioskFeedPage } from "./components/pages/KioskFeedPage";
 import { LegacyPage, LegacyPageById } from "./components/pages/LegacyPage";
 import { pageRegistry } from "./config/routes";
+import { LoopAccessGate } from "./components/loop/LoopAccessGate";
+import { LoopShell } from "./components/loop/LoopShell";
+import { LoopDashboardPage } from "./components/loop/pages/LoopDashboardPage";
+import { LoopProjectsPage } from "./components/loop/pages/LoopProjectsPage";
+import { LoopActivitiesPage } from "./components/loop/pages/LoopActivitiesPage";
+import { LoopTeamsPage } from "./components/loop/pages/LoopTeamsPage";
+import { LoopPlanningPage } from "./components/loop/pages/LoopPlanningPage";
+import { LoopRisksPage } from "./components/loop/pages/LoopRisksPage";
+import { LoopApprovalsPage } from "./components/loop/pages/LoopApprovalsPage";
+import { LoopLessonsPage } from "./components/loop/pages/LoopLessonsPage";
+import { LoopReportsPage } from "./components/loop/pages/LoopReportsPage";
 
 function App() {
   const perfilPage = pageRegistry.find((p) => p.id === "pessoas-perfil");
@@ -90,6 +102,24 @@ function App() {
         <Route path="/comunicados/arquivo" element={<ComunicadosKindPage config={COMUNICADOS_ARQUIVO_CONFIG} />} />
         <Route path="/notificacoes" element={<NotificationsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route
+          path="/loop"
+          element={
+            <LoopAccessGate>
+              <LoopShell />
+            </LoopAccessGate>
+          }
+        >
+          <Route index element={<LoopDashboardPage />} />
+          <Route path="projetos" element={<LoopProjectsPage />} />
+          <Route path="atividades" element={<LoopActivitiesPage />} />
+          <Route path="equipes" element={<LoopTeamsPage />} />
+          <Route path="planejamento" element={<LoopPlanningPage />} />
+          <Route path="riscos" element={<LoopRisksPage />} />
+          <Route path="aprovacoes" element={<LoopApprovalsPage />} />
+          <Route path="aprendizados" element={<LoopLessonsPage />} />
+          <Route path="relatorios" element={<LoopReportsPage />} />
+        </Route>
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
         <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
@@ -97,6 +127,7 @@ function App() {
         <Route path="/admin/totvs-rm" element={<TotvsRmConfigPage />} />
         <Route path="/admin/email" element={<EmailHubPage />} />
         <Route path="/admin/email/config" element={<EmailConfigPage />} />
+        <Route path="/admin/governanca/organograma" element={<OrganogramGovernancePage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
         <Route path="/mapa-do-site" element={<SitemapPage />} />

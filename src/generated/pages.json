@@ -67,6 +67,7 @@
     "hasScript": true,
     "externals": [
       "assets/org-profile-modal.js",
+      "assets/org-edit-drawer.js",
       "https://cdn.balkan.app/orgchart-community.js"
     ],
     "organograma": true,

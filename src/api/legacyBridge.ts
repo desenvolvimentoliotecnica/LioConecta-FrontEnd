@@ -9,6 +9,7 @@ export function installLegacyApiBridge() {
     post: <T>(path: string, body?: unknown) => api.post<T>(path, body),
     put: <T>(path: string, body: unknown) => api.put<T>(path, body),
     patch: <T>(path: string, body?: unknown) => api.patch<T>(path, body),
+    delete: <T>(path: string) => api.delete<T>(path),
   };
 }
 
@@ -21,6 +22,7 @@ declare global {
       post: <T>(path: string, body?: unknown) => Promise<T>;
       put: <T>(path: string, body: unknown) => Promise<T>;
       patch: <T>(path: string, body?: unknown) => Promise<T>;
+      delete: <T>(path: string) => Promise<T>;
     };
   }
 }

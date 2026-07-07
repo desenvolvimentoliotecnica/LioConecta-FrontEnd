@@ -38,6 +38,9 @@
             <button type="button" class="org-view-toggle" id="org-view-full-toggle" hidden>
               Ver organograma completo
             </button>
+            <button type="button" class="org-view-toggle org-view-edit-toggle" id="org-edit-mode-toggle" hidden>
+              Modo edição
+            </button>
           </div>
         </div>
         <div class="org-search-results" id="org-search-results" hidden role="listbox" aria-label="Resultados da busca"></div>
@@ -78,6 +81,7 @@
 
         <div class="org-node-menu" id="org-node-menu" hidden role="menu" aria-label="Ações do colaborador">
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="perfil">Ver perfil</button>
+          <button class="org-node-menu__item" type="button" role="menuitem" data-action="editar" hidden>Editar posição</button>
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="ferias">Solicitar férias</button>
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="solicitar-posicao">Solicitar nova posição</button>
           <button class="org-node-menu__item" type="button" role="menuitem" data-action="promover">Promover</button>
@@ -114,5 +118,73 @@
                 <button type="submit" class="org-position-request__btn">Enviar solicitação</button>
               </footer>
             </form>
+          </div>
+        </div>
+
+        <div class="org-edit-drawer" id="org-edit-drawer" hidden>
+          <div class="org-edit-drawer__backdrop" data-close-org-edit></div>
+          <div class="org-edit-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="org-edit-drawer-title">
+            <header class="org-edit-drawer__header">
+              <div>
+                <h2 class="org-edit-drawer__title" id="org-edit-drawer-title">Editar posição</h2>
+                <p class="org-edit-drawer__subtitle" id="org-edit-drawer-subtitle"></p>
+              </div>
+              <button class="org-edit-drawer__close" type="button" data-close-org-edit aria-label="Fechar">&times;</button>
+            </header>
+            <div class="org-edit-drawer__body">
+              <div class="org-edit-drawer__alert" id="org-edit-alert" hidden role="status"></div>
+              <div class="org-edit-drawer__section">
+                <h3 class="org-edit-drawer__section-title">Dados editáveis</h3>
+                <div class="org-edit-drawer__avatar-wrap" id="org-edit-avatar-wrap" aria-hidden="true"></div>
+                <label class="org-edit-drawer__field" id="org-edit-display-name-field">
+                  <span>Nome</span>
+                  <input type="text" id="org-edit-display-name" autocomplete="off" />
+                </label>
+                <label class="org-edit-drawer__field">
+                  <span>Departamento</span>
+                  <select id="org-edit-department"></select>
+                </label>
+                <label class="org-edit-drawer__field">
+                  <span>Cargo ou função</span>
+                  <input type="text" id="org-edit-title" placeholder="Ex.: Desenvolvedor Sr." autocomplete="off" />
+                </label>
+                <label class="org-edit-drawer__field org-edit-drawer__search-wrap">
+                  <span>Gestor</span>
+                  <input type="search" id="org-edit-manager-search" placeholder="Buscar colaborador…" autocomplete="off" />
+                  <input type="hidden" id="org-edit-manager-position-id" />
+                  <div class="org-edit-drawer__search-results" id="org-edit-manager-results" hidden></div>
+                  <div class="org-edit-drawer__manager-pill" id="org-edit-manager-pill" hidden>
+                    <span id="org-edit-manager-pill-label"></span>
+                    <button type="button" class="org-edit-drawer__manager-clear" id="org-edit-manager-clear" aria-label="Remover gestor">&times;</button>
+                  </div>
+                </label>
+                <label class="org-edit-drawer__toggle">
+                  <input type="checkbox" id="org-edit-visible" checked />
+                  <span>Visível no organograma</span>
+                </label>
+              </div>
+              <div class="org-edit-drawer__section">
+                <h3 class="org-edit-drawer__section-title">Valor no AD/Graph</h3>
+                <div class="org-edit-drawer__readonly-grid">
+                  <div class="org-edit-drawer__readonly-item">
+                    <span class="org-edit-drawer__readonly-label">Cargo</span>
+                    <span class="org-edit-drawer__readonly-value" id="org-edit-graph-title">—</span>
+                  </div>
+                  <div class="org-edit-drawer__readonly-item">
+                    <span class="org-edit-drawer__readonly-label">Departamento</span>
+                    <span class="org-edit-drawer__readonly-value" id="org-edit-graph-department">—</span>
+                  </div>
+                  <div class="org-edit-drawer__readonly-item">
+                    <span class="org-edit-drawer__readonly-label">Gestor</span>
+                    <span class="org-edit-drawer__readonly-value" id="org-edit-graph-manager">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <footer class="org-edit-drawer__footer">
+              <button type="button" class="org-edit-drawer__btn org-edit-drawer__btn--danger" id="org-edit-delete-btn">Excluir</button>
+              <button type="button" class="org-edit-drawer__btn" data-close-org-edit>Cancelar</button>
+              <button type="button" class="org-edit-drawer__btn org-edit-drawer__btn--primary" id="org-edit-save-btn">Salvar</button>
+            </footer>
           </div>
         </div>

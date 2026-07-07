@@ -8,6 +8,8 @@ import { useTestPlannerConnection } from "../../api/hooks/usePlannerConfig";
 import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
 import { useTestLdapConnection } from "../../api/hooks/useLdapConfig";
 import { useMe } from "../../api/hooks/useMe";
+import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
+import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
 
@@ -24,10 +26,16 @@ const LDAP_USE_SSL_KEY = "ldap.use_ssl";
 const LDAP_BIND_DN_KEY = "ldap.bind_dn";
 const LDAP_BIND_PASSWORD_KEY = "ldap.bind_password";
 const LDAP_SEARCH_BASE_KEY = "ldap.search_base";
-const INTEGRATIONS_MOCK_KEY = "integrations.use_dev_adapters";
 const PLANNER_ENABLED_KEY = "planner.enabled";
 const PLANNER_PLAN_ID_KEY = "planner.plan_id";
 const PLANNER_DEFAULT_BUCKET_KEY = "planner.default_bucket_id";
+const ORGANOGRAM_MODULE_ID = "organogram";
+const LOOP_MODULE_ID = "loop";
+
+const DOMAIN_MODULE_TABS = [
+  { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
+  { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
+] as const;
 
 function apiErrorDetail(error: unknown): string | undefined {
   if (!(error instanceof ApiError)) return undefined;
@@ -186,20 +194,30 @@ export function BackendConfigPage() {
     if (categories.length > 0) {
       setDraft(buildDraft(categories));
       const categoryFromUrl = searchParams.get("category");
-      if (categoryFromUrl && categories.some((category) => category.id === categoryFromUrl)) {
+      if (
+        categoryFromUrl &&
+        (categories.some((category) => category.id === categoryFromUrl) ||
+          DOMAIN_MODULE_TABS.some((tab) => tab.id === categoryFromUrl))
+      ) {
         setActiveCategory(categoryFromUrl);
-      } else if (!categories.some((c) => c.id === activeCategory)) {
+      } else if (
+        !categories.some((c) => c.id === activeCategory) &&
+        !DOMAIN_MODULE_TABS.some((tab) => tab.id === activeCategory)
+      ) {
         setActiveCategory(categories[0]?.id ?? "database");
       }
     }
   }, [categories, activeCategory, searchParams]);
 
-  const activeSection = useMemo(
-    () => categories.find((category) => category.id === activeCategory) ?? categories[0],
-    [categories, activeCategory],
-  );
+  const isDomainModule = DOMAIN_MODULE_TABS.some((tab) => tab.id === activeCategory);
 
-  const usesDevAdapters = (draft[INTEGRATIONS_MOCK_KEY] ?? "true") === "true";
+  const activeSection = useMemo(
+    () =>
+      isDomainModule
+        ? undefined
+        : categories.find((category) => category.id === activeCategory) ?? categories[0],
+    [categories, activeCategory, isDomainModule],
+  );
 
   async function handleTestGraphConnection() {
     setTestFeedback(null);
@@ -370,18 +388,68 @@ export function BackendConfigPage() {
                   {category.label}
                 </button>
               ))}
+              {DOMAIN_MODULE_TABS.map((moduleTab) => (
+                <button
+                  key={moduleTab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeCategory === moduleTab.id}
+                  className={`filter-chip${activeCategory === moduleTab.id ? " is-active" : ""}`}
+                  onClick={() => setActiveCategory(moduleTab.id)}
+                >
+                  {moduleTab.label}
+                </button>
+              ))}
             </div>
-            <button
-              type="button"
-              className="backend-config-page__save"
-              onClick={() => void handleSave()}
-              disabled={updateSettings.isPending || !activeSection}
-            >
-              <i className="fa-solid fa-floppy-disk" aria-hidden="true" />
-              {updateSettings.isPending ? "Salvando..." : "Salvar seção"}
-            </button>
+            {!isDomainModule ? (
+              <button
+                type="button"
+                className="backend-config-page__save"
+                onClick={() => void handleSave()}
+                disabled={updateSettings.isPending || !activeSection}
+              >
+                <i className="fa-solid fa-floppy-disk" aria-hidden="true" />
+                {updateSettings.isPending ? "Salvando..." : "Salvar seção"}
+              </button>
+            ) : null}
           </div>
         ) : null}
+
+        <div className="backend-config-page__modules" aria-label="Configurações por módulo">
+          <p className="backend-config-page__modules-title">Configurações por módulo</p>
+          <Link
+            to="/admin/governanca/organograma"
+            className={`backend-config-page__module-card${activeCategory === ORGANOGRAM_MODULE_ID ? " is-active" : ""}`}
+            onClick={() => setActiveCategory(ORGANOGRAM_MODULE_ID)}
+          >
+            <span className="backend-config-page__module-card-icon" aria-hidden="true">
+              <i className="fa-solid fa-sitemap" />
+            </span>
+            <span className="backend-config-page__module-card-title">Governança do organograma</span>
+            <span className="backend-config-page__module-card-text">
+              Posições, departamentos, importação do Graph e permissões de edição — persistidos no domínio do
+              organograma (fora de app_settings).
+            </span>
+          </Link>
+          <Link to="/admin/email/config" className="backend-config-page__module-card">
+            <span className="backend-config-page__module-card-icon" aria-hidden="true">
+              <i className="fa-solid fa-envelope" />
+            </span>
+            <span className="backend-config-page__module-card-title">E-mail — SMTP</span>
+            <span className="backend-config-page__module-card-text">
+              Host, credenciais e parâmetros de retry da fila transacional.
+            </span>
+          </Link>
+          <Link to="/admin/totvs-rm" className="backend-config-page__module-card">
+            <span className="backend-config-page__module-card-icon" aria-hidden="true">
+              <i className="fa-solid fa-database" />
+            </span>
+            <span className="backend-config-page__module-card-title">TOTVS RM — Ponto</span>
+            <span className="backend-config-page__module-card-text">
+              Conexão SQL Server read-only para espelho de ponto e holerite.
+            </span>
+          </Link>
+        </div>
       </section>
 
       {feedback ? (
@@ -402,6 +470,71 @@ export function BackendConfigPage() {
         </div>
       ) : null}
 
+      {activeCategory === ORGANOGRAM_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="organogram-module-title">
+          <div className="backend-config-page__section-head">
+            <h2 id="organogram-module-title" className="backend-config-page__section-title">
+              Organograma — governança manual
+            </h2>
+            <p className="backend-config-page__section-desc">
+              O organograma exibido no portal pode divergir do Microsoft Graph/AD. As regras de edição, importação e
+              posições são configuradas no painel dedicado abaixo — não nesta tabela <code>app_settings</code>.
+            </p>
+          </div>
+
+          <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+            Após importar do Graph, alterações manuais são preservadas nas reimportações. Ative a governança e defina
+            quem pode editar antes de liberar o modo edição no organograma.
+          </div>
+
+          <div className="backend-config-page__module-actions">
+            <Link
+              className="backend-config-page__module-link backend-config-page__module-link--primary"
+              to="/admin/governanca/organograma"
+            >
+              <i className="fa-solid fa-table-list" aria-hidden="true" />
+              Abrir gestão
+            </Link>
+            <Link
+              className="backend-config-page__module-link"
+              to="/admin/governanca/organograma?tab=configuracoes"
+            >
+              <i className="fa-solid fa-sliders" aria-hidden="true" />
+              Permissões e comportamento
+            </Link>
+            <Link className="backend-config-page__module-link" to="/pessoas/organograma?view=full">
+              <i className="fa-solid fa-diagram-project" aria-hidden="true" />
+              Ver organograma
+            </Link>
+          </div>
+
+          <OrganogramDepartmentsConfigSection />
+        </section>
+      ) : null}
+
+      {activeCategory === LOOP_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="loop-module-title">
+          <div className="backend-config-page__section-head">
+            <h2 id="loop-module-title" className="backend-config-page__section-title">
+              Loop de Projetos — acesso e permissões
+            </h2>
+            <p className="backend-config-page__section-desc">
+              Controle quem visualiza o módulo Loop (∞) no menu lateral esquerdo. Em modo mock, as configurações
+              são salvas localmente no navegador.
+            </p>
+          </div>
+
+          <div className="backend-config-page__module-actions">
+            <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/loop">
+              <i className="fa-solid fa-infinity" aria-hidden="true" />
+              Abrir Loop de Projetos
+            </Link>
+          </div>
+
+          <LoopProjetosSettingsSection />
+        </section>
+      ) : null}
+
       {activeSection ? (
         <section className="backend-config-page__section" aria-labelledby="config-section-title">
           <div className="backend-config-page__section-head">
@@ -412,15 +545,6 @@ export function BackendConfigPage() {
               <p className="backend-config-page__section-desc">{activeSection.description}</p>
             ) : null}
           </div>
-
-          {activeCategory === "integrations" ? (
-            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
-              Esta seção controla se a API chama sistemas reais. Com «Modo mock» em Sim, o worker{" "}
-              <strong>graph-directory-sync</strong> sincroniza usuários fictícios do Graph dev
-              (incluindo o perfil de Leonardo em Sistemas).
-              Defina Não (false), salve e <strong>reinicie a API</strong> antes de rodar o worker novamente.
-            </div>
-          ) : null}
 
           {activeCategory === "glpi" ? (
             <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
@@ -436,7 +560,7 @@ export function BackendConfigPage() {
                 </li>
               </ul>
               Não inverta os dois campos (o rótulo «API» da infra vai no App token, «serviço» no User token). Salve e
-              teste a conexão antes de desativar o modo mock em Integrações.
+              teste a conexão.
             </div>
           ) : null}
 
@@ -454,34 +578,6 @@ export function BackendConfigPage() {
               Para abrir chamados pelo portal, cada colaborador precisa existir como usuário no GLPI com o{" "}
               <strong>mesmo e-mail corporativo</strong> cadastrado no LioConecta. Sem esse cadastro, a API retorna
               erro 422 ao criar ticket.
-            </div>
-          ) : null}
-
-          {activeCategory === "glpi" && usesDevAdapters ? (
-            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
-              Modo mock ativo — credenciais GLPI abaixo são ignoradas até desativar o mock em{" "}
-              <button
-                type="button"
-                className="backend-config-page__inline-link"
-                onClick={() => setActiveCategory("integrations")}
-              >
-                Integrações
-              </button>
-              , reiniciar a API e testar novamente.
-            </div>
-          ) : null}
-
-          {activeCategory === "graph" && usesDevAdapters ? (
-            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
-              Modo mock ativo — credenciais Graph abaixo são ignoradas pelo worker até desativar o mock em{" "}
-              <button
-                type="button"
-                className="backend-config-page__inline-link"
-                onClick={() => setActiveCategory("integrations")}
-              >
-                Integrações
-              </button>
-              , reiniciar a API e executar o sync novamente.
             </div>
           ) : null}
 
@@ -522,20 +618,6 @@ export function BackendConfigPage() {
               Em produção use <code>auth.provider=ldap</code>. A chave <code>auth.jwt_signing_key</code> e as chaves{" "}
               <code>ldap.*</code> exigem reinício da API após alteração. E-mails em{" "}
               <code>auth.super_admin_emails</code> recebem role Admin no primeiro login LDAP.
-            </div>
-          ) : null}
-
-          {activeCategory === "planner" && usesDevAdapters ? (
-            <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
-              Modo mock ativo — Minhas Atividades usa tarefas fictícias. Desative o mock em{" "}
-              <button
-                type="button"
-                className="backend-config-page__inline-link"
-                onClick={() => setActiveCategory("integrations")}
-              >
-                Integrações
-              </button>
-              , reinicie a API e habilite o Planner abaixo.
             </div>
           ) : null}
 

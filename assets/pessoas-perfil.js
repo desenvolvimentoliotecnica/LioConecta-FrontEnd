@@ -39,7 +39,8 @@
     atual: "Cargo atual",
     promotion: "Promoção",
     admission: "Admissão",
-    transfer: "Transferência"
+    transfer: "Transferência",
+    salary: "Ajuste salarial"
   };
 
   var monthNames = [
@@ -353,9 +354,39 @@
     }).join("");
   }
 
+  function parseHistorySortKey(dateLabel) {
+    if (!dateLabel) return 0;
+    var text = String(dateLabel).toLowerCase();
+    var yearMatch = text.match(/(19|20)\d{2}/);
+    var year = yearMatch ? parseInt(yearMatch[0], 10) : 0;
+    var month = 0;
+    var monthMap = {
+      jan: 1, fev: 2, mar: 3, abr: 4, mai: 5, jun: 6,
+      jul: 7, ago: 8, set: 9, out: 10, nov: 11, dez: 12
+    };
+    Object.keys(monthMap).some(function (abbr) {
+      if (text.indexOf(abr) !== -1) {
+        month = monthMap[abbr];
+        return true;
+      }
+      return false;
+    });
+    return year * 100 + month;
+  }
+
+  function sortHistoryDescending(history) {
+    return history.slice().sort(function (a, b) {
+      var left = parseHistorySortKey(a && a.date);
+      var right = parseHistorySortKey(b && b.date);
+      if (right !== left) return right - left;
+      var typeWeight = { atual: 5, promotion: 4, transfer: 3, salary: 2, admission: 1 };
+      return (typeWeight[b.type] || 0) - (typeWeight[a.type] || 0);
+    });
+  }
+
   function renderHistory(history) {
     if (!history || !history.length) return '<p class="profile-empty">Nenhum histórico registrado.</p>';
-    return history.map(function (item) {
+    return sortHistoryDescending(history).map(function (item) {
       return (
         '<article class="profile-timeline__item">' +
         '<div class="profile-timeline__date">' + item.date + " · " + (historyTypeLabels[item.type] || item.type) + "</div>" +
@@ -716,7 +747,7 @@
   function mergeProfileHistory(personalData) {
     var baseHistory = parseJsonField(personalData.history, []) || [];
     var userHistory = parseJsonField(personalData.careerHistory, []) || [];
-    return baseHistory.concat(userHistory);
+    return sortHistoryDescending(baseHistory.concat(userHistory));
   }
 
   function renderProjectsEditor(projects) {

@@ -11,7 +11,7 @@ const MOCK_ME: MeDto = {
   name: "Leonardo Sabino Mendes",
   email: "leonardo.mendes@liotecnica.com.br",
   title: "Desenvolvedor Sr.",
-  photoUrl: "/avatar-carlos-mendes.png",
+  photoUrl: null,
   departmentName: "Sistemas",
   roles: ["Employee", "Manager", "Admin"],
 };

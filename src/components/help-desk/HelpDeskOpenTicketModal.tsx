@@ -281,7 +281,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
             </p>
           ) : currentCategoryLevel.length === 0 ? (
             <p className="hd-modal__empty">
-              Nenhum serviço disponível nesta área. A infra precisa configurar os IDs de categoria em{" "}
+              Nenhum serviço disponível nesta área. Verifique a integração GLPI ou os IDs em{" "}
               <code>helpdesk.glpi_areas</code>.
             </p>
           ) : (

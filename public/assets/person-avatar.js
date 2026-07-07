@@ -1,5 +1,7 @@
 (function (global) {
   var FAKE_PATTERNS = [
+    /^\/avatar-[^/]+\.png$/i,
+    /^avatar-[^/]+\.png$/i,
     /^\/avatar-ti\.png$/i,
     /^avatar-ti\.png$/i,
     /\/avatar-placeholder/i,

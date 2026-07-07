@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { canAccessAdminArea, canAccessLoopModule } from "../../api/auth";
+import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useMe } from "../../api/hooks/useMe";
 
 type SidebarItemConfig = {
@@ -10,6 +11,7 @@ type SidebarItemConfig = {
   activeOn?: readonly string[];
   spacerBefore?: boolean;
   adminOnly?: boolean;
+  loopAccessOnly?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -19,6 +21,13 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
   { label: "Grupos", icon: "fa-people-group", href: "/grupos", activePrefix: "/grupos" },
   { label: "Calendário", icon: "fa-calendar-days", href: "/calendario" },
   { label: "Documentos", icon: "fa-folder-open", href: "/documentos", activePrefix: "/documentos" },
+  {
+    label: "Loop",
+    icon: "fa-infinity",
+    href: "/loop",
+    activePrefix: "/loop",
+    loopAccessOnly: true,
+  },
 ];
 
 const RIGHT_ITEMS: SidebarItemConfig[] = [
@@ -51,6 +60,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     icon: "fa-envelope",
     href: "/admin/email",
     activePrefix: "/admin/email",
+    adminOnly: true,
+  },
+  {
+    label: "Organograma",
+    icon: "fa-sitemap",
+    href: "/admin/governanca/organograma",
+    activePrefix: "/admin/governanca/organograma",
     adminOnly: true,
   },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
@@ -95,12 +111,15 @@ function SidebarItem({ label, icon, href }: SidebarItemConfig) {
 
 export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarProps) {
   const { data: me } = useMe();
+  const { data: loopSettings } = useLoopSettings();
   const canAccessAdmin = canAccessAdminArea(me);
+  const canAccessLoop = canAccessLoopModule(me, loopSettings);
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
-  const items =
-    side === "right"
-      ? baseItems.filter((item) => !item.adminOnly || canAccessAdmin)
-      : baseItems;
+  const items = baseItems.filter((item) => {
+    if (item.loopAccessOnly) return canAccessLoop;
+    if (item.adminOnly) return canAccessAdmin;
+    return true;
+  });
   const id = side === "left" ? "sidebar-left" : "sidebar-right";
 
   return (
@@ -122,38 +141,40 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         </span>
         <span className="sidebar__toggle-label">Recolher</span>
       </button>
-      {items.map((item, idx) => {
-        const isHomeActive =
-          side === "left" && idx === 0 && (activePath === "/" || activePath === "");
-        const isRouteActive =
-          item.href !== "#" &&
-          (activePath === item.href ||
-            (item.activePrefix &&
-              (activePath === item.activePrefix || activePath.startsWith(`${item.activePrefix}/`))));
-        const isActive = isHomeActive || isRouteActive;
-        return (
-          <span key={item.label}>
-            {item.spacerBefore ? <div className="sidebar__spacer" /> : null}
-            {isActive ? (
-              <Link className="sidebar__item is-active" to={item.href} title={item.label}>
-                <SidebarIcon icon={item.icon} />
-                <span className="sidebar__text">{item.label}</span>
-              </Link>
-            ) : (
-              <SidebarItem {...item} />
-            )}
-          </span>
-        );
-      })}
-      {side === "left" ? (
-        <>
-          <div className="sidebar__spacer" />
-          <a className="sidebar__item" href="#" title="Configurações">
-            <SidebarIcon icon="fa-gear" />
-            <span className="sidebar__text">Configurações</span>
-          </a>
-        </>
-      ) : null}
+      <nav className="sidebar__nav" aria-label={side === "left" ? "Navegação principal" : "Navegação secundária"}>
+        {items.map((item, idx) => {
+          const isHomeActive =
+            side === "left" && idx === 0 && (activePath === "/" || activePath === "");
+          const isRouteActive =
+            item.href !== "#" &&
+            (activePath === item.href ||
+              (item.activePrefix &&
+                (activePath === item.activePrefix || activePath.startsWith(`${item.activePrefix}/`))));
+          const isActive = isHomeActive || isRouteActive;
+          return (
+            <span key={item.label}>
+              {item.spacerBefore ? <div className="sidebar__spacer" /> : null}
+              {isActive ? (
+                <Link className="sidebar__item is-active" to={item.href} title={item.label}>
+                  <SidebarIcon icon={item.icon} />
+                  <span className="sidebar__text">{item.label}</span>
+                </Link>
+              ) : (
+                <SidebarItem {...item} />
+              )}
+            </span>
+          );
+        })}
+        {side === "left" ? (
+          <>
+            <div className="sidebar__spacer" />
+            <a className="sidebar__item" href="#" title="Configurações">
+              <SidebarIcon icon="fa-gear" />
+              <span className="sidebar__text">Configurações</span>
+            </a>
+          </>
+        ) : null}
+      </nav>
     </aside>
   );
 }
