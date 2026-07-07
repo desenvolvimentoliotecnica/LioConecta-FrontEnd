@@ -418,6 +418,8 @@ export interface PayslipSummaryDto {
   userMessage?: string | null;
   dataSource?: string | null;
   syncedAt?: string | null;
+  hiredYear?: number | null;
+  informeYear?: number | null;
 }
 
 export interface PayslipServiceDto {

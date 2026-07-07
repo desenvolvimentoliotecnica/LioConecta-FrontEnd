@@ -51,7 +51,12 @@ export function PayslipInformeModal({
       footer={footer}>
       {isLoading ? <p className="pay-status">Gerando informe…</p> : null}
       {isError ? <p className="pay-status">Informe não disponível para o ano selecionado.</p> : null}
-      {data ? (
+      {!isLoading && !isError && data && data.lines.length === 0 ? (
+        <p className="pay-status">
+          Não há rendimentos registrados neste ano. O informe considera apenas meses após sua admissão.
+        </p>
+      ) : null}
+      {data && data.lines.length > 0 ? (
         <>
           <div className="pay-summary-row">
             <div className="pay-summary-box">

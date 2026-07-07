@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
 import {
+  downloadCartaConsignacaoPdf,
+  downloadComprovantePdf,
   downloadPayslipPdf,
   usePayslipHistory,
-  usePayslipRequest,
   usePayslipServices,
   usePayslipSummary,
 } from "../../api/hooks/usePayslips";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { PayslipServiceDto } from "../../api/types";
 import { bookmarkIdForService, formatMoney } from "../../utils/money";
+import { pickComparativoPeriods, resolveInformeYear } from "../../utils/payslipHelpers";
 import { buildSyncMetaLabel } from "../../utils/syncMeta";
 import {
   ContrachequeServiceCard,
@@ -19,14 +21,19 @@ import { PayslipConsultaModal, type ConsultaKind } from "./PayslipConsultaModal"
 import { PayslipHelpModal } from "./PayslipHelpModal";
 import { PayslipHistoryModal } from "./PayslipHistoryModal";
 import { PayslipInformeModal } from "./PayslipInformeModal";
-import { PayslipRequestResultModal } from "./PayslipRequestResultModal";
 import { PayslipViewerModal } from "./PayslipViewerModal";
 import { RhPageHead } from "../servicos/RhPageHead";
 import { sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/contracheque-page.css";
 
 const PAYSLIP_HISTORY_LIMIT = 12;
-const INFORME_IR_YEAR = new Date().getFullYear() - 1;
+
+type ViewerState = {
+  year: number;
+  month: number;
+  paymentType?: string;
+  title: string;
+};
 
 const FILTERS = [
   { id: "all", label: "Todos" },
@@ -42,22 +49,23 @@ export function ContrachequePage() {
   const [query, setQuery] = useState("");
   const [showValues, setShowValues] = useState(false);
   const toggleShowValues = () => setShowValues((value) => !value);
-  const [viewer, setViewer] = useState<{ year: number; month: number; title: string } | null>(null);
+  const [viewer, setViewer] = useState<ViewerState | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [comparativoOpen, setComparativoOpen] = useState(false);
   const [consultaKind, setConsultaKind] = useState<ConsultaKind | null>(null);
   const [informeOpen, setInformeOpen] = useState(false);
   const [helpService, setHelpService] = useState<PayslipServiceDto | null>(null);
-  const [requestMessage, setRequestMessage] = useState<string | null>(null);
 
   const summaryQuery = usePayslipSummary();
   const servicesQuery = usePayslipServices();
   const historyQuery = usePayslipHistory(PAYSLIP_HISTORY_LIMIT);
-  const requestMutation = usePayslipRequest();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
 
   const filtered = useMemo(
-    () => filterServices(servicesQuery.data ?? [], category, query),
+    () =>
+      filterServices(servicesQuery.data ?? [], category, query).filter(
+        (service) => service.id !== "segunda-via",
+      ),
     [servicesQuery.data, category, query],
   );
 
@@ -68,7 +76,12 @@ export function ContrachequePage() {
   );
 
   const latest = historyQuery.data?.[0];
-  const previous = historyQuery.data?.[1];
+  const comparativoPeriods = useMemo(
+    () => pickComparativoPeriods(historyQuery.data ?? []),
+    [historyQuery.data],
+  );
+  const informeYear =
+    summaryData?.informeYear ?? resolveInformeYear(summaryData?.hiredYear ?? undefined);
 
   const openLatestViewer = (title: string) => {
     if (!latest) {
@@ -107,14 +120,10 @@ export function ContrachequePage() {
         setConsultaKind("rubricas");
         break;
       case "comprovante":
-      case "segunda-via":
+        await downloadComprovantePdf();
+        break;
       case "carta-consignacao":
-        requestMutation.mutate(
-          { serviceId: service.id, competence: summaryQuery.data?.latestCompetence },
-          {
-            onSuccess: (result) => setRequestMessage(result.message),
-          },
-        );
+        await downloadCartaConsignacaoPdf();
         break;
       default:
         break;
@@ -244,6 +253,8 @@ export function ContrachequePage() {
         title={viewer?.title ?? "Contracheque"}
         year={viewer?.year ?? null}
         month={viewer?.month ?? null}
+        paymentType={viewer?.paymentType}
+        stacked={historyOpen}
         showValues={showValues}
         onToggleShowValues={toggleShowValues}
         onClose={() => setViewer(null)}
@@ -253,19 +264,26 @@ export function ContrachequePage() {
         open={historyOpen}
         showValues={showValues}
         onToggleShowValues={toggleShowValues}
-        onClose={() => setHistoryOpen(false)}
-        onSelect={(year, month) => {
+        onClose={() => {
           setHistoryOpen(false);
-          setViewer({ year, month, title: "Visualizar contracheque" });
+          setViewer(null);
+        }}
+        onSelect={(year, month, paymentType) => {
+          setViewer({
+            year,
+            month,
+            paymentType,
+            title: "Visualizar contracheque",
+          });
         }}
       />
 
       <PayslipComparativoModal
         open={comparativoOpen}
-        fromYear={previous?.year ?? null}
-        fromMonth={previous?.month ?? null}
-        toYear={latest?.year ?? null}
-        toMonth={latest?.month ?? null}
+        fromYear={comparativoPeriods.from?.year ?? null}
+        fromMonth={comparativoPeriods.from?.month ?? null}
+        toYear={comparativoPeriods.to?.year ?? null}
+        toMonth={comparativoPeriods.to?.month ?? null}
         showValues={showValues}
         onToggleShowValues={toggleShowValues}
         onClose={() => setComparativoOpen(false)}
@@ -281,7 +299,7 @@ export function ContrachequePage() {
 
       <PayslipInformeModal
         open={informeOpen}
-        year={INFORME_IR_YEAR}
+        year={informeYear}
         showValues={showValues}
         onToggleShowValues={toggleShowValues}
         onClose={() => setInformeOpen(false)}
@@ -291,12 +309,6 @@ export function ContrachequePage() {
         open={helpService !== null}
         service={helpService}
         onClose={() => setHelpService(null)}
-      />
-
-      <PayslipRequestResultModal
-        open={requestMessage !== null}
-        message={requestMessage ?? ""}
-        onClose={() => setRequestMessage(null)}
       />
     </main>
   );
