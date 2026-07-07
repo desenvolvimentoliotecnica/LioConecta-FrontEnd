@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maturidade — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools"><button type="button" id="meeting-mode-btn">Modo reunião</button></div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Matriz de Maturidade</h2>
+        <p>Código atual vs meta — cruzamento com diretriz do gestor (<code>page-maturity.ts</code>).</p>
+      </header>
+
+      <h3 style="margin-bottom:1rem;color:#1e3a5f">Heatmap por pilar</h3>
+      <div class="heatmap" id="maturity-heatmap"></div>
+
+      <div class="card">
+        <h3>Legenda de maturidade</h3>
+        <p style="font-size:.88rem">
+          <span class="badge badge--integrated">Integrado</span> API real, React prod-ready ·
+          <span class="badge badge--partial">Parcial</span> Funciona com gaps ·
+          <span class="badge badge--prototype">Protótipo</span> Legacy/mock ·
+          <span class="badge badge--new">Novo</span> A construir ·
+          <span class="badge badge--blocked">Bloqueado</span> Dependência externa
+        </p>
+      </div>
+
+      <h3 style="margin:1.25rem 0 .75rem;color:#1e3a5f">Mapa rota → código → gap</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rota</th>
+              <th>Label</th>
+              <th>Maturidade</th>
+              <th class="tech-only">Arquivo</th>
+              <th class="tech-only">API</th>
+              <th>Item gestor</th>
+              <th>Gap</th>
+            </tr>
+          </thead>
+          <tbody id="maturity-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card tech-only">
+        <h3>Referência — PAGE_MATURITY (amostra gestor)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rota</th><th>Maturidade código</th></tr></thead>
+            <tbody>
+              <tr><td><code>/servicos/contracheque</code></td><td><span class="badge badge--integrated">integrated</span></td></tr>
+              <tr><td><code>/servicos/ferias-ausencias</code></td><td><span class="badge badge--integrated">integrated</span></td></tr>
+              <tr><td><code>/servicos/ponto-eletronico</code></td><td><span class="badge badge--integrated">integrated</span></td></tr>
+              <tr><td><code>/servicos/solicitacoes-rh</code></td><td><span class="badge badge--prototype">prototype</span></td></tr>
+              <tr><td><code>/comunicados/oficiais</code></td><td><span class="badge badge--integrated">integrated</span></td></tr>
+              <tr><td><code>/</code> (feed)</td><td><span class="badge badge--partial">partial</span></td></tr>
+              <tr><td><code>/pessoas/aniversariantes</code></td><td><span class="badge badge--partial">partial</span></td></tr>
+              <tr><td><code>/servicos/acesso-sistemas</code></td><td><span class="badge badge--prototype">prototype</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.82rem;margin-top:.75rem;color:var(--muted)">Fonte: <code>src/config/page-maturity.ts</code></p>
+      </div>
+
+      <footer class="page-footer">LioConecta · Matriz maturidade · Atualizar após cada release</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

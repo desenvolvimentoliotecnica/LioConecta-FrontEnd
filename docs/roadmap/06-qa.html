@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools"><button type="button" id="meeting-mode-btn">Modo reunião</button></div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Plano de QA</h2>
+        <p>Matriz de testes, tipos por fase e Definition of Done.</p>
+      </header>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__label">Casos QA</div><div class="stat__value" data-stat="qa">—</div></div>
+        <div class="stat"><div class="stat__label">Histórias</div><div class="stat__value" data-stat="stories">—</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Tipos de teste por fase</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tipo</th><th>Escopo</th><th>Fase</th><th>Responsável</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Regressão</strong></td><td>Holerite, ponto, férias, comunicados (integrados)</td><td>F1</td><td>QA + Dev</td></tr>
+              <tr><td><strong>Integração RM</strong></td><td>Homolog Corpore; workers sync; write-back</td><td>F1–F2</td><td>QA + RH + BE</td></tr>
+              <tr><td><strong>E2E Playwright</strong></td><td>Fluxos críticos novos (<code>e2e/</code>)</td><td>F2–F3</td><td>QA</td></tr>
+              <tr><td><strong>UAT</strong></td><td>RH valida movimentações; Comunicação valida admin</td><td>F2–F3</td><td>Negócio</td></tr>
+              <tr><td><strong>Segurança</strong></td><td>RBAC por papel; tokens SSO; audit trail</td><td>F4</td><td>QA + TI</td></tr>
+              <tr><td><strong>Performance</strong></td><td>Sync RM; carga feed/comunicados</td><td>F2</td><td>BE + QA</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 style="margin:1.25rem 0 .75rem;color:#1e3a5f">Matriz História → Casos QA</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID QA</th><th>História</th><th>Tipo</th><th>Caso de teste</th><th>Fase</th></tr></thead>
+          <tbody id="qa-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Casos QA adicionais (expandir na execução)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Área</th><th>Cenário</th><th>Critério aceite</th></tr></thead>
+            <tbody>
+              <tr><td>RM</td><td>Holerite mês fechado indisponível</td><td>Mensagem clara; não exibe PDF corrompido</td></tr>
+              <tr><td>RM</td><td>Férias saldo zero</td><td>Botão solicitar desabilitado</td></tr>
+              <tr><td>RM</td><td>Ajuste ponto gestor rejeita</td><td>Colaborador notificado; status rejeitado</td></tr>
+              <tr><td>RM</td><td>Promoção sem permissão gestor</td><td>403 / UI bloqueada</td></tr>
+              <tr><td>Intranet</td><td>Comunicado rascunho</td><td>Não visível para colaborador</td></tr>
+              <tr><td>Intranet</td><td>Mood duplicado mesmo dia</td><td>Atualiza registro existente</td></tr>
+              <tr><td>Intranet</td><td>Feedback anônimo</td><td>Identidade não exposta para gestor</td></tr>
+              <tr><td>Auth</td><td>App ERP sem role</td><td>Tile oculto ou mensagem acesso negado</td></tr>
+              <tr><td>Auth</td><td>Token MSAL expirado</td><td>Re-link flow Calendar/Chat</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Definition of Done (global)</h3>
+        <ul style="padding-left:1.25rem;font-size:.9rem">
+          <li>Código revisado e merge na branch principal</li>
+          <li>Testes unitários/integração BE passando</li>
+          <li>Caso QA da história executado e documentado</li>
+          <li>Sem regressão nos módulos integrados adjacentes</li>
+          <li>RBAC validado para papéis Colaborador, Gestor, RH, Admin</li>
+          <li>Audit trail para operações sensíveis (movimentações, SSO)</li>
+          <li>Documentação API atualizada (se endpoint novo)</li>
+          <li>Maturidade atualizada em <code>page-maturity.ts</code> (se rota nova/alterada)</li>
+          <li>Mapa do site revisado se nova rota (<code>sitemap.ts</code>)</li>
+          <li>Demo script R1–R4 atualizado se entregável de release</li>
+        </ul>
+      </div>
+
+      <div class="card tech-only">
+        <h3>Ferramentas</h3>
+        <ul style="padding-left:1.25rem;font-size:.9rem">
+          <li><strong>Vitest</strong> — testes unitários FE</li>
+          <li><strong>Playwright</strong> — E2E (<code>npm run test:e2e</code>)</li>
+          <li><strong>RM Homolog</strong> — Corpore SQL + workers TOTVS</li>
+          <li><strong>Observabilidade</strong> — trilha auditoria admin</li>
+        </ul>
+      </div>
+
+      <footer class="page-footer">LioConecta · Plano QA · DoD ágil</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

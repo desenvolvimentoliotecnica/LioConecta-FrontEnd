@@ -13,6 +13,8 @@ export type SectionPageHeadProps = {
   description: string;
   /** Leaf page label in breadcrumb. Omit for hub root pages. */
   current?: string;
+  /** Optional sync/status line below the description (e.g. RM syncedAt). */
+  syncMeta?: ReactNode;
   toolbar?: ReactNode;
   actions?: ReactNode;
 };
@@ -22,6 +24,7 @@ export function SectionPageHead({
   title,
   description,
   current,
+  syncMeta,
   toolbar,
   actions,
 }: SectionPageHeadProps) {
@@ -51,6 +54,7 @@ export function SectionPageHead({
           <div>
             <h1 className="page-header__title">{title}</h1>
             <p className="page-header__desc">{description}</p>
+            {syncMeta ? <p className="page-header__sync-meta">{syncMeta}</p> : null}
           </div>
           {actions}
         </div>

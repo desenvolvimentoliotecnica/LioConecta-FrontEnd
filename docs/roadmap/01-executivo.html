@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executivo — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools">
+        <div class="search-wrap">
+          <input type="search" id="global-search" placeholder="Buscar…" style="width:100%;padding:.4rem .6rem;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:#fff">
+          <div id="search-results" class="search-results"></div>
+        </div>
+        <button type="button" id="meeting-mode-btn">Modo reunião</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Resumo Executivo</h2>
+        <p>Visão para gestão — origem, estado atual, fases propostas e riscos.</p>
+      </header>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__label">Épicos</div><div class="stat__value" data-stat="epics">—</div></div>
+        <div class="stat"><div class="stat__label">Histórias</div><div class="stat__value" data-stat="stories">—</div></div>
+        <div class="stat"><div class="stat__label">Itens gestor</div><div class="stat__value" data-stat="gestor-items">—</div></div>
+        <div class="stat"><div class="stat__label">Já integrados</div><div class="stat__value" data-stat="integrated">—</div></div>
+        <div class="stat"><div class="stat__label">Bloqueados</div><div class="stat__value" data-stat="blocked">—</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Origem — diretriz recebida</h3>
+        <p style="font-size:.9rem;margin-bottom:.75rem">Texto consolidado da solicitação do gestor:</p>
+        <blockquote style="border-left:4px solid var(--fe);padding-left:1rem;font-size:.9rem;color:var(--muted)">
+          <strong>Integração RM:</strong> Criar Requisição (Promoção, Desligamento, Transferência);
+          Acompanhar ciclo de vida da vaga até contratação; Solicitação de férias; Ajuste de Ponto;
+          Visualização de Holerite; Visualização de banco de Horas por colaborador.<br><br>
+          <strong>Portal Intranet:</strong> Painel de administração de comunicados; Comunicação;
+          Aniversariantes; Feed de notícias; Como me sinto; Envio de Feedback;
+          Indicadores por área (Finanças, Operações, Comercial).<br><br>
+          <strong>Autenticação:</strong> Hub com aplicações por área de negócio (apps TI);
+          Datasul, TMS, Mercanet — avaliar com fornecedor.
+        </blockquote>
+      </div>
+
+      <div class="card">
+        <h3>Estado atual vs meta (síntese)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pilar</th><th>Integrado</th><th>Parcial</th><th>Novo / Protótipo</th><th>Bloqueado</th></tr></thead>
+            <tbody>
+              <tr><td><strong>RM</strong></td><td>Holerite, Férias, Ponto (leitura)</td><td>Banco de horas</td><td>Movimentações, Ajuste ponto, Vaga</td><td>—</td></tr>
+              <tr><td><strong>Intranet</strong></td><td>Listas comunicados</td><td>Feed, Aniversariantes, Mood, Admin parcial</td><td>Feedback, Indicadores área</td><td>—</td></tr>
+              <tr><td><strong>Auth/Hub</strong></td><td>LDAP/JWT login</td><td>MSAL Calendar/Teams</td><td>Hub apps TI</td><td>Datasul, TMS, Mercanet</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.85rem;margin-top:.75rem"><a href="08-matriz-maturidade.html">Ver matriz completa código → gap</a></p>
+      </div>
+
+      <div class="card">
+        <h3>Roadmap proposto (4 fases)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fase</th><th>Nome</th><th>Duração</th><th>Justificativa</th></tr></thead>
+            <tbody>
+              <tr><td><strong>F1</strong></td><td>Consolidar o que já funciona</td><td>4–6 sprints</td><td>Holerite, férias, ponto já integrados — estabilizar + comunicados admin + mood/aniversariantes</td></tr>
+              <tr><td><strong>F2</strong></td><td>RM transacional</td><td>6–8 sprints</td><td>Greenfield: movimentações, ajuste ponto write, ciclo vaga</td></tr>
+              <tr><td><strong>F3</strong></td><td>Intranet e engajamento</td><td>4–6 sprints</td><td>Feedback, indicadores por área, feed unificado</td></tr>
+              <tr><td><strong>F4</strong></td><td>Hub + ERP</td><td>3–4 sprints + discovery</td><td>Launcher apps TI; spikes Datasul/TMS/Mercanet com fornecedor</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note" style="margin-top:1rem">
+          <strong>Por que não na ordem literal?</strong> Entregar valor nos módulos já integrados primeiro;
+          movimentações RM exigem API greenfield; ERP depende de fornecedor externo.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Progresso estimado por fase</h3>
+        <div id="phase-progress"></div>
+      </div>
+
+      <div class="card">
+        <h3>Matriz de riscos</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Risco</th><th>Impacto</th><th>Mitigação</th></tr></thead>
+            <tbody>
+              <tr><td>R1</td><td>Write-back RM (férias, movimentações, ponto)</td><td>Alto</td><td>Homologação Corpore; workers idempotentes</td></tr>
+              <tr><td>R2</td><td>Fornecedor ERP (Datasul/TMS/Mercanet)</td><td>Alto</td><td>Spikes F4; não bloquear F1–F3</td></tr>
+              <tr><td>R3</td><td>Sync aniversariantes RM + Graph</td><td>Médio</td><td>Fallback Graph; alerta se RM offline</td></tr>
+              <tr><td>R4</td><td>Legacy solicitações RH (mock)</td><td>Médio</td><td>Migrar React na F2</td></tr>
+              <tr><td>R5</td><td>Permissões gestor/RH</td><td>Alto</td><td>RBAC centralizado; testes por papel</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Fora de escopo (explicito)</h3>
+        <ul class="clean">
+          <li>eSocial e obrigações fiscais</li>
+          <li>Medicina ocupacional / SST</li>
+          <li>Parametrização folha RM</li>
+          <li>Backoffice completo de folha</li>
+          <li>Admissão digital end-to-end (além do MVP de vaga)</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:1rem"><strong>Aprofundar:</strong>
+        <a href="02-backlog.html">Backlog</a> ·
+        <a href="07-releases.html">Releases</a> ·
+        <a href="03-specs-rm.html">Specs RM</a>
+      </p>
+
+      <footer class="page-footer">LioConecta · Resumo executivo · Jul/2026</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

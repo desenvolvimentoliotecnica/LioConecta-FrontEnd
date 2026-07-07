@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specs Intranet — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools"><button type="button" id="meeting-mode-btn">Modo reunião</button></div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Especificações — Portal Intranet</h2>
+        <p>7 itens da diretriz do gestor · Comunicação e engajamento</p>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:.35rem">Cada spec inclui tasks e botão <strong>Exportar MD</strong> (Spec → Histórias → Tasks) para implementação.</p>
+      </header>
+
+      <div id="spec-page-toolbar" class="spec-page-toolbar no-print"></div>
+
+      <nav class="card no-print" style="padding:.75rem 1rem">
+        <a href="#spec-admin-comunicados">Admin comunicados</a> ·
+        <a href="#spec-comunicacao">Comunicação</a> ·
+        <a href="#spec-aniversariantes">Aniversariantes</a> ·
+        <a href="#spec-noticias">Notícias</a> ·
+        <a href="#spec-mood">Como me sinto</a> ·
+        <a href="#spec-feedback">Feedback</a> ·
+        <a href="#spec-indicadores">Indicadores</a>
+      </nav>
+
+      <article class="spec-block" id="spec-admin-comunicados">
+        <h3>1. Painel Administração de Comunicados <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-001">US-INTRA-001</a></p>
+        <h4>Objetivo</h4>
+        <p>Admin/Comunicação cria, edita, publica e arquiva comunicados oficiais, departamentais e urgentes.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li>Listas <code>integrated</code>: <code>/comunicados/oficiais</code>, departamentais, urgentes, arquivo</li>
+          <li>Editor <code>ComunicadoEditorPage.tsx</code> — protótipo; POST <code>/comunicados</code> existe</li>
+          <li>Filtros e busca na listagem — UI-only (sem handler)</li>
+        </ul>
+        <h4>Entregáveis F1</h4>
+        <ul><li>CRUD completo com preview</li><li>Métricas de leitura (visualizações, % lidos)</li><li>Workflow rascunho → publicado → arquivado</li></ul>
+        <pre>POST   /comunicados
+PATCH  /comunicados/{id}
+GET    /comunicados/{id}/metrics</pre>
+      </article>
+
+      <article class="spec-block" id="spec-comunicacao">
+        <h3>2. Comunicação <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-002">US-INTRA-002</a></p>
+        <h4>Objetivo</h4>
+        <p>Canal unificado de comunicação interna — feed, comunicados, hubs.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li>Feed híbrido: API posts + cards HTML estáticos (enquetes, notícias demo)</li>
+          <li>Hub comunicados com fallback estático</li>
+          <li>Grupos parcialmente integrados</li>
+        </ul>
+        <h4>Meta F1–F3</h4>
+        <p>Reduzir protótipos visíveis; comunicados como fonte oficial; feed para social/engajamento.</p>
+      </article>
+
+      <article class="spec-block" id="spec-aniversariantes">
+        <h3>3. Aniversariantes <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-003">US-INTRA-003</a></p>
+        <h4>Objetivo</h4>
+        <p>Listar aniversariantes próximos 60 dias; permitir parabenizar.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li><code>GET /people/birthdays?days=60</code></li>
+          <li>Legacy page + hook <code>useBirthdays</code> no calendário</li>
+          <li>Botão "Parabenizar" — <code>href="#"</code> (não wired)</li>
+        </ul>
+        <h4>Entregáveis F1</h4>
+        <ul><li>Parabenizar → post no feed ou notificação</li><li>Sync RM + Graph com fallback</li><li>Migrar legacy → React (opcional F1)</li></ul>
+      </article>
+
+      <article class="spec-block" id="spec-noticias">
+        <h3>4. Feed de Notícias <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-004">US-INTRA-004</a></p>
+        <h4>Objetivo</h4>
+        <p>Notícias internas unificadas — sem depender de cards estáticos no feed.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li>Hub <code>/noticias</code> — links hardcoded para âncoras do feed</li>
+          <li>Sem CMS/API dedicada de notícias</li>
+        </ul>
+        <h4>Opções F3</h4>
+        <ol>
+          <li>Notícias como tipo de post no feed API (<code>kind: news</code>)</li>
+          <li>Comunicados departamentais como fonte de notícias</li>
+          <li>CMS leve (admin cria notícia → aparece feed + hub)</li>
+        </ol>
+      </article>
+
+      <article class="spec-block" id="spec-mood">
+        <h3>5. Como me sinto <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-005">US-INTRA-005</a></p>
+        <h4>Objetivo</h4>
+        <p>Colaborador registra humor diário; RH visualiza tendências agregadas.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li><code>MoodCheckCard</code> no feed — <code>GET/POST /mood</code></li>
+          <li>Texto feedback randomizado local (<code>mood-feedback.ts</code>)</li>
+          <li>Desabilitado em modo mock</li>
+        </ul>
+        <h4>Entregáveis F1</h4>
+        <pre>GET /mood/analytics?period=week|month  (RH Admin)
+Dashboard: distribuição por nível, tendência, anonimizado</pre>
+      </article>
+
+      <article class="spec-block" id="spec-feedback">
+        <h3>6. Envio de Feedback <span class="badge badge--new">Novo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-006">US-INTRA-006</a></p>
+        <h4>Objetivo</h4>
+        <p>Canal formal de feedback (sugestão, elogio, reclamação) — distinto do mood check.</p>
+        <h4>Atores</h4>
+        <p>Colaborador, RH, Gestor (triagem)</p>
+        <h4>Fluxo</h4>
+        <pre>Colaborador → formulário (categoria, texto, anônimo?)
+    → Fila triagem RH/Gestor
+    → Status: recebido → em_análise → respondido → encerrado</pre>
+        <pre>POST /feedback
+GET  /feedback?status=  (RH)
+PATCH /feedback/{id}/respond</pre>
+        <h4>UI proposta</h4>
+        <p>Rota <code>/feedback</code> ou item em Serviços RH; link no hub intranet.</p>
+      </article>
+
+      <article class="spec-block" id="spec-indicadores">
+        <h3>7. Indicadores por Área (Finanças, Operações, Comercial) <span class="badge badge--prototype">Protótipo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-INTRA-007">US-INTRA-007</a></p>
+        <h4>Objetivo</h4>
+        <p>Linkar painéis/indicadores já criados por área — acessos dedicados no portal.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li><code>/analytics</code> — KPIs portal (mock parcial)</li>
+          <li><code>/loop</code>, <code>/pulse</code> — dashboards mock com times Comercial/Operações</li>
+          <li>Sem rotas <code>/areas/financeiro</code> etc.</li>
+        </ul>
+        <h4>Entregáveis F3</h4>
+        <ul>
+          <li>Hub por área: Finanças, Operações, Comercial</li>
+          <li>Tiles linkando apps/dashboards existentes (URLs externas ou internas)</li>
+          <li>RBAC — só área autorizada vê seu hub</li>
+        </ul>
+        <p>Relacionado a <a href="05-specs-auth-hub.html#spec-hub-apps">Hub apps</a> (EPIC-AUTH).</p>
+      </article>
+
+      <footer class="page-footer">LioConecta · Specs Intranet · Fase F1–F3</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

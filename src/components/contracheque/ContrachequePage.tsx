@@ -9,6 +9,7 @@ import {
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { PayslipServiceDto } from "../../api/types";
 import { bookmarkIdForService, formatMoney } from "../../utils/money";
+import { buildSyncMetaLabel } from "../../utils/syncMeta";
 import {
   ContrachequeServiceCard,
   filterServices,
@@ -23,6 +24,9 @@ import { PayslipViewerModal } from "./PayslipViewerModal";
 import { RhPageHead } from "../servicos/RhPageHead";
 import { sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/contracheque-page.css";
+
+const PAYSLIP_HISTORY_LIMIT = 12;
+const INFORME_IR_YEAR = new Date().getFullYear() - 1;
 
 const FILTERS = [
   { id: "all", label: "Todos" },
@@ -48,7 +52,7 @@ export function ContrachequePage() {
 
   const summaryQuery = usePayslipSummary();
   const servicesQuery = usePayslipServices();
-  const historyQuery = usePayslipHistory(24);
+  const historyQuery = usePayslipHistory(PAYSLIP_HISTORY_LIMIT);
   const requestMutation = usePayslipRequest();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
 
@@ -58,13 +62,10 @@ export function ContrachequePage() {
   );
 
   const summaryData = summaryQuery.data;
-  const syncedLabel = useMemo(() => {
-    if (!summaryData?.syncedAt) {
-      return null;
-    }
-
-    return `Atualizado em ${new Date(summaryData.syncedAt).toLocaleString("pt-BR")}`;
-  }, [summaryData?.syncedAt]);
+  const syncMetaLabel = useMemo(
+    () => buildSyncMetaLabel(summaryData?.syncedAt, summaryData?.dataSource),
+    [summaryData?.syncedAt, summaryData?.dataSource],
+  );
 
   const latest = historyQuery.data?.[0];
   const previous = historyQuery.data?.[1];
@@ -126,6 +127,7 @@ export function ContrachequePage() {
         title="Contracheque"
         current="Contracheque"
         description="Consulte holerites, baixe comprovantes, emita informes de rendimentos e acompanhe sua remuneração com segurança."
+        syncMeta={syncMetaLabel}
         toolbar={
           <div className="pay-toolbar">
             <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
@@ -178,13 +180,6 @@ export function ContrachequePage() {
           </p>
         </div>
       </div>
-
-      {syncedLabel ? (
-        <p className="pay-sync-meta">
-          {syncedLabel}
-          {summaryData?.dataSource ? ` · origem ${summaryData.dataSource}` : ""}
-        </p>
-      ) : null}
 
       {summaryData?.userMessage ? (
         <div className="pay-alert" role="alert">
@@ -286,7 +281,7 @@ export function ContrachequePage() {
 
       <PayslipInformeModal
         open={informeOpen}
-        year={2025}
+        year={INFORME_IR_YEAR}
         showValues={showValues}
         onToggleShowValues={toggleShowValues}
         onClose={() => setInformeOpen(false)}

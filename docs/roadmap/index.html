@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub — Backlog Ágil LioConecta</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand">
+        <h1>LioConecta Roadmap</h1>
+        <p>Backlog ágil · Jul/2026</p>
+      </div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools">
+        <div class="search-wrap">
+          <input type="search" id="global-search" placeholder="Buscar história, task…" style="width:100%;padding:.4rem .6rem;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:#fff">
+          <div id="search-results" class="search-results"></div>
+        </div>
+        <button type="button" id="meeting-mode-btn">Modo reunião</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Backlog Ágil LioConecta</h2>
+        <p>Mini-site para reuniões — visibilidade total do escopo definido pelo gestor (RM, Intranet, Auth/Hub).</p>
+      </header>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__label">Itens gestor</div><div class="stat__value" data-stat="gestor-items">—</div></div>
+        <div class="stat"><div class="stat__label">User stories</div><div class="stat__value" data-stat="stories">—</div></div>
+        <div class="stat"><div class="stat__label">Tasks</div><div class="stat__value" data-stat="tasks">—</div></div>
+        <div class="stat"><div class="stat__label">Integrados</div><div class="stat__value" data-stat="integrated">—</div></div>
+        <div class="stat"><div class="stat__label">Bloqueados</div><div class="stat__value" data-stat="blocked">—</div></div>
+      </div>
+
+      <div class="note note--info">
+        <strong>Como usar na reunião:</strong> comece por <a href="01-executivo.html">Executivo</a> com o gestor;
+        aprofunde em Specs e Backlog com a equipe. Use <em>Modo reunião</em> na barra lateral para fonte maior.
+        Rode localmente: <code>npm run docs:roadmap</code> → <code>http://localhost:4173</code>
+      </div>
+
+      <div class="card">
+        <h3>Progresso por fase</h3>
+        <div id="phase-progress"></div>
+      </div>
+
+      <h3 style="margin-bottom:1rem;color:#1e3a5f">Navegação</h3>
+      <div class="card-grid" id="hub-cards"></div>
+
+      <div class="card">
+        <h3>Checklist — diretriz do gestor (19 itens)</h3>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem">Cada item linka para spec funcional e história no backlog.</p>
+        <div id="gestor-checklist"></div>
+      </div>
+
+      <footer class="page-footer">LioConecta · Roadmap ágil · Gerado em 07/07/2026 · Escopo full stack (FE + BE + RM + QA)</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

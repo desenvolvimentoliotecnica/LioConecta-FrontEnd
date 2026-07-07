@@ -26,7 +26,7 @@ export function PayslipHistoryModal({
   onClose,
   onSelect,
 }: Props) {
-  const { data, isLoading, isError } = usePayslipHistory(24);
+  const { data, isLoading, isError } = usePayslipHistory(12);
 
   const handleDownload = async (
     event: MouseEvent,

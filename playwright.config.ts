@@ -17,7 +17,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     env: {
       VITE_USE_MOCK: "false",
-      VITE_AUTH_MODE: "dev",
+      VITE_AUTH_MODE: "portal",
       VITE_OBSERVABILITY_ENABLED: "true",
       VITE_API_BASE_URL: "/api/v1",
     },

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Releases — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools"><button type="button" id="meeting-mode-btn">Modo reunião</button></div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Release Plan — R1 a R4</h2>
+        <p>Marcos demonstráveis e scripts de demo para reunião.</p>
+      </header>
+
+      <div class="card">
+        <h3>Timeline</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Release</th><th>Fase</th><th>Período estimado</th><th>Entregável</th></tr></thead>
+            <tbody>
+              <tr><td><strong>R1</strong></td><td>F1</td><td>Jul–Set 2026</td><td>Self-service RH estável + comunicados admin + mood/aniversariantes</td></tr>
+              <tr><td><strong>R2</strong></td><td>F2</td><td>Set 2026–Jan 2027</td><td>Movimentações RM + ajuste ponto + ciclo vaga MVP</td></tr>
+              <tr><td><strong>R3</strong></td><td>F3</td><td>Jan–Mar 2027</td><td>Feedback + indicadores área + feed unificado</td></tr>
+              <tr><td><strong>R4</strong></td><td>F4</td><td>Fev–Mai 2027</td><td>Hub apps TI + discovery Datasul/TMS/Mercanet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dependências entre releases</h3>
+        <pre style="background:#f8fafc;color:#334155;border:1px solid var(--border);padding:1rem;border-radius:8px;font-size:.85rem">
+R1 (base estável)
+ └── R2 depende de ponto/férias estáveis para ajuste ponto e write-back RM
+      └── R3 pode paralelizar parcialmente após R1 (comunicados/feed)
+           └── R4 depende de padrão hub (pode reutilizar indicadores R3)
+        </pre>
+      </div>
+
+      <h3 style="margin:1.25rem 0 .75rem;color:#1e3a5f">Scripts de demo (reunião)</h3>
+      <div id="releases-list"></div>
+
+      <div class="card">
+        <h3>Histórias por release</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Release</th><th>Histórias incluídas</th></tr></thead>
+            <tbody>
+              <tr><td><strong>R1</strong></td><td>US-RM-001..003, 005, 006 · US-INTRA-001..003, 005</td></tr>
+              <tr><td><strong>R2</strong></td><td>US-RM-004, 007, 008, 010..014</td></tr>
+              <tr><td><strong>R3</strong></td><td>US-INTRA-004, 006, 007</td></tr>
+              <tr><td><strong>R4</strong></td><td>US-AUTH-001..005 (003–005 = spikes/doc)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>Dica reunião:</strong> Use <em>Modo reunião</em> na sidebar. Comece pelo demo script de R1
+        para mostrar o que já funciona; depois R2 para escopo novo do gestor.
+      </div>
+
+      <footer class="page-footer">LioConecta · Releases · Sprint 2 semanas</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>
