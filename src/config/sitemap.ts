@@ -285,6 +285,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Define quem acessa o módulo Loop (∞) no menu lateral esquerdo.",
         ),
         entry(
+          "Chat Teams — configuração",
+          "/admin/configuracoes-backend?category=chat",
+          "Integração do chat interno com Microsoft Teams — credenciais, escopos e teste de conexão.",
+        ),
+        entry(
           "Trilha de auditoria",
           "/admin/trilha-auditoria",
           "Consulta paginada de eventos de mutações HTTP e alterações de entidades.",

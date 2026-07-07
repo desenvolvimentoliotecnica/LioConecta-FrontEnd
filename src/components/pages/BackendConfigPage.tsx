@@ -7,6 +7,7 @@ import { useTestGraphConnection } from "../../api/hooks/useGraphConfig";
 import { useTestPlannerConnection } from "../../api/hooks/usePlannerConfig";
 import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
 import { useTestLdapConnection } from "../../api/hooks/useLdapConfig";
+import { useTestChatConnection } from "../../api/hooks/useChat";
 import { useMe } from "../../api/hooks/useMe";
 import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
@@ -160,6 +161,7 @@ export function BackendConfigPage() {
   const testPlannerConnection = useTestPlannerConnection();
   const testGlpiConnection = useTestGlpiConnection();
   const testLdapConnection = useTestLdapConnection();
+  const testChatConnection = useTestChatConnection();
   const [activeCategory, setActiveCategory] = useState<string>("database");
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState<{ type: "success" | "warn" | "info" | "error"; text: string } | null>(
@@ -183,6 +185,12 @@ export function BackendConfigPage() {
   } | null>(null);
 
   const [plannerTestFeedback, setPlannerTestFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    detail?: string | null;
+  } | null>(null);
+
+  const [chatTestFeedback, setChatTestFeedback] = useState<{
     type: "success" | "error";
     title: string;
     detail?: string | null;
@@ -309,6 +317,24 @@ export function BackendConfigPage() {
       setPlannerTestFeedback({
         type: "error",
         title: "Falha ao testar conexão com o Microsoft Planner.",
+      });
+    }
+  }
+
+  async function handleTestChatConnection() {
+    setChatTestFeedback(null);
+    try {
+      const result = await testChatConnection.mutateAsync();
+      setChatTestFeedback({
+        type: result.success ? "success" : "error",
+        title: result.message,
+        detail: result.detail,
+      });
+    } catch (error) {
+      setChatTestFeedback({
+        type: "error",
+        title: "Falha ao testar integração do chat Teams.",
+        detail: apiErrorDetail(error),
       });
     }
   }
@@ -658,6 +684,40 @@ export function BackendConfigPage() {
             </div>
           ) : null}
 
+          {activeCategory === "chat" ? (
+            <div className="backend-config-page__alert backend-config-page__alert--info" role="note">
+              O chat interno usa Microsoft Graph com permissões delegadas. Configure o app registration em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("graph")}
+              >
+                Microsoft Graph
+              </button>{" "}
+              e o provedor de login em{" "}
+              <button
+                type="button"
+                className="backend-config-page__inline-link"
+                onClick={() => setActiveCategory("azure_ad")}
+              >
+                Azure AD
+              </button>
+              . Cada colaborador vincula a própria conta do Teams na primeira utilização.
+            </div>
+          ) : null}
+
+          {chatTestFeedback && activeCategory === "chat" ? (
+            <div
+              className={`backend-config-page__alert backend-config-page__alert--${chatTestFeedback.type === "success" ? "success" : "error"}`}
+              role="status"
+            >
+              <strong>{chatTestFeedback.title}</strong>
+              {chatTestFeedback.detail ? (
+                <p className="backend-config-page__alert-detail">{chatTestFeedback.detail}</p>
+              ) : null}
+            </div>
+          ) : null}
+
           {testFeedback && activeCategory === "graph" ? (
             <div
               className={`backend-config-page__alert backend-config-page__alert--${testFeedback.type === "success" ? "success" : "error"}`}
@@ -674,7 +734,8 @@ export function BackendConfigPage() {
                 (setting) =>
                   setting.key !== "graph.directory_last_sync_utc" &&
                   setting.key !== "planner.last_sync_utc" &&
-                  setting.key !== "planner.plan_title",
+                  setting.key !== "planner.plan_title" &&
+                  !setting.key.startsWith("chat.last_test"),
               )
               .map((setting) => (
               <SettingField
@@ -755,6 +816,24 @@ export function BackendConfigPage() {
               <p className="backend-config-page__actions-hint">
                 Valida OAuth e conta usuários <code>@liotecnica.com.br</code> no tenant. Salve antes se alterou
                 credenciais — o teste usa o formulário ou valores já persistidos.
+              </p>
+            </div>
+          ) : null}
+
+          {activeCategory === "chat" ? (
+            <div className="backend-config-page__actions">
+              <button
+                type="button"
+                className="backend-config-page__test"
+                onClick={() => void handleTestChatConnection()}
+                disabled={testChatConnection.isPending}
+              >
+                <i className="fa-solid fa-plug-circle-check" aria-hidden="true" />
+                {testChatConnection.isPending ? "Testando…" : "Testar integração Chat Teams"}
+              </button>
+              <p className="backend-config-page__actions-hint">
+                Valida bootstrap, escopos delegados e conectividade com o Graph para o chat interno. Requer Graph e
+                Azure AD configurados.
               </p>
             </div>
           ) : null}

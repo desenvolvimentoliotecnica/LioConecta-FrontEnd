@@ -25,6 +25,23 @@
     return value;
   }
 
+  function openPersonChat(email, teamsUpn) {
+    var chatEmail = email || teamsUpn;
+    if (!chatEmail) return;
+    var chat = global.LioChat;
+    if (chat && chat.enabled && typeof chat.openConversationByEmail === "function") {
+      chat.openConversationByEmail(chatEmail);
+      return;
+    }
+    var teamsTarget = teamsUpn || email;
+    if (!teamsTarget) return;
+    window.open(
+      "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsTarget),
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
   var deptColors = {
     Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
     Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
@@ -1284,8 +1301,16 @@
         };
       }
     }
-    document.getElementById("profile-teams-btn").href =
-      "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email || "");
+    var teamsBtn = document.getElementById("profile-teams-btn");
+    if (teamsBtn) {
+      teamsBtn.href = contact.email
+        ? "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email)
+        : "#";
+      teamsBtn.onclick = function (event) {
+        event.preventDefault();
+        openPersonChat(contact.email, contact.teams || contact.email);
+      };
+    }
     document.getElementById("profile-schedule-btn").href =
       "https://outlook.office.com/calendar/action/compose?subject=Reuni%C3%A3o%20com%20" + encodeURIComponent(person.name);
     document.getElementById("profile-org-link").href = orgChartHref(person.id);

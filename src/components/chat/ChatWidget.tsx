@@ -1,11 +1,21 @@
 import { useEffect, useRef, useState } from "react";
+import { useChatMessages } from "../../api/hooks/useChat";
 import { closeOtherMenus, useMenuCloseSync } from "../layout/NotificationsMenu";
 import { useChat } from "./ChatContext";
-import { CURRENT_USER_ID, type ChatConversation } from "./mockData";
+import { ChatTeamsLinkBanner } from "./ChatTeamsLinkBanner";
+import { mapMessageDtos } from "./chatMappers";
+import type { ChatConversation } from "./chatTypes";
 
 function ChatWindow({ conversationId }: { conversationId: string }) {
-  const { getConversation, closeConversation, sendMessage } = useChat();
+  const { getConversation, closeConversation, sendMessage, currentUserId, linked, needsConsent } =
+    useChat();
   const conversation = getConversation(conversationId);
+  const {
+    data: messageDtos = [],
+    isLoading,
+    isError,
+  } = useChatMessages(linked && !needsConsent ? conversationId : null);
+  const messages = mapMessageDtos(messageDtos);
   const [draft, setDraft] = useState("");
   const [expanded, setExpanded] = useState(false);
   const historyRef = useRef<HTMLDivElement>(null);
@@ -14,11 +24,11 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
     if (historyRef.current) {
       historyRef.current.scrollTop = historyRef.current.scrollHeight;
     }
-  }, [conversation?.messages.length]);
+  }, [messages.length]);
 
   if (!conversation) return null;
 
-  const canSend = draft.trim().length > 0;
+  const canSend = draft.trim().length > 0 && linked && !needsConsent;
 
   const handleSend = () => {
     if (!canSend) return;
@@ -43,7 +53,10 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
             aria-label={expanded ? "Restaurar" : "Expandir"}
             onClick={() => setExpanded((v) => !v)}
           >
-            <i className={`fa-solid ${expanded ? "fa-down-left-and-up-right-to-center" : "fa-up-right-and-down-left-from-center"}`} aria-hidden="true" />
+            <i
+              className={`fa-solid ${expanded ? "fa-down-left-and-up-right-to-center" : "fa-up-right-and-down-left-from-center"}`}
+              aria-hidden="true"
+            />
           </button>
           <button
             className="chat-widget__icon-btn"
@@ -61,49 +74,41 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
         <div className="chat-window__profile-info">
           <div className="chat-window__profile-name-row">
             <strong>{conversation.name}</strong>
-            {conversation.verified && (
-              <i className="fa-solid fa-circle-check chat-window__verified" aria-label="Verificado" />
-            )}
-            {conversation.pronouns && (
-              <span className="chat-window__pronouns">{conversation.pronouns}</span>
-            )}
-            {conversation.connectionLevel && (
-              <span className="chat-window__connection">{conversation.connectionLevel}</span>
-            )}
           </div>
-          {conversation.headline && (
-            <p className="chat-window__headline">{conversation.headline}</p>
-          )}
         </div>
       </div>
 
       <div className="chat-window__history" ref={historyRef}>
-        {conversation.messages.map((msg, idx) => {
-          const showDate = msg.dateLabel && (idx === 0 || conversation.messages[idx - 1]?.dateLabel !== msg.dateLabel);
-          const isMine = msg.senderId === CURRENT_USER_ID;
+        {isLoading ? <p className="chat-window__state">Carregando mensagens…</p> : null}
+        {isError ? (
+          <p className="chat-window__state chat-window__state--error">
+            Não foi possível carregar as mensagens.
+          </p>
+        ) : null}
+        {!isLoading && !isError && messages.length === 0 ? (
+          <p className="chat-window__state">Nenhuma mensagem ainda.</p>
+        ) : null}
+        {messages.map((msg, idx) => {
+          const showDate =
+            msg.dateLabel && (idx === 0 || messages[idx - 1]?.dateLabel !== msg.dateLabel);
+          const isMine = Boolean(currentUserId && msg.senderId === currentUserId);
+          const avatar = msg.authorPhotoUrl ?? conversation.avatar;
+          const authorName = msg.authorDisplayName ?? conversation.name;
 
           return (
             <div key={msg.id}>
-              {showDate && (
-                <div className="chat-window__date-sep">{msg.dateLabel}</div>
-              )}
+              {showDate ? <div className="chat-window__date-sep">{msg.dateLabel}</div> : null}
               <div className={`chat-window__msg${isMine ? " chat-window__msg--mine" : ""}`}>
-                {!isMine && (
-                  <img className="chat-window__msg-avatar" src={conversation.avatar} alt="" />
-                )}
+                {!isMine ? <img className="chat-window__msg-avatar" src={avatar} alt="" /> : null}
                 <div className="chat-window__msg-body">
-                  {!isMine && (
+                  {!isMine ? (
                     <div className="chat-window__msg-meta">
-                      <strong>{conversation.name}</strong>
-                      {conversation.verified && (
-                        <i className="fa-solid fa-circle-check chat-window__verified" aria-hidden="true" />
-                      )}
+                      <strong>{authorName}</strong>
                       <time>{msg.timestamp}</time>
                     </div>
-                  )}
-                  {msg.subject && <p className="chat-window__msg-subject">{msg.subject}</p>}
+                  ) : null}
                   <p className="chat-window__msg-text">{msg.text}</p>
-                  {isMine && <time className="chat-window__msg-time">{msg.timestamp}</time>}
+                  {isMine ? <time className="chat-window__msg-time">{msg.timestamp}</time> : null}
                 </div>
               </div>
             </div>
@@ -112,11 +117,15 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
       </div>
 
       <footer className="chat-window__composer">
+        {needsConsent ? (
+          <p className="chat-window__composer-hint">Vincule sua conta do Teams para enviar mensagens.</p>
+        ) : null}
         <textarea
           className="chat-window__input"
           placeholder="Escreva uma mensagem"
           rows={3}
           value={draft}
+          disabled={!linked || needsConsent}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -126,20 +135,6 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
           }}
         />
         <div className="chat-window__toolbar">
-          <div className="chat-window__toolbar-left">
-            <button className="chat-widget__icon-btn" type="button" aria-label="Imagem">
-              <i className="fa-regular fa-image" aria-hidden="true" />
-            </button>
-            <button className="chat-widget__icon-btn" type="button" aria-label="Anexo">
-              <i className="fa-solid fa-paperclip" aria-hidden="true" />
-            </button>
-            <button className="chat-widget__icon-btn" type="button" aria-label="GIF">
-              <span className="chat-window__gif-label">GIF</span>
-            </button>
-            <button className="chat-widget__icon-btn" type="button" aria-label="Emoji">
-              <i className="fa-regular fa-face-smile" aria-hidden="true" />
-            </button>
-          </div>
           <div className="chat-window__toolbar-right">
             <button
               className={`chat-window__send${canSend ? " chat-window__send--active" : ""}`}
@@ -148,9 +143,6 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
               onClick={handleSend}
             >
               Enviar
-            </button>
-            <button className="chat-widget__icon-btn" type="button" aria-label="Mais opções">
-              <i className="fa-solid fa-ellipsis" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -182,9 +174,9 @@ function ConversationItem({
         </div>
         <p className="chat-list__preview">{conversation.lastMessage}</p>
       </div>
-      {conversation.unreadCount > 0 && (
+      {conversation.unreadCount > 0 ? (
         <span className="chat-list__badge">{conversation.unreadCount}</span>
-      )}
+      ) : null}
     </button>
   );
 }
@@ -201,7 +193,9 @@ function MessagingListHeader({
   const left = (
     <>
       <span className="chat-list__header-avatar-wrap chat-list__header-avatar-wrap--brand">
-        <span className="chat-list__header-avatar-letter" aria-hidden="true">L</span>
+        <span className="chat-list__header-avatar-letter" aria-hidden="true">
+          L
+        </span>
         <span className="chat-list__online-dot" aria-hidden="true" />
       </span>
       <h2 className="chat-list__title">Mensagens</h2>
@@ -226,9 +220,6 @@ function MessagingListHeader({
         <button className="chat-widget__icon-btn" type="button" aria-label="Mais opções">
           <i className="fa-solid fa-ellipsis" aria-hidden="true" />
         </button>
-        <button className="chat-widget__icon-btn" type="button" aria-label="Nova mensagem">
-          <i className="fa-regular fa-pen-to-square" aria-hidden="true" />
-        </button>
         <button
           className="chat-widget__icon-btn"
           type="button"
@@ -252,6 +243,10 @@ function MessagingList() {
     activeTab,
     searchQuery,
     openWindows,
+    needsConsent,
+    linked,
+    conversationsLoading,
+    conversationsError,
     setListMinimized,
     setActiveTab,
     setSearchQuery,
@@ -271,70 +266,78 @@ function MessagingList() {
         onToggleMinimize={() => setListMinimized(!listMinimized)}
       />
 
-      {!listMinimized && (
+      {!listMinimized ? (
         <>
-      <div className="chat-list__search">
-        <span className="chat-list__search-icon" aria-hidden="true">
-          <i className="fa-solid fa-magnifying-glass" />
-        </span>
-        <input
-          type="search"
-          className="chat-list__search-input"
-          placeholder="Pesquisar mensagens"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button className="chat-widget__icon-btn chat-list__filter" type="button" aria-label="Filtros">
-          <i className="fa-solid fa-sliders" aria-hidden="true" />
-        </button>
-      </div>
+          {needsConsent ? <ChatTeamsLinkBanner /> : null}
 
-      <div className="chat-list__tabs" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "priority"}
-          className={`chat-list__tab${activeTab === "priority" ? " chat-list__tab--active" : ""}`}
-          onClick={() => setActiveTab("priority")}
-        >
-          Prioritárias
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "other"}
-          className={`chat-list__tab${activeTab === "other" ? " chat-list__tab--active" : ""}`}
-          onClick={() => setActiveTab("other")}
-        >
-          Outras
-        </button>
-      </div>
-
-      <div className="chat-list__conversations" role="list">
-        {filteredConversations.length === 0 ? (
-          <p className="chat-list__empty">Nenhuma conversa encontrada.</p>
-        ) : (
-          filteredConversations.map((c) => (
-            <ConversationItem
-              key={c.id}
-              conversation={c}
-              selected={openWindows.includes(c.id)}
-              onSelect={() => openConversation(c.id)}
+          <div className="chat-list__search">
+            <span className="chat-list__search-icon" aria-hidden="true">
+              <i className="fa-solid fa-magnifying-glass" />
+            </span>
+            <input
+              type="search"
+              className="chat-list__search-input"
+              placeholder="Pesquisar mensagens"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              disabled={!linked}
             />
-          ))
-        )}
-      </div>
+          </div>
+
+          <div className="chat-list__tabs" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "priority"}
+              className={`chat-list__tab${activeTab === "priority" ? " chat-list__tab--active" : ""}`}
+              onClick={() => setActiveTab("priority")}
+            >
+              Prioritárias
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "other"}
+              className={`chat-list__tab${activeTab === "other" ? " chat-list__tab--active" : ""}`}
+              onClick={() => setActiveTab("other")}
+            >
+              Outras
+            </button>
+          </div>
+
+          <div className="chat-list__conversations" role="list">
+            {conversationsLoading ? (
+              <p className="chat-list__empty">Carregando conversas…</p>
+            ) : conversationsError ? (
+              <p className="chat-list__empty">Não foi possível carregar as conversas.</p>
+            ) : !linked && !needsConsent ? (
+              <p className="chat-list__empty">Conta do Teams não vinculada.</p>
+            ) : filteredConversations.length === 0 ? (
+              <p className="chat-list__empty">Nenhuma conversa encontrada.</p>
+            ) : (
+              filteredConversations.map((c) => (
+                <ConversationItem
+                  key={c.id}
+                  conversation={c}
+                  selected={openWindows.includes(c.id)}
+                  onSelect={() => openConversation(c.id)}
+                />
+              ))
+            )}
+          </div>
         </>
-      )}
+      ) : null}
     </aside>
   );
 }
 
 export function ChatWidget() {
-  const { openWindows, closeList } = useChat();
+  const { enabled, openWindows, closeList } = useChat();
   useMenuCloseSync((open) => {
     if (!open) closeList();
   }, "messages");
+
+  if (!enabled) return null;
 
   return (
     <div className="chat-widget" aria-live="polite">
@@ -349,8 +352,10 @@ export function ChatWidget() {
 }
 
 export function MessagesTrigger() {
-  const { toggleList, listOpen, listMinimized, totalUnread } = useChat();
+  const { enabled, toggleList, listOpen, listMinimized, totalUnread } = useChat();
   const isActive = listOpen && !listMinimized;
+
+  if (!enabled) return null;
 
   return (
     <div

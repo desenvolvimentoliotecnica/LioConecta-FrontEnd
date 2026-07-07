@@ -180,7 +180,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     category: "conta",
     question: "Como usar o chat interno?",
     answer:
-      "O chat fica disponível no canto inferior da tela. Clique em Mensagens na barra superior para abrir conversas recentes, enviar mensagens diretas e acompanhar respostas em tempo real.",
+      "O chat interno usa Microsoft Teams por trás: clique em Mensagens na barra superior para ver conversas sincronizadas. Na primeira vez, vincule sua conta corporativa do Teams quando solicitado. Depois disso, envie mensagens diretas e acompanhe respostas em tempo real pelo portal.",
   },
   {
     id: "analytics-ajuda",
