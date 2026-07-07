@@ -86,9 +86,9 @@
               <span><i class="fa-solid fa-building" aria-hidden="true"></i> ${item.provider}</span>
             </div>
             <div class="benefit-card__footer">
-              <a class="benefit-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Acessar</a>
+              <a class="benefit-card__open" href="/servicos/cardapio"><i class="fa-regular fa-eye" aria-hidden="true"></i> Acessar</a>
               <div class="benefit-card__actions">
-                <a class="benefit-card__btn" href="#" aria-label="Abrir ${item.title}"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a class="benefit-card__btn" href="/servicos/cardapio" aria-label="Abrir ${item.title}"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
                 <a class="benefit-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
               </div>
             </div>

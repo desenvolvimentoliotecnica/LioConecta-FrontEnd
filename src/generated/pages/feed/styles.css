@@ -251,9 +251,9 @@ var(--wf-bg) 70%
 }
 
 .sidebar__item.is-active::before {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.95);
+  opacity: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .sidebar__item.is-active {

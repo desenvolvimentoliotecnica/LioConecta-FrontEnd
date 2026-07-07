@@ -98,17 +98,42 @@ function SidebarIcon({ icon }: { icon: string }) {
   );
 }
 
-function SidebarItem({ label, icon, href }: SidebarItemConfig) {
+function isSidebarItemActive(item: SidebarItemConfig, activePath: string): boolean {
+  const path = activePath || "/";
+
+  if (item.activeOn?.length) {
+    return item.activeOn.some((p) => path === p || (p === "/" && path === ""));
+  }
+
+  if (item.activePrefix) {
+    return path === item.activePrefix || path.startsWith(`${item.activePrefix}/`);
+  }
+
+  if (item.href === "#") return false;
+
+  // "/" belongs to Início (activeOn); avoid marking Feed with the same href.
+  if (item.href === "/") return false;
+
+  return path === item.href;
+}
+
+function SidebarItem({
+  label,
+  icon,
+  href,
+  isActive = false,
+}: SidebarItemConfig & { isActive?: boolean }) {
+  const className = `sidebar__item${isActive ? " is-active" : ""}`;
   if (href === "#") {
     return (
-      <a className="sidebar__item" href="#" title={label}>
+      <a className={className} href="#" title={label}>
         <SidebarIcon icon={icon} />
         <span className="sidebar__text">{label}</span>
       </a>
     );
   }
   return (
-    <Link className="sidebar__item" to={href} title={label}>
+    <Link className={className} to={href} title={label}>
       <SidebarIcon icon={icon} />
       <span className="sidebar__text">{label}</span>
     </Link>
@@ -148,26 +173,12 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
         <span className="sidebar__toggle-label">Recolher</span>
       </button>
       <nav className="sidebar__nav" aria-label={side === "left" ? "Navegação principal" : "Navegação secundária"}>
-        {items.map((item, idx) => {
-          const isHomeActive =
-            side === "left" && idx === 0 && (activePath === "/" || activePath === "");
-          const isRouteActive =
-            item.href !== "#" &&
-            (activePath === item.href ||
-              (item.activePrefix &&
-                (activePath === item.activePrefix || activePath.startsWith(`${item.activePrefix}/`))));
-          const isActive = isHomeActive || isRouteActive;
+        {items.map((item) => {
+          const isActive = isSidebarItemActive(item, activePath);
           return (
             <span key={item.label}>
               {item.spacerBefore ? <div className="sidebar__spacer" /> : null}
-              {isActive ? (
-                <Link className="sidebar__item is-active" to={item.href} title={item.label}>
-                  <SidebarIcon icon={item.icon} />
-                  <span className="sidebar__text">{item.label}</span>
-                </Link>
-              ) : (
-                <SidebarItem {...item} />
-              )}
+              <SidebarItem {...item} isActive={isActive} />
             </span>
           );
         })}

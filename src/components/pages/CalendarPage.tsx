@@ -23,6 +23,7 @@ import { acquireDelegatedToken } from "../../auth/azureMsal";
 import { formatMsalErrorForUser } from "../../auth/msalErrors";
 import { mapBirthdaysToCalendarEvents } from "../../config/calendar";
 import { CalendarEventModal } from "../calendar/CalendarEventModal";
+import { CafeteriaMenuPanel } from "../calendar/CafeteriaMenuPanel";
 import {
   dtoToModalEvent,
   mapBirthdayToFullCalendar,
@@ -81,7 +82,7 @@ export function CalendarPage() {
   const { data: birthdays = [] } = useBirthdays(showBirthdays ? 365 : 0);
   const { data: cafeteriaMenu } = useCafeteriaMenu(
     showMenu ? selectedMenuDate : null,
-    showMenu && canLoadOutlook,
+    showMenu,
   );
 
   const birthdayFcEvents = useMemo(() => {
@@ -369,28 +370,7 @@ export function CalendarPage() {
 
         {showMenu ? (
           <aside className="calendar-page__aside">
-            <section className="calendar-panel calendar-panel--menu" aria-label="Cardápio do dia">
-              <div className="calendar-menu__header">
-                <h2 className="calendar-panel__title">Cardápio do dia</h2>
-                <Link className="calendar-menu__link" to="/servicos/refeitorio">
-                  Refeitório
-                  <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-                </Link>
-              </div>
-              {cafeteriaMenu && cafeteriaMenu.items.length > 0 ? (
-                <ul className="calendar-menu">
-                  {cafeteriaMenu.items.map((item) => (
-                    <li key={item} className="calendar-menu__item">
-                      <div className="calendar-menu__content">
-                        <strong className="calendar-menu__name">{item}</strong>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="calendar-panel__empty">Cardápio não disponível para esta data.</p>
-              )}
-            </section>
+            <CafeteriaMenuPanel date={selectedMenuDate} menu={cafeteriaMenu ?? null} />
           </aside>
         ) : null}
       </div>

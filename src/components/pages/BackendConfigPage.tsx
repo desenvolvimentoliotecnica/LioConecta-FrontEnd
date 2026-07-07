@@ -13,6 +13,7 @@ import { useMe } from "../../api/hooks/useMe";
 import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
 import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
+import { MenuEditorSettingsSection } from "../admin/MenuEditorSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
 
@@ -38,10 +39,12 @@ const AZURE_AD_CLIENT_KEY = "azure_ad.client_id";
 const AZURE_AD_TENANT_KEY = "azure_ad.tenant_id";
 const ORGANOGRAM_MODULE_ID = "organogram";
 const LOOP_MODULE_ID = "loop";
+const CARDAPIO_MODULE_ID = "cardapio";
 
 const DOMAIN_MODULE_TABS = [
   { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
   { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
+  { id: CARDAPIO_MODULE_ID, label: "Cardápio" },
 ] as const;
 
 function apiErrorDetail(error: unknown): string | undefined {
@@ -602,6 +605,27 @@ export function BackendConfigPage() {
           </div>
 
           <LoopProjetosSettingsSection />
+        </section>
+      ) : null}
+
+      {activeCategory === CARDAPIO_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="cardapio-module-title">
+          <ConfigSectionHead
+            titleId="cardapio-module-title"
+            title="Cardápio — acesso e envio"
+            description="Controle quem edita o cardápio semanal em Facilities e os destinatários padrão do e-mail semanal."
+            helpCategoryId={CARDAPIO_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
+
+          <div className="backend-config-page__module-actions">
+            <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/servicos/cardapio">
+              <i className="fa-solid fa-utensils" aria-hidden="true" />
+              Abrir Gestão de cardápio
+            </Link>
+          </div>
+
+          <MenuEditorSettingsSection />
         </section>
       ) : null}
 

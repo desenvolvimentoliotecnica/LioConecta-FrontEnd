@@ -1,4 +1,5 @@
 import { pageAssets } from "../generated/pagesIndex";
+import { injectScopedPageStyle } from "../utils/pageInjectedStyles";
 import {
   COMUNICADO_KIND_ARQUIVO,
   COMUNICADO_KIND_DEPARTAMENTAL,
@@ -130,20 +131,9 @@ export function getComunicadosConfigByPath(path: string): ComunicadosPageConfig 
 }
 
 export function injectComunicadosPageStyles(pageId: string): () => void {
-  const attr = `data-page-style="${pageId}"`;
-  document.querySelector(`style[${attr}]`)?.remove();
-
   const assets = pageAssets[pageId];
   if (!assets?.styles) return () => undefined;
-
-  const el = document.createElement("style");
-  el.setAttribute("data-page-style", pageId);
-  el.textContent = assets.styles;
-  document.head.appendChild(el);
-
-  return () => {
-    document.querySelector(`style[${attr}]`)?.remove();
-  };
+  return injectScopedPageStyle(pageId, assets.styles);
 }
 
 export function comunicadoReaderId(comunicado: { id: string; slug?: string | null }): string {

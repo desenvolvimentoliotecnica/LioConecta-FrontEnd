@@ -7,6 +7,7 @@ import { FEED_PAGE_ID, injectFeedPageStyles, splitFeedHtml } from "../../config/
 import { getPageHeadSection, sectionMainClass, usesSectionPageHead } from "../../config/page-head";
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
+import { injectScopedPageStyle } from "../../utils/pageInjectedStyles";
 import { useFeedComments, useFeedHashScroll, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
 import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
@@ -20,22 +21,13 @@ function injectPageStyles(pageId: string): (() => void) | undefined {
   }
 
   const assets = pageAssets[pageId];
-  const attr = `data-page-style="${pageId}"`;
-  document.querySelector(`style[${attr}]`)?.remove();
-  const el = document.createElement("style");
-  el.setAttribute("data-page-style", pageId);
   let combined = assets?.styles ?? "";
   if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
   if (pageId === "pessoas-organograma" || pageId === "pessoas-diretorio") combined += "\n" + orgModalCss;
   if (pageId === "pessoas-organograma") combined += "\n" + orgEditDrawerCss;
   if (usesSectionPageHead(pageId)) combined += "\n" + sectionPageHeadCss;
   if (!combined) return undefined;
-  el.textContent = combined;
-  document.head.appendChild(el);
-
-  return () => {
-    document.querySelector(`style[${attr}]`)?.remove();
-  };
+  return injectScopedPageStyle(pageId, combined);
 }
 
 function legacyMainClass(pageId: string): string {

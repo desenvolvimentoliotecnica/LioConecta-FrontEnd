@@ -1,0 +1,380 @@
+.cardapio-page {
+  display: grid;
+  gap: 16px;
+}
+
+.cardapio-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.cardapio-page__btn {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cardapio-page__btn:hover {
+  background: #f8fafc;
+}
+
+.cardapio-page__btn--primary {
+  background: #0d9488;
+  border-color: #0d9488;
+  color: #fff;
+}
+
+.cardapio-page__btn--primary:hover {
+  background: #0f766e;
+}
+
+.cardapio-page__toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cardapio-page__week-label h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.cardapio-page__week-label p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.cardapio-page__nav-btn {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cardapio-page__toast {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.cardapio-page__toast--success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.cardapio-page__toast--error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.cardapio-page__loading,
+.cardapio-page__error {
+  margin: 0;
+  font-size: 14px;
+}
+
+.cardapio-page__error {
+  color: #b91c1c;
+}
+
+.cardapio-page__mobile {
+  display: none;
+}
+
+.cardapio-grid-wrap {
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cardapio-grid {
+  width: 100%;
+  min-width: 960px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cardapio-grid th,
+.cardapio-grid td {
+  border: 1px solid #e2e8f0;
+  vertical-align: top;
+  padding: 8px;
+}
+
+.cardapio-grid__corner {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #f8fafc;
+  min-width: 180px;
+}
+
+.cardapio-grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #ecfeff;
+  text-align: center;
+}
+
+.cardapio-grid__day--holiday {
+  background: #fef2f2;
+}
+
+.cardapio-grid__day-label {
+  display: block;
+  font-weight: 700;
+}
+
+.cardapio-grid__holiday-btn,
+.cardapio-grid__holiday-badge {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.cardapio-grid__holiday-btn {
+  border: 1px dashed #fca5a5;
+  background: #fff;
+  border-radius: 999px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.cardapio-grid__holiday-badge {
+  display: inline-block;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.cardapio-grid__row-label {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #f8fafc;
+  min-width: 180px;
+}
+
+.cardapio-grid__row-label span {
+  display: block;
+  font-weight: 600;
+}
+
+.cardapio-grid__apply-row {
+  margin-top: 6px;
+  border: none;
+  background: transparent;
+  color: #0d9488;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.cardapio-grid__cell--holiday {
+  background: #fff7f7;
+}
+
+.cardapio-grid__cell--empty {
+  color: #94a3b8;
+}
+
+.cardapio-grid__input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px;
+  font: inherit;
+  resize: vertical;
+}
+
+.cardapio-grid__dash {
+  color: #cbd5e1;
+}
+
+.cardapio-day-cards {
+  display: grid;
+  gap: 12px;
+}
+
+.cardapio-day-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+
+.cardapio-day-card--holiday {
+  border-color: #fecaca;
+  background: #fff7f7;
+}
+
+.cardapio-day-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cardapio-day-card__title {
+  margin: 0;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.cardapio-day-card__badge {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cardapio-day-card__list {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.cardapio-day-card__item dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.cardapio-day-card__item dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+.cardapio-day-card__empty {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.cardapio-email-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1200;
+  padding: 16px;
+}
+
+.cardapio-email-modal {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+}
+
+.cardapio-email-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cardapio-email-modal__head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.cardapio-email-modal__close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.cardapio-email-modal__body {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.cardapio-email-modal__subject {
+  margin: 0;
+  font-size: 14px;
+}
+
+.cardapio-email-modal__field {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.cardapio-email-modal__field textarea {
+  font: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.cardapio-email-modal__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.cardapio-email-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+
+.calendar-menu__holiday {
+  margin: 0 0 10px;
+  font-weight: 700;
+  color: #b91c1c;
+}
+
+.calendar-menu__holiday--festive {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fef2f2;
+}
+
+@media (max-width: 960px) {
+  .cardapio-page__toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .cardapio-page__desktop {
+    display: none;
+  }
+
+  .cardapio-page__mobile {
+    display: block;
+  }
+}
