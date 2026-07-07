@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specs RM — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools">
+        <button type="button" id="meeting-mode-btn">Modo reunião</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Especificações — Integração RM</h2>
+        <p>8 itens da diretriz do gestor · TOTVS RM (Corpore) · Full stack</p>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:.35rem">Cada spec inclui tasks e botão <strong>Exportar MD</strong> (Spec → Histórias → Tasks) para implementação.</p>
+      </header>
+
+      <div id="spec-page-toolbar" class="spec-page-toolbar no-print"></div>
+
+      <nav class="card no-print" style="padding:.75rem 1rem">
+        <strong>Ir para:</strong>
+        <a href="#spec-holerite">Holerite</a> ·
+        <a href="#spec-ferias">Férias</a> ·
+        <a href="#spec-ajuste-ponto">Ajuste ponto</a> ·
+        <a href="#spec-banco-horas">Banco horas</a> ·
+        <a href="#spec-promocao">Promoção</a> ·
+        <a href="#spec-desligamento">Desligamento</a> ·
+        <a href="#spec-transferencia">Transferência</a> ·
+        <a href="#spec-vaga">Ciclo vaga</a>
+      </nav>
+
+      <article class="spec-block" id="spec-holerite">
+        <h3>1. Visualização de Holerite <span class="badge badge--integrated">Integrado</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-RM-001">US-RM-001</a> · <strong>Rota:</strong> <code>/servicos/contracheque</code></p>
+        <h4>Objetivo</h4>
+        <p>Colaborador consulta holerite mensal, histórico, PDF, comparativo e informe IR.</p>
+        <h4>Estado atual</h4>
+        <ul><li>React <code>ContrachequePage.tsx</code> integrado via <code>/rh/payslips/*</code></li><li>Sync RM: worker <code>totvs-payslip-sync</code> (SQL read-only)</li></ul>
+        <h4>Gaps / tasks restantes</h4>
+        <ul><li>Regressão QA informe IR e comparativo</li><li>Validar metadados sync (<code>syncedAt</code>, <code>dataSource</code>) na UI</li></ul>
+        <h4>API</h4>
+        <pre>GET /rh/payslips/summary
+GET /rh/payslips?month=&year=
+GET /rh/payslips/{id}/pdf</pre>
+      </article>
+
+      <article class="spec-block" id="spec-ferias">
+        <h3>2. Solicitação de Férias <span class="badge badge--integrated">Integrado</span></h3>
+        <p><strong>Histórias:</strong> <a href="02-backlog.html#US-RM-002">US-RM-002</a>, <a href="02-backlog.html#US-RM-003">US-RM-003</a></p>
+        <h4>Objetivo</h4>
+        <p>Colaborador solicita férias, consulta saldo e acompanha status até aprovação RM.</p>
+        <h4>Fluxo</h4>
+        <ol><li>Colaborador abre módulo férias → consulta saldo (<code>/rh/leave/balance</code>)</li><li>Preenche período → POST <code>/rh/leave/requests</code></li><li>Portal exibe status (pendente/aprovado/rejeitado)</li><li>Backend write-back RM (validar homolog)</li></ol>
+        <h4>Regras</h4>
+        <ul><li>Saldo insuficiente bloqueia envio</li><li>Gestor/RH aprovam conforme política interna</li></ul>
+        <h4>Fora de escopo</h4>
+        <p>Parametrização de política de férias no RM (admin folha).</p>
+      </article>
+
+      <article class="spec-block" id="spec-ajuste-ponto">
+        <h3>3. Ajuste de Ponto <span class="badge badge--new">Novo</span></h3>
+        <p><strong>Histórias:</strong> <a href="02-backlog.html#US-RM-004">US-RM-004</a>, <a href="02-backlog.html#US-RM-007">US-RM-007</a>, <a href="02-backlog.html#US-RM-008">US-RM-008</a></p>
+        <h4>Objetivo</h4>
+        <p>Colaborador solicita correção no espelho de ponto; gestor e RH aprovam; RM recebe movimentação.</p>
+        <h4>Atores</h4>
+        <p>Colaborador, Gestor, RH Admin</p>
+        <h4>Fluxo principal</h4>
+        <pre>Colaborador → seleciona dia no espelho → informa motivo + horário correto
+    → Gestor aprova/rejeita
+    → RH valida
+    → Worker/API envia ajuste ao RM
+    → Espelho atualizado no próximo sync</pre>
+        <h4>API proposta</h4>
+        <pre>POST   /rh/ponto/adjustments
+GET    /rh/ponto/adjustments?status=
+PATCH  /rh/ponto/adjustments/{id}/approve  (gestor)
+PATCH  /rh/ponto/adjustments/{id}/validate (RH)</pre>
+        <h4>Integração RM</h4>
+        <p>Tabelas batida/justificativa (ABATFUN, AAFHTFUN — validar com equipe RM).</p>
+        <h4>Estado atual</h4>
+        <p>Ponto é <strong>somente leitura</strong> — <code>PontoEletronicoPage.tsx</code> sem write.</p>
+      </article>
+
+      <article class="spec-block" id="spec-banco-horas">
+        <h3>4. Banco de Horas por Colaborador <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-RM-005">US-RM-005</a></p>
+        <h4>Objetivo</h4>
+        <p>Colaborador vê saldo; gestor consulta banco de horas da equipe.</p>
+        <h4>Estado atual</h4>
+        <ul><li>Modal <code>LeaveBancoHorasModal</code> → <code>/rh/leave/banco-horas</code></li><li>Saldo resumido na página de ponto</li></ul>
+        <h4>Gaps</h4>
+        <ul><li>Tela gestor: filtro por colaborador/equipe</li><li>Extrato detalhado (créditos/débitos)</li></ul>
+        <pre>GET /rh/ponto/banco-horas?employeeId=  (gestor scope)
+GET /rh/ponto/banco-horas/extrato?from=&to=</pre>
+      </article>
+
+      <article class="spec-block" id="spec-promocao">
+        <h3>5. Requisição — Promoção <span class="badge badge--new">Novo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-RM-010">US-RM-010</a></p>
+        <h4>Objetivo</h4>
+        <p>Gestor/RH abre requisição de promoção com novo cargo, salário, centro de custo.</p>
+        <h4>Atores</h4>
+        <p>Gestor (solicita), RH (valida), Diretoria (aprova — se aplicável)</p>
+        <h4>Campos formulário</h4>
+        <ul><li>Colaborador, cargo atual, cargo proposto, salário proposto, CC, motivo, anexos</li></ul>
+        <pre>POST /rh/requests/movimentacao  { tipo: "promocao", ... }
+GET  /rh/requests/movimentacao?tipo=promocao&status=</pre>
+        <h4>Estado atual</h4>
+        <p>Legacy <code>/servicos/solicitacoes-rh</code> — card mock offline, sem API.</p>
+      </article>
+
+      <article class="spec-block" id="spec-desligamento">
+        <h3>6. Requisição — Desligamento <span class="badge badge--new">Novo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-RM-011">US-RM-011</a></p>
+        <h4>Objetivo</h4>
+        <p>Fluxo formal de desligamento com tipo, data, motivo e checklist RH.</p>
+        <h4>Campos</h4>
+        <ul><li>Colaborador, tipo desligamento, data aviso, data desligamento, motivo RM, observações</li></ul>
+        <h4>Integração RM</h4>
+        <p>Módulo Vitae — movimentação desligamento (validar tabelas com DBA RM).</p>
+        <h4>Regras</h4>
+        <ul><li>Somente gestor + RH podem iniciar</li><li>Audit trail obrigatório</li></ul>
+      </article>
+
+      <article class="spec-block" id="spec-transferencia">
+        <h3>7. Requisição — Transferência <span class="badge badge--new">Novo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-RM-012">US-RM-012</a></p>
+        <h4>Objetivo</h4>
+        <p>Transferir colaborador entre departamento, CC ou filial.</p>
+        <h4>Campos</h4>
+        <ul><li>Colaborador, origem, destino (dept/CC/filial), data efetiva, motivo</li></ul>
+        <p>Legacy possui card estático <em>transferência</em> em solicitações RH — migrar para React.</p>
+      </article>
+
+      <article class="spec-block" id="spec-vaga">
+        <h3>8. Ciclo de Vida da Vaga até Contratação <span class="badge badge--new">Novo</span></h3>
+        <p><strong>Histórias:</strong> <a href="02-backlog.html#US-RM-013">US-RM-013</a>, <a href="02-backlog.html#US-RM-014">US-RM-014</a></p>
+        <h4>Objetivo</h4>
+        <p>Abrir requisição de vaga, acompanhar pipeline (triagem → entrevista → proposta → contratação).</p>
+        <h4>Estados pipeline (MVP)</h4>
+        <pre>aberta → em_triagem → entrevista → proposta → contratada | cancelada</pre>
+        <h4>API proposta</h4>
+        <pre>POST   /rh/vagas
+GET    /rh/vagas?status=
+PATCH  /rh/vagas/{id}/status
+POST   /rh/vagas/{id}/candidatos
+PATCH  /rh/vagas/{id}/contratar</pre>
+        <h4>UI</h4>
+        <p>Kanban ou lista com filtros; notificações gestor/RH em mudança de status.</p>
+        <h4>Fora de escopo MVP</h4>
+        <p>Integração job boards externos; admissão digital completa.</p>
+      </article>
+
+      <footer class="page-footer">LioConecta · Specs RM · Fase F1–F2</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

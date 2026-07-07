@@ -155,6 +155,13 @@
   line-height: 1.5;
 }
 
+.section-page-head [class*="page-header--"] .page-header__sync-meta {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 6px 0 0;
+}
+
 .section-page-head .page-toolbar,
 .section-page-head .pay-toolbar,
 .section-page-head .docs-hub__controls {

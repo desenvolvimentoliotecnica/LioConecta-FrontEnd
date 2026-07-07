@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specs Auth/Hub — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools"><button type="button" id="meeting-mode-btn">Modo reunião</button></div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Especificações — Autenticação e Hub</h2>
+        <p>Hub de apps por área · SSO · Discovery ERP (Datasul, TMS, Mercanet)</p>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:.35rem">Cada spec inclui tasks e botão <strong>Exportar MD</strong> (Spec → Histórias → Tasks) para implementação.</p>
+      </header>
+
+      <div id="spec-page-toolbar" class="spec-page-toolbar no-print"></div>
+
+      <div class="note note--info">
+        <strong>Arquitetura atual:</strong> Login portal = LDAP/JWT (<code>/acesso</code>).
+        MSAL Azure = apenas Calendar e Teams (Graph). SignalR hubs usam JWT portal.
+      </div>
+
+      <article class="spec-block" id="spec-hub-apps">
+        <h3>1. Hub com Aplicações por Área de Negócio <span class="badge badge--prototype">Protótipo</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-AUTH-001">US-AUTH-001</a></p>
+        <h4>Objetivo</h4>
+        <p>Centralizar launch de apps desenvolvidas pela TI (e futuramente ERP) por área: Comercial, Operações, Finanças, TI, RH.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li><code>/servicos/acesso-sistemas</code> — legacy mock, botões <code>href="#"</code></li>
+          <li>Hubs internos existem: <code>/servicos/rh</code>, <code>/servicos/ti</code> (rotas portal)</li>
+          <li>Padrão: <code>*-hub.ts</code> + <code>*HubPage.tsx</code></li>
+        </ul>
+        <h4>Arquitetura proposta</h4>
+        <pre>GET /apps/catalog?area=comercial|operacoes|financeiro|ti
+→ { id, name, description, icon, launchUrl, ssoType, requiredRoles }
+
+ssoType: none | deeplink | msal | saml | oidc</pre>
+        <h4>Frontend F4</h4>
+        <ul>
+          <li>Substituir legacy por React hub (modelo TiHubPage)</li>
+          <li>Launch: <code>window.open</code> ou SSO popup</li>
+          <li>Admin: seção em Backend Config para cadastro apps</li>
+        </ul>
+        <h4>RBAC</h4>
+        <p>Filtrar apps por <code>MeDto.roles</code> e departamento; audit log de acessos.</p>
+      </article>
+
+      <article class="spec-block" id="spec-sso">
+        <h3>2. Framework SSO Reutilizável <span class="badge badge--partial">Parcial</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-AUTH-002">US-AUTH-002</a></p>
+        <h4>Objetivo</h4>
+        <p>Generalizar padrão link-account (Calendar/Chat) para outros apps Azure ou SAML/OIDC.</p>
+        <h4>Estado atual</h4>
+        <ul>
+          <li><code>azureMsal.ts</code> — popup + silent token</li>
+          <li><code>POST /calendar/link-account</code>, <code>POST /chat/link-account</code></li>
+          <li>Config: <code>azure_ad.client_id</code>, <code>azure_ad.tenant_id</code></li>
+        </ul>
+        <h4>Extensão F4</h4>
+        <ul>
+          <li>Token broker backend para apps não-Graph</li>
+          <li>SAML/OIDC proxy se ERP não federado Entra ID</li>
+          <li>Componente <code>AppLaunchGate</code> (similar LoopAccessGate)</li>
+        </ul>
+      </article>
+
+      <article class="spec-block" id="spec-datasul">
+        <h3>3. Datasul — Discovery <span class="badge badge--blocked">Bloqueado</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-AUTH-003">US-AUTH-003</a> (Spike)</p>
+        <div class="note note--danger">Dependência: avaliar com fornecedor — não implementável até discovery.</div>
+        <h4>Perguntas fornecedor</h4>
+        <ul>
+          <li>API REST/SOAP disponível? Documentação?</li>
+          <li>SSO via SAML/OIDC ou credencial própria?</li>
+          <li>Federado com Entra ID (Azure AD)?</li>
+          <li>Ambientes homolog/prod e VPN necessária?</li>
+          <li>Quais módulos prioritários (financeiro, estoque, compras)?</li>
+        </ul>
+        <h4>Entregável spike</h4>
+        <p>Documento ADR com opções, esforço estimado, recomendação — output R4.</p>
+      </article>
+
+      <article class="spec-block" id="spec-tms">
+        <h3>4. TMS — Discovery <span class="badge badge--blocked">Bloqueado</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-AUTH-004">US-AUTH-004</a> (Spike)</p>
+        <div class="note note--danger">Dependência: avaliar com fornecedor.</div>
+        <h4>Perguntas fornecedor</h4>
+        <ul>
+          <li>URL launch e modelo autenticação</li>
+          <li>Integração tracking/logística exposta via API?</li>
+          <li>Usuários mapeados AD ou base própria?</li>
+        </ul>
+      </article>
+
+      <article class="spec-block" id="spec-mercanet">
+        <h3>5. Mercanet — Discovery <span class="badge badge--blocked">Bloqueado</span></h3>
+        <p><strong>História:</strong> <a href="02-backlog.html#US-AUTH-005">US-AUTH-005</a> (Spike)</p>
+        <div class="note note--danger">Dependência: avaliar com fornecedor.</div>
+        <h4>Perguntas fornecedor</h4>
+        <ul>
+          <li>Portal web ou desktop? SSO disponível?</li>
+          <li>API pedidos/clientes para embed no hub?</li>
+          <li>Área Comercial — perfis de acesso</li>
+        </ul>
+      </article>
+
+      <div class="card">
+        <h3>Diagrama — Auth atual vs meta</h3>
+        <pre style="background:#f8fafc;color:#334155;border:1px solid var(--border)">
+[Ldap Login] → JWT sessionStorage → API portal + SignalR
+                    ↓
+              [MSAL popup] → Graph (Calendar, Teams only)
+                    ↓
+              [Meta F4] → App Catalog + SSO broker → Datasul/TMS/Mercanet
+        </pre>
+      </div>
+
+      <footer class="page-footer">LioConecta · Specs Auth · Fase F4 + discovery</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>

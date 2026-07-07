@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backlog — LioConecta Roadmap</title>
+  <link rel="stylesheet" href="assets/roadmap.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar no-print">
+      <div class="sidebar__brand"><h1>LioConecta Roadmap</h1><p>Backlog ágil · Jul/2026</p></div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar__tools">
+        <div class="search-wrap">
+          <input type="search" id="global-search" placeholder="Buscar…" style="width:100%;padding:.4rem .6rem;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:#fff">
+          <div id="search-results" class="search-results"></div>
+        </div>
+        <button type="button" id="meeting-mode-btn">Modo reunião</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="page-header">
+        <h2>Backlog Master</h2>
+        <p>Epics, user stories e contagem de tasks — full stack (FE + BE + QA).</p>
+      </header>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__label">User stories</div><div class="stat__value" data-stat="stories">—</div></div>
+        <div class="stat"><div class="stat__label">Tasks</div><div class="stat__value" data-stat="tasks">—</div></div>
+        <div class="stat"><div class="stat__label">Casos QA</div><div class="stat__value" data-stat="qa">—</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Épicos</h3>
+        <ul class="clean">
+          <li><strong>EPIC-RM</strong> — Integração RM (holerite, férias, ponto, movimentações, vaga)</li>
+          <li><strong>EPIC-INTRA</strong> — Portal Intranet (comunicados, feed, engajamento, indicadores)</li>
+          <li><strong>EPIC-AUTH</strong> — Autenticação e Hub (apps por área, SSO, ERP)</li>
+        </ul>
+      </div>
+
+      <h3 style="margin:1.25rem 0 .75rem;color:#1e3a5f">User Stories</h3>
+      <div class="filters no-print">
+        <label>Épico <select id="filter-epic"><option value="">Todos</option><option value="EPIC-RM">RM</option><option value="EPIC-INTRA">Intranet</option><option value="EPIC-AUTH">Auth</option></select></label>
+        <label>Fase <select id="filter-phase"><option value="">Todas</option><option value="F1">F1</option><option value="F2">F2</option><option value="F3">F3</option><option value="F4">F4</option></select></label>
+        <label>Status <select id="filter-status"><option value="">Todos</option><option value="integrated">Integrado</option><option value="partial">Parcial</option><option value="new">Novo</option><option value="prototype">Protótipo</option><option value="blocked">Bloqueado</option></select></label>
+        <input type="search" id="backlog-search" placeholder="Buscar ID ou título…">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Epic</th><th>Feature</th><th>História</th><th>Fase</th><th>Status</th><th class="tech-only">FE</th><th class="tech-only">BE</th><th class="tech-only">QA</th><th>Prior.</th><th>Spec</th></tr></thead>
+          <tbody id="backlog-tbody"></tbody>
+        </table>
+      </div>
+
+      <h3 style="margin:1.5rem 0 .75rem;color:#1e3a5f">Tasks detalhadas</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>História</th><th>Spec</th><th>Tipo</th><th>Descrição</th><th>Fase</th></tr></thead>
+          <tbody id="tasks-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card tech-only" style="margin-top:1.5rem">
+        <h3>Critérios de aceite (por história)</h3>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:.75rem">Resumo — detalhes nas specs por domínio.</p>
+        <ul style="font-size:.88rem;padding-left:1.25rem">
+          <li><code>US-RM-001</code> — Colaborador visualiza holerite, baixa PDF, consulta histórico 12 meses</li>
+          <li><code>US-RM-002</code> — Solicitação férias criada no portal reflete no RM em até 24h (homolog)</li>
+          <li><code>US-RM-004</code> — Ajuste ponto: colaborador submete → gestor aprova → RH valida → RM</li>
+          <li><code>US-RM-010..012</code> — Requisições movimentação com workflow e audit trail</li>
+          <li><code>US-RM-013</code> — Vaga aberta → candidatos → contratação rastreável</li>
+          <li><code>US-INTRA-001</code> — Admin publica comunicado visível na listagem em &lt; 1 min</li>
+          <li><code>US-INTRA-006</code> — Feedback enviado aparece na fila de triagem RH</li>
+          <li><code>US-AUTH-001</code> — App só visível para roles/áreas autorizadas</li>
+        </ul>
+      </div>
+
+      <footer class="page-footer">LioConecta · Backlog · IDs estáveis US-*/TS-*</footer>
+    </main>
+  </div>
+  <script src="assets/roadmap-data.js"></script>
+  <script src="assets/roadmap.js"></script>
+</body>
+</html>
