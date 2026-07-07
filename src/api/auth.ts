@@ -1,4 +1,5 @@
 import type { MeDto, UserRole } from "./types";
+import type { LoopSettings } from "../config/loop/settings";
 
 const ROLE_INDEX: Record<UserRole, number> = {
   Employee: 0,
@@ -25,4 +26,12 @@ export function isAdminUser(me: MeDto | undefined): boolean {
 /** Alinhado à policy RequireAdmin do backend (Admin ou AnalyticsViewer). */
 export function canAccessAdminArea(me: MeDto | undefined): boolean {
   return hasRole(me, "Admin") || hasRole(me, "AnalyticsViewer");
+}
+
+export function canAccessLoopModule(me: MeDto | undefined, settings: LoopSettings | undefined): boolean {
+  if (!me || !settings?.enabled) return false;
+  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
+    return true;
+  }
+  return settings.allowedRoles.some((role) => hasRole(me, role));
 }

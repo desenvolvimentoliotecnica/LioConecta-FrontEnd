@@ -25,6 +25,7 @@ function exact(path: string, meta: Omit<RouteMeta, "routeTemplate"> & { routeTem
 const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/", { pageName: "Home", module: "home" }),
   exact("/analytics", { pageName: "Analytics", module: "analytics" }),
+  exact("/loop", { pageName: "LoopDashboard", module: "loop" }),
   exact("/admin/configuracoes-backend", { pageName: "BackendConfig", module: "admin" }),
   exact("/admin/trilha-auditoria", { pageName: "AuditTrail", module: "admin" }),
   exact("/admin/observabilidade", { pageName: "ObservabilityHub", module: "admin" }),
@@ -32,6 +33,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/admin/totvs-rm", { pageName: "TotvsRmConfig", module: "admin" }),
   exact("/admin/email", { pageName: "EmailHub", module: "admin" }),
   exact("/admin/email/config", { pageName: "EmailConfig", module: "admin" }),
+  exact("/admin/governanca/organograma", { pageName: "OrganogramGovernance", module: "admin" }),
   exact("/minhas-atividades", { pageName: "Activities", module: "home" }),
   exact("/ajuda", { pageName: "Help", module: "home" }),
   exact("/mapa-do-site", { pageName: "Sitemap", module: "home" }),

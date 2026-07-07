@@ -1314,3 +1314,194 @@ export interface HelpDeskTicketDetailDto {
   assignee?: string | null;
   events: HelpDeskTicketEventDto[];
 }
+
+export type OrgPositionSource = "graph" | "manual";
+
+export interface OrgChartSettingsDto {
+  governanceEnabled: boolean;
+  editAllowedRoles: UserRole[];
+  editAllowedEmails: string[];
+  viewFullAllowedRoles: UserRole[];
+  allowDisplayNameEdit: boolean;
+  allowReimport: boolean;
+  showOverrideBadge: boolean;
+  updatedAt: string;
+  updatedById?: string | null;
+}
+
+export interface UpsertOrgChartSettingsRequest {
+  governanceEnabled: boolean;
+  editAllowedRoles: UserRole[];
+  editAllowedEmails: string[];
+  viewFullAllowedRoles: UserRole[];
+  allowDisplayNameEdit: boolean;
+  allowReimport: boolean;
+  showOverrideBadge: boolean;
+}
+
+export interface OrgChartPolicyDto {
+  canEdit: boolean;
+  canImport: boolean;
+  canManageDepartments: boolean;
+  canViewFull: boolean;
+  allowedFields: string[];
+  governanceEnabled: boolean;
+}
+
+export interface GovernedOrgChartNodeDto {
+  id: string;
+  orgChartId?: string | null;
+  slug: string;
+  name: string;
+  title?: string | null;
+  photoUrl?: string | null;
+  departmentName?: string | null;
+  managerId?: string | null;
+  tags: string[];
+  isOrphan: boolean;
+  email?: string | null;
+  teamsUpn?: string | null;
+  phone?: string | null;
+  location?: string | null;
+  hireDate?: string | null;
+  positionId: string;
+  hasManualOverride: boolean;
+  graphTitle?: string | null;
+  graphDepartmentName?: string | null;
+  graphManagerName?: string | null;
+  orgDepartmentId?: string | null;
+  managerPositionId?: string | null;
+  managerName?: string | null;
+  isVisible?: boolean;
+}
+
+export interface GovernedOrgChartDto {
+  nodes: GovernedOrgChartNodeDto[];
+  rootId?: string | null;
+  total: number;
+  rootIds: string[];
+  orphanCount: number;
+  syncedAtUtc?: string | null;
+  unassignedNodes: GovernedOrgChartNodeDto[];
+  unassignedCount: number;
+}
+
+export interface OrgDepartmentDto {
+  id: string;
+  name: string;
+  parentDepartmentId?: string | null;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+export interface UpsertOrgDepartmentRequest {
+  name: string;
+  parentDepartmentId?: string | null;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+export interface OrgPositionDto {
+  id: string;
+  personId: string;
+  personName: string;
+  title?: string | null;
+  departmentName?: string | null;
+  orgDepartmentId?: string | null;
+  managerPositionId?: string | null;
+  managerName?: string | null;
+  isVisible: boolean;
+  sortOrder: number;
+  hasManualOverride: boolean;
+  source: OrgPositionSource;
+  graphTitle?: string | null;
+  graphDepartmentName?: string | null;
+  updatedAt: string;
+}
+
+export interface UpsertOrgPositionRequest {
+  title?: string | null;
+  departmentName?: string | null;
+  orgDepartmentId?: string | null;
+  managerPositionId?: string | null;
+  isVisible?: boolean | null;
+  sortOrder?: number | null;
+  displayName?: string | null;
+}
+
+export interface CreateOrgPositionRequest {
+  personId: string;
+  title?: string | null;
+  departmentName?: string | null;
+  orgDepartmentId?: string | null;
+  managerPositionId?: string | null;
+  isVisible?: boolean;
+  sortOrder?: number;
+}
+
+export interface OrgChartGovernanceSummaryDto {
+  totalPositions: number;
+  visiblePositions: number;
+  manualOverrides: number;
+  totalDepartments: number;
+  activeDepartments: number;
+  lastImportAt?: string | null;
+}
+
+export interface ImportFromGraphRequest {
+  force: boolean;
+}
+
+export type ImportFromGraphResultDto = OrgChartGovernanceSummaryDto;
+
+export interface OrgDepartmentMappingDto {
+  id: string;
+  sourceName: string;
+  orgDepartmentId?: string | null;
+  orgDepartmentName?: string | null;
+  employeeCount: number;
+  isActive: boolean;
+}
+
+export interface UpsertOrgDepartmentMappingRequest {
+  orgDepartmentId?: string | null;
+  isActive?: boolean | null;
+  updateOrgDepartmentId?: boolean;
+}
+
+export interface ImportDepartmentsFromDirectoryRequest {
+  createMissingDepartments?: boolean;
+}
+
+export interface ImportDepartmentsFromDirectoryResultDto {
+  mappingsImported: number;
+  departmentsCreated: number;
+  departmentsLinked: number;
+  unmappedCount: number;
+}
+
+export interface OrgDepartmentMappingDto {
+  id: string;
+  sourceName: string;
+  orgDepartmentId?: string | null;
+  orgDepartmentName?: string | null;
+  employeeCount: number;
+  isActive: boolean;
+}
+
+export interface UpsertOrgDepartmentMappingRequest {
+  orgDepartmentId?: string | null;
+  isActive?: boolean | null;
+  updateOrgDepartmentId?: boolean;
+}
+
+export interface ImportDepartmentsFromDirectoryRequest {
+  createMissingDepartments?: boolean;
+}
+
+export interface ImportDepartmentsFromDirectoryResultDto {
+  mappingsImported: number;
+  departmentsCreated: number;
+  departmentsLinked: number;
+  unmappedCount: number;
+}

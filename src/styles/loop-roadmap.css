@@ -1,0 +1,111 @@
+.loop-roadmap {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.loop-roadmap__header {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+
+.loop-roadmap__timeline-wrap {
+  position: relative;
+  min-width: 600px;
+}
+
+.loop-roadmap__today {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ef4444;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.loop-roadmap__row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.5rem 0;
+}
+
+.loop-roadmap__project strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.loop-roadmap__project span {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.loop-roadmap__track {
+  position: relative;
+  height: 36px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.loop-roadmap__phase {
+  position: absolute;
+  top: 4px;
+  height: 28px;
+  border-radius: 4px;
+  opacity: 0.85;
+  min-width: 4px;
+  overflow: hidden;
+}
+
+.loop-roadmap__phase-label {
+  font-size: 0.65rem;
+  color: #fff;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 28px;
+}
+
+.loop-roadmap__milestone {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #6366f1;
+  font-size: 0.65rem;
+  z-index: 1;
+}
+
+.loop-roadmap__milestone--atrasado {
+  color: #ef4444;
+}
+
+.loop-roadmap__dates {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.loop-roadmap__today-label {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.loop-roadmap__today-label i {
+  font-size: 0.5rem;
+  margin-right: 0.25rem;
+}

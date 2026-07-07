@@ -1,6 +1,9 @@
 (function () {
       const orgBootId = (window.__lioOrgBootId = (window.__lioOrgBootId || 0) + 1);
       OrgProfileModal.init();
+      if (window.OrgEditDrawer && typeof OrgEditDrawer.init === "function") {
+        OrgEditDrawer.init();
+      }
       const DEFAULT_ORG_FOCUS_SLUGS = ["julio", "julio-schwartzman"];
       /** >1 aproxima o card; <1 mostra mais contexto ao redor do nó focado. */
       const ORG_FOCUS_ZOOM = 0.65;
@@ -465,17 +468,37 @@
         OrgChart.templates.lio.field_0 = function (node, data, template, config, value) {
           const isJulio = isJulioSchwartzmanNode(data);
           const layout = getCardLayout(node, data);
-          return renderOrgSvgText(value, {
-            x: layout.cx,
-            y: layout.nameY,
-            maxWidth: orgTextWidth(node),
-            maxLines: 2,
-            fontSize: isJulio ? 16 : 14,
-            fontWeight: 700,
-            fill: "#1e293b",
-            stroke: "#ffffff",
-            strokeWidth: 2.5
-          });
+          const showBadge =
+            data.hasManualOverride &&
+            window.__lioOrgBootContext &&
+            window.__lioOrgBootContext.showOverrideBadge !== false &&
+            (!window.__lioOrgBootContext.policy ||
+              window.__lioOrgBootContext.policy.governanceEnabled !== false);
+          const badgeMarkup = showBadge
+            ? renderOrgSvgText("OVERRIDE", {
+                x: node.w - 42,
+                y: 18,
+                maxWidth: 72,
+                maxLines: 1,
+                fontSize: 9,
+                fontWeight: 700,
+                fill: "#b45309"
+              })
+            : "";
+          return (
+            badgeMarkup +
+            renderOrgSvgText(value, {
+              x: layout.cx,
+              y: layout.nameY,
+              maxWidth: orgTextWidth(node),
+              maxLines: 2,
+              fontSize: isJulio ? 16 : 14,
+              fontWeight: 700,
+              fill: "#1e293b",
+              stroke: "#ffffff",
+              strokeWidth: 2.5
+            })
+          );
         };
 
         OrgChart.templates.lio.field_1 = function (node, data, template, config, value) {
@@ -557,6 +580,12 @@
           OrgProfileModal.open(person, nodeIndex, function (p) {
             showOrgAction("Mensagem para " + p.name + " — chat interno em breve.");
           });
+          return;
+        }
+
+        if (action === "editar") {
+          if (!window.OrgEditDrawer || typeof OrgEditDrawer.openFromNode !== "function") return;
+          OrgEditDrawer.openFromNode(person);
           return;
         }
 
@@ -1123,6 +1152,14 @@
           positionItem.hidden = !allowed;
           positionItem.disabled = !allowed;
         }
+
+        const editItem = menu.querySelector('[data-action="editar"]');
+        if (editItem) {
+          const policy = (window.__lioOrgBootContext && window.__lioOrgBootContext.policy) || {};
+          const canEdit = policy.canEdit === true || policy.CanEdit === true;
+          editItem.hidden = !canEdit;
+          editItem.disabled = !canEdit;
+        }
       }
 
       function findMenuButton(el) {
@@ -1486,8 +1523,15 @@
       function updateOrgToolbar(bootContext) {
         const hint = document.getElementById("org-view-hint");
         const toggle = document.getElementById("org-view-full-toggle");
+        const editToggle = document.getElementById("org-edit-mode-toggle");
         const searchInput = document.getElementById("org-people-search");
         if (!bootContext) return;
+
+        const policy = bootContext.policy || {};
+        const canViewFull =
+          policy.canViewFull === true ||
+          policy.CanViewFull === true ||
+          (!policy.governanceEnabled && bootContext.isAdminOrHr);
 
         if (hint) {
           if (bootContext.viewMode === "full") {
@@ -1502,12 +1546,24 @@
         }
 
         if (toggle) {
-          if (bootContext.isAdminOrHr) {
+          if (canViewFull) {
             toggle.hidden = false;
             toggle.textContent =
               bootContext.viewMode === "full" ? "Ver minha árvore" : "Ver organograma completo";
           } else {
             toggle.hidden = true;
+          }
+        }
+
+        if (editToggle) {
+          const canEdit = policy.canEdit === true || policy.CanEdit === true;
+          if (canEdit) {
+            editToggle.hidden = false;
+            editToggle.classList.toggle("is-active", !!window.__lioOrgEditMode);
+            editToggle.textContent = window.__lioOrgEditMode ? "Sair do modo edição" : "Modo edição";
+          } else {
+            editToggle.hidden = true;
+            window.__lioOrgEditMode = false;
           }
         }
 
@@ -1656,6 +1712,19 @@
         });
       }
 
+      function setupOrgEditModeToggle() {
+        const toggle = document.getElementById("org-edit-mode-toggle");
+        if (!toggle || toggle.__lioOrgEditToggleBound) return;
+        toggle.__lioOrgEditToggleBound = true;
+        toggle.addEventListener("click", function () {
+          window.__lioOrgEditMode = !window.__lioOrgEditMode;
+          updateOrgToolbar(window.__lioOrgBootContext || {});
+          if (window.__lioOrgChart && typeof window.__lioOrgChart.draw === "function") {
+            window.__lioOrgChart.draw();
+          }
+        });
+      }
+
       function setupOrgViewToggle() {
         const toggle = document.getElementById("org-view-full-toggle");
         if (!toggle || toggle.__lioOrgToggleBound) return;
@@ -1742,12 +1811,34 @@
         const name = apiNode.name || apiNode.Name || "";
         var managerId = apiNode.managerId || apiNode.ManagerId;
         var managerNode = managerId && apiNodesById ? apiNodesById[managerId] : null;
+        const positionId = apiNode.positionId || apiNode.PositionId || null;
+        const personId = apiNode.id || apiNode.Id || null;
         return {
           slug: apiNode.slug || apiNode.Slug || "",
           name: name,
           title: apiNode.title || apiNode.Title || "Colaborador",
           img: resolvePhotoUrl(apiNode.photoUrl || apiNode.PhotoUrl),
+          photoUrl: apiNode.photoUrl || apiNode.PhotoUrl || "",
           dept: dept,
+          departmentName: dept,
+          personId: personId,
+          positionId: positionId,
+          orgDepartmentId: apiNode.orgDepartmentId || apiNode.OrgDepartmentId || null,
+          managerPositionId: apiNode.managerPositionId || apiNode.ManagerPositionId || null,
+          managerPersonId: managerId || null,
+          managerName:
+            apiNode.managerName ||
+            apiNode.ManagerName ||
+            (managerNode ? managerNode.name || managerNode.Name : "") ||
+            apiNode.graphManagerName ||
+            apiNode.GraphManagerName ||
+            "",
+          isVisible: apiNode.isVisible !== false && apiNode.IsVisible !== false,
+          hasManualOverride: apiNode.hasManualOverride === true || apiNode.HasManualOverride === true,
+          graphTitle: apiNode.graphTitle || apiNode.GraphTitle || apiNode.title || apiNode.Title || "",
+          graphDepartmentName:
+            apiNode.graphDepartmentName || apiNode.GraphDepartmentName || dept,
+          graphManagerName: apiNode.graphManagerName || apiNode.GraphManagerName || "",
           profile:
             OrgProfileModal && typeof OrgProfileModal.buildProfileFromApiNode === "function"
               ? OrgProfileModal.buildProfileFromApiNode(apiNode, managerNode)
@@ -1760,6 +1851,9 @@
         const tbody = document.getElementById("org-unassigned-body");
         const desc = document.getElementById("org-unassigned-desc");
         if (!section || !tbody) return null;
+
+        const policy = (window.__lioOrgBootContext && window.__lioOrgBootContext.policy) || {};
+        const canEdit = policy.canEdit === true || policy.CanEdit === true;
 
         if (!unassignedPeople.length) {
           section.hidden = true;
@@ -1806,6 +1900,11 @@
               escapeHtml(person.dept) +
               "</span></td>" +
               '<td><div class="org-unassigned__actions">' +
+              (canEdit
+                ? '<button type="button" class="org-unassigned__btn" data-unassigned-assign="' +
+                  escapeAttr(person.slug) +
+                  '">Atribuir gestor</button>'
+                : "") +
               '<button type="button" class="org-unassigned__btn" data-unassigned-profile="' +
               escapeAttr(person.slug) +
               '">Ver perfil</button>' +
@@ -1830,6 +1929,15 @@
           });
         });
 
+        tbody.querySelectorAll("[data-unassigned-assign]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const slug = btn.getAttribute("data-unassigned-assign");
+            const person = nodeIndexBySlug[slug];
+            if (!person || !window.OrgEditDrawer) return;
+            OrgEditDrawer.openFromNode(person);
+          });
+        });
+
         bindUnassignedAvatarFallbacks(tbody);
 
         return section;
@@ -1848,11 +1956,12 @@
         const apiNodesById = indexApiNodesById(apiNodes);
         let nextNum = 1;
         apiNodes.forEach(function (node) {
-          guidToNumeric[node.id] = nextNum++;
+          const nodeId = node.id || node.Id;
+          guidToNumeric[nodeId] = nextNum++;
         });
 
         return apiNodes.map(function (node) {
-          const dept = node.departmentName || "Sem departamento";
+          const dept = node.departmentName || node.DepartmentName || "Sem departamento";
           const isOrphan = node.isOrphan === true || node.IsOrphan === true;
           const managerNumeric =
             !isOrphan && node.managerId && guidToNumeric[node.managerId]
@@ -1861,20 +1970,42 @@
           const deptLabel = isOrphan ? dept + " · Gestor ext." : dept;
           var managerId = node.managerId || node.ManagerId;
           var managerNode = managerId ? apiNodesById[managerId] : null;
+          const positionId = node.positionId || node.PositionId || null;
+          const personId = node.id || node.Id || null;
           return {
-            id: guidToNumeric[node.id],
-            slug: node.slug,
-            name: node.name,
-            title: node.title || "Colaborador",
+            id: guidToNumeric[personId],
+            slug: node.slug || node.Slug,
+            name: node.name || node.Name,
+            title: node.title || node.Title || "Colaborador",
             img: resolvePhotoUrl(node.photoUrl || node.PhotoUrl),
+            photoUrl: node.photoUrl || node.PhotoUrl || "",
             dept: deptLabel,
-            tags: node.tags || [],
+            departmentName: dept,
+            tags: node.tags || node.Tags || [],
             isOrphan: isOrphan,
             pid: managerNumeric,
+            personId: personId,
+            positionId: positionId,
+            orgDepartmentId: node.orgDepartmentId || node.OrgDepartmentId || null,
+            managerPositionId: node.managerPositionId || node.ManagerPositionId || null,
+            managerPersonId: managerId || null,
+            managerName:
+              node.managerName ||
+              node.ManagerName ||
+              (managerNode ? managerNode.name || managerNode.Name : "") ||
+              node.graphManagerName ||
+              node.GraphManagerName ||
+              "",
+            isVisible: node.isVisible !== false && node.IsVisible !== false,
+            hasManualOverride: node.hasManualOverride === true || node.HasManualOverride === true,
+            graphTitle: node.graphTitle || node.GraphTitle || node.title || node.Title || "",
+            graphDepartmentName:
+              node.graphDepartmentName || node.GraphDepartmentName || dept,
+            graphManagerName: node.graphManagerName || node.GraphManagerName || "",
             profile:
               OrgProfileModal && typeof OrgProfileModal.buildProfileFromApiNode === "function"
                 ? OrgProfileModal.buildProfileFromApiNode(node, managerNode)
-                : OrgProfileModal.buildProfileExtras(node.name, deptLabel)
+                : OrgProfileModal.buildProfileExtras(node.name || node.Name, deptLabel)
           };
         });
       }
@@ -1965,6 +2096,7 @@
         setupOrgNodeMenu(nodeIndex);
         setupOrgPositionRequestModal();
         setupOrgLevelAddButtons(chart, nodeIndex);
+        setupOrgChartEditClicks(chart, nodeIndex);
 
         chart.onInit(function () {
           if (!countEl) return;
@@ -2039,25 +2171,68 @@
         applyFocusAfterRootChange();
       }
 
+      function setupOrgChartEditClicks(chart, nodeIndex) {
+        if (!chart || chart.__lioOrgEditClicksBound) return;
+        chart.__lioOrgEditClicksBound = true;
+
+        chart.on("click", function (sender, args) {
+          if (!window.__lioOrgEditMode) return;
+          if (!args || !args.node || args.node.id === undefined) return;
+          if (args.event && findMenuButton(args.event.target)) return;
+
+          const person = nodeIndex[args.node.id] || nodeIndex[String(args.node.id)];
+          if (!person || !window.OrgEditDrawer) return;
+          OrgEditDrawer.openFromNode(person);
+        });
+      }
+
       function bootOrganogram() {
         const bootId = window.__lioOrgBootId;
         return resolveBootContext()
           .then(function (bootContext) {
             if (bootId !== window.__lioOrgBootId) return;
             window.__lioOrgBootContext = bootContext;
-            updateOrgToolbar(bootContext);
-            return Promise.all([
-              window.LioApi.get("/people/org-chart"),
-              bootContext.focusSlug
-                ? window.LioApi.get("/people/" + encodeURIComponent(bootContext.focusSlug) + "/hierarchy").catch(
-                    function () {
-                      return null;
-                    }
-                  )
-                : Promise.resolve(null)
-            ]).then(function (results) {
-              return { bootContext: bootContext, payload: results[0], hierarchy: results[1] };
-            });
+            return window.LioApi.get("/org-chart/policy")
+              .then(function (policy) {
+                bootContext.policy = policy || {};
+                bootContext.showOverrideBadge = policy.showOverrideBadge !== false;
+                window.__lioOrgBootContext = bootContext;
+                updateOrgToolbar(bootContext);
+                const chartPath =
+                  bootContext.policy.governanceEnabled === true ||
+                  bootContext.policy.GovernanceEnabled === true
+                    ? "/org-chart"
+                    : "/people/org-chart";
+                return Promise.all([
+                  window.LioApi.get(chartPath),
+                  bootContext.focusSlug
+                    ? window.LioApi.get(
+                        "/people/" + encodeURIComponent(bootContext.focusSlug) + "/hierarchy"
+                      ).catch(function () {
+                        return null;
+                      })
+                    : Promise.resolve(null)
+                ]).then(function (results) {
+                  return { bootContext: bootContext, payload: results[0], hierarchy: results[1] };
+                });
+              })
+              .catch(function () {
+                bootContext.policy = {};
+                window.__lioOrgBootContext = bootContext;
+                updateOrgToolbar(bootContext);
+                return Promise.all([
+                  window.LioApi.get("/people/org-chart"),
+                  bootContext.focusSlug
+                    ? window.LioApi.get(
+                        "/people/" + encodeURIComponent(bootContext.focusSlug) + "/hierarchy"
+                      ).catch(function () {
+                        return null;
+                      })
+                    : Promise.resolve(null)
+                ]).then(function (results) {
+                  return { bootContext: bootContext, payload: results[0], hierarchy: results[1] };
+                });
+              });
           })
           .then(function (bundle) {
             if (!bundle || bootId !== window.__lioOrgBootId) return;
@@ -2160,6 +2335,7 @@
 
       setupOrgPeopleSearch();
       setupOrgViewToggle();
+      setupOrgEditModeToggle();
 
       if (!window.LioApi || window.LioApi.useMock) {
         if (countEl) {
@@ -2169,4 +2345,5 @@
       }
 
       bootOrganogram();
+      window.reloadOrganogram = reloadOrganogram;
     })();

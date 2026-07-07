@@ -380,13 +380,6 @@ export function ActivitiesPage() {
         </div>
       </header>
 
-      {data?.usesDevAdapters ? (
-        <div className="activities-page__banner activities-page__banner--warn" role="status">
-          Modo mock ativo — exibindo tarefas fictícias. Desative em{" "}
-          <Link to="/admin/configuracoes-backend?category=integrations">Integrações</Link> para dados reais.
-        </div>
-      ) : null}
-
       {!data?.plannerEnabled && !isLoading ? (
         <div className="activities-page__banner activities-page__banner--info" role="status">
           Integração Planner desabilitada. Um administrador pode ativar em{" "}

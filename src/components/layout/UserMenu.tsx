@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLogout } from "../../api/hooks/useAuth";
 import { useMe } from "../../api/hooks/useMe";
+import { UserAvatar } from "../ui/UserAvatar";
 import { closeOtherMenus, useMenuCloseSync } from "./NotificationsMenu";
 
 const FALLBACK = {
   slug: "leonardo-mendes",
   name: "Leonardo Sabino Mendes",
-  photoUrl: "/avatar-carlos-mendes.png",
 };
 
 export function UserMenu() {
@@ -41,10 +41,6 @@ export function UserMenu() {
     location.pathname === "/pessoas/perfil" &&
     new URLSearchParams(location.search).get("id") === user.slug;
 
-  const avatarSrc = user.photoUrl?.startsWith("/")
-    ? user.photoUrl
-    : user.photoUrl ?? FALLBACK.photoUrl;
-
   return (
     <div className={`user-menu${open ? " is-open" : ""}`} ref={ref}>
       <button
@@ -60,7 +56,7 @@ export function UserMenu() {
           setOpen((v) => !v);
         }}
       >
-        <img className="avatar" src={avatarSrc} alt="" />
+        <UserAvatar photoUrl={me?.photoUrl} />
         <span className="user-menu__name" title={user.name}>
           {user.name}
         </span>

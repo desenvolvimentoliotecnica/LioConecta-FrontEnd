@@ -208,6 +208,26 @@ export function buildSitemapSections(): SitemapSection[] {
       ],
     },
     {
+      id: "loop",
+      label: "Loop de Projetos",
+      icon: "fa-infinity",
+      items: [
+        entry(
+          "Visão Geral",
+          "/loop",
+          "Dashboard executivo de projetos, KPIs, alertas e desempenho.",
+        ),
+        entry("Projetos", "/loop/projetos", "Portfólio com saúde, progresso e responsáveis."),
+        entry("Atividades", "/loop/atividades", "Tarefas operacionais e próximos passos."),
+        entry("Equipes", "/loop/equipes", "Capacidade e ocupação por squad."),
+        entry("Planejamento", "/loop/planejamento", "Roadmap com fases e marcos."),
+        entry("Riscos", "/loop/riscos", "Gestão de riscos por severidade."),
+        entry("Aprovações", "/loop/aprovacoes", "Pendências aguardando decisão."),
+        entry("Aprendizados", "/loop/aprendizados", "Lições aprendidas por projeto."),
+        entry("Relatórios", "/loop/relatorios", "Exportações executivas (em breve)."),
+      ],
+    },
+    {
       id: "utilitarios",
       label: "Utilitários",
       icon: "fa-toolbox",
@@ -255,6 +275,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "Credenciais, integrações e parâmetros operacionais — persistidos no banco.",
         ),
         entry(
+          "Organograma — hub de configurações",
+          "/admin/configuracoes-backend?category=organogram",
+          "Acesso à governança do organograma a partir do painel de configurações do backend.",
+        ),
+        entry(
+          "Loop de Projetos — permissões",
+          "/admin/configuracoes-backend?category=loop",
+          "Define quem acessa o módulo Loop (∞) no menu lateral esquerdo.",
+        ),
+        entry(
           "Trilha de auditoria",
           "/admin/trilha-auditoria",
           "Consulta paginada de eventos de mutações HTTP e alterações de entidades.",
@@ -283,6 +313,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "E-mail — SMTP",
           "/admin/email/config",
           "Configuração SMTP persistida em banco — host, credenciais e parâmetros de retry.",
+        ),
+        entry(
+          "Governança do organograma",
+          "/admin/governanca/organograma",
+          "Gestão de posições, departamentos, importação do Graph e políticas de edição.",
+        ),
+        entry(
+          "Governança — Configurações",
+          "/admin/governanca/organograma?tab=configuracoes",
+          "Papéis autorizados, e-mails extras e comportamento de overrides no organograma.",
         ),
         entry(
           "Configurações observabilidade",
