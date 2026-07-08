@@ -13,8 +13,9 @@ const FEED_SCROLL_OVERRIDES = `
 .main.main--feed-scroll > .announcement--carousel {
   margin-top: 20px;
 }
+/* Hide only the legacy HTML feed — never .feed-api-posts (API masonry). */
 .main.main--feed-scroll:has(.feed-api-posts .feed-grid) > .feed-grid,
-.main.main--feed-scroll:has(.feed-api-posts .feed-grid) > div:has(> .feed-grid) {
+.main.main--feed-scroll:has(.feed-api-posts .feed-grid) > div:not(.feed-api-posts):has(> .feed-grid) {
   display: none !important;
 }
 .feed-composer {
