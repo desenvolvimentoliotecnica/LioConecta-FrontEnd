@@ -19,6 +19,7 @@
     "generate:biblioteca-pdfs": "python scripts/generate-biblioteca-pdfs.py",
     "extract": "python scripts/migrate-to-react.py && python scripts/generate-pages-index.py && python scripts/fix-css-urls.py",
     "docs:roadmap": "npx --yes serve docs/roadmap -p 4173",
+    "docs:transforma": "npx --yes serve docs/transforma -p 4174",
     "render:intro-video": "node tools/render-intro-video.mjs"
   },
   "dependencies": {
