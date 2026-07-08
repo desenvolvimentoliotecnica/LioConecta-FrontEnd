@@ -1,0 +1,284 @@
+.compass-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  min-height: calc(100vh - var(--wf-topbar-h));
+  width: 100%;
+  max-width: none;
+  background: var(--wf-bg, #eceff3);
+  position: relative;
+  z-index: 1;
+  align-items: start;
+}
+
+.compass-shell--nav-collapsed {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.compass-shell__main {
+  min-width: 0;
+  padding: 1rem 1.25rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.compass-shell__header {
+  margin-bottom: 1rem;
+}
+
+.compass-shell__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.compass-shell__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compass-shell__persona {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.compass-shell__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.compass-shell__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 220px;
+  min-width: 200px;
+  padding: 0.45rem 0.75rem;
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 10px);
+}
+
+.compass-shell__search input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  font: inherit;
+  background: transparent;
+}
+
+.compass-shell__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.compass-shell__filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.compass-shell__select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+.compass-shell__reset {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.compass-nav {
+  background: #fff;
+  border-right: 1px solid var(--wf-border, #e2e8f0);
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: sticky;
+  top: var(--wf-topbar-h);
+  align-self: start;
+  height: calc(100vh - var(--wf-topbar-h));
+  max-height: calc(100vh - var(--wf-topbar-h));
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 2;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 99, 235, 0.25) transparent;
+}
+
+.compass-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.compass-nav::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.25);
+  border-radius: 3px;
+}
+
+.compass-nav__toggle {
+  align-self: flex-end;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.25rem;
+}
+
+.compass-nav--collapsed .compass-nav__toggle i {
+  transform: rotate(180deg);
+}
+
+.compass-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.compass-nav__brand-icon {
+  font-size: 1.25rem;
+}
+
+.compass-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.compass-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: #334155;
+  text-decoration: none;
+  position: relative;
+}
+
+.compass-nav__item:hover {
+  background: #f1f5f9;
+}
+
+.compass-nav__item.is-active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.compass-nav__badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.35rem;
+}
+
+.compass-nav--collapsed .compass-nav__label,
+.compass-nav--collapsed .compass-nav__brand-text {
+  display: none;
+}
+
+.compass-nav--collapsed .compass-nav__item {
+  justify-content: center;
+  padding: 0.55rem 0.35rem;
+}
+
+.compass-nav--collapsed .compass-nav__badge {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.1rem;
+  margin-left: 0;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  font-size: 0.65rem;
+  padding: 0 0.25rem;
+}
+
+.compass-page__loading {
+  padding: 2rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .compass-shell {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+}
+
+.compass-shell--module-focus {
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.compass-shell--module-focus .compass-nav {
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.compass-shell--module-focus .compass-shell__main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  background: var(--wf-bg, #eceff3);
+}
+
+.compass-shell--module-focus .compass-shell__header,
+.compass-shell--module-focus .compass-shell__toolbar {
+  width: 100%;
+  max-width: none;
+}
+
+.compass-shell--module-focus .compass-page {
+  max-width: none;
+  width: 100%;
+}
+
+.compass-shell--module-focus .compass-dashboard__grid,
+.compass-shell--module-focus .compass-dashboard__grid--3,
+.compass-shell--module-focus .compass-panel,
+.compass-shell--module-focus .compass-table-wrap,
+.compass-shell--module-focus .compass-kpi-grid,
+.compass-shell--module-focus .analytics-kpi-grid,
+.compass-shell--module-focus .compass-cycle {
+  width: 100%;
+  max-width: none;
+}

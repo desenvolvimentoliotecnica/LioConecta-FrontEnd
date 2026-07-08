@@ -43,6 +43,8 @@ function waitForProfileDom(): Promise<void> {
 
 async function bootProfilePage(): Promise<void> {
   installLegacyApiBridge();
+  await loadScript("/assets/person-avatar.js");
+  await loadScript("/assets/avatar-picker.js");
   await loadScript("/assets/pessoas-perfil.js");
   await waitForProfileDom();
   const initResult = window.ProfilePage?.init();

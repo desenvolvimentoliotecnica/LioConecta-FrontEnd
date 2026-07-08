@@ -1526,6 +1526,168 @@ export interface LoopBootstrapDto {
   allowedEmails: string[];
 }
 
+export interface CompassBootstrapDto {
+  enabled: boolean;
+  allowedRoles: UserRole[];
+  allowedEmails: string[];
+}
+
+export interface CompassSnapshotDto {
+  id: string;
+  name: string;
+  source: string;
+  exportedAt: string;
+  fiscalYear: number;
+  periodLabel: string;
+  hyperionVersion?: string | null;
+}
+
+export interface CompassDimensionOptionDto {
+  value: string;
+  label: string;
+  count?: number | null;
+}
+
+export interface CompassMetaDto {
+  snapshot: CompassSnapshotDto;
+  hyperionBadge?: string | null;
+  directorias: CompassDimensionOptionDto[];
+  unidades: CompassDimensionOptionDto[];
+  familias: CompassDimensionOptionDto[];
+  tipos: CompassDimensionOptionDto[];
+}
+
+export interface CompassKpiDto {
+  id: string;
+  label: string;
+  value: string;
+  delta: string;
+  trend: "up" | "down" | "neutral";
+  icon: string;
+  mod: string;
+  href?: string | null;
+}
+
+export interface CompassAlertDto {
+  id: string;
+  type?: string;
+  severity: string;
+  title: string;
+  description: string;
+  quantity: number;
+  date?: string;
+  origin?: string;
+  link: string;
+}
+
+export interface CompassDashboardGapDto {
+  id: string;
+  title: string;
+  severity: "critico" | "alto" | "medio" | "baixo";
+  diretoria: string;
+  tipo: string;
+  value: string;
+  variacaoPct: number;
+}
+
+export interface CompassDashboardMeetingDto {
+  id: string;
+  date: string;
+  time: string;
+  title: string;
+  phaseLabel: string;
+}
+
+export interface CompassDashboardDecisionDto {
+  id: string;
+  title: string;
+  meetingTitle: string;
+  ownerName: string;
+  dueDate: string;
+  impact: string;
+  status: string;
+}
+
+export interface CompassReconciliationCellDto {
+  diretoria: string;
+  tipo: string;
+  ibpAtual: number;
+  ibpAnterior: number;
+  variacao: number;
+  variacaoPct: number;
+}
+
+export interface CompassAggregateRowDto {
+  groupKey: string;
+  groupLabel: string;
+  ibpAtual: number;
+  ibpAnterior: number;
+  variacao: number;
+  variacaoPct: number;
+  rowCount?: number;
+}
+
+export type CompassAggregateGroupBy = "diretoria" | "familia" | "tipo" | "unidade" | "matriz";
+
+export interface CompassAggregatesDto {
+  groupBy: CompassAggregateGroupBy;
+  rows: CompassAggregateRowDto[];
+  totals: {
+    ibpAtual: number;
+    ibpAnterior: number;
+    variacao: number;
+    variacaoPct: number;
+  };
+}
+
+export interface CompassDashboardDto {
+  snapshot: CompassSnapshotDto;
+  currentPhaseLabel: string;
+  cycleProgress: number;
+  alignmentIndex: number;
+  alignmentDelta: number;
+  kpis: CompassKpiDto[];
+  alerts: CompassAlertDto[];
+  alignmentHistory: { label: string; value: number }[];
+  demandSupplyChart: { label: string; demand: number; supply: number }[];
+  varianceBridge: { label: string; value: number; color: string }[];
+  topGaps: CompassDashboardGapDto[];
+  upcomingMeetings: CompassDashboardMeetingDto[];
+  recentDecisions: CompassDashboardDecisionDto[];
+  reconciliationMatrix: CompassReconciliationCellDto[];
+  summaryByTipo: CompassAggregateRowDto[];
+  summaryByDiretoria: CompassAggregateRowDto[];
+}
+
+export interface CompassYtdRowDto {
+  id: string;
+  diretoria: string;
+  unidade: string;
+  familia: string;
+  tipo: string;
+  matriz: string;
+  conta: string;
+  ibpAtual: number;
+  ibpAnterior: number;
+  variacao: number;
+  variacaoPct: number;
+  moeda: string;
+}
+
+export interface CompassYtdPageDto {
+  items: CompassYtdRowDto[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  totals: {
+    ibpAtual: number;
+    ibpAnterior: number;
+    variacao: number;
+    variacaoPct: number;
+  };
+}
+
 export interface ChatStatusDto {
   enabled: boolean;
   linked: boolean;

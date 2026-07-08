@@ -146,6 +146,13 @@ export async function acquireDelegatedToken(
   fallbackScopes: string[],
   options?: AcquireDelegatedTokenOptions,
 ): Promise<AuthenticationResult> {
+  if (typeof window !== "undefined" && !window.isSecureContext) {
+    const httpsOrigin = window.location.origin.replace(/^http:/i, "https:");
+    throw new Error(
+      `O vínculo Microsoft exige HTTPS (Web Crypto). Acesse ${httpsOrigin}, aceite o certificado de desenvolvimento e tente «Vincular conta» novamente.`,
+    );
+  }
+
   const msal = getOrCreateMsalInstance(bootstrap);
   if (!msal) {
     throw new Error("Configuração MSAL indisponível — preencha azure_ad.* no admin.");

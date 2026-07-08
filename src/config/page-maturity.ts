@@ -81,6 +81,18 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/servicos/due-diligence": "prototype",
   "/servicos/procuracoes": "prototype",
   "/servicos/consultoria-juridica": "prototype",
+
+  "/compass": "prototype",
+  "/compass/analise-ytd": "prototype",
+  "/compass/ciclo": "prototype",
+  "/compass/volume": "prototype",
+  "/compass/canais": "prototype",
+  "/compass/financeiro": "prototype",
+  "/compass/reconciliacao": "prototype",
+  "/compass/reunioes": "prototype",
+  "/compass/decisoes": "prototype",
+  "/compass/cenarios": "prototype",
+  "/compass/relatorios": "prototype",
 };
 
 export const TOPBAR_NAV_ITEMS: NavLinkItem[] = [

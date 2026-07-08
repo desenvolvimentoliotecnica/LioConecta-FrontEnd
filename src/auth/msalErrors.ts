@@ -72,6 +72,13 @@ export function formatMsalErrorForUser(error: unknown): string {
     return "Permissão negada no popup Microsoft. Clique em «Vincular conta» e aceite as permissões solicitadas.";
   }
 
+  if (message.includes("crypto_nonexistent") || message.includes("crypto.subtle")) {
+    const httpsOrigin = typeof window !== "undefined"
+      ? window.location.origin.replace(/^http:/i, "https:")
+      : redirectUri.replace(/^http:/i, "https:");
+    return `O MSAL exige HTTPS neste ambiente. Acesse ${httpsOrigin} (não http), aceite o certificado de desenvolvimento e registre essa URL no Azure em Authentication → SPA.`;
+  }
+
   switch (code) {
     case BrowserAuthErrorCodes.interactionInProgress:
     case BrowserAuthErrorCodes.interactionInProgressCancelled:

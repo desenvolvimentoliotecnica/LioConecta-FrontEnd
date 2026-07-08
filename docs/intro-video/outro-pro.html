@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>LioConecta Outro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1920px; height: 1080px; overflow: hidden;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .stage {
+      position: relative; width: 1920px; height: 1080px; overflow: hidden;
+      background: linear-gradient(135deg, #003580 0%, #0046ad 45%, #006e8f 100%);
+      color: #fff;
+    }
+    .glow {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(0,180,200,.35), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,.12), transparent 40%);
+    }
+    .content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 32px; text-align: center;
+    }
+    .logo { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 8px 24px rgba(0,0,0,.25)); }
+    .title { font-size: 68px; font-weight: 800; letter-spacing: -2px; }
+    .subtitle { font-size: 26px; font-weight: 500; max-width: 820px; line-height: 1.55; color: rgba(255,255,255,.9); }
+    .cta {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 20px 48px; border-radius: 999px;
+      background: #fff; color: #0046ad; font-size: 22px; font-weight: 700;
+      box-shadow: 0 16px 48px rgba(0,0,0,.22);
+    }
+    .footer {
+      position: absolute; bottom: 52px; left: 0; right: 0; text-align: center;
+      font-size: 17px; color: rgba(255,255,255,.75);
+    }
+    .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .dot {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="glow" id="glow"></div>
+    <div class="particles" id="particles"></div>
+    <div class="content">
+      <img class="logo" id="logo" src="assets/logo-lioconecta.png" alt="" />
+      <h2 class="title" id="title">Bem-vindo ao LioConecta</h2>
+      <p class="subtitle" id="subtitle">Conectando pessoas, processos e conhecimento na Lio Técnica</p>
+      <div class="cta" id="cta">Acesse com suas credenciais corporativas →</div>
+    </div>
+    <p class="footer" id="footer">liotecnica.com.br</p>
+  </div>
+  <script>
+    const dots = Array.from({ length: 24 }, (_, i) => {
+      const el = document.createElement("div");
+      el.className = "dot";
+      el.dataset.i = String(i);
+      el.style.left = `${8 + (i * 37) % 88}%`;
+      el.style.top = `${12 + (i * 53) % 76}%`;
+      document.getElementById("particles").appendChild(el);
+      return el;
+    });
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+    window.seekOutro = function(ms) {
+      const s = ms / 1000;
+      const logo = document.getElementById("logo");
+      const title = document.getElementById("title");
+      const subtitle = document.getElementById("subtitle");
+      const cta = document.getElementById("cta");
+      const footer = document.getElementById("footer");
+
+      const logoP = easeOut(clamp01(s / 0.7));
+      logo.style.opacity = logoP;
+      logo.style.transform = `scale(${0.5 + logoP * 0.5}) translateY(${(1 - logoP) * 30}px)`;
+
+      const titleP = easeOut(clamp01((s - 0.45) / 0.7));
+      title.style.opacity = titleP;
+      title.style.transform = `translateY(${(1 - titleP) * 24}px)`;
+
+      const subP = easeOut(clamp01((s - 0.95) / 0.8));
+      subtitle.style.opacity = subP;
+      subtitle.style.transform = `translateY(${(1 - subP) * 20}px)`;
+
+      const ctaP = easeOut(clamp01((s - 1.55) / 0.75));
+      cta.style.opacity = ctaP;
+      cta.style.transform = `translateY(${(1 - ctaP) * 18}px) scale(${0.92 + ctaP * 0.08})`;
+
+      const footP = easeOut(clamp01((s - 2.2) / 0.6));
+      footer.style.opacity = footP;
+
+      dots.forEach((dot, i) => {
+        const phase = (s * (0.4 + (i % 5) * 0.08) + i * 0.2) % 1;
+        dot.style.opacity = 0.15 + phase * 0.55;
+        dot.style.transform = `translateY(${Math.sin(s * 1.2 + i) * 12}px) scale(${0.8 + phase * 0.5})`;
+      });
+    };
+
+    window.seekOutro(0);
+  </script>
+</body>
+</html>

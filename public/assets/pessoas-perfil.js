@@ -931,8 +931,66 @@
     document.getElementById("profile-history").innerHTML = renderHistory(person.history);
   }
 
+  function resolveProfileAvatarUrl(person) {
+    if (!person) return "";
+    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrl === "function") {
+      return global.PersonAvatar.resolvePhotoUrl(person.img || person.photoUrl) || "";
+    }
+    return person.img || person.photoUrl || "";
+  }
+
+  function openAvatarPickerForProfile() {
+    if (!canEditProfile() || !currentPerson || !global.AvatarPicker) return;
+
+    var graphPhotoUrl =
+      currentPerson.graphPhotoUrl ||
+      (global.PersonAvatar && global.PersonAvatar.resolveGraphPhotoUrl(currentPerson.img));
+
+    global.AvatarPicker.open({
+      mode: "me",
+      isSelf: true,
+      slug: currentPerson.id,
+      personName: currentPerson.name,
+      photoUrl: currentPerson.img,
+      graphPhotoUrl: graphPhotoUrl,
+      currentUrl: resolveProfileAvatarUrl(currentPerson),
+      onSaved: function (savedUrl, result) {
+        if (result) {
+          applyUpdatedProfile(result);
+        } else {
+          currentPerson.img = savedUrl || graphPhotoUrl || "";
+          renderProfileAvatar(currentPerson);
+        }
+        if (typeof global.reloadOrganogram === "function") {
+          global.reloadOrganogram();
+        }
+      }
+    });
+  }
+
+  function renderProfileAvatar(person) {
+    var avatarEl = document.getElementById("profile-avatar");
+    var changeBtn = document.getElementById("profile-avatar-change");
+    if (!avatarEl) return;
+
+    var src = resolveProfileAvatarUrl(person);
+    if (src) {
+      avatarEl.src = src;
+      avatarEl.hidden = false;
+    } else {
+      avatarEl.removeAttribute("src");
+      avatarEl.hidden = true;
+    }
+    avatarEl.alt = "Foto de " + person.name;
+
+    if (changeBtn) {
+      changeBtn.hidden = !canEditProfile();
+    }
+  }
+
   function updateOverviewFromPerson(person) {
     refreshEditableSections(person);
+    renderProfileAvatar(person);
   }
 
   function applyUpdatedProfile(dto) {
@@ -1026,6 +1084,12 @@
   function setupProfileEditModals() {
     if (editModalsInitialized) return;
     editModalsInitialized = true;
+
+    var avatarChangeBtn = document.getElementById("profile-avatar-change");
+    if (avatarChangeBtn) {
+      avatarChangeBtn.addEventListener("click", openAvatarPickerForProfile);
+    }
+
     document.querySelectorAll("[data-edit-section]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         openEditModal(btn.getAttribute("data-edit-section"));
@@ -1240,15 +1304,7 @@
     renderBreadcrumb(person, hierarchy.chain);
     renderBirthdayBanner(person);
 
-    var avatarEl = document.getElementById("profile-avatar");
-    if (person.img) {
-      avatarEl.src = person.img;
-      avatarEl.hidden = false;
-    } else {
-      avatarEl.removeAttribute("src");
-      avatarEl.hidden = true;
-    }
-    avatarEl.alt = "Foto de " + person.name;
+    renderProfileAvatar(person);
     document.getElementById("profile-name").textContent = person.name;
     document.getElementById("profile-role").textContent = person.title;
     document.getElementById("profile-dept").textContent = person.dept;
@@ -1401,6 +1457,8 @@
       title: dto.title || "",
       dept: dto.departmentName || "",
       img: dto.photoUrl || "",
+      graphPhotoUrl: dto.graphPhotoUrl || dto.GraphPhotoUrl || null,
+      portalPhotoUrl: dto.portalPhotoUrl || dto.PortalPhotoUrl || null,
       aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
       bio: personalData.bio || dto.bio || "",
       pronouns: personalData.pronouns || dto.pronouns || "",

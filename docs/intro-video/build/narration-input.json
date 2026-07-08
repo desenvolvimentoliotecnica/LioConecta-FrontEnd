@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hook",
+    "text": "Bem-vindo ao LioConecta. O portal que conecta toda a Lio Técnica em um só lugar."
+  },
+  {
+    "id": "feed",
+    "text": "No Feed corporativo, você acompanha publicações, enquetes, parabenizações e as novidades da empresa em tempo real."
+  },
+  {
+    "id": "comunicados",
+    "text": "Comunicados concentra avisos oficiais, alertas urgentes e informações departamentais com leitura rastreável."
+  },
+  {
+    "id": "pessoas",
+    "text": "Em Pessoas, encontre colegas, explore perfis e navegue pelo organograma da organização."
+  },
+  {
+    "id": "documentos",
+    "text": "Documentos centraliza políticas, formulários, manuais e toda a biblioteca institucional."
+  },
+  {
+    "id": "grupos",
+    "text": "Grupos reúnem comunidades por tema, projeto ou área para colaboração contínua."
+  },
+  {
+    "id": "calendario",
+    "text": "O Calendário integra sua agenda com reuniões, compromissos e aniversários corporativos."
+  },
+  {
+    "id": "help-desk",
+    "text": "E no Help Desk, abra chamados de TI e demais serviços em poucos cliques."
+  },
+  {
+    "id": "outro",
+    "text": "LioConecta. Conectando pessoas, processos e conhecimento. Acesse agora com suas credenciais corporativas."
+  }
+]

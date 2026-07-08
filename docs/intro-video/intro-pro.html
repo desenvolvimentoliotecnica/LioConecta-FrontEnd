@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>LioConecta Intro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1920px; height: 1080px; overflow: hidden;
+      font-family: Inter, system-ui, sans-serif;
+      background: #fff;
+    }
+    .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+    .bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #fff 0%, #ebf3ff 50%, #e6f9fc 100%);
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(90px);
+    }
+    .orb-1 { width: 700px; height: 700px; background: rgba(0,70,173,.14); top: -180px; right: -120px; }
+    .orb-2 { width: 560px; height: 560px; background: rgba(0,180,200,.16); bottom: -160px; left: -100px; }
+    .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,70,173,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,70,173,.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+    .content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 28px;
+    }
+    .logo-box { position: relative; width: 240px; height: 240px; display: grid; place-items: center; }
+    .ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 4px solid transparent;
+      border-top-color: #00b4c8; border-right-color: #0046ad;
+    }
+    .logo { width: 170px; height: 170px; object-fit: contain; }
+    .title {
+      font-size: 88px; font-weight: 800; letter-spacing: -3px; color: #0046ad;
+    }
+    .title span { color: #00b4c8; }
+    .subtitle {
+      font-size: 30px; font-weight: 500; color: #475569; text-align: center; max-width: 900px; line-height: 1.45;
+    }
+    .pulse-line {
+      position: absolute; left: 50%; top: 50%; height: 3px; width: 0;
+      transform: translate(-50%, 180px);
+      background: linear-gradient(90deg, transparent, #00b4c8, #0046ad, transparent);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="bg" id="bg"></div>
+    <div class="grid" id="grid"></div>
+    <div class="orb orb-1" id="orb1"></div>
+    <div class="orb orb-2" id="orb2"></div>
+    <div class="pulse-line" id="pulse"></div>
+    <div class="content">
+      <div class="logo-box">
+        <div class="ring" id="ring"></div>
+        <img class="logo" id="logo" src="assets/logo-lioconecta.png" alt="" />
+      </div>
+      <h1 class="title" id="title">Lio<span>Conecta</span></h1>
+      <p class="subtitle" id="subtitle">O portal que conecta pessoas, processos e conhecimento</p>
+    </div>
+  </div>
+  <script>
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeOutBack(t) {
+      const c1 = 1.70158; const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    }
+    function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+    window.seekIntro = function(ms) {
+      const s = ms / 1000;
+      const bg = document.getElementById("bg");
+      const grid = document.getElementById("grid");
+      const orb1 = document.getElementById("orb1");
+      const orb2 = document.getElementById("orb2");
+      const ring = document.getElementById("ring");
+      const logo = document.getElementById("logo");
+      const title = document.getElementById("title");
+      const subtitle = document.getElementById("subtitle");
+      const pulse = document.getElementById("pulse");
+
+      bg.style.opacity = clamp01(s / 0.5);
+      grid.style.opacity = clamp01((s - 0.1) / 0.6) * 0.9;
+      orb1.style.opacity = clamp01((s - 0.2) / 0.8);
+      orb2.style.opacity = clamp01((s - 0.35) / 0.8);
+      orb1.style.transform = `translate(${Math.sin(s * 0.8) * 18}px, ${Math.cos(s * 0.7) * 12}px)`;
+      orb2.style.transform = `translate(${Math.cos(s * 0.6) * 14}px, ${Math.sin(s * 0.5) * 16}px)`;
+
+      const logoP = easeOutBack(clamp01((s - 0.25) / 0.7));
+      logo.style.opacity = logoP;
+      logo.style.transform = `scale(${0.35 + logoP * 0.65})`;
+
+      ring.style.opacity = clamp01((s - 0.35) / 0.5) * 0.85;
+      ring.style.transform = `rotate(${s * 140}deg) scale(${0.85 + clamp01((s - 0.35) / 0.6) * 0.15})`;
+
+      const titleP = easeOutCubic(clamp01((s - 0.75) / 0.65));
+      title.style.opacity = titleP;
+      title.style.transform = `translateY(${(1 - titleP) * 36}px)`;
+
+      const subP = easeOutCubic(clamp01((s - 1.15) / 0.75));
+      subtitle.style.opacity = subP;
+      subtitle.style.transform = `translateY(${(1 - subP) * 28}px)`;
+
+      const pulseP = clamp01((s - 1.5) / 0.9);
+      pulse.style.width = `${pulseP * 920}px`;
+      pulse.style.opacity = pulseP * (1 - clamp01((s - 3.2) / 0.5));
+    };
+
+    window.seekIntro(0);
+  </script>
+</body>
+</html>

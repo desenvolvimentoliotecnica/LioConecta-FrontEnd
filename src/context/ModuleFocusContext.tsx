@@ -10,8 +10,12 @@ type ModuleFocusContextValue = {
 
 const ModuleFocusContext = createContext<ModuleFocusContextValue | null>(null);
 
+const FOCUSABLE_MODULE_PREFIXES = ["/loop", "/pulse", "/compass"] as const;
+
 function isFocusableModulePath(pathname: string): boolean {
-  return pathname === "/loop" || pathname.startsWith("/loop/") || pathname === "/pulse" || pathname.startsWith("/pulse/");
+  return FOCUSABLE_MODULE_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
 }
 
 export function ModuleFocusProvider({ children }: { children: ReactNode }) {

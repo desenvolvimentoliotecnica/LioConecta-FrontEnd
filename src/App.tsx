@@ -73,6 +73,19 @@ import { PulseReviewPage } from "./components/pulse/pages/PulseReviewPage";
 import { PulseRetroPage } from "./components/pulse/pages/PulseRetroPage";
 import { PulseImpedimentsPage } from "./components/pulse/pages/PulseImpedimentsPage";
 import { PulseMeetingsPage } from "./components/pulse/pages/PulseMeetingsPage";
+import { CompassAccessGate } from "./components/compass/CompassAccessGate";
+import { CompassShell } from "./components/compass/CompassShell";
+import { CompassDashboardPage } from "./components/compass/pages/CompassDashboardPage";
+import { CompassAnaliseYtdPage } from "./components/compass/pages/CompassAnaliseYtdPage";
+import { CompassCicloPage } from "./components/compass/pages/CompassCicloPage";
+import { CompassVolumePage } from "./components/compass/pages/CompassVolumePage";
+import { CompassCanaisPage } from "./components/compass/pages/CompassCanaisPage";
+import { CompassFinanceiroPage } from "./components/compass/pages/CompassFinanceiroPage";
+import { CompassReconciliacaoPage } from "./components/compass/pages/CompassReconciliacaoPage";
+import { CompassCenariosPage } from "./components/compass/pages/CompassCenariosPage";
+import { CompassMeetingsPage } from "./components/compass/pages/CompassMeetingsPage";
+import { CompassDecisionsPage } from "./components/compass/pages/CompassDecisionsPage";
+import { CompassRelatoriosPage } from "./components/compass/pages/CompassRelatoriosPage";
 
 function App() {
   const perfilPage = pageRegistry.find((p) => p.id === "pessoas-perfil");
@@ -151,6 +164,28 @@ function App() {
           <Route path="retro" element={<PulseRetroPage />} />
           <Route path="impedimentos" element={<PulseImpedimentsPage />} />
           <Route path="meetings" element={<PulseMeetingsPage />} />
+        </Route>
+        <Route
+          path="/compass"
+          element={
+            <CompassAccessGate>
+              <CompassShell />
+            </CompassAccessGate>
+          }
+        >
+          <Route index element={<CompassDashboardPage />} />
+          <Route path="analise-ytd" element={<CompassAnaliseYtdPage />} />
+          <Route path="ciclo" element={<CompassCicloPage />} />
+          <Route path="volume" element={<CompassVolumePage />} />
+          <Route path="canais" element={<CompassCanaisPage />} />
+          <Route path="demanda" element={<CompassVolumePage />} />
+          <Route path="supply" element={<CompassCanaisPage />} />
+          <Route path="financeiro" element={<CompassFinanceiroPage />} />
+          <Route path="reconciliacao" element={<CompassReconciliacaoPage />} />
+          <Route path="reunioes" element={<CompassMeetingsPage />} />
+          <Route path="decisoes" element={<CompassDecisionsPage />} />
+          <Route path="cenarios" element={<CompassCenariosPage />} />
+          <Route path="relatorios" element={<CompassRelatoriosPage />} />
         </Route>
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
