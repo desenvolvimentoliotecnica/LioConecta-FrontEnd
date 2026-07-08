@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, config } from "../client";
+import { api, config, ApiError } from "../client";
 import type {
   CreateLeaveRequestDto,
   LeaveBalanceDto,
   LeaveBancoHorasDto,
   LeaveHistoryItemDto,
+  LeaveRequestDetailDto,
+  LeaveRequestItemDto,
   LeaveRequestResultDto,
   LeaveServiceDto,
   LeaveSummaryDto,
@@ -47,6 +49,24 @@ export function useLeaveHistory(limit = 24, enabled = false) {
   });
 }
 
+export function useLeaveRequests(limit = 24, enabled = true) {
+  return useQuery({
+    queryKey: [...LEAVE_QUERY_KEY, "requests", limit],
+    queryFn: () => api.get<LeaveRequestItemDto[]>(`/rh/leave/requests?limit=${limit}`),
+    enabled,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useLeaveRequestDetail(recordId: string | null) {
+  return useQuery({
+    queryKey: [...LEAVE_QUERY_KEY, "request", recordId],
+    queryFn: () => api.get<LeaveRequestDetailDto>(`/rh/leave/requests/${recordId}`),
+    enabled: recordId !== null,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
 export function useLeaveBancoHoras(enabled: boolean) {
   return useQuery({
     queryKey: [...LEAVE_QUERY_KEY, "banco-horas"],
@@ -63,6 +83,28 @@ export function useLeaveTeamCalendar(enabled: boolean) {
     enabled,
     retry: config.useMock ? 0 : 1,
   });
+}
+
+export function extractLeaveRequestError(error: unknown): string {
+  if (error instanceof ApiError) {
+    if (error.status === 422) {
+      const detail =
+        error.body && typeof error.body === "object" && "detail" in error.body
+          ? String((error.body as { detail?: string }).detail)
+          : error.message;
+      return detail || "Saldo insuficiente para esta solicitação.";
+    }
+
+    if (error.status === 400 || error.status === 409) {
+      const detail =
+        error.body && typeof error.body === "object" && "detail" in error.body
+          ? String((error.body as { detail?: string }).detail)
+          : error.message;
+      return detail || "Não foi possível enviar a solicitação.";
+    }
+  }
+
+  return "Não foi possível enviar a solicitação. Tente novamente.";
 }
 
 export function useLeaveRequest() {

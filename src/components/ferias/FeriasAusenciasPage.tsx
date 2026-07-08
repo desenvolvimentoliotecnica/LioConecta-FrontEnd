@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import {
+  extractLeaveRequestError,
   useLeaveRequest,
   useLeaveServices,
   useLeaveSummary,
@@ -13,8 +14,10 @@ import { LeaveBalanceModal } from "./LeaveBalanceModal";
 import { LeaveBancoHorasModal } from "./LeaveBancoHorasModal";
 import { LeaveHelpModal } from "./LeaveHelpModal";
 import { LeaveHistoryModal } from "./LeaveHistoryModal";
+import { LeaveRequestDetailModal } from "./LeaveRequestDetailModal";
 import { LeaveRequestModal } from "./LeaveRequestModal";
 import { LeaveRequestResultModal } from "./LeaveRequestResultModal";
+import { LeaveRequestsPanel } from "./LeaveRequestsPanel";
 import { filterLeaveServices, LeaveServiceCard } from "./LeaveServiceCard";
 import { LeaveTeamCalendarModal } from "./LeaveTeamCalendarModal";
 import "../../styles/contracheque-page.css";
@@ -40,6 +43,8 @@ export function FeriasAusenciasPage() {
   const [requestService, setRequestService] = useState<LeaveServiceDto | null>(null);
   const [helpService, setHelpService] = useState<LeaveServiceDto | null>(null);
   const [requestMessage, setRequestMessage] = useState<string | null>(null);
+  const [requestError, setRequestError] = useState<string | null>(null);
+  const [detailRecordId, setDetailRecordId] = useState<string | null>(null);
 
   const summaryQuery = useLeaveSummary();
   const servicesQuery = useLeaveServices();
@@ -111,7 +116,11 @@ export function FeriasAusenciasPage() {
     requestMutation.mutate(payload, {
       onSuccess: (result) => {
         setRequestService(null);
+        setRequestError(null);
         setRequestMessage(result.message);
+      },
+      onError: (error) => {
+        setRequestError(extractLeaveRequestError(error));
       },
     });
   };
@@ -201,6 +210,8 @@ export function FeriasAusenciasPage() {
         </div>
       </div>
 
+      <LeaveRequestsPanel showValues={showValues} onSelect={setDetailRecordId} />
+
       {servicesQuery.isError ? (
         <p className="page-empty-note" role="alert">
           Não foi possível carregar os serviços. Verifique se a API está online.
@@ -253,8 +264,12 @@ export function FeriasAusenciasPage() {
       <LeaveRequestModal
         open={requestService !== null}
         service={requestService}
+        showValues={showValues}
         pending={requestMutation.isPending}
-        onClose={() => setRequestService(null)}
+        onClose={() => {
+          setRequestService(null);
+          setRequestError(null);
+        }}
         onSubmit={handleRequestSubmit}
       />
       <LeaveHelpModal
@@ -266,6 +281,17 @@ export function FeriasAusenciasPage() {
         open={requestMessage !== null}
         message={requestMessage}
         onClose={() => setRequestMessage(null)}
+      />
+      <LeaveRequestResultModal
+        open={requestError !== null}
+        message={requestError}
+        variant="error"
+        onClose={() => setRequestError(null)}
+      />
+      <LeaveRequestDetailModal
+        recordId={detailRecordId}
+        showValues={showValues}
+        onClose={() => setDetailRecordId(null)}
       />
     </main>
   );
