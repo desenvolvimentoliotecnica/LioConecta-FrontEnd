@@ -70,6 +70,29 @@
         return Math.round((thisYear - today) / 86400000);
       }
 
+      /** Semana calendário: domingo → sábado (ex.: 05/07–11/07). */
+      function getCalendarWeekBounds(today) {
+        var start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        start.setHours(0, 0, 0, 0);
+        start.setDate(start.getDate() - start.getDay());
+        var end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        end.setHours(23, 59, 59, 999);
+        return { start: start, end: end };
+      }
+
+      function birthdayDateThisYear(birthDate, today) {
+        var parts = birthDate.split("-");
+        return new Date(today.getFullYear(), Number(parts[1]) - 1, Number(parts[2]));
+      }
+
+      function isInCalendarWeek(birthDate, today) {
+        var birthday = birthdayDateThisYear(birthDate, today);
+        birthday.setHours(12, 0, 0, 0);
+        var week = getCalendarWeekBounds(today);
+        return birthday >= week.start && birthday <= week.end;
+      }
+
       function getNextCalendarMonth() {
         var today = new Date();
         return (today.getMonth() + 1) % 12 + 1;
@@ -104,6 +127,7 @@
           if (!person.birthDate) return;
           var daysThisYear = daysFromBirthdayThisYear(person.birthDate, today);
           var entry = {
+            id: person.id || "",
             name: person.name,
             role: person.title || "Colaborador",
             dept: person.departmentName || "",
@@ -119,7 +143,7 @@
 
           if (daysThisYear === 0) {
             groups[0].people.push(entry);
-          } else if (daysThisYear > 0 && daysThisYear <= 7) {
+          } else if (isInCalendarWeek(person.birthDate, today)) {
             groups[1].people.push(entry);
           } else if (entry.month === currentMonth) {
             groups[2].people.push(entry);
@@ -136,6 +160,10 @@
           }
         });
 
+        groups[1].people.sort(function (a, b) {
+          if (a.month !== b.month) return a.month - b.month;
+          return a.day - b.day;
+        });
         groups[2].people.sort(function (a, b) { return a.day - b.day; });
 
         var result = groups.filter(function (g) { return g.people.length; });
@@ -152,8 +180,11 @@
         var todayClass = isToday(person) ? " is-today" : "";
         var todayBadge = isToday(person) ? '<span class="person-card__today-badge">Hoje</span>' : "";
         var profileHref = "/pessoas/perfil?id=" + encodeURIComponent(person.slug);
+        var congratsDisabled = !person.id
+          ? ' aria-disabled="true" title="Não foi possível identificar o colaborador"'
+          : "";
         return (
-          '<article class="person-card' + todayClass + '" data-day="' + person.day + '" data-month="' + person.month + '" data-days="' + person.days + '" data-name="' + escapeHtml(person.searchName) + '">' +
+          '<article class="person-card' + todayClass + '" data-person-id="' + escapeHtml(person.id) + '" data-person-slug="' + escapeHtml(person.slug) + '" data-person-name="' + escapeHtml(person.name) + '" data-person-photo="' + escapeHtml(person.photoUrl || "") + '" data-day="' + person.day + '" data-month="' + person.month + '" data-days="' + person.days + '" data-name="' + escapeHtml(person.searchName) + '">' +
           todayBadge +
           avatarMarkup +
           '<h2 class="person-card__name">' + escapeHtml(person.name) + "</h2>" +
@@ -161,7 +192,7 @@
           '<span class="person-card__dept">' + escapeHtml(person.dept) + "</span>" +
           '<p class="person-card__birthday">' + escapeHtml(person.label) + "</p>" +
           '<div class="person-card__actions">' +
-          '<a class="person-card__btn" href="#" aria-label="Parabenizar ' + escapeHtml(person.name) + '"><i class="fa-regular fa-gift" aria-hidden="true"></i></a>' +
+          '<button type="button" class="person-card__btn person-card__btn--congrats" data-congrats' + congratsDisabled + ' aria-label="Parabenizar ' + escapeHtml(person.name) + '"><i class="fa-solid fa-gift" aria-hidden="true"></i></button>' +
           '<a class="person-card__btn" href="' + profileHref + '" aria-label="Ver perfil de ' + escapeHtml(person.name) + '"><i class="fa-regular fa-user" aria-hidden="true"></i></a>' +
           "</div></article>"
         );
@@ -188,7 +219,15 @@
 
         if (activeFilter === "all") return true;
         if (activeFilter === "today") return days === 0;
-        if (activeFilter === "week") return days >= 0 && days <= 7;
+        if (activeFilter === "week") {
+          var birthDateAttr =
+            today.getFullYear() +
+            "-" +
+            String(month).padStart(2, "0") +
+            "-" +
+            String(day).padStart(2, "0");
+          return isInCalendarWeek(birthDateAttr, today) && days !== 0;
+        }
         if (activeFilter === "month") return month === currentMonth; // calendário, inclui já ocorridos
         if (activeFilter === "next-month") return month === nextMonth;
         if (activeFilter.indexOf("cal-") === 0) {
@@ -341,6 +380,155 @@
       }
 
       wireToolbar();
+
+      var congratsModal = null;
+      var congratsTarget = null;
+      var POST_TYPE_CELEBRATION = 3;
+
+      function ensureCongratsModal() {
+        if (congratsModal) return congratsModal;
+        var wrap = document.createElement("div");
+        wrap.id = "birthday-congrats-modal";
+        wrap.className = "congrats-modal";
+        wrap.hidden = true;
+        wrap.innerHTML =
+          '<div class="congrats-modal__backdrop" data-congrats-close></div>' +
+          '<div class="congrats-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="congrats-modal-title">' +
+          '<header class="congrats-modal__header">' +
+          '<div class="congrats-modal__person">' +
+          '<span class="congrats-modal__avatar" id="congrats-modal-avatar" aria-hidden="true"></span>' +
+          '<div>' +
+          '<p class="congrats-modal__eyebrow">Dar os parabéns</p>' +
+          '<h2 class="congrats-modal__title" id="congrats-modal-title">Aniversariante</h2>' +
+          "</div></div>" +
+          '<button type="button" class="congrats-modal__close" data-congrats-close aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>' +
+          "</header>" +
+          '<label class="congrats-modal__label" for="congrats-modal-message">Mensagem</label>' +
+          '<textarea id="congrats-modal-message" class="congrats-modal__textarea" rows="4" maxlength="500" placeholder="Escreva uma mensagem de parabéns..."></textarea>' +
+          '<p class="congrats-modal__hint">A mensagem vira um post no feed com menção à pessoa e envia uma notificação.</p>' +
+          '<p class="congrats-modal__status" id="congrats-modal-status" role="status" hidden></p>' +
+          '<footer class="congrats-modal__footer">' +
+          '<button type="button" class="congrats-modal__btn congrats-modal__btn--ghost" data-congrats-close>Cancelar</button>' +
+          '<button type="button" class="congrats-modal__btn congrats-modal__btn--primary" id="congrats-modal-submit">' +
+          '<i class="fa-solid fa-gift" aria-hidden="true"></i> Enviar parabéns</button>' +
+          "</footer></div>";
+        document.body.appendChild(wrap);
+
+        wrap.addEventListener("click", function (event) {
+          if (event.target.closest("[data-congrats-close]")) {
+            closeCongratsModal();
+          }
+        });
+
+        document.getElementById("congrats-modal-submit").addEventListener("click", submitCongrats);
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && congratsModal && !congratsModal.hidden) {
+            closeCongratsModal();
+          }
+        });
+
+        congratsModal = wrap;
+        return wrap;
+      }
+
+      function setCongratsStatus(message, kind) {
+        var el = document.getElementById("congrats-modal-status");
+        if (!el) return;
+        if (!message) {
+          el.hidden = true;
+          el.textContent = "";
+          el.className = "congrats-modal__status";
+          return;
+        }
+        el.hidden = false;
+        el.textContent = message;
+        el.className = "congrats-modal__status" + (kind ? " is-" + kind : "");
+      }
+
+      function openCongratsModal(person) {
+        if (!person || !person.id) {
+          return;
+        }
+        congratsTarget = person;
+        var modal = ensureCongratsModal();
+        var title = document.getElementById("congrats-modal-title");
+        var avatar = document.getElementById("congrats-modal-avatar");
+        var message = document.getElementById("congrats-modal-message");
+        var submit = document.getElementById("congrats-modal-submit");
+        title.textContent = person.name;
+        if (person.photoUrl) {
+          avatar.innerHTML = '<img src="' + escapeHtml(person.photoUrl) + '" alt="">';
+        } else {
+          avatar.innerHTML = '<i class="fa-solid fa-user" aria-hidden="true"></i>';
+        }
+        message.value = "Parabéns! 🎂";
+        submit.disabled = false;
+        setCongratsStatus("", "");
+        modal.hidden = false;
+        document.body.classList.add("congrats-modal-open");
+        setTimeout(function () {
+          message.focus();
+          message.select();
+        }, 0);
+      }
+
+      function closeCongratsModal() {
+        if (!congratsModal) return;
+        congratsModal.hidden = true;
+        document.body.classList.remove("congrats-modal-open");
+        congratsTarget = null;
+        setCongratsStatus("", "");
+      }
+
+      function submitCongrats() {
+        if (!congratsTarget || !congratsTarget.id) return;
+        if (!window.LioApi || window.LioApi.useMock) {
+          setCongratsStatus("API indisponível.", "error");
+          return;
+        }
+        var messageEl = document.getElementById("congrats-modal-message");
+        var submit = document.getElementById("congrats-modal-submit");
+        var content = (messageEl.value || "").trim() || "Parabéns! 🎂";
+        submit.disabled = true;
+        setCongratsStatus("Enviando parabéns...", "");
+        window.LioApi.post("/feed/posts", {
+          type: POST_TYPE_CELEBRATION,
+          content: content,
+          metadata: {
+            kind: "birthday",
+            celebratedPersonId: congratsTarget.id
+          }
+        })
+          .then(function () {
+            setCongratsStatus("Parabéns publicados no feed!", "success");
+            setTimeout(closeCongratsModal, 900);
+          })
+          .catch(function (err) {
+            var msg = "Não foi possível enviar os parabéns.";
+            if (err && typeof err.body === "object" && err.body && err.body.message) {
+              msg = String(err.body.message);
+            } else if (err && err.message) {
+              msg = String(err.message);
+            }
+            setCongratsStatus(msg, "error");
+            submit.disabled = false;
+          });
+      }
+
+      root.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-congrats]");
+        if (!btn || !root.contains(btn)) return;
+        event.preventDefault();
+        if (btn.getAttribute("aria-disabled") === "true") return;
+        var card = btn.closest(".person-card");
+        if (!card) return;
+        openCongratsModal({
+          id: card.getAttribute("data-person-id") || "",
+          name: card.getAttribute("data-person-name") || "Colega",
+          slug: card.getAttribute("data-person-slug") || "",
+          photoUrl: card.getAttribute("data-person-photo") || ""
+        });
+      });
 
       root.innerHTML = '<p class="page-empty-note">Carregando aniversariantes...</p>';
 
