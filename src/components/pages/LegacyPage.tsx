@@ -87,8 +87,7 @@ export function LegacyPage() {
         <FeedAnnouncementCarousel />
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
-        <MoodCheckCard />
-        <FeedPosts />
+        <FeedPosts leading={<MoodCheckCard />} />
         <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
     );
@@ -121,8 +120,7 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
         <FeedAnnouncementCarousel />
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
-        <MoodCheckCard />
-        <FeedPosts />
+        <FeedPosts leading={<MoodCheckCard />} />
         <div dangerouslySetInnerHTML={{ __html: feedParts.feedGridAndAfter }} />
       </main>
     );

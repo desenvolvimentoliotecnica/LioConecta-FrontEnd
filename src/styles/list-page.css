@@ -648,8 +648,25 @@ min-height: 140px;
 
 .card--celebration .card__header,
 .card--celebration .card__body,
-.card--celebration .card__footer {
+.card--celebration .card__footer,
+.card--celebration .card__celebration-mention {
   background: rgba(255, 255, 255, 0.6);
+}
+
+.card__celebration-mention {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 0;
+  font-size: 13px;
+  color: #9d174d;
+  font-weight: 600;
+}
+
+.card__celebration-mention a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .card--celebration .card__footer {
