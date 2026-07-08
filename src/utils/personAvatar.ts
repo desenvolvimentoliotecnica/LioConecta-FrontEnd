@@ -1,3 +1,5 @@
+import { resolveBackendAssetUrl } from "../api/assetUrl";
+
 const FAKE_PATTERNS = [
   /^\/avatar-[^/]+\.png$/i,
   /^avatar-[^/]+\.png$/i,
@@ -8,6 +10,8 @@ const FAKE_PATTERNS = [
 ];
 
 export const PORTAL_AVATAR_BASE = "/assets/avatars/animals/";
+
+export const DEFAULT_PORTAL_AVATAR = `${PORTAL_AVATAR_BASE}avatar-crab.png`;
 
 function normalizePath(url: string): string {
   const trimmed = url.trim();
@@ -49,6 +53,13 @@ export function resolvePhotoUrl(url: string | null | undefined): string | null {
   return resolveGraphPhotoUrl(url);
 }
 
+export function isLegacyDemoAvatarUrl(url: string | null | undefined): boolean {
+  const normalized = normalizePath(String(url ?? ""));
+  if (!normalized) return false;
+  const path = normalized.split("?")[0];
+  return FAKE_PATTERNS.some((pattern) => pattern.test(path));
+}
+
 export function resolvePhotoUrlFromSource(source: {
   photoUrl?: string | null;
   PhotoUrl?: string | null;
@@ -69,4 +80,15 @@ export function resolvePhotoUrlFromSource(source: {
 
   const graph = source.graphPhotoUrl ?? source.GraphPhotoUrl ?? primary;
   return resolveGraphPhotoUrl(graph);
+}
+
+/** Resolve avatar path for `<img src>` — portal assets stay local; Graph photos use API origin. */
+export function resolvePersonAvatarSrc(
+  source: Parameters<typeof resolvePhotoUrlFromSource>[0],
+): string | null {
+  const resolved = resolvePhotoUrlFromSource(source);
+  if (!resolved) return null;
+  if (isPortalAvatarUrl(resolved)) return resolved;
+  const backend = resolveBackendAssetUrl(resolved);
+  return backend || null;
 }

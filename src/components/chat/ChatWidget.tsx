@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatMessages } from "../../api/hooks/useChat";
+import { UserAvatar } from "../ui/UserAvatar";
 import { closeOtherMenus, useMenuCloseSync } from "../layout/NotificationsMenu";
 import { useChat } from "./ChatContext";
 import { ChatTeamsLinkBanner } from "./ChatTeamsLinkBanner";
@@ -40,7 +41,7 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
     <div className={`chat-window${expanded ? " chat-window--expanded" : ""}`}>
       <header className="chat-window__header">
         <div className="chat-window__header-user">
-          <img className="chat-window__header-avatar" src={conversation.avatar} alt="" />
+          <UserAvatar className="chat-window__header-avatar" photoUrl={conversation.avatar} />
           <span className="chat-window__header-name">{conversation.name}</span>
         </div>
         <div className="chat-window__header-actions">
@@ -70,7 +71,7 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
       </header>
 
       <div className="chat-window__profile">
-        <img className="chat-window__profile-avatar" src={conversation.avatar} alt="" />
+        <UserAvatar className="chat-window__profile-avatar" photoUrl={conversation.avatar} />
         <div className="chat-window__profile-info">
           <div className="chat-window__profile-name-row">
             <strong>{conversation.name}</strong>
@@ -99,7 +100,9 @@ function ChatWindow({ conversationId }: { conversationId: string }) {
             <div key={msg.id}>
               {showDate ? <div className="chat-window__date-sep">{msg.dateLabel}</div> : null}
               <div className={`chat-window__msg${isMine ? " chat-window__msg--mine" : ""}`}>
-                {!isMine ? <img className="chat-window__msg-avatar" src={avatar} alt="" /> : null}
+                {!isMine ? (
+                  <UserAvatar className="chat-window__msg-avatar" photoUrl={avatar} />
+                ) : null}
                 <div className="chat-window__msg-body">
                   {!isMine ? (
                     <div className="chat-window__msg-meta">
@@ -166,7 +169,7 @@ function ConversationItem({
       className={`chat-list__item${selected ? " chat-list__item--selected" : ""}${conversation.unreadCount > 0 ? " chat-list__item--unread" : ""}`}
       onClick={onSelect}
     >
-      <img className="chat-list__avatar" src={conversation.avatar} alt="" />
+      <UserAvatar className="chat-list__avatar" photoUrl={conversation.avatar} />
       <div className="chat-list__body">
         <div className="chat-list__row">
           <strong className="chat-list__name">{conversation.name}</strong>

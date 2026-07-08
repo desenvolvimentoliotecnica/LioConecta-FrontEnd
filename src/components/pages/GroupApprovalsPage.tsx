@@ -9,6 +9,7 @@ import {
   injectGroupCreatePageStyles,
 } from "../../config/groups";
 import { useEffect, useState } from "react";
+import { UserAvatar } from "../ui/UserAvatar";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/comunicados-oficiais-page.css";
 
@@ -107,11 +108,7 @@ export function GroupApprovalsPage() {
                     <span className="tag tag--urgent">{groupStatusLabel(group.status)}</span>
                     <span className="official-card__date">{formatDate(group.createdAt)}</span>
                     <div className="official-card__author">
-                      <img
-                        className="avatar"
-                        src={group.owner.photoUrl ?? "/avatar-maria-silva.png"}
-                        alt=""
-                      />
+                      <UserAvatar className="avatar" photoUrl={group.owner.photoUrl} />
                       {group.owner.name}
                     </div>
                   </div>

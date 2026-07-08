@@ -3,6 +3,8 @@ import { api, ApiError, config } from "../client";
 import type { MeDto } from "../types";
 import { getStoredToken } from "./useAuth";
 
+import { DEFAULT_PORTAL_AVATAR } from "../../utils/personAvatar";
+
 const DEV_AUTH_MODE = import.meta.env.VITE_AUTH_MODE === "dev";
 
 const MOCK_ME: MeDto = {
@@ -11,7 +13,7 @@ const MOCK_ME: MeDto = {
   name: "Leonardo Sabino Mendes",
   email: "leonardo.mendes@liotecnica.com.br",
   title: "Desenvolvedor Sr.",
-  photoUrl: null,
+  photoUrl: DEFAULT_PORTAL_AVATAR,
   departmentName: "Sistemas",
   roles: ["Employee", "Manager", "Admin"],
 };

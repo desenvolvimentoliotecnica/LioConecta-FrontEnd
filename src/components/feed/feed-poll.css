@@ -5,6 +5,10 @@
   color: #64748b;
 }
 
+.card .poll__banner {
+  margin-top: 12px;
+}
+
 .feed-poll-card__status--closed {
   color: #b45309;
 }

@@ -1,7 +1,14 @@
+import { resolvePersonAvatarSrc } from "../../utils/personAvatar";
 import type { ChatConversationDto, ChatMessageDto } from "../../api/types";
 import type { ChatConversation, ChatMessage } from "./chatTypes";
 
-const DEFAULT_AVATAR = "/avatar-default.png";
+function resolveAvatar(participants: ChatConversationDto["participants"]): string | null {
+  for (const participant of participants) {
+    const src = resolvePersonAvatarSrc(participant.photoUrl);
+    if (src) return src;
+  }
+  return null;
+}
 
 function formatMessageTime(iso: string): string {
   const date = new Date(iso);
@@ -35,11 +42,6 @@ function formatDateLabel(iso: string): string {
     .toUpperCase();
 }
 
-function resolveAvatar(participants: ChatConversationDto["participants"]): string {
-  const withPhoto = participants.find((p) => p.photoUrl);
-  return withPhoto?.photoUrl ?? DEFAULT_AVATAR;
-}
-
 function isPriorityChat(chatType: string): boolean {
   const normalized = chatType.toLowerCase();
   return normalized === "oneonone" || normalized === "one_on_one" || normalized === "direct";
@@ -70,7 +72,7 @@ export function mapMessageDto(dto: ChatMessageDto): ChatMessage {
     timestamp: formatMessageTime(createdAt),
     dateLabel: formatDateLabel(createdAt),
     authorDisplayName: dto.author.displayName,
-    authorPhotoUrl: dto.author.photoUrl,
+    authorPhotoUrl: resolvePersonAvatarSrc(dto.author.photoUrl),
   };
 }
 
