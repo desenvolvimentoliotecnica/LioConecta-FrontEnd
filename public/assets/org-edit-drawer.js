@@ -451,12 +451,32 @@
       photoUrl: photoUrl,
       graphPhotoUrl: graphPhotoUrl,
       currentUrl:
-        global.PersonAvatar && global.PersonAvatar.resolvePhotoUrl
-          ? global.PersonAvatar.resolvePhotoUrl(photoUrl)
+        global.PersonAvatar && global.PersonAvatar.resolvePhotoUrlFromSource
+          ? global.PersonAvatar.resolvePhotoUrlFromSource({
+              photoUrl: photoUrl,
+              graphPhotoUrl: graphPhotoUrl,
+              portalPhotoUrl: pickField(context, ["portalPhotoUrl", "PortalPhotoUrl"])
+            })
           : photoUrl,
-      onSaved: function (savedUrl) {
+      onSaved: function (savedUrl, result) {
         if (currentContext) {
-          currentContext.photoUrl = savedUrl || graphPhotoUrl || "";
+          var portalUrl =
+            savedUrl &&
+            global.PersonAvatar &&
+            global.PersonAvatar.isPortalAvatarUrl(savedUrl)
+              ? savedUrl
+              : null;
+          if (result) {
+            currentContext.photoUrl =
+              result.photoUrl || result.PhotoUrl || savedUrl || graphPhotoUrl || "";
+            currentContext.portalPhotoUrl =
+              result.portalPhotoUrl || result.PortalPhotoUrl || portalUrl;
+            currentContext.graphPhotoUrl =
+              result.graphPhotoUrl || result.GraphPhotoUrl || graphPhotoUrl || null;
+          } else {
+            currentContext.photoUrl = savedUrl || graphPhotoUrl || "";
+            if (portalUrl) currentContext.portalPhotoUrl = portalUrl;
+          }
           renderAvatar(currentContext);
         }
         setAlert("Avatar atualizado.", "success");
@@ -482,9 +502,15 @@
     const photoUrl = pickField(context, ["photoUrl", "PhotoUrl", "img"]);
 
     const resolved =
-      global.PersonAvatar && typeof PersonAvatar.resolvePhotoUrl === "function"
-        ? PersonAvatar.resolvePhotoUrl(photoUrl)
-        : photoUrl;
+      global.PersonAvatar && typeof PersonAvatar.resolvePhotoUrlFromSource === "function"
+        ? PersonAvatar.resolvePhotoUrlFromSource({
+            photoUrl: photoUrl,
+            graphPhotoUrl: pickField(context, ["graphPhotoUrl", "GraphPhotoUrl"]),
+            portalPhotoUrl: pickField(context, ["portalPhotoUrl", "PortalPhotoUrl"])
+          })
+        : global.PersonAvatar && typeof PersonAvatar.resolvePhotoUrl === "function"
+          ? PersonAvatar.resolvePhotoUrl(photoUrl)
+          : photoUrl;
 
     let inner = "";
 
