@@ -10,8 +10,8 @@ const FEED_SCROLL_OVERRIDES = `
   overflow-y: auto !important;
   padding: 0 24px 40px !important;
 }
-.main.main--feed-scroll > :first-child {
-  padding-top: 20px;
+.main.main--feed-scroll > .announcement--carousel {
+  margin-top: 20px;
 }
 .feed-composer {
   position: sticky !important;

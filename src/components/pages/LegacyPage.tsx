@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
+import { FeedAnnouncementCarousel } from "../feed/FeedAnnouncementCarousel";
 import { FeedComposer } from "../feed/FeedComposer";
 import { FeedPosts } from "../feed/FeedPosts";
 import { MoodCheckCard } from "../feed/MoodCheckCard";
@@ -83,6 +84,7 @@ export function LegacyPage() {
   if (feedParts) {
     return (
       <main className="main main--feed-scroll" ref={mainRef}>
+        <FeedAnnouncementCarousel />
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
         <MoodCheckCard />
@@ -116,6 +118,7 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
   if (feedParts) {
     return (
       <main className="main main--feed-scroll" ref={mainRef}>
+        <FeedAnnouncementCarousel />
         <div dangerouslySetInnerHTML={{ __html: feedParts.beforeFeedGrid }} />
         <FeedComposer />
         <MoodCheckCard />

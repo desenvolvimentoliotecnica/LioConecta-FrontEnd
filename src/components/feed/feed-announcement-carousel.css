@@ -1,0 +1,130 @@
+.announcement--carousel {
+  position: relative;
+}
+
+.announcement__hero--link {
+  display: flex;
+  align-items: stretch;
+  min-height: 180px;
+  background-color: #fff7ed;
+  background-position: right center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+}
+
+.announcement__hero--link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 250, 243, 0.97) 0%,
+    rgba(255, 247, 237, 0.9) 42%,
+    rgba(255, 247, 237, 0.35) 68%,
+    rgba(255, 247, 237, 0.08) 100%
+  );
+  pointer-events: none;
+}
+
+.announcement__hero--link:focus-visible {
+  outline: 2px solid #ea580c;
+  outline-offset: -2px;
+}
+
+.announcement--carousel .announcement__content {
+  position: relative;
+  z-index: 1;
+}
+
+.announcement__hero--link .announcement__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.announcement--carousel .announcement__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #334155;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.announcement--carousel .announcement__nav:hover {
+  background: #fff;
+  color: #0f172a;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.announcement--carousel .announcement__nav:focus-visible {
+  outline: 2px solid #ea580c;
+  outline-offset: 2px;
+}
+
+.announcement__nav--prev {
+  left: 10px;
+}
+
+.announcement__nav--next {
+  right: 10px;
+}
+
+.announcement__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.announcement__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+}
+
+.announcement__dot.is-active {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.55);
+}
+
+.announcement--carousel .tag--urgent {
+  color: #b91c1c;
+}
+
+.announcement--carousel .tag--dept {
+  color: #1d4ed8;
+}
+
+@media (max-width: 1100px) {
+  .announcement__nav--prev {
+    left: 6px;
+  }
+
+  .announcement__nav--next {
+    right: 6px;
+  }
+}
