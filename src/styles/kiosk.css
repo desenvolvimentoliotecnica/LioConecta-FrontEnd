@@ -65,8 +65,8 @@
 
 @media (orientation: landscape) and (min-width: 768px) {
   .kiosk-feed .feed-grid {
-    column-count: 3;
-    column-gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
   }
 
   .kiosk-feed .announcement__hero {
@@ -80,8 +80,8 @@
   }
 
   .kiosk-feed .feed-grid {
-    column-count: 3;
-    column-gap: 24px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
   }
 }
 

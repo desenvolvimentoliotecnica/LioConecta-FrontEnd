@@ -467,10 +467,12 @@ a.announcement__cta:hover {
   max-width: 92px;
 }
 
-/* FEED GRID — layout em colunas (masonry) evita gaps verticais entre cards de alturas diferentes */
+/* FEED GRID — CSS Grid em linhas: esquerda → direita, cima → baixo (preenche todas as colunas) */
 .feed-grid {
-  column-count: 2;
-  column-gap: var(--wf-gap);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--wf-gap);
+  align-items: start;
 }
 
 .feed-column {
@@ -478,10 +480,8 @@ a.announcement__cta:hover {
 }
 
 .feed-grid .card {
-  break-inside: avoid;
-  margin-bottom: var(--wf-gap);
   width: 100%;
-  display: inline-block;
+  min-width: 0;
 }
 
 .card {
@@ -938,13 +938,13 @@ a.announcement__cta:hover {
 
 @media (min-width: 1400px) {
   .feed-grid {
-column-count: 3;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 1100px) {
   .feed-grid {
-column-count: 1;
+    grid-template-columns: 1fr;
   }
 
   .announcement__hero {
