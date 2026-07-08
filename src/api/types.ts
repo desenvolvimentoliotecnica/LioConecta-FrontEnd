@@ -673,6 +673,41 @@ export interface LeaveRequestResultDto {
   message: string;
 }
 
+export interface LeaveRequestItemDto {
+  id: string;
+  serviceRequestId?: string | null;
+  title: string;
+  status: string;
+  rmSyncStatus?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  dataSource?: string | null;
+  createdAt: string;
+}
+
+export interface LeaveTimelineEventDto {
+  label: string;
+  status: string;
+  occurredAt: string;
+  detail?: string | null;
+}
+
+export interface LeaveRequestDetailDto {
+  id: string;
+  serviceRequestId?: string | null;
+  title: string;
+  status: string;
+  rmSyncStatus?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  notes?: string | null;
+  dataSource?: string | null;
+  createdAt: string;
+  timeline: LeaveTimelineEventDto[];
+}
+
 export type AuditSource = "HttpRequest" | "EntityChange";
 
 export interface AuditEventDto {

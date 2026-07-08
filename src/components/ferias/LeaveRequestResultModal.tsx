@@ -3,14 +3,22 @@ import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 type Props = {
   open: boolean;
   message: string | null;
+  variant?: "success" | "error";
   onClose: () => void;
 };
 
-export function LeaveRequestResultModal({ open, message, onClose }: Props) {
+export function LeaveRequestResultModal({
+  open,
+  message,
+  variant = "success",
+  onClose,
+}: Props) {
+  const isError = variant === "error";
+
   return (
     <ContrachequeModal
       open={open}
-      title="Solicitação registrada"
+      title={isError ? "Não foi possível enviar" : "Solicitação registrada"}
       onClose={onClose}
       footer={
         <button type="button" className="pay-modal__btn" onClick={onClose}>
@@ -18,7 +26,9 @@ export function LeaveRequestResultModal({ open, message, onClose }: Props) {
         </button>
       }
     >
-      <p>{message ?? "Sua solicitação foi enviada ao RH."}</p>
+      <p className={isError ? "leave-form__error" : undefined}>
+        {message ?? (isError ? "Tente novamente em instantes." : "Sua solicitação foi enviada ao RH.")}
+      </p>
     </ContrachequeModal>
   );
 }

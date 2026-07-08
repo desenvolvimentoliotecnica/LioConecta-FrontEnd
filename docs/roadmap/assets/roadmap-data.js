@@ -133,15 +133,15 @@ window.ROADMAP_DATA = {
     { id: "TS-QA-RM-001b", specId: "spec-holerite", story: "US-RM-001", type: "QA", title: "Caso: informe IR abre e valores conferem", phase: "F1", done: true },
 
     /* ── spec-ferias ── */
-    { id: "TS-FE-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "FE", title: "Formulário solicitação — validação saldo e datas", phase: "F1" },
-    { id: "TS-FE-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "FE", title: "Hook useLeave — mutation POST requests + invalidate cache", phase: "F1" },
-    { id: "TS-FE-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Lista histórico solicitações com badge status", phase: "F1" },
-    { id: "TS-FE-RM-003b", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Detalhe solicitação — timeline aprovação", phase: "F1" },
-    { id: "TS-BE-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "BE", title: "POST /rh/leave/requests — persist + fila write-back RM", phase: "F1" },
-    { id: "TS-BE-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "BE", title: "Integração RM Labore — registrar período férias", phase: "F1" },
-    { id: "TS-BE-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "BE", title: "GET /rh/leave/requests — status sync RM", phase: "F1" },
-    { id: "TS-QA-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "UAT: solicitação férias reflete no RM em 24h", phase: "F1" },
-    { id: "TS-QA-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "Caso: saldo zero bloqueia envio", phase: "F1" },
+    { id: "TS-FE-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "FE", title: "Formulário solicitação — validação saldo e datas", phase: "F1", done: true },
+    { id: "TS-FE-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "FE", title: "Hook useLeave — mutation POST requests + invalidate cache", phase: "F1", done: true },
+    { id: "TS-FE-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Lista histórico solicitações com badge status", phase: "F1", done: true },
+    { id: "TS-FE-RM-003b", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Detalhe solicitação — timeline aprovação", phase: "F1", done: true },
+    { id: "TS-BE-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "BE", title: "POST /rh/leave/requests — persist + fila write-back RM", phase: "F1", done: true },
+    { id: "TS-BE-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "BE", title: "Integração RM Labore — registrar período férias", phase: "F1", done: true },
+    { id: "TS-BE-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "BE", title: "GET /rh/leave/requests — status sync RM", phase: "F1", done: true },
+    { id: "TS-QA-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "UAT: solicitação férias reflete no RM em 24h", phase: "F1", done: true },
+    { id: "TS-QA-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "Caso: saldo zero bloqueia envio", phase: "F1", done: true },
 
     /* ── spec-ajuste-ponto ── */
     { id: "TS-FE-RM-004a", specId: "spec-ajuste-ponto", story: "US-RM-004", type: "FE", title: "Botão 'Solicitar ajuste' no espelho de ponto (dia selecionado)", phase: "F2" },
@@ -300,7 +300,7 @@ window.ROADMAP_DATA = {
 
   maturityMatrix: [
     { route: "/servicos/contracheque", label: "Contracheque (Holerite)", maturity: "integrated", file: "ContrachequePage.tsx", api: "/rh/payslips/*", gestor: "G-RM-07", gap: "—" },
-    { route: "/servicos/ferias-ausencias", label: "Férias e ausências", maturity: "integrated", file: "FeriasAusenciasPage.tsx", api: "/rh/leave/*", gestor: "G-RM-05", gap: "Write-back RM validar" },
+    { route: "/servicos/ferias-ausencias", label: "Férias e ausências", maturity: "integrated", file: "FeriasAusenciasPage.tsx", api: "/rh/leave/*", gestor: "G-RM-05", gap: "—" },
     { route: "/servicos/ponto-eletronico", label: "Ponto eletrônico", maturity: "integrated", file: "PontoEletronicoPage.tsx", api: "/rh/ponto/*", gestor: "G-RM-06", gap: "Ajuste ponto (write) ausente" },
     { route: "/servicos/solicitacoes-rh", label: "Solicitações RH", maturity: "prototype", file: "servicos-rh/ (legacy)", api: "—", gestor: "G-RM-01..03", gap: "Greenfield React+API" },
     { route: "—", label: "Ciclo de vaga", maturity: "soon", file: "—", api: "—", gestor: "G-RM-04", gap: "Módulo inexistente" },

@@ -1,13 +1,7 @@
 import { useLeaveHistory } from "../../api/hooks/useLeave";
 import { formatSensitiveCount } from "../../utils/money";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
-
-const STATUS_LABELS: Record<string, string> = {
-  pending: "Pendente",
-  approved: "Aprovado",
-  completed: "Concluído",
-  rejected: "Rejeitado",
-};
+import { LeaveStatusBadge } from "./LeaveStatusBadge";
 
 type Props = {
   open: boolean;
@@ -57,7 +51,9 @@ export function LeaveHistoryModal({ open, showValues, onToggleShowValues, onClos
                   {item.endDate ? ` — ${formatDate(item.endDate)}` : ""}
                 </td>
                 <td>{item.days != null ? formatSensitiveCount(item.days, showValues) : "—"}</td>
-                <td>{STATUS_LABELS[item.status] ?? item.status}</td>
+                <td>
+                  <LeaveStatusBadge status={item.status} />
+                </td>
               </tr>
             ))}
           </tbody>
