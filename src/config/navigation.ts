@@ -25,6 +25,7 @@ export const pessoasLinks: NavLinkItem[] = [
   { label: "Novos colaboradores", path: "/pessoas/novos-colaboradores" },
   { label: "Aniversariantes", path: "/pessoas/aniversariantes" },
   { label: "Organograma", path: "/pessoas/organograma" },
+  { label: "Lista de Ramais", path: "/pessoas/ramais" },
 ];
 
 export const gruposLinks: NavLinkItem[] = [

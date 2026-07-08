@@ -16,6 +16,7 @@ import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSectio
 import { CompassSettingsSection } from "../admin/CompassSettingsSection";
 import { MenuEditorSettingsSection } from "../admin/MenuEditorSettingsSection";
 import { PortalUiSettingsSection } from "../admin/PortalUiSettingsSection";
+import { RamaisSettingsSection } from "../admin/RamaisSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
 import "../../styles/backend-config-page.css";
 
@@ -44,12 +45,14 @@ const LOOP_MODULE_ID = "loop";
 const COMPASS_MODULE_ID = "compass";
 const CARDAPIO_MODULE_ID = "cardapio";
 const PORTAL_UI_MODULE_ID = "portal-ui";
+const RAMAIS_MODULE_ID = "ramais";
 
 const DOMAIN_MODULE_TABS = [
   { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
   { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
   { id: COMPASS_MODULE_ID, label: "Compass IBP" },
   { id: CARDAPIO_MODULE_ID, label: "Cardápio" },
+  { id: RAMAIS_MODULE_ID, label: "Ramais" },
   { id: PORTAL_UI_MODULE_ID, label: "Portal UI" },
 ] as const;
 
@@ -656,6 +659,26 @@ export function BackendConfigPage() {
           </div>
 
           <MenuEditorSettingsSection />
+        </section>
+      ) : null}
+
+      {activeCategory === RAMAIS_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="ramais-module-title">
+          <ConfigSectionHead
+            titleId="ramais-module-title"
+            title="Ramais — gestão da lista"
+            description="Defina quais perfis e e-mails podem criar, editar e excluir ramais no menu Pessoas."
+            onOpenHelp={setHelpCategory}
+          />
+
+          <div className="backend-config-page__module-actions">
+            <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/pessoas/ramais">
+              <i className="fa-solid fa-phone" aria-hidden="true" />
+              Abrir Lista de Ramais
+            </Link>
+          </div>
+
+          <RamaisSettingsSection />
         </section>
       ) : null}
 

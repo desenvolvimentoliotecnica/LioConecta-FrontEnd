@@ -1974,3 +1974,38 @@ export interface CalendarConnectionTestResponse {
   tenantId?: string | null;
   clientId?: string | null;
 }
+
+export interface PhoneExtensionDto {
+  id: string;
+  name: string;
+  extension: string;
+  mobile?: string | null;
+  department: string;
+  title?: string | null;
+  email?: string | null;
+  managerName?: string | null;
+  personId?: string | null;
+  personSlug?: string | null;
+  personName?: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PhoneExtensionsBootstrapDto {
+  canManage: boolean;
+  total: number;
+  departments: string[];
+}
+
+export interface UpsertPhoneExtensionRequest {
+  name: string;
+  extension: string;
+  mobile?: string | null;
+  department: string;
+  title?: string | null;
+  email?: string | null;
+  managerName?: string | null;
+  personId?: string | null;
+  isActive?: boolean;
+}

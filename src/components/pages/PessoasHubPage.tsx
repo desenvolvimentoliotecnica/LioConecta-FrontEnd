@@ -13,7 +13,7 @@ export function PessoasHubPage() {
       <SectionPageHead
         section="pessoas"
         title="Pessoas"
-        description="Diretório, novos colaboradores, aniversariantes e organograma — o mesmo conteúdo disponível no menu Pessoas da barra superior."
+        description="Diretório, novos colaboradores, aniversariantes, organograma e lista de ramais — o mesmo conteúdo disponível no menu Pessoas da barra superior."
         toolbar={
           <section className="docs-hub__controls" aria-label="Busca">
             <div className="docs-hub__summary">

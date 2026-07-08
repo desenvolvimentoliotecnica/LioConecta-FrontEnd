@@ -211,6 +211,7 @@
 .docs-hub__card--novos { background: #f0fdf4; border-color: #86efac; }
 .docs-hub__card--aniversariantes { background: #fdf2f8; border-color: #f9a8d4; }
 .docs-hub__card--organograma { background: #f5f3ff; border-color: #c4b5fd; }
+.docs-hub__card--ramais { background: #ecfeff; border-color: #5eead4; }
 
 .docs-hub__card--meus { background: #eff6ff; border-color: #bfdbfe; }
 .docs-hub__card--explorar { background: #ecfeff; border-color: #5eead4; }
@@ -221,6 +222,7 @@
 .docs-hub__card-icon--novos { background: #dcfce7; color: #15803d; }
 .docs-hub__card-icon--aniversariantes { background: #fce7f3; color: #be185d; }
 .docs-hub__card-icon--organograma { background: #ede9fe; color: #6d28d9; }
+.docs-hub__card-icon--ramais { background: #cffafe; color: #0f766e; }
 
 .docs-hub__card-icon--meus { background: #dbeafe; color: #1d4ed8; }
 .docs-hub__card-icon--explorar { background: #cffafe; color: #0f766e; }
