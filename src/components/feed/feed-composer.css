@@ -400,6 +400,8 @@
   padding: 0 24px 40px;
 }
 
-.main--feed-scroll > :first-child {
+/* Espaço do topo fica no margin do carrossel (feed.ts), não em padding interno —
+   senão a imagem do hero fica com faixa vazia no topo. */
+.main--feed-scroll > :first-child:not(.announcement--carousel) {
   padding-top: 20px;
 }
