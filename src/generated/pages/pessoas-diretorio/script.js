@@ -112,7 +112,7 @@
 
       function resolvePhotoUrl(url) {
         if (window.PersonAvatar) {
-          return window.PersonAvatar.resolveGraphPhotoUrl(url);
+          return window.PersonAvatar.resolvePhotoUrl(url) || "";
         }
         if (!url || !String(url).trim()) return null;
         var trimmed = String(url).trim();

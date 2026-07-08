@@ -250,6 +250,8 @@
 .pulse-shell--module-focus {
   min-height: 100vh;
   width: 100%;
+  max-width: none;
+  grid-template-columns: 64px minmax(0, 1fr);
 }
 
 .pulse-shell--module-focus .pulse-nav {

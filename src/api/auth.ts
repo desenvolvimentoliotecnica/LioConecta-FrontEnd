@@ -1,4 +1,5 @@
 import type { MeDto, UserRole } from "./types";
+import type { CompassSettings } from "../config/compass/settings";
 import type { LoopSettings } from "../config/loop/settings";
 
 const ROLE_INDEX: Record<UserRole, number> = {
@@ -29,6 +30,14 @@ export function canAccessAdminArea(me: MeDto | undefined): boolean {
 }
 
 export function canAccessLoopModule(me: MeDto | undefined, settings: LoopSettings | undefined): boolean {
+  if (!me || !settings?.enabled) return false;
+  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
+    return true;
+  }
+  return settings.allowedRoles.some((role) => hasRole(me, role));
+}
+
+export function canAccessCompassModule(me: MeDto | undefined, settings: CompassSettings | undefined): boolean {
   if (!me || !settings?.enabled) return false;
   if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
     return true;

@@ -260,6 +260,24 @@ export function buildSitemapSections(): SitemapSection[] {
       ],
     },
     {
+      id: "compass",
+      label: "Compass IBP",
+      icon: "fa-compass",
+      items: [
+        entry("Visão Geral", "/compass", "Dashboard Hyperion YTD com KPIs IBP Atual vs Anterior."),
+        entry("Análise YTD", "/compass/analise-ytd", "Tabela paginada 11 colunas do cubo Oracle Hyperion EPBCS."),
+        entry("Ciclo IBP", "/compass/ciclo", "Linha do tempo e fases do ciclo de planejamento integrado."),
+        entry("Volume", "/compass/volume", "Volume YTD agregado por família (tipo Volume)."),
+        entry("Canais", "/compass/canais", "IBP YTD por unidade/canal de negócio."),
+        entry("Financeiro", "/compass/financeiro", "Cascade P&L por tipo contábil Hyperion."),
+        entry("Reconciliação", "/compass/reconciliacao", "Matriz Diretoria × Tipo com variações YTD."),
+        entry("Reuniões", "/compass/reunioes", "Agenda de reuniões por fase do ciclo IBP."),
+        entry("Decisões", "/compass/decisoes", "Registro de decisões tomadas e pendentes."),
+        entry("Cenários", "/compass/cenarios", "Simulações what-if e comparação de versões."),
+        entry("Relatórios", "/compass/relatorios", "Exportações executivas do ciclo IBP (em breve)."),
+      ],
+    },
+    {
       id: "utilitarios",
       label: "Utilitários",
       icon: "fa-toolbox",
@@ -315,6 +333,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Loop de Projetos — permissões",
           "/admin/configuracoes-backend?category=loop",
           "Define quem acessa o módulo Loop (∞) no menu lateral esquerdo.",
+        ),
+        entry(
+          "Compass IBP — permissões",
+          "/admin/configuracoes-backend?category=compass",
+          "Define quem acessa o módulo Compass (IBP) no menu lateral esquerdo.",
         ),
         entry(
           "Chat Teams — configuração",

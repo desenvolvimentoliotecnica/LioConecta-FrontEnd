@@ -1,0 +1,50 @@
+{
+  "voice": "pt-BR-AntonioNeural",
+  "segments": [
+    {
+      "id": "hook",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\hook.mp3",
+      "text": "Bem-vindo ao LioConecta. O portal que conecta toda a Lio Técnica em um só lugar."
+    },
+    {
+      "id": "feed",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\feed.mp3",
+      "text": "No Feed corporativo, você acompanha publicações, enquetes, parabenizações e as novidades da empresa em tempo real."
+    },
+    {
+      "id": "comunicados",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\comunicados.mp3",
+      "text": "Comunicados concentra avisos oficiais, alertas urgentes e informações departamentais com leitura rastreável."
+    },
+    {
+      "id": "pessoas",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\pessoas.mp3",
+      "text": "Em Pessoas, encontre colegas, explore perfis e navegue pelo organograma da organização."
+    },
+    {
+      "id": "documentos",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\documentos.mp3",
+      "text": "Documentos centraliza políticas, formulários, manuais e toda a biblioteca institucional."
+    },
+    {
+      "id": "grupos",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\grupos.mp3",
+      "text": "Grupos reúnem comunidades por tema, projeto ou área para colaboração contínua."
+    },
+    {
+      "id": "calendario",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\calendario.mp3",
+      "text": "O Calendário integra sua agenda com reuniões, compromissos e aniversários corporativos."
+    },
+    {
+      "id": "help-desk",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\help-desk.mp3",
+      "text": "E no Help Desk, abra chamados de TI e demais serviços em poucos cliques."
+    },
+    {
+      "id": "outro",
+      "file": "C:\\Users\\leonardo.mendes\\Projects\\LioConecta-FrontEnd\\docs\\intro-video\\build\\audio\\outro.mp3",
+      "text": "LioConecta. Conectando pessoas, processos e conhecimento. Acesse agora com suas credenciais corporativas."
+    }
+  ]
+}

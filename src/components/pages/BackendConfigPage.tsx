@@ -13,6 +13,7 @@ import { useMe } from "../../api/hooks/useMe";
 import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
 import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
+import { CompassSettingsSection } from "../admin/CompassSettingsSection";
 import { MenuEditorSettingsSection } from "../admin/MenuEditorSettingsSection";
 import { PortalUiSettingsSection } from "../admin/PortalUiSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
@@ -40,12 +41,14 @@ const AZURE_AD_CLIENT_KEY = "azure_ad.client_id";
 const AZURE_AD_TENANT_KEY = "azure_ad.tenant_id";
 const ORGANOGRAM_MODULE_ID = "organogram";
 const LOOP_MODULE_ID = "loop";
+const COMPASS_MODULE_ID = "compass";
 const CARDAPIO_MODULE_ID = "cardapio";
 const PORTAL_UI_MODULE_ID = "portal-ui";
 
 const DOMAIN_MODULE_TABS = [
   { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
   { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
+  { id: COMPASS_MODULE_ID, label: "Compass IBP" },
   { id: CARDAPIO_MODULE_ID, label: "Cardápio" },
   { id: PORTAL_UI_MODULE_ID, label: "Portal UI" },
 ] as const;
@@ -611,6 +614,27 @@ export function BackendConfigPage() {
           </div>
 
           <LoopProjetosSettingsSection />
+        </section>
+      ) : null}
+
+      {activeCategory === COMPASS_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="compass-module-title">
+          <ConfigSectionHead
+            titleId="compass-module-title"
+            title="Compass IBP — acesso e permissões"
+            description="Controle quem visualiza o módulo Compass (IBP) no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            helpCategoryId={COMPASS_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
+
+          <div className="backend-config-page__module-actions">
+            <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/compass">
+              <i className="fa-solid fa-compass" aria-hidden="true" />
+              Abrir Compass IBP
+            </Link>
+          </div>
+
+          <CompassSettingsSection />
         </section>
       ) : null}
 

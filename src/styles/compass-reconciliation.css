@@ -1,0 +1,85 @@
+.compass-matrix {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  gap: 4px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.compass-matrix__corner {
+  min-height: 2rem;
+}
+
+.compass-matrix__col-header,
+.compass-matrix__row-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  padding: 0.35rem;
+  text-align: center;
+}
+
+.compass-matrix__row-header {
+  justify-content: flex-end;
+  padding-right: 0.65rem;
+}
+
+.compass-matrix__cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  min-height: 4rem;
+  border: 1px solid #e2e8f0;
+}
+
+.compass-matrix__cell--diag {
+  background: #f8fafc;
+  color: #cbd5e1;
+  font-weight: 400;
+}
+
+.compass-matrix__cell--none {
+  background: #f8fafc;
+  color: #cbd5e1;
+}
+
+.compass-matrix__cell--low {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.compass-matrix__cell--medium {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.compass-matrix__cell--high {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+@media (max-width: 500px) {
+  .compass-matrix {
+    max-width: 100%;
+  }
+
+  .compass-matrix__col-header,
+  .compass-matrix__row-header {
+    font-size: 0.65rem;
+  }
+
+  .compass-matrix__cell {
+    min-height: 3rem;
+    font-size: 0.95rem;
+  }
+}

@@ -127,11 +127,12 @@
 
       function resolvePhotoUrl(url) {
         if (window.PersonAvatar) {
-          return window.PersonAvatar.resolveGraphPhotoUrl(url) || "";
+          return window.PersonAvatar.resolvePhotoUrl(url) || "";
         }
         if (!url || !String(url).trim()) return "";
         const trimmed = String(url).trim();
         const path = (trimmed.startsWith("/") ? trimmed : "/" + trimmed).split("?")[0].toLowerCase();
+        if (path.indexOf("/assets/avatars/animals/avatar-") === 0) return path;
         return path.indexOf("/media/people/") === 0 ? path : "";
       }
 

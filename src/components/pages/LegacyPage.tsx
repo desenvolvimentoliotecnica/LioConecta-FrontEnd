@@ -13,6 +13,7 @@ import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
 import orgEditDrawerCss from "../../styles/org-edit-drawer.css?inline";
+import avatarPickerCss from "../../styles/avatar-picker.css?inline";
 import sectionPageHeadCss from "../../styles/section-page-head.css?inline";
 
 function injectPageStyles(pageId: string): (() => void) | undefined {
@@ -22,9 +23,9 @@ function injectPageStyles(pageId: string): (() => void) | undefined {
 
   const assets = pageAssets[pageId];
   let combined = assets?.styles ?? "";
-  if (pageId === "pessoas-perfil") combined += "\n" + perfilCss;
+  if (pageId === "pessoas-perfil") combined += "\n" + perfilCss + "\n" + avatarPickerCss;
   if (pageId === "pessoas-organograma" || pageId === "pessoas-diretorio") combined += "\n" + orgModalCss;
-  if (pageId === "pessoas-organograma") combined += "\n" + orgEditDrawerCss;
+  if (pageId === "pessoas-organograma") combined += "\n" + orgEditDrawerCss + "\n" + avatarPickerCss;
   if (usesSectionPageHead(pageId)) combined += "\n" + sectionPageHeadCss;
   if (!combined) return undefined;
   return injectScopedPageStyle(pageId, combined);

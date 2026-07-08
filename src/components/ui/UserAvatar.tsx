@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { resolveGraphPhotoUrl } from "../../utils/personAvatar";
+import { resolvePhotoUrl } from "../../utils/personAvatar";
 
 type UserAvatarProps = {
   photoUrl?: string | null;
@@ -8,7 +8,7 @@ type UserAvatarProps = {
 };
 
 export function UserAvatar({ photoUrl, className = "avatar", alt = "" }: UserAvatarProps) {
-  const src = resolveGraphPhotoUrl(photoUrl);
+  const src = resolvePhotoUrl(photoUrl);
   const [broken, setBroken] = useState(false);
 
   if (!src || broken) {

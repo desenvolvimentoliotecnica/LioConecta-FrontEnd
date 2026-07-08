@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { canAccessAdminArea, canAccessLoopModule } from "../../api/auth";
+import { canAccessAdminArea, canAccessCompassModule, canAccessLoopModule } from "../../api/auth";
+import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useMe } from "../../api/hooks/useMe";
 
@@ -12,6 +13,7 @@ type SidebarItemConfig = {
   spacerBefore?: boolean;
   adminOnly?: boolean;
   loopAccessOnly?: boolean;
+  compassAccessOnly?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -34,6 +36,13 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     href: "/pulse",
     activePrefix: "/pulse",
     loopAccessOnly: true,
+  },
+  {
+    label: "Compass",
+    icon: "fa-compass",
+    href: "/compass",
+    activePrefix: "/compass",
+    compassAccessOnly: true,
   },
 ];
 
@@ -144,10 +153,13 @@ function SidebarItem({
 export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarProps) {
   const { data: me } = useMe();
   const { data: loopSettings } = useLoopSettings();
+  const { data: compassSettings } = useCompassSettings();
   const canAccessAdmin = canAccessAdminArea(me);
   const canAccessLoop = canAccessLoopModule(me, loopSettings);
+  const canAccessCompass = canAccessCompassModule(me, compassSettings);
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
   const items = baseItems.filter((item) => {
+    if (item.compassAccessOnly) return canAccessCompass;
     if (item.loopAccessOnly) return canAccessLoop;
     if (item.adminOnly) return canAccessAdmin;
     return true;

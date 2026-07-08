@@ -223,7 +223,7 @@
     });
 
     var src = global.PersonAvatar
-      ? global.PersonAvatar.resolveGraphPhotoUrl(person.img)
+      ? global.PersonAvatar.resolvePhotoUrl(person.img)
       : null;
 
     if (src) {

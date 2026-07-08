@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <title>LioConecta — Intro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #0046ad;
+      --blue-dark: #003580;
+      --teal: #00b4c8;
+      --teal-light: #e6f9fc;
+      --white: #ffffff;
+      --gray-50: #f8fafc;
+      --gray-600: #475569;
+      --gray-900: #0f172a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--white);
+    }
+
+    .stage {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* Background layers */
+    .bg-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #ffffff 0%, #ebf3ff 45%, #e6f9fc 100%);
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    .bg-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0;
+    }
+
+    .orb--1 {
+      width: 600px; height: 600px;
+      background: rgba(0, 70, 173, 0.12);
+      top: -100px; right: -80px;
+      animation: orbIn 2s ease 0.5s forwards, float1 8s ease-in-out 2s infinite;
+    }
+
+    .orb--2 {
+      width: 500px; height: 500px;
+      background: rgba(0, 180, 200, 0.15);
+      bottom: -120px; left: -60px;
+      animation: orbIn 2s ease 0.8s forwards, float2 10s ease-in-out 2.5s infinite;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 70, 173, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 70, 173, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease 0.3s forwards;
+    }
+
+    /* Scenes */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scene--logo {
+      animation: sceneLogo 6s ease forwards;
+    }
+
+    .scene--features {
+      animation: sceneFeatures 12s ease 5.5s forwards;
+    }
+
+    .scene--outro {
+      animation: sceneOutro 6s ease 17s forwards;
+    }
+
+    /* Logo scene */
+    .logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .logo-ring {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-ring::before {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--teal);
+      border-right-color: var(--blue);
+      opacity: 0;
+      animation: ringSpin 1.8s ease 0.4s forwards;
+    }
+
+    .logo-img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      transform: scale(0.3);
+      opacity: 0;
+      animation: logoPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+    }
+
+    .brand-name {
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      color: var(--blue);
+      opacity: 0;
+      transform: translateY(24px);
+      animation: slideUp 0.9s ease 1s forwards;
+    }
+
+    .brand-name span {
+      color: var(--teal);
+    }
+
+    .tagline {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--gray-600);
+      text-align: center;
+      max-width: 720px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.9s ease 1.6s forwards;
+    }
+
+    /* Features scene */
+    .features-header {
+      text-align: center;
+      margin-bottom: 56px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 0.8s ease 6s forwards;
+    }
+
+    .features-header h2 {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -1px;
+    }
+
+    .features-header p {
+      font-size: 22px;
+      color: var(--gray-600);
+      margin-top: 12px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      width: 1200px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 70, 173, 0.1);
+      border-radius: 20px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: 0 8px 32px rgba(0, 70, 173, 0.08);
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+    }
+
+    .feature-card:nth-child(1) { animation: cardIn 0.7s ease 6.6s forwards; }
+    .feature-card:nth-child(2) { animation: cardIn 0.7s ease 7.2s forwards; }
+    .feature-card:nth-child(3) { animation: cardIn 0.7s ease 7.8s forwards; }
+    .feature-card:nth-child(4) { animation: cardIn 0.7s ease 8.4s forwards; }
+    .feature-card:nth-child(5) { animation: cardIn 0.7s ease 9.0s forwards; }
+    .feature-card:nth-child(6) { animation: cardIn 0.7s ease 9.6s forwards; }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--teal-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .feature-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* Outro scene */
+    .outro-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      text-align: center;
+    }
+
+    .outro-logo {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      opacity: 0;
+      transform: scale(0.5);
+      animation: logoPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 17.2s forwards;
+    }
+
+    .outro-title {
+      font-size: 56px;
+      font-weight: 800;
+      color: var(--blue);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease 17.8s forwards;
+    }
+
+    .outro-sub {
+      font-size: 24px;
+      color: var(--gray-600);
+      max-width: 680px;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease 18.4s forwards;
+    }
+
+    .outro-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 600;
+      border-radius: 999px;
+      box-shadow: 0 12px 40px rgba(0, 70, 173, 0.35);
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+      animation: ctaIn 0.8s ease 19.2s forwards;
+    }
+
+    .outro-cta svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .outro-footer {
+      position: absolute;
+      bottom: 48px;
+      font-size: 16px;
+      color: var(--gray-600);
+      opacity: 0;
+      animation: fadeIn 0.8s ease 20s forwards;
+    }
+
+    .connection-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: lineExpand 1.5s ease 2.2s forwards;
+    }
+
+    /* Progress bar */
+    .progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      width: 0;
+      animation: progressBar 22s linear forwards;
+    }
+
+    /* Keyframes */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes orbIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 20px); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(25px, -15px); }
+    }
+
+    @keyframes logoPop {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes ringSpin {
+      0% { opacity: 0; transform: rotate(-90deg) scale(0.8); }
+      60% { opacity: 1; }
+      100% { opacity: 0.6; transform: rotate(270deg) scale(1); }
+    }
+
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes sceneLogo {
+      0% { opacity: 0; }
+      5% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes sceneFeatures {
+      0% { opacity: 0; }
+      5% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes sceneOutro {
+      0% { opacity: 0; }
+      8% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes ctaIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes lineExpand {
+      0% { width: 0; opacity: 0; }
+      30% { opacity: 0.6; }
+      100% { width: 800px; opacity: 0; }
+    }
+
+    @keyframes progressBar {
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="bg-gradient"></div>
+    <div class="grid-lines"></div>
+    <div class="bg-orbs">
+      <div class="orb orb--1"></div>
+      <div class="orb orb--2"></div>
+    </div>
+
+    <!-- Scene 1: Logo reveal -->
+    <div class="scene scene--logo">
+      <div class="connection-line"></div>
+      <div class="logo-wrap">
+        <div class="logo-ring">
+          <img class="logo-img" src="assets/logo-lioconecta.png" alt="LioConecta" />
+        </div>
+        <h1 class="brand-name">Lio<span>Conecta</span></h1>
+        <p class="tagline">O portal que conecta pessoas, processos e conhecimento na Lio Técnica</p>
+      </div>
+    </div>
+
+    <!-- Scene 2: Features -->
+    <div class="scene scene--features">
+      <div class="features-header">
+        <h2>Tudo o que você precisa, em um só lugar</h2>
+        <p>Sua intranet corporativa — simples, integrada e feita para o dia a dia</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-feed.png" alt="" /></div>
+          <h3>Feed</h3>
+          <p>Publicações, enquetes, parabenizações e interações da rede corporativa.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-people.png" alt="" /></div>
+          <h3>Pessoas</h3>
+          <p>Diretório, perfis, organograma e conexões entre áreas e colegas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-groups.png" alt="" /></div>
+          <h3>Grupos</h3>
+          <p>Comunidades por tema, projeto ou área para colaboração contínua.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-documents.png" alt="" /></div>
+          <h3>Documentos</h3>
+          <p>Políticas, formulários, manuais e biblioteca institucional.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-calendar.png" alt="" /></div>
+          <h3>Calendário</h3>
+          <p>Eventos, reuniões e agenda integrada ao fluxo de trabalho.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><img src="assets/icon-help.png" alt="" /></div>
+          <h3>Help Desk</h3>
+          <p>Suporte de TI, facilities e demais serviços em poucos cliques.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 3: Outro -->
+    <div class="scene scene--outro">
+      <div class="outro-wrap">
+        <img class="outro-logo" src="assets/logo-lioconecta.png" alt="LioConecta" />
+        <h2 class="outro-title">Bem-vindo ao LioConecta</h2>
+        <p class="outro-sub">Acesse com suas credenciais corporativas e comece a explorar o portal da Lio Técnica.</p>
+        <div class="outro-cta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          Conectar agora
+        </div>
+      </div>
+      <p class="outro-footer">Lio Técnica · liotecnica.com.br</p>
+    </div>
+
+    <div class="progress"></div>
+  </div>
+
+  <script>
+    window.__INTRO_DURATION_MS__ = 22000;
+    window.__INTRO_READY__ = true;
+    setTimeout(() => {
+      window.__INTRO_DONE__ = true;
+      document.dispatchEvent(new Event("intro-done"));
+    }, window.__INTRO_DURATION_MS__);
+  </script>
+</body>
+</html>

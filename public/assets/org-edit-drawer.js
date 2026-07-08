@@ -429,6 +429,46 @@
 
 
 
+  function canEditAvatarInDrawer(context) {
+    const policy = getPolicy();
+    if (!(policy.canEdit === true || policy.CanEdit === true)) return false;
+    if (!context) return false;
+    return !!pickField(context, ["personId", "PersonId", "slug", "Slug"]);
+  }
+
+  function openAvatarPicker(context) {
+    if (!global.AvatarPicker || typeof global.AvatarPicker.open !== "function") return;
+
+    const photoUrl = pickField(context, ["photoUrl", "PhotoUrl", "img"]);
+    const graphPhotoUrl =
+      pickField(context, ["graphPhotoUrl", "GraphPhotoUrl"]) ||
+      (global.PersonAvatar && global.PersonAvatar.resolveGraphPhotoUrl(photoUrl));
+
+    global.AvatarPicker.open({
+      personName: pickField(context, ["displayName", "personName", "name"]),
+      personId: pickField(context, ["personId", "PersonId"]),
+      slug: pickField(context, ["slug", "Slug"]),
+      photoUrl: photoUrl,
+      graphPhotoUrl: graphPhotoUrl,
+      currentUrl:
+        global.PersonAvatar && global.PersonAvatar.resolvePhotoUrl
+          ? global.PersonAvatar.resolvePhotoUrl(photoUrl)
+          : photoUrl,
+      onSaved: function (savedUrl) {
+        if (currentContext) {
+          currentContext.photoUrl = savedUrl || graphPhotoUrl || "";
+          renderAvatar(currentContext);
+        }
+        setAlert("Avatar atualizado.", "success");
+        if (typeof onSavedCallback === "function") {
+          onSavedCallback();
+        } else if (typeof global.reloadOrganogram === "function") {
+          global.reloadOrganogram();
+        }
+      }
+    });
+  }
+
   function renderAvatar(context) {
 
     const wrap = document.getElementById("org-edit-avatar-wrap");
@@ -441,23 +481,28 @@
 
     const photoUrl = pickField(context, ["photoUrl", "PhotoUrl", "img"]);
 
+    const resolved =
+      global.PersonAvatar && typeof PersonAvatar.resolvePhotoUrl === "function"
+        ? PersonAvatar.resolvePhotoUrl(photoUrl)
+        : photoUrl;
+
     let inner = "";
 
     if (global.PersonAvatar && typeof PersonAvatar.renderAvatarMarkup === "function") {
 
-      inner = PersonAvatar.renderAvatarMarkup(photoUrl, {
+      inner = PersonAvatar.renderAvatarMarkup(resolved || photoUrl, {
 
         className: "org-edit-drawer__avatar"
 
       });
 
-    } else if (photoUrl) {
+    } else if (resolved || photoUrl) {
 
       inner =
 
         '<img class="org-edit-drawer__avatar" src="' +
 
-        photoUrl.replace(/"/g, "&quot;") +
+        String(resolved || photoUrl).replace(/"/g, "&quot;") +
 
         '" alt="" />';
 
@@ -471,9 +516,21 @@
 
     }
 
-    wrap.innerHTML = '<div class="org-edit-drawer__avatar-ring">' + inner + "</div>";
+    var changeBtn = canEditAvatarInDrawer(context)
+      ? '<button type="button" class="org-edit-drawer__avatar-change" id="org-edit-avatar-change">' +
+        '<i class="fa-solid fa-pen" aria-hidden="true"></i> Alterar avatar</button>'
+      : "";
+
+    wrap.innerHTML = '<div class="org-edit-drawer__avatar-ring">' + inner + "</div>" + changeBtn;
 
     wrap.removeAttribute("aria-hidden");
+
+    var changeButton = document.getElementById("org-edit-avatar-change");
+    if (changeButton) {
+      changeButton.onclick = function () {
+        openAvatarPicker(context);
+      };
+    }
 
   }
 
@@ -1114,6 +1171,7 @@
       positionId: person.positionId,
 
       personId: person.personId,
+      slug: person.slug || person.Slug || "",
 
       personName: person.name,
 

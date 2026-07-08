@@ -8,11 +8,20 @@
     /\/images\/avatar\//i
   ];
 
+  var PORTAL_AVATAR_PREFIX = "/assets/avatars/animals/avatar-";
+
   function normalizePath(url) {
     var trimmed = String(url || "").trim();
     if (!trimmed) return "";
     if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
     return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+  }
+
+  function isPortalAvatarUrl(url) {
+    var normalized = normalizePath(url);
+    if (!normalized) return false;
+    var path = normalized.split("?")[0].toLowerCase();
+    return path.indexOf(PORTAL_AVATAR_PREFIX) === 0 && /\.png$/i.test(path);
   }
 
   function isGraphPhotoUrl(url) {
@@ -35,6 +44,36 @@
     return isGraphPhotoUrl(url) ? normalizePath(url) : null;
   }
 
+  /**
+   * Portal avatar (edição manual) prevalece sobre foto do Graph.
+   */
+  function resolvePhotoUrl(url) {
+    if (isPortalAvatarUrl(url)) return normalizePath(url);
+    return resolveGraphPhotoUrl(url);
+  }
+
+  function resolvePhotoUrlFromSource(source) {
+    if (!source) return null;
+    if (typeof source === "string") return resolvePhotoUrl(source);
+
+    var portal =
+      source.portalPhotoUrl ||
+      source.PortalPhotoUrl ||
+      source.portalAvatarUrl ||
+      source.PortalAvatarUrl ||
+      "";
+    if (isPortalAvatarUrl(portal)) return normalizePath(portal);
+
+    var primary = source.photoUrl || source.PhotoUrl || source.img || "";
+    if (isPortalAvatarUrl(primary)) return normalizePath(primary);
+
+    var graph =
+      source.graphPhotoUrl ||
+      source.GraphPhotoUrl ||
+      primary;
+    return resolveGraphPhotoUrl(graph);
+  }
+
   function defaultEscapeAttr(value) {
     return String(value || "").replace(/"/g, "&quot;");
   }
@@ -43,7 +82,7 @@
     options = options || {};
     var className = options.className || "person-card__avatar";
     var escapeAttr = options.escapeAttr || defaultEscapeAttr;
-    var src = resolveGraphPhotoUrl(photoUrlValue);
+    var src = resolvePhotoUrl(photoUrlValue);
 
     if (!src) {
       return (
@@ -69,9 +108,13 @@
   }
 
   global.PersonAvatar = {
+    isPortalAvatarUrl: isPortalAvatarUrl,
     isGraphPhotoUrl: isGraphPhotoUrl,
     resolveGraphPhotoUrl: resolveGraphPhotoUrl,
+    resolvePhotoUrl: resolvePhotoUrl,
+    resolvePhotoUrlFromSource: resolvePhotoUrlFromSource,
     renderAvatarMarkup: renderAvatarMarkup,
-    replaceBroken: replaceBroken
+    replaceBroken: replaceBroken,
+    PORTAL_AVATAR_BASE: "/assets/avatars/animals/"
   };
 })(window);

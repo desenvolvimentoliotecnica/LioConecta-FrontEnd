@@ -437,7 +437,9 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
         </HelpList>
         <HelpNote warn>
           Erro <code>AADSTS500113</code> no popup = falta registrar a redirect URI exata do ambiente em Authentication →
-          SPA (ex.: <code>http://localhost:5173</code> no dev local).
+          SPA (ex.: <code>http://localhost:5173</code> no dev local). Em servidor por IP (ex.{" "}
+          <code>10.0.0.79:8092</code>), use <strong>HTTPS</strong> — o MSAL não funciona em <code>http://</code> fora de
+          localhost (<code>crypto_nonexistent</code>).
         </HelpNote>
         <HelpHeading>Chave de criptografia (<code>calendar.token_encryption_key</code>)</HelpHeading>
         <HelpLead>
