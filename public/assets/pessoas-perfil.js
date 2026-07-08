@@ -1454,6 +1454,10 @@
   function mapApiProfileToLegacy(dto) {
     VIEWER_ROLE = mapViewerRole(dto.viewerContext);
     var personalData = parseJsonField(dto.personalData, {}) || {};
+    var portalFromPersonal =
+      personalData.portalAvatarUrl ||
+      personalData.PortalAvatarUrl ||
+      null;
     var availability = parseJsonField(personalData.availability, personalData.availability) || {};
     var stats = parseJsonField(personalData.stats, {}) || {};
     var skills = (dto.skills || []).map(function (skill) {
@@ -1478,9 +1482,11 @@
         dto.PhotoUrl ||
         dto.portalPhotoUrl ||
         dto.PortalPhotoUrl ||
+        portalFromPersonal ||
         "",
       graphPhotoUrl: dto.graphPhotoUrl || dto.GraphPhotoUrl || null,
-      portalPhotoUrl: dto.portalPhotoUrl || dto.PortalPhotoUrl || null,
+      portalPhotoUrl:
+        dto.portalPhotoUrl || dto.PortalPhotoUrl || portalFromPersonal || null,
       aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
       bio: personalData.bio || dto.bio || "",
       pronouns: personalData.pronouns || dto.pronouns || "",
