@@ -29,6 +29,11 @@ export function canAccessAdminArea(me: MeDto | undefined): boolean {
   return hasRole(me, "Admin") || hasRole(me, "AnalyticsViewer");
 }
 
+/** Gestor / RH / Admin — gestão de férias (allow-list por e-mail resolve no backend). */
+export function canAccessLeaveManagement(me: MeDto | undefined): boolean {
+  return hasRole(me, "Admin") || hasRole(me, "HR") || hasRole(me, "Manager");
+}
+
 export function canAccessLoopModule(me: MeDto | undefined, settings: LoopSettings | undefined): boolean {
   if (!me || !settings?.enabled) return false;
   if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {

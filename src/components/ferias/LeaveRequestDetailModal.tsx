@@ -1,4 +1,9 @@
-import { useLeaveRequestDetail } from "../../api/hooks/useLeave";
+import { useState } from "react";
+import {
+  downloadLeaveRequestPdf,
+  openLeaveRequestPdf,
+  useLeaveRequestDetail,
+} from "../../api/hooks/useLeave";
 import { leaveStatusLabel } from "../../utils/leaveHelpers";
 import { formatSensitiveCount } from "../../utils/money";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
@@ -24,6 +29,21 @@ function formatDateTime(value: string): string {
 export function LeaveRequestDetailModal({ recordId, showValues, onClose }: Props) {
   const detailQuery = useLeaveRequestDetail(recordId);
   const detail = detailQuery.data;
+  const [pdfBusy, setPdfBusy] = useState(false);
+
+  const handlePdf = async (action: "download" | "print") => {
+    if (!recordId) return;
+    setPdfBusy(true);
+    try {
+      if (action === "download") {
+        await downloadLeaveRequestPdf(recordId);
+      } else {
+        await openLeaveRequestPdf(recordId);
+      }
+    } finally {
+      setPdfBusy(false);
+    }
+  };
 
   return (
     <ContrachequeModal
@@ -48,6 +68,25 @@ export function LeaveRequestDetailModal({ recordId, showValues, onClose }: Props
             {detail.dataSource ? (
               <p className="leave-detail__source">Origem: {detail.dataSource}</p>
             ) : null}
+          </div>
+
+          <div className="leave-gestao-actions">
+            <button
+              type="button"
+              className="pay-btn"
+              disabled={pdfBusy}
+              onClick={() => void handlePdf("print")}
+            >
+              Imprimir comprovante
+            </button>
+            <button
+              type="button"
+              className="pay-btn pay-btn--ghost"
+              disabled={pdfBusy}
+              onClick={() => void handlePdf("download")}
+            >
+              Baixar PDF
+            </button>
           </div>
 
           <h3 className="leave-timeline__title">Linha do tempo</h3>

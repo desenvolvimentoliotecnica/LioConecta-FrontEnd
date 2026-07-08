@@ -1,10 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   extractLeaveRequestError,
   useLeaveRequest,
   useLeaveServices,
   useLeaveSummary,
 } from "../../api/hooks/useLeave";
+import { useMe } from "../../api/hooks/useMe";
+import { canAccessLeaveManagement } from "../../api/auth";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { LeaveServiceDto } from "../../api/types";
 import { bookmarkIdForLeave, formatSensitiveCount } from "../../utils/money";
@@ -33,6 +36,7 @@ const FILTERS = [
 ] as const;
 
 export function FeriasAusenciasPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [showValues, setShowValues] = useState(false);
@@ -44,12 +48,23 @@ export function FeriasAusenciasPage() {
   const [helpService, setHelpService] = useState<LeaveServiceDto | null>(null);
   const [requestMessage, setRequestMessage] = useState<string | null>(null);
   const [requestError, setRequestError] = useState<string | null>(null);
-  const [detailRecordId, setDetailRecordId] = useState<string | null>(null);
+  const [detailRecordId, setDetailRecordId] = useState<string | null>(
+    searchParams.get("requestId"),
+  );
 
+  const meQuery = useMe();
+  const showGestaoLink = canAccessLeaveManagement(meQuery.data);
   const summaryQuery = useLeaveSummary();
   const servicesQuery = useLeaveServices();
   const requestMutation = useLeaveRequest();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
+
+  useEffect(() => {
+    const requestId = searchParams.get("requestId");
+    if (requestId) {
+      setDetailRecordId(requestId);
+    }
+  }, [searchParams]);
 
   const filtered = useMemo(
     () => filterLeaveServices(servicesQuery.data ?? [], category, query),
@@ -131,6 +146,13 @@ export function FeriasAusenciasPage() {
         title="Férias e Ausências"
         current="Férias e ausências"
         description="Solicite férias, registre ausências, consulte saldos e acompanhe o status das suas solicitações com o time de RH."
+        actions={
+          showGestaoLink ? (
+            <Link className="pay-btn pay-btn--ghost" to="/servicos/ferias-ausencias/gestao">
+              Gestão de férias
+            </Link>
+          ) : null
+        }
         toolbar={
           <div className="pay-toolbar">
             <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
@@ -291,7 +313,13 @@ export function FeriasAusenciasPage() {
       <LeaveRequestDetailModal
         recordId={detailRecordId}
         showValues={showValues}
-        onClose={() => setDetailRecordId(null)}
+        onClose={() => {
+          setDetailRecordId(null);
+          if (searchParams.has("requestId")) {
+            searchParams.delete("requestId");
+            setSearchParams(searchParams, { replace: true });
+          }
+        }}
       />
     </main>
   );

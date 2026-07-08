@@ -142,13 +142,13 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[0].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[0].icon}`} aria-hidden="true" /> {servicosHeadings[0].label}
             </span>
-            {items.slice(0, 6).map((item) => (
+            {items.slice(0, 7).map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[1].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[1].icon}`} aria-hidden="true" /> {servicosHeadings[1].label}
             </span>
-            {items.slice(6, 8).map((item) => (
+            {items.slice(7, 9).map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[2].className}`} role="presentation">

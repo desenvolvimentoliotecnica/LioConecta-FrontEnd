@@ -588,10 +588,37 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
     render: () => (
       <>
         <HelpLead>
-          URLs e links externos dos serviços de férias, licenças e afastamentos na área RH do portal. Chaves em{" "}
-          <code>leave.*</code>.
+          Configurações de notificação, e-mail e links dos serviços de férias. Chaves em <code>leave.*</code>.
+          A aprovação formal continua no RM Labore; o portal notifica e espelha status.
         </HelpLead>
-        <HelpHeading>Como editar</HelpHeading>
+        <HelpHeading>Notificação no portal</HelpHeading>
+        <HelpList>
+          <li>
+            <code>leave.notify_roles</code> — JSON array de roles (default <code>[&quot;HR&quot;]</code>) além do gestor direto
+          </li>
+          <li>
+            <code>leave.notify_emails</code> — e-mails adicionais (também usados como allow-list de gestão)
+          </li>
+        </HelpList>
+        <HelpHeading>E-mail SMTP (override de desenvolvimento)</HelpHeading>
+        <HelpList>
+          <li>
+            <code>leave.email.enabled</code> — liga o disparo de e-mail ao criar solicitação
+          </li>
+          <li>
+            <code>leave.email.dev_override_enabled</code> — <strong>já vem ligado</strong>; redireciona todos os e-mails
+          </li>
+          <li>
+            <code>leave.email.dev_override_to</code> — destinatário único (default{" "}
+            <code>leonardo.mendes@liotecnica.com.br</code>)
+          </li>
+        </HelpList>
+        <HelpNote>
+          Em produção, desligue <code>leave.email.dev_override_enabled</code> (ou limpe o e-mail de override) para enviar
+          aos gestores/RH reais. Com override ativo, o assunto/corpo incluem o prefixo{" "}
+          <code>[DEV OVERRIDE]</code> e a lista de destinatários originais.
+        </HelpNote>
+        <HelpHeading>URLs de serviços</HelpHeading>
         <HelpList ordered>
           <li>Identifique o serviço (férias, licença, etc.) pelo label</li>
           <li>Preencha URL do portal ou formulário externo corporativo</li>

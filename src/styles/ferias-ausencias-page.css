@@ -480,9 +480,75 @@
   text-align: center;
 }
 
+.leave-gestao-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.2fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.leave-gestao-filters {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.leave-gestao-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.leave-gestao-filters select,
+.leave-gestao-filters input {
+  border: 1px solid var(--wf-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.leave-requests-list__item.is-selected {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #7dd3fc;
+}
+
+.leave-gestao-detail,
+.leave-gestao-list {
+  background: #fff;
+  border: 1px solid var(--wf-border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.leave-gestao-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+.leave-gestao-denied {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.leave-gestao-denied__hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #9a3412;
+}
+
 @media (max-width: 900px) {
   .leave-stats { grid-template-columns: 1fr; }
   .leave-grid { grid-template-columns: 1fr; }
   .leave-card.is-featured { grid-column: auto; }
   .leave-form { grid-template-columns: 1fr; }
+  .leave-gestao-layout { grid-template-columns: 1fr; }
+  .leave-gestao-filters { grid-template-columns: 1fr; }
 }

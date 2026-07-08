@@ -64,6 +64,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/servicos/contracheque", { pageName: "Contracheque", module: "rh" }),
   exact("/servicos/beneficios", { pageName: "Beneficios", module: "rh" }),
   exact("/servicos/ferias-ausencias", { pageName: "FeriasAusencias", module: "rh" }),
+  exact("/servicos/ferias-ausencias/gestao", { pageName: "FeriasGestao", module: "rh" }),
   exact("/servicos/ponto-eletronico", { pageName: "PontoEletronico", module: "rh" }),
   exact("/servicos/ti", { pageName: "TiHub", module: "ti" }),
   exact("/enquetes", { pageName: "EnquetesHub", module: "enquetes" }),
