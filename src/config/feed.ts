@@ -13,6 +13,10 @@ const FEED_SCROLL_OVERRIDES = `
 .main.main--feed-scroll > .announcement--carousel {
   margin-top: 20px;
 }
+.main.main--feed-scroll:has(.feed-api-posts .feed-grid) > .feed-grid,
+.main.main--feed-scroll:has(.feed-api-posts .feed-grid) > div:has(> .feed-grid) {
+  display: none !important;
+}
 .feed-composer {
   position: sticky !important;
   top: 0 !important;

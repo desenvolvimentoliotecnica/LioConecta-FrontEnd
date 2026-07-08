@@ -467,7 +467,7 @@ a.announcement__cta:hover {
   max-width: 92px;
 }
 
-/* FEED GRID — CSS Grid em linhas: esquerda → direita, cima → baixo (preenche todas as colunas) */
+/* FEED GRID — colunas reais (masonry): itens em round-robin L→R no topo, sem gaps verticais */
 .feed-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -476,12 +476,19 @@ a.announcement__cta:hover {
 }
 
 .feed-column {
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wf-gap);
+  min-width: 0;
 }
 
 .feed-grid .card {
   width: 100%;
   min-width: 0;
+}
+
+.feed-column .feed-mood-slot {
+  margin-bottom: 0;
 }
 
 .card {
