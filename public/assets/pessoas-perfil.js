@@ -933,10 +933,27 @@
 
   function resolveProfileAvatarUrl(person) {
     if (!person) return "";
-    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrl === "function") {
-      return global.PersonAvatar.resolvePhotoUrl(person.img || person.photoUrl) || "";
+    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrlFromSource === "function") {
+      return global.PersonAvatar.resolvePhotoUrlFromSource(person) || "";
     }
-    return person.img || person.photoUrl || "";
+    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrl === "function") {
+      var candidate =
+        person.portalPhotoUrl ||
+        person.PortalPhotoUrl ||
+        person.img ||
+        person.photoUrl ||
+        person.PhotoUrl ||
+        "";
+      return global.PersonAvatar.resolvePhotoUrl(candidate) || candidate || "";
+    }
+    return (
+      person.portalPhotoUrl ||
+      person.PortalPhotoUrl ||
+      person.img ||
+      person.photoUrl ||
+      person.PhotoUrl ||
+      ""
+    );
   }
 
   function openAvatarPickerForProfile() {
@@ -1456,7 +1473,12 @@
       name: dto.name || "",
       title: dto.title || "",
       dept: dto.departmentName || "",
-      img: dto.photoUrl || "",
+      img:
+        dto.photoUrl ||
+        dto.PhotoUrl ||
+        dto.portalPhotoUrl ||
+        dto.PortalPhotoUrl ||
+        "",
       graphPhotoUrl: dto.graphPhotoUrl || dto.GraphPhotoUrl || null,
       portalPhotoUrl: dto.portalPhotoUrl || dto.PortalPhotoUrl || null,
       aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
