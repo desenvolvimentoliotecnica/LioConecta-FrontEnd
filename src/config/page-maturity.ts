@@ -57,7 +57,7 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
 
   "/servicos/help-desk": "integrated",
   "/servicos/solicitar-equipamento": "prototype",
-  "/servicos/acesso-sistemas": "prototype",
+  "/servicos/acesso-sistemas": "integrated",
   "/servicos/vpn-acesso-remoto": "prototype",
 
   "/servicos/reservas-salas": "prototype",

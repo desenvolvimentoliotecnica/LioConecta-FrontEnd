@@ -340,6 +340,16 @@ export function buildSitemapSections(): SitemapSection[] {
           "Define quem acessa o módulo Compass (IBP) no menu lateral esquerdo.",
         ),
         entry(
+          "Sistemas — permissões",
+          "/admin/configuracoes-backend?category=systems",
+          "Define quem pode gerir o catálogo de sistemas no hub de acesso.",
+        ),
+        entry(
+          "Acesso a sistemas",
+          "/servicos/acesso-sistemas",
+          "Hub corporativo de links para sistemas internos e externos.",
+        ),
+        entry(
           "Chat Teams — configuração",
           "/admin/configuracoes-backend?category=chat",
           "Integração do chat interno com Microsoft Teams — credenciais, escopos e teste de conexão.",

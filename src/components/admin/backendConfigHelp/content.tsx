@@ -684,6 +684,29 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
     ),
   },
 
+  systems: {
+    title: "Ajuda — Hub de Sistemas",
+    render: () => (
+      <>
+        <HelpLead>
+          Controle de permissões para gestão do catálogo de sistemas no hub <strong>Acesso a Sistemas</strong>. As
+          alterações são persistidas em <strong>/admin/app-settings</strong> (chaves <code>systems.*</code>).
+        </HelpLead>
+        <HelpHeading>O que configurar</HelpHeading>
+        <HelpList>
+          <li>Perfis autorizados a criar, editar e desativar sistemas</li>
+          <li>E-mails extras na whitelist sem depender da role</li>
+          <li>Ambiente do portal via <code>portal.environment</code> (dev, hml, prd)</li>
+        </HelpList>
+        <HelpHeading>Acesso rápido</HelpHeading>
+        <HelpNote>
+          Use <strong>Abrir Hub de Sistemas</strong> para validar as regras após salvar. O CRUD fica no próprio hub para
+          usuários autorizados.
+        </HelpNote>
+      </>
+    ),
+  },
+
   loop: {
     title: "Ajuda — Loop de Projetos",
     render: () => (

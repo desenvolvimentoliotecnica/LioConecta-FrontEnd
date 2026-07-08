@@ -24,6 +24,7 @@ import { HelpDeskPage } from "./components/help-desk/HelpDeskPage";
 import { CardapioPage } from "./components/facilities/CardapioPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
 import { TiHubPage } from "./components/pages/TiHubPage";
+import { SystemsHubPage } from "./components/pages/SystemsHubPage";
 import { CalendarPage } from "./components/pages/CalendarPage";
 import { BookmarksPage } from "./components/pages/BookmarksPage";
 import { FavoritesPage } from "./components/pages/FavoritesPage";
@@ -221,6 +222,7 @@ function App() {
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/cardapio" element={<CardapioPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
+        <Route path="/servicos/acesso-sistemas" element={<SystemsHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
         <Route path="/parabenizacoes" element={<ParabenizacoesHubPage />} />
         <Route path="/noticias" element={<NoticiasHubPage />} />
@@ -237,7 +239,8 @@ function App() {
             page.id === "servicos-beneficios" ||
             page.id === "servicos-ferias" ||
             page.id === "servicos-ponto" ||
-            page.id === "servicos-help-desk"
+            page.id === "servicos-help-desk" ||
+            page.id === "servicos-acesso-sistemas"
           ) {
             return null;
           }
