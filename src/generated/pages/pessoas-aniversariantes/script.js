@@ -61,6 +61,15 @@
         return Math.round((next - today) / 86400000);
       }
 
+      /** Dias até o aniversário neste ano (negativo se já passou). */
+      function daysFromBirthdayThisYear(birthDate, today) {
+        var parts = birthDate.split("-");
+        var month = Number(parts[1]);
+        var day = Number(parts[2]);
+        var thisYear = new Date(today.getFullYear(), month - 1, day);
+        return Math.round((thisYear - today) / 86400000);
+      }
+
       function getNextCalendarMonth() {
         var today = new Date();
         return (today.getMonth() + 1) % 12 + 1;
@@ -83,6 +92,7 @@
       function buildGroups(people) {
         var today = new Date();
         today.setHours(0, 0, 0, 0);
+        var currentMonth = today.getMonth() + 1;
         var groups = [
           { id: "today", name: "Hoje", people: [] },
           { id: "week", name: "Esta semana", people: [] },
@@ -92,7 +102,7 @@
 
         people.forEach(function (person) {
           if (!person.birthDate) return;
-          var days = daysUntilBirthday(person.birthDate, today);
+          var daysThisYear = daysFromBirthdayThisYear(person.birthDate, today);
           var entry = {
             name: person.name,
             role: person.title || "Colaborador",
@@ -100,18 +110,18 @@
             deptId: slugify(person.departmentName || "sem-departamento"),
             day: Number(person.birthDate.split("-")[2]),
             month: Number(person.birthDate.split("-")[1]),
-            days: days,
+            days: daysThisYear,
             label: formatBirthLabel(person.birthDate),
             slug: person.slug,
             photoUrl: person.photoUrl,
             searchName: normalizeSearch(person.name)
           };
 
-          if (days === 0) {
+          if (daysThisYear === 0) {
             groups[0].people.push(entry);
-          } else if (days <= 7) {
+          } else if (daysThisYear > 0 && daysThisYear <= 7) {
             groups[1].people.push(entry);
-          } else if (days <= 30) {
+          } else if (entry.month === currentMonth) {
             groups[2].people.push(entry);
           } else {
             var calKey = "cal-" + entry.month;
@@ -125,6 +135,8 @@
             byCalendarMonth[calKey].people.push(entry);
           }
         });
+
+        groups[2].people.sort(function (a, b) { return a.day - b.day; });
 
         var result = groups.filter(function (g) { return g.people.length; });
         Object.keys(byCalendarMonth)
@@ -177,7 +189,7 @@
         if (activeFilter === "all") return true;
         if (activeFilter === "today") return days === 0;
         if (activeFilter === "week") return days >= 0 && days <= 7;
-        if (activeFilter === "month") return month === currentMonth;
+        if (activeFilter === "month") return month === currentMonth; // calendário, inclui já ocorridos
         if (activeFilter === "next-month") return month === nextMonth;
         if (activeFilter.indexOf("cal-") === 0) {
           return month === Number(activeFilter.slice(4));
@@ -256,14 +268,14 @@
         }
         if (todayCount === 0) {
           bannerTextEl.textContent =
-            "Nenhum aniversariante hoje. Nos próximos 60 dias, " +
+            "Nenhum aniversariante hoje. Este mês e nos próximos 60 dias: " +
             total + " colaborador" + (total === 1 ? "" : "es") + " comemoram mais um ano de vida.";
         } else if (todayCount === 1) {
           bannerTextEl.textContent =
-            "Hoje é aniversário de 1 colaborador. Nos próximos 60 dias, " + total + " celebrações no total.";
+            "Hoje é aniversário de 1 colaborador. Este mês e nos próximos 60 dias: " + total + " celebrações no total.";
         } else {
           bannerTextEl.textContent =
-            "Hoje são " + todayCount + " aniversariantes. Nos próximos 60 dias, " + total + " celebrações no total.";
+            "Hoje são " + todayCount + " aniversariantes. Este mês e nos próximos 60 dias: " + total + " celebrações no total.";
         }
       }
 

@@ -17,6 +17,8 @@
 
 .compass-shell__main {
   min-width: 0;
+  width: 100%;
+  max-width: none;
   padding: 1rem 1.25rem 2rem;
   position: relative;
   z-index: 1;
@@ -24,6 +26,8 @@
 
 .compass-shell__header {
   margin-bottom: 1rem;
+  width: 100%;
+  max-width: none;
 }
 
 .compass-shell__header-top {

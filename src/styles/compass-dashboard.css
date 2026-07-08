@@ -153,7 +153,8 @@
 .compass-kpi--cenarios .compass-kpi__accent { background: #8b5cf6; }
 
 .compass-page {
-  max-width: 1400px;
+  width: 100%;
+  max-width: none;
 }
 
 .compass-page__head {
