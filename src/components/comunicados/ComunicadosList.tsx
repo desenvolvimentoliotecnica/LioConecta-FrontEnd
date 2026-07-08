@@ -11,6 +11,7 @@ import {
   type ComunicadosPageConfig,
   comunicadoReaderId,
 } from "../../config/comunicados-pages";
+import { UserAvatar } from "../ui/UserAvatar";
 
 const KIND_TAG: Record<
   ComunicadoKind,
@@ -42,7 +43,6 @@ function ComunicadoCard({
   featured?: boolean;
 }) {
   const heroImage = item.heroImageUrl ?? "/bg-announcement.png";
-  const authorAvatar = item.author.photoUrl ?? "/avatar-maria-silva.png";
   const readerId = comunicadoReaderId(item);
   const tag = config.listMode === "archived" ? KIND_TAG[item.kind] : { label: config.tagLabel, className: config.tagClass };
   const tagClass = tag.className ? ` ${tag.className}` : "";
@@ -56,7 +56,7 @@ function ComunicadoCard({
         <div className="official-card__meta">
           <span className={`tag${tagClass}`}>{tag.label}</span>
           <span className="official-card__date">{formatListDate(displayDate)}</span>          <div className="official-card__author">
-            <img className="avatar" src={authorAvatar} alt="" />
+            <UserAvatar className="avatar" photoUrl={item.author.photoUrl} />
             {item.author.name}
           </div>
         </div>

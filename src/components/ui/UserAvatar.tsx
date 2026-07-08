@@ -1,14 +1,22 @@
 import { useState } from "react";
-import { resolvePhotoUrl } from "../../utils/personAvatar";
+import { resolvePersonAvatarSrc, resolvePhotoUrlFromSource } from "../../utils/personAvatar";
+
+type AvatarSource = Parameters<typeof resolvePhotoUrlFromSource>[0];
 
 type UserAvatarProps = {
   photoUrl?: string | null;
+  source?: AvatarSource;
   className?: string;
   alt?: string;
 };
 
-export function UserAvatar({ photoUrl, className = "avatar", alt = "" }: UserAvatarProps) {
-  const src = resolvePhotoUrl(photoUrl);
+export function UserAvatar({
+  photoUrl,
+  source,
+  className = "avatar",
+  alt = "",
+}: UserAvatarProps) {
+  const src = resolvePersonAvatarSrc(source ?? photoUrl);
   const [broken, setBroken] = useState(false);
 
   if (!src || broken) {

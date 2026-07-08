@@ -2,13 +2,11 @@ import { useRef, useState } from "react";
 import { useCreatePost, useUploadPostMedia } from "../../api/hooks/useFeed";
 import { useMe } from "../../api/hooks/useMe";
 import { config } from "../../api/client";
+import { UserAvatar } from "../ui/UserAvatar";
 import { PollCreateModal } from "./PollCreateModal";
 import "./feed-composer.css";
 
-const FALLBACK_USER = {
-  name: "Maria Silva",
-  photoUrl: "/avatar-maria-silva.png",
-};
+const FALLBACK_NAME = "Leonardo Sabino Mendes";
 
 type Attachment = {
   file: File;
@@ -19,10 +17,7 @@ export function FeedComposer() {
   const { data: me } = useMe();
   const createPost = useCreatePost();
   const uploadPostMedia = useUploadPostMedia();
-  const user = me ?? FALLBACK_USER;
-  const avatar = user.photoUrl?.startsWith("/")
-    ? user.photoUrl
-    : user.photoUrl ?? FALLBACK_USER.photoUrl;
+  const user = me ?? { name: FALLBACK_NAME };
 
   const [expanded, setExpanded] = useState(false);
   const [text, setText] = useState("");
@@ -117,7 +112,7 @@ export function FeedComposer() {
 
       <article className="card feed-composer__card">
         <div className="feed-composer__top">
-          <img className="avatar avatar--sm" src={avatar} alt={user.name} />
+          <UserAvatar className="avatar avatar--sm" photoUrl={me?.photoUrl} alt={user.name} />
 
           {!expanded ? (
             <button

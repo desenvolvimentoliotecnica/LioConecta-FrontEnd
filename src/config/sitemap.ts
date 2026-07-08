@@ -151,7 +151,7 @@ export function buildSitemapSections(): SitemapSection[] {
       label: "Grupos",
       icon: "fa-user-group",
       items: [
-        entry("Hub Grupos", "/grupos", "Página central com atalhos para grupos e comunidades."),
+        entry("Hub Grupos", "/grupos", "Página central com atalhos para grupos e colaboração."),
         ...gruposLinks.map((item) => fromNav(item)),
       ],
     },

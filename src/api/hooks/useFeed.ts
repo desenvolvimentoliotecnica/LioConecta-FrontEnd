@@ -100,7 +100,7 @@ export function useAddPostComment() {
               slug: me?.slug ?? "maria-silva",
               name: me?.name ?? "Você",
               title: me?.title,
-              photoUrl: me?.photoUrl ?? "/avatar-maria-silva.png",
+              photoUrl: me?.photoUrl ?? null,
               departmentName: me?.departmentName,
               isActive: true,
             },

@@ -11,7 +11,7 @@ export type ChatMessage = {
 export type ChatConversation = {
   id: string;
   name: string;
-  avatar: string;
+  avatar: string | null;
   lastMessage: string;
   lastMessageDate: string;
   unreadCount: number;

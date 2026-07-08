@@ -31,7 +31,6 @@ export const pessoasLinks: NavLinkItem[] = [
 export const gruposLinks: NavLinkItem[] = [
   { label: "Meus grupos", path: "/grupos/meus-grupos" },
   { label: "Explorar grupos", path: "/grupos/explorar" },
-  { label: "Comunidades", path: "#" },
   { label: "Criar grupo", path: "/grupos/criar" },
   { label: "Aprovações", path: "/grupos/aprovacoes" },
 ];

@@ -15,6 +15,7 @@ import {
   COMUNICADOS_OFICIAIS_CONFIG,
   COMUNICADOS_URGENTES_CONFIG,
 } from "../../config/comunicados-pages";
+import { UserAvatar } from "../ui/UserAvatar";
 import "../../styles/comunicado-reader.css";
 
 type ComunicadoReaderProps = {
@@ -83,7 +84,6 @@ function ApiComunicadoView({
 }) {
   const meta = kindMeta(comunicado.kind);
   const heroImage = comunicado.heroImageUrl ?? "/bg-announcement.png";
-  const authorAvatar = comunicado.author.photoUrl ?? "/avatar-maria-silva.png";
   const publishedLabel = formatPublishedDate(comunicado.publishedAt);
   const mainClass = isKiosk ? "kiosk-reader" : "main";
 
@@ -126,7 +126,7 @@ function ApiComunicadoView({
                 </time>
               ) : null}
               <div className="comunicado-reader__author">
-                <img className="avatar" src={authorAvatar} alt="" />
+                <UserAvatar className="avatar" photoUrl={comunicado.author.photoUrl} />
                 {comunicado.author.name}
               </div>
             </div>

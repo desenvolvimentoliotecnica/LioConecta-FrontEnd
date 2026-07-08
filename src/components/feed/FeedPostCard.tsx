@@ -9,6 +9,7 @@ import {
 } from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
 import { POST_TYPE_CELEBRATION, POST_TYPE_COMUNICADO, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../../api/types";
+import { UserAvatar } from "../ui/UserAvatar";
 import { FeedPostActionsMenu } from "./FeedPostActionsMenu";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
 import { ImageLightbox } from "./ImageLightbox";
@@ -17,11 +18,6 @@ import { formatFeedTime, getPostMedia, postTypeBadge, postTypeBadgeClass } from 
 type Props = {
   post: FeedPostDto;
 };
-
-function authorAvatar(photoUrl?: string | null): string {
-  if (photoUrl?.startsWith("/")) return photoUrl;
-  return photoUrl ?? "/avatar-maria-silva.png";
-}
 
 function celebrationMention(post: FeedPostDto): { name: string; slug?: string } | null {
   const name = post.metadata?.celebratedPersonName;
@@ -36,11 +32,7 @@ function celebrationMention(post: FeedPostDto): { name: string; slug?: string } 
 function CommentItem({ comment }: { comment: CommentDto }) {
   return (
     <div className="comment">
-      <img
-        className="avatar avatar--xs"
-        src={authorAvatar(comment.author.photoUrl)}
-        alt=""
-      />
+      <UserAvatar className="avatar avatar--xs" photoUrl={comment.author.photoUrl} />
       <div className="comment__body">
         <div className="comment__meta">
           {comment.author.name}{" "}
@@ -61,9 +53,6 @@ export function FeedPostCard({ post }: Props) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-
-  const avatar = authorAvatar(post.author.photoUrl);
-  const viewerAvatar = authorAvatar(me?.photoUrl);
 
   const isLiked = post.viewerReaction?.toLowerCase() === FEED_LIKE_REACTION;
   const isLikePending = toggleLike.isPending && toggleLike.variables === post.id;
@@ -133,7 +122,7 @@ export function FeedPostCard({ post }: Props) {
         </div>
       ) : null}
       <div className="card__header">
-        <img className="avatar avatar--sm" src={avatar} alt={post.author.name} />
+        <UserAvatar className="avatar avatar--sm" photoUrl={post.author.photoUrl} alt={post.author.name} />
         <div className="card__meta">
           <div className="card__author">{post.author.name}</div>
           <div className="card__time">{formatFeedTime(post.createdAt)}</div>
@@ -237,7 +226,7 @@ export function FeedPostCard({ post }: Props) {
           )}
 
           <form className="comments__form" onSubmit={handleSubmitComment}>
-            <img className="avatar avatar--xs" src={viewerAvatar} alt="" />
+            <UserAvatar className="avatar avatar--xs" photoUrl={me?.photoUrl} />
             <label className="visually-hidden" htmlFor={`${formId}-input`}>
               Escreva um comentário
             </label>
