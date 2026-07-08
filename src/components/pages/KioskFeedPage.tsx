@@ -8,6 +8,7 @@ import {
 } from "../../config/feed";
 import { getPageById } from "../../config/routes";
 import { useFeedComments, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
+import { FeedAnnouncementCarousel } from "../feed/FeedAnnouncementCarousel";
 
 export function KioskFeedPage() {
   const mainRef = useRef<HTMLElement>(null);
@@ -55,6 +56,7 @@ export function KioskFeedPage() {
 
   return (
     <main className="kiosk-feed" ref={mainRef}>
+      <FeedAnnouncementCarousel variant="kiosk" />
       <div dangerouslySetInnerHTML={{ __html: parts.beforeFeedGrid }} />
       <div dangerouslySetInnerHTML={{ __html: parts.feedGridAndAfter }} />
     </main>
