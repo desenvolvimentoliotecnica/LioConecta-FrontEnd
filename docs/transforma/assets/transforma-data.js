@@ -1,0 +1,158 @@
+/* eslint-disable no-unused-vars */
+/** Metadados do mini-site LioTransforma — Jul/2026 */
+window.TRANSFORMA_DATA = {
+  meta: {
+    title: "LioTransforma",
+    subtitle: "LMS/LXP · Capacidades · Transformação",
+    version: "1.0",
+    date: "08/07/2026",
+  },
+
+  stats: {
+    epics: 15,
+    stories: 52,
+    releases: 4,
+    specs: 6,
+    prototypes: 9,
+    sprintsMvp: "5–6",
+  },
+
+  /** Protótipos de tela (assets/prototypes/) */
+  prototypes: [
+    {
+      id: "home",
+      title: "Para Você",
+      route: "/transforma",
+      release: "R5",
+      image: "assets/prototypes/proto-home-para-voce.png",
+      desc: "Home personalizada com feed, treinamentos pendentes, PDI e recomendações.",
+      pages: ["hub", "visao", "arquitetura", "spec-fundacao", "releases"],
+    },
+    {
+      id: "trilhas",
+      title: "Explorar Trilhas",
+      route: "/transforma/explorar/trilhas",
+      release: "R5",
+      image: "assets/prototypes/proto-trilhas.png",
+      desc: "Catálogo de trilhas com progresso, filtros e academias.",
+      pages: ["spec-aprendizado", "historias", "releases"],
+    },
+    {
+      id: "pdi",
+      title: "Meu PDI",
+      route: "/transforma/evolucao/pdi",
+      release: "R5",
+      image: "assets/prototypes/proto-pdi.png",
+      desc: "PDI vivo com objetivo, ações vinculadas e barra de progresso.",
+      pages: ["visao", "spec-capacidades-pdi", "historias"],
+    },
+    {
+      id: "capacidades",
+      title: "Mapa de Capacidades",
+      route: "/transforma/capacidades",
+      release: "R5",
+      image: "assets/prototypes/proto-capacidades.png",
+      desc: "Taxonomia visual com níveis de proficiência por subcapacidade.",
+      pages: ["capacidades", "spec-capacidades-pdi", "visao"],
+    },
+    {
+      id: "transformacao",
+      title: "Transformação em Ação",
+      route: "/transforma/transformacao",
+      release: "R6",
+      image: "assets/prototypes/proto-transformacao.png",
+      desc: "Dashboard de iniciativas estratégicas com KPIs e cards de progresso.",
+      pages: ["visao", "spec-transformacao", "epicos"],
+    },
+    {
+      id: "desafio",
+      title: "Desafio de Transformação",
+      route: "/transforma/transformacao/desafios/:id",
+      release: "R6",
+      image: "assets/prototypes/proto-desafio.png",
+      desc: "Desafio aberto com ideias, votação e contadores de engajamento.",
+      pages: ["visao", "spec-transformacao", "historias"],
+    },
+    {
+      id: "oportunidade",
+      title: "Oportunidade Recomendada",
+      route: "/transforma/oportunidades",
+      release: "R6",
+      image: "assets/prototypes/proto-oportunidade.png",
+      desc: "Learning → Skills → Projetos: recomendação após conclusão de trilha.",
+      pages: ["visao", "spec-engajamento", "epicos"],
+    },
+    {
+      id: "gestor",
+      title: "Dashboard do Gestor",
+      route: "/transforma/gestao/time",
+      release: "R7",
+      image: "assets/prototypes/proto-gestor.png",
+      desc: "Visão do time: capacidades, gaps, compliance e PDIs.",
+      pages: ["visao", "spec-cockpit", "releases"],
+    },
+    {
+      id: "cockpit",
+      title: "Cockpit Diretoria",
+      route: "/transforma/cockpit",
+      release: "R8",
+      image: "assets/prototypes/proto-cockpit.png",
+      desc: "Capability & Transformation Cockpit executivo.",
+      pages: ["visao", "spec-cockpit", "releases"],
+    },
+  ],
+
+  releases: [
+    { id: "R5", name: "MVP — Aprender, Desenvolver, Evoluir", period: "2027 Q3", epics: "TF-01 a TF-04" },
+    { id: "R6", name: "Transformar e Compartilhar", period: "2027 Q4", epics: "TF-05 a TF-08, TF-10–13" },
+    { id: "R7", name: "Liderar o Desenvolvimento", period: "2028 Q1", epics: "TF-09, TF-12, TF-14" },
+    { id: "R8", name: "Capability Cockpit", period: "2028 Q1–Q2", epics: "TF-15" },
+  ],
+
+  sections: [
+    {
+      label: "Visão & Planejamento",
+      pages: [
+        { id: "hub", label: "Hub", icon: "🏠", file: "README.md", desc: "Índice e definição de produto" },
+        { id: "visao", label: "Visão Executiva", icon: "🎯", file: "01-visao-executiva.md", desc: "Apresentação para diretoria" },
+        { id: "arquitetura", label: "Arquitetura", icon: "🏗️", file: "02-arquitetura-integracao.md", desc: "Rotas, APIs e integrações" },
+        { id: "epicos", label: "Épicos", icon: "📦", file: "03-epicos.md", desc: "15 épicos do módulo" },
+        { id: "historias", label: "Histórias", icon: "📋", file: "04-historias-usuario.md", desc: "52 user stories" },
+        { id: "backlog", label: "Backlog", icon: "📊", file: "05-backlog-priorizado.md", desc: "MoSCoW e priorização" },
+        { id: "releases", label: "Releases", icon: "🚀", file: "06-releases-fases.md", desc: "R5–R8 e demos" },
+        { id: "capacidades", label: "Mapa Capacidades", icon: "🧠", file: "07-mapa-capacidades.md", desc: "Taxonomia de skills" },
+        { id: "prototipos", label: "Protótipos", icon: "🖼️", virtual: true, desc: "9 telas conceituais" },
+      ],
+    },
+    {
+      label: "Specs de implementação",
+      pages: [
+        { id: "spec-fundacao", label: "Fundação", icon: "⚙️", file: "specs/spec-transforma-fundacao.md", desc: "Shell, nav, RBAC" },
+        { id: "spec-aprendizado", label: "Aprendizado", icon: "🎓", file: "specs/spec-transforma-aprendizado.md", desc: "LMS/LXP core" },
+        { id: "spec-capacidades-pdi", label: "Capacidades & PDI", icon: "📈", file: "specs/spec-transforma-capacidades-pdi.md", desc: "Skills e PDI vivo" },
+        { id: "spec-transformacao", label: "Transformação", icon: "🔥", file: "specs/spec-transforma-transformacao-desafios.md", desc: "Iniciativas e desafios" },
+        { id: "spec-engajamento", label: "Engajamento", icon: "🤝", file: "specs/spec-transforma-engajamento.md", desc: "UGC, feed, gamificação" },
+        { id: "spec-cockpit", label: "Cockpit", icon: "📊", file: "specs/spec-transforma-cockpit.md", desc: "Gestor e diretoria" },
+      ],
+    },
+  ],
+
+  /** Mapeia nomes de arquivo MD → id de página (links internos) */
+  fileToId: {
+    "README.md": "hub",
+    "01-visao-executiva.md": "visao",
+    "02-arquitetura-integracao.md": "arquitetura",
+    "03-epicos.md": "epicos",
+    "04-historias-usuario.md": "historias",
+    "05-backlog-priorizado.md": "backlog",
+    "06-releases-fases.md": "releases",
+    "07-mapa-capacidades.md": "capacidades",
+    "specs/spec-transforma-fundacao.md": "spec-fundacao",
+    "specs/spec-transforma-aprendizado.md": "spec-aprendizado",
+    "specs/spec-transforma-capacidades-pdi.md": "spec-capacidades-pdi",
+    "specs/spec-transforma-transformacao-desafios.md": "spec-transformacao",
+    "specs/spec-transforma-engajamento.md": "spec-engajamento",
+    "specs/spec-transforma-cockpit.md": "spec-cockpit",
+    "../07-mapa-capacidades.md": "capacidades",
+  },
+};
