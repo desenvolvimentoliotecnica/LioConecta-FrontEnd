@@ -57,6 +57,15 @@ export const PESSOAS_SECTIONS: HubSection[] = [
     mod: "organograma",
     count: "18 departamentos",
   },
+  {
+    id: "ramais",
+    label: pessoasLinks[4].label,
+    path: pessoasLinks[4].path,
+    description: "Consulte ramais por nome, departamento ou número.",
+    icon: "fa-phone",
+    mod: "ramais",
+    count: "295 ramais",
+  },
 ];
 
 export const PESSOAS_RECENT: HubRecentItem[] = [

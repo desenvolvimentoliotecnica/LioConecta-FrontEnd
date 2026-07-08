@@ -32,6 +32,7 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/pessoas/novos-colaboradores": "partial",
   "/pessoas/aniversariantes": "partial",
   "/pessoas/organograma": "partial",
+  "/pessoas/ramais": "integrated",
 
   "/grupos/meus-grupos": "partial",
   "/grupos/explorar": "integrated",

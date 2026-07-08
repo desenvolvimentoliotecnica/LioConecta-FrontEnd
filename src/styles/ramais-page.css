@@ -1,0 +1,379 @@
+.ramais-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.ramais-page__summary {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: min(100%, 280px);
+  flex: 1;
+}
+
+.ramais-page__summary-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #cffafe;
+  color: #0f766e;
+}
+
+.ramais-page__summary-title {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ramais-page__summary-text {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.ramais-page__search {
+  flex: 1;
+  min-width: min(100%, 240px);
+}
+
+.ramais-page__select select {
+  min-height: 42px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: #fff;
+  color: #0f172a;
+}
+
+.ramais-page__check {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+.ramais-page__feedback {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ecfeff;
+  color: #115e59;
+  border: 1px solid #99f6e4;
+}
+
+.ramais-page__empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  color: #64748b;
+  text-align: center;
+}
+
+.ramais-page__empty i {
+  font-size: 1.75rem;
+  color: #94a3b8;
+}
+
+.ramais-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ramais-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ramais-card--inactive {
+  opacity: 0.72;
+}
+
+.ramais-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ramais-card__name {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.ramais-card__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ramais-card__name a:hover {
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+.ramais-card__meta {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 0.8125rem;
+}
+
+.ramais-card__ext {
+  flex-shrink: 0;
+  min-width: 56px;
+  text-align: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #ecfeff;
+  color: #0f766e;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.ramais-card__details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.ramais-card__details dt {
+  color: #94a3b8;
+}
+
+.ramais-card__details dd {
+  margin: 0;
+  color: #334155;
+  overflow-wrap: anywhere;
+}
+
+.ramais-card__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.ramais-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ramais-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ramais-btn--primary {
+  background: #0f766e;
+  color: #fff;
+}
+
+.ramais-btn--ghost {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.ramais-btn--danger {
+  background: #fff;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.ramais-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgb(15 23 42 / 45%);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.ramais-modal__dialog {
+  width: min(560px, 100%);
+  max-height: min(90vh, 820px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 24px 48px rgb(15 23 42 / 18%);
+}
+
+.ramais-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ramais-modal__head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.ramais-modal__close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  cursor: pointer;
+}
+
+.ramais-form {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px 18px;
+}
+
+.ramais-form label,
+.ramais-typeahead {
+  display: grid;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: #334155;
+  position: relative;
+}
+
+.ramais-form input[type="text"],
+.ramais-form input[type="email"],
+.ramais-form input:not([type]),
+.ramais-typeahead input {
+  min-height: 42px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0 12px;
+  background: #fff;
+  color: #0f172a;
+}
+
+.ramais-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ramais-form__hint {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.ramais-form__link-btn {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: #0f766e;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ramais-form__check {
+  display: inline-flex !important;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ramais-form__error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.ramais-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ramais-typeahead__list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgb(15 23 42 / 12%);
+  max-height: 220px;
+  overflow: auto;
+}
+
+.ramais-typeahead__option {
+  width: 100%;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.ramais-typeahead__option:hover {
+  background: #f0fdfa;
+}
+
+.ramais-typeahead__option span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.ramais-typeahead__empty {
+  padding: 10px;
+  color: #64748b;
+  font-size: 0.8125rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .ramais-form__row {
+    grid-template-columns: 1fr;
+  }
+
+  .ramais-page__toolbar {
+    align-items: stretch;
+  }
+}

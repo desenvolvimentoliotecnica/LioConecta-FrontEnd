@@ -13,6 +13,7 @@ import { GroupCreatePage } from "./components/pages/GroupCreatePage";
 import { GroupExplorePage } from "./components/pages/GroupExplorePage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
+import { PhoneExtensionsPage } from "./components/pessoas/PhoneExtensionsPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
@@ -206,6 +207,7 @@ function App() {
         <Route path="/documentos" element={<DocumentsHubPage />} />
         <Route path="/comunicados" element={<ComunicadosHubPage />} />
         <Route path="/pessoas" element={<PessoasHubPage />} />
+        <Route path="/pessoas/ramais" element={<PhoneExtensionsPage />} />
         <Route path="/grupos" element={<GruposHubPage />} />
         <Route path="/grupos/criar" element={<GroupCreatePage />} />
         <Route path="/grupos/explorar" element={<GroupExplorePage />} />

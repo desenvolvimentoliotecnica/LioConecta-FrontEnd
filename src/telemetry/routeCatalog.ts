@@ -55,6 +55,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/comunicados/arquivo", { pageName: "ComunicadosArquivo", module: "comunicados" }),
   exact("/notificacoes", { pageName: "Notifications", module: "home" }),
   exact("/pessoas", { pageName: "PessoasHub", module: "pessoas" }),
+  exact("/pessoas/ramais", { pageName: "PhoneExtensions", module: "pessoas" }),
   exact("/pessoas/perfil", { pageName: "PersonProfile", routeTemplate: "/pessoas/perfil/:slug", module: "pessoas" }),
   exact("/grupos", { pageName: "GruposHub", module: "grupos" }),
   exact("/grupos/criar", { pageName: "GroupCreate", module: "grupos" }),
