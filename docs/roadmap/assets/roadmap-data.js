@@ -142,6 +142,11 @@ window.ROADMAP_DATA = {
     { id: "TS-BE-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "BE", title: "GET /rh/leave/requests — status sync RM", phase: "F1", done: true },
     { id: "TS-QA-RM-002a", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "UAT: solicitação férias reflete no RM em 24h", phase: "F1", done: true },
     { id: "TS-QA-RM-002b", specId: "spec-ferias", story: "US-RM-002", type: "QA", title: "Caso: saldo zero bloqueia envio", phase: "F1", done: true },
+    { id: "TS-BE-RM-002c", specId: "spec-ferias", story: "US-RM-002", type: "BE", title: "Notify portal + e-mail SMTP com override dest. no CreateRequest", phase: "F1", done: true },
+    { id: "TS-BE-RM-003b", specId: "spec-ferias", story: "US-RM-003", type: "BE", title: "GET /rh/leave/management[+/{id}/pdf] — RBAC gestor/RH + QuestPDF", phase: "F1", done: true },
+    { id: "TS-FE-RM-003c", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Rota /servicos/ferias-ausencias/gestao — lista, detalhe, deep-link", phase: "F1", done: true },
+    { id: "TS-FE-RM-003d", specId: "spec-ferias", story: "US-RM-003", type: "FE", title: "Imprimir/baixar comprovante PDF + help leave.email.dev_override", phase: "F1", done: true },
+    { id: "TS-QA-RM-003a", specId: "spec-ferias", story: "US-RM-003", type: "QA", title: "UAT: e-mail só no override; notificação gestor; PDF ok", phase: "F1", done: true },
 
     /* ── spec-ajuste-ponto ── */
     { id: "TS-FE-RM-004a", specId: "spec-ajuste-ponto", story: "US-RM-004", type: "FE", title: "Botão 'Solicitar ajuste' no espelho de ponto (dia selecionado)", phase: "F2" },
@@ -301,6 +306,7 @@ window.ROADMAP_DATA = {
   maturityMatrix: [
     { route: "/servicos/contracheque", label: "Contracheque (Holerite)", maturity: "integrated", file: "ContrachequePage.tsx", api: "/rh/payslips/*", gestor: "G-RM-07", gap: "—" },
     { route: "/servicos/ferias-ausencias", label: "Férias e ausências", maturity: "integrated", file: "FeriasAusenciasPage.tsx", api: "/rh/leave/*", gestor: "G-RM-05", gap: "—" },
+    { route: "/servicos/ferias-ausencias/gestao", label: "Gestão de férias", maturity: "integrated", file: "FeriasGestaoPage.tsx", api: "/rh/leave/management", gestor: "G-RM-05", gap: "Aprovação no Labore" },
     { route: "/servicos/ponto-eletronico", label: "Ponto eletrônico", maturity: "integrated", file: "PontoEletronicoPage.tsx", api: "/rh/ponto/*", gestor: "G-RM-06", gap: "Ajuste ponto (write) ausente" },
     { route: "/servicos/solicitacoes-rh", label: "Solicitações RH", maturity: "prototype", file: "servicos-rh/ (legacy)", api: "—", gestor: "G-RM-01..03", gap: "Greenfield React+API" },
     { route: "—", label: "Ciclo de vaga", maturity: "soon", file: "—", api: "—", gestor: "G-RM-04", gap: "Módulo inexistente" },

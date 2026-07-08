@@ -47,6 +47,7 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Benefícios", path: "/servicos/beneficios" },
   { label: "Contracheque", path: "/servicos/contracheque" },
   { label: "Férias e ausências", path: "/servicos/ferias-ausencias" },
+  { label: "Gestão de férias", path: "/servicos/ferias-ausencias/gestao" },
   { label: "Solicitações RH", path: "/servicos/solicitacoes-rh" },
   { label: "Ponto eletrônico", path: "/servicos/ponto-eletronico" },
   { label: "Vale-transporte", path: "/servicos/vale-transporte" },

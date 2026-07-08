@@ -708,6 +708,42 @@ export interface LeaveRequestDetailDto {
   timeline: LeaveTimelineEventDto[];
 }
 
+export interface LeaveManagementItemDto {
+  id: string;
+  serviceRequestId?: string | null;
+  employeeName: string;
+  employeeId?: string | null;
+  email: string;
+  title: string;
+  status: string;
+  rmSyncStatus?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  dataSource?: string | null;
+  createdAt: string;
+}
+
+export interface LeaveManagementDetailDto {
+  id: string;
+  serviceRequestId?: string | null;
+  employeeName: string;
+  employeeId?: string | null;
+  email: string;
+  title: string;
+  status: string;
+  rmSyncStatus?: string | null;
+  rmExternalId?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  days?: number | null;
+  notes?: string | null;
+  dataSource?: string | null;
+  createdAt: string;
+  timeline: LeaveTimelineEventDto[];
+  approvalNote: string;
+}
+
 export type AuditSource = "HttpRequest" | "EntityChange";
 
 export interface AuditEventDto {

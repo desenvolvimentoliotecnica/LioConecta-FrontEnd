@@ -5,6 +5,8 @@ import type {
   LeaveBalanceDto,
   LeaveBancoHorasDto,
   LeaveHistoryItemDto,
+  LeaveManagementDetailDto,
+  LeaveManagementItemDto,
   LeaveRequestDetailDto,
   LeaveRequestItemDto,
   LeaveRequestResultDto,
@@ -12,6 +14,7 @@ import type {
   LeaveSummaryDto,
   LeaveTeamCalendarDto,
 } from "../types";
+import { downloadBlobWithToast } from "../../utils/payslipToast";
 
 export const LEAVE_QUERY_KEY = ["leave"] as const;
 
@@ -67,6 +70,38 @@ export function useLeaveRequestDetail(recordId: string | null) {
   });
 }
 
+export function useLeaveManagementList(params: {
+  status?: string;
+  q?: string;
+  limit?: number;
+  enabled?: boolean;
+}) {
+  const status = params.status?.trim() || undefined;
+  const q = params.q?.trim() || undefined;
+  const limit = params.limit ?? 50;
+  const search = new URLSearchParams();
+  if (status) search.set("status", status);
+  if (q) search.set("q", q);
+  search.set("limit", String(limit));
+
+  return useQuery({
+    queryKey: [...LEAVE_QUERY_KEY, "management", status ?? "", q ?? "", limit],
+    queryFn: () =>
+      api.get<LeaveManagementItemDto[]>(`/rh/leave/management?${search.toString()}`),
+    enabled: params.enabled !== false,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useLeaveManagementDetail(recordId: string | null) {
+  return useQuery({
+    queryKey: [...LEAVE_QUERY_KEY, "management", "detail", recordId],
+    queryFn: () => api.get<LeaveManagementDetailDto>(`/rh/leave/management/${recordId}`),
+    enabled: recordId !== null,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
 export function useLeaveBancoHoras(enabled: boolean) {
   return useQuery({
     queryKey: [...LEAVE_QUERY_KEY, "banco-horas"],
@@ -116,4 +151,34 @@ export function useLeaveRequest() {
       void queryClient.invalidateQueries({ queryKey: LEAVE_QUERY_KEY });
     },
   });
+}
+
+export async function downloadLeaveRequestPdf(recordId: string) {
+  await downloadBlobWithToast(
+    api.getBlob(`/rh/leave/requests/${recordId}/pdf`),
+    `comprovante-ferias-${recordId}.pdf`,
+    "O comprovante da solicitação de férias foi baixado.",
+  );
+}
+
+export async function openLeaveRequestPdf(recordId: string) {
+  const blob = await api.getBlob(`/rh/leave/requests/${recordId}/pdf`);
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank", "noopener,noreferrer");
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
+export async function downloadLeaveManagementPdf(recordId: string) {
+  await downloadBlobWithToast(
+    api.getBlob(`/rh/leave/management/${recordId}/pdf`),
+    `comprovante-ferias-gestao-${recordId}.pdf`,
+    "O comprovante da solicitação de férias foi baixado.",
+  );
+}
+
+export async function openLeaveManagementPdf(recordId: string) {
+  const blob = await api.getBlob(`/rh/leave/management/${recordId}/pdf`);
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank", "noopener,noreferrer");
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
