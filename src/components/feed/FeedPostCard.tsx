@@ -8,7 +8,7 @@ import {
   useTogglePostLike,
 } from "../../api/hooks/useFeed";
 import type { CommentDto, FeedPostDto } from "../../api/types";
-import { POST_TYPE_COMUNICADO, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../../api/types";
+import { POST_TYPE_CELEBRATION, POST_TYPE_COMUNICADO, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../../api/types";
 import { FeedPostActionsMenu } from "./FeedPostActionsMenu";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
 import { ImageLightbox } from "./ImageLightbox";
@@ -21,6 +21,16 @@ type Props = {
 function authorAvatar(photoUrl?: string | null): string {
   if (photoUrl?.startsWith("/")) return photoUrl;
   return photoUrl ?? "/avatar-maria-silva.png";
+}
+
+function celebrationMention(post: FeedPostDto): { name: string; slug?: string } | null {
+  const name = post.metadata?.celebratedPersonName;
+  const slug = post.metadata?.celebratedPersonSlug;
+  if (typeof name !== "string" || !name.trim()) return null;
+  return {
+    name: name.trim(),
+    slug: typeof slug === "string" && slug.trim() ? slug.trim() : undefined,
+  };
 }
 
 function CommentItem({ comment }: { comment: CommentDto }) {
@@ -64,6 +74,8 @@ export function FeedPostCard({ post }: Props) {
 
   const isComunicado = post.type === POST_TYPE_COMUNICADO;
   const isPoll = post.type === POST_TYPE_POLL;
+  const isCelebration = post.type === POST_TYPE_CELEBRATION;
+  const celebrated = isCelebration ? celebrationMention(post) : null;
   const heroImage =
     isComunicado && typeof post.metadata.heroImageUrl === "string"
       ? resolveBackendAssetUrl(post.metadata.heroImageUrl)
@@ -105,7 +117,7 @@ export function FeedPostCard({ post }: Props) {
 
   return (
     <article
-      className={`card${isComunicado ? " card--comunicado" : ""}`}
+      className={`card${isComunicado ? " card--comunicado" : ""}${isCelebration ? " card--celebration" : ""}`}
       data-feed-post-id={post.id}
     >
       {heroImage ? (
@@ -127,12 +139,33 @@ export function FeedPostCard({ post }: Props) {
           <div className="card__time">{formatFeedTime(post.createdAt)}</div>
         </div>
         <span className={`badge ${postTypeBadgeClass(post.type)}`}>
-          {postTypeBadge(post.type)}
+          {isCelebration ? (
+            <>
+              <i className="fa-solid fa-gift" aria-hidden="true" /> {postTypeBadge(post.type)}
+            </>
+          ) : (
+            postTypeBadge(post.type)
+          )}
         </span>
         {canDelete ? (
           <FeedPostActionsMenu onDelete={handleDeletePost} disabled={isDeletePending} />
         ) : null}
       </div>
+      {isCelebration && celebrated ? (
+        <div className="card__celebration-mention">
+          <i className="fa-solid fa-cake-candles" aria-hidden="true" />
+          <span>
+            Parabenizou{" "}
+            {celebrated.slug ? (
+              <a href={`/pessoas/perfil?id=${encodeURIComponent(celebrated.slug)}`}>
+                @{celebrated.name}
+              </a>
+            ) : (
+              <strong>@{celebrated.name}</strong>
+            )}
+          </span>
+        </div>
+      ) : null}
       {isComunicado ? (
         <div className="card__body" dangerouslySetInnerHTML={{ __html: post.content }} />
       ) : isPoll && post.poll ? (

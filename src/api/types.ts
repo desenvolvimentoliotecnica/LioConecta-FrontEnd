@@ -73,6 +73,7 @@ export type PostType =
 export const POST_TYPE_SOCIAL = 0 as const;
 export const POST_TYPE_COMUNICADO = 1 as const;
 export const POST_TYPE_POLL = 2 as const;
+export const POST_TYPE_CELEBRATION = 3 as const;
 
 export interface PersonSummaryDto {
   id: string;
@@ -86,6 +87,7 @@ export interface PersonSummaryDto {
 }
 
 export interface BirthdayPersonDto {
+  id?: string;
   slug: string;
   name: string;
   title?: string | null;
