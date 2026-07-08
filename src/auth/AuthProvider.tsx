@@ -17,21 +17,31 @@ const queryClient = new QueryClient({
 
 const DEV_AUTH_MODE = import.meta.env.VITE_AUTH_MODE === "dev";
 
+const nullTokenProvider = async () => null;
+const portalTokenProvider = async () => getStoredToken();
+
+/** Wire token before any child query fires (useEffect runs too late / after paint). */
+function installTokenProviders(provider: () => Promise<string | null>) {
+  setTokenProvider(provider);
+  setTelemetryTokenProvider(provider);
+}
+
+installTokenProviders(DEV_AUTH_MODE ? nullTokenProvider : portalTokenProvider);
+
 function DevAuthBridge({ children }: { children: ReactNode }) {
   useEffect(() => {
-    const provider = async () => null;
-    setTokenProvider(provider);
-    setTelemetryTokenProvider(provider);
+    installTokenProviders(nullTokenProvider);
     setNetworkErrorTracker(trackNetworkError);
   }, []);
   return <>{children}</>;
 }
 
 function PortalAuthBridge({ children }: { children: ReactNode }) {
+  // Reaffirm synchronously on render so Strict Mode / remounts never leave the default null provider.
+  installTokenProviders(portalTokenProvider);
+
   useEffect(() => {
-    const provider = async () => getStoredToken();
-    setTokenProvider(provider);
-    setTelemetryTokenProvider(provider);
+    installTokenProviders(portalTokenProvider);
     setNetworkErrorTracker(trackNetworkError);
   }, []);
 

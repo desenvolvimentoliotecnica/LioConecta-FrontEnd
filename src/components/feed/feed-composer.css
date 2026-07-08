@@ -215,6 +215,10 @@
   margin-bottom: var(--wf-gap, 16px);
 }
 
+.feed-api-posts__leading {
+  margin-bottom: var(--wf-gap, 16px);
+}
+
 .feed-api-posts__status {
   margin: 0 0 var(--wf-gap, 16px);
   padding: 12px 16px;

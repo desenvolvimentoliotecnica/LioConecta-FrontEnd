@@ -18,38 +18,38 @@ export function FeedPosts({ leading }: FeedPostsProps = {}) {
   const posts = data?.items ?? [];
   const leadingItems = Children.toArray(leading).filter(Boolean);
 
-  if (isLoading && leadingItems.length === 0) {
-    return (
-      <div className="feed-api-posts" aria-busy="true" aria-label="Carregando publicações">
-        <p className="feed-api-posts__status">Carregando publicações…</p>
-      </div>
-    );
-  }
+  // Only mount `.feed-grid` when there are API posts. Otherwise the page CSS
+  // `:has(.feed-api-posts .feed-grid)` hides the legacy HTML feed and leaves a blank area
+  // when /feed fails or is still loading.
+  if (posts.length === 0) {
+    if (!isLoading && !isError && leadingItems.length === 0) {
+      return null;
+    }
 
-  if (isError && posts.length === 0 && leadingItems.length === 0) {
     return (
-      <div className="feed-api-posts" role="alert">
-        <p className="feed-api-posts__status feed-api-posts__status--error">
-          Não foi possível carregar as publicações do feed.
-        </p>
+      <div
+        className="feed-api-posts"
+        aria-busy={isLoading || undefined}
+        aria-label={isLoading ? "Carregando publicações" : undefined}
+        role={isError ? "alert" : undefined}
+      >
+        {isError ? (
+          <p className="feed-api-posts__status feed-api-posts__status--error">
+            Não foi possível carregar as publicações do feed.
+          </p>
+        ) : null}
+        {isLoading ? (
+          <p className="feed-api-posts__status">Carregando publicações…</p>
+        ) : null}
+        {leadingItems.length > 0 ? (
+          <div className="feed-api-posts__leading">{leadingItems}</div>
+        ) : null}
       </div>
     );
   }
 
   const postNodes = posts.map((post) => <FeedPostCard key={post.id} post={post} />);
   const items = [...leadingItems, ...postNodes];
-
-  if (items.length === 0) {
-    if (isLoading) {
-      return (
-        <div className="feed-api-posts" aria-busy="true" aria-label="Carregando publicações">
-          <p className="feed-api-posts__status">Carregando publicações…</p>
-        </div>
-      );
-    }
-    return null;
-  }
-
   const columns = distributeRoundRobin(items, columnCount);
 
   return (
