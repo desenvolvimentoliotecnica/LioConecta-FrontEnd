@@ -2011,3 +2011,56 @@ export interface UpsertPhoneExtensionRequest {
   personId?: string | null;
   isActive?: boolean;
 }
+
+export interface PortalSystemDto {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  category: string;
+  destinationType: "External" | "Internal" | string;
+  urlDev?: string | null;
+  urlHml?: string | null;
+  urlPrd?: string | null;
+  launchUrl?: string | null;
+  iconKind: "FontAwesome" | "Upload" | string;
+  iconFaClass?: string | null;
+  iconAssetUrl?: string | null;
+  sortOrder: number;
+  isActive: boolean;
+  accessNotes?: string | null;
+  clickCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SystemsBootstrapDto {
+  canManage: boolean;
+  environment: "dev" | "hml" | "prd" | string;
+  total: number;
+  categories: string[];
+}
+
+export interface UpsertPortalSystemRequest {
+  name: string;
+  slug: string;
+  description?: string | null;
+  category: string;
+  destinationType: string;
+  urlDev?: string | null;
+  urlHml?: string | null;
+  urlPrd?: string | null;
+  iconKind: string;
+  iconFaClass?: string | null;
+  iconAssetUrl?: string | null;
+  sortOrder?: number;
+  isActive?: boolean;
+  accessNotes?: string | null;
+}
+
+export interface UploadSystemIconResponseDto {
+  url: string;
+  contentType: string;
+  sizeBytes: number;
+  originalFileName?: string | null;
+}

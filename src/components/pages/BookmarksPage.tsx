@@ -1,26 +1,55 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { usePreferences, useUpdatePreferences } from "../../api/hooks/usePreferences";
+import { useSystems } from "../../api/hooks/useSystems";
 import { BOOKMARKS, BOOKMARK_FILTERS, DEFAULT_BOOKMARK_IDS, filterBookmarks, type BookmarkKind } from "../../config/bookmarks";
+import { systemBookmarkItems } from "../../config/systems/bookmarks";
 import "../../styles/hub-pages.css";
 
 const DEFAULT_SAVED_IDS = DEFAULT_BOOKMARK_IDS;
+
+function BookmarkOpenLink({ href, title }: { href: string; title: string }) {
+  if (/^https?:\/\//i.test(href)) {
+    return (
+      <a className="hub-card__link" href={href} target="_blank" rel="noopener noreferrer">
+        Abrir
+        <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+      </a>
+    );
+  }
+
+  return (
+    <Link className="hub-card__link" to={href} aria-label={`Abrir ${title}`}>
+      Abrir
+      <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+    </Link>
+  );
+}
 
 export function BookmarksPage() {
   const [kind, setKind] = useState<BookmarkKind>("all");
   const [query, setQuery] = useState("");
   const { data: preferences } = usePreferences();
   const updatePreferences = useUpdatePreferences();
+  const { data: systems = [] } = useSystems({ includeInactive: true });
 
   const savedIds = useMemo(
     () => new Set(preferences?.bookmarks.length ? preferences.bookmarks : DEFAULT_SAVED_IDS),
     [preferences?.bookmarks],
   );
 
-  const filtered = useMemo(
-    () => filterBookmarks(BOOKMARKS.filter((item) => savedIds.has(item.id)), kind, query),
-    [kind, query, savedIds],
-  );
+  const allBookmarks = useMemo(() => {
+    const staticBookmarks = BOOKMARKS.filter((item) => savedIds.has(item.id));
+    const dynamicSystemBookmarks = systemBookmarkItems(systems, savedIds);
+    const knownIds = new Set(staticBookmarks.map((item) => item.id));
+
+    return [
+      ...staticBookmarks,
+      ...dynamicSystemBookmarks.filter((item) => !knownIds.has(item.id)),
+    ];
+  }, [savedIds, systems]);
+
+  const filtered = useMemo(() => filterBookmarks(allBookmarks, kind, query), [allBookmarks, kind, query]);
 
   const removeBookmark = (id: string) => {
     const next = [...savedIds].filter((entry) => entry !== id);
@@ -39,8 +68,8 @@ export function BookmarksPage() {
           <div>
             <h1 className="page-header__title">Bookmarks</h1>
             <p className="page-header__desc">
-              Conteúdos que você salvou para consultar depois — comunicados, posts do feed, documentos
-              e solicitações em andamento.
+              Conteúdos que você salvou para consultar depois — comunicados, posts do feed, documentos,
+              sistemas e solicitações em andamento.
             </p>
           </div>
         </div>
@@ -106,10 +135,7 @@ export function BookmarksPage() {
                   </time>
                 </div>
                 <div className="hub-card__actions">
-                  <Link className="hub-card__link" to={item.href}>
-                    Abrir
-                    <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-                  </Link>
+                  <BookmarkOpenLink href={item.href} title={item.title} />
                   <button
                     className="hub-card__remove"
                     type="button"
@@ -126,7 +152,7 @@ export function BookmarksPage() {
       ) : (
         <div className="hub-page__empty">
           <i className="fa-regular fa-bookmark" aria-hidden="true" />
-          <p>Nenhum bookmark encontrado. Salve comunicados, posts ou documentos para vê-los aqui.</p>
+          <p>Nenhum bookmark encontrado. Salve comunicados, posts, documentos ou sistemas para vê-los aqui.</p>
         </div>
       )}
 

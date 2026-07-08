@@ -24,6 +24,12 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
   { label: "Calendário", icon: "fa-calendar-days", href: "/calendario" },
   { label: "Documentos", icon: "fa-folder-open", href: "/documentos", activePrefix: "/documentos" },
   {
+    label: "Sistemas",
+    icon: "fa-border-all",
+    href: "/servicos/acesso-sistemas",
+    activePrefix: "/servicos/acesso-sistemas",
+  },
+  {
     label: "Loop",
     icon: "fa-infinity",
     href: "/loop",

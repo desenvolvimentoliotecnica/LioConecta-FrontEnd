@@ -17,10 +17,10 @@ const TI_META: Record<string, { description: string; icon: string; mod: string; 
     count: "Catálogo disponível",
   },
   "acesso-sistemas": {
-    description: "Peça acesso a ERP, produtividade e sistemas internos.",
-    icon: "fa-key",
+    description: "Hub corporativo com links para sistemas internos e externos por ambiente.",
+    icon: "fa-table-cells",
     mod: "acesso",
-    count: "18 sistemas",
+    count: "Catálogo dinâmico",
   },
   "vpn-acesso-remoto": {
     description: "Configure VPN e acesse a rede corporativa remotamente.",

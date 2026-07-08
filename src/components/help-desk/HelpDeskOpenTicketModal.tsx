@@ -264,7 +264,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
           {phase === "area" ? (
             <>
               <p className="hd-modal__intro">
-                <i className="fa-solid fa-grid-2" aria-hidden="true" />
+                <i className="fa-solid fa-table-cells" aria-hidden="true" />
                 Escolha a área para ver os serviços disponíveis.
               </p>
 

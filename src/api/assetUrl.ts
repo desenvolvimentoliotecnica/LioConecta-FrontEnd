@@ -34,7 +34,9 @@ export function resolveBackendAssetUrl(url: string | null | undefined): string {
 
   const normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
   const servedByBackend =
-    normalized.startsWith("/posts/") || normalized.startsWith("/media/");
+    normalized.startsWith("/posts/") ||
+    normalized.startsWith("/media/") ||
+    normalized.startsWith("/systems/");
 
   if (!servedByBackend) {
     return normalized;
