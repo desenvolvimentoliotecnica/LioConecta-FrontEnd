@@ -68,6 +68,13 @@ export const UNILIO_NAV_ITEMS: UniLioNavItem[] = [
     personas: ["learner", "manager", "instructor", "admin"],
   },
   {
+    id: "minhas-duvidas",
+    label: "Minhas Dúvidas",
+    path: "/unilio/minhas-duvidas",
+    icon: "fa-circle-question",
+    personas: ["learner", "manager", "instructor", "admin"],
+  },
+  {
     id: "recomendacoes",
     label: "Recomendações",
     path: "/unilio/recomendacoes",

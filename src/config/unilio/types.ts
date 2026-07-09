@@ -307,3 +307,52 @@ export type UniLioPlayerView = {
   currentModule: UniLioModule | null;
   nextModule: UniLioModule | null;
 };
+
+export type UniLioQuestionVisibility = "private" | "public";
+
+export type UniLioQuestionReply = {
+  id: string;
+  authorName: string;
+  isInstructorReply: boolean;
+  body: string;
+  createdAt: string;
+};
+
+export type UniLioQuestionSummary = {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  moduleId?: string | null;
+  moduleTitle?: string | null;
+  authorPersonId: string;
+  authorName: string;
+  body: string;
+  visibility: UniLioQuestionVisibility;
+  status: string;
+  unread: boolean;
+  createdAt: string;
+  replyCount: number;
+  lastInstructorReply?: string | null;
+  lastInstructorReplyAt?: string | null;
+};
+
+export type UniLioQuestionDetail = UniLioQuestionSummary & {
+  replies: UniLioQuestionReply[];
+};
+
+export type UniLioQuestionsView = {
+  items: UniLioQuestionSummary[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  unreadCount: number;
+};
+
+export type UniLioQuestionFilters = {
+  courseId?: string;
+  status?: string;
+  unreadOnly?: boolean;
+  page?: number;
+  pageSize?: number;
+};

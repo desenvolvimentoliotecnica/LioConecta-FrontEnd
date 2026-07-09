@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useUniLioCourseRecommendations } from "../../api/hooks/useUniLioCourseRecommendations";
 import { useUniLioCourseStart } from "../../api/hooks/useUniLioCourseStart";
 import { useUniLioProgress } from "../../api/hooks/useUniLioProgress";
+import { useUniLioCreateQuestion, useUniLioModuleQuestions } from "../../api/hooks/useUniLioQuestions";
 import { formatUniLioDuration } from "../../utils/unilioView";
 import { parseUniLioQuizJson } from "../../utils/unilioQuiz";
 import type { UniLioCourseDetail, UniLioModule } from "../../config/unilio/types";
@@ -10,7 +11,10 @@ import { UniLioContentTypeBadge, UniLioProgressBar } from "./UniLioShared";
 import { UniLioQuizWidget } from "./UniLioQuizWidget";
 import { UniLioCourseRecommendationsModal } from "./UniLioCourseRecommendationsModal";
 import { UniLioCourseFeedbackModal } from "./UniLioCourseFeedbackModal";
+import { UniLioModuleQuestionModal } from "./UniLioModuleQuestionModal";
+import { UniLioModuleQuestionsPanel } from "./UniLioModuleQuestionsPanel";
 import "../../styles/unilio-player.css";
+import "../../styles/unilio-questions.css";
 
 type Props = {
   course: UniLioCourseDetail;
@@ -111,7 +115,12 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
   const [quizPassed, setQuizPassed] = useState(false);
   const [showCourseFeedback, setShowCourseFeedback] = useState(false);
   const [showCourseRecommendations, setShowCourseRecommendations] = useState(false);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [pendingCompletionModule, setPendingCompletionModule] = useState<UniLioModule | null>(null);
+
+  const createQuestionMutation = useUniLioCreateQuestion();
+  const { data: moduleQuestions, isLoading: moduleQuestionsLoading, refetch: refetchModuleQuestions } =
+    useUniLioModuleQuestions(course.id, activeModule?.id ?? null);
 
   const { data: courseRecommendations, isLoading: recommendationsLoading } = useUniLioCourseRecommendations(
     course.id,
@@ -343,7 +352,24 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
                 ) : null}
               </div>
 
+              {activeModule ? (
+                <UniLioModuleQuestionsPanel
+                  items={moduleQuestions.items}
+                  isLoading={moduleQuestionsLoading}
+                />
+              ) : null}
+
               <footer className="unilio-player__content-foot">
+                <button
+                  type="button"
+                  className="unilio-player__help-btn"
+                  onClick={() => setShowQuestionModal(true)}
+                >
+                  <i className="fa-solid fa-circle-question" aria-hidden="true" />
+                  Dúvidas
+                </button>
+
+                <div className="unilio-player__foot-actions">
                 {!activeModule.isCompleted ? (
                   <button
                     type="button"
@@ -370,6 +396,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
                     <i className="fa-solid fa-circle-check" aria-hidden="true" /> Módulo concluído
                   </p>
                 )}
+                </div>
               </footer>
             </>
           ) : (
@@ -392,6 +419,30 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
         isLoading={recommendationsLoading}
         onGoToCatalog={() => setShowCourseRecommendations(false)}
       />
+
+      {activeModule ? (
+        <UniLioModuleQuestionModal
+          open={showQuestionModal}
+          courseTitle={course.title}
+          moduleTitle={activeModule.title}
+          busy={createQuestionMutation.isPending}
+          onClose={() => setShowQuestionModal(false)}
+          onSubmit={(payload) => {
+            void createQuestionMutation
+              .mutateAsync({
+                courseId: course.id,
+                moduleId: activeModule.id,
+                body: payload.body,
+                visibility: payload.visibility,
+                scopeCourse: payload.scopeCourse,
+              })
+              .then(() => {
+                setShowQuestionModal(false);
+                void refetchModuleQuestions();
+              });
+          }}
+        />
+      ) : null}
     </div>
   );
 }

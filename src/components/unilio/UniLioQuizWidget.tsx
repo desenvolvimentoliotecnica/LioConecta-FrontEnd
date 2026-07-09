@@ -23,7 +23,13 @@ export function UniLioQuizWidget({ moduleTitle, passingScore, questions, onSubmi
     onSubmit?.(score, passed);
   };
 
+  const handleRetry = () => {
+    setResult(null);
+    onSubmit?.(0, false);
+  };
+
   const allAnswered = questions.every((q) => Boolean(answers[q.id]));
+  const showSubmit = !result || !result.passed;
 
   return (
     <div className="unilio-quiz">
@@ -42,7 +48,13 @@ export function UniLioQuizWidget({ moduleTitle, passingScore, questions, onSubmi
                 name={q.id}
                 value={opt.id}
                 checked={answers[q.id] === opt.id}
-                onChange={() => setAnswers((a) => ({ ...a, [q.id]: opt.id }))}
+                onChange={() => {
+                  setAnswers((a) => ({ ...a, [q.id]: opt.id }));
+                  if (result && !result.passed) {
+                    setResult(null);
+                    onSubmit?.(0, false);
+                  }
+                }}
               />
               {opt.label}
             </label>
@@ -50,20 +62,29 @@ export function UniLioQuizWidget({ moduleTitle, passingScore, questions, onSubmi
         </fieldset>
       ))}
 
-      {!result ? (
-        <button
-          type="button"
-          className="unilio-quiz__submit"
-          onClick={handleSubmit}
-          disabled={!allAnswered}
-        >
-          Enviar respostas
-        </button>
-      ) : (
+      {result ? (
         <div className={`unilio-quiz__result unilio-quiz__result--${result.passed ? "pass" : "fail"}`}>
           {result.passed ? "Aprovado!" : "Reprovado — tente novamente."} Nota: {result.score}%
         </div>
-      )}
+      ) : null}
+
+      {showSubmit ? (
+        <div className="unilio-quiz__actions">
+          {result && !result.passed ? (
+            <button type="button" className="unilio-quiz__retry" onClick={handleRetry}>
+              Refazer quiz
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="unilio-quiz__submit"
+            onClick={handleSubmit}
+            disabled={!allAnswered}
+          >
+            Enviar respostas
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

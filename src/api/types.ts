@@ -2549,3 +2549,72 @@ export interface UniLioReportsDto {
   topCourses: UniLioCourseSummaryDto[];
   complianceGaps: UniLioComplianceItemDto[];
 }
+
+export interface UniLioQuestionQuery {
+  courseId?: string | null;
+  status?: string | null;
+  unreadOnly?: boolean | null;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface CreateUniLioQuestionRequest {
+  body: string;
+  visibility?: string;
+  moduleId?: string | null;
+}
+
+export interface ReplyUniLioQuestionRequest {
+  body: string;
+}
+
+export interface UniLioQuestionReplyDto {
+  id: string;
+  authorName: string;
+  isInstructorReply: boolean;
+  body: string;
+  createdAt: string;
+}
+
+export interface UniLioQuestionSummaryDto {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  moduleId?: string | null;
+  moduleTitle?: string | null;
+  authorPersonId: string;
+  authorName: string;
+  body: string;
+  visibility: string;
+  status: string;
+  unread: boolean;
+  createdAt: string;
+  replyCount: number;
+  lastInstructorReply?: string | null;
+  lastInstructorReplyAt?: string | null;
+}
+
+export interface UniLioQuestionDetailDto {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  moduleId?: string | null;
+  moduleTitle?: string | null;
+  authorPersonId: string;
+  authorName: string;
+  body: string;
+  visibility: string;
+  status: string;
+  unread: boolean;
+  createdAt: string;
+  replies: UniLioQuestionReplyDto[];
+}
+
+export interface UniLioQuestionsPageDto {
+  items: UniLioQuestionSummaryDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  unreadCount: number;
+}

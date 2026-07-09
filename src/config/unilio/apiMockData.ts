@@ -15,6 +15,8 @@ import type {
   UniLioRecommendationsDto,
   UniLioReportsDto,
   UniLioSkillsDto,
+  UniLioQuestionsPageDto,
+  UniLioQuestionDetailDto,
 } from "../../api/types";
 import type { UniLioFilters } from "./types";
 import { COURSE_IDS_MAP, MOCK_COURSES, PATH_IDS, getMockCourse } from "./mockSeed";
@@ -579,6 +581,163 @@ export function buildMockReports(filters: UniLioFilters): UniLioReportsDto {
     ],
     topCourses: filterCourses(filters).slice(0, 5).map(toSummary),
     complianceGaps: buildMockCompliance().items.filter((i) => i.progressPct < 100),
+  };
+}
+
+const MOCK_QUESTION_PUBLIC_ID = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb001";
+const MOCK_QUESTION_PRIVATE_ID = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb002";
+
+export function buildMockModuleQuestions(
+  courseId: string,
+  moduleId: string,
+): UniLioQuestionsPageDto {
+  const course = getMockCourse(courseId);
+  const module = course?.modules.find((m) => m.id === moduleId);
+  return {
+    items: [
+      {
+        id: MOCK_QUESTION_PUBLIC_ID,
+        courseId,
+        courseTitle: course?.title ?? "Curso",
+        moduleId,
+        moduleTitle: module?.title ?? "Módulo",
+        authorPersonId: "seed-julio",
+        authorName: "Júlio Schwartzman",
+        body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
+        visibility: "public",
+        status: "answered",
+        unread: false,
+        createdAt: new Date(Date.now() - 86_400_000).toISOString(),
+        replyCount: 1,
+        lastInstructorReply:
+          "O onboarding remoto cobre os mesmos tópicos; a diferença está no formato das atividades práticas.",
+        lastInstructorReplyAt: new Date(Date.now() - 43_200_000).toISOString(),
+      },
+    ],
+    page: 1,
+    pageSize: 20,
+    totalCount: 1,
+    totalPages: 1,
+    unreadCount: 0,
+  };
+}
+
+export function buildMockMyQuestions(): UniLioQuestionsPageDto {
+  const courseId = COURSE_IDS.onboarding;
+  const course = getMockCourse(courseId);
+  const module = course?.modules[0];
+  return {
+    items: [
+      {
+        id: MOCK_QUESTION_PRIVATE_ID,
+        courseId,
+        courseTitle: course?.title ?? "Onboarding LioTécnica",
+        moduleId: module?.id ?? null,
+        moduleTitle: module?.title ?? null,
+        authorPersonId: "seed-julio",
+        authorName: "Você",
+        body: "Posso refazer o quiz se não atingir a nota mínima?",
+        visibility: "private",
+        status: "open",
+        unread: false,
+        createdAt: new Date(Date.now() - 43_200_000).toISOString(),
+        replyCount: 0,
+      },
+      {
+        id: MOCK_QUESTION_PUBLIC_ID,
+        courseId,
+        courseTitle: course?.title ?? "Onboarding LioTécnica",
+        moduleId: module?.id ?? null,
+        moduleTitle: module?.title ?? null,
+        authorPersonId: "seed-julio",
+        authorName: "Você",
+        body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
+        visibility: "public",
+        status: "answered",
+        unread: true,
+        createdAt: new Date(Date.now() - 86_400_000).toISOString(),
+        replyCount: 1,
+        lastInstructorReply:
+          "O onboarding remoto cobre os mesmos tópicos; a diferença está no formato das atividades práticas.",
+        lastInstructorReplyAt: new Date(Date.now() - 43_200_000).toISOString(),
+      },
+    ],
+    page: 1,
+    pageSize: 20,
+    totalCount: 2,
+    totalPages: 1,
+    unreadCount: 1,
+  };
+}
+
+export function buildMockInstructorQuestions(): UniLioQuestionsPageDto {
+  const courseId = COURSE_IDS.onboarding;
+  const course = getMockCourse(courseId);
+  const module = course?.modules[0];
+  return {
+    items: [
+      {
+        id: MOCK_QUESTION_PRIVATE_ID,
+        courseId,
+        courseTitle: course?.title ?? "Onboarding LioTécnica",
+        moduleId: module?.id ?? null,
+        moduleTitle: module?.title ?? null,
+        authorPersonId: "seed-carlos",
+        authorName: "Carlos Mendes",
+        body: "Posso refazer o quiz se não atingir a nota mínima?",
+        visibility: "private",
+        status: "open",
+        unread: true,
+        createdAt: new Date(Date.now() - 21_600_000).toISOString(),
+        replyCount: 0,
+      },
+      {
+        id: MOCK_QUESTION_PUBLIC_ID,
+        courseId,
+        courseTitle: course?.title ?? "Onboarding LioTécnica",
+        moduleId: module?.id ?? null,
+        moduleTitle: module?.title ?? null,
+        authorPersonId: "seed-julio",
+        authorName: "Júlio Schwartzman",
+        body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
+        visibility: "public",
+        status: "answered",
+        unread: false,
+        createdAt: new Date(Date.now() - 86_400_000).toISOString(),
+        replyCount: 1,
+        lastInstructorReply:
+          "O onboarding remoto cobre os mesmos tópicos; a diferença está no formato das atividades práticas.",
+        lastInstructorReplyAt: new Date(Date.now() - 43_200_000).toISOString(),
+      },
+    ],
+    page: 1,
+    pageSize: 20,
+    totalCount: 2,
+    totalPages: 1,
+    unreadCount: 1,
+  };
+}
+
+export function buildMockQuestionDetail(id: string): UniLioQuestionDetailDto {
+  const instructor = buildMockInstructorQuestions().items.find((q) => q.id === id)
+    ?? buildMockMyQuestions().items.find((q) => q.id === id);
+  if (!instructor) {
+    throw new Error("Pergunta não encontrada");
+  }
+  return {
+    ...instructor,
+    replies:
+      instructor.status === "answered"
+        ? [
+            {
+              id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb003",
+              authorName: "Maria Silva",
+              isInstructorReply: true,
+              body: "O onboarding remoto cobre os mesmos tópicos; a diferença está no formato das atividades práticas.",
+              createdAt: new Date(Date.now() - 43_200_000).toISOString(),
+            },
+          ]
+        : [],
   };
 }
 
