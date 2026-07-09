@@ -96,6 +96,20 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/compass/decisoes": "prototype",
   "/compass/cenarios": "prototype",
   "/compass/relatorios": "prototype",
+
+  "/unilio": "prototype",
+  "/unilio/catalogo": "prototype",
+  "/unilio/trilhas": "prototype",
+  "/unilio/avaliacoes": "prototype",
+  "/unilio/certificados": "prototype",
+  "/unilio/compliance": "prototype",
+  "/unilio/comunidade": "prototype",
+  "/unilio/recomendacoes": "prototype",
+  "/unilio/instrutor": "prototype",
+  "/unilio/gestor": "prototype",
+  "/unilio/eventos": "prototype",
+  "/unilio/competencias": "prototype",
+  "/unilio/relatorios": "prototype",
 };
 
 export const TOPBAR_NAV_ITEMS: NavLinkItem[] = [

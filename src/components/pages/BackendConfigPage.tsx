@@ -14,6 +14,7 @@ import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmen
 import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
 import { CompassSettingsSection } from "../admin/CompassSettingsSection";
+import { UniLioSettingsSection } from "../admin/UniLioSettingsSection";
 import { MenuEditorSettingsSection } from "../admin/MenuEditorSettingsSection";
 import { PortalUiSettingsSection } from "../admin/PortalUiSettingsSection";
 import { RamaisSettingsSection } from "../admin/RamaisSettingsSection";
@@ -45,6 +46,7 @@ const AZURE_AD_TENANT_KEY = "azure_ad.tenant_id";
 const ORGANOGRAM_MODULE_ID = "organogram";
 const LOOP_MODULE_ID = "loop";
 const COMPASS_MODULE_ID = "compass";
+const UNILIO_MODULE_ID = "unilio";
 const CARDAPIO_MODULE_ID = "cardapio";
 const PORTAL_UI_MODULE_ID = "portal-ui";
 const RAMAIS_MODULE_ID = "ramais";
@@ -55,6 +57,7 @@ const DOMAIN_MODULE_TABS = [
   { id: ORGANOGRAM_MODULE_ID, label: "Organograma" },
   { id: LOOP_MODULE_ID, label: "Loop de Projetos" },
   { id: COMPASS_MODULE_ID, label: "Compass IBP" },
+  { id: UNILIO_MODULE_ID, label: "UniLio" },
   { id: CARDAPIO_MODULE_ID, label: "Cardápio" },
   { id: RAMAIS_MODULE_ID, label: "Ramais" },
   { id: BENEFICIOS_MODULE_ID, label: "Benefícios RH" },
@@ -644,6 +647,27 @@ export function BackendConfigPage() {
           </div>
 
           <CompassSettingsSection />
+        </section>
+      ) : null}
+
+      {activeCategory === UNILIO_MODULE_ID ? (
+        <section className="backend-config-page__section" aria-labelledby="unilio-module-title">
+          <ConfigSectionHead
+            titleId="unilio-module-title"
+            title="UniLio — acesso e permissões"
+            description="Controle quem visualiza o portal de aprendizagem corporativa no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            helpCategoryId={UNILIO_MODULE_ID}
+            onOpenHelp={setHelpCategory}
+          />
+
+          <div className="backend-config-page__module-actions">
+            <Link className="backend-config-page__module-link backend-config-page__module-link--primary" to="/unilio">
+              <i className="fa-solid fa-graduation-cap" aria-hidden="true" />
+              Abrir UniLio
+            </Link>
+          </div>
+
+          <UniLioSettingsSection />
         </section>
       ) : null}
 

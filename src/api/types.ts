@@ -2237,3 +2237,286 @@ export interface UploadSystemIconResponseDto {
   sizeBytes: number;
   originalFileName?: string | null;
 }
+
+// ── UniLio (LMS) ─────────────────────────────────────────────────────────────
+
+export interface UniLioBootstrapDto {
+  enabled: boolean;
+  allowedRoles: UserRole[];
+  allowedEmails: string[];
+}
+
+export interface UniLioMetaDto {
+  persona: string;
+  areas: string[];
+  departments: string[];
+  contentTypes: string[];
+  skills: string[];
+}
+
+export interface UniLioKpiDto {
+  id: string;
+  label: string;
+  value: string;
+  delta: string;
+  trend: string;
+  icon: string;
+}
+
+export interface UniLioIntegrationLinkDto {
+  sourceType: string;
+  sourceKey: string;
+  label: string;
+}
+
+export interface UniLioCourseSummaryDto {
+  id: string;
+  seedKey: string;
+  title: string;
+  description: string;
+  contentType: string;
+  durationMinutes: number;
+  isMandatory: boolean;
+  area: string;
+  department: string;
+  rating: number;
+  instructorName: string;
+  thumbnailUrl?: string | null;
+  externalUrl?: string | null;
+  provider?: string | null;
+  status: string;
+  progressPct?: number | null;
+  enrollmentStatus?: string | null;
+  skillNames: string[];
+  integrations: UniLioIntegrationLinkDto[];
+}
+
+export interface UniLioModuleDto {
+  id: string;
+  sortOrder: number;
+  title: string;
+  contentType: string;
+  contentUrl?: string | null;
+  durationMinutes: number;
+  articleHtml?: string | null;
+  quizJson?: string | null;
+  quizPassingScore?: number | null;
+  isCompleted: boolean;
+}
+
+export interface UniLioCourseDetailDto extends UniLioCourseSummaryDto {
+  progressPct: number;
+  enrollmentStatus: string;
+  modules: UniLioModuleDto[];
+}
+
+export interface UniLioPathSummaryDto {
+  id: string;
+  seedKey: string;
+  title: string;
+  description: string;
+  courseCount: number;
+  progressPct: number;
+  completedCourses: number;
+}
+
+export interface UniLioPathDetailDto extends UniLioPathSummaryDto {
+  courses: UniLioCourseSummaryDto[];
+}
+
+export interface UniLioAlertDto {
+  id: string;
+  severity: string;
+  title: string;
+  description: string;
+  link: string;
+}
+
+export interface UniLioRecommendationDto {
+  courseId: string;
+  title: string;
+  reason: string;
+  area: string;
+  durationMinutes: number;
+  contentType: string;
+}
+
+export interface UniLioDashboardDto {
+  kpis: UniLioKpiDto[];
+  activePath: UniLioPathSummaryDto | null;
+  alerts: UniLioAlertDto[];
+  nextSteps: UniLioCourseSummaryDto[];
+  topRecommendations: UniLioRecommendationDto[];
+}
+
+export interface UniLioCatalogPageDto {
+  items: UniLioCourseSummaryDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface UniLioPathsDto {
+  items: UniLioPathSummaryDto[];
+}
+
+export interface UniLioProgressDto {
+  courseId: string;
+  progressPct: number;
+  status: string;
+  courseCompleted: boolean;
+}
+
+export interface UniLioAssessmentSummaryDto {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  title: string;
+  passingScore: number;
+  lastScore?: number | null;
+  lastPassed?: boolean | null;
+  lastAttemptedAt?: string | null;
+  status: string;
+}
+
+export interface UniLioAssessmentsDto {
+  pending: UniLioAssessmentSummaryDto[];
+  history: UniLioAssessmentSummaryDto[];
+}
+
+export interface UniLioAssessmentSubmitRequest {
+  answers: Record<string, string>;
+}
+
+export interface UniLioAssessmentResultDto {
+  attemptId: string;
+  score: number;
+  passed: boolean;
+  certificateIssued: boolean;
+  certificateCode?: string | null;
+}
+
+export interface UniLioCertificateDto {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  certificateCode: string;
+  issuedAt: string;
+  area: string;
+}
+
+export interface UniLioCertificatesDto {
+  items: UniLioCertificateDto[];
+}
+
+export interface UniLioComplianceItemDto {
+  courseId: string;
+  title: string;
+  area: string;
+  progressPct: number;
+  status: string;
+  dueDate?: string | null;
+  isOverdue: boolean;
+}
+
+export interface UniLioComplianceDto {
+  items: UniLioComplianceItemDto[];
+  completedCount: number;
+  pendingCount: number;
+  overdueCount: number;
+}
+
+export interface UniLioCommunityPostDto {
+  id: string;
+  authorName: string;
+  authorAvatarUrl?: string | null;
+  courseTitle?: string | null;
+  body: string;
+  likesCount: number;
+  createdAt: string;
+}
+
+export interface UniLioCommunityPageDto {
+  items: UniLioCommunityPostDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface UniLioRecommendationsDto {
+  items: UniLioRecommendationDto[];
+}
+
+export interface UniLioEventDto {
+  id: string;
+  title: string;
+  eventType: string;
+  startsAt: string;
+  endsAt: string;
+  instructorName?: string | null;
+  maxAttendees: number;
+  registeredCount: number;
+  isRegistered: boolean;
+  meetingUrl?: string | null;
+}
+
+export interface UniLioEventsDto {
+  items: UniLioEventDto[];
+}
+
+export interface UniLioSkillLevelDto {
+  skillId: string;
+  name: string;
+  category: string;
+  currentLevel: number;
+  targetLevel: number;
+  relatedCourseTitles: string[];
+}
+
+export interface UniLioSkillsDto {
+  items: UniLioSkillLevelDto[];
+}
+
+export interface UniLioTeamMemberDto {
+  personId: string;
+  name: string;
+  department: string;
+  enrolledCount: number;
+  completedCount: number;
+  mandatoryPending: number;
+  avgProgressPct: number;
+}
+
+export interface UniLioManagerTeamDto {
+  members: UniLioTeamMemberDto[];
+  totalMembers: number;
+  avgCompletionPct: number;
+}
+
+export interface UniLioInstructorCourseDto {
+  courseId: string;
+  title: string;
+  area: string;
+  enrolledCount: number;
+  completedCount: number;
+  avgRating: number;
+  status: string;
+}
+
+export interface UniLioInstructorCoursesDto {
+  items: UniLioInstructorCourseDto[];
+}
+
+export interface UniLioReportMetricDto {
+  label: string;
+  value: string;
+  delta: string;
+}
+
+export interface UniLioReportsDto {
+  metrics: UniLioReportMetricDto[];
+  topCourses: UniLioCourseSummaryDto[];
+  complianceGaps: UniLioComplianceItemDto[];
+}

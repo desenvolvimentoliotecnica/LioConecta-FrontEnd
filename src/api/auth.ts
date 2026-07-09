@@ -1,6 +1,7 @@
 import type { MeDto, UserRole } from "./types";
 import type { CompassSettings } from "../config/compass/settings";
 import type { LoopSettings } from "../config/loop/settings";
+import type { UniLioSettings } from "../config/unilio/settings";
 
 const ROLE_INDEX: Record<UserRole, number> = {
   Employee: 0,
@@ -43,6 +44,14 @@ export function canAccessLoopModule(me: MeDto | undefined, settings: LoopSetting
 }
 
 export function canAccessCompassModule(me: MeDto | undefined, settings: CompassSettings | undefined): boolean {
+  if (!me || !settings?.enabled) return false;
+  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
+    return true;
+  }
+  return settings.allowedRoles.some((role) => hasRole(me, role));
+}
+
+export function canAccessUniLioModule(me: MeDto | undefined, settings: UniLioSettings | undefined): boolean {
   if (!me || !settings?.enabled) return false;
   if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
     return true;

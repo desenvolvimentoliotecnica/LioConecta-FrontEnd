@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão de Pessoas: Líder e RH | UniLio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --lio-navy: #012e5a;
+      --lio-teal: #0d9488;
+      --lio-teal-light: #14b8a6;
+      --lio-bg: #f0f4f8;
+      --lio-surface: #ffffff;
+      --lio-border: #d1dbe6;
+      --lio-text: #334155;
+      --lio-muted: #64748b;
+      --lio-success: #059669;
+      --lio-warning: #d97706;
+      --lio-radius: 12px;
+      --lio-shadow: 0 4px 24px rgba(1, 46, 90, 0.08);
+      --header-h: 68px;
+      --nav-btn-w: 52px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      background: var(--lio-bg);
+      color: var(--lio-text);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header + progress ── */
+    .unilio-header {
+      background: var(--lio-navy);
+      color: #fff;
+      padding: 10px 20px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .unilio-header__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 20px;
+    }
+    .unilio-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: .92rem;
+      white-space: nowrap;
+    }
+    .unilio-header__brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--lio-teal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .unilio-header__progress {
+      min-width: 0;
+    }
+    .unilio-header__progress-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      font-size: .72rem;
+      opacity: .85;
+    }
+    .unilio-header__progress-meta strong {
+      font-size: .82rem;
+      opacity: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .unilio-header__progress-meta span:last-child {
+      color: var(--lio-teal-light);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .unilio-header__track {
+      height: 5px;
+      background: rgba(255,255,255,.18);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .unilio-header__fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--lio-teal), var(--lio-teal-light));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .35s ease;
+    }
+    .unilio-header__org {
+      font-size: .78rem;
+      opacity: .65;
+      white-space: nowrap;
+    }
+
+    /* ── Wizard stage (content + lateral nav) ── */
+    .wizard-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .wizard-nav {
+      align-self: center;
+      flex-shrink: 0;
+      width: var(--nav-btn-w);
+      min-height: var(--nav-btn-w);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .15s, transform .1s, box-shadow .15s;
+      box-shadow: var(--lio-shadow);
+    }
+    .wizard-nav:active:not(:disabled) { transform: scale(.94); }
+    .wizard-nav:disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .wizard-nav--prev {
+      background: #fff;
+      color: var(--lio-navy);
+      border: 1px solid var(--lio-border);
+    }
+    .wizard-nav--prev:hover:not(:disabled) { background: #f1f5f9; }
+    .wizard-nav--next {
+      background: var(--lio-teal);
+      color: #fff;
+    }
+    .wizard-nav--next:hover:not(:disabled) {
+      background: var(--lio-teal-light);
+      box-shadow: 0 4px 20px rgba(13,148,136,.35);
+    }
+    .wizard-nav__label {
+      display: none;
+    }
+
+    .wizard-viewport {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wizard-step {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeIn .3s ease;
+    }
+    .wizard-step.is-active {
+      display: flex;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .wizard-step.is-back {
+      animation-name: fadeInBack;
+    }
+    @keyframes fadeInBack {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .step-card {
+      background: var(--lio-surface);
+      border-radius: var(--lio-radius);
+      border: 1px solid var(--lio-border);
+      box-shadow: 0 2px 12px rgba(1, 46, 90, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+    }
+    .step-card__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--lio-border);
+      background: linear-gradient(135deg, #f8fafc, #fff);
+      flex-shrink: 0;
+    }
+    .step-card__badge {
+      width: 34px;
+      height: 34px;
+      background: var(--lio-navy);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+    .step-card__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+    }
+    .step-card__img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .step-card__body {
+      padding: 20px 24px 24px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    .step-card__body p { margin-bottom: 12px; }
+    .step-card__body p:last-child { margin-bottom: 0; }
+
+    /* Hero step */
+    .hero-step .step-card__img { height: 260px; }
+    .hero-trail {
+      display: inline-flex;
+      background: #ecfdf5;
+      color: var(--lio-teal);
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .hero-step h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      color: var(--lio-muted);
+      font-size: .92rem;
+      margin-bottom: 16px;
+    }
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-chip {
+      background: #f1f5f9;
+      border: 1px solid var(--lio-border);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: .75rem;
+      color: var(--lio-muted);
+      font-weight: 500;
+    }
+
+    h3 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+      margin: 16px 0 8px;
+    }
+    h3:first-child { margin-top: 0; }
+
+    .callout {
+      border-left: 4px solid var(--lio-teal);
+      background: #f0fdfa;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: .9rem;
+    }
+    .callout strong { color: var(--lio-navy); }
+    .callout--warn { border-color: var(--lio-warning); background: #fffbeb; }
+    .callout--navy { border-color: var(--lio-navy); background: #eff6ff; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+      margin: 12px 0;
+    }
+    .data-table th {
+      background: var(--lio-navy);
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--lio-border);
+      vertical-align: top;
+    }
+    .data-table tr:nth-child(even) td { background: #f8fafc; }
+
+    .obj-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .obj-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: .9rem;
+    }
+    .obj-list li::before {
+      content: "✓";
+      background: var(--lio-teal);
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .diagram {
+      background: var(--lio-navy);
+      color: #fff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: .84rem;
+      line-height: 1.75;
+      margin: 14px 0;
+      font-family: "Courier New", monospace;
+    }
+    .diagram hr {
+      border: none;
+      border-top: 1px dashed rgba(255,255,255,.3);
+      margin: 8px 0;
+    }
+
+    .reflection-item label {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--lio-navy);
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .reflection-item textarea {
+      width: 100%;
+      min-height: 140px;
+      border: 1px solid var(--lio-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: .88rem;
+      resize: none;
+      transition: border-color .2s;
+    }
+    .reflection-item textarea:focus {
+      outline: none;
+      border-color: var(--lio-teal);
+      box-shadow: 0 0 0 3px rgba(13,148,136,.15);
+    }
+
+    .quiz-step .quiz-q__text {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--lio-navy);
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 2px solid var(--lio-border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: .9rem;
+      transition: background .15s, border-color .15s;
+    }
+    .quiz-option:hover { background: #f8fafc; }
+    .quiz-option input { accent-color: var(--lio-teal); margin-top: 3px; flex-shrink: 0; }
+    .quiz-option.selected { border-color: var(--lio-teal); background: #f0fdfa; }
+    .quiz-option.correct { border-color: var(--lio-success); background: #ecfdf5; color: var(--lio-success); font-weight: 600; }
+    .quiz-option.incorrect { border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+    .quiz-feedback {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.ok { background: #ecfdf5; color: var(--lio-success); border: 1px solid #6ee7b7; }
+    .quiz-feedback.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .completion-badge {
+      text-align: center;
+      padding: 24px 16px;
+    }
+    .completion-badge__icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+    .completion-badge h2 {
+      font-size: 1.35rem;
+      color: var(--lio-navy);
+      margin-bottom: 8px;
+    }
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+      text-align: left;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--lio-border);
+      border-radius: 8px;
+      font-size: .88rem;
+    }
+    .checklist li.done { background: #ecfdf5; border-color: #6ee7b7; }
+    .checklist li input { accent-color: var(--lio-teal); }
+
+    .page-footer {
+      text-align: center;
+      font-size: .75rem;
+      color: var(--lio-muted);
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--lio-border);
+    }
+
+    @media (min-width: 900px) {
+      :root { --nav-btn-w: 120px; }
+      .wizard-nav {
+        border-radius: var(--lio-radius);
+        flex-direction: column;
+        gap: 4px;
+        font-size: 1.1rem;
+        min-height: 88px;
+      }
+      .wizard-nav__label {
+        display: block;
+        font-size: .72rem;
+        font-weight: 600;
+        letter-spacing: .02em;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .unilio-header__inner {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .unilio-header__brand span:last-child { display: none; }
+      .unilio-header__org { display: none; }
+      .wizard-stage { padding: 10px 8px 14px; gap: 8px; }
+      :root { --nav-btn-w: 44px; }
+      .step-card__body { padding: 16px; }
+      .hero-step h1 { font-size: 1.25rem; }
+      .step-card__img { height: 150px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="unilio-header">
+    <div class="unilio-header__inner">
+      <div class="unilio-header__brand">
+        <div class="unilio-header__brand-icon">🎓</div>
+        <span>UniLio — Portal de Aprendizagem</span>
+      </div>
+      <div class="unilio-header__progress">
+        <div class="unilio-header__progress-meta">
+          <strong id="headerStepTitle">Introdução</strong>
+          <span><span id="stepCounter">Passo 1 de 17</span> · <span id="progressPct">0%</span></span>
+        </div>
+        <div class="unilio-header__track">
+          <div class="unilio-header__fill" id="progressFill"></div>
+        </div>
+      </div>
+      <div class="unilio-header__org">Liotecnica</div>
+    </div>
+  </header>
+
+  <main class="wizard-stage">
+    <button class="wizard-nav wizard-nav--prev" id="btnPrev" aria-label="Passo anterior" title="Anterior">
+      ‹
+      <span class="wizard-nav__label">Anterior</span>
+    </button>
+
+    <div class="wizard-viewport" id="wizardViewport">
+
+      <!-- 0 Intro -->
+      <div class="wizard-step hero-step" data-step="0" data-title="Introdução">
+        <div class="step-card">
+          <img class="step-card__img" src="assets/hero-unilio-gestao-pessoas.png" alt="Colaboradores aprendendo no UniLio" />
+          <div class="step-card__body">
+            <div class="hero-trail">Trilha · Gestão de Pessoas e Liderança · Módulo 1</div>
+            <h1>Gestão de Pessoas: papel do líder e do RH</h1>
+            <p class="hero-subtitle">Entenda a divisão de responsabilidades entre liderança e Recursos Humanos — e como essa parceria gera resultados para pessoas e negócio.</p>
+            <div class="meta-chips">
+              <span class="meta-chip">⏱ 15 min + 6 min vídeo</span>
+              <span class="meta-chip">📊 Introdução</span>
+              <span class="meta-chip">👥 Líderes, gestores e RH</span>
+            </div>
+            <div class="callout" style="margin-top:18px">
+              Use as setas <strong>laterais</strong> ou as teclas <strong>← →</strong> do teclado para avançar passo a passo.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1 Objetivos -->
+      <div class="wizard-step" data-step="1" data-title="Objetivos de aprendizagem">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">🎯</div>
+            <div class="step-card__title">Objetivos de aprendizagem</div>
+          </div>
+          <div class="step-card__body">
+            <p>Ao concluir este conteúdo, você será capaz de:</p>
+            <ul class="obj-list" style="margin-top:12px">
+              <li><strong>Diferenciar</strong> gestão de pessoas e a função do RH.</li>
+              <li><strong>Identificar</strong> as responsabilidades do líder no dia a dia.</li>
+              <li><strong>Reconhecer</strong> o RH como parceiro estratégico.</li>
+              <li><strong>Aplicar</strong> a divisão de papéis em situações reais.</li>
+              <li><strong>Compreender</strong> que pessoas e negócio caminham juntos.</li>
+            </ul>
+            <div class="callout">
+              <strong>Para refletir:</strong> Quem você acha que é o principal responsável pela gestão das pessoas do seu time?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Mod 1 -->
+      <div class="wizard-step" data-step="2" data-title="Módulo 1 — O que é gestão de pessoas">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">1</div>
+            <div class="step-card__title">O que é gestão de pessoas?</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-1-gestao-pessoas.png" alt="Jornada do colaborador" />
+          <div class="step-card__body">
+            <p>Gestão de pessoas é uma <strong>prática ampla de gestão</strong>: administração, coordenação e organização do trabalho, acompanhando a <strong>jornada do colaborador</strong>.</p>
+            <table class="data-table">
+              <thead><tr><th>Categoria</th><th>Exemplos</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Ciclo de vida</strong></td><td>Recrutamento, integração, desenvolvimento, desligamento</td></tr>
+                <tr><td><strong>Desempenho</strong></td><td>Feedback, avaliação, metas</td></tr>
+                <tr><td><strong>Desenvolvimento</strong></td><td>Treinamentos, capacitação, PDI</td></tr>
+                <tr><td><strong>Operação</strong></td><td>Férias, horas extras, ponto</td></tr>
+              </tbody>
+            </table>
+            <div class="callout"><strong>Ponto-chave:</strong> Gestão de pessoas ≠ RH. O RH apoia; a gestão acontece na linha de frente.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Mod 2 -->
+      <div class="wizard-step" data-step="3" data-title="Módulo 2 — Papel do líder">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">2</div>
+            <div class="step-card__title">Quem é o principal responsável?</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-2-lideranca.png" alt="Líder conduzindo equipe" />
+          <div class="step-card__body">
+            <p><strong>A liderança é a principal responsável</strong> pela gestão das pessoas no negócio.</p>
+            <ul class="obj-list">
+              <li>Conhece contexto e dinâmicas do time</li>
+              <li>Acompanha desempenho e comportamento</li>
+              <li>Dá feedback e orienta continuamente</li>
+              <li>Define e acompanha metas</li>
+              <li>Identifica sinais de sobrecarga ou desmotivação</li>
+            </ul>
+            <div class="callout callout--navy">
+              <strong>Na Liotecnica:</strong> Desempenho abaixo do esperado? A primeira conversa é <strong>sua responsabilidade como líder</strong>, com apoio do RH.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Mod 3 -->
+      <div class="wizard-step" data-step="4" data-title="Módulo 3 — Papel do RH">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">3</div>
+            <div class="step-card__title">Qual é o papel do RH?</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-3-papel-rh.png" alt="RH como parceiro estratégico" />
+          <div class="step-card__body">
+            <h3>Parceiro estratégico</h3>
+            <ul class="obj-list">
+              <li>Ferramentas, métodos e frameworks para a liderança</li>
+              <li>Políticas e padrões (benefícios, jornada, compliance)</li>
+              <li>Indicadores, relatórios e alertas</li>
+            </ul>
+            <h3>Operador de processos</h3>
+            <ul class="obj-list">
+              <li>Admissão, folha, benefícios, ponto</li>
+              <li>Conformidade legal e sindical</li>
+              <li>Sistemas e fluxos do dia a dia</li>
+            </ul>
+            <div class="callout">Os nomes mudam (RH, Gente &amp; Gestão, Pessoas e Cultura), mas a essência é <strong>estruturar para a liderança gerir com qualidade</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Mod 4 -->
+      <div class="wizard-step" data-step="5" data-title="Módulo 4 — Divisão na prática">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">4</div>
+            <div class="step-card__title">Divisão de papéis na prática</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-4-divisao-papeis.png" alt="Líder e RH com papéis complementares" />
+          <div class="step-card__body">
+            <h3>Exemplo: controle de jornada</h3>
+            <table class="data-table">
+              <thead><tr><th>Agente</th><th>Responsabilidade</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Líder</strong></td><td>Acompanha atrasos, horas extras, sobrecarga no dia a dia</td></tr>
+                <tr><td><strong>RH</strong></td><td>Painéis, alertas, políticas e conformidade legal</td></tr>
+              </tbody>
+            </table>
+            <div class="callout"><strong>O líder gerencia. O RH equipa e padroniza.</strong></div>
+            <table class="data-table">
+              <thead><tr><th>Situação</th><th>Líder</th><th>RH</th></tr></thead>
+              <tbody>
+                <tr><td>Feedback</td><td>Conduz e acompanha</td><td>Modelo e calendário</td></tr>
+                <tr><td>Treinamento</td><td>Identifica e aplica</td><td>Conteúdos no UniLio</td></tr>
+                <tr><td>Desligamento</td><td>Comunica ao time</td><td>Processo legal</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Mod 5 -->
+      <div class="wizard-step" data-step="6" data-title="Módulo 5 — Objetivo comum">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">5</div>
+            <div class="step-card__title">Objetivo comum: pessoas e negócio</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-5-objetivo-comum.png" alt="Pessoas e negócio juntos" />
+          <div class="step-card__body">
+            <p>Objetivo único: gerar o melhor resultado <strong>para as pessoas e para o negócio</strong>.</p>
+            <div class="diagram">
+              GESTÃO DE PESSOAS — jornada, desempenho, desenvolvimento
+              <hr>
+              LÍDER → dia a dia · RH → ferramentas + políticas
+              <hr>
+              OBJETIVO COMUM → Pessoas + Negócio
+            </div>
+            <h3>Sinais de alerta</h3>
+            <div class="callout callout--warn">
+              • "Gestão de pessoas é problema do RH"<br>
+              • "O gestor não faz a parte dele"<br>
+              • Processos existem no papel, mas não são usados
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Vídeo -->
+      <div class="wizard-step" data-step="7" data-title="Vídeo complementar">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">▶</div>
+            <div class="step-card__title">Vídeo complementar (opcional)</div>
+          </div>
+          <div class="step-card__body">
+            <p>Entrevista com <strong>Mariá Menezes</strong> no canal Mestre do ERP (~6 min).</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/jiUotcPVPdc" title="Gestão de Pessoas: RH ou Líder?" allowfullscreen></iframe>
+            </div>
+            <div class="callout">Assista se quiser reforçar o conteúdo. Você pode pular com <strong>Próximo</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8-10 Reflexão (1 per step) -->
+      <div class="wizard-step" data-step="8" data-title="Reflexão 1 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 1 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r1">No seu time hoje, quais atividades de gestão de pessoas você executa diretamente? Quais delega ou espera que o RH resolva?</label>
+            <textarea id="r1" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step" data-step="9" data-title="Reflexão 2 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 2 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r2">Pense em um caso recente (feedback, hora extra, desempenho). Quem deveria ter agido — líder, RH ou ambos? O que aconteceu?</label>
+            <textarea id="r2" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step" data-step="10" data-title="Reflexão 3 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 3 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r3">O que você pode fazer diferente esta semana para fortalecer a parceria com o RH?</label>
+            <textarea id="r3" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11-15 Quiz (1 question per step) -->
+      <div class="wizard-step quiz-step" data-step="11" data-title="Quiz 1 de 5" data-quiz="1" data-correct="b">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 1 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Gestão de pessoas e RH são a mesma coisa?</div>
+            <div class="quiz-options" data-name="q1">
+              <label class="quiz-option"><input type="radio" name="q1" value="a" /> Sim, são sinônimos</label>
+              <label class="quiz-option"><input type="radio" name="q1" value="b" /> Não — gestão de pessoas é mais ampla; RH apoia e estrutura</label>
+            </div>
+            <div class="quiz-feedback" id="fb11"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="12" data-title="Quiz 2 de 5" data-quiz="1" data-correct="b">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 2 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Quem é o principal responsável pela gestão das pessoas no dia a dia?</div>
+            <div class="quiz-options" data-name="q2">
+              <label class="quiz-option"><input type="radio" name="q2" value="a" /> RH</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="b" /> Liderança</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="c" /> Diretoria</label>
+            </div>
+            <div class="quiz-feedback" id="fb12"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="13" data-title="Quiz 3 de 5" data-quiz="1" data-correct="b">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 3 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Qual é um papel típico do RH em controle de jornada?</div>
+            <div class="quiz-options" data-name="q3">
+              <label class="quiz-option"><input type="radio" name="q3" value="a" /> Substituir o líder no acompanhamento diário</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="b" /> Definir políticas, fornecer indicadores e alertas</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="c" /> Aplicar advertências diretamente</label>
+            </div>
+            <div class="quiz-feedback" id="fb13"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="14" data-title="Quiz 4 de 5" data-quiz="1" data-correct="c">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 4 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">O objetivo comum de líderes e RH é:</div>
+            <div class="quiz-options" data-name="q4">
+              <label class="quiz-option"><input type="radio" name="q4" value="a" /> Reduzir custos com pessoas</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="b" /> Cumprir apenas exigências legais</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="c" /> Gerar o melhor resultado para pessoas e para o negócio</label>
+            </div>
+            <div class="quiz-feedback" id="fb14"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="15" data-title="Quiz 5 de 5" data-quiz="1" data-correct="c">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 5 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Um sinal de parceria saudável entre líder e RH é:</div>
+            <div class="quiz-options" data-name="q5">
+              <label class="quiz-option"><input type="radio" name="q5" value="a" /> Líder ignora processos e resolve tudo informalmente</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="b" /> RH decide sobre o time sem envolver o gestor</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="c" /> Líder usa ferramentas e políticas do RH no dia a dia</label>
+            </div>
+            <div class="quiz-feedback" id="fb15"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 Conclusão -->
+      <div class="wizard-step" data-step="16" data-title="Conclusão">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✅</div>
+            <div class="step-card__title">Parabéns — conteúdo concluído!</div>
+          </div>
+          <div class="step-card__body">
+            <div class="completion-badge">
+              <div class="completion-badge__icon" id="completionIcon">🎉</div>
+              <h2 id="completionTitle">Você completou o Módulo 1</h2>
+              <p id="completionMsg" style="color:var(--lio-muted);font-size:.9rem">Gestão de Pessoas: papel do líder e do RH</p>
+            </div>
+            <ul class="checklist" id="checklist">
+              <li id="chk-read"><input type="checkbox" checked disabled /> Leitura dos módulos concluída</li>
+              <li id="chk-reflect"><input type="checkbox" disabled /> Reflexão respondida</li>
+              <li id="chk-quiz"><input type="checkbox" disabled /> Quiz aprovado (≥ 4/5)</li>
+              <li id="chk-video"><input type="checkbox" id="cVideo" /> Vídeo assistido (opcional)</li>
+            </ul>
+            <div class="callout callout--navy" style="margin-top:16px">
+              <strong>Próximo módulo:</strong> Níveis de maturidade do RH
+            </div>
+            <div class="page-footer">UniLio · Liotecnica · Mestre do ERP (Mariá Menezes)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="wizard-nav wizard-nav--next" id="btnNext" aria-label="Próximo passo" title="Próximo">
+      ›
+      <span class="wizard-nav__label" id="btnNextLabel">Próximo</span>
+    </button>
+  </main>
+
+  <script>
+    const TOTAL = 17;
+    const STORAGE_KEY = 'unilio_wizard_step';
+    let current = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+    if (current >= TOTAL) current = TOTAL - 1;
+
+    const steps = document.querySelectorAll('.wizard-step');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const progressFill = document.getElementById('progressFill');
+    const progressPct = document.getElementById('progressPct');
+    const stepCounter = document.getElementById('stepCounter');
+    const headerStepTitle = document.getElementById('headerStepTitle');
+    const btnNextLabel = document.getElementById('btnNextLabel');
+
+    const quizAnswers = JSON.parse(localStorage.getItem('unilio_quiz') || '{}');
+    let quizScore = 0;
+
+    function isQuizStep(idx) {
+      return idx >= 11 && idx <= 15;
+    }
+
+    function validateQuizStep(idx) {
+      const step = steps[idx];
+      const correct = step.dataset.correct;
+      const name = step.querySelector('.quiz-options').dataset.name;
+      const selected = step.querySelector(`input[name="${name}"]:checked`);
+      const fb = document.getElementById('fb' + idx);
+
+      if (!selected) {
+        fb.textContent = '⚠ Selecione uma resposta antes de continuar.';
+        fb.className = 'quiz-feedback show err';
+        return false;
+      }
+
+      const ok = selected.value === correct;
+      quizAnswers[name] = selected.value;
+      localStorage.setItem('unilio_quiz', JSON.stringify(quizAnswers));
+
+      step.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.classList.remove('selected', 'correct', 'incorrect');
+        const val = opt.querySelector('input').value;
+        if (val === correct) opt.classList.add('correct');
+        else if (opt.querySelector('input') === selected) opt.classList.add('incorrect');
+      });
+
+      fb.textContent = ok ? '✅ Correto!' : '❌ Incorreto. Revise o módulo correspondente.';
+      fb.className = 'quiz-feedback show ' + (ok ? 'ok' : 'err');
+      return true;
+    }
+
+    function restoreQuizSelections() {
+      steps.forEach((step, idx) => {
+        if (!isQuizStep(idx)) return;
+        const name = step.querySelector('.quiz-options').dataset.name;
+        const saved = quizAnswers[name];
+        if (saved) {
+          const input = step.querySelector(`input[value="${saved}"]`);
+          if (input) {
+            input.checked = true;
+            input.closest('.quiz-option').classList.add('selected');
+          }
+        }
+      });
+    }
+
+    function calcQuizScore() {
+      let s = 0;
+      for (let i = 11; i <= 15; i++) {
+        const step = steps[i];
+        const name = step.querySelector('.quiz-options').dataset.name;
+        if (quizAnswers[name] === step.dataset.correct) s++;
+      }
+      return s;
+    }
+
+    function updateCompletionScreen() {
+      const reflectDone = ['r1','r2','r3'].every(id => (localStorage.getItem('unilio_ref_' + id) || '').trim().length > 10);
+      quizScore = calcQuizScore();
+      const quizPassed = quizScore >= 4;
+
+      document.getElementById('chk-reflect').classList.toggle('done', reflectDone);
+      document.getElementById('chk-reflect').querySelector('input').checked = reflectDone;
+
+      document.getElementById('chk-quiz').classList.toggle('done', quizPassed);
+      document.getElementById('chk-quiz').querySelector('input').checked = quizPassed;
+
+      const icon = document.getElementById('completionIcon');
+      const title = document.getElementById('completionTitle');
+      const msg = document.getElementById('completionMsg');
+
+      if (quizPassed && reflectDone) {
+        icon.textContent = '🏆';
+        title.textContent = 'Aprovado na trilha!';
+        msg.textContent = `Quiz: ${quizScore}/5 acertos · Reflexão completa`;
+      } else if (!quizPassed) {
+        icon.textContent = '📚';
+        title.textContent = 'Quase lá!';
+        msg.textContent = `Quiz: ${quizScore}/5 — mínimo 4 acertos. Volte às questões pelo indicador de passos.`;
+      }
+    }
+
+    function goTo(idx, direction = 1) {
+      if (idx < 0 || idx >= TOTAL) return;
+
+      steps.forEach(s => {
+        s.classList.remove('is-active', 'is-back');
+        s.setAttribute('aria-hidden', 'true');
+      });
+      current = idx;
+      localStorage.setItem(STORAGE_KEY, current);
+
+      const step = steps[current];
+      step.classList.add('is-active');
+      step.setAttribute('aria-hidden', 'false');
+      if (direction < 0) step.classList.add('is-back');
+
+      const pct = Math.round((current / (TOTAL - 1)) * 100);
+      progressFill.style.width = pct + '%';
+      progressPct.textContent = pct + '%';
+      stepCounter.textContent = `Passo ${current + 1} de ${TOTAL}`;
+      headerStepTitle.textContent = step.dataset.title;
+
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = false;
+      if (current === TOTAL - 1) {
+        btnNextLabel.textContent = 'Concluir';
+        btnNext.title = 'Concluir conteúdo';
+        updateCompletionScreen();
+      } else if (isQuizStep(current)) {
+        btnNextLabel.textContent = 'Confirmar';
+        btnNext.title = 'Confirmar resposta';
+      } else {
+        btnNextLabel.textContent = 'Próximo';
+        btnNext.title = 'Próximo passo';
+      }
+
+      step.querySelector('.step-card__body')?.scrollTo(0, 0);
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1, -1));
+
+    function advanceStep() {
+      if (isQuizStep(current)) {
+        if (!validateQuizStep(current)) return;
+      }
+      if (current === 7) {
+        localStorage.setItem('unilio_video_seen', '1');
+      }
+      if (current < TOTAL - 1) {
+        goTo(current + 1, 1);
+      } else {
+        btnNext.disabled = true;
+        btnNextLabel.textContent = 'Feito';
+      }
+    }
+
+    btnNext.addEventListener('click', advanceStep);
+
+    function isTypingContext(el) {
+      if (!el) return false;
+      const tag = el.tagName;
+      if (tag === 'TEXTAREA') return true;
+      if (tag === 'INPUT') {
+        const t = el.type;
+        return t === 'text' || t === 'search' || t === 'email' || t === 'password' || t === 'number';
+      }
+      return el.isContentEditable;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (isTypingContext(document.activeElement)) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!btnNext.disabled) advanceStep();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (current > 0) goTo(current - 1, -1);
+      }
+    });
+
+    /* Reflection auto-save */
+    ['r1','r2','r3'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = localStorage.getItem('unilio_ref_' + id) || '';
+      el.addEventListener('input', () => localStorage.setItem('unilio_ref_' + id, el.value));
+    });
+
+    /* Quiz option highlight */
+    document.querySelectorAll('.quiz-option input').forEach(input => {
+      input.addEventListener('change', () => {
+        const group = input.closest('.quiz-options');
+        group.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+        input.closest('.quiz-option').classList.add('selected');
+        const idx = parseInt(input.closest('.wizard-step').dataset.step, 10);
+        document.getElementById('fb' + idx).className = 'quiz-feedback';
+      });
+    });
+
+    document.getElementById('cVideo').addEventListener('change', e => {
+      localStorage.setItem('unilio_chk_video', e.target.checked ? '1' : '0');
+      e.target.closest('li').classList.toggle('done', e.target.checked);
+    });
+    if (localStorage.getItem('unilio_chk_video') === '1') {
+      const v = document.getElementById('cVideo');
+      v.checked = true;
+      v.closest('li').classList.add('done');
+    }
+
+    restoreQuizSelections();
+    goTo(current, 1);
+  </script>
+</body>
+</html>

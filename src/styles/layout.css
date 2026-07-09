@@ -596,21 +596,24 @@ var(--wf-bg) 70%
 
 .body--module-focus .compass-page,
 .body--module-focus .loop-page,
-.body--module-focus .pulse-page {
+.body--module-focus .pulse-page,
+.body--module-focus .unilio-page {
   max-width: none;
   width: 100%;
 }
 
 .body--module-focus .compass-shell,
 .body--module-focus .loop-shell,
-.body--module-focus .pulse-shell {
+.body--module-focus .pulse-shell,
+.body--module-focus .unilio-shell {
   width: 100%;
   max-width: none;
 }
 
 .body--module-focus .compass-shell__main,
 .body--module-focus .loop-shell__main,
-.body--module-focus .pulse-shell__main {
+.body--module-focus .pulse-shell__main,
+.body--module-focus .unilio-shell__main {
   width: 100%;
   max-width: none;
 }

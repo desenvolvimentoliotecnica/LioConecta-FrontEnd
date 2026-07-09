@@ -1,0 +1,67 @@
+.unilio-skill-matrix__group {
+  margin-bottom: 1.5rem;
+}
+
+.unilio-skill-matrix__category {
+  margin: 0 0 0.75rem;
+  color: #047857;
+}
+
+.unilio-skill-matrix__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.unilio-skill-card {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1rem;
+}
+
+.unilio-skill-card__name {
+  margin: 0 0 0.75rem;
+}
+
+.unilio-skill-card__levels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.unilio-skill-card__level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.unilio-skill-card__dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.unilio-skill-card__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.unilio-skill-card__dot.is-filled {
+  background: #059669;
+}
+
+.unilio-skill-card__dot--target.is-filled {
+  background: #34d399;
+}
+
+.unilio-skill-card__courses {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
