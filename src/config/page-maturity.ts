@@ -106,6 +106,7 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/unilio/comunidade": "prototype",
   "/unilio/recomendacoes": "prototype",
   "/unilio/instrutor": "prototype",
+  "/unilio/admin/aprovacoes": "prototype",
   "/unilio/gestor": "prototype",
   "/unilio/eventos": "prototype",
   "/unilio/competencias": "prototype",

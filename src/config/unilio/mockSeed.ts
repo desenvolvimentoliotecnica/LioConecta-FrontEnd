@@ -216,6 +216,8 @@ function mapCourse(seed: SeedCourse): UniLioCourseDetailDto {
     enrollmentStatus: enrollment.enrollmentStatus,
     skillNames: (seed.skillSeedKeys ?? []).map((k) => SKILL_LABELS[k] ?? k),
     integrations: [],
+    enrolledCount: 0,
+    completedCount: 0,
     modules,
   };
 }

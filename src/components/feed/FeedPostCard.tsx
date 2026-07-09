@@ -29,6 +29,14 @@ function celebrationMention(post: FeedPostDto): { name: string; slug?: string } 
   };
 }
 
+function uniLioCourseCompleted(post: FeedPostDto): { courseTitle?: string; courseId?: string } | null {
+  if (post.metadata?.kind !== "unilio_course_completed") return null;
+  const courseTitle =
+    typeof post.metadata.courseTitle === "string" ? post.metadata.courseTitle.trim() : undefined;
+  const courseId = typeof post.metadata.courseId === "string" ? post.metadata.courseId : undefined;
+  return { courseTitle, courseId };
+}
+
 function CommentItem({ comment }: { comment: CommentDto }) {
   return (
     <div className="comment">
@@ -65,6 +73,7 @@ export function FeedPostCard({ post }: Props) {
   const isPoll = post.type === POST_TYPE_POLL;
   const isCelebration = post.type === POST_TYPE_CELEBRATION;
   const celebrated = isCelebration ? celebrationMention(post) : null;
+  const courseCompleted = uniLioCourseCompleted(post);
   const heroImage =
     isComunicado && typeof post.metadata.heroImageUrl === "string"
       ? resolveBackendAssetUrl(post.metadata.heroImageUrl)
@@ -151,6 +160,21 @@ export function FeedPostCard({ post }: Props) {
               </a>
             ) : (
               <strong>@{celebrated.name}</strong>
+            )}
+          </span>
+        </div>
+      ) : null}
+      {courseCompleted ? (
+        <div className="card__celebration-mention">
+          <i className="fa-solid fa-graduation-cap" aria-hidden="true" />
+          <span>
+            Concluiu o curso{" "}
+            {courseCompleted.courseId ? (
+              <a href={`/unilio/curso/${encodeURIComponent(courseCompleted.courseId)}`}>
+                {courseCompleted.courseTitle ?? "no UniLio"}
+              </a>
+            ) : (
+              <strong>{courseCompleted.courseTitle ?? "no UniLio"}</strong>
             )}
           </span>
         </div>

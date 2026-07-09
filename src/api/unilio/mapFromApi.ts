@@ -35,7 +35,9 @@ import type {
   UniLioRecommendationsView,
   UniLioReportsView,
   UniLioSkillsView,
+  UniLioRecommendation,
 } from "../../config/unilio/types";
+import { MOCK_COURSES } from "../../config/unilio/mockSeed";
 
 function mapPersona(raw: string): UniLioPersona {
   if (raw === "admin" || raw === "manager" || raw === "instructor" || raw === "learner") {
@@ -172,9 +174,24 @@ export function mapUniLioCommunityFromApi(raw: UniLioCommunityPageDto): UniLioCo
   };
 }
 
+function enrichRecommendationThumbnails(items: UniLioRecommendation[]): UniLioRecommendation[] {
+  return items.map((item) => ({
+    ...item,
+    thumbnailUrl:
+      item.thumbnailUrl?.trim() ||
+      MOCK_COURSES.find((course) => course.id === item.courseId)?.thumbnailUrl ||
+      null,
+  }));
+}
+
 export function mapUniLioRecommendationsFromApi(raw: UniLioRecommendationsDto): UniLioRecommendationsView {
+  const items = raw.items.map((r) => ({
+    ...r,
+    courseId: String(r.courseId),
+    thumbnailUrl: r.thumbnailUrl ?? null,
+  }));
   return {
-    items: raw.items.map((r) => ({ ...r, courseId: String(r.courseId) })),
+    items: enrichRecommendationThumbnails(items),
   };
 }
 

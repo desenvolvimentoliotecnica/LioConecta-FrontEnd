@@ -291,6 +291,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry("Comunidade", "/unilio/comunidade", "Feed de discussões e novidades da universidade corporativa."),
         entry("Recomendações", "/unilio/recomendacoes", "Cursos sugeridos com base no perfil e trilhas."),
         entry("Instrutor", "/unilio/instrutor", "Painel do instrutor com métricas de engajamento."),
+        entry("Aprovação de cursos", "/unilio/admin/aprovacoes", "Fila de cursos enviados aguardando publicação."),
         entry("Meu Time", "/unilio/gestor", "Acompanhamento de aprendizagem do time (gestores)."),
         entry("Eventos", "/unilio/eventos", "Lives, workshops e turmas presenciais."),
         entry("Competências", "/unilio/competencias", "Mapa de habilidades — nível atual vs. meta."),

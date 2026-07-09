@@ -18,6 +18,10 @@ import type {
 } from "../../api/types";
 import type { UniLioFilters } from "./types";
 import { COURSE_IDS_MAP, MOCK_COURSES, PATH_IDS, getMockCourse } from "./mockSeed";
+import {
+  getEnrollmentRecordsForCourse,
+  getEnrollmentStatsForCourse,
+} from "./enrollmentMetrics";
 
 export const COURSE_IDS = {
   codigoConduta: COURSE_IDS_MAP["codigo-conduta"],
@@ -46,9 +50,37 @@ export const UNILIO_API_MOCK_META: UniLioMetaDto = {
   skills: ["Liofilização", "Qualidade Alimentar", "Lean Manufacturing", "Liderança", "Power BI", "Excel", "LGPD"],
 };
 
+function withEnrollmentMetrics(course: UniLioCourseDetailDto): UniLioCourseDetailDto {
+  const stats = getEnrollmentStatsForCourse(course.id);
+  return {
+    ...course,
+    enrolledCount: stats.enrolledCount,
+    completedCount: stats.completedCount,
+  };
+}
+
 function toSummary(course: UniLioCourseDetailDto) {
-  const { modules: _modules, ...summary } = course;
+  const { modules: _modules, ...summary } = withEnrollmentMetrics(course);
   return summary;
+}
+
+function isMandatoryPending(course: UniLioCourseDetailDto) {
+  return course.isMandatory && course.enrollmentStatus !== "completed";
+}
+
+/** Higher suffix ≈ newer course in the seeded catalog. */
+function catalogRecencyKey(course: UniLioCourseDetailDto) {
+  const lastPart = course.id.split("-")[4];
+  return Number.parseInt(lastPart.slice(-4), 16);
+}
+
+function sortCatalogCourses(courses: UniLioCourseDetailDto[]) {
+  return courses.slice().sort((a, b) => {
+    const aPriority = isMandatoryPending(a) ? 1 : 0;
+    const bPriority = isMandatoryPending(b) ? 1 : 0;
+    if (bPriority !== aPriority) return bPriority - aPriority;
+    return catalogRecencyKey(b) - catalogRecencyKey(a);
+  });
 }
 
 function filterCourses(filters: UniLioFilters) {
@@ -155,7 +187,7 @@ export function buildMockDashboard(filters: UniLioFilters): UniLioDashboardDto {
 }
 
 export function buildMockCatalog(filters: UniLioFilters): UniLioCatalogPageDto {
-  const filtered = filterCourses(filters);
+  const filtered = sortCatalogCourses(filterCourses(filters));
   const page = filters.page ?? 1;
   const pageSize = filters.pageSize ?? 12;
   const start = (page - 1) * pageSize;
@@ -171,7 +203,18 @@ export function buildMockCatalog(filters: UniLioFilters): UniLioCatalogPageDto {
 }
 
 export function buildMockCourse(courseId: string): UniLioCourseDetailDto | null {
-  return getMockCourse(courseId);
+  const course = getMockCourse(courseId);
+  return course ? withEnrollmentMetrics(course) : null;
+}
+
+export function buildMockCourseEnrollments(courseId: string) {
+  const stats = getEnrollmentStatsForCourse(courseId);
+  return {
+    courseId,
+    enrolledCount: stats.enrolledCount,
+    completedCount: stats.completedCount,
+    items: getEnrollmentRecordsForCourse(courseId),
+  };
 }
 
 export function buildMockPaths(): UniLioPathsDto {
@@ -358,6 +401,49 @@ export function buildMockRecommendations(): UniLioRecommendationsDto {
   return {
     items: buildMockDashboard({}).topRecommendations,
   };
+}
+
+export function buildMockCourseRecommendations(courseId: string): UniLioRecommendationsDto {
+  const completed = MOCK_COURSES.find((c) => c.id === courseId);
+  if (!completed) {
+    return { items: [] };
+  }
+
+  const skillSet = new Set(completed.skillNames);
+  const items = MOCK_COURSES.filter((course) => {
+    if (course.id === courseId) return false;
+    if (course.enrollmentStatus === "completed") return false;
+    const sameArea = course.area === completed.area;
+    const sharedSkill = course.skillNames.some((skill) => skillSet.has(skill));
+    return sameArea || sharedSkill;
+  })
+    .sort((a, b) => {
+      const aScore =
+        (a.area === completed.area ? 2 : 0) +
+        a.skillNames.filter((skill) => skillSet.has(skill)).length;
+      const bScore =
+        (b.area === completed.area ? 2 : 0) +
+        b.skillNames.filter((skill) => skillSet.has(skill)).length;
+      if (bScore !== aScore) return bScore - aScore;
+      return b.rating - a.rating;
+    })
+    .slice(0, 3)
+    .map((course) => {
+      const sharedSkill = course.skillNames.find((skill) => skillSet.has(skill));
+      return {
+        courseId: course.id,
+        title: course.title,
+        reason: sharedSkill
+          ? `Complementa o tema de ${sharedSkill}.`
+          : `Relacionado à área de ${course.area}.`,
+        area: course.area,
+        durationMinutes: course.durationMinutes,
+        contentType: course.contentType,
+        thumbnailUrl: course.thumbnailUrl ?? null,
+      };
+    });
+
+  return { items };
 }
 
 export function buildMockEvents(): UniLioEventsDto {
