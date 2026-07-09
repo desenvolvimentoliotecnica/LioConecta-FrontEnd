@@ -90,6 +90,22 @@ import { CompassCenariosPage } from "./components/compass/pages/CompassCenariosP
 import { CompassMeetingsPage } from "./components/compass/pages/CompassMeetingsPage";
 import { CompassDecisionsPage } from "./components/compass/pages/CompassDecisionsPage";
 import { CompassRelatoriosPage } from "./components/compass/pages/CompassRelatoriosPage";
+import { UniLioAccessGate } from "./components/unilio/UniLioAccessGate";
+import { UniLioShell } from "./components/unilio/UniLioShell";
+import { UniLioDashboardPage } from "./components/unilio/pages/UniLioDashboardPage";
+import { UniLioCatalogoPage } from "./components/unilio/pages/UniLioCatalogoPage";
+import { UniLioTrilhasPage } from "./components/unilio/pages/UniLioTrilhasPage";
+import { UniLioPlayerPage } from "./components/unilio/pages/UniLioPlayerPage";
+import { UniLioAvaliacoesPage } from "./components/unilio/pages/UniLioAvaliacoesPage";
+import { UniLioCertificadosPage } from "./components/unilio/pages/UniLioCertificadosPage";
+import { UniLioCompliancePage } from "./components/unilio/pages/UniLioCompliancePage";
+import { UniLioComunidadePage } from "./components/unilio/pages/UniLioComunidadePage";
+import { UniLioRecomendacoesPage } from "./components/unilio/pages/UniLioRecomendacoesPage";
+import { UniLioInstrutorPage } from "./components/unilio/pages/UniLioInstrutorPage";
+import { UniLioGestorPage } from "./components/unilio/pages/UniLioGestorPage";
+import { UniLioEventosPage } from "./components/unilio/pages/UniLioEventosPage";
+import { UniLioCompetenciasPage } from "./components/unilio/pages/UniLioCompetenciasPage";
+import { UniLioRelatoriosPage } from "./components/unilio/pages/UniLioRelatoriosPage";
 
 function App() {
   const perfilPage = pageRegistry.find((p) => p.id === "pessoas-perfil");
@@ -190,6 +206,29 @@ function App() {
           <Route path="decisoes" element={<CompassDecisionsPage />} />
           <Route path="cenarios" element={<CompassCenariosPage />} />
           <Route path="relatorios" element={<CompassRelatoriosPage />} />
+        </Route>
+        <Route
+          path="/unilio"
+          element={
+            <UniLioAccessGate>
+              <UniLioShell />
+            </UniLioAccessGate>
+          }
+        >
+          <Route index element={<UniLioDashboardPage />} />
+          <Route path="catalogo" element={<UniLioCatalogoPage />} />
+          <Route path="trilhas" element={<UniLioTrilhasPage />} />
+          <Route path="curso/:courseId" element={<UniLioPlayerPage />} />
+          <Route path="avaliacoes" element={<UniLioAvaliacoesPage />} />
+          <Route path="certificados" element={<UniLioCertificadosPage />} />
+          <Route path="compliance" element={<UniLioCompliancePage />} />
+          <Route path="comunidade" element={<UniLioComunidadePage />} />
+          <Route path="recomendacoes" element={<UniLioRecomendacoesPage />} />
+          <Route path="instrutor" element={<UniLioInstrutorPage />} />
+          <Route path="gestor" element={<UniLioGestorPage />} />
+          <Route path="eventos" element={<UniLioEventosPage />} />
+          <Route path="competencias" element={<UniLioCompetenciasPage />} />
+          <Route path="relatorios" element={<UniLioRelatoriosPage />} />
         </Route>
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />

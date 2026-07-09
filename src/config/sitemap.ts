@@ -278,6 +278,26 @@ export function buildSitemapSections(): SitemapSection[] {
       ],
     },
     {
+      id: "unilio",
+      label: "UniLio",
+      icon: "fa-graduation-cap",
+      items: [
+        entry("Visão Geral", "/unilio", "Dashboard de aprendizagem com KPIs, trilha ativa e próximos passos."),
+        entry("Catálogo", "/unilio/catalogo", "Biblioteca de cursos corporativos com filtros por área e tipo."),
+        entry("Trilhas", "/unilio/trilhas", "Percursos estruturados de desenvolvimento de competências."),
+        entry("Avaliações", "/unilio/avaliacoes", "Quizzes pendentes e histórico de tentativas."),
+        entry("Certificados", "/unilio/certificados", "Certificados emitidos após conclusão de cursos."),
+        entry("Compliance", "/unilio/compliance", "Treinamentos obrigatórios e prazos de conclusão."),
+        entry("Comunidade", "/unilio/comunidade", "Feed de discussões e novidades da universidade corporativa."),
+        entry("Recomendações", "/unilio/recomendacoes", "Cursos sugeridos com base no perfil e trilhas."),
+        entry("Instrutor", "/unilio/instrutor", "Painel do instrutor com métricas de engajamento."),
+        entry("Meu Time", "/unilio/gestor", "Acompanhamento de aprendizagem do time (gestores)."),
+        entry("Eventos", "/unilio/eventos", "Lives, workshops e turmas presenciais."),
+        entry("Competências", "/unilio/competencias", "Mapa de habilidades — nível atual vs. meta."),
+        entry("Relatórios", "/unilio/relatorios", "Métricas executivas de aprendizagem e gaps de compliance."),
+      ],
+    },
+    {
       id: "utilitarios",
       label: "Utilitários",
       icon: "fa-toolbox",
@@ -338,6 +358,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Compass IBP — permissões",
           "/admin/configuracoes-backend?category=compass",
           "Define quem acessa o módulo Compass (IBP) no menu lateral esquerdo.",
+        ),
+        entry(
+          "UniLio — permissões",
+          "/admin/configuracoes-backend?category=unilio",
+          "Define quem acessa o portal de aprendizagem UniLio no menu lateral esquerdo.",
         ),
         entry(
           "Sistemas — permissões",

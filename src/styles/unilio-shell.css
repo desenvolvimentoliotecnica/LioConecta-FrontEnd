@@ -1,0 +1,595 @@
+.unilio-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  min-height: calc(100vh - var(--wf-topbar-h));
+  width: 100%;
+  max-width: none;
+  background: var(--wf-bg, #eceff3);
+  position: relative;
+  z-index: 1;
+  align-items: start;
+}
+
+.unilio-shell--nav-collapsed {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.unilio-shell__main {
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  padding: 1rem 1.25rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.unilio-shell__header {
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: none;
+}
+
+.unilio-shell__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.unilio-shell__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unilio-shell__persona {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #d1fae5;
+  color: #047857;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.unilio-shell__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.unilio-shell__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 220px;
+  min-width: 200px;
+  padding: 0.45rem 0.75rem;
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 10px);
+}
+
+.unilio-shell__search input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  font: inherit;
+  background: transparent;
+}
+
+.unilio-shell__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.unilio-shell__filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.unilio-shell__select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+.unilio-shell__reset {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.unilio-nav {
+  background: #fff;
+  border-right: 1px solid var(--wf-border, #e2e8f0);
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: sticky;
+  top: var(--wf-topbar-h);
+  align-self: start;
+  height: calc(100vh - var(--wf-topbar-h));
+  max-height: calc(100vh - var(--wf-topbar-h));
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 2;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(5, 150, 105, 0.25) transparent;
+}
+
+.unilio-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.unilio-nav::-webkit-scrollbar-thumb {
+  background: rgba(5, 150, 105, 0.25);
+  border-radius: 3px;
+}
+
+.unilio-nav__toggle {
+  align-self: flex-end;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.25rem;
+}
+
+.unilio-nav--collapsed .unilio-nav__toggle i {
+  transform: rotate(180deg);
+}
+
+.unilio-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.unilio-nav__brand-icon {
+  font-size: 1.25rem;
+}
+
+.unilio-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.unilio-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: #334155;
+  text-decoration: none;
+  position: relative;
+}
+
+.unilio-nav__item:hover {
+  background: #f1f5f9;
+}
+
+.unilio-nav__item.is-active {
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 600;
+}
+
+.unilio-nav__badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.35rem;
+}
+
+.unilio-nav--collapsed .unilio-nav__label,
+.unilio-nav--collapsed .unilio-nav__brand-text {
+  display: none;
+}
+
+.unilio-nav--collapsed .unilio-nav__item {
+  justify-content: center;
+  padding: 0.55rem 0.35rem;
+}
+
+.unilio-nav--collapsed .unilio-nav__badge {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.1rem;
+  margin-left: 0;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  font-size: 0.65rem;
+  padding: 0 0.25rem;
+}
+
+.unilio-nav--minimal {
+  width: 52px;
+  padding: 0.75rem 0.35rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.unilio-nav--minimal .unilio-nav__exit,
+.unilio-nav--minimal .unilio-nav__brand--minimal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.unilio-nav--minimal .unilio-nav__exit:hover,
+.unilio-nav--minimal .unilio-nav__brand--minimal:hover {
+  background: #f1f5f9;
+  color: #059669;
+}
+
+.unilio-shell--player-focus .unilio-nav--minimal {
+  border-right: 1px solid var(--wf-border, #e2e8f0);
+}
+
+.unilio-page__loading {
+  padding: 2rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .unilio-shell {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+}
+
+.unilio-shell--module-focus {
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.unilio-shell--module-focus .unilio-nav {
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.unilio-shell--module-focus .unilio-shell__main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  background: var(--wf-bg, #eceff3);
+}
+
+.unilio-shell--module-focus .unilio-shell__header,
+.unilio-shell--module-focus .unilio-shell__toolbar {
+  width: 100%;
+  max-width: none;
+}
+
+.unilio-shell--module-focus .unilio-page {
+  max-width: none;
+  width: 100%;
+}
+
+.unilio-shell--module-focus .unilio-dashboard__grid,
+.unilio-shell--module-focus .unilio-dashboard__grid--3,
+.unilio-shell--module-focus .unilio-panel,
+.unilio-shell--module-focus .unilio-table-wrap,
+.unilio-shell--module-focus .unilio-kpi-grid,
+.unilio-kpi--emerald { background: #ecfdf5; border-color: #6ee7b7; }
+.unilio-kpi--emerald .unilio-kpi__accent { background: #059669; }
+
+.unilio-page {
+  width: 100%;
+  max-width: none;
+}
+
+.unilio-page__head {
+  margin-bottom: 1rem;
+}
+
+.unilio-page__title {
+  margin: 0 0 0.35rem;
+}
+
+.unilio-page__desc {
+  margin: 0;
+  color: #64748b;
+}
+
+.unilio-fallback-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 0.875rem;
+}
+
+.unilio-shell__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  background: #ecfdf5;
+  color: #047857;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.unilio-panel {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.unilio-panel__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.unilio-panel__desc {
+  margin: 0 0 0.75rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.unilio-panel__empty {
+  color: #94a3b8;
+  margin: 0;
+}
+
+.unilio-panel__link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #059669;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.unilio-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unilio-progress__track {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.unilio-progress__fill {
+  height: 100%;
+  background: #059669;
+  border-radius: 999px;
+}
+
+.unilio-progress__value {
+  font-size: 0.75rem;
+  color: #64748b;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.unilio-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.unilio-alerts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.unilio-alert {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--wf-border, #e2e8f0);
+}
+
+.unilio-alert__accent {
+  color: #059669;
+}
+
+.unilio-recommendation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.unilio-recommendation-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.unilio-recommendation-list span {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.unilio-path-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.unilio-path-diagram__node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 180px;
+}
+
+.unilio-path-diagram__node.is-active {
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
+}
+
+.unilio-path-diagram__title {
+  font-weight: 600;
+}
+
+.unilio-path-diagram__meta {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.unilio-path-diagram__arrow {
+  color: #94a3b8;
+}
+
+.unilio-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.unilio-event-card {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1rem;
+}
+
+.unilio-event-card__type {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: #ecfdf5;
+  color: #047857;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.unilio-event-card__btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  background: #059669;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.unilio-cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.unilio-cert-card {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.unilio-cert-card__icon {
+  font-size: 2rem;
+  color: #059669;
+  margin-bottom: 0.5rem;
+}
+
+.unilio-cert-card__code {
+  font-family: monospace;
+  color: #64748b;
+}
+
+.unilio-reports-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.unilio-report-metric {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: var(--wf-radius, 12px);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.unilio-report-metric__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.unilio-row--overdue {
+  background: #fef2f2;
+}

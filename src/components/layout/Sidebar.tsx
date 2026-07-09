@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { canAccessAdminArea, canAccessCompassModule, canAccessLoopModule } from "../../api/auth";
+import { canAccessAdminArea, canAccessCompassModule, canAccessLoopModule, canAccessUniLioModule } from "../../api/auth";
 import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
+import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
 import { useMe } from "../../api/hooks/useMe";
 
 type SidebarItemConfig = {
@@ -14,6 +15,7 @@ type SidebarItemConfig = {
   adminOnly?: boolean;
   loopAccessOnly?: boolean;
   compassAccessOnly?: boolean;
+  unilioAccessOnly?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -49,6 +51,13 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     href: "/compass",
     activePrefix: "/compass",
     compassAccessOnly: true,
+  },
+  {
+    label: "UniLio",
+    icon: "fa-graduation-cap",
+    href: "/unilio",
+    activePrefix: "/unilio",
+    unilioAccessOnly: true,
   },
 ];
 
@@ -160,12 +169,15 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
   const { data: me } = useMe();
   const { data: loopSettings } = useLoopSettings();
   const { data: compassSettings } = useCompassSettings();
+  const { data: unilioSettings } = useUniLioSettings();
   const canAccessAdmin = canAccessAdminArea(me);
   const canAccessLoop = canAccessLoopModule(me, loopSettings);
   const canAccessCompass = canAccessCompassModule(me, compassSettings);
+  const canAccessUniLio = canAccessUniLioModule(me, unilioSettings);
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
   const items = baseItems.filter((item) => {
     if (item.compassAccessOnly) return canAccessCompass;
+    if (item.unilioAccessOnly) return canAccessUniLio;
     if (item.loopAccessOnly) return canAccessLoop;
     if (item.adminOnly) return canAccessAdmin;
     return true;

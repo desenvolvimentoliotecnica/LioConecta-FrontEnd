@@ -28,6 +28,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/loop", { pageName: "LoopDashboard", module: "loop" }),
   exact("/pulse", { pageName: "PulseDashboard", module: "pulse" }),
   exact("/compass", { pageName: "CompassDashboard", module: "compass" }),
+  exact("/unilio", { pageName: "UniLioDashboard", module: "unilio" }),
   exact("/admin/configuracoes-backend", { pageName: "BackendConfig", module: "admin" }),
   exact("/admin/trilha-auditoria", { pageName: "AuditTrail", module: "admin" }),
   exact("/admin/observabilidade", { pageName: "ObservabilityHub", module: "admin" }),

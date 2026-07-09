@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RH Ágil: adaptação rápida às mudanças | UniLio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --lio-navy: #012e5a;
+      --lio-teal: #0d9488;
+      --lio-teal-light: #14b8a6;
+      --lio-bg: #f0f4f8;
+      --lio-surface: #ffffff;
+      --lio-border: #d1dbe6;
+      --lio-text: #334155;
+      --lio-muted: #64748b;
+      --lio-success: #059669;
+      --lio-warning: #d97706;
+      --lio-radius: 12px;
+      --lio-shadow: 0 4px 24px rgba(1, 46, 90, 0.08);
+      --header-h: 68px;
+      --nav-btn-w: 52px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      background: var(--lio-bg);
+      color: var(--lio-text);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header + progress ── */
+    .unilio-header {
+      background: var(--lio-navy);
+      color: #fff;
+      padding: 10px 20px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .unilio-header__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 20px;
+    }
+    .unilio-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: .92rem;
+      white-space: nowrap;
+    }
+    .unilio-header__brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--lio-teal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .unilio-header__progress {
+      min-width: 0;
+    }
+    .unilio-header__progress-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      font-size: .72rem;
+      opacity: .85;
+    }
+    .unilio-header__progress-meta strong {
+      font-size: .82rem;
+      opacity: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .unilio-header__progress-meta span:last-child {
+      color: var(--lio-teal-light);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .unilio-header__track {
+      height: 5px;
+      background: rgba(255,255,255,.18);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .unilio-header__fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--lio-teal), var(--lio-teal-light));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .35s ease;
+    }
+    .unilio-header__org {
+      font-size: .78rem;
+      opacity: .65;
+      white-space: nowrap;
+    }
+
+    /* ── Wizard stage (content + lateral nav) ── */
+    .wizard-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .wizard-nav {
+      align-self: center;
+      flex-shrink: 0;
+      width: var(--nav-btn-w);
+      min-height: var(--nav-btn-w);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .15s, transform .1s, box-shadow .15s;
+      box-shadow: var(--lio-shadow);
+    }
+    .wizard-nav:active:not(:disabled) { transform: scale(.94); }
+    .wizard-nav:disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .wizard-nav--prev {
+      background: #fff;
+      color: var(--lio-navy);
+      border: 1px solid var(--lio-border);
+    }
+    .wizard-nav--prev:hover:not(:disabled) { background: #f1f5f9; }
+    .wizard-nav--next {
+      background: var(--lio-teal);
+      color: #fff;
+    }
+    .wizard-nav--next:hover:not(:disabled) {
+      background: var(--lio-teal-light);
+      box-shadow: 0 4px 20px rgba(13,148,136,.35);
+    }
+    .wizard-nav__label {
+      display: none;
+    }
+
+    .wizard-viewport {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wizard-step {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeIn .3s ease;
+    }
+    .wizard-step.is-active {
+      display: flex;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .wizard-step.is-back {
+      animation-name: fadeInBack;
+    }
+    @keyframes fadeInBack {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .step-card {
+      background: var(--lio-surface);
+      border-radius: var(--lio-radius);
+      border: 1px solid var(--lio-border);
+      box-shadow: 0 2px 12px rgba(1, 46, 90, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+    }
+    .step-card__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--lio-border);
+      background: linear-gradient(135deg, #f8fafc, #fff);
+      flex-shrink: 0;
+    }
+    .step-card__badge {
+      width: 34px;
+      height: 34px;
+      background: var(--lio-navy);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+    .step-card__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+    }
+    .step-card__img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .step-card__body {
+      padding: 20px 24px 24px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    .step-card__body p { margin-bottom: 12px; }
+    .step-card__body p:last-child { margin-bottom: 0; }
+
+    /* Hero step */
+    .hero-step .step-card__img { height: 260px; }
+    .hero-trail {
+      display: inline-flex;
+      background: #ecfdf5;
+      color: var(--lio-teal);
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .hero-step h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      color: var(--lio-muted);
+      font-size: .92rem;
+      margin-bottom: 16px;
+    }
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-chip {
+      background: #f1f5f9;
+      border: 1px solid var(--lio-border);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: .75rem;
+      color: var(--lio-muted);
+      font-weight: 500;
+    }
+
+    h3 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--lio-navy);
+      margin: 16px 0 8px;
+    }
+    h3:first-child { margin-top: 0; }
+
+    .callout {
+      border-left: 4px solid var(--lio-teal);
+      background: #f0fdfa;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: .9rem;
+    }
+    .callout strong { color: var(--lio-navy); }
+    .callout--warn { border-color: var(--lio-warning); background: #fffbeb; }
+    .callout--navy { border-color: var(--lio-navy); background: #eff6ff; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+      margin: 12px 0;
+    }
+    .data-table th {
+      background: var(--lio-navy);
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--lio-border);
+      vertical-align: top;
+    }
+    .data-table tr:nth-child(even) td { background: #f8fafc; }
+
+    .obj-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .obj-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: .9rem;
+    }
+    .obj-list li::before {
+      content: "✓";
+      background: var(--lio-teal);
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .diagram {
+      background: var(--lio-navy);
+      color: #fff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: .84rem;
+      line-height: 1.75;
+      margin: 14px 0;
+      font-family: "Courier New", monospace;
+    }
+    .diagram hr {
+      border: none;
+      border-top: 1px dashed rgba(255,255,255,.3);
+      margin: 8px 0;
+    }
+
+    .reflection-item label {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--lio-navy);
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .reflection-item textarea {
+      width: 100%;
+      min-height: 140px;
+      border: 1px solid var(--lio-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: .88rem;
+      resize: none;
+      transition: border-color .2s;
+    }
+    .reflection-item textarea:focus {
+      outline: none;
+      border-color: var(--lio-teal);
+      box-shadow: 0 0 0 3px rgba(13,148,136,.15);
+    }
+
+    .quiz-step .quiz-q__text {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--lio-navy);
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 2px solid var(--lio-border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: .9rem;
+      transition: background .15s, border-color .15s;
+    }
+    .quiz-option:hover { background: #f8fafc; }
+    .quiz-option input { accent-color: var(--lio-teal); margin-top: 3px; flex-shrink: 0; }
+    .quiz-option.selected { border-color: var(--lio-teal); background: #f0fdfa; }
+    .quiz-option.correct { border-color: var(--lio-success); background: #ecfdf5; color: var(--lio-success); font-weight: 600; }
+    .quiz-option.incorrect { border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+    .quiz-feedback {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.ok { background: #ecfdf5; color: var(--lio-success); border: 1px solid #6ee7b7; }
+    .quiz-feedback.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .completion-badge {
+      text-align: center;
+      padding: 24px 16px;
+    }
+    .completion-badge__icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+    .completion-badge h2 {
+      font-size: 1.35rem;
+      color: var(--lio-navy);
+      margin-bottom: 8px;
+    }
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+      text-align: left;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--lio-border);
+      border-radius: 8px;
+      font-size: .88rem;
+    }
+    .checklist li.done { background: #ecfdf5; border-color: #6ee7b7; }
+    .checklist li input { accent-color: var(--lio-teal); }
+
+    .page-footer {
+      text-align: center;
+      font-size: .75rem;
+      color: var(--lio-muted);
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--lio-border);
+    }
+
+    @media (min-width: 900px) {
+      :root { --nav-btn-w: 120px; }
+      .wizard-nav {
+        border-radius: var(--lio-radius);
+        flex-direction: column;
+        gap: 4px;
+        font-size: 1.1rem;
+        min-height: 88px;
+      }
+      .wizard-nav__label {
+        display: block;
+        font-size: .72rem;
+        font-weight: 600;
+        letter-spacing: .02em;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .unilio-header__inner {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .unilio-header__brand span:last-child { display: none; }
+      .unilio-header__org { display: none; }
+      .wizard-stage { padding: 10px 8px 14px; gap: 8px; }
+      :root { --nav-btn-w: 44px; }
+      .step-card__body { padding: 16px; }
+      .hero-step h1 { font-size: 1.25rem; }
+      .step-card__img { height: 150px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="unilio-header">
+    <div class="unilio-header__inner">
+      <div class="unilio-header__brand">
+        <div class="unilio-header__brand-icon">🎓</div>
+        <span>UniLio — Portal de Aprendizagem</span>
+      </div>
+      <div class="unilio-header__progress">
+        <div class="unilio-header__progress-meta">
+          <strong id="headerStepTitle">Introdução</strong>
+          <span><span id="stepCounter">Passo 1 de 18</span> · <span id="progressPct">0%</span></span>
+        </div>
+        <div class="unilio-header__track">
+          <div class="unilio-header__fill" id="progressFill"></div>
+        </div>
+      </div>
+      <div class="unilio-header__org">Liotecnica</div>
+    </div>
+  </header>
+
+  <main class="wizard-stage">
+    <button class="wizard-nav wizard-nav--prev" id="btnPrev" aria-label="Passo anterior" title="Anterior">
+      ‹
+      <span class="wizard-nav__label">Anterior</span>
+    </button>
+
+    <div class="wizard-viewport" id="wizardViewport">
+
+      <!-- 0 Intro -->
+      <div class="wizard-step hero-step" data-step="0" data-title="Introdução">
+        <div class="step-card">
+          <img class="step-card__img" src="assets/hero-rh-agil.png" alt="RH ágil e adaptação às mudanças" />
+          <div class="step-card__body">
+            <div class="hero-trail">Trilha · Gestão de Pessoas e Liderança · Módulo 2</div>
+            <h1>RH Ágil: como se adaptar rápido às mudanças</h1>
+            <p class="hero-subtitle">Com base na entrevista com <strong>Antônio Catharino</strong> (CHRO, Serasa Experian) no programa Gestão de Pessoas — Foursales. Aprenda mindset ágil, MVP, inovação e cases práticos de transformação do RH.</p>
+            <div class="meta-chips">
+              <span class="meta-chip">⏱ 20 min + vídeo completo</span>
+              <span class="meta-chip">📊 Intermediário</span>
+              <span class="meta-chip">👥 RH, liderança e TI</span>
+            </div>
+            <div class="callout" style="margin-top:18px">
+              Use as setas <strong>laterais</strong> ou as teclas <strong>← →</strong> do teclado para avançar passo a passo.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1 Objetivos -->
+      <div class="wizard-step" data-step="1" data-title="Objetivos de aprendizagem">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">🎯</div>
+            <div class="step-card__title">Objetivos de aprendizagem</div>
+          </div>
+          <div class="step-card__body">
+            <p>Ao concluir este conteúdo, você será capaz de:</p>
+            <ul class="obj-list" style="margin-top:12px">
+              <li><strong>Compreender</strong> o que significa RH ágil — mindset de resposta rápida ao negócio.</li>
+              <li><strong>Diferenciar</strong> cultura ágil de metodologia aplicada de forma rígida.</li>
+              <li><strong>Aplicar</strong> conceitos de MVP, inception e entregas incrementais no RH.</li>
+              <li><strong>Identificar</strong> subsistemas de RH com maior ganho imediato (recrutamento, shared services).</li>
+              <li><strong>Relacionar</strong> inovação, usabilidade e protagonismo do RH diante de crises.</li>
+            </ul>
+            <div class="callout">
+              <strong>Para refletir:</strong> O RH da sua empresa responde às demandas do negócio com a velocidade necessária?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Mod 1 -->
+      <div class="wizard-step" data-step="2" data-title="Módulo 1 — O que é RH ágil">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">1</div>
+            <div class="step-card__title">O que é RH ágil?</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-1-rh-agil-mindset.png" alt="Mindset ágil no RH" />
+          <div class="step-card__body">
+            <p>Para Antônio Catharino, ser ágil é criar uma <strong>organização inserida</strong> no contexto certo para <strong>adaptar-se às necessidades do negócio de forma rápida e eficiente</strong>.</p>
+            <p>O mundo é cada vez mais <strong>VUCA</strong> (volátil, incerto, complexo e ambíguo). A pandemia acelerou isso — trabalho remoto virou exemplo de resposta ágil em semanas.</p>
+            <table class="data-table">
+              <thead><tr><th>Princípio</th><th>Na prática</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Velocidade</strong></td><td>Respostas rápidas às demandas do negócio</td></tr>
+                <tr><td><strong>Valor</strong></td><td>Evitar projetos longos que chegam desatualizados</td></tr>
+                <tr><td><strong>Mindset</strong></td><td>Mudança de mentalidade — não só ferramentas</td></tr>
+                <tr><td><strong>Integração</strong></td><td>RH trabalha para dentro e para fora da organização</td></tr>
+              </tbody>
+            </table>
+            <div class="callout"><strong>Ponto-chave:</strong> RH ágil = mindset de adaptação rápida + geração de valor para pessoas e rentabilidade do negócio.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Mod 2 -->
+      <div class="wizard-step" data-step="3" data-title="Módulo 2 — Cultura ágil">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">2</div>
+            <div class="step-card__title">Cultura ágil vs. metodologia</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-2-cultura-agil.png" alt="Cultura ágil versus metodologia rígida" />
+          <div class="step-card__body">
+            <p>Antônio tira a palavra <strong>"metodologia"</strong> da equação e coloca <strong>"cultura ágil"</strong> — ela pode entrar em qualquer lugar, inclusive na vida pessoal.</p>
+            <div class="callout callout--warn">
+              <strong>Erro comum:</strong> tentar implantar Scrum/Kanban 100% fiel à metodologia, de forma forçada. Na Serasa, a área de RH chegou a usar Kanban, percebeu que não tinha preparo para 100% ágil e recalibraram.
+            </div>
+            <ul class="obj-list">
+              <li>Cultura de MVP — entregar o mínimo viável e evoluir</li>
+              <li>Menos burocracia, mais simplicidade</li>
+              <li>Melhoria contínua no "sangue" do time</li>
+              <li>Permitir falhas sem "matar" o profissional inovador</li>
+            </ul>
+            <div class="callout"><strong>Lição:</strong> Não force metodologia. Plante cultura ágil gradualmente no contexto da sua organização.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Mod 3 -->
+      <div class="wizard-step" data-step="4" data-title="Módulo 3 — Práticas MVP e autonomia">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">3</div>
+            <div class="step-card__title">Práticas: MVP, inception e autonomia</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-3-praticas-mvp.png" alt="Workshop inception e MVP" />
+          <div class="step-card__body">
+            <h3>Dentro e fora do RH</h3>
+            <p>Na Serasa, times de tecnologia já operam em ágil. O RH aprendeu a replicar o modelo em processos de negócio — com <strong>inception</strong> (workshop de 2 dias para desenhar o processo ideal) e definição de <strong>MVP</strong>.</p>
+            <h3>Case Oracle HCM — velocidade</h3>
+            <p>Primeiro go-live de Oracle em <strong>3 meses</strong> (antes, projetos similares levavam 1,5 ano). Decisão pragmática: manter salário anual no sistema em vez de atrasar o projeto por customização — adaptação em 1 semana.</p>
+            <ul class="obj-list">
+              <li>Times multifuncionais com autonomia para decidir</li>
+              <li>Líder valida — não microgerencia cada detalhe</li>
+              <li>Entrega fase 1 → correções na sprint seguinte</li>
+              <li>Confiança no time é pré-requisito</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Mod 4 -->
+      <div class="wizard-step" data-step="5" data-title="Módulo 4 — Onde aplicar primeiro">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">4</div>
+            <div class="step-card__title">Onde aplicar ágil primeiro?</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-4-recrutamento-services.png" alt="Recrutamento ágil e shared services" />
+          <div class="step-card__body">
+            <p>Antônio aponta dois subsistemas com <strong>maior ganho imediato</strong>:</p>
+            <table class="data-table">
+              <thead><tr><th>Área</th><th>Por quê</th><th>Meta</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Recrutamento</strong></td><td>Guerra por talentos; experiência do candidato ponta a ponta</td><td>De 60 dias para ~1 semana (tech)</td></tr>
+                <tr><td><strong>Shared Services</strong></td><td>Processos transacionais lentos (admissão, férias, promoção)</td><td>Experiência mobile, "ordem natural" sem burocracia</td></tr>
+              </tbody>
+            </table>
+            <div class="callout"><strong>Ordem natural:</strong> admissão → recrutamento → demissão → promoção → transferência → férias. Se o básico transacional não funciona, nada mais funciona.</div>
+            <div class="callout callout--navy">Cultura ágil precisa <strong>permear a organização inteira</strong> — não ficar isolada no RH.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Mod 5 -->
+      <div class="wizard-step" data-step="6" data-title="Módulo 5 — Inovação e tecnologia">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">5</div>
+            <div class="step-card__title">Inovação, front-end e usabilidade</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-5-inovacao-tech.png" alt="Inovação e experiência digital no RH" />
+          <div class="step-card__body">
+            <p>Inovação é <strong>cultura</strong>, não projeto pontual. Na Serasa, toda quinta-feira há reunião dedicada — parte operacional, parte inovação.</p>
+            <h3>Front-end sobre back-end robusto</h3>
+            <p>ERP (Oracle) como backend + <strong>front-end customizado</strong> para o usuário. Exemplo: abrir vaga de recrutamento em <strong>1 minuto</strong> via formulário simples, enquanto o ATS roda por trás.</p>
+            <ul class="obj-list">
+              <li>Usabilidade = adesão à mudança de processo</li>
+              <li>Front-end ágil permite ajustes em semanas, não meses</li>
+              <li>Líderes de frente trazem tendências do mercado (1 slide, não 1h de pitch)</li>
+              <li>Tecnologia serve a experiência — não o contrário</li>
+            </ul>
+            <div class="callout"><strong>Dica prática:</strong> Abra a cabeça — muita coisa no RH se repete há 20 anos. Há espaço para inovar dentro das restrições legais.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Mod 6 -->
+      <div class="wizard-step" data-step="7" data-title="Módulo 6 — Case e protagonismo">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">6</div>
+            <div class="step-card__title">Case Oracle + protagonismo na crise</div>
+          </div>
+          <img class="step-card__img" src="assets/modulo-6-case-oracle.png" alt="Case de transformação digital RH" />
+          <div class="step-card__body">
+            <h3>Resultados do Oracle HCM na Serasa</h3>
+            <ul class="obj-list">
+              <li>Go-live em 3 meses com time multifuncional de alta autonomia</li>
+              <li>Fase 1 rodando; fase 2 em andamento</li>
+              <li>Comunicação intensa para a organização sentir a mudança cultural</li>
+              <li>Priorizar o que vale a pena "brigar" — deixar o resto para sprints futuras</li>
+            </ul>
+            <h3>Protagonismo: fábrica em chamas (PepsiCo, 2008)</h3>
+            <p>Antônio pediu tempo antes de demitir 600 pessoas após incêndio na fábrica. Montou squads multifuncionais, realocou talentos, treinou com Sebrae — entregou <strong>200% de bônus</strong> no ano e ganhou prêmio internacional.</p>
+            <div class="callout callout--navy"><strong>Mensagem final:</strong> Levante a mão. Tenha senso de dono. Comece com MVP, entregue rápido, evolua incrementalmente.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 Vídeo -->
+      <div class="wizard-step" data-step="8" data-title="Vídeo completo">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">▶</div>
+            <div class="step-card__title">Vídeo completo (opcional)</div>
+          </div>
+          <div class="step-card__body">
+            <p>Entrevista completa com <strong>Antônio Catharino</strong> (CHRO, Serasa Experian) — programa Gestão de Pessoas #30, Foursales.</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/pfDNiSea1GQ" title="RH Ágil: Como se adaptar rápido às mudanças" allowfullscreen></iframe>
+            </div>
+            <div class="callout">Assista para aprofundar cases e Q&amp;A ao vivo. Você pode pular com <strong>Próximo</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9-11 Reflexão -->
+      <div class="wizard-step" data-step="9" data-title="Reflexão 1 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 1 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r1">Qual processo do RH na sua empresa demora demais para responder ao negócio? O que impede a agilidade?</label>
+            <textarea id="r1" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step" data-step="10" data-title="Reflexão 2 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 2 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r2">Existe algum projeto de RH que poderia ser entregue como MVP em semanas, em vez de meses? Qual seria a versão mínima?</label>
+            <textarea id="r2" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step" data-step="11" data-title="Reflexão 3 de 3">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✍</div>
+            <div class="step-card__title">Reflexão — pergunta 3 de 3</div>
+          </div>
+          <div class="step-card__body reflection-item">
+            <label for="r3">O que você pode fazer esta semana para plantar cultura ágil no seu time — sem esperar um projeto grande?</label>
+            <textarea id="r3" placeholder="Escreva sua reflexão aqui…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12-16 Quiz -->
+      <div class="wizard-step quiz-step" data-step="12" data-title="Quiz 1 de 5" data-quiz="1" data-correct="b">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 1 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Segundo Antônio Catharino, RH ágil é principalmente:</div>
+            <div class="quiz-options" data-name="q1">
+              <label class="quiz-option"><input type="radio" name="q1" value="a" /> Implantar Scrum/Kanban 100% fiel ao manual</label>
+              <label class="quiz-option"><input type="radio" name="q1" value="b" /> Mindset de adaptação rápida às necessidades do negócio</label>
+            </div>
+            <div class="quiz-feedback" id="fb12"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="13" data-title="Quiz 2 de 5" data-quiz="1" data-correct="c">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 2 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Quais subsistemas de RH Antônio aponta com maior ganho imediato de agilidade?</div>
+            <div class="quiz-options" data-name="q2">
+              <label class="quiz-option"><input type="radio" name="q2" value="a" /> Folha de pagamento e compliance</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="b" /> Treinamento e clima organizacional</label>
+              <label class="quiz-option"><input type="radio" name="q2" value="c" /> Recrutamento e shared services (processos transacionais)</label>
+            </div>
+            <div class="quiz-feedback" id="fb13"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="14" data-title="Quiz 3 de 5" data-quiz="1" data-correct="a">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 3 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">O que é "inception" no contexto da Serasa?</div>
+            <div class="quiz-options" data-name="q3">
+              <label class="quiz-option"><input type="radio" name="q3" value="a" /> Workshop para desenhar o processo ideal antes de definir o MVP</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="b" /> Auditoria anual de conformidade trabalhista</label>
+              <label class="quiz-option"><input type="radio" name="q3" value="c" /> Treinamento obrigatório de metodologia Scrum</label>
+            </div>
+            <div class="quiz-feedback" id="fb14"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="15" data-title="Quiz 4 de 5" data-quiz="1" data-correct="b">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 4 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Por que a Serasa investe em front-end customizado sobre o ERP?</div>
+            <div class="quiz-options" data-name="q4">
+              <label class="quiz-option"><input type="radio" name="q4" value="a" /> Para substituir completamente o sistema backend</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="b" /> Para oferecer experiência simples, rápida e com alta adesão do usuário</label>
+              <label class="quiz-option"><input type="radio" name="q4" value="c" /> Para cumprir exigências legais de auditoria</label>
+            </div>
+            <div class="quiz-feedback" id="fb15"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-step quiz-step" data-step="16" data-title="Quiz 5 de 5" data-quiz="1" data-correct="c">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">?</div>
+            <div class="step-card__title">Quiz — questão 5 de 5</div>
+          </div>
+          <div class="step-card__body">
+            <div class="quiz-q__text">Qual é a dica prática de Antônio para implementar ágil no RH?</div>
+            <div class="quiz-options" data-name="q5">
+              <label class="quiz-option"><input type="radio" name="q5" value="a" /> Esperar aprovação de um projeto de 2 anos antes de começar</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="b" /> Copiar exatamente a metodologia de empresas de tecnologia</label>
+              <label class="quiz-option"><input type="radio" name="q5" value="c" /> Começar com MVP — entregar rápido e evoluir incrementalmente</label>
+            </div>
+            <div class="quiz-feedback" id="fb16"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 Conclusão -->
+      <div class="wizard-step" data-step="17" data-title="Conclusão">
+        <div class="step-card">
+          <div class="step-card__header">
+            <div class="step-card__badge">✅</div>
+            <div class="step-card__title">Parabéns — conteúdo concluído!</div>
+          </div>
+          <div class="step-card__body">
+            <div class="completion-badge">
+              <div class="completion-badge__icon" id="completionIcon">🎉</div>
+              <h2 id="completionTitle">Você completou o Módulo 2</h2>
+              <p id="completionMsg" style="color:var(--lio-muted);font-size:.9rem">RH Ágil: adaptação rápida às mudanças</p>
+            </div>
+            <ul class="checklist" id="checklist">
+              <li id="chk-read"><input type="checkbox" checked disabled /> Leitura dos módulos concluída</li>
+              <li id="chk-reflect"><input type="checkbox" disabled /> Reflexão respondida</li>
+              <li id="chk-quiz"><input type="checkbox" disabled /> Quiz aprovado (≥ 4/5)</li>
+              <li id="chk-video"><input type="checkbox" id="cVideo" /> Vídeo assistido (opcional)</li>
+            </ul>
+            <div class="callout callout--navy" style="margin-top:16px">
+              <strong>Conteúdo anterior da trilha:</strong> Gestão de Pessoas — papel do líder e do RH
+            </div>
+            <div class="page-footer">UniLio · Liotecnica · Foursales (Antônio Catharino)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="wizard-nav wizard-nav--next" id="btnNext" aria-label="Próximo passo" title="Próximo">
+      ›
+      <span class="wizard-nav__label" id="btnNextLabel">Próximo</span>
+    </button>
+  </main>
+
+  <script>
+    const TOTAL = 18;
+    const STORAGE_KEY = 'unilio_rh_agil_wizard_step';
+    let current = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+    if (current >= TOTAL) current = TOTAL - 1;
+
+    const steps = document.querySelectorAll('.wizard-step');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const progressFill = document.getElementById('progressFill');
+    const progressPct = document.getElementById('progressPct');
+    const stepCounter = document.getElementById('stepCounter');
+    const headerStepTitle = document.getElementById('headerStepTitle');
+    const btnNextLabel = document.getElementById('btnNextLabel');
+
+    const quizAnswers = JSON.parse(localStorage.getItem('unilio_rh_agil_quiz') || '{}');
+    let quizScore = 0;
+
+    function isQuizStep(idx) {
+      return idx >= 12 && idx <= 16;
+    }
+
+    function validateQuizStep(idx) {
+      const step = steps[idx];
+      const correct = step.dataset.correct;
+      const name = step.querySelector('.quiz-options').dataset.name;
+      const selected = step.querySelector(`input[name="${name}"]:checked`);
+      const fb = document.getElementById('fb' + idx);
+
+      if (!selected) {
+        fb.textContent = '⚠ Selecione uma resposta antes de continuar.';
+        fb.className = 'quiz-feedback show err';
+        return false;
+      }
+
+      const ok = selected.value === correct;
+      quizAnswers[name] = selected.value;
+      localStorage.setItem('unilio_rh_agil_quiz', JSON.stringify(quizAnswers));
+
+      step.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.classList.remove('selected', 'correct', 'incorrect');
+        const val = opt.querySelector('input').value;
+        if (val === correct) opt.classList.add('correct');
+        else if (opt.querySelector('input') === selected) opt.classList.add('incorrect');
+      });
+
+      fb.textContent = ok ? '✅ Correto!' : '❌ Incorreto. Revise o módulo correspondente.';
+      fb.className = 'quiz-feedback show ' + (ok ? 'ok' : 'err');
+      return true;
+    }
+
+    function restoreQuizSelections() {
+      steps.forEach((step, idx) => {
+        if (!isQuizStep(idx)) return;
+        const name = step.querySelector('.quiz-options').dataset.name;
+        const saved = quizAnswers[name];
+        if (saved) {
+          const input = step.querySelector(`input[value="${saved}"]`);
+          if (input) {
+            input.checked = true;
+            input.closest('.quiz-option').classList.add('selected');
+          }
+        }
+      });
+    }
+
+    function calcQuizScore() {
+      let s = 0;
+      for (let i = 12; i <= 16; i++) {
+        const step = steps[i];
+        const name = step.querySelector('.quiz-options').dataset.name;
+        if (quizAnswers[name] === step.dataset.correct) s++;
+      }
+      return s;
+    }
+
+    function updateCompletionScreen() {
+      const reflectDone = ['r1','r2','r3'].every(id => (localStorage.getItem('unilio_rh_agil_ref_' + id) || '').trim().length > 10);
+      quizScore = calcQuizScore();
+      const quizPassed = quizScore >= 4;
+
+      document.getElementById('chk-reflect').classList.toggle('done', reflectDone);
+      document.getElementById('chk-reflect').querySelector('input').checked = reflectDone;
+
+      document.getElementById('chk-quiz').classList.toggle('done', quizPassed);
+      document.getElementById('chk-quiz').querySelector('input').checked = quizPassed;
+
+      const icon = document.getElementById('completionIcon');
+      const title = document.getElementById('completionTitle');
+      const msg = document.getElementById('completionMsg');
+
+      if (quizPassed && reflectDone) {
+        icon.textContent = '🏆';
+        title.textContent = 'Aprovado na trilha!';
+        msg.textContent = `Quiz: ${quizScore}/5 acertos · Reflexão completa`;
+      } else if (!quizPassed) {
+        icon.textContent = '📚';
+        title.textContent = 'Quase lá!';
+        msg.textContent = `Quiz: ${quizScore}/5 — mínimo 4 acertos. Volte às questões pelo indicador de passos.`;
+      }
+    }
+
+    function goTo(idx, direction = 1) {
+      if (idx < 0 || idx >= TOTAL) return;
+
+      steps.forEach(s => {
+        s.classList.remove('is-active', 'is-back');
+        s.setAttribute('aria-hidden', 'true');
+      });
+      current = idx;
+      localStorage.setItem(STORAGE_KEY, current);
+
+      const step = steps[current];
+      step.classList.add('is-active');
+      step.setAttribute('aria-hidden', 'false');
+      if (direction < 0) step.classList.add('is-back');
+
+      const pct = Math.round((current / (TOTAL - 1)) * 100);
+      progressFill.style.width = pct + '%';
+      progressPct.textContent = pct + '%';
+      stepCounter.textContent = `Passo ${current + 1} de ${TOTAL}`;
+      headerStepTitle.textContent = step.dataset.title;
+
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = false;
+      if (current === TOTAL - 1) {
+        btnNextLabel.textContent = 'Concluir';
+        btnNext.title = 'Concluir conteúdo';
+        updateCompletionScreen();
+      } else if (isQuizStep(current)) {
+        btnNextLabel.textContent = 'Confirmar';
+        btnNext.title = 'Confirmar resposta';
+      } else {
+        btnNextLabel.textContent = 'Próximo';
+        btnNext.title = 'Próximo passo';
+      }
+
+      step.querySelector('.step-card__body')?.scrollTo(0, 0);
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1, -1));
+
+    function advanceStep() {
+      if (isQuizStep(current)) {
+        if (!validateQuizStep(current)) return;
+      }
+      if (current === 8) {
+        localStorage.setItem('unilio_rh_agil_video_seen', '1');
+      }
+      if (current < TOTAL - 1) {
+        goTo(current + 1, 1);
+      } else {
+        btnNext.disabled = true;
+        btnNextLabel.textContent = 'Feito';
+      }
+    }
+
+    btnNext.addEventListener('click', advanceStep);
+
+    function isTypingContext(el) {
+      if (!el) return false;
+      const tag = el.tagName;
+      if (tag === 'TEXTAREA') return true;
+      if (tag === 'INPUT') {
+        const t = el.type;
+        return t === 'text' || t === 'search' || t === 'email' || t === 'password' || t === 'number';
+      }
+      return el.isContentEditable;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (isTypingContext(document.activeElement)) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!btnNext.disabled) advanceStep();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (current > 0) goTo(current - 1, -1);
+      }
+    });
+
+    /* Reflection auto-save */
+    ['r1','r2','r3'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = localStorage.getItem('unilio_rh_agil_ref_' + id) || '';
+      el.addEventListener('input', () => localStorage.setItem('unilio_rh_agil_ref_' + id, el.value));
+    });
+
+    /* Quiz option highlight */
+    document.querySelectorAll('.quiz-option input').forEach(input => {
+      input.addEventListener('change', () => {
+        const group = input.closest('.quiz-options');
+        group.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+        input.closest('.quiz-option').classList.add('selected');
+        const idx = parseInt(input.closest('.wizard-step').dataset.step, 10);
+        document.getElementById('fb' + idx).className = 'quiz-feedback';
+      });
+    });
+
+    document.getElementById('cVideo').addEventListener('change', e => {
+      localStorage.setItem('unilio_rh_agil_chk_video', e.target.checked ? '1' : '0');
+      e.target.closest('li').classList.toggle('done', e.target.checked);
+    });
+    if (localStorage.getItem('unilio_rh_agil_chk_video') === '1') {
+      const v = document.getElementById('cVideo');
+      v.checked = true;
+      v.closest('li').classList.add('done');
+    }
+
+    restoreQuizSelections();
+    goTo(current, 1);
+  </script>
+</body>
+</html>
