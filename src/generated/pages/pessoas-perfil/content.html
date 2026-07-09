@@ -29,31 +29,38 @@
 
           <section class="profile-hero">
             <div class="profile-hero__avatar-wrap">
-              <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
-              <button class="profile-hero__avatar-change" type="button" id="profile-avatar-change" hidden>
-                <i class="fa-solid fa-pen" aria-hidden="true"></i> Alterar avatar
-              </button>
+              <div class="profile-hero__avatar-frame">
+                <img class="profile-hero__avatar" id="profile-avatar" src="" alt="" />
+                <button
+                  class="profile-hero__avatar-change"
+                  type="button"
+                  id="profile-avatar-change"
+                  aria-label="Alterar avatar"
+                  title="Alterar avatar"
+                  hidden
+                >
+                  <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
-            <div class="profile-hero__main">
-              <div class="profile-hero__name-row">
+            <div class="profile-hero__content">
+              <div class="profile-hero__identity">
                 <h1 class="profile-hero__name" id="profile-name"></h1>
                 <span class="profile-hero__pronouns" id="profile-pronouns"></span>
-                <button class="profile-panel__edit profile-hero__edit" type="button" data-edit-section="pronouns" hidden>Editar</button>
-              </div>
-              <p class="profile-hero__role" id="profile-role"></p>
-              <div class="profile-hero__meta">
+                <span class="profile-hero__role" id="profile-role"></span>
                 <span class="profile-hero__dept" id="profile-dept"></span>
-                <span id="profile-badges"></span>
+                <span class="profile-hero__badges" id="profile-badges"></span>
               </div>
-            </div>
-            <div class="profile-hero__actions">
-              <button class="profile-btn" type="button" id="profile-email-btn"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button>
-              <a class="profile-btn" id="profile-teams-btn" href="#"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Teams</a>
-              <a class="profile-btn" id="profile-schedule-btn" href="#"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Agendar</a>
-              <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
-              <button class="profile-btn" type="button" id="profile-vcard-btn"><i class="fa-regular fa-address-card" aria-hidden="true"></i> vCard</button>
-              <button class="profile-btn" type="button" id="profile-print-btn"><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir</button>
-              <a class="profile-btn profile-btn--primary" id="profile-org-link" href="/pessoas/organograma"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
+              <div class="profile-hero__actions">
+                <button class="profile-panel__edit" type="button" data-edit-section="pronouns" hidden>Editar</button>
+                <button class="profile-btn" type="button" id="profile-email-btn"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button>
+                <a class="profile-btn" id="profile-teams-btn" href="#"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Teams</a>
+                <a class="profile-btn" id="profile-schedule-btn" href="#"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Agendar</a>
+                <button class="profile-btn" type="button" id="profile-message-btn"><i class="fa-regular fa-comment" aria-hidden="true"></i> Mensagem</button>
+                <button class="profile-btn" type="button" id="profile-vcard-btn"><i class="fa-regular fa-address-card" aria-hidden="true"></i> vCard</button>
+                <button class="profile-btn" type="button" id="profile-print-btn"><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir</button>
+                <a class="profile-btn profile-btn--primary" id="profile-org-link" href="/pessoas/organograma"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> Organograma</a>
+              </div>
             </div>
           </section>
 

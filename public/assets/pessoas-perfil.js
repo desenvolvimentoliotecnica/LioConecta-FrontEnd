@@ -957,7 +957,12 @@
   }
 
   function openAvatarPickerForProfile() {
-    if (!canEditProfile() || !currentPerson || !global.AvatarPicker) return;
+    if (!canEditProfile() || !currentPerson) return;
+
+    if (!global.AvatarPicker || typeof global.AvatarPicker.open !== "function") {
+      console.warn("[ProfilePage] AvatarPicker indisponível.");
+      return;
+    }
 
     var graphPhotoUrl =
       currentPerson.graphPhotoUrl ||
@@ -978,6 +983,15 @@
           currentPerson.img = savedUrl || graphPhotoUrl || "";
           renderProfileAvatar(currentPerson);
         }
+        if (canEditProfile()) {
+          var updatedPhotoUrl =
+            (result && (result.photoUrl || result.PhotoUrl)) || savedUrl || graphPhotoUrl || null;
+          window.dispatchEvent(
+            new CustomEvent("lio:me-avatar-updated", {
+              detail: { photoUrl: updatedPhotoUrl },
+            })
+          );
+        }
         if (typeof global.reloadOrganogram === "function") {
           global.reloadOrganogram();
         }
@@ -985,9 +999,23 @@
     });
   }
 
+  function bindProfileAvatarChangeButton() {
+    var changeBtn = document.getElementById("profile-avatar-change");
+    if (!changeBtn) return;
+
+    var canEdit = canEditProfile();
+    changeBtn.hidden = !canEdit;
+    changeBtn.onclick = canEdit
+      ? function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openAvatarPickerForProfile();
+        }
+      : null;
+  }
+
   function renderProfileAvatar(person) {
     var avatarEl = document.getElementById("profile-avatar");
-    var changeBtn = document.getElementById("profile-avatar-change");
     if (!avatarEl) return;
 
     var src = resolveProfileAvatarUrl(person);
@@ -999,10 +1027,7 @@
       avatarEl.hidden = true;
     }
     avatarEl.alt = "Foto de " + person.name;
-
-    if (changeBtn) {
-      changeBtn.hidden = !canEditProfile();
-    }
+    bindProfileAvatarChangeButton();
   }
 
   function updateOverviewFromPerson(person) {
@@ -1097,15 +1122,22 @@
   }
 
   var editModalsInitialized = false;
+  var avatarPickerDelegationBound = false;
 
   function setupProfileEditModals() {
+    if (!avatarPickerDelegationBound) {
+      avatarPickerDelegationBound = true;
+      document.addEventListener("click", function (event) {
+        var btn = event.target.closest("#profile-avatar-change");
+        if (!btn || btn.hidden) return;
+        event.preventDefault();
+        event.stopPropagation();
+        openAvatarPickerForProfile();
+      });
+    }
+
     if (editModalsInitialized) return;
     editModalsInitialized = true;
-
-    var avatarChangeBtn = document.getElementById("profile-avatar-change");
-    if (avatarChangeBtn) {
-      avatarChangeBtn.addEventListener("click", openAvatarPickerForProfile);
-    }
 
     document.querySelectorAll("[data-edit-section]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -1683,6 +1715,7 @@
     init: init,
     bumpLoadGeneration: function () {
       activeLoadId += 1;
+      editModalsInitialized = false;
     },
     setViewerRole: function (role) {
       VIEWER_ROLE = role;

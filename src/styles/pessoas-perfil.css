@@ -92,9 +92,30 @@
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06), 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
-.profile-hero__main {
+.profile-hero__avatar-wrap {
+  flex-shrink: 0;
+  padding-bottom: 14px;
+}
+
+.profile-hero__avatar-frame {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.profile-hero__content {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-hero__identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
 }
 
 .profile-hero__avatar {
@@ -110,38 +131,44 @@
   display: none !important;
 }
 
-.profile-hero__name-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
 .profile-hero__name {
   font-size: 28px;
   font-weight: 700;
   color: #1e293b;
   margin: 0;
+  line-height: 1.15;
 }
 
 .profile-hero__pronouns {
-  font-size: 13px;
+  font-size: 14px;
   color: #64748b;
   font-weight: 500;
+}
+
+.profile-hero__pronouns:empty {
+  display: none;
 }
 
 .profile-hero__role {
   font-size: 15px;
   color: #475569;
-  margin: 0 0 10px;
+  margin: 0;
+  font-weight: 500;
 }
 
-.profile-hero__meta {
-  display: flex;
+.profile-hero__role:empty {
+  display: none;
+}
+
+.profile-hero__badges {
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+}
+
+.profile-hero__badges:empty {
+  display: none;
 }
 
 .profile-hero__dept {
@@ -152,6 +179,10 @@
   font-weight: 700;
   background: var(--profile-badge-bg, #ede9fe);
   color: var(--profile-badge-text, #6d28d9);
+}
+
+.profile-hero__dept:empty {
+  display: none;
 }
 
 .profile-hero__badge {
@@ -181,7 +212,7 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  flex-shrink: 0;
+  align-items: center;
 }
 
 .profile-btn {
@@ -572,10 +603,6 @@
 
 .profile-card__head .profile-card__title {
   margin-bottom: 0;
-}
-
-.profile-hero__edit {
-  margin-left: auto;
 }
 
 .profile-edit-modal__dialog--wide {
@@ -1232,11 +1259,17 @@
   }
 
   .profile-hero {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .profile-hero__actions {
-    width: 100%;
+  .profile-hero__avatar-wrap {
+    width: auto;
+    align-self: flex-start;
+  }
+
+  .profile-hero__name {
+    font-size: 24px;
   }
 }
 

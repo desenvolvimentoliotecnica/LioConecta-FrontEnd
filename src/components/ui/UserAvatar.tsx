@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { resolvePersonAvatarSrc, resolvePhotoUrlFromSource } from "../../utils/personAvatar";
 
 type AvatarSource = Parameters<typeof resolvePhotoUrlFromSource>[0];
@@ -18,6 +18,10 @@ export function UserAvatar({
 }: UserAvatarProps) {
   const src = resolvePersonAvatarSrc(source ?? photoUrl);
   const [broken, setBroken] = useState(false);
+
+  useEffect(() => {
+    setBroken(false);
+  }, [src]);
 
   if (!src || broken) {
     return (

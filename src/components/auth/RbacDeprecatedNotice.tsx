@@ -19,7 +19,7 @@ export function RbacDeprecatedNotice({ permissionKey, moduleLabel }: RbacDepreca
         — não use mais listas de perfis ou e-mails nesta tela.
       </p>
       <p>
-        Atribua a permissão <code>{permissionKey}</code> às roles em{" "}
+        Atribua a permissão <code>{permissionKey}</code> às regras em{" "}
         <Link to="/admin/controle-acesso">Controle de acesso</Link>.
       </p>
     </div>

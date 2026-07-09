@@ -21,6 +21,24 @@ export function getApiOrigin(): string {
   return "";
 }
 
+/** Caminho relativo da mídia no backend (ex.: /posts/medias/...). */
+export function normalizeBackendMediaUrl(url: string | null | undefined): string {
+  if (!url?.trim()) {
+    return "";
+  }
+
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      return new URL(trimmed).pathname;
+    } catch {
+      return trimmed;
+    }
+  }
+
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+}
+
 /** Resolve URLs de arquivos servidos pelo backend (/posts/medias, /media/...). */
 export function resolveBackendAssetUrl(url: string | null | undefined): string {
   if (!url?.trim()) {

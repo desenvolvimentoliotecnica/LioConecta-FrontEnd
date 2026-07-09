@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
 import type {
+  BulkUpdateSubjectAssignmentsRequest,
   CreateTestUserRequest,
   PermissionCatalogItemDto,
+  RbacSubjectSearchResultDto,
   ResetTestUserPasswordRequest,
   RoleDetailDto,
   RoleDto,
@@ -111,6 +113,30 @@ export function useUpdateRbacAssignments() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: RBAC_ADMIN_QUERY_KEY });
     },
+  });
+}
+
+export function useBulkUpdateRbacAssignments() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: BulkUpdateSubjectAssignmentsRequest) =>
+      api.put<void>("/admin/rbac/assignments/bulk", body),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: RBAC_ADMIN_QUERY_KEY });
+    },
+  });
+}
+
+export function useRbacSubjectSearch(subjectType: string, query: string, enabled = true) {
+  const term = query.trim();
+  return useQuery({
+    queryKey: [...RBAC_ADMIN_QUERY_KEY, "subjects", subjectType, term] as const,
+    queryFn: () =>
+      api.get<RbacSubjectSearchResultDto[]>(
+        `/admin/rbac/subjects/search?subjectType=${encodeURIComponent(subjectType)}&q=${encodeURIComponent(term)}&limit=8`,
+      ),
+    enabled: enabled && term.length >= 2 && Boolean(subjectType),
+    retry: 0,
   });
 }
 

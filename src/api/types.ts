@@ -117,6 +117,17 @@ export interface UpdateSubjectAssignmentsRequest {
   roleIds: string[];
 }
 
+export interface BulkUpdateSubjectAssignmentsRequest {
+  items: UpdateSubjectAssignmentsRequest[];
+}
+
+export interface RbacSubjectSearchResultDto {
+  subjectType: RbacSubjectType;
+  subjectId: string;
+  label: string;
+  subtitle?: string | null;
+}
+
 export interface TestUserDto {
   id: string;
   email: string;

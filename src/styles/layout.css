@@ -177,11 +177,13 @@ var(--wf-bg) 70%
   );
 }
 
-.body.is-left-expanded {
+.body.is-left-expanded,
+.app-shell.is-left-expanded {
   --wf-sidebar-w-left: var(--wf-sidebar-w-expanded);
 }
 
-.body.is-right-expanded {
+.body.is-right-expanded,
+.app-shell.is-right-expanded {
   --wf-sidebar-w-right: var(--wf-sidebar-w-expanded);
 }
 
@@ -562,6 +564,7 @@ var(--wf-bg) 70%
 /* Module focus mode (Loop / Pulse / Compass) */
 .app-shell--module-focus {
   --wf-topbar-h: 0px;
+  --wf-sidebar-w-right: 0px;
   grid-template-rows: 1fr;
 }
 

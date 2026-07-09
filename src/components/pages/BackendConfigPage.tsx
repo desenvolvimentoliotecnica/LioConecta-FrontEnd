@@ -851,7 +851,7 @@ export function BackendConfigPage() {
             <div className="backend-config-page__alert backend-config-page__alert--warn" role="note">
               Em produção use <code>auth.provider=ldap</code>. A chave <code>auth.jwt_signing_key</code> e as chaves{" "}
               <code>ldap.*</code> exigem reinício da API após alteração. E-mails em{" "}
-              <code>auth.super_admin_emails</code> recebem role Admin no primeiro login LDAP.
+              <code>auth.super_admin_emails</code> recebem a regra Admin no primeiro login LDAP.
             </div>
           ) : null}
 

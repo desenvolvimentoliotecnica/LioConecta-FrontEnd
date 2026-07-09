@@ -3,6 +3,8 @@ import { useFeed } from "../../api/hooks/useFeed";
 import { config } from "../../api/client";
 import { FeedPostCard } from "./FeedPostCard";
 import { distributeRoundRobin, useFeedColumnCount } from "./feed-masonry";
+import { useFeedPostDeepLink } from "./useFeedPostDeepLink";
+import "./feed-deep-link.css";
 
 type FeedPostsProps = {
   /** Card(s) no início do masonry (ex.: MoodCheck), na mesma ordem L→R. */
@@ -12,10 +14,11 @@ type FeedPostsProps = {
 export function FeedPosts({ leading }: FeedPostsProps = {}) {
   const { data, isLoading, isError } = useFeed();
   const columnCount = useFeedColumnCount();
+  const posts = data?.items ?? [];
+
+  useFeedPostDeepLink(posts, isLoading);
 
   if (config.useMock) return null;
-
-  const posts = data?.items ?? [];
   const leadingItems = Children.toArray(leading).filter(Boolean);
 
   // Only mount `.feed-grid` when there are API posts. Otherwise the page CSS

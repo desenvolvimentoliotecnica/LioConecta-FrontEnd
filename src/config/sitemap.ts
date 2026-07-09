@@ -350,7 +350,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry(
           "Controle de acesso (RBAC)",
           "/admin/controle-acesso",
-          "Roles dinâmicas, atribuições, usuários de teste e catálogo de permissões.",
+          "Regras dinâmicas, atribuições, usuários de teste e catálogo de permissões.",
         ),
         entry(
           "Organograma — hub de configurações",

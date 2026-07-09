@@ -10,7 +10,12 @@ import { NOTIFICATION_FILTERS, type NotificationFilter } from "../../config/noti
 import {
   mapNotificationDtoToItem,
   matchesNotificationFilter,
+  notificationLinkTo,
 } from "../../utils/notifications";
+import {
+  dispatchFeedPostFocus,
+  extractFeedPostIdFromHref,
+} from "../feed/useFeedPostDeepLink";
 import "../../styles/notifications-page.css";
 
 export function NotificationsPage() {
@@ -137,8 +142,14 @@ export function NotificationsPage() {
               <li key={item.id}>
                 <Link
                   className={`notifications-page__item${unread ? " notifications-page__item--unread" : ""}`}
-                  to={item.href}
-                  onClick={() => handleMarkItemRead(item.id)}
+                  to={notificationLinkTo(item.href)}
+                  onClick={() => {
+                    const feedPostId = extractFeedPostIdFromHref(item.href);
+                    if (feedPostId) {
+                      dispatchFeedPostFocus(feedPostId);
+                    }
+                    handleMarkItemRead(item.id);
+                  }}
                 >
                   <span className={`notifications-page__icon notifications-page__icon--${item.mod}`}>
                     <i className={`fa-solid ${item.icon}`} aria-hidden="true" />

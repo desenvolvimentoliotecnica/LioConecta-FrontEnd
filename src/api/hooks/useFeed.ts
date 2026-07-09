@@ -132,6 +132,96 @@ export function useAddPostComment() {
   });
 }
 
+export const PHOTO_COMMENTS_QUERY_KEY = ["feed", "photo-comments"] as const;
+
+export function postMediaCommentsQueryKey(postId: string, mediaUrl: string) {
+  return [...PHOTO_COMMENTS_QUERY_KEY, postId, mediaUrl] as const;
+}
+
+export function usePostMediaComments(postId: string | null, mediaUrl: string | null) {
+  return useQuery({
+    queryKey: postMediaCommentsQueryKey(postId ?? "", mediaUrl ?? ""),
+    queryFn: async (): Promise<CommentDto[]> => {
+      if (config.useMock || !postId || !mediaUrl) {
+        return [];
+      }
+
+      const params = new URLSearchParams({ mediaUrl });
+      const response = await api.get<{ items: CommentDto[] }>(
+        `/feed/posts/${postId}/media/comments?${params.toString()}`,
+      );
+      return response.items ?? [];
+    },
+    enabled: Boolean(postId && mediaUrl && !config.useMock),
+    staleTime: 15_000,
+  });
+}
+
+export function useAddPostMediaComment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      postId,
+      mediaUrl,
+      text,
+    }: {
+      postId: string;
+      mediaUrl: string;
+      text: string;
+    }): Promise<CommentDto> => {
+      if (config.useMock) {
+        throw new Error("Mock mode — API call skipped");
+      }
+
+      return api.post<CommentDto>(`/feed/posts/${postId}/media/comments`, {
+        text: text.trim(),
+        mediaUrl,
+      });
+    },
+    onMutate: async ({ postId, mediaUrl, text }) => {
+      const queryKey = postMediaCommentsQueryKey(postId, mediaUrl);
+      await queryClient.cancelQueries({ queryKey });
+      const previous = queryClient.getQueryData<CommentDto[]>(queryKey);
+      const me = queryClient.getQueryData<MeDto>(["me"]);
+      const trimmed = text.trim();
+
+      queryClient.setQueryData<CommentDto[]>(queryKey, (current) => [
+        ...(current ?? []),
+        {
+          id: `optimistic-${Date.now()}`,
+          text: trimmed,
+          author: {
+            id: me?.id ?? "optimistic",
+            slug: me?.slug ?? "maria-silva",
+            name: me?.name ?? "Você",
+            title: me?.title,
+            photoUrl: me?.photoUrl ?? null,
+            departmentName: me?.departmentName,
+            isActive: true,
+          },
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+
+      return { previous, queryKey };
+    },
+    onSuccess: (comment, { postId, mediaUrl }, context) => {
+      const queryKey = context?.queryKey ?? postMediaCommentsQueryKey(postId, mediaUrl);
+      queryClient.setQueryData<CommentDto[]>(queryKey, (current) => {
+        const withoutOptimistic = (current ?? []).filter((item) => !item.id.startsWith("optimistic-"));
+        const alreadyPresent = withoutOptimistic.some((item) => item.id === comment.id);
+        return alreadyPresent ? withoutOptimistic : [...withoutOptimistic, comment];
+      });
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(context.queryKey, context.previous);
+      }
+    },
+  });
+}
+
 export function useTogglePostLike() {
   const queryClient = useQueryClient();
 
@@ -192,16 +282,29 @@ export function useCreatePost() {
       content: string;
       mediaUrl?: string | null;
       mediaType?: string | null;
+      mediaItems?: Array<{ url: string; mediaType: string }>;
     }): Promise<FeedPostDto> => {
       if (config.useMock) {
         throw new Error("Mock mode — API call skipped");
       }
 
+      const mediaItems =
+        input.mediaItems?.filter((item) => item.url.trim()) ??
+        (input.mediaUrl && input.mediaUrl.trim()
+          ? [
+              {
+                url: input.mediaUrl.trim(),
+                mediaType: input.mediaType?.trim() || "image",
+              },
+            ]
+          : []);
+
       const metadata: Record<string, unknown> | null =
-        input.mediaUrl && input.mediaUrl.trim()
+        mediaItems.length > 0
           ? {
-              mediaUrl: input.mediaUrl.trim(),
-              ...(input.mediaType ? { mediaType: input.mediaType } : {}),
+              mediaUrl: mediaItems[0].url,
+              mediaType: mediaItems[0].mediaType,
+              mediaItems,
             }
           : null;
 

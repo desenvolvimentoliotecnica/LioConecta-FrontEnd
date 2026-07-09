@@ -77,8 +77,38 @@ export function mapNotificationDtoToItem(dto: NotificationDto): NotificationItem
     text: dto.body,
     time: formatRelativeTime(dto.createdAt),
     dateTime: dto.createdAt,
-    href: dto.href ?? "/notificacoes",
+    href: normalizeNotificationHref(dto.href),
   };
+}
+
+/** Converts API href (e.g. `/?post=uuid`) into a React Router location. */
+export function notificationLinkTo(
+  href: string,
+): string | { pathname: string; search: string; hash?: string } {
+  const normalized = normalizeNotificationHref(href);
+
+  if (normalized.startsWith("/?")) {
+    return { pathname: "/", search: normalized.slice(1) };
+  }
+
+  const hashIndex = normalized.indexOf("#");
+  if (hashIndex > 0) {
+    return {
+      pathname: normalized.slice(0, hashIndex),
+      search: "",
+      hash: normalized.slice(hashIndex),
+    };
+  }
+
+  return normalized;
+}
+
+function normalizeNotificationHref(href?: string | null): string {
+  const raw = href?.trim();
+  if (!raw) return "/notificacoes";
+  if (raw.startsWith("/")) return raw;
+  if (raw.startsWith("?")) return `/${raw}`;
+  return `/${raw}`;
 }
 
 export function matchesNotificationFilter(item: NotificationItem, filter: NotificationFilter): boolean {

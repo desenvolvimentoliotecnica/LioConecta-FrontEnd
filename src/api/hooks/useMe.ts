@@ -5,6 +5,9 @@ import { getStoredToken } from "./useAuth";
 
 import { DEFAULT_PORTAL_AVATAR } from "../../utils/personAvatar";
 
+export const ME_QUERY_KEY = ["me"] as const;
+export const ME_AVATAR_UPDATED_EVENT = "lio:me-avatar-updated";
+
 const DEV_AUTH_MODE = import.meta.env.VITE_AUTH_MODE === "dev";
 
 const MOCK_ME: MeDto = {
@@ -43,7 +46,7 @@ export function useMe() {
   const hasToken = Boolean(getStoredToken());
 
   return useQuery({
-    queryKey: ["me"],
+    queryKey: ME_QUERY_KEY,
     queryFn: async (): Promise<MeDto> => {
       if (config.useMock || DEV_AUTH_MODE) {
         return MOCK_ME;

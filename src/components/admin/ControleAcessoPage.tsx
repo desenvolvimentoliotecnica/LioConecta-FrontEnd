@@ -1,6 +1,5 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ApiError } from "../../api/client";
 import { usePermissions } from "../../hooks/usePermissions";
 import { RBAC_ADMIN_PERMISSIONS } from "../../config/rbac/permissions";
 import {
@@ -8,9 +7,7 @@ import {
   useCreateRbacTestUser,
   useDeleteRbacRole,
   useDeleteRbacTestUser,
-  useRbacAssignments,
   useRbacPermissions,
-  useRbacRoleDetail,
   useRbacRoles,
   useRbacTestUsers,
   useResetRbacTestUserPassword,
@@ -19,20 +16,31 @@ import {
 } from "../../api/hooks/useRbacAdmin";
 import type {
   BusinessArea,
+  PersonSummaryDto,
   RoleDto,
   TestUserDto,
   UpsertRoleRequest,
 } from "../../api/types";
+import { PeopleMultiSelect } from "../beneficios/PeopleMultiSelect";
 import { usePortalConfirm } from "../../hooks/usePortalConfirm";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
+import { AssignmentsTab } from "./rbac/AssignmentsTab";
+import { RoleDetailModal } from "./rbac/RoleDetailModal";
+import {
+  apiErrorMessage,
+  fromBusinessAreaApiValue,
+  fromBusinessAreaApiValueRequired,
+  toBusinessAreaApiValue,
+  toBusinessAreaApiValueRequired,
+} from "./rbac/rbacUi";
 import "../../styles/contracheque-page.css";
 import "../../styles/controle-acesso-page.css";
 
 type ControleTab = "roles" | "assignments" | "test-users" | "permissions";
 
 const TABS: { id: ControleTab; label: string; icon: string }[] = [
-  { id: "roles", label: "Roles", icon: "fa-user-shield" },
+  { id: "roles", label: "Regras", icon: "fa-user-shield" },
   { id: "assignments", label: "Atribuições", icon: "fa-link" },
   { id: "test-users", label: "Usuários de teste", icon: "fa-flask" },
   { id: "permissions", label: "Catálogo de permissões", icon: "fa-list-check" },
@@ -84,27 +92,6 @@ function scopeLabel(scope: string | number): string {
   return scope;
 }
 
-function subjectTypeLabel(value: string | number): string {
-  if (typeof value === "number") {
-    return ["PortalUser", "Person", "TestUser"][value] ?? String(value);
-  }
-  return value;
-}
-
-function apiErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) {
-    if (typeof error.body === "string" && error.body.trim()) return error.body;
-    if (error.body && typeof error.body === "object") {
-      const record = error.body as Record<string, unknown>;
-      const title = record.title ?? record.message ?? record.detail;
-      if (typeof title === "string" && title.trim()) return title;
-    }
-    return error.message;
-  }
-  if (error instanceof Error) return error.message;
-  return "Operação não concluída.";
-}
-
 export function ControleAcessoPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = parseTab(searchParams.get("tab"));
@@ -147,7 +134,7 @@ export function ControleAcessoPage() {
         section="plataforma"
         title="Controle de acesso (RBAC)"
         current="Controle de acesso"
-        description="Roles dinâmicas, atribuições por sujeito, usuários de teste e catálogo de permissões."
+        description="Regras dinâmicas, atribuições por sujeito, usuários de teste e catálogo de permissões."
         actions={
           <Link className="controle-acesso-page__head-action" to="/admin/configuracoes-backend">
             <i className="fa-solid fa-server" aria-hidden="true" />
@@ -223,8 +210,8 @@ function RolesTab({
   const handleDelete = async (role: RoleDto) => {
     if (role.isSystem) return;
     const confirmed = await ask({
-      title: "Excluir role",
-      message: `Remover a role "${role.name}"? Atribuições vinculadas também serão afetadas.`,
+      title: "Excluir regra",
+      message: `Remover a regra "${role.name}"? Atribuições vinculadas também serão afetadas.`,
       confirmLabel: "Excluir",
       variant: "danger",
     });
@@ -232,7 +219,7 @@ function RolesTab({
     try {
       await deleteRole.mutateAsync(role.id);
       if (selectedRoleId === role.id) setSelectedRoleId(null);
-      setFeedback(`Role "${role.name}" removida.`);
+      setFeedback(`Regra "${role.name}" removida.`);
     } catch (error) {
       setFeedback(apiErrorMessage(error));
     }
@@ -246,9 +233,9 @@ function RolesTab({
             <i className="fa-solid fa-user-shield" />
           </div>
           <div>
-            <div className="controle-acesso__intro-title">Roles e templates</div>
+            <div className="controle-acesso__intro-title">Regras e templates</div>
             <p className="controle-acesso__intro-text">
-              Roles de sistema e templates de key user são somente leitura. Roles customizadas podem
+              Regras de sistema e templates de key user são somente leitura. Regras personalizadas podem
               ser criadas e editadas aqui.
             </p>
           </div>
@@ -258,28 +245,28 @@ function RolesTab({
           <input
             className="controle-acesso__search"
             type="search"
-            placeholder="Buscar role…"
+            placeholder="Buscar regra…"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            aria-label="Buscar role"
+            aria-label="Buscar regra"
           />
           <div className="controle-acesso__toolbar-end">
             <button type="button" className="controle-acesso-btn controle-acesso-btn--primary" onClick={openCreate}>
-              <i className="fa-solid fa-plus" aria-hidden="true" /> Nova role
+              <i className="fa-solid fa-plus" aria-hidden="true" /> Nova regra
             </button>
           </div>
         </div>
 
         {feedback ? <p className="controle-acesso__status">{feedback}</p> : null}
-        {rolesQuery.isLoading ? <p className="controle-acesso__status">Carregando roles…</p> : null}
+        {rolesQuery.isLoading ? <p className="controle-acesso__status">Carregando regras…</p> : null}
         {rolesQuery.isError ? (
           <p className="controle-acesso__status controle-acesso__status--error">
-            Não foi possível carregar roles.
+            Não foi possível carregar regras.
           </p>
         ) : null}
 
         {!rolesQuery.isLoading && filteredRoles.length === 0 ? (
-          <p className="controle-acesso__empty">Nenhuma role encontrada.</p>
+          <p className="controle-acesso__empty">Nenhuma regra encontrada.</p>
         ) : (
           <div className="controle-acesso__table-wrap">
             <table className="controle-acesso__table">
@@ -326,7 +313,7 @@ function RolesTab({
                         >
                           Detalhes
                         </button>
-                        {!role.isSystem ? (
+                        {!role.isSystem && !role.isKeyUserTemplate ? (
                           <>
                             <button
                               type="button"
@@ -356,7 +343,12 @@ function RolesTab({
       </section>
 
       {selectedRoleId ? (
-        <RoleDetailPanel roleId={selectedRoleId} onClose={() => setSelectedRoleId(null)} />
+        <RoleDetailModal
+          roleId={selectedRoleId}
+          roleName={rolesQuery.data?.find((item) => item.id === selectedRoleId)?.name}
+          onClose={() => setSelectedRoleId(null)}
+          onSaved={(message) => setFeedback(message)}
+        />
       ) : null}
 
       {modalOpen ? (
@@ -368,10 +360,10 @@ function RolesTab({
             try {
               if (editingRole) {
                 await updateRole.mutateAsync({ id: editingRole.id, body });
-                setFeedback(`Role "${body.name}" atualizada.`);
+                setFeedback(`Regra "${body.name}" atualizada.`);
               } else {
                 await createRole.mutateAsync(body);
-                setFeedback(`Role "${body.name}" criada.`);
+                setFeedback(`Regra "${body.name}" criada.`);
               }
               setModalOpen(false);
             } catch (error) {
@@ -381,56 +373,6 @@ function RolesTab({
         />
       ) : null}
     </>
-  );
-}
-
-function RoleDetailPanel({ roleId, onClose }: { roleId: string; onClose: () => void }) {
-  const detailQuery = useRbacRoleDetail(roleId);
-
-  return (
-    <section className="controle-acesso__panel" aria-label="Detalhes da role">
-      <div className="controle-acesso__toolbar">
-        <strong>Permissões da role</strong>
-        <div className="controle-acesso__toolbar-end">
-          <button type="button" className="controle-acesso-btn controle-acesso-btn--ghost" onClick={onClose}>
-            Fechar
-          </button>
-        </div>
-      </div>
-      {detailQuery.isLoading ? <p className="controle-acesso__status">Carregando detalhes…</p> : null}
-      {detailQuery.isError ? (
-        <p className="controle-acesso__status controle-acesso__status--error">Falha ao carregar detalhes.</p>
-      ) : null}
-      {detailQuery.data ? (
-        <>
-          <p className="controle-acesso__intro-text">
-            {detailQuery.data.name} — {detailQuery.data.permissions.length} permissões efetivas na matriz.
-          </p>
-          <div className="controle-acesso__table-wrap">
-            <table className="controle-acesso__table">
-              <thead>
-                <tr>
-                  <th>Permissão</th>
-                  <th>Escopo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {detailQuery.data.permissions.map((permission) => (
-                  <tr key={`${permission.permissionKey}-${scopeLabel(permission.dataScope)}`}>
-                    <td className="controle-acesso__permission-key">{permission.permissionKey}</td>
-                    <td>
-                      <span className="controle-acesso__badge controle-acesso__badge--scope">
-                        {scopeLabel(permission.dataScope)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      ) : null}
-    </section>
   );
 }
 
@@ -448,7 +390,7 @@ function RoleFormModal({
   const [name, setName] = useState(role?.name ?? "");
   const [description, setDescription] = useState(role?.description ?? "");
   const [businessArea, setBusinessArea] = useState<BusinessArea | "">(
-    role?.businessArea ?? "",
+    fromBusinessAreaApiValue(role?.businessArea),
   );
 
   const handleSubmit = async (event: FormEvent) => {
@@ -456,14 +398,14 @@ function RoleFormModal({
     await onSubmit({
       name: name.trim(),
       description: description.trim() || null,
-      businessArea: businessArea || null,
+      businessArea: toBusinessAreaApiValue(businessArea),
     });
   };
 
   return (
     <ContrachequeModal
       open
-      title={role ? "Editar role" : "Nova role"}
+      title={role ? "Editar regra" : "Nova regra"}
       onClose={onClose}
       footer={
         <>
@@ -523,112 +465,6 @@ function RoleFormModal({
   );
 }
 
-function AssignmentsTab() {
-  const [subjectType, setSubjectType] = useState("");
-  const [query, setQuery] = useState("");
-  const assignmentsQuery = useRbacAssignments({
-    subjectType: subjectType || undefined,
-    query: query || undefined,
-  });
-
-  const grouped = useMemo(() => {
-    const map = new Map<string, { label: string; type: string; roles: string[] }>();
-    for (const item of assignmentsQuery.data ?? []) {
-      const key = `${subjectTypeLabel(item.subjectType)}:${item.subjectId}`;
-      const existing = map.get(key);
-      if (existing) {
-        existing.roles.push(item.roleName);
-      } else {
-        map.set(key, {
-          label: item.subjectLabel,
-          type: subjectTypeLabel(item.subjectType),
-          roles: [item.roleName],
-        });
-      }
-    }
-    return [...map.values()];
-  }, [assignmentsQuery.data]);
-
-  return (
-    <section className="controle-acesso__panel">
-      <div className="controle-acesso__intro">
-        <div className="controle-acesso__intro-icon" aria-hidden="true">
-          <i className="fa-solid fa-link" />
-        </div>
-        <div>
-          <div className="controle-acesso__intro-title">Atribuições de roles</div>
-          <p className="controle-acesso__intro-text">
-            Visualize quais sujeitos (PortalUser, Person ou TestUser) possuem cada role. A edição em
-            massa será disponibilizada na próxima iteração via API <code>PUT /assignments</code>.
-          </p>
-        </div>
-      </div>
-
-      <div className="controle-acesso__toolbar">
-        <select
-          className="controle-acesso__select"
-          value={subjectType}
-          onChange={(event) => setSubjectType(event.target.value)}
-          aria-label="Filtrar por tipo de sujeito"
-        >
-          <option value="">Todos os tipos</option>
-          <option value="PortalUser">PortalUser</option>
-          <option value="Person">Person</option>
-          <option value="TestUser">TestUser</option>
-        </select>
-        <input
-          className="controle-acesso__search"
-          type="search"
-          placeholder="Buscar por nome ou e-mail…"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          aria-label="Buscar atribuições"
-        />
-      </div>
-
-      {assignmentsQuery.isLoading ? <p className="controle-acesso__status">Carregando atribuições…</p> : null}
-      {assignmentsQuery.isError ? (
-        <p className="controle-acesso__status controle-acesso__status--error">
-          Não foi possível carregar atribuições.
-        </p>
-      ) : null}
-
-      {!assignmentsQuery.isLoading && grouped.length === 0 ? (
-        <p className="controle-acesso__empty">Nenhuma atribuição encontrada.</p>
-      ) : (
-        <div className="controle-acesso__table-wrap">
-          <table className="controle-acesso__table">
-            <thead>
-              <tr>
-                <th>Sujeito</th>
-                <th>Tipo</th>
-                <th>Roles</th>
-              </tr>
-            </thead>
-            <tbody>
-              {grouped.map((row) => (
-                <tr key={`${row.type}:${row.label}`}>
-                  <td>{row.label}</td>
-                  <td>{row.type}</td>
-                  <td>
-                    <div className="controle-acesso__role-tags">
-                      {row.roles.map((roleName) => (
-                        <span key={roleName} className="controle-acesso__badge">
-                          {roleName}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </section>
-  );
-}
-
 function TestUsersTab({
   ask,
 }: {
@@ -680,7 +516,9 @@ function TestUsersTab({
           <div>
             <div className="controle-acesso__intro-title">Usuários de teste</div>
             <p className="controle-acesso__intro-text">
-              Contas locais independentes do LDAP para validação de permissões por área de negócio.
+              Contas locais independentes do LDAP para validação de permissões. Opcionalmente vincule um
+              colaborador do diretório; sem vínculo, o login cria automaticamente um perfil técnico para a
+              sessão.
             </p>
           </div>
         </div>
@@ -718,7 +556,7 @@ function TestUsersTab({
                   <th>Nome</th>
                   <th>E-mail</th>
                   <th>Área</th>
-                  <th>Roles</th>
+                  <th>Regras</th>
                   <th>Status</th>
                   <th>Ações</th>
                 </tr>
@@ -826,21 +664,31 @@ function TestUserFormModal({
     update?: import("../../api/types").UpdateTestUserRequest;
   }) => Promise<void>;
 }) {
+  const rolesQuery = useRbacRoles();
   const [email, setEmail] = useState(user?.email ?? "");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState(user?.displayName ?? "");
-  const [businessArea, setBusinessArea] = useState<BusinessArea>(user?.businessArea ?? "Core");
+  const [businessArea, setBusinessArea] = useState<BusinessArea>(
+    fromBusinessAreaApiValueRequired(user?.businessArea),
+  );
+  const [templateRoleId, setTemplateRoleId] = useState("");
+  const [linkedPerson, setLinkedPerson] = useState<PersonSummaryDto[]>([]);
   const [notes, setNotes] = useState(user?.notes ?? "");
   const [isActive, setIsActive] = useState(user?.isActive ?? true);
 
+  const handleLinkedPersonChange = (people: PersonSummaryDto[]) => {
+    setLinkedPerson(people.length <= 1 ? people : [people[people.length - 1]!]);
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    const optionalPersonId = linkedPerson[0]?.id ?? (user ? user.optionalPersonId ?? null : null);
     if (user) {
       await onSubmit({
         update: {
           displayName: displayName.trim(),
-          businessArea,
-          optionalPersonId: user.optionalPersonId ?? null,
+          businessArea: toBusinessAreaApiValueRequired(businessArea),
+          optionalPersonId,
           isActive,
           expiresAt: user.expiresAt ?? null,
           notes: notes.trim() || null,
@@ -853,8 +701,10 @@ function TestUserFormModal({
         email: email.trim(),
         password,
         displayName: displayName.trim(),
-        businessArea,
+        businessArea: toBusinessAreaApiValueRequired(businessArea),
+        optionalPersonId,
         notes: notes.trim() || null,
+        templateRoleId: templateRoleId || null,
       },
     });
   };
@@ -934,6 +784,41 @@ function TestUserFormModal({
             ))}
           </select>
         </div>
+        <div className="controle-acesso__field">
+          <PeopleMultiSelect
+            label="Colaborador vinculado (opcional)"
+            selected={linkedPerson}
+            onChange={handleLinkedPersonChange}
+            placeholder="Buscar colaborador do diretório…"
+          />
+          <p className="controle-acesso__permission-desc">
+            Use para simular o login como um colaborador real. Se ficar em branco, o sistema cria um perfil
+            técnico automaticamente no primeiro acesso.
+          </p>
+          {user?.optionalPersonId && linkedPerson.length === 0 ? (
+            <p className="controle-acesso__permission-desc">
+              Esta conta já possui um perfil vinculado internamente. Selecione outro colaborador acima apenas se
+              quiser substituir.
+            </p>
+          ) : null}
+        </div>
+        {!user ? (
+          <div className="controle-acesso__field">
+            <label htmlFor="test-user-template-role">Regra inicial</label>
+            <select
+              id="test-user-template-role"
+              value={templateRoleId}
+              onChange={(event) => setTemplateRoleId(event.target.value)}
+            >
+              <option value="">Nenhuma (atribuir depois)</option>
+              {(rolesQuery.data ?? []).map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : null}
         {user ? (
           <div className="controle-acesso__field">
             <label htmlFor="test-user-active">Ativo</label>

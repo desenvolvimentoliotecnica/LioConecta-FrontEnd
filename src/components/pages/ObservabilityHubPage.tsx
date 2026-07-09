@@ -292,7 +292,7 @@ export function ObservabilityHubPage() {
         <header className="page-header">
           <h1 className="page-header__title">Acesso restrito</h1>
           <p className="page-header__desc">
-            O hub de observabilidade exige perfil Admin. Seu usuário atual não possui essa role.
+            O hub de observabilidade exige perfil Admin. Seu usuário atual não possui essa regra.
           </p>
         </header>
         <p>

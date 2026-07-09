@@ -7,7 +7,7 @@ export function RamaisSettingsSection() {
     <section className="org-governance__panel loop-settings" aria-label="Configurações da lista de ramais">
       <RbacDeprecatedNotice permissionKey={PERMISSIONS.ramais.manage} moduleLabel="Lista de Ramais" />
       <p className="org-governance__intro-text">
-        Use <strong>Controle de acesso</strong> para atribuir <code>{PERMISSIONS.ramais.manage}</code> às roles
+        Use <strong>Controle de acesso</strong> para atribuir <code>{PERMISSIONS.ramais.manage}</code> às regras
         autorizadas a gerir a lista de ramais.
       </p>
     </section>
