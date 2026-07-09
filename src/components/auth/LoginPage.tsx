@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../../api/client";
 import { useApiHealth } from "../../api/hooks/useApiHealth";
 import { useLogin } from "../../api/hooks/useAuth";
+import { clearReturnUrl, resolvePostLoginRedirect } from "../../utils/authRedirect";
 import { ApiStatusIndicator } from "./ApiStatusIndicator";
 import "../../styles/login-page.css";
 
@@ -65,11 +66,6 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const redirectTo =
-    (location.state as { from?: string } | null)?.from && (location.state as { from?: string }).from !== "/acesso"
-      ? (location.state as { from: string }).from
-      : "/";
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
@@ -86,6 +82,8 @@ export function LoginPage() {
 
     try {
       await login.mutateAsync({ email: email.trim(), password });
+      const redirectTo = resolvePostLoginRedirect(location, { includeStored: true });
+      clearReturnUrl();
       navigate(redirectTo, { replace: true });
     } catch (submitError) {
       setError(loginErrorMessage(submitError, isOnline));

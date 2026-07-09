@@ -1,6 +1,7 @@
 import type { UniLioCourseDetailDto, UniLioModuleDto } from "../../api/types";
 import catalogJson from "./data/unilio-catalog.json";
 import overlayJson from "./data/unilio-content-overlay.json";
+import newCoursesOverlayJson from "./data/unilio-new-courses-overlay.json";
 
 type SeedModule = {
   sortOrder: number;
@@ -58,6 +59,8 @@ const COURSE_IDS: Record<string, string> = {
   "seguranca-informacao": "22222222-2222-2222-2222-222222220018",
   "feedback-efetivo": "22222222-2222-2222-2222-222222220019",
   "onboarding-liotecnica": "22222222-2222-2222-2222-22222222001a",
+  "curso-gestao-pessoas-lider-rh": "22222222-2222-2222-2222-22222222001b",
+  "curso-rh-agil-catharino": "22222222-2222-2222-2222-22222222001c",
 };
 
 export const PATH_IDS = {
@@ -109,7 +112,12 @@ function mergeCourses(): SeedCourse[] {
 
   const courses = catalog.courses.map((c) => ({ ...c, modules: [...c.modules] }));
 
-  for (const patch of overlay.courses) {
+  const overlayPatches = [
+    ...overlay.courses,
+    ...(newCoursesOverlayJson as { courses: Partial<SeedCourse>[] }).courses,
+  ];
+
+  for (const patch of overlayPatches) {
     if (!patch.seedKey || !index.has(patch.seedKey)) continue;
     const i = index.get(patch.seedKey)!;
     const existing = courses[i];
@@ -141,6 +149,8 @@ const ENROLLMENT_MOCK: Record<string, EnrollmentMock> = {
   "ext-appcc-crq": { progressPct: 100, enrollmentStatus: "completed", completedModules: 99 },
   "ext-gestao-pessoas-rh": { progressPct: 60, enrollmentStatus: "in_progress", completedModules: 1 },
   "ext-lideranca-negociar": { progressPct: 0, enrollmentStatus: "not_started", completedModules: 0 },
+  "curso-gestao-pessoas-lider-rh": { progressPct: 0, enrollmentStatus: "not_started", completedModules: 0 },
+  "curso-rh-agil-catharino": { progressPct: 10, enrollmentStatus: "in_progress", completedModules: 1 },
 };
 
 function mapModule(seedKey: string, module: SeedModule, isCompleted: boolean): UniLioModuleDto {
