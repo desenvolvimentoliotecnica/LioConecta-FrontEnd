@@ -1,34 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { config } from "../../api/client";
 import { useLoopSettings, useSaveLoopSettings } from "../../api/hooks/useLoopSettings";
-import type { UserRole } from "../../api/types";
 import { DEFAULT_LOOP_SETTINGS, loopSettingsFingerprint, type LoopSettings } from "../../config/loop/settings";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { RbacDeprecatedNotice } from "../auth/RbacDeprecatedNotice";
 import "../../styles/organogram-governance-page.css";
-
-const ROLE_OPTIONS: UserRole[] = [
-  "Employee",
-  "Manager",
-  "HR",
-  "TI",
-  "Facilities",
-  "Legal",
-  "Admin",
-  "AnalyticsViewer",
-  "KioskReader",
-];
-
-function parseEmails(value: string): string[] {
-  return value
-    .split(/[\n,;]+/)
-    .map((email) => email.trim())
-    .filter(Boolean);
-}
 
 export function LoopProjetosSettingsSection() {
   const { data: settings, fingerprint, isLoading, isError } = useLoopSettings();
   const saveMutation = useSaveLoopSettings();
   const [form, setForm] = useState<LoopSettings>(DEFAULT_LOOP_SETTINGS);
-  const [extraEmails, setExtraEmails] = useState("");
   const [feedback, setFeedback] = useState<{ type: "success" | "error" | "warn"; message: string } | null>(null);
   const hydratedFingerprint = useRef<string | null>(null);
 
@@ -37,28 +18,17 @@ export function LoopProjetosSettingsSection() {
     if (hydratedFingerprint.current === fingerprint) return;
 
     setForm(settings);
-    setExtraEmails(settings.allowedEmails.join("\n"));
     hydratedFingerprint.current = fingerprint;
   }, [fingerprint, isLoading, settings]);
-
-  const toggleRole = (role: UserRole) => {
-    setForm((current) => {
-      const next = current.allowedRoles.includes(role)
-        ? current.allowedRoles.filter((r) => r !== role)
-        : [...current.allowedRoles, role];
-      return { ...current, allowedRoles: next };
-    });
-  };
 
   const handleSave = async () => {
     setFeedback(null);
 
-    const next: LoopSettings = { ...form, allowedEmails: parseEmails(extraEmails) };
+    const next: LoopSettings = { ...form };
 
     try {
       const { settings: saved, persistedToServer } = await saveMutation.mutateAsync(next);
       setForm(saved);
-      setExtraEmails(saved.allowedEmails.join("\n"));
       hydratedFingerprint.current = loopSettingsFingerprint(saved);
       setFeedback({
         type: persistedToServer ? "success" : "warn",
@@ -78,6 +48,8 @@ export function LoopProjetosSettingsSection() {
 
   return (
     <section className="org-governance__panel loop-settings" aria-label="Configurações do Loop de Projetos">
+      <RbacDeprecatedNotice permissionKey={PERMISSIONS.loop.access} moduleLabel="Loop de Projetos" />
+
       <div className="org-governance__intro-head">
         <div className="org-governance__intro-icon loop-settings__icon" aria-hidden="true">
           <i className="fa-solid fa-infinity" />
@@ -85,7 +57,7 @@ export function LoopProjetosSettingsSection() {
         <div>
           <div className="org-governance__intro-title">Loop de Projetos e Equipes</div>
           <p className="org-governance__intro-text">
-            Define quem pode acessar o módulo de gestão de projetos pelo menu lateral (∞ Loop).
+            Habilita ou desabilita o módulo no portal. Quem pode acessar é definido em Controle de acesso.
           </p>
         </div>
       </div>
@@ -117,37 +89,6 @@ export function LoopProjetosSettingsSection() {
             onChange={(e) => setForm((c) => ({ ...c, enabled: e.target.checked }))}
           />
           Módulo Loop habilitado
-        </label>
-
-        <div className="org-governance__field org-governance__field--full">
-          <span>Perfis com acesso</span>
-          <div className="org-governance__role-list">
-            {ROLE_OPTIONS.map((role) => (
-              <label key={role} className="org-governance__role-chip">
-                <input
-                  type="checkbox"
-                  checked={form.allowedRoles.includes(role)}
-                  disabled={isLoading || saveMutation.isPending}
-                  onChange={() => toggleRole(role)}
-                />
-                {role}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <label className="org-governance__field org-governance__field--full">
-          <span>E-mails adicionais com acesso (um por linha)</span>
-          <textarea
-            rows={4}
-            value={extraEmails}
-            disabled={isLoading || saveMutation.isPending}
-            onChange={(e) => setExtraEmails(e.target.value)}
-            placeholder="gestor@empresa.com.br"
-          />
-          <small className="backend-config-page__field-hint">
-            Lista de permissão: estes e-mails entram no Loop mesmo sem o perfil marcado acima.
-          </small>
         </label>
 
         <div className="org-governance__toolbar">

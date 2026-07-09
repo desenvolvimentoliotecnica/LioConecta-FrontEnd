@@ -1,4 +1,6 @@
 import type { MeDto, UserRole } from "../../api/types";
+import { hasPermission } from "../../api/auth";
+import { PERMISSIONS } from "../rbac/permissions";
 
 export type RamaisSettings = {
   allowedRoles: UserRole[];
@@ -6,7 +8,9 @@ export type RamaisSettings = {
 };
 
 export const RAMAIS_SETTING_KEYS = {
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.ramais.manage */
   allowedRoles: "ramais.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "ramais.allowed_emails",
 } as const;
 
@@ -15,33 +19,8 @@ export const DEFAULT_RAMAIS_SETTINGS: RamaisSettings = {
   allowedEmails: [],
 };
 
-function roleToIndex(role: UserRole): number {
-  const map: Record<UserRole, number> = {
-    Employee: 0,
-    Manager: 1,
-    HR: 2,
-    TI: 3,
-    Facilities: 4,
-    Legal: 5,
-    Admin: 6,
-    AnalyticsViewer: 7,
-    KioskReader: 8,
-  };
-  return map[role];
-}
-
-export function canManageRamais(me: MeDto | undefined, settings: RamaisSettings | undefined): boolean {
-  if (!me) return false;
-  if (me.roles.some((role) => role === "Admin" || role === 6)) return true;
-  if (!settings) return false;
-
-  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
-    return true;
-  }
-
-  return settings.allowedRoles.some((role) =>
-    me.roles.some((value) => value === role || value === roleToIndex(role)),
-  );
+export function canManageRamais(me: MeDto | undefined, _settings?: RamaisSettings): boolean {
+  return hasPermission(me, PERMISSIONS.ramais.manage);
 }
 
 export function ramaisSettingsToAppSettings(settings: RamaisSettings) {

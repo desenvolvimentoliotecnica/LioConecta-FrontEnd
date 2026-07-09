@@ -1,0 +1,44 @@
+---
+description: Manter RBAC sincronizado com navegação, UI e APIs do portal
+alwaysApply: true
+---
+
+# RBAC — revisão obrigatória
+
+O controle de acesso do LioConecta é centralizado em **RBAC** (`/admin/controle-acesso`). **Sempre revise permissões quando alterar navegação, gates de módulo ou telas administrativas.**
+
+## Quando revisar
+
+Revise `src/config/rbac/permissions.ts`, `usePermissions` / `PermissionGate` e páginas afetadas se a mudança incluir:
+
+- Novo item no **Sidebar** (`src/components/layout/Sidebar.tsx`) ou **Topbar** (`src/components/layout/Topbar.tsx`)
+- Nova rota protegida ou **AccessGate** de módulo (Loop, Pulse, Compass, UniLio, etc.)
+- Nova página ou ação em **área admin** (`/admin/*`)
+- Novo botão, menu ou link visível só a gestores/RH/TI/Facilities
+- Nova chamada de API que exige policy no backend — alinhar chave de permissão
+- Remoção de rota ou item de menu — remover `permission`/`moduleGate` associados
+
+**Não** adicionar `allowed_roles` / `allowed_emails` em Configurações do Backend para controle de acesso — use RBAC.
+
+## Onde editar
+
+| Arquivo | Responsabilidade |
+|---------|------------------|
+| `src/config/rbac/permissions.ts` | Chaves canônicas (`PERMISSIONS.*`) |
+| `src/hooks/usePermissions.ts` | Hook de consumo no React |
+| `src/components/auth/PermissionGate.tsx` | Gate declarativo por permissão |
+| `src/api/auth.ts` | Helpers `hasPermission`, `canAccess*Module` |
+| `src/components/layout/Sidebar.tsx` | `permission` / `moduleGate` por item |
+| Backend `PermissionCatalog` | Fonte de verdade das chaves (não duplicar sem alinhar) |
+
+## Checklist antes de concluir a tarefa
+
+1. Chave de permissão existe no catálogo RBAC do backend (ou foi adicionada lá)
+2. UI usa `usePermissions` / `PermissionGate` — não `hasRole` nem listas `allowed_roles`
+3. Sidebar e Topbar ocultam links sem permissão
+4. AccessGates de módulo checam permissão **e** flag `enabled` quando aplicável
+5. Páginas admin usam permissão específica (`admin.settings.manage`, `analytics.view`, etc.)
+6. Config. Backend não expõe perfis/e-mails para módulos RBAC — aviso aponta para `/admin/controle-acesso`
+7. `npm run build` e testes (`npm test`) passam sem erros
+
+Se a mudança for apenas cosmética em página já protegida por RBAC, revisão extra não é necessária.

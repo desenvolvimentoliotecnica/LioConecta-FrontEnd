@@ -41,6 +41,7 @@ import { TotvsRmConfigPage } from "./components/admin/TotvsRmConfigPage";
 import { EmailHubPage } from "./components/admin/EmailHubPage";
 import { EmailConfigPage } from "./components/admin/EmailConfigPage";
 import { OrganogramGovernancePage } from "./components/admin/OrganogramGovernancePage";
+import { ControleAcessoPage } from "./components/admin/ControleAcessoPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -243,6 +244,7 @@ function App() {
           <Route path="relatorios" element={<UniLioRelatoriosPage />} />
         </Route>
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
+        <Route path="/admin/controle-acesso" element={<ControleAcessoPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
         <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
         <Route path="/admin/workers" element={<WorkersHubPage />} />

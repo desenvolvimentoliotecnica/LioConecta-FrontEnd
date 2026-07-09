@@ -117,6 +117,16 @@
   --sph-chip-color: #c2410c;
 }
 
+.section-page-head--plataforma {
+  --sph-border: rgba(147, 197, 253, 0.55);
+  --sph-bg-base: #eff6ff;
+  --sph-bg-accent: rgba(239, 246, 255, 0.84);
+  --sph-shadow: rgba(37, 99, 235, 0.06);
+  --sph-chip-bg: #dbeafe;
+  --sph-chip-border: #93c5fd;
+  --sph-chip-color: #1d4ed8;
+}
+
 .section-page-head .page-header {
   position: relative;
   z-index: 1;

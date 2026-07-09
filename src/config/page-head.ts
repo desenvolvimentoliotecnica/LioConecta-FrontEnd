@@ -6,7 +6,8 @@ export type PageHeadSection =
   | "juridico"
   | "documentos"
   | "grupos"
-  | "comunicados";
+  | "comunicados"
+  | "plataforma";
 
 export type PageHeadSectionMeta = {
   hubPath?: string;
@@ -22,6 +23,7 @@ export const PAGE_HEAD_SECTIONS: Record<PageHeadSection, PageHeadSectionMeta> = 
   documentos: { hubPath: "/documentos", hubLabel: "Documentos" },
   grupos: { hubPath: "/grupos", hubLabel: "Grupos" },
   comunicados: { hubPath: "/comunicados", hubLabel: "Comunicados" },
+  plataforma: { hubPath: "/admin/configuracoes-backend", hubLabel: "Administração" },
 };
 
 const TI_PAGE_IDS = new Set([

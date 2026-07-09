@@ -10,7 +10,9 @@ export const COMPASS_SETTINGS_STORAGE_KEY = "lioconecta.compass.settings";
 
 export const COMPASS_SETTING_KEYS = {
   enabled: "compass.enabled",
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.compass.access */
   allowedRoles: "compass.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "compass.allowed_emails",
 } as const;
 

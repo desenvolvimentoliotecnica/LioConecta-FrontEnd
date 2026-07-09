@@ -10,7 +10,9 @@ export const LOOP_SETTINGS_STORAGE_KEY = "lioconecta.loop.settings";
 
 export const LOOP_SETTING_KEYS = {
   enabled: "loop.enabled",
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.loop.access */
   allowedRoles: "loop.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "loop.allowed_emails",
 } as const;
 

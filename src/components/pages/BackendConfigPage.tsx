@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
-import { isAdminUser } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import { ApiError } from "../../api/client";
 import { useAppSettings, useUpdateAppSettings } from "../../api/hooks/useAppSettings";
 import { useTestGraphConnection } from "../../api/hooks/useGraphConfig";
@@ -9,7 +10,6 @@ import { useTestGlpiConnection } from "../../api/hooks/useGlpiConfig";
 import { useTestLdapConnection } from "../../api/hooks/useLdapConfig";
 import { useTestChatConnection } from "../../api/hooks/useChat";
 import { useTestCalendarConnection } from "../../api/hooks/useCalendar";
-import { useMe } from "../../api/hooks/useMe";
 import { OrganogramDepartmentsConfigSection } from "../admin/OrganogramDepartmentsConfigSection";
 import { BackendConfigHelpModal, ConfigSectionHead } from "../admin/backendConfigHelp";
 import { LoopProjetosSettingsSection } from "../admin/LoopProjetosSettingsSection";
@@ -21,6 +21,7 @@ import { RamaisSettingsSection } from "../admin/RamaisSettingsSection";
 import { BeneficiosSettingsSection } from "../admin/BeneficiosSettingsSection";
 import { SystemsSettingsSection } from "../admin/SystemsSettingsSection";
 import type { AppSettingCategoryDto, AppSettingDto } from "../../api/types";
+import { DEPRECATED_ACCESS_SETTING_KEYS } from "../../config/rbac/permissions";
 import "../../styles/backend-config-page.css";
 
 const SECRET_MASK = "********";
@@ -181,7 +182,8 @@ function SettingField({
 
 export function BackendConfigPage() {
   const [searchParams] = useSearchParams();
-  const { data: me, isLoading: meLoading } = useMe();
+  const { hasPermission, isLoading: meLoading } = usePermissions();
+  const isAdmin = hasPermission(PERMISSIONS.admin.settingsManage);
   const { data: categories = [], isLoading, isError } = useAppSettings();
   const updateSettings = useUpdateAppSettings();
   const testGraphConnection = useTestGraphConnection();
@@ -231,8 +233,6 @@ export function BackendConfigPage() {
   } | null>(null);
 
   const [helpCategory, setHelpCategory] = useState<string | null>(null);
-
-  const isAdmin = isAdminUser(me);
 
   useEffect(() => {
     const categoryFromUrl = searchParams.get("category");
@@ -612,8 +612,8 @@ export function BackendConfigPage() {
         <section className="backend-config-page__section" aria-labelledby="loop-module-title">
           <ConfigSectionHead
             titleId="loop-module-title"
-            title="Loop de Projetos — acesso e permissões"
-            description="Controle quem visualiza o módulo Loop (∞) no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            title="Loop de Projetos — módulo"
+            description="Habilita ou desabilita o módulo Loop no portal. Permissões de acesso são gerenciadas em Controle de acesso (RBAC)."
             helpCategoryId={LOOP_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
@@ -633,8 +633,8 @@ export function BackendConfigPage() {
         <section className="backend-config-page__section" aria-labelledby="compass-module-title">
           <ConfigSectionHead
             titleId="compass-module-title"
-            title="Compass IBP — acesso e permissões"
-            description="Controle quem visualiza o módulo Compass (IBP) no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            title="Compass IBP — módulo"
+            description="Habilita ou desabilita o módulo Compass no portal. Permissões de acesso são gerenciadas em Controle de acesso (RBAC)."
             helpCategoryId={COMPASS_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
@@ -654,8 +654,8 @@ export function BackendConfigPage() {
         <section className="backend-config-page__section" aria-labelledby="unilio-module-title">
           <ConfigSectionHead
             titleId="unilio-module-title"
-            title="UniLio — acesso e permissões"
-            description="Controle quem visualiza o portal de aprendizagem corporativa no menu lateral esquerdo. As permissões são salvas centralmente via API de configurações."
+            title="UniLio — módulo"
+            description="Habilita ou desabilita o portal UniLio. Permissões de acesso são gerenciadas em Controle de acesso (RBAC)."
             helpCategoryId={UNILIO_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
@@ -675,8 +675,8 @@ export function BackendConfigPage() {
         <section className="backend-config-page__section" aria-labelledby="cardapio-module-title">
           <ConfigSectionHead
             titleId="cardapio-module-title"
-            title="Cardápio — acesso e envio"
-            description="Controle quem edita o cardápio semanal em Facilities e os destinatários padrão do e-mail semanal."
+            title="Cardápio — envio semanal"
+            description="Destinatários padrão do e-mail semanal. Quem edita o cardápio é definido em Controle de acesso (RBAC)."
             helpCategoryId={CARDAPIO_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
@@ -697,7 +697,7 @@ export function BackendConfigPage() {
           <ConfigSectionHead
             titleId="ramais-module-title"
             title="Ramais — gestão da lista"
-            description="Defina quais perfis e e-mails podem criar, editar e excluir ramais no menu Pessoas."
+            description="Permissões de gestão da lista de ramais foram migradas para Controle de acesso (RBAC)."
             onOpenHelp={setHelpCategory}
           />
 
@@ -717,7 +717,7 @@ export function BackendConfigPage() {
           <ConfigSectionHead
             titleId="beneficios-module-title"
             title="Benefícios — permissões de gestão"
-            description="Defina quais perfis e e-mails podem gerir catálogo e atribuições de benefícios."
+            description="Permissões de gestão de benefícios foram migradas para Controle de acesso (RBAC)."
             onOpenHelp={setHelpCategory}
           />
 
@@ -737,7 +737,7 @@ export function BackendConfigPage() {
           <ConfigSectionHead
             titleId="systems-module-title"
             title="Sistemas — permissões de gestão"
-            description="Defina quais perfis e e-mails podem criar, editar e desativar sistemas no hub de acesso."
+            description="Permissões de gestão do hub de sistemas foram migradas para Controle de acesso (RBAC)."
             helpCategoryId={SYSTEMS_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
@@ -994,7 +994,10 @@ export function BackendConfigPage() {
                   setting.key !== "planner.last_sync_utc" &&
                   setting.key !== "planner.plan_title" &&
                   !setting.key.startsWith("chat.teams.last_test") &&
-                  !setting.key.startsWith("calendar.last_test"),
+                  !setting.key.startsWith("calendar.last_test") &&
+                  !DEPRECATED_ACCESS_SETTING_KEYS.includes(
+                    setting.key as (typeof DEPRECATED_ACCESS_SETTING_KEYS)[number],
+                  ),
               )
               .map((setting) => (
               <SettingField

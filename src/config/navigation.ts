@@ -92,6 +92,18 @@ export const juridicoLinks: NavLinkItem[] = [
   { label: "Consultoria jurídica", path: "/servicos/consultoria-juridica" },
 ];
 
+export const adminLinks: NavLinkItem[] = [
+  { label: "Configurações do Backend", path: "/admin/configuracoes-backend" },
+  { label: "Controle de acesso", path: "/admin/controle-acesso" },
+  { label: "Trilha de auditoria", path: "/admin/trilha-auditoria" },
+  { label: "Observabilidade", path: "/admin/observabilidade" },
+  { label: "Workers", path: "/admin/workers" },
+  { label: "TOTVS RM — Ponto", path: "/admin/totvs-rm" },
+  { label: "E-mail — Fila", path: "/admin/email" },
+  { label: "E-mail — SMTP", path: "/admin/email/config" },
+  { label: "Governança do organograma", path: "/admin/governanca/organograma" },
+];
+
 export const allServicosLinks: NavLinkItem[] = [
   ...servicosLinks,
   ...tiLinks,

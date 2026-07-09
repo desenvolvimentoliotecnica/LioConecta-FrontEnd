@@ -16,6 +16,27 @@ const MOCK_ME: MeDto = {
   photoUrl: DEFAULT_PORTAL_AVATAR,
   departmentName: "Sistemas",
   roles: ["Employee", "Manager", "Admin"],
+  permissions: [
+    { key: "portal.access", scope: "Global" },
+    { key: "admin.settings.manage", scope: "Global" },
+    { key: "rbac.roles.manage", scope: "Global" },
+    { key: "rbac.assignments.manage", scope: "Global" },
+    { key: "rbac.test_users.manage", scope: "Global" },
+    { key: "analytics.view", scope: "Global" },
+    { key: "loop.access", scope: "Global" },
+    { key: "pulse.access", scope: "Global" },
+    { key: "compass.access", scope: "Global" },
+    { key: "unilio.access", scope: "Global" },
+    { key: "benefits.manage", scope: "Global" },
+    { key: "systems.manage", scope: "Global" },
+    { key: "ramais.manage", scope: "Global" },
+    { key: "facilities.menu.manage", scope: "Global" },
+    { key: "admin.workers.manage", scope: "Global" },
+    { key: "admin.email.manage", scope: "Global" },
+    { key: "admin.totvs.manage", scope: "Global" },
+  ],
+  subjectType: "PortalUser",
+  isTestUser: false,
 };
 
 export function useMe() {

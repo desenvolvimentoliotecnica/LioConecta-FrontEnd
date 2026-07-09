@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
-import { canAccessAdminArea, canAccessCompassModule, canAccessLoopModule, canAccessUniLioModule } from "../../api/auth";
+import { canAccessLoopModule, canAccessCompassModule, canAccessPulseModule, canAccessUniLioModule } from "../../api/auth";
 import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
-import { useMe } from "../../api/hooks/useMe";
+import { PERMISSIONS, RBAC_ADMIN_PERMISSIONS } from "../../config/rbac/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
+
+type ModuleGate = "loop" | "pulse" | "compass" | "unilio";
 
 type SidebarItemConfig = {
   label: string;
@@ -12,10 +15,8 @@ type SidebarItemConfig = {
   activePrefix?: string;
   activeOn?: readonly string[];
   spacerBefore?: boolean;
-  adminOnly?: boolean;
-  loopAccessOnly?: boolean;
-  compassAccessOnly?: boolean;
-  unilioAccessOnly?: boolean;
+  permission?: string | readonly string[];
+  moduleGate?: ModuleGate;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -36,69 +37,79 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     icon: "fa-infinity",
     href: "/loop",
     activePrefix: "/loop",
-    loopAccessOnly: true,
+    permission: PERMISSIONS.loop.access,
+    moduleGate: "loop",
   },
   {
     label: "Pulse",
     icon: "fa-heart-pulse",
     href: "/pulse",
     activePrefix: "/pulse",
-    loopAccessOnly: true,
+    moduleGate: "pulse",
   },
   {
     label: "Compass",
     icon: "fa-compass",
     href: "/compass",
     activePrefix: "/compass",
-    compassAccessOnly: true,
+    permission: PERMISSIONS.compass.access,
+    moduleGate: "compass",
   },
   {
     label: "UniLio",
     icon: "fa-graduation-cap",
     href: "/unilio",
     activePrefix: "/unilio",
-    unilioAccessOnly: true,
+    permission: PERMISSIONS.unilio.access,
+    moduleGate: "unilio",
   },
 ];
 
 const RIGHT_ITEMS: SidebarItemConfig[] = [
   { label: "Minhas atividades", icon: "fa-list-check", href: "/minhas-atividades" },
-  { label: "Analytics", icon: "fa-chart-pie", href: "/analytics" },
+  { label: "Analytics", icon: "fa-chart-pie", href: "/analytics", permission: PERMISSIONS.analytics.view },
   {
     label: "Config. Backend",
     icon: "fa-server",
     href: "/admin/configuracoes-backend",
     activePrefix: "/admin/configuracoes-backend",
     spacerBefore: true,
-    adminOnly: true,
+    permission: PERMISSIONS.admin.settingsManage,
+  },
+  {
+    label: "Controle de acesso",
+    icon: "fa-user-shield",
+    href: "/admin/controle-acesso",
+    activePrefix: "/admin/controle-acesso",
+    permission: RBAC_ADMIN_PERMISSIONS,
   },
   {
     label: "Trilha de auditoria",
     icon: "fa-clipboard-list",
     href: "/admin/trilha-auditoria",
     activePrefix: "/admin/trilha-auditoria",
-    adminOnly: true,
+    permission: PERMISSIONS.analytics.view,
   },
   {
     label: "Observabilidade",
     icon: "fa-chart-line",
     href: "/admin/observabilidade",
     activePrefix: "/admin/observabilidade",
-    adminOnly: true,
+    permission: PERMISSIONS.analytics.view,
   },
   {
     label: "E-mail",
     icon: "fa-envelope",
     href: "/admin/email",
     activePrefix: "/admin/email",
-    adminOnly: true,
+    permission: PERMISSIONS.admin.emailManage,
   },
   {
     label: "Organograma",
     icon: "fa-sitemap",
     href: "/admin/governanca/organograma",
     activePrefix: "/admin/governanca/organograma",
-    adminOnly: true,
+    permission: PERMISSIONS.admin.settingsManage,
   },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
   { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
@@ -165,21 +176,45 @@ function SidebarItem({
   );
 }
 
+function isModuleGateOpen(
+  gate: ModuleGate | undefined,
+  me: ReturnType<typeof usePermissions>["me"],
+  loopSettings: ReturnType<typeof useLoopSettings>["data"],
+  compassSettings: ReturnType<typeof useCompassSettings>["data"],
+  unilioSettings: ReturnType<typeof useUniLioSettings>["data"],
+): boolean {
+  if (!gate) return true;
+  switch (gate) {
+    case "loop":
+      return canAccessLoopModule(me, loopSettings);
+    case "pulse":
+      return canAccessPulseModule(me, loopSettings);
+    case "compass":
+      return canAccessCompassModule(me, compassSettings);
+    case "unilio":
+      return canAccessUniLioModule(me, unilioSettings);
+    default:
+      return true;
+  }
+}
+
 export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarProps) {
-  const { data: me } = useMe();
+  const { me, hasPermission, hasAnyPermission } = usePermissions();
   const { data: loopSettings } = useLoopSettings();
   const { data: compassSettings } = useCompassSettings();
   const { data: unilioSettings } = useUniLioSettings();
-  const canAccessAdmin = canAccessAdminArea(me);
-  const canAccessLoop = canAccessLoopModule(me, loopSettings);
-  const canAccessCompass = canAccessCompassModule(me, compassSettings);
-  const canAccessUniLio = canAccessUniLioModule(me, unilioSettings);
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
   const items = baseItems.filter((item) => {
-    if (item.compassAccessOnly) return canAccessCompass;
-    if (item.unilioAccessOnly) return canAccessUniLio;
-    if (item.loopAccessOnly) return canAccessLoop;
-    if (item.adminOnly) return canAccessAdmin;
+    if (item.permission) {
+      const granted =
+        typeof item.permission === "string"
+          ? hasPermission(item.permission)
+          : hasAnyPermission(item.permission);
+      if (!granted) return false;
+    }
+    if (item.moduleGate) {
+      return isModuleGateOpen(item.moduleGate, me, loopSettings, compassSettings, unilioSettings);
+    }
     return true;
   });
   const id = side === "left" ? "sidebar-left" : "sidebar-right";

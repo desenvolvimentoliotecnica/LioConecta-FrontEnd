@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useTriggerWorker,
   useWorkerDefinitions,
   useWorkerRunDetail,
   useWorkerRuns,
 } from "../../api/hooks/useWorkers";
-import { useMe } from "../../api/hooks/useMe";
 import type { WorkerDefinitionDto, WorkerRunDto } from "../../api/types";
 import "../../styles/workers-hub-page.css";
 
@@ -166,7 +166,7 @@ function RunDetailPanel({
 }
 
 export function WorkersHubPage() {
-  const meQuery = useMe();
+  const { hasPermission, isLoading: meLoading } = usePermissions();
   const definitionsQuery = useWorkerDefinitions();
   const triggerMutation = useTriggerWorker();
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -200,7 +200,7 @@ export function WorkersHubPage() {
     [runsQuery.data],
   );
 
-  if (meQuery.isLoading) {
+  if (meLoading) {
     return (
       <main className="main">
         <p className="workers-empty">Carregando permissões…</p>
@@ -208,7 +208,7 @@ export function WorkersHubPage() {
     );
   }
 
-  if (!canAccessAdminArea(meQuery.data)) {
+  if (!hasPermission(PERMISSIONS.admin.workersManage)) {
     return <Navigate to="/" replace />;
   }
 

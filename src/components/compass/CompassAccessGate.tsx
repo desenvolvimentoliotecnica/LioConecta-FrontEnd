@@ -1,9 +1,10 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { canAccessCompassModule } from "../../api/auth";
 import { useCompassSettings } from "../../api/hooks/useCompassSettings";
-import { useMe } from "../../api/hooks/useMe";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
 import type { CompassFilters } from "../../config/compass/types";
+import { ModuleAccessDenied } from "../auth/ModuleAccessDenied";
 
 type CompassFiltersContextValue = {
   filters: CompassFilters;
@@ -45,10 +46,10 @@ export function useCompassFilters(): CompassFiltersContextValue {
 }
 
 export function CompassAccessGate({ children }: { children: ReactNode }) {
-  const { data: me, isLoading: meLoading } = useMe();
+  const { hasPermission, isLoading: permissionsLoading } = usePermissions();
   const { data: settings, isLoading: settingsLoading } = useCompassSettings();
 
-  if (meLoading || settingsLoading) {
+  if (permissionsLoading || settingsLoading) {
     return (
       <main className="main">
         <p className="compass-page__loading">Carregando módulo Compass…</p>
@@ -56,23 +57,21 @@ export function CompassAccessGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!canAccessCompassModule(me, settings)) {
+  const granted = hasPermission(PERMISSIONS.compass.access) && settings?.enabled !== false;
+
+  if (!granted) {
     return (
-      <main className="main">
-        <header className="page-header">
+      <ModuleAccessDenied
+        moduleName="Compass IBP"
+        permissionKey={PERMISSIONS.compass.access}
+        breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <Link to="/">Início</Link>
             <span className="breadcrumb__sep">/</span>
             <span className="breadcrumb__current">Compass IBP</span>
           </nav>
-          <h1 className="page-header__title">Acesso restrito</h1>
-          <p className="page-header__desc">
-            O módulo Compass IBP não está disponível para seu perfil. Solicite acesso ao administrador ou verifique as
-            permissões em{" "}
-            <Link to="/admin/configuracoes-backend?category=compass">Configurações do Backend → Compass</Link>.
-          </p>
-        </header>
-      </main>
+        }
+      />
     );
   }
 

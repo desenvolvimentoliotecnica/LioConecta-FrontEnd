@@ -10,7 +10,9 @@ export const UNILIO_SETTINGS_STORAGE_KEY = "lioconecta.unilio.settings";
 
 export const UNILIO_SETTING_KEYS = {
   enabled: "unilio.enabled",
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.unilio.access */
   allowedRoles: "unilio.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "unilio.allowed_emails",
 } as const;
 
