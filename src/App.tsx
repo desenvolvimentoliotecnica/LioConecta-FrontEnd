@@ -102,6 +102,8 @@ import { UniLioCompliancePage } from "./components/unilio/pages/UniLioCompliance
 import { UniLioComunidadePage } from "./components/unilio/pages/UniLioComunidadePage";
 import { UniLioRecomendacoesPage } from "./components/unilio/pages/UniLioRecomendacoesPage";
 import { UniLioInstrutorPage } from "./components/unilio/pages/UniLioInstrutorPage";
+import { UniLioInstrutorDuvidasPage } from "./components/unilio/pages/UniLioInstrutorDuvidasPage";
+import { UniLioMinhasDuvidasPage } from "./components/unilio/pages/UniLioMinhasDuvidasPage";
 import {
   UniLioAprovacaoListPage,
   UniLioAprovacaoReviewPage,
@@ -228,8 +230,10 @@ function App() {
           <Route path="certificados" element={<UniLioCertificadosPage />} />
           <Route path="compliance" element={<UniLioCompliancePage />} />
           <Route path="comunidade" element={<UniLioComunidadePage />} />
+          <Route path="minhas-duvidas" element={<UniLioMinhasDuvidasPage />} />
           <Route path="recomendacoes" element={<UniLioRecomendacoesPage />} />
           <Route path="instrutor" element={<UniLioInstrutorPage />} />
+          <Route path="instrutor/duvidas" element={<UniLioInstrutorDuvidasPage />} />
           <Route path="instrutor/curso/:courseId/editar" element={<UniLioCourseEditPage />} />
           <Route path="admin/aprovacoes" element={<UniLioAprovacaoListPage />} />
           <Route path="admin/aprovacoes/:courseId" element={<UniLioAprovacaoReviewPage />} />

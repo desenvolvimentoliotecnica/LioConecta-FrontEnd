@@ -15,6 +15,8 @@ import type {
   UniLioRecommendationsDto,
   UniLioReportsDto,
   UniLioSkillsDto,
+  UniLioQuestionsPageDto,
+  UniLioQuestionDetailDto,
 } from "../types";
 import type {
   UniLioAssessmentsView,
@@ -36,6 +38,9 @@ import type {
   UniLioReportsView,
   UniLioSkillsView,
   UniLioRecommendation,
+  UniLioQuestionsView,
+  UniLioQuestionDetail,
+  UniLioQuestionVisibility,
 } from "../../config/unilio/types";
 import { MOCK_COURSES } from "../../config/unilio/mockSeed";
 
@@ -228,6 +233,43 @@ export function mapUniLioReportsFromApi(raw: UniLioReportsDto): UniLioReportsVie
       ...g,
       courseId: String(g.courseId),
       dueDate: g.dueDate ?? null,
+    })),
+  };
+}
+
+function mapQuestionVisibility(raw: string): UniLioQuestionVisibility {
+  return raw === "public" ? "public" : "private";
+}
+
+function mapQuestionSummary(
+  item: UniLioQuestionsPageDto["items"][number],
+) {
+  return {
+    ...item,
+    id: String(item.id),
+    courseId: String(item.courseId),
+    moduleId: item.moduleId ? String(item.moduleId) : null,
+    authorPersonId: String(item.authorPersonId),
+    visibility: mapQuestionVisibility(item.visibility),
+  };
+}
+
+export function mapUniLioQuestionsFromApi(raw: UniLioQuestionsPageDto): UniLioQuestionsView {
+  return {
+    ...raw,
+    items: raw.items.map(mapQuestionSummary),
+  };
+}
+
+export function mapUniLioQuestionDetailFromApi(raw: UniLioQuestionDetailDto): UniLioQuestionDetail {
+  return {
+    ...mapQuestionSummary({
+      ...raw,
+      replyCount: raw.replies.length,
+    }),
+    replies: raw.replies.map((r) => ({
+      ...r,
+      id: String(r.id),
     })),
   };
 }

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useUniLioInstructorCourses } from "../../../api/hooks/useUniLioInstructorCourses";
+import { useUniLioInstructorQuestions } from "../../../api/hooks/useUniLioQuestions";
 import { useUniLioAuthoringCourses } from "../../../api/hooks/useUniLioAuthoring";
 import { formatUniLioRating } from "../../../utils/unilioView";
 import { UniLioFallbackBanner } from "../UniLioFallbackBanner";
 import "../../../styles/unilio-aprovacao.css";
+import "../../../styles/unilio-questions.css";
 
 function statusLabel(status: string) {
   switch (status) {
@@ -23,6 +25,7 @@ function statusLabel(status: string) {
 export function UniLioInstrutorPage() {
   const { data, isLoading, isFallback } = useUniLioInstructorCourses();
   const { data: authoringCourses = [], isLoading: authoringLoading } = useUniLioAuthoringCourses();
+  const { data: instructorQuestions } = useUniLioInstructorQuestions({ pageSize: 1 });
 
   if (isLoading || authoringLoading) {
     return (
@@ -37,9 +40,16 @@ export function UniLioInstrutorPage() {
       <div className="unilio-page__head">
         <h1 className="unilio-page__title">Painel do Instrutor</h1>
         <p className="unilio-page__desc">Cursos sob sua responsabilidade e métricas de engajamento.</p>
-        <div className="unilio-authoring-form__actions" style={{ marginTop: "0.75rem" }}>
+        <div className="unilio-authoring-form__actions" style={{ marginTop: "0.75rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
           <Link to="/unilio/instrutor/curso/novo/editar" className="unilio-player__complete-btn" style={{ textDecoration: "none" }}>
             Novo curso
+          </Link>
+          <Link to="/unilio/instrutor/duvidas" className="unilio-player__help-btn" style={{ textDecoration: "none" }}>
+            <i className="fa-solid fa-inbox" aria-hidden="true" />
+            Caixa de dúvidas
+            {instructorQuestions.unreadCount > 0 ? (
+              <span className="unilio-questions-inbox__unread">{instructorQuestions.unreadCount}</span>
+            ) : null}
           </Link>
         </div>
       </div>
