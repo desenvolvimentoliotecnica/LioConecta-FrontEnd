@@ -4,11 +4,25 @@ import { ApiError } from "../../api/client";
 import { config } from "../../api/client";
 import { getStoredToken, setStoredToken } from "../../api/hooks/useAuth";
 import { useMe } from "../../api/hooks/useMe";
+import { buildLoginRedirect, buildReturnUrl, resolvePostLoginRedirect } from "../../utils/authRedirect";
 
 const DEV_AUTH_MODE = import.meta.env.VITE_AUTH_MODE === "dev";
 
 function isAuthBypassed() {
   return DEV_AUTH_MODE || config.useMock;
+}
+
+function LoginNavigate({ loginRedirect }: { loginRedirect: ReturnType<typeof buildLoginRedirect> }) {
+  return (
+    <Navigate
+      to={{
+        pathname: loginRedirect.pathname,
+        search: loginRedirect.search,
+      }}
+      replace
+      state={loginRedirect.state}
+    />
+  );
 }
 
 export function RequireAuth() {
@@ -31,7 +45,7 @@ export function RequireAuth() {
   }
 
   if (!token) {
-    return <Navigate to="/acesso" replace state={{ from: location.pathname }} />;
+    return <LoginNavigate loginRedirect={buildLoginRedirect(buildReturnUrl(location))} />;
   }
 
   if (isLoading) {
@@ -43,17 +57,18 @@ export function RequireAuth() {
   }
 
   if (isError) {
-    return <Navigate to="/acesso" replace state={{ from: location.pathname }} />;
+    return <LoginNavigate loginRedirect={buildLoginRedirect(buildReturnUrl(location))} />;
   }
 
   if (!me) {
-    return <Navigate to="/acesso" replace />;
+    return <LoginNavigate loginRedirect={buildLoginRedirect(buildReturnUrl(location))} />;
   }
 
   return <Outlet />;
 }
 
 export function GuestOnly({ children }: { children: ReactNode }) {
+  const location = useLocation();
   const token = getStoredToken();
   const { data: me, isLoading } = useMe();
 
@@ -62,7 +77,8 @@ export function GuestOnly({ children }: { children: ReactNode }) {
   }
 
   if (token && (isLoading || me)) {
-    return <Navigate to="/" replace />;
+    const redirectTo = resolvePostLoginRedirect(location);
+    return <Navigate to={redirectTo} replace />;
   }
 
   return <>{children}</>;
