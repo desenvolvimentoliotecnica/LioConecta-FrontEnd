@@ -6,7 +6,11 @@ import {
   useNotifications,
   useUnreadNotificationCount,
 } from "../../api/hooks/useNotifications";
-import { mapNotificationDtoToItem } from "../../utils/notifications";
+import { mapNotificationDtoToItem, notificationLinkTo } from "../../utils/notifications";
+import {
+  dispatchFeedPostFocus,
+  extractFeedPostIdFromHref,
+} from "../feed/useFeedPostDeepLink";
 
 type MenuApi = { closeAll: (except: Element | null) => void };
 
@@ -19,8 +23,12 @@ export function NotificationsMenu() {
   const markAllRead = useMarkAllNotificationsRead();
 
   const recent = useMemo(
-    () => (notificationsPage?.items ?? []).slice(0, 3).map(mapNotificationDtoToItem),
-    [notificationsPage?.items]
+    () =>
+      (notificationsPage?.items ?? [])
+        .filter((entry) => !entry.isRead)
+        .slice(0, 3)
+        .map(mapNotificationDtoToItem),
+    [notificationsPage?.items],
   );
 
   useEffect(() => {
@@ -87,19 +95,17 @@ export function NotificationsMenu() {
         </div>
         {recent.length > 0 ? (
           <ul className="notifications-menu__list">
-            {recent.map((item) => {
-              const dto = notificationsPage?.items.find((entry) => entry.id === item.id);
-              const unread = dto ? !dto.isRead : false;
-              return (
-                <li
-                  key={item.id}
-                  className={`notifications-menu__item${unread ? " notifications-menu__item--unread" : ""}`}
-                >
+            {recent.map((item) => (
+                <li key={item.id} className="notifications-menu__item notifications-menu__item--unread">
                   <Link
                     className="notifications-menu__link"
-                    to={item.href}
+                    to={notificationLinkTo(item.href)}
                     onClick={() => {
-                      if (unread) handleMarkItemRead(item.id);
+                      const feedPostId = extractFeedPostIdFromHref(item.href);
+                      if (feedPostId) {
+                        dispatchFeedPostFocus(feedPostId);
+                      }
+                      handleMarkItemRead(item.id);
                       setOpen(false);
                     }}
                   >
@@ -113,11 +119,10 @@ export function NotificationsMenu() {
                     </div>
                   </Link>
                 </li>
-              );
-            })}
+              ))}
           </ul>
         ) : (
-          <p className="notifications-menu__empty">Nenhuma notificação recente.</p>
+          <p className="notifications-menu__empty">Tudo em dia! Nenhuma notificação pendente.</p>
         )}
         <Link className="notifications-menu__footer" to="/notificacoes" onClick={() => setOpen(false)}>
           Ver todas as notificações

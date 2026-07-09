@@ -253,6 +253,60 @@
   gap: 14px;
 }
 
+.controle-acesso__detail-modal {
+  display: grid;
+  gap: 12px;
+}
+
+.controle-acesso__detail-modal-table {
+  max-height: min(52vh, 480px);
+  overflow: auto;
+}
+
+.controle-acesso__permission-editor {
+  display: grid;
+  gap: 18px;
+}
+
+.controle-acesso__permission-editor-section {
+  display: grid;
+  gap: 10px;
+}
+
+.controle-acesso__permission-editor-assigned {
+  max-height: min(36vh, 320px);
+  overflow: auto;
+}
+
+.controle-acesso__permission-editor-catalog {
+  max-height: min(32vh, 280px);
+}
+
+.controle-acesso__permission-editor-catalog-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.controle-acesso__permission-editor-catalog-item:last-child {
+  border-bottom: none;
+}
+
+.controle-acesso__permission-editor-scope {
+  min-width: 120px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.controle-acesso__permission-editor-search {
+  max-width: none;
+}
+
 .controle-acesso__field {
   display: grid;
   gap: 6px;
@@ -306,4 +360,158 @@
   background: #f8fafc;
   color: #64748b;
   font-size: 13px;
+}
+
+.controle-acesso__field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.controle-acesso__table-check {
+  width: 42px;
+}
+
+.controle-acesso__table tr.is-selected td {
+  background: #eff6ff;
+}
+
+.controle-acesso__role-picker {
+  display: grid;
+  gap: 10px;
+}
+
+.controle-acesso__role-picker-search {
+  max-width: none;
+}
+
+.controle-acesso__role-picker-list {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.controle-acesso__role-picker-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.controle-acesso__role-picker-item:last-child {
+  border-bottom: none;
+}
+
+.controle-acesso__role-picker-item.is-selected {
+  background: #eff6ff;
+}
+
+.controle-acesso__role-picker-copy {
+  display: grid;
+  gap: 2px;
+}
+
+.controle-acesso__subject-picker {
+  display: grid;
+  gap: 12px;
+}
+
+.controle-acesso__subject-typeahead {
+  position: relative;
+  display: grid;
+  gap: 6px;
+}
+
+.controle-acesso__subject-typeahead input {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.controle-acesso__subject-typeahead-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  max-height: 220px;
+  overflow: auto;
+}
+
+.controle-acesso__subject-typeahead-list button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.controle-acesso__subject-typeahead-list button:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.controle-acesso__subject-typeahead-list button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.controle-acesso__subject-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controle-acesso__subject-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 12px;
+}
+
+.controle-acesso__subject-chip-type {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 10px;
+}
+
+.controle-acesso__subject-chip button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.controle-acesso__assignment-targets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.controle-acesso__assignment-targets li {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
 }

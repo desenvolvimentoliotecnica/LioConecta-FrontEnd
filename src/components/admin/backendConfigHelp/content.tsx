@@ -174,7 +174,7 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
             <strong>JWT — expiração</strong> — minutos até o token expirar (padrão 480 = 8 h)
           </li>
           <li>
-            <strong>E-mails Admin</strong> — JSON com e-mails corporativos que recebem role Admin no login LDAP
+            <strong>E-mails Admin</strong> — JSON com e-mails corporativos que recebem a regra Admin no login LDAP
           </li>
         </HelpList>
         <HelpHeading>Relação com outras seções</HelpHeading>
@@ -594,7 +594,7 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
         <HelpHeading>Notificação no portal</HelpHeading>
         <HelpList>
           <li>
-            <code>leave.notify_roles</code> — JSON array de roles (default <code>[&quot;HR&quot;]</code>) além do gestor direto
+            <code>leave.notify_roles</code> — JSON array de regras (default <code>[&quot;HR&quot;]</code>) além do gestor direto
           </li>
           <li>
             <code>leave.notify_emails</code> — e-mails adicionais (também usados como allow-list de gestão)
@@ -695,7 +695,7 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
         <HelpHeading>O que configurar</HelpHeading>
         <HelpList>
           <li>Perfis autorizados a criar, editar e desativar sistemas</li>
-          <li>E-mails extras na whitelist sem depender da role</li>
+          <li>E-mails extras na whitelist sem depender da regra</li>
           <li>Ambiente do portal via <code>portal.environment</code> (dev, hml, prd)</li>
         </HelpList>
         <HelpHeading>Acesso rápido</HelpHeading>

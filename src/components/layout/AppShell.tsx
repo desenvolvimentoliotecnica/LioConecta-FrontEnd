@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useChatHubSync } from "../../api/hooks/useChatHubSync";
+import { useMeAvatarSync } from "../../api/hooks/useMeAvatarSync";
 import { useNotificationHubSync } from "../../api/hooks/useNotifications";
 import { ModuleFocusProvider, useModuleFocus } from "../../context/ModuleFocusContext";
 import { useSidebar } from "../../hooks/useSidebar";
@@ -29,10 +30,13 @@ function AppShellLayout() {
   const { focusMode } = useModuleFocus();
   useNotificationHubSync();
   useChatHubSync();
+  useMeAvatarSync();
   usePageViewTracking();
 
   return (
-    <div className={`app-shell${focusMode ? " app-shell--module-focus" : ""}`}>
+    <div
+      className={`app-shell${focusMode ? " app-shell--module-focus" : ""}${bodyClass ? ` ${bodyClass}` : ""}`}
+    >
       <Topbar />
       <div
         className={`body${bodyClass ? ` ${bodyClass}` : ""}${focusMode ? " body--module-focus" : ""}`}
@@ -42,6 +46,7 @@ function AppShellLayout() {
         <Outlet />
         <Sidebar side="right" expanded={rightExpanded} onToggle={toggleRight} activePath={location.pathname} />
       </div>
+      <ChatWindowBridge />
     </div>
   );
 }
@@ -52,7 +57,6 @@ export function AppShell() {
       <ModuleFocusProvider>
         <AppShellLayout />
       </ModuleFocusProvider>
-      <ChatWindowBridge />
     </ChatProvider>
   );
 }

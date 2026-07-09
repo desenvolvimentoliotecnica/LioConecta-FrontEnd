@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import { resolveBackendAssetUrl } from "../../api/assetUrl";
+import { normalizeBackendMediaUrl, resolveBackendAssetUrl } from "../../api/assetUrl";
 import { useMe } from "../../api/hooks/useMe";
 import {
   FEED_LIKE_REACTION,
@@ -13,7 +13,7 @@ import { UserAvatar } from "../ui/UserAvatar";
 import { FeedPostActionsMenu } from "./FeedPostActionsMenu";
 import { FeedPollBody, getPollHeroImage } from "./FeedPollCard";
 import { ImageLightbox } from "./ImageLightbox";
-import { formatFeedTime, getPostMedia, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
+import { formatFeedTime, getPostMediaItems, postTypeBadge, postTypeBadgeClass } from "./feed-utils";
 
 type Props = {
   post: FeedPostDto;
@@ -60,7 +60,7 @@ export function FeedPostCard({ post }: Props) {
   const formId = useId();
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; mediaUrl: string } | null>(null);
 
   const isLiked = post.viewerReaction?.toLowerCase() === FEED_LIKE_REACTION;
   const isLikePending = toggleLike.isPending && toggleLike.variables === post.id;
@@ -78,7 +78,7 @@ export function FeedPostCard({ post }: Props) {
     isComunicado && typeof post.metadata.heroImageUrl === "string"
       ? resolveBackendAssetUrl(post.metadata.heroImageUrl)
       : undefined;
-  const postMedia = !isComunicado && !isPoll ? getPostMedia(post) : null;
+  const postMediaItems = !isComunicado && !isPoll ? getPostMediaItems(post) : [];
   const isOwner = Boolean(me?.id && post.author.id === me.id);
   const canDelete =
     isOwner && (post.type === POST_TYPE_SOCIAL || post.type === POST_TYPE_POLL);
@@ -124,7 +124,14 @@ export function FeedPostCard({ post }: Props) {
             type="button"
             className="post-media__trigger"
             aria-label="Ampliar imagem"
-            onClick={() => setLightboxSrc(heroImage)}
+            onClick={() =>
+              setLightbox({
+                src: heroImage,
+                mediaUrl: normalizeBackendMediaUrl(
+                  typeof post.metadata.heroImageUrl === "string" ? post.metadata.heroImageUrl : "",
+                ),
+              })
+            }
           >
             <img src={heroImage} alt="" />
           </button>
@@ -188,23 +195,49 @@ export function FeedPostCard({ post }: Props) {
       ) : post.content.trim() ? (
         <div className="card__body">{post.content}</div>
       ) : null}
-      {postMedia ? (
-        <div
-          className={`post-media${postMedia.type === "video" ? " post-media--video" : " post-media--clickable"}`}
-        >
-          {postMedia.type === "video" ? (
-            <video src={postMedia.url} controls playsInline preload="metadata" />
-          ) : (
+      {postMediaItems.length > 0 ? (
+        postMediaItems.length === 1 && postMediaItems[0].type === "video" ? (
+          <div className="post-media post-media--video">
+            <video src={postMediaItems[0].url} controls playsInline preload="metadata" />
+          </div>
+        ) : postMediaItems.length === 1 ? (
+          <div className="post-media post-media--clickable">
             <button
               type="button"
               className="post-media__trigger"
               aria-label="Ampliar imagem"
-              onClick={() => setLightboxSrc(postMedia.url)}
+              onClick={() =>
+                setLightbox({ src: postMediaItems[0].url, mediaUrl: postMediaItems[0].rawUrl })
+              }
             >
-              <img src={postMedia.url} alt="" loading="lazy" />
+              <img src={postMediaItems[0].url} alt="" loading="lazy" />
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div
+            className={`post-media-gallery post-media-gallery--count-${Math.min(postMediaItems.length, 4)}`}
+          >
+            {postMediaItems.slice(0, 4).map((item, index) => {
+              const remainingCount = postMediaItems.length - 4;
+              const showMoreOverlay = remainingCount > 0 && index === 3;
+
+              return (
+                <button
+                  key={`${item.url}-${index}`}
+                  type="button"
+                  className="post-media-gallery__item"
+                  aria-label={showMoreOverlay ? `Ver mais ${remainingCount} imagens` : "Ampliar imagem"}
+                  onClick={() => setLightbox({ src: item.url, mediaUrl: item.rawUrl })}
+                >
+                  <img src={item.url} alt="" loading="lazy" />
+                  {showMoreOverlay ? (
+                    <span className="post-media-gallery__more">+{remainingCount}</span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+        )
       ) : null}
       <div className="card__footer">
         <button
@@ -275,11 +308,13 @@ export function FeedPostCard({ post }: Props) {
         </section>
       ) : null}
 
-      {lightboxSrc ? (
+      {lightbox ? (
         <ImageLightbox
           open
-          src={lightboxSrc}
-          onClose={() => setLightboxSrc(null)}
+          src={lightbox.src}
+          postId={post.id}
+          mediaUrl={lightbox.mediaUrl || undefined}
+          onClose={() => setLightbox(null)}
         />
       ) : null}
     </article>

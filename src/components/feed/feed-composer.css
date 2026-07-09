@@ -59,18 +59,43 @@
 
 .feed-composer__preview {
   position: relative;
-  margin: 12px 0 0 52px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--wf-border, #e2e8f0);
-  max-width: 320px;
+  min-height: 96px;
+}
+
+.feed-composer__preview-grid {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0 52px;
+  max-width: 420px;
+}
+
+.feed-composer__preview-grid--count-1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.feed-composer__preview-grid--count-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.feed-composer__preview-grid--count-3,
+.feed-composer__preview-grid--count-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.feed-composer__preview-grid--count-3 .feed-composer__preview:first-child {
+  grid-column: 1 / -1;
 }
 
 .feed-composer__preview img,
 .feed-composer__preview video {
   display: block;
   width: 100%;
-  max-height: 200px;
+  height: 100%;
+  min-height: 96px;
+  max-height: 180px;
   object-fit: cover;
 }
 
@@ -139,9 +164,7 @@
 }
 
 .feed-composer__tool--photo { color: #16a34a; }
-.feed-composer__tool--doc { color: #2563eb; }
 .feed-composer__tool--poll { color: #7c3aed; }
-.feed-composer__tool--celebrate { color: #d97706; }
 
 .feed-composer__submit {
   display: flex;
@@ -383,8 +406,9 @@
     display: none;
   }
 
-  .feed-composer__preview {
+  .feed-composer__preview-grid {
     margin-left: 0;
+    max-width: none;
   }
 
   .feed-composer__actions {

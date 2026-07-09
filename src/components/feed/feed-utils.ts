@@ -1,4 +1,4 @@
-import { resolveBackendAssetUrl } from "../../api/assetUrl";
+import { normalizeBackendMediaUrl, resolveBackendAssetUrl } from "../../api/assetUrl";
 
 export function formatFeedTime(iso: string): string {
   const date = new Date(iso);
@@ -57,14 +57,48 @@ export function getPostMedia(post: { metadata: Record<string, unknown> }): {
   url: string;
   type: "image" | "video";
 } | null {
+  const items = getPostMediaItems(post);
+  return items[0] ?? null;
+}
+
+export function getPostMediaItems(post: { metadata: Record<string, unknown> }): Array<{
+  url: string;
+  rawUrl: string;
+  type: "image" | "video";
+}> {
+  const rawItems = post.metadata.mediaItems;
+  if (Array.isArray(rawItems) && rawItems.length > 0) {
+    return rawItems
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const record = item as Record<string, unknown>;
+        const rawUrl = record.url;
+        if (typeof rawUrl !== "string" || !rawUrl.trim()) return null;
+        const mediaType = record.mediaType;
+        const normalizedRawUrl = normalizeBackendMediaUrl(rawUrl);
+        return {
+          url: resolveBackendAssetUrl(normalizedRawUrl),
+          rawUrl: normalizedRawUrl,
+          type: mediaType === "video" ? ("video" as const) : ("image" as const),
+        };
+      })
+      .filter(
+        (item): item is { url: string; rawUrl: string; type: "image" | "video" } => item !== null,
+      );
+  }
+
   const rawUrl = post.metadata.mediaUrl;
   if (typeof rawUrl !== "string" || !rawUrl.trim()) {
-    return null;
+    return [];
   }
 
   const mediaType = post.metadata.mediaType;
-  return {
-    url: resolveBackendAssetUrl(rawUrl),
-    type: mediaType === "video" ? "video" : "image",
-  };
+  const normalizedRawUrl = normalizeBackendMediaUrl(rawUrl);
+  return [
+    {
+      url: resolveBackendAssetUrl(normalizedRawUrl),
+      rawUrl: normalizedRawUrl,
+      type: mediaType === "video" ? "video" : "image",
+    },
+  ];
 }

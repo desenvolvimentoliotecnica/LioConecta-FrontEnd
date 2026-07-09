@@ -3,7 +3,7 @@
 .chat-widget {
   position: fixed;
   bottom: 0;
-  right: 24px;
+  right: calc(var(--wf-sidebar-w-right, 52px) + 16px);
   display: flex;
   align-items: flex-end;
   gap: 12px;
@@ -740,7 +740,7 @@
 
 @media (max-width: 900px) {
   .chat-widget {
-    right: 12px;
+    right: calc(var(--wf-sidebar-w-right, 52px) + 12px);
     left: 12px;
     justify-content: flex-end;
   }

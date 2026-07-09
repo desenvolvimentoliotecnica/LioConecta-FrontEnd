@@ -1,0 +1,6 @@
+.card.card--feed-highlight {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.25);
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease;
+}
