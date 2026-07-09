@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useSaveTotvsRmConfiguration,
   useTestTotvsRmConnection,
   useTotvsRmConfiguration,
 } from "../../api/hooks/useTotvsRm";
-import { useMe } from "../../api/hooks/useMe";
 import type { UpsertTotvsRmConfigurationRequest } from "../../api/types";
 import "../../styles/totvs-rm-config-page.css";
 
@@ -35,7 +35,7 @@ function formatUpdatedAt(value?: string): string {
 }
 
 export function TotvsRmConfigPage() {
-  const meQuery = useMe();
+  const { hasPermission, isLoading: meLoading } = usePermissions();
   const configQuery = useTotvsRmConfiguration();
   const saveMutation = useSaveTotvsRmConfiguration();
   const testMutation = useTestTotvsRmConnection();
@@ -115,7 +115,7 @@ export function TotvsRmConfigPage() {
     }
   };
 
-  if (meQuery.isLoading) {
+  if (meLoading) {
     return (
       <main className="main">
         <p className="totvs-rm-config__empty">Carregando permissões…</p>
@@ -123,7 +123,7 @@ export function TotvsRmConfigPage() {
     );
   }
 
-  if (!canAccessAdminArea(meQuery.data)) {
+  if (!hasPermission(PERMISSIONS.admin.totvsManage)) {
     return <Navigate to="/" replace />;
   }
 

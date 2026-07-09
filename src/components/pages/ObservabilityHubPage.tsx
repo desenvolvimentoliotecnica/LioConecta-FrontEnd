@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useObservabilityAccessEvents,
   useObservabilityErrors,
@@ -8,7 +9,6 @@ import {
   useObservabilityPageViews,
   useObservabilitySummary,
 } from "../../api/hooks/useObservability";
-import { useMe } from "../../api/hooks/useMe";
 import {
   AUDIT_PERIOD_LABELS,
   AUDIT_PERIODS,
@@ -98,8 +98,8 @@ function PaginationBar({
 }
 
 export function ObservabilityHubPage() {
-  const { data: me, isLoading: meLoading, isError: meError } = useMe();
-  const canAccess = canAccessAdminArea(me);
+  const { hasPermission, isLoading: meLoading, isError: meError, me } = usePermissions();
+  const canAccess = hasPermission(PERMISSIONS.analytics.view);
 
   const [tab, setTab] = useState<HubTab>("errors");
   const [page, setPage] = useState(1);

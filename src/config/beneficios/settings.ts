@@ -1,4 +1,6 @@
 import type { MeDto, UserRole } from "../../api/types";
+import { hasPermission } from "../../api/auth";
+import { PERMISSIONS } from "../rbac/permissions";
 
 export type BeneficiosSettings = {
   allowedRoles: UserRole[];
@@ -6,7 +8,9 @@ export type BeneficiosSettings = {
 };
 
 export const BENEFICIOS_SETTING_KEYS = {
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.benefits.manage */
   allowedRoles: "benefits.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "benefits.allowed_emails",
 } as const;
 
@@ -15,33 +19,8 @@ export const DEFAULT_BENEFICIOS_SETTINGS: BeneficiosSettings = {
   allowedEmails: [],
 };
 
-const ROLE_INDEX: Record<UserRole, number> = {
-  Employee: 0,
-  Manager: 1,
-  HR: 2,
-  TI: 3,
-  Facilities: 4,
-  Legal: 5,
-  Admin: 6,
-  AnalyticsViewer: 7,
-  KioskReader: 8,
-};
-
-export function canManageBeneficios(
-  me: MeDto | undefined,
-  settings: BeneficiosSettings | undefined,
-): boolean {
-  if (!me) return false;
-  if (me.roles.some((role) => role === "Admin" || role === ROLE_INDEX.Admin)) return true;
-  if (!settings) return false;
-
-  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
-    return true;
-  }
-
-  return settings.allowedRoles.some((role) =>
-    me.roles.some((value) => value === role || value === ROLE_INDEX[role]),
-  );
+export function canManageBeneficios(me: MeDto | undefined, _settings?: BeneficiosSettings): boolean {
+  return hasPermission(me, PERMISSIONS.benefits.manage);
 }
 
 export function beneficiosSettingsToAppSettings(settings: BeneficiosSettings) {

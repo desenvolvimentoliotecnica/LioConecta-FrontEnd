@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { canAccessUniLioModule } from "../../api/auth";
 import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
 import { useMe } from "../../api/hooks/useMe";
+import { usePermissions } from "../../hooks/usePermissions";
 import type { UniLioFilters } from "../../config/unilio/types";
 
 type UniLioFiltersContextValue = {
@@ -46,11 +47,32 @@ export function useUniLioFilters(): UniLioFiltersContextValue {
   return ctx;
 }
 
+function UniLioAccessDenied() {
+  return (
+    <main className="main">
+      <header className="page-header">
+        <nav className="breadcrumb" aria-label="Breadcrumb">
+          <Link to="/">Início</Link>
+          <span className="breadcrumb__sep">/</span>
+          <span className="breadcrumb__current">UniLio</span>
+        </nav>
+        <h1 className="page-header__title">Acesso restrito</h1>
+        <p className="page-header__desc">
+          O portal UniLio não está disponível para seu perfil. Solicite a permissão{" "}
+          <strong>unilio.access</strong> ao administrador ou verifique as configurações em{" "}
+          <Link to="/admin/configuracoes-backend?category=unilio">Configurações do Backend → UniLio</Link>.
+        </p>
+      </header>
+    </main>
+  );
+}
+
 export function UniLioAccessGate({ children }: { children: ReactNode }) {
   const { data: me, isLoading: meLoading } = useMe();
+  const { hasPermission, isLoading: permLoading } = usePermissions();
   const { data: settings, isLoading: settingsLoading } = useUniLioSettings();
 
-  if (meLoading || settingsLoading) {
+  if (meLoading || permLoading || settingsLoading) {
     return (
       <main className="main">
         <p className="unilio-page__loading">Carregando módulo UniLio…</p>
@@ -58,24 +80,9 @@ export function UniLioAccessGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!canAccessUniLioModule(me, settings)) {
-    return (
-      <main className="main">
-        <header className="page-header">
-          <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link to="/">Início</Link>
-            <span className="breadcrumb__sep">/</span>
-            <span className="breadcrumb__current">UniLio</span>
-          </nav>
-          <h1 className="page-header__title">Acesso restrito</h1>
-          <p className="page-header__desc">
-            O portal UniLio não está disponível para seu perfil. Solicite acesso ao administrador ou verifique as
-            permissões em{" "}
-            <Link to="/admin/configuracoes-backend?category=unilio">Configurações do Backend → UniLio</Link>.
-          </p>
-        </header>
-      </main>
-    );
+  const granted = hasPermission("unilio.access") || canAccessUniLioModule(me, settings);
+  if (!granted) {
+    return <UniLioAccessDenied />;
   }
 
   return <UniLioFiltersProvider>{children}</UniLioFiltersProvider>;

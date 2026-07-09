@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useCancelEmailMessage,
   useEmailMessage,
@@ -8,7 +9,6 @@ import {
   useEmailSummary,
   useRetryEmailMessage,
 } from "../../api/hooks/useEmailQueue";
-import { useMe } from "../../api/hooks/useMe";
 import type { EmailMessageDto } from "../../api/types";
 import "../../styles/email-hub-page.css";
 
@@ -143,7 +143,7 @@ function MessageDetail({
 }
 
 export function EmailHubPage() {
-  const meQuery = useMe();
+  const { hasPermission, isLoading: meLoading } = usePermissions();
   const summaryQuery = useEmailSummary();
   const retryMutation = useRetryEmailMessage();
   const cancelMutation = useCancelEmailMessage();
@@ -187,7 +187,7 @@ export function EmailHubPage() {
     }
   };
 
-  if (meQuery.isLoading) {
+  if (meLoading) {
     return (
       <main className="main">
         <p className="email-hub__empty">Carregando permissões…</p>
@@ -195,7 +195,7 @@ export function EmailHubPage() {
     );
   }
 
-  if (!canAccessAdminArea(meQuery.data)) {
+  if (!hasPermission(PERMISSIONS.admin.emailManage)) {
     return <Navigate to="/" replace />;
   }
 

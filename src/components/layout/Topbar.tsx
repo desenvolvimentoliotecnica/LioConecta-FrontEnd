@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { usePortalUiSettings } from "../../api/hooks/usePortalUiSettings";
-import { useMe } from "../../api/hooks/useMe";
-import { useBenefitsSettings } from "../../api/hooks/useBenefitsSettings";
-import { canManageBeneficios } from "../../config/beneficios/settings";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
 import { MATURITY_META, getPageMaturity } from "../../config/page-maturity";
 import type { NavLinkItem } from "../../config/navigation";
 import {
@@ -192,11 +191,9 @@ function Dropdown({
 
 export function Topbar() {
   const { data: portalUi } = usePortalUiSettings();
-  const { data: me } = useMe();
-  const { data: benefitsSettings, isError: benefitsSettingsError } = useBenefitsSettings();
+  const { hasPermission } = usePermissions();
   const showBadges = portalUi.maturityBadgesEnabled;
-  const canManageBenefits =
-    !benefitsSettingsError && canManageBeneficios(me, benefitsSettings);
+  const canManageBenefits = hasPermission(PERMISSIONS.benefits.manage);
 
   const filterServicosItem = (item: NavLinkItem) =>
     !item.benefitsManageOnly || canManageBenefits;

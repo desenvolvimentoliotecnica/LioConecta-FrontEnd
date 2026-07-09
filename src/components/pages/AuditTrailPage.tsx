@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { canAccessAdminArea } from "../../api/auth";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useAuditActions,
   useAuditEvents,
   useAuditSummary,
   useAuditTargetTypes,
 } from "../../api/hooks/useAuditEvents";
-import { useMe } from "../../api/hooks/useMe";
 import type { AuditEventDto, AuditHttpStatusFilter, AuditSource } from "../../api/types";
 import {
   AUDIT_PERIOD_LABELS,
@@ -46,8 +46,8 @@ function resetPage(setPage: (value: number) => void) {
 
 export function AuditTrailPage() {
   const [searchParams] = useSearchParams();
-  const { data: me, isLoading: meLoading, isError: meError } = useMe();
-  const canAccess = canAccessAdminArea(me);
+  const { hasPermission, isLoading: meLoading, isError: meError, me } = usePermissions();
+  const canAccess = hasPermission(PERMISSIONS.analytics.view);
 
   const [page, setPage] = useState(1);
   const [period, setPeriod] = useState<AuditPeriod>("30d");
@@ -186,7 +186,8 @@ export function AuditTrailPage() {
         <header className="page-header">
           <h1 className="page-header__title">Acesso restrito</h1>
           <p className="page-header__desc">
-            A trilha de auditoria exige perfil Admin. Seu usuário atual não possui essa role.
+            A trilha de auditoria exige a permissão <code>{PERMISSIONS.analytics.view}</code>. Solicite acesso em{" "}
+            <Link to="/admin/controle-acesso">Controle de acesso</Link>.
           </p>
         </header>
         <p>

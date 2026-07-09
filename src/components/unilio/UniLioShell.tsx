@@ -59,6 +59,7 @@ export function UniLioShell() {
         collapsed={navIsCollapsed}
         onToggle={() => setNavCollapsed((c) => !c)}
         persona={persona.persona}
+        me={me}
         complianceBadge={compliance.overdueCount}
         minimal={isFocusView}
       />

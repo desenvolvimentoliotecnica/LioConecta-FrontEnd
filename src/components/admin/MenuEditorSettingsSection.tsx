@@ -1,20 +1,9 @@
 import { useEffect, useState } from "react";
 import { useMenuEditorSettings, useSaveMenuEditorSettings } from "../../api/hooks/useMenuEditorSettings";
-import type { UserRole } from "../../api/types";
 import { DEFAULT_MENU_EDITOR_SETTINGS, type MenuEditorSettings } from "../../config/facilities/menu";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { RbacDeprecatedNotice } from "../auth/RbacDeprecatedNotice";
 import "../../styles/organogram-governance-page.css";
-
-const ROLE_OPTIONS: UserRole[] = [
-  "Employee",
-  "Manager",
-  "HR",
-  "TI",
-  "Facilities",
-  "Legal",
-  "Admin",
-  "AnalyticsViewer",
-  "KioskReader",
-];
 
 function parseEmails(value: string): string[] {
   return value
@@ -27,32 +16,22 @@ export function MenuEditorSettingsSection() {
   const { data: settings, isLoading, isError } = useMenuEditorSettings();
   const saveMutation = useSaveMenuEditorSettings();
   const [form, setForm] = useState<MenuEditorSettings>(DEFAULT_MENU_EDITOR_SETTINGS);
-  const [editorEmails, setEditorEmails] = useState("");
   const [emailRecipients, setEmailRecipients] = useState("");
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
     if (isLoading) return;
     setForm(settings);
-    setEditorEmails(settings.allowedEmails.join("\n"));
     setEmailRecipients(settings.emailRecipients.join("\n"));
   }, [settings, isLoading]);
-
-  const toggleRole = (role: UserRole) => {
-    setForm((current) => {
-      const next = current.allowedRoles.includes(role)
-        ? current.allowedRoles.filter((r) => r !== role)
-        : [...current.allowedRoles, role];
-      return { ...current, allowedRoles: next };
-    });
-  };
 
   const handleSave = async () => {
     setFeedback(null);
 
     const next: MenuEditorSettings = {
       ...form,
-      allowedEmails: parseEmails(editorEmails),
+      allowedRoles: settings.allowedRoles,
+      allowedEmails: settings.allowedEmails,
       emailRecipients: parseEmails(emailRecipients),
     };
 
@@ -61,18 +40,20 @@ export function MenuEditorSettingsSection() {
       setForm(next);
       setFeedback({
         type: "success",
-        message: "Configurações do cardápio salvas no servidor.",
+        message: "Destinatários do envio semanal salvos no servidor.",
       });
     } catch {
       setFeedback({
         type: "error",
-        message: "Não foi possível salvar as configurações do cardápio. Tente novamente.",
+        message: "Não foi possível salvar as configurações do cardápio.",
       });
     }
   };
 
   return (
     <section className="org-governance__panel loop-settings" aria-label="Configurações do cardápio">
+      <RbacDeprecatedNotice permissionKey={PERMISSIONS.facilities.menuManage} moduleLabel="Gestão de cardápio" />
+
       <div className="org-governance__intro-head">
         <div className="org-governance__intro-icon loop-settings__icon" aria-hidden="true">
           <i className="fa-solid fa-utensils" />
@@ -80,7 +61,8 @@ export function MenuEditorSettingsSection() {
         <div>
           <div className="org-governance__intro-title">Gestão de cardápio (Facilities)</div>
           <p className="org-governance__intro-text">
-            Define quem pode editar o cardápio semanal e os destinatários padrão do envio por e-mail.
+            Quem edita o cardápio é definido em Controle de acesso. Aqui você configura apenas os destinatários padrão
+            do envio semanal por e-mail.
           </p>
         </div>
       </div>
@@ -104,34 +86,6 @@ export function MenuEditorSettingsSection() {
           void handleSave();
         }}
       >
-        <div className="org-governance__field org-governance__field--full">
-          <span>Perfis com permissão de edição</span>
-          <div className="org-governance__role-list">
-            {ROLE_OPTIONS.map((role) => (
-              <label key={role} className="org-governance__role-chip">
-                <input
-                  type="checkbox"
-                  checked={form.allowedRoles.includes(role)}
-                  disabled={isLoading || saveMutation.isPending}
-                  onChange={() => toggleRole(role)}
-                />
-                {role}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <label className="org-governance__field org-governance__field--full">
-          <span>E-mails com permissão de edição (um por linha)</span>
-          <textarea
-            rows={4}
-            value={editorEmails}
-            disabled={isLoading || saveMutation.isPending}
-            onChange={(e) => setEditorEmails(e.target.value)}
-            placeholder="endomarketing@liotecnica.com.br"
-          />
-        </label>
-
         <label className="org-governance__field org-governance__field--full">
           <span>Destinatários padrão do envio semanal (um por linha)</span>
           <textarea
@@ -149,7 +103,7 @@ export function MenuEditorSettingsSection() {
             className="org-governance__btn org-governance__btn--primary"
             disabled={isLoading || saveMutation.isPending}
           >
-            {saveMutation.isPending ? "Salvando…" : "Salvar configurações"}
+            {saveMutation.isPending ? "Salvando…" : "Salvar destinatários"}
           </button>
         </div>
       </form>

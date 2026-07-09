@@ -9,6 +9,33 @@ export type UserRole =
   | "AnalyticsViewer"
   | "KioskReader";
 
+export type DataScope = "Self" | "Team" | "Department" | "Global" | 0 | 1 | 2 | 3;
+
+export type BusinessArea =
+  | "Core"
+  | "RH"
+  | "Financeiro"
+  | "Contabil"
+  | "TI"
+  | "Facilities"
+  | "Juridico"
+  | "Marketing"
+  | "Pessoas"
+  | "Projetos"
+  | "Planejamento"
+  | "Plataforma"
+  | "Analytics"
+  | "Quiosque"
+  | "UniLio"
+  | number;
+
+export type RbacSubjectType = "PortalUser" | "Person" | "TestUser" | 0 | 1 | 2;
+
+export interface EffectivePermissionDto {
+  key: string;
+  scope: DataScope;
+}
+
 export interface MeDto {
   id: string;
   slug: string;
@@ -18,6 +45,120 @@ export interface MeDto {
   photoUrl?: string | null;
   departmentName?: string | null;
   roles: Array<UserRole | number>;
+  permissions?: EffectivePermissionDto[];
+  subjectType?: string | null;
+  isTestUser?: boolean;
+}
+
+export interface PermissionCatalogItemDto {
+  key: string;
+  module: string;
+  resource: string;
+  action: string;
+  label: string;
+  description: string;
+  businessArea: BusinessArea;
+  allowedScopes: DataScope[];
+  menuPath?: string | null;
+}
+
+export interface RoleDto {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  businessArea?: BusinessArea | null;
+  isSystem: boolean;
+  isKeyUserTemplate: boolean;
+  isActive: boolean;
+  permissionCount: number;
+}
+
+export interface RolePermissionDto {
+  permissionKey: string;
+  dataScope: DataScope;
+}
+
+export interface RoleDetailDto {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  businessArea?: BusinessArea | null;
+  isSystem: boolean;
+  isKeyUserTemplate: boolean;
+  isActive: boolean;
+  permissions: RolePermissionDto[];
+}
+
+export interface UpsertRoleRequest {
+  name: string;
+  description?: string | null;
+  businessArea?: BusinessArea | null;
+}
+
+export interface UpdateRolePermissionsRequest {
+  permissions: RolePermissionDto[];
+}
+
+export interface SubjectRoleAssignmentDto {
+  id: string;
+  subjectType: RbacSubjectType;
+  subjectId: string;
+  subjectLabel: string;
+  roleId: string;
+  roleName: string;
+  assignedAt: string;
+}
+
+export interface UpdateSubjectAssignmentsRequest {
+  subjectType: RbacSubjectType;
+  subjectId: string;
+  roleIds: string[];
+}
+
+export interface TestUserDto {
+  id: string;
+  email: string;
+  displayName: string;
+  businessArea: BusinessArea;
+  optionalPersonId?: string | null;
+  isActive: boolean;
+  expiresAt?: string | null;
+  notes?: string | null;
+  roleNames: string[];
+}
+
+export interface CreateTestUserRequest {
+  email: string;
+  password: string;
+  displayName: string;
+  businessArea: BusinessArea;
+  optionalPersonId?: string | null;
+  expiresAt?: string | null;
+  notes?: string | null;
+  templateRoleId?: string | null;
+}
+
+export interface UpdateTestUserRequest {
+  displayName: string;
+  businessArea: BusinessArea;
+  optionalPersonId?: string | null;
+  isActive: boolean;
+  expiresAt?: string | null;
+  notes?: string | null;
+}
+
+export interface ResetTestUserPasswordRequest {
+  password: string;
+}
+
+export interface RbacBootstrapDto {
+  permissions: EffectivePermissionDto[];
+  menus: Record<string, string>;
+  subjectType?: string | null;
+  isTestUser: boolean;
+  businessArea?: BusinessArea | null;
 }
 
 export interface LoginRequest {
@@ -2242,6 +2383,7 @@ export interface UploadSystemIconResponseDto {
 
 export interface UniLioBootstrapDto {
   enabled: boolean;
+  canAccess: boolean;
   allowedRoles: UserRole[];
   allowedEmails: string[];
 }

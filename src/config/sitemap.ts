@@ -348,6 +348,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Credenciais, integrações e parâmetros operacionais — persistidos no banco.",
         ),
         entry(
+          "Controle de acesso (RBAC)",
+          "/admin/controle-acesso",
+          "Roles dinâmicas, atribuições, usuários de teste e catálogo de permissões.",
+        ),
+        entry(
           "Organograma — hub de configurações",
           "/admin/configuracoes-backend?category=organogram",
           "Acesso à governança do organograma a partir do painel de configurações do backend.",

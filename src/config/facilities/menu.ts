@@ -1,4 +1,6 @@
 import type { MeDto, MenuDayStatus, MenuMealType, MenuSectionDto, UserRole } from "../../api/types";
+import { hasPermission } from "../../api/auth";
+import { PERMISSIONS } from "../rbac/permissions";
 
 export type MenuSectionTemplate = {
   key: string;
@@ -12,7 +14,9 @@ export type MenuEditorSettings = {
 };
 
 export const MENU_SETTING_KEYS = {
+  /** @deprecated Access is RBAC-managed — use PERMISSIONS.facilities.menuManage */
   allowedRoles: "facilities.menu.allowed_roles",
+  /** @deprecated Access is RBAC-managed — use Controle de acesso */
   allowedEmails: "facilities.menu.allowed_emails",
   emailRecipients: "facilities.menu.email_recipients",
 } as const;
@@ -127,33 +131,8 @@ export function formatDisplayDate(dateKey: string): string {
   });
 }
 
-export function canEditMenu(me: MeDto | undefined, settings: MenuEditorSettings | undefined): boolean {
-  if (!me) return false;
-  if (me.roles.some((role) => role === "Admin" || role === 6)) return true;
-  if (!settings) return false;
-
-  if (settings.allowedEmails.some((email) => email.toLowerCase() === me.email.toLowerCase())) {
-    return true;
-  }
-
-  return settings.allowedRoles.some((role) =>
-    me.roles.some((value) => value === role || value === roleToIndex(role)),
-  );
-}
-
-function roleToIndex(role: UserRole): number {
-  const map: Record<UserRole, number> = {
-    Employee: 0,
-    Manager: 1,
-    HR: 2,
-    TI: 3,
-    Facilities: 4,
-    Legal: 5,
-    Admin: 6,
-    AnalyticsViewer: 7,
-    KioskReader: 8,
-  };
-  return map[role];
+export function canEditMenu(me: MeDto | undefined, _settings?: MenuEditorSettings): boolean {
+  return hasPermission(me, PERMISSIONS.facilities.menuManage);
 }
 
 export function menuEditorSettingsToAppSettings(settings: MenuEditorSettings) {

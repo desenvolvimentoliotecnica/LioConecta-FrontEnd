@@ -1,9 +1,10 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { canAccessLoopModule } from "../../api/auth";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
-import { useMe } from "../../api/hooks/useMe";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
 import type { LoopFilters, LoopPeriod } from "../../config/loop/types";
+import { ModuleAccessDenied } from "../auth/ModuleAccessDenied";
 
 type LoopFiltersContextValue = {
   filters: LoopFilters;
@@ -45,10 +46,10 @@ export function useLoopFilters(): LoopFiltersContextValue {
 }
 
 export function LoopAccessGate({ children }: { children: ReactNode }) {
-  const { data: me, isLoading: meLoading } = useMe();
+  const { hasPermission, isLoading: permissionsLoading } = usePermissions();
   const { data: settings, isLoading: settingsLoading } = useLoopSettings();
 
-  if (meLoading || settingsLoading) {
+  if (permissionsLoading || settingsLoading) {
     return (
       <main className="main">
         <p className="loop-page__loading">Carregando módulo Loop…</p>
@@ -56,23 +57,21 @@ export function LoopAccessGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!canAccessLoopModule(me, settings)) {
+  const granted = hasPermission(PERMISSIONS.loop.access) && settings?.enabled !== false;
+
+  if (!granted) {
     return (
-      <main className="main">
-        <header className="page-header">
+      <ModuleAccessDenied
+        moduleName="Loop de Projetos"
+        permissionKey={PERMISSIONS.loop.access}
+        breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <Link to="/">Início</Link>
             <span className="breadcrumb__sep">/</span>
             <span className="breadcrumb__current">Loop de Projetos</span>
           </nav>
-          <h1 className="page-header__title">Acesso restrito</h1>
-          <p className="page-header__desc">
-            O módulo Loop de Projetos não está disponível para seu perfil. Solicite acesso ao administrador
-            ou verifique as permissões em{" "}
-            <Link to="/admin/configuracoes-backend?category=loop">Configurações do Backend → Loop</Link>.
-          </p>
-        </header>
-      </main>
+        }
+      />
     );
   }
 

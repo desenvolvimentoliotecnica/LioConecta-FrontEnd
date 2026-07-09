@@ -113,6 +113,8 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/unilio/eventos": "prototype",
   "/unilio/competencias": "prototype",
   "/unilio/relatorios": "prototype",
+
+  "/admin/controle-acesso": "integrated",
 };
 
 export const TOPBAR_NAV_ITEMS: NavLinkItem[] = [

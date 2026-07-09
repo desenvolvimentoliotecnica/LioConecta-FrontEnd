@@ -1,11 +1,13 @@
 import { Link, NavLink } from "react-router-dom";
-import { filterNavItemsForPersona } from "../../config/unilio/navigation";
+import { filterNavItemsForPermissions } from "../../config/unilio/navigation";
+import type { MeDto } from "../../api/types";
 import type { UniLioPersona } from "../../config/unilio/types";
 
 type UniLioNavProps = {
   collapsed: boolean;
   onToggle: () => void;
   persona: UniLioPersona;
+  me?: MeDto | null;
   complianceBadge?: number;
   minimal?: boolean;
 };
@@ -13,11 +15,12 @@ type UniLioNavProps = {
 export function UniLioNav({
   collapsed,
   onToggle,
-  persona,
+  persona: _persona,
+  me,
   complianceBadge = 0,
   minimal = false,
 }: UniLioNavProps) {
-  const items = filterNavItemsForPersona(persona);
+  const items = filterNavItemsForPermissions(me);
 
   if (minimal) {
     return (
