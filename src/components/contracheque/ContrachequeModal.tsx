@@ -8,6 +8,7 @@ type Props = {
   compact?: boolean;
   stacked?: boolean;
   closeOnEscape?: boolean;
+  showCloseButton?: boolean;
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
@@ -51,6 +52,7 @@ export function ContrachequeModal({
   compact,
   stacked = false,
   closeOnEscape = true,
+  showCloseButton = true,
   onClose,
   children,
   footer,
@@ -129,9 +131,11 @@ export function ContrachequeModal({
           <h2 className="pay-modal__title" id={titleId}>
             {title}
           </h2>
-          <button type="button" className="pay-modal__close" onClick={onClose} aria-label="Fechar">
-            <i className="fa-solid fa-xmark" aria-hidden="true" />
-          </button>
+          {showCloseButton ? (
+            <button type="button" className="pay-modal__close" onClick={onClose} aria-label="Fechar">
+              <i className="fa-solid fa-xmark" aria-hidden="true" />
+            </button>
+          ) : null}
         </header>
         <div className="pay-modal__body">{children}</div>
         <footer className="pay-modal__footer">

@@ -1,11 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useUniLioCourseRecommendations } from "../../api/hooks/useUniLioCourseRecommendations";
+import { useUniLioCourseStart } from "../../api/hooks/useUniLioCourseStart";
 import { useUniLioProgress } from "../../api/hooks/useUniLioProgress";
 import { formatUniLioDuration } from "../../utils/unilioView";
 import { parseUniLioQuizJson } from "../../utils/unilioQuiz";
 import type { UniLioCourseDetail, UniLioModule } from "../../config/unilio/types";
 import { UniLioContentTypeBadge, UniLioProgressBar } from "./UniLioShared";
 import { UniLioQuizWidget } from "./UniLioQuizWidget";
+import { UniLioCourseRecommendationsModal } from "./UniLioCourseRecommendationsModal";
+import { UniLioCourseFeedbackModal } from "./UniLioCourseFeedbackModal";
 import "../../styles/unilio-player.css";
 
 type Props = {
@@ -34,7 +38,14 @@ function isDirectVideo(url: string): boolean {
 
 function resolveModuleMedia(module: UniLioModule, course: UniLioCourseDetail) {
   const type = module.contentType;
-  const rawUrl = module.contentUrl ?? course.externalUrl ?? null;
+
+  if (type === "article" || type === "quiz") {
+    return { kind: "empty" as const };
+  }
+
+  const rawUrl =
+    module.contentUrl ??
+    (type === "external" || type === "video" || type === "pdf" ? course.externalUrl : null);
 
   if (!rawUrl) {
     return { kind: "empty" as const };
@@ -56,11 +67,25 @@ function resolveModuleMedia(module: UniLioModule, course: UniLioCourseDetail) {
     return { kind: "link" as const, url: rawUrl, provider: course.provider };
   }
 
-  return { kind: "link" as const, url: rawUrl };
+  return { kind: "empty" as const };
+}
+
+function stripDuplicateArticleTitle(html: string, title: string): string {
+  const normalizedTitle = title.trim().toLowerCase();
+  return html.replace(/^\s*<h2[^>]*>([\s\S]*?)<\/h2>/i, (match, inner) => {
+    const text = inner.replace(/<[^>]+>/g, "").trim().toLowerCase();
+    return text === normalizedTitle ? "" : match;
+  });
 }
 
 export function UniLioPlayer({ course, isFallback = false }: Props) {
   const completeMutation = useUniLioProgress();
+  useUniLioCourseStart(course.id);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const orderedModules = useMemo(
+    () => [...course.modules].sort((a, b) => a.sortOrder - b.sortOrder),
+    [course.modules],
+  );
   const [activeModuleId, setActiveModuleId] = useState<string | null>(
     course.modules.find((m) => !m.isCompleted)?.id ?? course.modules[0]?.id ?? null,
   );
@@ -84,15 +109,70 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
   );
 
   const [quizPassed, setQuizPassed] = useState(false);
+  const [showCourseFeedback, setShowCourseFeedback] = useState(false);
+  const [showCourseRecommendations, setShowCourseRecommendations] = useState(false);
+  const [pendingCompletionModule, setPendingCompletionModule] = useState<UniLioModule | null>(null);
+
+  const { data: courseRecommendations, isLoading: recommendationsLoading } = useUniLioCourseRecommendations(
+    course.id,
+    showCourseRecommendations,
+  );
 
   useEffect(() => {
     setQuizPassed(false);
+    contentRef.current?.scrollTo({ top: 0 });
   }, [activeModuleId]);
 
   const completedCount = course.modules.filter((m) => m.isCompleted).length;
 
-  const handleComplete = async (module: UniLioModule) => {
-    await completeMutation.mutateAsync({ courseId: course.id, moduleId: module.id });
+  const advanceAfterModule = (module: UniLioModule) => {
+    contentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    const idx = orderedModules.findIndex((m) => m.id === module.id);
+    const next = idx >= 0 ? orderedModules[idx + 1] : undefined;
+    if (next) {
+      setActiveModuleId(next.id);
+    }
+  };
+
+  const wouldCompleteCourse = (module: UniLioModule) =>
+    orderedModules.every((m) => m.isCompleted || m.id === module.id);
+
+  const completeModule = async (
+    module: UniLioModule,
+    feedback?: { contentRating: number; feedbackComment: string },
+  ) => {
+    await completeMutation.mutateAsync({
+      courseId: course.id,
+      moduleId: module.id,
+      contentRating: feedback?.contentRating,
+      feedbackComment: feedback?.feedbackComment,
+    });
+
+    if (!wouldCompleteCourse(module)) {
+      advanceAfterModule(module);
+    }
+  };
+
+  const handleCourseFeedbackSubmit = async (payload: {
+    contentRating: number;
+    feedbackComment: string;
+  }) => {
+    if (!pendingCompletionModule) return;
+
+    await completeModule(pendingCompletionModule, payload);
+    setPendingCompletionModule(null);
+    setShowCourseFeedback(false);
+    setShowCourseRecommendations(true);
+  };
+
+  const requestModuleCompletion = (module: UniLioModule) => {
+    if (wouldCompleteCourse(module)) {
+      setPendingCompletionModule(module);
+      setShowCourseFeedback(true);
+      return;
+    }
+
+    void completeModule(module);
   };
 
   return (
@@ -108,6 +188,17 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
             <p className="unilio-player-focus__subtitle">
               {course.instructorName}
               {course.area ? ` · ${course.area}` : ""}
+              {(course.completedCount ?? 0) > 0 ? (
+                <>
+                  {" · "}
+                  <span className="unilio-player-focus__completion-metric">
+                    <i className="fa-solid fa-circle-check" aria-hidden="true" />{" "}
+                    {course.completedCount === 1
+                      ? "1 pessoa concluiu"
+                      : `${course.completedCount} pessoas concluíram`}
+                  </span>
+                </>
+              ) : null}
             </p>
           </div>
         </div>
@@ -164,90 +255,93 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
         <section className="unilio-player__content" aria-label="Conteúdo do módulo">
           {activeModule ? (
             <>
-              <header className="unilio-player__content-head">
-                <div>
-                  <p className="unilio-player__content-kicker">Módulo {activeModule.sortOrder}</p>
-                  <h2>{activeModule.title}</h2>
-                </div>
-                <UniLioContentTypeBadge type={activeModule.contentType} />
-              </header>
+              <div ref={contentRef} className="unilio-player__content-scroll">
+                <header className="unilio-player__content-head">
+                  <div>
+                    <p className="unilio-player__content-kicker">Módulo {activeModule.sortOrder}</p>
+                    <h2>{activeModule.title}</h2>
+                  </div>
+                  <UniLioContentTypeBadge type={activeModule.contentType} />
+                </header>
 
-              {media?.kind === "embed" ? (
-                <div className="unilio-player__video">
-                  <iframe
-                    title={activeModule.title}
-                    src={media.url}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              ) : null}
+                {media?.kind === "embed" ? (
+                  <div className="unilio-player__video-stage">
+                    <div className="unilio-player__video">
+                      <iframe
+                        title={activeModule.title}
+                        src={media.url}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                ) : null}
 
-              {media?.kind === "video" ? (
-                <div className="unilio-player__video">
-                  <video controls playsInline preload="metadata" src={media.url}>
-                    Seu navegador não suporta reprodução de vídeo.
-                  </video>
-                </div>
-              ) : null}
+                {media?.kind === "video" ? (
+                  <div className="unilio-player__video-stage">
+                    <div className="unilio-player__video">
+                      <video controls playsInline preload="metadata" src={media.url}>
+                        Seu navegador não suporta reprodução de vídeo.
+                      </video>
+                    </div>
+                  </div>
+                ) : null}
 
-              {media?.kind === "pdf" ? (
-                <div className="unilio-player__pdf">
-                  <iframe title={activeModule.title} src={media.url} className="unilio-player__pdf-frame" />
-                  <a href={media.url} target="_blank" rel="noopener noreferrer" className="unilio-player__external-link">
-                    Abrir PDF em nova aba
-                  </a>
-                </div>
-              ) : null}
+                {media?.kind === "pdf" ? (
+                  <div className="unilio-player__pdf">
+                    <iframe title={activeModule.title} src={media.url} className="unilio-player__pdf-frame" />
+                    <a href={media.url} target="_blank" rel="noopener noreferrer" className="unilio-player__external-link">
+                      Abrir PDF em nova aba
+                    </a>
+                  </div>
+                ) : null}
 
-              {media?.kind === "link" ? (
-                <div className="unilio-player__external">
-                  {media.provider ? (
+                {media?.kind === "link" && media.provider ? (
+                  <div className="unilio-player__external">
                     <span className="unilio-player__external-badge">
                       <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
                       Conteúdo externo{media.provider ? ` — ${media.provider}` : ""}
                     </span>
-                  ) : null}
-                  <a href={media.url} target="_blank" rel="noopener noreferrer" className="unilio-player__external-link">
-                    Abrir conteúdo em nova aba
-                  </a>
-                </div>
-              ) : null}
+                  </div>
+                ) : null}
 
-              {activeModule.contentType === "article" ? (
-                activeModule.articleHtml ? (
-                  <article
-                    className="unilio-player__article unilio-player__article--rich"
-                    dangerouslySetInnerHTML={{ __html: activeModule.articleHtml }}
+                {activeModule.contentType === "article" ? (
+                  activeModule.articleHtml ? (
+                    <article
+                      className="unilio-player__article unilio-player__article--rich"
+                      dangerouslySetInnerHTML={{
+                        __html: stripDuplicateArticleTitle(activeModule.articleHtml, activeModule.title),
+                      }}
+                    />
+                  ) : (
+                    <article className="unilio-player__article">
+                      <p>
+                        Leia o material do módulo <strong>{activeModule.title}</strong> e marque como concluído para
+                        avançar.
+                      </p>
+                    </article>
+                  )
+                ) : null}
+
+                {activeModule.contentType === "quiz" && quizPayload ? (
+                  <UniLioQuizWidget
+                    moduleTitle={activeModule.title}
+                    passingScore={quizPayload.passingScore}
+                    questions={quizPayload.questions}
+                    onSubmit={(_score, passed) => setQuizPassed(passed)}
                   />
-                ) : (
-                  <article className="unilio-player__article">
-                    <p>
-                      Leia o material do módulo <strong>{activeModule.title}</strong> e marque como concluído para
-                      avançar.
-                    </p>
-                  </article>
-                )
-              ) : null}
+                ) : null}
 
-              {activeModule.contentType === "quiz" && quizPayload ? (
-                <UniLioQuizWidget
-                  moduleTitle={activeModule.title}
-                  passingScore={quizPayload.passingScore}
-                  questions={quizPayload.questions}
-                  onSubmit={(_score, passed) => setQuizPassed(passed)}
-                />
-              ) : null}
+                {activeModule.contentType === "quiz" && !quizPayload ? (
+                  <p className="unilio-panel__empty">Quiz deste módulo não está disponível.</p>
+                ) : null}
 
-              {activeModule.contentType === "quiz" && !quizPayload ? (
-                <p className="unilio-panel__empty">Quiz deste módulo não está disponível.</p>
-              ) : null}
-
-              {media?.kind === "empty" &&
-              activeModule.contentType !== "article" &&
-              activeModule.contentType !== "quiz" ? (
-                <p className="unilio-panel__empty">Conteúdo deste módulo não disponível no protótipo.</p>
-              ) : null}
+                {media?.kind === "empty" &&
+                activeModule.contentType !== "article" &&
+                activeModule.contentType !== "quiz" ? (
+                  <p className="unilio-panel__empty">Conteúdo deste módulo não disponível no protótipo.</p>
+                ) : null}
+              </div>
 
               <footer className="unilio-player__content-foot">
                 {!activeModule.isCompleted ? (
@@ -258,13 +352,18 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
                       completeMutation.isPending ||
                       (activeModule.contentType === "quiz" && !quizPassed)
                     }
-                    onClick={() => void handleComplete(activeModule)}
+                    onClick={() => requestModuleCompletion(activeModule)}
                   >
-                    {completeMutation.isPending
-                      ? "Salvando…"
-                      : activeModule.contentType === "quiz" && !quizPassed
-                        ? "Aprove no quiz para concluir"
-                        : "Marcar módulo como concluído"}
+                    {completeMutation.isPending ? (
+                      "Salvando…"
+                    ) : activeModule.contentType === "quiz" && !quizPassed ? (
+                      "Aprove no quiz para concluir"
+                    ) : (
+                      <>
+                        Marcar conteúdo como concluído
+                        <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                      </>
+                    )}
                   </button>
                 ) : (
                   <p className="unilio-player__done-msg">
@@ -278,6 +377,21 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
           )}
         </section>
       </div>
+
+      <UniLioCourseFeedbackModal
+        open={showCourseFeedback}
+        courseTitle={course.title}
+        busy={completeMutation.isPending}
+        onSubmit={(payload) => void handleCourseFeedbackSubmit(payload)}
+      />
+
+      <UniLioCourseRecommendationsModal
+        open={showCourseRecommendations}
+        completedCourseTitle={course.title}
+        items={courseRecommendations.items}
+        isLoading={recommendationsLoading}
+        onGoToCatalog={() => setShowCourseRecommendations(false)}
+      />
     </div>
   );
 }

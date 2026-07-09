@@ -56,6 +56,23 @@ export type UniLioCourseSummary = {
   enrollmentStatus?: string | null;
   skillNames: string[];
   integrations: UniLioIntegrationLink[];
+  enrolledCount: number;
+  completedCount: number;
+};
+
+export type UniLioCourseEnrollmentRecord = {
+  personId: string;
+  personName: string;
+  status: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
+};
+
+export type UniLioCourseEnrollmentsView = {
+  courseId: string;
+  enrolledCount: number;
+  completedCount: number;
+  items: UniLioCourseEnrollmentRecord[];
 };
 
 export type UniLioModule = {
@@ -106,6 +123,7 @@ export type UniLioRecommendation = {
   area: string;
   durationMinutes: number;
   contentType: string;
+  thumbnailUrl?: string | null;
 };
 
 export type UniLioDashboardView = {

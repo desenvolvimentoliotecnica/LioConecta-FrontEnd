@@ -1,0 +1,15 @@
+---
+description: Pedidos de curso novo no UniLio — seed só no backend; seguir skill unilio-novo-curso (preview local, deploy DEV após aprovação)
+alwaysApply: true
+---
+
+# UniLio — novo curso
+
+Quando o usuário pedir **curso novo**, **trilha UniLio**, **conteúdo no portal de aprendizagem** ou **publicar curso no DEV**:
+
+1. Ler e seguir a skill **`unilio-novo-curso`** (`~/.cursor/skills/unilio-novo-curso/SKILL.md`).
+2. **Catálogo só no backend** (`LioConecta.Backend/Seed/Data/`). Não duplicar em `src/config/unilio/data/` do frontend.
+3. **Frontend:** apenas imagens em `public/unilio/courses/{slug}/assets/`.
+4. **Conteúdo obrigatório:** sem inventar dados; fontes confiáveis citadas; **mínimo 10 módulos, sempre**; thumbnail; imagens por módulo; vídeo de referência (`external`); quiz (5 questões, 80%); avaliação final em `assessments[]`.
+5. **Fase 1:** criar + validar local → parar e pedir aprovação.
+6. **Fase 2:** deploy DEV (`deploy-dev.ps1`) **somente** após aprovação explícita do usuário.

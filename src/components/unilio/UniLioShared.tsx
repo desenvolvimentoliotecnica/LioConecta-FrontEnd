@@ -56,15 +56,30 @@ export function UniLioContentTypeBadge({ type }: { type: string }) {
   return <span className="unilio-type-badge">{label}</span>;
 }
 
+export function UniLioDepartmentBadge({ department }: { department?: string | null }) {
+  const label = department?.trim();
+  if (!label) return null;
+  return <span className="unilio-department-badge">{label}</span>;
+}
+
 export function UniLioStatusBadge({ status }: { status: string }) {
   const label = ENROLLMENT_STATUS_LABELS[status] ?? status;
-  return <span className={`unilio-status unilio-status--${status.replace("_", "-")}`}>{label}</span>;
+  return <span className={`unilio-status unilio-status--${status.replaceAll("_", "-")}`}>{label}</span>;
 }
 
 export function UniLioMandatoryBadge() {
   return (
     <span className="unilio-mandatory-badge">
       <i className="fa-solid fa-shield-halved" aria-hidden="true" /> Obrigatório
+    </span>
+  );
+}
+
+export function UniLioParticipantsBadge({ count }: { count: number }) {
+  const label = count === 1 ? "1 fez" : `${count} fizeram`;
+  return (
+    <span className="unilio-participants-badge" title={`${count} colaborador(es) iniciaram este curso`}>
+      <i className="fa-solid fa-users" aria-hidden="true" /> {label}
     </span>
   );
 }

@@ -18,10 +18,12 @@
 .unilio-shell__main {
   min-width: 0;
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   padding: 1rem 1.25rem 2rem;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .unilio-shell__header {
@@ -58,59 +60,88 @@
 .unilio-shell__toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: center;
   margin-top: 0.75rem;
+}
+
+.unilio-filter-bar {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 0.8125rem;
+}
+
+.unilio-filter-bar.unilio-shell__toolbar {
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .unilio-shell__search {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex: 1 1 220px;
-  min-width: 200px;
-  padding: 0.45rem 0.75rem;
+  gap: 0.4rem;
+  flex: 2 1 160px;
+  min-width: 0;
+  max-width: none;
+  padding: 0.35rem 0.55rem;
   background: #fff;
   border: 1px solid var(--wf-border, #e2e8f0);
   border-radius: var(--wf-radius, 10px);
+  font-size: 0.8125rem;
 }
 
 .unilio-shell__search input {
   border: 0;
   outline: 0;
   width: 100%;
+  min-width: 0;
   font: inherit;
+  font-size: 0.8125rem;
   background: transparent;
+}
+
+.unilio-shell__search input::placeholder {
+  font-size: 0.8125rem;
 }
 
 .unilio-shell__filters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
   align-items: center;
+  min-width: 0;
+}
+
+.unilio-shell__select {
+  padding: 0.32rem 0.45rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: 10.5rem;
+}
+
+.unilio-shell__reset {
+  padding: 0.32rem 0.55rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .unilio-shell__filter-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-}
-
-.unilio-shell__select {
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--wf-border, #e2e8f0);
-  border-radius: 8px;
-  background: #fff;
-  font: inherit;
-}
-
-.unilio-shell__reset {
-  padding: 0.4rem 0.75rem;
-  border: 1px solid var(--wf-border, #e2e8f0);
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-  font: inherit;
 }
 
 .unilio-nav {

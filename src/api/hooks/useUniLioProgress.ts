@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
-import type { UniLioProgressDto } from "../types";
+import type { UniLioProgressDto, UniLioCompleteModuleRequest } from "../types";
 import type { UniLioProgressResult } from "../../config/unilio/types";
 
 function mapProgress(raw: UniLioProgressDto): UniLioProgressResult {
@@ -16,7 +16,22 @@ export function useUniLioProgress() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ courseId, moduleId }: { courseId: string; moduleId: string }) => {
+    mutationFn: async ({
+      courseId,
+      moduleId,
+      contentRating,
+      feedbackComment,
+    }: {
+      courseId: string;
+      moduleId: string;
+      contentRating?: number;
+      feedbackComment?: string;
+    }) => {
+      const body: UniLioCompleteModuleRequest = {
+        contentRating: contentRating ?? null,
+        feedbackComment: feedbackComment?.trim() || null,
+      };
+
       if (config.useMock) {
         return {
           courseId,
@@ -28,7 +43,7 @@ export function useUniLioProgress() {
 
       const result = await api.post<UniLioProgressDto>(
         `/unilio/courses/${courseId}/modules/${moduleId}/complete`,
-        {},
+        body,
       );
       return mapProgress(result);
     },
@@ -36,6 +51,7 @@ export function useUniLioProgress() {
       void queryClient.invalidateQueries({ queryKey: ["unilio", "course", variables.courseId] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "dashboard"] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "compliance"] });
+      void queryClient.invalidateQueries({ queryKey: ["unilio"] });
     },
   });
 }

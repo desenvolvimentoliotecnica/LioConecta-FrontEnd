@@ -102,6 +102,16 @@
   font-weight: 600;
 }
 
+.unilio-department-badge {
+  display: inline-flex;
+  padding: 0.15rem 0.5rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
 .unilio-mandatory-badge {
   display: inline-flex;
   align-items: center;
@@ -109,6 +119,18 @@
   padding: 0.15rem 0.5rem;
   background: #fef3c7;
   color: #b45309;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.unilio-participants-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  background: #f5f3ff;
+  color: #6d28d9;
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 600;
@@ -132,7 +154,254 @@
   color: #15803d;
 }
 
-.unilio-status--not-started {
+.unilio-status--not-started,
+.unilio-status--not-enrolled {
   background: #f1f5f9;
   color: #64748b;
+}
+
+.unilio-catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.unilio-page--catalog {
+  padding-top: 0;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.unilio-catalog-page-head {
+  margin-bottom: 0.75rem;
+}
+
+.unilio-catalog-page-head .unilio-page__title {
+  margin-bottom: 0.15rem;
+}
+
+.unilio-catalog-page-head .unilio-page__desc {
+  margin: 0;
+}
+
+.unilio-catalog-toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.unilio-catalog-filter-bar {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.unilio-catalog-filter-bar.unilio-shell__toolbar {
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
+.unilio-catalog-filter-bar .unilio-shell__search {
+  flex: 1 1 140px;
+  min-width: 140px;
+  max-width: none;
+}
+
+.unilio-catalog-filter-bar .unilio-shell__filters {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.unilio-catalog-filter-bar .unilio-shell__select {
+  max-width: none;
+  min-width: 8.25rem;
+}
+
+.unilio-catalog-filter-bar .unilio-shell__select[aria-label="Filtrar por departamento"] {
+  min-width: 11.5rem;
+}
+
+.unilio-catalog-view-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.unilio-catalog-toolbar__meta {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 0.75rem;
+}
+
+.unilio-catalog-view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.unilio-catalog-view-toggle__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  background: #fff;
+  color: #64748b;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unilio-catalog-view-toggle__btn + .unilio-catalog-view-toggle__btn {
+  border-left: 1px solid var(--wf-border, #e2e8f0);
+}
+
+.unilio-catalog-view-toggle__btn.is-active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.unilio-catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.unilio-course-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.unilio-course-card--list {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.25rem;
+  padding: 0 1rem 0 0;
+  overflow: hidden;
+}
+
+.unilio-course-card--list .unilio-course-card__thumb {
+  width: 148px;
+  min-width: 148px;
+  aspect-ratio: auto;
+  height: auto;
+  align-self: stretch;
+  flex-shrink: 0;
+  border-radius: 0;
+  border-top-left-radius: var(--wf-radius, 12px);
+  border-bottom-left-radius: var(--wf-radius, 12px);
+}
+
+.unilio-course-card--list .unilio-course-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unilio-course-card--list .unilio-course-card__head,
+.unilio-course-card--list .unilio-course-card__title,
+.unilio-course-card--list .unilio-course-card__meta,
+.unilio-course-card--list .unilio-course-card__footer {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.unilio-course-card--list .unilio-course-card__head {
+  padding-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.unilio-course-card--list .unilio-course-card__body {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 0;
+  gap: 0.15rem;
+  justify-content: center;
+}
+
+.unilio-course-card--list .unilio-course-card__footer {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 0;
+  margin-top: 0.35rem;
+}
+
+.unilio-course-card__access-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: #059669;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: auto;
+  align-self: center;
+}
+
+.unilio-course-card__access-btn:hover {
+  background: #047857;
+  color: #fff;
+}
+
+.unilio-catalog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.unilio-catalog-pagination__info {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.unilio-catalog-pagination__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 1100px) {
+  .unilio-catalog-filter-bar.unilio-shell__toolbar {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .unilio-catalog-filter-bar .unilio-shell__search {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .unilio-catalog-filter-bar .unilio-shell__filters {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+  }
+
+  .unilio-catalog-filter-bar .unilio-shell__select {
+    max-width: none;
+    flex: 1 1 9rem;
+  }
 }

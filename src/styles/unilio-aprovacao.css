@@ -1,0 +1,144 @@
+.unilio-aprovacao-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.unilio-aprovacao-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.unilio-aprovacao-list__item:hover {
+  border-color: #059669;
+}
+
+.unilio-aprovacao-list__item strong {
+  display: block;
+}
+
+.unilio-aprovacao-list__item span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.unilio-aprovacao-list__meta {
+  white-space: nowrap;
+}
+
+.unilio-aprovacao-review__back {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: #059669;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.unilio-aprovacao-panel {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.unilio-aprovacao-panel__hero {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.unilio-aprovacao-panel__thumb {
+  width: 160px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.unilio-aprovacao-panel__meta {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.unilio-aprovacao-panel__modules {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.unilio-aprovacao-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--wf-border, #e2e8f0);
+}
+
+.unilio-authoring-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.unilio-authoring-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.unilio-authoring-form input,
+.unilio-authoring-form textarea {
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 8px;
+}
+
+.unilio-authoring-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.unilio-authoring-form__check {
+  flex-direction: row;
+  align-items: center;
+}
+
+.unilio-authoring-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.unilio-authoring-modules {
+  background: #fff;
+  border: 1px solid var(--wf-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.unilio-authoring-modules__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}

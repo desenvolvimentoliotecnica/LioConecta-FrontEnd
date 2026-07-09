@@ -2289,6 +2289,29 @@ export interface UniLioCourseSummaryDto {
   enrollmentStatus?: string | null;
   skillNames: string[];
   integrations: UniLioIntegrationLinkDto[];
+  enrolledCount: number;
+  completedCount: number;
+}
+
+export interface UniLioCourseEnrollmentRecordDto {
+  personId: string;
+  personName: string;
+  status: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
+}
+
+export interface UniLioCourseEnrollmentsDto {
+  courseId: string;
+  enrolledCount: number;
+  completedCount: number;
+  items: UniLioCourseEnrollmentRecordDto[];
+}
+
+export interface UniLioCourseStartDto {
+  courseId: string;
+  enrollmentStatus: string;
+  startedAt: string;
 }
 
 export interface UniLioModuleDto {
@@ -2339,6 +2362,7 @@ export interface UniLioRecommendationDto {
   area: string;
   durationMinutes: number;
   contentType: string;
+  thumbnailUrl?: string | null;
 }
 
 export interface UniLioDashboardDto {
@@ -2366,6 +2390,11 @@ export interface UniLioProgressDto {
   progressPct: number;
   status: string;
   courseCompleted: boolean;
+}
+
+export interface UniLioCompleteModuleRequest {
+  contentRating?: number | null;
+  feedbackComment?: string | null;
 }
 
 export interface UniLioAssessmentSummaryDto {

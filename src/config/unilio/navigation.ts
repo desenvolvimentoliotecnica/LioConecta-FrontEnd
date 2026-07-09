@@ -82,6 +82,13 @@ export const UNILIO_NAV_ITEMS: UniLioNavItem[] = [
     personas: ["instructor", "admin"],
   },
   {
+    id: "aprovacoes",
+    label: "Aprovações",
+    path: "/unilio/admin/aprovacoes",
+    icon: "fa-stamp",
+    personas: ["admin"],
+  },
+  {
     id: "gestor",
     label: "Meu Time",
     path: "/unilio/gestor",

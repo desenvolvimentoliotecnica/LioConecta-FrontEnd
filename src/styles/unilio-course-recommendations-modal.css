@@ -1,0 +1,154 @@
+.pay-modal:has(.unilio-course-recs) .pay-modal__header {
+  justify-content: center;
+  text-align: center;
+}
+
+.pay-modal:has(.unilio-course-recs) .pay-modal__title {
+  text-align: center;
+}
+
+.pay-modal__footer:has(.unilio-course-recs__footer) {
+  justify-content: center;
+}
+
+.pay-modal__footer:has(.unilio-course-recs__footer) .pay-modal__footer-end {
+  margin-left: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+.unilio-course-recs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.unilio-course-recs__lead {
+  margin: 0;
+  max-width: 32rem;
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.unilio-course-recs__loading,
+.unilio-course-recs__empty {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.88rem;
+  color: #64748b;
+}
+
+.unilio-course-recs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.unilio-course-recs__card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  background: #f8fafc;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.unilio-course-recs__card:hover {
+  border-color: #86efac;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1);
+}
+
+.unilio-course-recs__card-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.unilio-course-recs__card-watermark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.32;
+  transform: scale(1.08);
+}
+
+.unilio-course-recs__card-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(248, 250, 252, 0.62) 55%,
+    rgba(255, 255, 255, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.unilio-course-recs__card:hover .unilio-course-recs__card-watermark img {
+  opacity: 0.38;
+}
+
+.unilio-course-recs__card:hover .unilio-course-recs__card-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.48) 0%,
+    rgba(255, 255, 255, 0.68) 55%,
+    rgba(255, 255, 255, 0.82) 100%
+  );
+}
+
+.unilio-course-recs__card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.unilio-course-recs__card-title {
+  font-size: 0.96rem;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.unilio-course-recs__card p {
+  margin: 0;
+  max-width: 24rem;
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.unilio-course-recs__card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.unilio-course-recs__footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

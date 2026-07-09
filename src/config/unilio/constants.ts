@@ -27,6 +27,7 @@ export const UNILIO_PERIODS = [
 
 export const ENROLLMENT_STATUS_LABELS: Record<string, string> = {
   not_started: "Não iniciado",
+  not_enrolled: "Disponível",
   in_progress: "Em andamento",
   completed: "Concluído",
   overdue: "Atrasado",

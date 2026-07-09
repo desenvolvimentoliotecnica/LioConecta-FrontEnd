@@ -102,6 +102,11 @@ import { UniLioCompliancePage } from "./components/unilio/pages/UniLioCompliance
 import { UniLioComunidadePage } from "./components/unilio/pages/UniLioComunidadePage";
 import { UniLioRecomendacoesPage } from "./components/unilio/pages/UniLioRecomendacoesPage";
 import { UniLioInstrutorPage } from "./components/unilio/pages/UniLioInstrutorPage";
+import {
+  UniLioAprovacaoListPage,
+  UniLioAprovacaoReviewPage,
+} from "./components/unilio/pages/UniLioAprovacaoPage";
+import { UniLioCourseEditPage } from "./components/unilio/pages/UniLioCourseEditPage";
 import { UniLioGestorPage } from "./components/unilio/pages/UniLioGestorPage";
 import { UniLioEventosPage } from "./components/unilio/pages/UniLioEventosPage";
 import { UniLioCompetenciasPage } from "./components/unilio/pages/UniLioCompetenciasPage";
@@ -225,6 +230,9 @@ function App() {
           <Route path="comunidade" element={<UniLioComunidadePage />} />
           <Route path="recomendacoes" element={<UniLioRecomendacoesPage />} />
           <Route path="instrutor" element={<UniLioInstrutorPage />} />
+          <Route path="instrutor/curso/:courseId/editar" element={<UniLioCourseEditPage />} />
+          <Route path="admin/aprovacoes" element={<UniLioAprovacaoListPage />} />
+          <Route path="admin/aprovacoes/:courseId" element={<UniLioAprovacaoReviewPage />} />
           <Route path="gestor" element={<UniLioGestorPage />} />
           <Route path="eventos" element={<UniLioEventosPage />} />
           <Route path="competencias" element={<UniLioCompetenciasPage />} />
