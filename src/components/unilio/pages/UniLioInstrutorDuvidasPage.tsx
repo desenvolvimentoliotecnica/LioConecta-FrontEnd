@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   useUniLioInstructorQuestionDetail,
@@ -6,19 +6,13 @@ import {
   useUniLioMarkQuestionRead,
   useUniLioQuestionReply,
 } from "../../../api/hooks/useUniLioQuestions";
-import { formatUniLioDateTime } from "../../../utils/unilioView";
 import { UniLioFallbackBanner } from "../UniLioFallbackBanner";
+import { UniLioFilterBar } from "../UniLioFilterBar";
+import { UniLioInstructorQuestionsTable } from "../UniLioInstructorQuestionsTable";
+import { UniLioQuestionDetailModal } from "../UniLioQuestionDetailModal";
+import "../../../styles/unilio-catalog.css";
+import "../../../styles/unilio-instrutor-page.css";
 import "../../../styles/unilio-questions.css";
-
-function statusLabel(status: string) {
-  if (status === "answered") return "Respondida";
-  if (status === "closed") return "Encerrada";
-  return "Aberta";
-}
-
-function visibilityLabel(visibility: string) {
-  return visibility === "public" ? "Pública (FAQ)" : "Privada";
-}
 
 export function UniLioInstrutorDuvidasPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,13 +40,12 @@ export function UniLioInstrutorDuvidasPage() {
     setReplyBody("");
   }, [selectedId]);
 
-  const selectedSummary = useMemo(
-    () => data.items.find((item) => item.id === selectedId) ?? null,
-    [data.items, selectedId],
-  );
-
   const handleSelect = (id: string) => {
     setSearchParams({ question: id });
+  };
+
+  const handleCloseModal = () => {
+    setSearchParams({});
   };
 
   const handleReply = async () => {
@@ -61,32 +54,58 @@ export function UniLioInstrutorDuvidasPage() {
     setReplyBody("");
   };
 
+  const answeredCount = data.items.filter((item) => item.status === "answered").length;
+
   if (isLoading) {
     return (
-      <main className="unilio-page">
+      <main className="unilio-page unilio-page--inbox">
         <p className="unilio-page__loading">Carregando caixa de dúvidas…</p>
       </main>
     );
   }
 
   return (
-    <main className="unilio-page">
-      <div className="unilio-page__head">
+    <main className="unilio-page unilio-page--inbox">
+      <div className="unilio-inbox-page-head">
+        <Link to="/unilio/instrutor" className="unilio-inbox-back">
+          <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+          Voltar ao painel do instrutor
+        </Link>
         <h1 className="unilio-page__title">Caixa de dúvidas</h1>
         <p className="unilio-page__desc">
           Dúvidas enviadas pelos alunos nos seus cursos, com data, curso, módulo e visibilidade.
         </p>
-        <Link to="/unilio/instrutor" className="unilio-module-questions__link">
-          Voltar ao painel do instrutor
-        </Link>
+      </div>
+
+      <div className="unilio-instrutor-courses__summary unilio-inbox-summary">
+        <article className="unilio-instrutor-courses__stat">
+          <span className="unilio-instrutor-courses__stat-value">{data.items.length}</span>
+          <span className="unilio-instrutor-courses__stat-label">Dúvidas</span>
+        </article>
+        <article className="unilio-instrutor-courses__stat">
+          <span className="unilio-instrutor-courses__stat-value">{data.openCount}</span>
+          <span className="unilio-instrutor-courses__stat-label">Abertas</span>
+        </article>
+        <article className="unilio-instrutor-courses__stat">
+          <span className="unilio-instrutor-courses__stat-value">{answeredCount}</span>
+          <span className="unilio-instrutor-courses__stat-label">Respondidas</span>
+        </article>
+        <article className="unilio-instrutor-courses__stat">
+          <span className="unilio-instrutor-courses__stat-value">{data.unreadCount}</span>
+          <span className="unilio-instrutor-courses__stat-label">Não lidas</span>
+        </article>
+      </div>
+
+      <div className="unilio-catalog-toolbar-row">
+        <UniLioFilterBar className="unilio-catalog-filter-bar" />
       </div>
 
       <UniLioFallbackBanner show={isFallback} />
 
-      <div className="unilio-questions-inbox__filters">
+      <div className="unilio-instrutor-courses__filters unilio-instrutor-courses__filters--inbox" role="group" aria-label="Filtrar dúvidas">
         <button
           type="button"
-          className={`unilio-questions-inbox__filter${!statusFilter && !unreadOnly ? " is-active" : ""}`}
+          className={`unilio-instrutor-courses__filter${!statusFilter && !unreadOnly ? " is-active" : ""}`}
           onClick={() => {
             setStatusFilter("");
             setUnreadOnly(false);
@@ -96,131 +115,61 @@ export function UniLioInstrutorDuvidasPage() {
         </button>
         <button
           type="button"
-          className={`unilio-questions-inbox__filter${statusFilter === "open" ? " is-active" : ""}`}
-          onClick={() => setStatusFilter("open")}
+          className={`unilio-instrutor-courses__filter${statusFilter === "open" ? " is-active" : ""}`}
+          onClick={() => {
+            setStatusFilter("open");
+            setUnreadOnly(false);
+          }}
         >
           Abertas
+          {data.openCount > 0 ? (
+            <span className="unilio-instrutor-courses__filter-badge">{data.openCount}</span>
+          ) : null}
         </button>
         <button
           type="button"
-          className={`unilio-questions-inbox__filter${statusFilter === "answered" ? " is-active" : ""}`}
-          onClick={() => setStatusFilter("answered")}
+          className={`unilio-instrutor-courses__filter${statusFilter === "answered" ? " is-active" : ""}`}
+          onClick={() => {
+            setStatusFilter("answered");
+            setUnreadOnly(false);
+          }}
         >
           Respondidas
         </button>
         <button
           type="button"
-          className={`unilio-questions-inbox__filter${unreadOnly ? " is-active" : ""}`}
-          onClick={() => setUnreadOnly((v) => !v)}
+          className={`unilio-instrutor-courses__filter${unreadOnly ? " is-active" : ""}`}
+          onClick={() => {
+            setUnreadOnly((value) => !value);
+            setStatusFilter("");
+          }}
         >
           Não lidas
           {data.unreadCount > 0 ? (
-            <span className="unilio-questions-inbox__unread" style={{ marginLeft: "0.35rem" }}>
-              {data.unreadCount}
-            </span>
+            <span className="unilio-instrutor-courses__filter-badge">{data.unreadCount}</span>
           ) : null}
         </button>
       </div>
 
-      <div className="unilio-questions-inbox__table-wrap">
-        <table className="audit-trail-page__table">
-          <thead>
-            <tr>
-              <th>Data/Hora</th>
-              <th>Aluno</th>
-              <th>Curso</th>
-              <th>Módulo</th>
-              <th>Dúvida</th>
-              <th>Visibilidade</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.items.map((item) => (
-              <tr
-                key={item.id}
-                style={{ cursor: "pointer", background: item.id === selectedId ? "#f0fdf4" : undefined }}
-                onClick={() => handleSelect(item.id)}
-              >
-                <td>{formatUniLioDateTime(item.createdAt)}</td>
-                <td>{item.authorName}</td>
-                <td>{item.courseTitle}</td>
-                <td>{item.moduleTitle ?? "Curso inteiro"}</td>
-                <td>{item.body.length > 80 ? `${item.body.slice(0, 80)}…` : item.body}</td>
-                <td>{visibilityLabel(item.visibility)}</td>
-                <td>
-                  {statusLabel(item.status)}
-                  {item.unread ? (
-                    <span className="unilio-questions-inbox__unread" style={{ marginLeft: "0.35rem" }}>
-                      !
-                    </span>
-                  ) : null}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <UniLioInstructorQuestionsTable
+        items={data.items}
+        selectedId={selectedId}
+        openCount={data.openCount}
+        onSelect={handleSelect}
+      />
 
-      {selectedId ? (
-        <section className="unilio-questions-inbox__detail">
-          {detailLoading && !detail ? (
-            <p>Carregando detalhe…</p>
-          ) : detail ? (
-            <>
-              <h2>Detalhe da dúvida</h2>
-              <p>
-                <strong>{detail.authorName}</strong> · {detail.courseTitle}
-                {detail.moduleTitle ? ` · ${detail.moduleTitle}` : " · Curso inteiro"} ·{" "}
-                {formatUniLioDateTime(detail.createdAt)}
-              </p>
-              <div className="unilio-questions-inbox__thread">
-                <div className="unilio-questions-inbox__bubble unilio-questions-inbox__bubble--learner">
-                  {detail.body}
-                </div>
-                {detail.replies.map((reply) => (
-                  <div
-                    key={reply.id}
-                    className={`unilio-questions-inbox__bubble ${
-                      reply.isInstructorReply
-                        ? "unilio-questions-inbox__bubble--instructor"
-                        : "unilio-questions-inbox__bubble--learner"
-                    }`}
-                  >
-                    <strong>{reply.authorName}</strong>
-                    <p style={{ margin: "0.35rem 0 0" }}>{reply.body}</p>
-                    <small>{formatUniLioDateTime(reply.createdAt)}</small>
-                  </div>
-                ))}
-              </div>
-
-              {detail.status !== "closed" ? (
-                <div className="unilio-questions-inbox__reply-form">
-                  <label htmlFor="instructor-reply">Sua resposta</label>
-                  <textarea
-                    id="instructor-reply"
-                    value={replyBody}
-                    maxLength={2000}
-                    placeholder="Escreva a resposta para o aluno…"
-                    onChange={(e) => setReplyBody(e.target.value)}
-                  />
-                  <div className="unilio-questions-inbox__reply-actions">
-                    <button
-                      type="button"
-                      className="unilio-player__complete-btn"
-                      disabled={!replyBody.trim() || replyMutation.isPending}
-                      onClick={() => void handleReply()}
-                    >
-                      {replyMutation.isPending ? "Enviando…" : "Responder aluno"}
-                    </button>
-                  </div>
-                </div>
-              ) : null}
-            </>
-          ) : selectedSummary ? (
-            <p>Não foi possível carregar o detalhe desta dúvida.</p>
-          ) : null}
-        </section>
+      {selectedId && detail ? (
+        <UniLioQuestionDetailModal
+          open
+          mode="instructor"
+          detail={detail}
+          loading={detailLoading}
+          replyBody={replyBody}
+          replyBusy={replyMutation.isPending}
+          onReplyBodyChange={setReplyBody}
+          onReply={() => void handleReply()}
+          onClose={handleCloseModal}
+        />
       ) : null}
     </main>
   );

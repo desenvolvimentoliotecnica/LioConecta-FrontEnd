@@ -1,31 +1,38 @@
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useUniLioInstructorCourses } from "../../../api/hooks/useUniLioInstructorCourses";
 import { useUniLioInstructorQuestions } from "../../../api/hooks/useUniLioQuestions";
-import { useUniLioAuthoringCourses } from "../../../api/hooks/useUniLioAuthoring";
-import { formatUniLioRating } from "../../../utils/unilioView";
+import {
+  useUniLioAuthoringCourses,
+  useWithdrawUniLioCourse,
+} from "../../../api/hooks/useUniLioAuthoring";
+import { mergeInstructorCourses } from "../instructorCoursesModel";
 import { UniLioFallbackBanner } from "../UniLioFallbackBanner";
+import { UniLioInstructorCoursesTable } from "../UniLioInstructorCoursesTable";
 import "../../../styles/unilio-aprovacao.css";
 import "../../../styles/unilio-questions.css";
-
-function statusLabel(status: string) {
-  switch (status) {
-    case "draft":
-      return "Rascunho";
-    case "pending_approval":
-      return "Aguardando aprovação";
-    case "published":
-      return "Publicado";
-    case "rejected":
-      return "Rejeitado";
-    default:
-      return status;
-  }
-}
+import "../../../styles/unilio-instrutor-page.css";
 
 export function UniLioInstrutorPage() {
-  const { data, isLoading, isFallback } = useUniLioInstructorCourses();
+  const navigate = useNavigate();
+  const { data: instructorMetrics, isLoading, isFallback } = useUniLioInstructorCourses();
   const { data: authoringCourses = [], isLoading: authoringLoading } = useUniLioAuthoringCourses();
   const { data: instructorQuestions } = useUniLioInstructorQuestions({ pageSize: 1 });
+  const withdrawCourse = useWithdrawUniLioCourse();
+
+  const courses = useMemo(
+    () => mergeInstructorCourses(authoringCourses, instructorMetrics.items),
+    [authoringCourses, instructorMetrics.items],
+  );
+
+  async function handleEditPending(courseId: string) {
+    await withdrawCourse.mutateAsync(courseId);
+    navigate(`/unilio/instrutor/curso/${courseId}/editar`);
+  }
+
+  async function handleWithdrawOnly(courseId: string) {
+    await withdrawCourse.mutateAsync(courseId);
+  }
 
   if (isLoading || authoringLoading) {
     return (
@@ -47,8 +54,8 @@ export function UniLioInstrutorPage() {
           <Link to="/unilio/instrutor/duvidas" className="unilio-player__help-btn" style={{ textDecoration: "none" }}>
             <i className="fa-solid fa-inbox" aria-hidden="true" />
             Caixa de dúvidas
-            {instructorQuestions.unreadCount > 0 ? (
-              <span className="unilio-questions-inbox__unread">{instructorQuestions.unreadCount}</span>
+            {instructorQuestions.openCount > 0 ? (
+              <span className="unilio-questions-inbox__unread">{instructorQuestions.openCount}</span>
             ) : null}
           </Link>
         </div>
@@ -56,70 +63,12 @@ export function UniLioInstrutorPage() {
 
       <UniLioFallbackBanner show={isFallback} />
 
-      {authoringCourses.length > 0 ? (
-        <section className="unilio-authoring-modules" style={{ marginBottom: "1rem" }}>
-          <h2>Meus cursos (autoria)</h2>
-          <div className="unilio-table-wrap">
-            <table className="audit-trail-page__table">
-              <thead>
-                <tr>
-                  <th>Curso</th>
-                  <th>Área</th>
-                  <th>Módulos</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {authoringCourses.map((course) => (
-                  <tr key={course.id}>
-                    <td>{course.title}</td>
-                    <td>{course.area}</td>
-                    <td>{course.moduleCount}</td>
-                    <td>{statusLabel(course.status)}</td>
-                    <td>
-                      {(course.status === "draft" || course.status === "rejected") && (
-                        <Link to={`/unilio/instrutor/curso/${course.id}/editar`}>Editar</Link>
-                      )}
-                      {course.status === "pending_approval" && <span>Em revisão</span>}
-                      {course.status === "published" && (
-                        <Link to={`/unilio/curso/${course.id}`}>Ver no catálogo</Link>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ) : null}
-
-      <div className="unilio-table-wrap">
-        <table className="audit-trail-page__table">
-          <thead>
-            <tr>
-              <th>Curso</th>
-              <th>Área</th>
-              <th>Matriculados</th>
-              <th>Concluídos</th>
-              <th>Avaliação</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.items.map((course) => (
-              <tr key={course.courseId}>
-                <td>{course.title}</td>
-                <td>{course.area}</td>
-                <td>{course.enrolledCount}</td>
-                <td>{course.completedCount}</td>
-                <td>{formatUniLioRating(course.avgRating)}</td>
-                <td>{statusLabel(course.status)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <UniLioInstructorCoursesTable
+        courses={courses}
+        withdrawBusy={withdrawCourse.isPending}
+        onEditPending={(courseId) => void handleEditPending(courseId)}
+        onWithdraw={(courseId) => void handleWithdrawOnly(courseId)}
+      />
     </main>
   );
 }

@@ -5,9 +5,10 @@ import "../../styles/comunicado-hero-image-modal.css";
 type Props = {
   value: string;
   onChange: (url: string) => void;
+  disabled?: boolean;
 };
 
-export function ComunicadoHeroImagePicker({ value, onChange }: Props) {
+export function ComunicadoHeroImagePicker({ value, onChange, disabled = false }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const trimmed = value.trim();
 
@@ -28,12 +29,13 @@ export function ComunicadoHeroImagePicker({ value, onChange }: Props) {
         <button
           type="button"
           className="hero-image-picker__choose"
+          disabled={disabled}
           onClick={() => setModalOpen(true)}
         >
           <i className="fa-solid fa-images" aria-hidden="true" />
           Escolher imagem
         </button>
-        {trimmed ? (
+        {trimmed && !disabled ? (
           <button
             type="button"
             className="hero-image-picker__remove"
@@ -46,7 +48,7 @@ export function ComunicadoHeroImagePicker({ value, onChange }: Props) {
       </div>
 
       <ComunicadoHeroImageModal
-        open={modalOpen}
+        open={modalOpen && !disabled}
         initialUrl={value}
         onClose={() => setModalOpen(false)}
         onConfirm={onChange}

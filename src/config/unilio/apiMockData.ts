@@ -601,6 +601,7 @@ export function buildMockModuleQuestions(
         courseTitle: course?.title ?? "Curso",
         moduleId,
         moduleTitle: module?.title ?? "Módulo",
+        moduleSortOrder: module?.sortOrder ?? null,
         authorPersonId: "seed-julio",
         authorName: "Júlio Schwartzman",
         body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
@@ -619,6 +620,7 @@ export function buildMockModuleQuestions(
     totalCount: 1,
     totalPages: 1,
     unreadCount: 0,
+    openCount: 0,
   };
 }
 
@@ -634,6 +636,7 @@ export function buildMockMyQuestions(): UniLioQuestionsPageDto {
         courseTitle: course?.title ?? "Onboarding LioTécnica",
         moduleId: module?.id ?? null,
         moduleTitle: module?.title ?? null,
+        moduleSortOrder: module?.sortOrder ?? null,
         authorPersonId: "seed-julio",
         authorName: "Você",
         body: "Posso refazer o quiz se não atingir a nota mínima?",
@@ -649,6 +652,7 @@ export function buildMockMyQuestions(): UniLioQuestionsPageDto {
         courseTitle: course?.title ?? "Onboarding LioTécnica",
         moduleId: module?.id ?? null,
         moduleTitle: module?.title ?? null,
+        moduleSortOrder: module?.sortOrder ?? null,
         authorPersonId: "seed-julio",
         authorName: "Você",
         body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
@@ -667,6 +671,7 @@ export function buildMockMyQuestions(): UniLioQuestionsPageDto {
     totalCount: 2,
     totalPages: 1,
     unreadCount: 1,
+    openCount: 1,
   };
 }
 
@@ -682,6 +687,7 @@ export function buildMockInstructorQuestions(): UniLioQuestionsPageDto {
         courseTitle: course?.title ?? "Onboarding LioTécnica",
         moduleId: module?.id ?? null,
         moduleTitle: module?.title ?? null,
+        moduleSortOrder: module?.sortOrder ?? null,
         authorPersonId: "seed-carlos",
         authorName: "Carlos Mendes",
         body: "Posso refazer o quiz se não atingir a nota mínima?",
@@ -697,6 +703,7 @@ export function buildMockInstructorQuestions(): UniLioQuestionsPageDto {
         courseTitle: course?.title ?? "Onboarding LioTécnica",
         moduleId: module?.id ?? null,
         moduleTitle: module?.title ?? null,
+        moduleSortOrder: module?.sortOrder ?? null,
         authorPersonId: "seed-julio",
         authorName: "Júlio Schwartzman",
         body: "Qual a diferença entre onboarding presencial e remoto neste módulo?",
@@ -715,6 +722,7 @@ export function buildMockInstructorQuestions(): UniLioQuestionsPageDto {
     totalCount: 2,
     totalPages: 1,
     unreadCount: 1,
+    openCount: 1,
   };
 }
 

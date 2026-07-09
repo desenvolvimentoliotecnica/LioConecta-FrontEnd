@@ -23,6 +23,12 @@
   border-color: #94a3b8;
 }
 
+.unilio-player__help-btn.is-active {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+  color: #047857;
+}
+
 .unilio-player__foot-actions {
   display: flex;
   align-items: center;
@@ -92,6 +98,191 @@
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   background: #f8fafc;
+}
+
+/* Module questions drawer (player) */
+
+.unilio-module-questions-drawer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.unilio-module-questions-drawer.is-open {
+  pointer-events: auto;
+}
+
+.unilio-module-questions-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  background: rgba(15, 23, 42, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.unilio-module-questions-drawer.is-open .unilio-module-questions-drawer__backdrop {
+  opacity: 1;
+}
+
+.unilio-module-questions-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(380px, 92vw);
+  height: 100%;
+  background: #fff;
+  border-left: 1px solid #e2e8f0;
+  box-shadow: -8px 0 28px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.24s ease;
+}
+
+.unilio-module-questions-drawer.is-open .unilio-module-questions-drawer__panel {
+  transform: translateX(0);
+}
+
+.unilio-module-questions-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.unilio-module-questions-drawer__title {
+  margin: 0;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #0f172a;
+}
+
+.unilio-module-questions-drawer__subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.unilio-module-questions-drawer__close {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.unilio-module-questions-drawer__close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.unilio-module-questions-drawer__body {
+  flex: 1;
+  overflow: auto;
+  padding: 0.85rem 1rem;
+}
+
+.unilio-module-questions-drawer__empty {
+  padding: 1.5rem 0.5rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.unilio-module-questions-drawer__empty p {
+  margin: 0;
+}
+
+.unilio-module-questions-drawer__empty-hint {
+  margin-top: 0.5rem !important;
+  font-size: 0.82rem;
+}
+
+.unilio-module-questions-drawer__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem 1rem;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.unilio-module-questions-drawer__footer-meta {
+  width: 100%;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.unilio-module-questions-drawer__tab {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 15;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.65rem 0.45rem;
+  border: 1px solid #cbd5e1;
+  border-right: none;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background: #fff;
+  color: #047857;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: -4px 0 12px rgba(15, 23, 42, 0.08);
+}
+
+.unilio-module-questions-drawer__tab:hover {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+.unilio-module-questions-drawer__tab-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.04em;
+}
+
+.unilio-module-questions-drawer__tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.unilio-module-questions__loading {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .unilio-module-questions__head {
@@ -264,4 +455,107 @@
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
+}
+
+.unilio-question-detail-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.unilio-question-detail-modal__loading {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.unilio-question-detail-modal__meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.unilio-question-detail-modal__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.unilio-question-detail-modal__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.unilio-question-detail-modal__badge--muted {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.unilio-question-detail-modal__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-left: auto;
+}
+
+.unilio-page--inbox {
+  min-width: 0;
+}
+
+.unilio-inbox-page-head {
+  margin-bottom: 0.75rem;
+}
+
+.unilio-inbox-page-head .unilio-page__title {
+  margin-bottom: 0.15rem;
+}
+
+.unilio-inbox-page-head .unilio-page__desc {
+  margin: 0;
+}
+
+.unilio-inbox-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.unilio-inbox-back:hover {
+  background: #d1fae5;
+  border-color: #34d399;
+  color: #065f46;
+}
+
+.unilio-inbox-back:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.unilio-inbox-summary {
+  margin-bottom: 0.85rem;
+}
+
+.unilio-inbox-table {
+  margin-top: 0.25rem;
+}
+
+.unilio-instrutor-courses__filters--inbox {
+  margin-bottom: 0.75rem;
 }

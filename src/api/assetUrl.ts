@@ -36,7 +36,8 @@ export function resolveBackendAssetUrl(url: string | null | undefined): string {
   const servedByBackend =
     normalized.startsWith("/posts/") ||
     normalized.startsWith("/media/") ||
-    normalized.startsWith("/systems/");
+    normalized.startsWith("/systems/") ||
+    normalized.startsWith("/unilio/modules/attachments/");
 
   if (!servedByBackend) {
     return normalized;

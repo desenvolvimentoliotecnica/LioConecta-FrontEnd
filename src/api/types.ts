@@ -2314,6 +2314,15 @@ export interface UniLioCourseStartDto {
   startedAt: string;
 }
 
+export interface UniLioModuleAttachmentDto {
+  id: string;
+  fileName: string;
+  url: string;
+  contentType: string;
+  sizeBytes: number;
+  sortOrder: number;
+}
+
 export interface UniLioModuleDto {
   id: string;
   sortOrder: number;
@@ -2325,6 +2334,7 @@ export interface UniLioModuleDto {
   quizJson?: string | null;
   quizPassingScore?: number | null;
   isCompleted: boolean;
+  attachments: UniLioModuleAttachmentDto[];
 }
 
 export interface UniLioCourseDetailDto extends UniLioCourseSummaryDto {
@@ -2532,6 +2542,7 @@ export interface UniLioInstructorCourseDto {
   completedCount: number;
   avgRating: number;
   status: string;
+  publishedAt?: string | null;
 }
 
 export interface UniLioInstructorCoursesDto {
@@ -2582,6 +2593,7 @@ export interface UniLioQuestionSummaryDto {
   courseTitle: string;
   moduleId?: string | null;
   moduleTitle?: string | null;
+  moduleSortOrder?: number | null;
   authorPersonId: string;
   authorName: string;
   body: string;
@@ -2600,6 +2612,7 @@ export interface UniLioQuestionDetailDto {
   courseTitle: string;
   moduleId?: string | null;
   moduleTitle?: string | null;
+  moduleSortOrder?: number | null;
   authorPersonId: string;
   authorName: string;
   body: string;
@@ -2617,4 +2630,5 @@ export interface UniLioQuestionsPageDto {
   totalCount: number;
   totalPages: number;
   unreadCount: number;
+  openCount?: number;
 }

@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
 import {
+  NOTIFICATIONS_QUERY_KEY,
+  NOTIFICATIONS_UNREAD_QUERY_KEY,
+} from "../../utils/notifications";
+import {
   mapUniLioQuestionDetailFromApi,
   mapUniLioQuestionsFromApi,
 } from "../unilio/mapFromApi";
@@ -131,6 +135,31 @@ export function useUniLioInstructorQuestionDetail(questionId: string | null) {
   };
 }
 
+export function useUniLioMyQuestionDetail(questionId: string | null) {
+  const query = useQuery({
+    queryKey: ["unilio", "my-question", questionId],
+    queryFn: async () =>
+      mapUniLioQuestionDetailFromApi(
+        await api.get(`/unilio/me/questions/${questionId}`),
+      ),
+    enabled: !config.useMock && Boolean(questionId),
+    staleTime: 15_000,
+  });
+
+  const isFallback = config.useMock || query.isError;
+  const data =
+    questionId && (config.useMock || query.isError)
+      ? mapUniLioQuestionDetailFromApi(buildMockQuestionDetail(questionId))
+      : query.data ?? null;
+
+  return {
+    data,
+    isLoading: !config.useMock && query.isLoading,
+    isFallback,
+    refetch: query.refetch,
+  };
+}
+
 export function useUniLioCreateQuestion() {
   const queryClient = useQueryClient();
 
@@ -177,6 +206,8 @@ export function useUniLioCreateQuestion() {
       void queryClient.invalidateQueries({ queryKey: ["unilio", "module-questions"] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "my-questions"] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "instructor-questions"] });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_UNREAD_QUERY_KEY });
       if (variables.moduleId) {
         void queryClient.invalidateQueries({
           queryKey: ["unilio", "module-questions", variables.courseId, variables.moduleId],
@@ -218,8 +249,13 @@ export function useUniLioQuestionReply() {
       void queryClient.invalidateQueries({ queryKey: ["unilio", "instructor-questions"] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "my-questions"] });
       void queryClient.invalidateQueries({ queryKey: ["unilio", "module-questions"] });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_UNREAD_QUERY_KEY });
       void queryClient.invalidateQueries({
         queryKey: ["unilio", "instructor-question", variables.questionId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ["unilio", "my-question", variables.questionId],
       });
     },
   });
