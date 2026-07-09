@@ -1,0 +1,68 @@
+.pay-modal--confirm {
+  width: min(420px, 100%);
+}
+
+.pay-modal--confirm .pay-modal__body {
+  padding-top: 8px;
+}
+
+.pay-modal__btn--danger {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+}
+
+.pay-modal__btn--danger:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.pay-modal__btn--warning {
+  background: #db2777;
+  border-color: #db2777;
+  color: #fff;
+}
+
+.pay-modal__btn--warning:hover:not(:disabled) {
+  background: #be185d;
+  border-color: #be185d;
+}
+
+.portal-confirm {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+  padding: 4px 8px 8px;
+}
+
+.portal-confirm__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+}
+
+.portal-confirm__icon--default {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.portal-confirm__icon--danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.portal-confirm__icon--warning {
+  background: #fdf2f8;
+  color: #db2777;
+}
+
+.portal-confirm__message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+}

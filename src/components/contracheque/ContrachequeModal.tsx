@@ -5,6 +5,7 @@ type Props = {
   open: boolean;
   title: string;
   wide?: boolean;
+  compact?: boolean;
   stacked?: boolean;
   closeOnEscape?: boolean;
   onClose: () => void;
@@ -47,6 +48,7 @@ export function ContrachequeModal({
   open,
   title,
   wide,
+  compact,
   stacked = false,
   closeOnEscape = true,
   onClose,
@@ -116,7 +118,7 @@ export function ContrachequeModal({
     >
       <div
         ref={dialogRef}
-        className={`pay-modal${wide ? " pay-modal--wide" : ""}`}
+        className={`pay-modal${wide ? " pay-modal--wide" : ""}${compact ? " pay-modal--confirm" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

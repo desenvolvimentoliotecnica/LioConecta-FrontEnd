@@ -1,11 +1,16 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   useBenefitList,
   useBenefitRequest,
   useBenefitSummary,
 } from "../../api/hooks/useBenefits";
+import { useBenefitsBootstrap } from "../../api/hooks/useBenefitsManagement";
+import { useBenefitsSettings } from "../../api/hooks/useBenefitsSettings";
+import { useMe } from "../../api/hooks/useMe";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { BenefitListItemDto } from "../../api/types";
+import { canManageBeneficios } from "../../config/beneficios/settings";
 import { bookmarkIdForBenefit, formatMoney } from "../../utils/money";
 import { RhPageHead } from "../servicos/RhPageHead";
 import { sectionMainClass } from "../layout/SectionPageHead";
@@ -14,6 +19,7 @@ import { BenefitDetailModal } from "./BenefitDetailModal";
 import { BenefitRequestResultModal } from "./BenefitRequestResultModal";
 import "../../styles/contracheque-page.css";
 import "../../styles/beneficios-page.css";
+import "../../styles/beneficios-gestao-page.css";
 
 const FILTERS = [
   { id: "all", label: "Todos" },
@@ -35,6 +41,12 @@ export function BeneficiosPage() {
   const listQuery = useBenefitList();
   const requestMutation = useBenefitRequest();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
+  const meQuery = useMe();
+  const settingsQuery = useBenefitsSettings();
+  const bootstrap = useBenefitsBootstrap();
+  const showGestaoLink =
+    (bootstrap.data?.canManage ?? false) ||
+    (!settingsQuery.isError && canManageBeneficios(meQuery.data, settingsQuery.data));
 
   const filtered = useMemo(
     () => filterBenefits(listQuery.data ?? [], category, query),
@@ -82,6 +94,11 @@ export function BeneficiosPage() {
               ))}
             </div>
             <div className="pay-toolbar__actions">
+              {showGestaoLink ? (
+                <Link className="beneficios-gestao-btn beneficios-gestao-btn--ghost" to="/servicos/beneficios/gestao">
+                  Gestão de benefícios
+                </Link>
+              ) : null}
               <button
                 type="button"
                 className={`pay-toggle-values${showValues ? " is-active" : ""}`}
