@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../client";
+import { readApiNumber, readApiOptionalString } from "../readApiFields";
 import { FEED_QUERY_KEY } from "./useFeed";
 
 export type UniLioAuthoringCourseSummary = {
@@ -10,6 +11,18 @@ export type UniLioAuthoringCourseSummary = {
   moduleCount: number;
   submittedAt?: string;
   publishedAt?: string;
+  enrolledCount: number;
+  completedCount: number;
+  avgRating: number;
+};
+
+export type UniLioAuthoringModuleAttachment = {
+  id: string;
+  fileName: string;
+  url: string;
+  contentType: string;
+  sizeBytes: number;
+  sortOrder: number;
 };
 
 export type UniLioAuthoringModule = {
@@ -23,6 +36,14 @@ export type UniLioAuthoringModule = {
   quizJson?: string | null;
   quizPassingScore?: number | null;
   isCompleted: boolean;
+  attachments: UniLioAuthoringModuleAttachment[];
+};
+
+export type UniLioAuthoringAssessment = {
+  id: string;
+  title: string;
+  passingScore: number;
+  questionsJson: string;
 };
 
 export type UniLioAuthoringCourse = {
@@ -47,6 +68,7 @@ export type UniLioAuthoringCourse = {
   submittedAt?: string | null;
   rejectionReason?: string | null;
   modules: UniLioAuthoringModule[];
+  assessment?: UniLioAuthoringAssessment | null;
 };
 
 export type UniLioUpsertCourseRequest = {
@@ -73,6 +95,12 @@ export type UniLioUpsertModuleRequest = {
   durationMinutes: number;
   articleHtml?: string | null;
   quizJson?: string | null;
+};
+
+export type UniLioUpsertAssessmentRequest = {
+  title: string;
+  passingScore: number;
+  questionsJson: string;
 };
 
 export type UniLioApprovalReview = {
@@ -103,6 +131,44 @@ export type UniLioApprovalReview = {
 
 const AUTHORING_KEY = ["unilio", "authoring"] as const;
 
+function mapAttachment(raw: Record<string, unknown>): UniLioAuthoringModuleAttachment {
+  return {
+    id: String(raw.id ?? raw.Id),
+    fileName: String(raw.fileName ?? raw.FileName ?? ""),
+    url: String(raw.url ?? raw.Url ?? ""),
+    contentType: String(raw.contentType ?? raw.ContentType ?? ""),
+    sizeBytes: Number(raw.sizeBytes ?? raw.SizeBytes ?? 0),
+    sortOrder: Number(raw.sortOrder ?? raw.SortOrder ?? 0),
+  };
+}
+
+function mapModule(raw: Record<string, unknown>): UniLioAuthoringModule {
+  return {
+    id: String(raw.id),
+    sortOrder: Number(raw.sortOrder ?? 0),
+    title: String(raw.title ?? ""),
+    contentType: String(raw.contentType ?? "article"),
+    contentUrl: raw.contentUrl ? String(raw.contentUrl) : null,
+    durationMinutes: Number(raw.durationMinutes ?? 0),
+    articleHtml: raw.articleHtml ? String(raw.articleHtml) : null,
+    quizJson: raw.quizJson ? String(raw.quizJson) : null,
+    quizPassingScore: raw.quizPassingScore != null ? Number(raw.quizPassingScore) : null,
+    isCompleted: Boolean(raw.isCompleted),
+    attachments: Array.isArray(raw.attachments)
+      ? raw.attachments.map((item) => mapAttachment(item as Record<string, unknown>))
+      : [],
+  };
+}
+
+function mapAssessment(raw: Record<string, unknown>): UniLioAuthoringAssessment {
+  return {
+    id: String(raw.id ?? raw.Id ?? ""),
+    title: String(raw.title ?? raw.Title ?? ""),
+    passingScore: Number(raw.passingScore ?? raw.PassingScore ?? 0),
+    questionsJson: String(raw.questionsJson ?? raw.QuestionsJson ?? "[]"),
+  };
+}
+
 function mapCourse(raw: Record<string, unknown>): UniLioAuthoringCourse {
   return {
     id: String(raw.id),
@@ -126,22 +192,11 @@ function mapCourse(raw: Record<string, unknown>): UniLioAuthoringCourse {
     submittedAt: raw.submittedAt ? String(raw.submittedAt) : null,
     rejectionReason: raw.rejectionReason ? String(raw.rejectionReason) : null,
     modules: Array.isArray(raw.modules)
-      ? raw.modules.map((m) => {
-          const mod = m as Record<string, unknown>;
-          return {
-            id: String(mod.id),
-            sortOrder: Number(mod.sortOrder ?? 0),
-            title: String(mod.title ?? ""),
-            contentType: String(mod.contentType ?? "article"),
-            contentUrl: mod.contentUrl ? String(mod.contentUrl) : null,
-            durationMinutes: Number(mod.durationMinutes ?? 0),
-            articleHtml: mod.articleHtml ? String(mod.articleHtml) : null,
-            quizJson: mod.quizJson ? String(mod.quizJson) : null,
-            quizPassingScore: mod.quizPassingScore != null ? Number(mod.quizPassingScore) : null,
-            isCompleted: Boolean(mod.isCompleted),
-          };
-        })
+      ? raw.modules.map((m) => mapModule(m as Record<string, unknown>))
       : [],
+    assessment: raw.assessment
+      ? mapAssessment(raw.assessment as Record<string, unknown>)
+      : null,
   };
 }
 
@@ -151,13 +206,16 @@ export function useUniLioAuthoringCourses() {
     queryFn: async () => {
       const res = await api.get<{ items: Record<string, unknown>[] }>("/unilio/authoring/courses");
       return (res.items ?? []).map((item) => ({
-        id: String(item.id),
-        title: String(item.title ?? ""),
-        area: String(item.area ?? ""),
-        status: String(item.status ?? ""),
-        moduleCount: Number(item.moduleCount ?? 0),
-        submittedAt: item.submittedAt ? String(item.submittedAt) : undefined,
-        publishedAt: item.publishedAt ? String(item.publishedAt) : undefined,
+        id: String(item.id ?? item.Id),
+        title: String(item.title ?? item.Title ?? ""),
+        area: String(item.area ?? item.Area ?? ""),
+        status: String(item.status ?? item.Status ?? ""),
+        moduleCount: readApiNumber(item, "moduleCount"),
+        submittedAt: readApiOptionalString(item, "submittedAt"),
+        publishedAt: readApiOptionalString(item, "publishedAt"),
+        enrolledCount: readApiNumber(item, "enrolledCount"),
+        completedCount: readApiNumber(item, "completedCount"),
+        avgRating: readApiNumber(item, "avgRating"),
       })) satisfies UniLioAuthoringCourseSummary[];
     },
   });
@@ -169,13 +227,16 @@ export function usePendingUniLioCourses() {
     queryFn: async () => {
       const res = await api.get<{ items: Record<string, unknown>[] }>("/unilio/authoring/courses/pending");
       return (res.items ?? []).map((item) => ({
-        id: String(item.id),
-        title: String(item.title ?? ""),
-        area: String(item.area ?? ""),
-        status: String(item.status ?? ""),
-        moduleCount: Number(item.moduleCount ?? 0),
-        submittedAt: item.submittedAt ? String(item.submittedAt) : undefined,
-        publishedAt: item.publishedAt ? String(item.publishedAt) : undefined,
+        id: String(item.id ?? item.Id),
+        title: String(item.title ?? item.Title ?? ""),
+        area: String(item.area ?? item.Area ?? ""),
+        status: String(item.status ?? item.Status ?? ""),
+        moduleCount: readApiNumber(item, "moduleCount"),
+        submittedAt: readApiOptionalString(item, "submittedAt"),
+        publishedAt: readApiOptionalString(item, "publishedAt"),
+        enrolledCount: readApiNumber(item, "enrolledCount"),
+        completedCount: readApiNumber(item, "completedCount"),
+        avgRating: readApiNumber(item, "avgRating"),
       })) satisfies UniLioAuthoringCourseSummary[];
     },
   });
@@ -261,6 +322,14 @@ export function useSubmitUniLioCourse() {
   });
 }
 
+export function useWithdrawUniLioCourse() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (courseId: string) => api.post(`/unilio/authoring/courses/${courseId}/withdraw`, {}),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: AUTHORING_KEY }),
+  });
+}
+
 export function useApproveUniLioCourse() {
   const qc = useQueryClient();
   return useMutation({
@@ -287,6 +356,66 @@ export function useAddUniLioModule(courseId: string) {
   return useMutation({
     mutationFn: (body: UniLioUpsertModuleRequest) =>
       api.post(`/unilio/authoring/courses/${courseId}/modules`, body),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useUpdateUniLioModule(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ moduleId, body }: { moduleId: string; body: UniLioUpsertModuleRequest }) =>
+      api.put(`/unilio/authoring/courses/${courseId}/modules/${moduleId}`, body),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useDeleteUniLioModule(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (moduleId: string) => api.delete(`/unilio/authoring/courses/${courseId}/modules/${moduleId}`),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useUploadUniLioModuleAttachment(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ moduleId, file }: { moduleId: string; file: File }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      return api.upload<Record<string, unknown>>(
+        `/unilio/authoring/courses/${courseId}/modules/${moduleId}/attachments`,
+        formData,
+      );
+    },
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useDeleteUniLioModuleAttachment(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ moduleId, attachmentId }: { moduleId: string; attachmentId: string }) =>
+      api.delete(
+        `/unilio/authoring/courses/${courseId}/modules/${moduleId}/attachments/${attachmentId}`,
+      ),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useUpsertUniLioCourseAssessment(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: UniLioUpsertAssessmentRequest) =>
+      api.put<Record<string, unknown>>(`/unilio/authoring/courses/${courseId}/assessment`, body),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useDeleteUniLioCourseAssessment(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.delete(`/unilio/authoring/courses/${courseId}/assessment`),
     onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
   });
 }

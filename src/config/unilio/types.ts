@@ -75,6 +75,15 @@ export type UniLioCourseEnrollmentsView = {
   items: UniLioCourseEnrollmentRecord[];
 };
 
+export type UniLioModuleAttachment = {
+  id: string;
+  fileName: string;
+  url: string;
+  contentType: string;
+  sizeBytes: number;
+  sortOrder: number;
+};
+
 export type UniLioModule = {
   id: string;
   sortOrder: number;
@@ -86,6 +95,7 @@ export type UniLioModule = {
   quizJson?: string | null;
   quizPassingScore?: number | null;
   isCompleted: boolean;
+  attachments: UniLioModuleAttachment[];
 };
 
 export type UniLioCourseDetail = UniLioCourseSummary & {
@@ -269,6 +279,7 @@ export type UniLioInstructorCourse = {
   completedCount: number;
   avgRating: number;
   status: string;
+  publishedAt?: string;
 };
 
 export type UniLioInstructorCoursesView = {
@@ -324,6 +335,7 @@ export type UniLioQuestionSummary = {
   courseTitle: string;
   moduleId?: string | null;
   moduleTitle?: string | null;
+  moduleSortOrder?: number | null;
   authorPersonId: string;
   authorName: string;
   body: string;
@@ -347,6 +359,7 @@ export type UniLioQuestionsView = {
   totalCount: number;
   totalPages: number;
   unreadCount: number;
+  openCount: number;
 };
 
 export type UniLioQuestionFilters = {

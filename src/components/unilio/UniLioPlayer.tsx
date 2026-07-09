@@ -6,13 +6,18 @@ import { useUniLioProgress } from "../../api/hooks/useUniLioProgress";
 import { useUniLioCreateQuestion, useUniLioModuleQuestions } from "../../api/hooks/useUniLioQuestions";
 import { formatUniLioDuration } from "../../utils/unilioView";
 import { parseUniLioQuizJson } from "../../utils/unilioQuiz";
+import {
+  formatUniLioAttachmentSize,
+  uniLioAttachmentIconClass,
+} from "../../utils/unilioAttachments";
+import { resolveBackendAssetUrl } from "../../api/assetUrl";
 import type { UniLioCourseDetail, UniLioModule } from "../../config/unilio/types";
 import { UniLioContentTypeBadge, UniLioProgressBar } from "./UniLioShared";
 import { UniLioQuizWidget } from "./UniLioQuizWidget";
 import { UniLioCourseRecommendationsModal } from "./UniLioCourseRecommendationsModal";
 import { UniLioCourseFeedbackModal } from "./UniLioCourseFeedbackModal";
 import { UniLioModuleQuestionModal } from "./UniLioModuleQuestionModal";
-import { UniLioModuleQuestionsPanel } from "./UniLioModuleQuestionsPanel";
+import { UniLioModuleQuestionsDrawer } from "./UniLioModuleQuestionsDrawer";
 import "../../styles/unilio-player.css";
 import "../../styles/unilio-questions.css";
 
@@ -116,6 +121,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
   const [showCourseFeedback, setShowCourseFeedback] = useState(false);
   const [showCourseRecommendations, setShowCourseRecommendations] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [questionsDrawerOpen, setQuestionsDrawerOpen] = useState(false);
   const [pendingCompletionModule, setPendingCompletionModule] = useState<UniLioModule | null>(null);
 
   const createQuestionMutation = useUniLioCreateQuestion();
@@ -129,6 +135,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
 
   useEffect(() => {
     setQuizPassed(false);
+    setQuestionsDrawerOpen(false);
     contentRef.current?.scrollTo({ top: 0 });
   }, [activeModuleId]);
 
@@ -350,23 +357,63 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
                 activeModule.contentType !== "quiz" ? (
                   <p className="unilio-panel__empty">Conteúdo deste módulo não disponível no protótipo.</p>
                 ) : null}
+
+                {activeModule.attachments.length > 0 ? (
+                  <section
+                    className="unilio-player__attachments"
+                    aria-label="Materiais complementares"
+                  >
+                    <h3 className="unilio-player__attachments-title">Materiais complementares</h3>
+                    <ul className="unilio-player__attachment-list">
+                      {activeModule.attachments.map((attachment) => (
+                        <li key={attachment.id}>
+                          <a
+                            className="unilio-player__attachment-link"
+                            href={resolveBackendAssetUrl(attachment.url)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={attachment.fileName}
+                          >
+                            <i
+                              className={`fa-solid ${uniLioAttachmentIconClass(attachment.fileName)}`}
+                              aria-hidden="true"
+                            />
+                            <span className="unilio-player__attachment-name">{attachment.fileName}</span>
+                            <span className="unilio-player__attachment-size">
+                              {formatUniLioAttachmentSize(attachment.sizeBytes)}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
               </div>
 
               {activeModule ? (
-                <UniLioModuleQuestionsPanel
+                <UniLioModuleQuestionsDrawer
+                  open={questionsDrawerOpen}
+                  onClose={() => setQuestionsDrawerOpen(false)}
+                  onOpen={() => setQuestionsDrawerOpen(true)}
+                  onAskQuestion={() => setShowQuestionModal(true)}
                   items={moduleQuestions.items}
                   isLoading={moduleQuestionsLoading}
+                  moduleTitle={activeModule.title}
                 />
               ) : null}
 
               <footer className="unilio-player__content-foot">
                 <button
                   type="button"
-                  className="unilio-player__help-btn"
-                  onClick={() => setShowQuestionModal(true)}
+                  className={`unilio-player__help-btn${questionsDrawerOpen ? " is-active" : ""}`}
+                  onClick={() => setQuestionsDrawerOpen((open) => !open)}
+                  aria-expanded={questionsDrawerOpen}
                 >
                   <i className="fa-solid fa-circle-question" aria-hidden="true" />
                   Dúvidas
+                  {moduleQuestions.items.length > 0 ? (
+                    <span className="unilio-questions-inbox__unread">{moduleQuestions.items.length}</span>
+                  ) : null}
                 </button>
 
                 <div className="unilio-player__foot-actions">
@@ -438,6 +485,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
               })
               .then(() => {
                 setShowQuestionModal(false);
+                setQuestionsDrawerOpen(true);
                 void refetchModuleQuestions();
               });
           }}

@@ -264,6 +264,7 @@
   min-height: 0;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .unilio-player__content-scroll {
@@ -593,6 +594,61 @@
 .unilio-quiz__result--fail {
   color: #b91c1c;
   font-weight: 600;
+}
+
+.unilio-player__attachments {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.unilio-player__attachments-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.unilio-player__attachment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.unilio-player__attachment-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 0.86rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.unilio-player__attachment-link:hover {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.unilio-player__attachment-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unilio-player__attachment-size {
+  margin-left: auto;
+  color: #64748b;
+  font-size: 0.76rem;
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {

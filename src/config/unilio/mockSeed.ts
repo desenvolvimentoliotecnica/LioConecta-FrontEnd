@@ -168,6 +168,7 @@ function mapModule(seedKey: string, module: SeedModule, isCompleted: boolean): U
     quizJson: module.quizJson ?? null,
     quizPassingScore: parseQuizPassingScore(module.quizJson),
     isCompleted,
+    attachments: [],
   };
 }
 

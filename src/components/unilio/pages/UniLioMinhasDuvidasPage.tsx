@@ -1,11 +1,13 @@
-import { useEffect, useMemo } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   useUniLioMarkQuestionRead,
+  useUniLioMyQuestionDetail,
   useUniLioMyQuestions,
 } from "../../../api/hooks/useUniLioQuestions";
 import { formatUniLioDateTime } from "../../../utils/unilioView";
 import { UniLioFallbackBanner } from "../UniLioFallbackBanner";
+import { UniLioQuestionDetailModal } from "../UniLioQuestionDetailModal";
 import "../../../styles/unilio-questions.css";
 
 function statusLabel(status: string) {
@@ -15,22 +17,25 @@ function statusLabel(status: string) {
 }
 
 export function UniLioMinhasDuvidasPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const highlightId = searchParams.get("question");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedId = searchParams.get("question");
 
   const { data, isLoading, isFallback } = useUniLioMyQuestions({ pageSize: 50 });
+  const { data: detail, isLoading: detailLoading } = useUniLioMyQuestionDetail(selectedId);
   const markReadMutation = useUniLioMarkQuestionRead("learner");
 
-  const highlighted = useMemo(
-    () => data.items.find((item) => item.id === highlightId) ?? null,
-    [data.items, highlightId],
-  );
-
   useEffect(() => {
-    if (!highlightId || !highlighted?.unread) return;
-    void markReadMutation.mutateAsync(highlightId);
-  }, [highlightId, highlighted?.unread, markReadMutation]);
+    if (!selectedId || !detail?.unread) return;
+    void markReadMutation.mutateAsync(selectedId);
+  }, [selectedId, detail?.unread, markReadMutation]);
+
+  const handleCloseModal = () => {
+    setSearchParams({});
+  };
+
+  const handleSelect = (id: string) => {
+    setSearchParams({ question: id });
+  };
 
   if (isLoading) {
     return (
@@ -39,6 +44,11 @@ export function UniLioMinhasDuvidasPage() {
       </main>
     );
   }
+
+  const moduleHref =
+    detail?.moduleId != null
+      ? `/unilio/curso/${detail.courseId}?modulo=${detail.moduleId}`
+      : undefined;
 
   return (
     <main className="unilio-page">
@@ -56,36 +66,6 @@ export function UniLioMinhasDuvidasPage() {
 
       <UniLioFallbackBanner show={isFallback} />
 
-      {highlighted ? (
-        <section className="unilio-questions-inbox__detail" style={{ marginBottom: "1rem" }}>
-          <h2>Dúvida selecionada</h2>
-          <p>
-            <strong>{highlighted.courseTitle}</strong>
-            {highlighted.moduleTitle ? ` · ${highlighted.moduleTitle}` : " · Curso inteiro"}
-          </p>
-          <p>{highlighted.body}</p>
-          <p className="unilio-module-questions__status">{statusLabel(highlighted.status)}</p>
-          {highlighted.moduleId ? (
-            <button
-              type="button"
-              className="unilio-player__complete-btn"
-              style={{ marginTop: "0.75rem" }}
-              onClick={() => navigate(`/unilio/curso/${highlighted.courseId}?modulo=${highlighted.moduleId}`)}
-            >
-              Abrir no módulo
-            </button>
-          ) : (
-            <Link
-              to={`/unilio/curso/${highlighted.courseId}`}
-              className="unilio-module-questions__link"
-              style={{ display: "inline-block", marginTop: "0.75rem" }}
-            >
-              Abrir curso
-            </Link>
-          )}
-        </section>
-      ) : null}
-
       <div className="unilio-questions-inbox__table-wrap">
         <table className="audit-trail-page__table">
           <thead>
@@ -101,8 +81,8 @@ export function UniLioMinhasDuvidasPage() {
             {data.items.map((item) => (
               <tr
                 key={item.id}
-                style={{ cursor: "pointer", background: item.id === highlightId ? "#f0fdf4" : undefined }}
-                onClick={() => navigate(`/unilio/minhas-duvidas?question=${item.id}`)}
+                style={{ cursor: "pointer", background: item.id === selectedId ? "#f0fdf4" : undefined }}
+                onClick={() => handleSelect(item.id)}
               >
                 <td>{formatUniLioDateTime(item.createdAt)}</td>
                 <td>{item.courseTitle}</td>
@@ -121,6 +101,17 @@ export function UniLioMinhasDuvidasPage() {
           </tbody>
         </table>
       </div>
+
+      {selectedId && detail ? (
+        <UniLioQuestionDetailModal
+          open
+          mode="learner"
+          detail={detail}
+          loading={detailLoading}
+          moduleHref={moduleHref}
+          onClose={handleCloseModal}
+        />
+      ) : null}
     </main>
   );
 }

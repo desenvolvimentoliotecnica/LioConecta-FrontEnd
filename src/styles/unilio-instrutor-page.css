@@ -1,0 +1,647 @@
+.unilio-instrutor-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.unilio-instrutor-courses__summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.unilio-instrutor-courses__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.unilio-instrutor-courses__stat-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.unilio-instrutor-courses__stat-label {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.unilio-instrutor-courses__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.unilio-instrutor-courses__search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: min(100%, 280px);
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: #64748b;
+}
+
+.unilio-instrutor-courses__search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: #0f172a;
+  background: transparent;
+}
+
+.unilio-instrutor-courses__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.unilio-instrutor-courses__filter {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: #fff;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unilio-instrutor-courses__filter:hover {
+  border-color: #94a3b8;
+}
+
+.unilio-instrutor-courses__filter.is-active {
+  border-color: #6ee7b7;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.unilio-instrutor-courses__filters--inbox {
+  margin-bottom: 0.25rem;
+}
+
+.unilio-instrutor-courses__filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  margin-left: 0.35rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.unilio-instrutor-courses__filter.is-active .unilio-instrutor-courses__filter-badge {
+  background: #b91c1c;
+}
+
+.unilio-instrutor-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.unilio-instrutor-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.8125rem;
+}
+
+.unilio-instrutor-table col.col-course {
+  width: 26%;
+}
+
+.unilio-instrutor-table col.col-area {
+  width: 10%;
+}
+
+.unilio-instrutor-table col.col-modules {
+  width: 5%;
+}
+
+.unilio-instrutor-table col.col-status {
+  width: 11%;
+}
+
+.unilio-instrutor-table col.col-students {
+  width: 6%;
+}
+
+.unilio-instrutor-table col.col-completion {
+  width: 7%;
+}
+
+.unilio-instrutor-table col.col-rating {
+  width: 6%;
+}
+
+.unilio-instrutor-table col.col-date {
+  width: 9%;
+}
+
+.unilio-instrutor-table col.col-actions {
+  width: 7%;
+}
+
+.unilio-instrutor-table th,
+.unilio-instrutor-table td {
+  padding: 0.42rem 0.55rem;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unilio-instrutor-table th.is-course,
+.unilio-instrutor-table td.unilio-instrutor-table__cell-course {
+  text-align: left;
+}
+
+.unilio-instrutor-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.unilio-instrutor-table th.is-center,
+.unilio-instrutor-table td.is-center {
+  text-align: center;
+}
+
+.unilio-instrutor-table td.is-numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.unilio-instrutor-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.unilio-instrutor-table__row-clickable {
+  cursor: pointer;
+}
+
+.unilio-instrutor-table tbody tr.is-selected {
+  background: #f0fdf4;
+}
+
+.unilio-instrutor-table tbody tr.is-selected:hover {
+  background: #ecfdf5;
+}
+
+.unilio-instrutor-table__cell-actions,
+.unilio-instrutor-table th.col-actions {
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.unilio-instrutor-table__actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.unilio-instrutor-table__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #dbe6f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.78rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.unilio-instrutor-table__icon-btn:hover {
+  background: #f0fdf4;
+  border-color: #6ee7b7;
+  color: #047857;
+}
+
+.unilio-instrutor-table__icon-btn:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 1px;
+}
+
+.unilio-instrutor-table__icon-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.unilio-instrutor-table__icon-btn--muted {
+  color: #64748b;
+}
+
+.unilio-instrutor-table__icon-btn--muted:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.unilio-instrutor-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.unilio-instrutor-table__sort.is-center {
+  justify-content: center;
+  width: 100%;
+}
+
+.unilio-instrutor-table__sort i {
+  font-size: 0.72rem;
+  opacity: 0.55;
+}
+
+.unilio-instrutor-table__sort.is-active {
+  color: #047857;
+}
+
+.unilio-instrutor-table__sort.is-active i {
+  opacity: 1;
+}
+
+.unilio-instrutor-table__course {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.unilio-instrutor-table__course-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.unilio-instrutor-table__authored {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  color: #059669;
+}
+
+.unilio-instrutor-table__sep {
+  margin: 0 0.15rem;
+  color: #cbd5e1;
+}
+
+.unilio-instrutor-table__metric {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.unilio-instrutor-table__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #b45309;
+}
+
+.unilio-instrutor-table__rating i {
+  font-size: 0.68rem;
+}
+
+.unilio-instrutor-table__submitted {
+  font-size: 0.82rem;
+  color: #92400e;
+}
+
+.unilio-instrutor-table__muted {
+  color: #94a3b8;
+}
+
+.unilio-instrutor-table__empty {
+  text-align: center;
+  color: #64748b;
+  padding: 1.5rem !important;
+}
+
+.unilio-instrutor-courses__footer {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.unilio-instrutor-courses__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+}
+
+.unilio-instrutor-courses__empty i {
+  font-size: 1.6rem;
+  color: #94a3b8;
+}
+
+.unilio-instrutor-courses__empty p {
+  margin: 0;
+  max-width: 28rem;
+  color: #475569;
+}
+
+.unilio-instrutor-table__cell-area {
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.unilio-course-area {
+  display: inline-block;
+  max-width: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.1rem 0.42rem;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: middle;
+}
+
+.unilio-course-area--quality {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.unilio-course-area--compliance {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.unilio-course-area--management {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.unilio-course-area--data {
+  background: #cffafe;
+  color: #0e7490;
+}
+
+.unilio-course-area--tech {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.unilio-course-area--food-tech {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.unilio-course-area--operations {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.unilio-course-area--engineering {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.unilio-course-area--maintenance {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.unilio-course-area--productivity {
+  background: #fae8ff;
+  color: #a21caf;
+}
+
+.unilio-course-area--institutional {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.unilio-course-area--general {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.unilio-course-area--accent-a {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.unilio-course-area--accent-b {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.unilio-course-area--accent-c {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.unilio-course-area--accent-d {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.unilio-course-area--accent-e {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.unilio-course-area--accent-f {
+  background: #ecfccb;
+  color: #4d7c0f;
+}
+
+.unilio-course-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.35;
+}
+
+.unilio-course-status--draft {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.unilio-course-status--pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.unilio-course-status--published {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.unilio-course-status--rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.unilio-course-status--neutral {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.unilio-instrutor-table--questions {
+  min-width: 760px;
+}
+
+.unilio-instrutor-table--questions col.col-q-date {
+  width: 12%;
+}
+
+.unilio-instrutor-table--questions td.is-date,
+.unilio-instrutor-table--questions th.col-q-date {
+  font-size: 0.7rem;
+  line-height: 1.25;
+}
+
+.unilio-instrutor-table--questions col.col-q-student {
+  width: 22%;
+}
+
+.unilio-instrutor-table--questions td.unilio-instrutor-table__cell-student {
+  min-width: 10.5rem;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.unilio-instrutor-table--questions col.col-q-body {
+  width: 39%;
+}
+
+.unilio-instrutor-table--questions col.col-q-visibility {
+  width: 8%;
+}
+
+.unilio-instrutor-table--questions col.col-q-status {
+  width: 12%;
+}
+
+.unilio-instrutor-table--questions col.col-q-actions {
+  width: 7%;
+}
+
+.unilio-instrutor-table__chip-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 100%;
+}
+
+.unilio-question-status,
+.unilio-question-visibility {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.35;
+}
+
+.unilio-question-status--open {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.unilio-question-status--answered {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.unilio-question-status--closed {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.unilio-question-visibility--private {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.unilio-question-visibility--public {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+@media (max-width: 960px) {
+  .unilio-instrutor-courses__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .unilio-instrutor-courses__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .unilio-instrutor-courses__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .unilio-instrutor-courses__search {
+    min-width: 100%;
+  }
+}

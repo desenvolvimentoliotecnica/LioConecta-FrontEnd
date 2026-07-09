@@ -18,6 +18,7 @@ import type {
   UniLioQuestionsPageDto,
   UniLioQuestionDetailDto,
 } from "../types";
+import { readApiNumber, readApiOptionalString } from "../readApiFields";
 import type {
   UniLioAssessmentsView,
   UniLioCatalogView,
@@ -74,7 +75,11 @@ function mapCourse(course: UniLioCourseDetailDto): UniLioCourseDetail {
   return {
     ...course,
     id: String(course.id),
-    modules: course.modules.map((m) => ({ ...m, id: String(m.id) })),
+    modules: course.modules.map((m) => ({
+      ...m,
+      id: String(m.id),
+      attachments: (m.attachments ?? []).map((a) => ({ ...a, id: String(a.id) })),
+    })),
   };
 }
 
@@ -221,7 +226,19 @@ export function mapUniLioManagerTeamFromApi(raw: UniLioManagerTeamDto): UniLioMa
 
 export function mapUniLioInstructorCoursesFromApi(raw: UniLioInstructorCoursesDto): UniLioInstructorCoursesView {
   return {
-    items: raw.items.map((c) => ({ ...c, courseId: String(c.courseId) })),
+    items: raw.items.map((c) => {
+      const record = c as unknown as Record<string, unknown>;
+      return {
+        courseId: String(c.courseId ?? record.CourseId),
+        title: String(c.title ?? record.Title ?? ""),
+        area: String(c.area ?? record.Area ?? ""),
+        enrolledCount: readApiNumber(record, "enrolledCount"),
+        completedCount: readApiNumber(record, "completedCount"),
+        avgRating: readApiNumber(record, "avgRating"),
+        status: String(c.status ?? record.Status ?? ""),
+        publishedAt: readApiOptionalString(record, "publishedAt"),
+      };
+    }),
   };
 }
 
@@ -257,6 +274,7 @@ function mapQuestionSummary(
 export function mapUniLioQuestionsFromApi(raw: UniLioQuestionsPageDto): UniLioQuestionsView {
   return {
     ...raw,
+    openCount: raw.openCount ?? raw.items.filter((item) => item.status === "open").length,
     items: raw.items.map(mapQuestionSummary),
   };
 }
