@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { usePortalUiSettings } from "../../api/hooks/usePortalUiSettings";
+import { useMe } from "../../api/hooks/useMe";
+import { useBenefitsSettings } from "../../api/hooks/useBenefitsSettings";
+import { canManageBeneficios } from "../../config/beneficios/settings";
 import { MATURITY_META, getPageMaturity } from "../../config/page-maturity";
 import type { NavLinkItem } from "../../config/navigation";
 import {
@@ -15,6 +18,7 @@ import {
   isPessoasSectionActive,
   pessoasLinks,
   servicosHeadings,
+  servicosLinks,
   tiLinks,
   facilitiesLinks,
   juridicoLinks,
@@ -73,12 +77,16 @@ function Dropdown({
   items,
   services,
   showBadges,
+  filterItem,
+  visibleServicosLinks,
 }: {
   label: string;
   menuId: string;
   items: NavLinkItem[];
   services?: boolean;
   showBadges: boolean;
+  filterItem?: (item: NavLinkItem) => boolean;
+  visibleServicosLinks?: NavLinkItem[];
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -114,6 +122,8 @@ function Dropdown({
   }, []);
 
   const close = () => setOpen(false);
+  const visibleItems = filterItem ? items.filter(filterItem) : items;
+  const rhServicosLinks = visibleServicosLinks ?? servicosLinks;
 
   return (
     <div className={`topbar__dropdown${open ? " is-open" : ""}`} ref={ref}>
@@ -142,13 +152,13 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[0].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[0].icon}`} aria-hidden="true" /> {servicosHeadings[0].label}
             </span>
-            {items.slice(0, 7).map((item) => (
+            {rhServicosLinks.slice(0, 8).map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[1].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[1].icon}`} aria-hidden="true" /> {servicosHeadings[1].label}
             </span>
-            {items.slice(7, 9).map((item) => (
+            {rhServicosLinks.slice(8, 10).map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[2].className}`} role="presentation">
@@ -171,7 +181,7 @@ function Dropdown({
             ))}
           </>
         ) : (
-          items.map((item) => (
+          visibleItems.map((item) => (
             <MenuItemLink key={`${item.path}-${item.label}`} item={item} showBadges={showBadges} onNavigate={close} />
           ))
         )}
@@ -182,7 +192,15 @@ function Dropdown({
 
 export function Topbar() {
   const { data: portalUi } = usePortalUiSettings();
+  const { data: me } = useMe();
+  const { data: benefitsSettings, isError: benefitsSettingsError } = useBenefitsSettings();
   const showBadges = portalUi.maturityBadgesEnabled;
+  const canManageBenefits =
+    !benefitsSettingsError && canManageBeneficios(me, benefitsSettings);
+
+  const filterServicosItem = (item: NavLinkItem) =>
+    !item.benefitsManageOnly || canManageBenefits;
+  const visibleServicosLinks = servicosLinks.filter(filterServicosItem);
 
   return (
     <header className="topbar" aria-label="Barra superior">
@@ -205,7 +223,15 @@ export function Topbar() {
           <Dropdown label="Pessoas" menuId="menu-pessoas" items={pessoasLinks} showBadges={showBadges} />
           <Dropdown label="Grupos" menuId="menu-grupos" items={gruposLinks} showBadges={showBadges} />
           <Dropdown label="Documentos" menuId="menu-documentos" items={documentosLinks} showBadges={showBadges} />
-          <Dropdown label="Serviços" menuId="menu-servicos" items={allServicosLinks} services showBadges={showBadges} />
+          <Dropdown
+            label="Serviços"
+            menuId="menu-servicos"
+            items={allServicosLinks}
+            services
+            showBadges={showBadges}
+            filterItem={filterServicosItem}
+            visibleServicosLinks={visibleServicosLinks}
+          />
         </nav>
       </div>
 

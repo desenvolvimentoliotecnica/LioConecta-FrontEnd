@@ -1,0 +1,1061 @@
+/* Gestão de benefícios — RH admin (tema rosa alinhado a beneficios-page + padrão portal) */
+
+.beneficios-gestao__tabs,
+.beneficios-gestao__subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.beneficios-gestao__panel {
+  margin-bottom: var(--wf-gap);
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 16px;
+}
+
+.beneficios-gestao__intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #fce7f3;
+}
+
+.beneficios-gestao__intro-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #fce7f3;
+  color: #db2777;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__intro-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.beneficios-gestao__intro-text {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--wf-text-muted);
+  line-height: 1.45;
+}
+
+.beneficios-gestao__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.beneficios-gestao__toolbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.beneficios-gestao__toolbar .page-search,
+.beneficios-gestao__search {
+  flex: 1;
+  min-width: min(100%, 280px);
+  max-width: 420px;
+}
+
+.beneficios-gestao__search {
+  height: 38px;
+  border-color: #f9a8d4;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.beneficios-gestao__search:focus-within {
+  border-color: #db2777;
+  box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.12);
+}
+
+.beneficios-gestao__search input {
+  border: none !important;
+  outline: none;
+  background: transparent !important;
+  min-height: unset !important;
+  padding: 0 !important;
+  font-size: 13px;
+  width: 100%;
+  color: #334155;
+  font-family: inherit;
+}
+
+.beneficios-gestao__search input::placeholder {
+  color: var(--wf-text-muted);
+}
+
+.beneficios-gestao__select {
+  display: inline-flex;
+}
+
+.beneficios-gestao__select select {
+  min-height: 36px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.beneficios-gestao__check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+  cursor: pointer;
+}
+
+.beneficios-gestao__check input {
+  width: 16px;
+  height: 16px;
+  accent-color: #db2777;
+}
+
+/* Botões — substituem pay-btn (inexistente no design system) */
+.beneficios-gestao-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.beneficios-gestao-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.beneficios-gestao-btn--primary {
+  background: #db2777;
+  color: #fff;
+  border-color: #db2777;
+}
+
+.beneficios-gestao-btn--primary:hover:not(:disabled) {
+  background: #be185d;
+  border-color: #be185d;
+}
+
+.beneficios-gestao-btn--ghost {
+  background: #fff;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.beneficios-gestao-btn--ghost:hover:not(:disabled) {
+  background: #fdf2f8;
+  border-color: #f9a8d4;
+  color: #9d174d;
+}
+
+.beneficios-gestao-btn--danger {
+  background: #fff;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.beneficios-gestao-btn--danger:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.beneficios-gestao-btn--sm {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.beneficios-gestao__feedback {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fdf2f8;
+  color: #9d174d;
+  border: 1px solid #f9a8d4;
+  font-size: 13px;
+}
+
+.beneficios-gestao__table-wrap {
+  overflow: auto;
+  border: 1px solid #fce7f3;
+  border-radius: 10px;
+}
+
+.beneficios-gestao__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: auto;
+}
+
+.beneficios-gestao__table--catalog th:first-child,
+.beneficios-gestao__table--catalog td:first-child {
+  text-align: left;
+  width: auto;
+  white-space: normal;
+}
+
+.beneficios-gestao__table--catalog th:not(:first-child),
+.beneficios-gestao__table--catalog td:not(:first-child) {
+  text-align: center;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.beneficios-gestao__table--catalog .beneficios-gestao__table-actions {
+  justify-content: center;
+}
+
+.beneficios-gestao__table--catalog th:last-child,
+.beneficios-gestao__table--catalog td:last-child {
+  min-width: max-content;
+}
+
+.beneficios-gestao__table th,
+.beneficios-gestao__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #fce7f3;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.beneficios-gestao__table th {
+  background: #fdf2f8;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9d174d;
+}
+
+.beneficios-gestao__table tbody tr:hover {
+  background: #fffbfc;
+}
+
+.beneficios-gestao__table tr.is-inactive td {
+  opacity: 0.6;
+}
+
+.beneficios-gestao__table-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.beneficios-gestao__table-actions {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+.beneficios-gestao__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.beneficios-gestao__badge--saude {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.beneficios-gestao__badge--alimentacao {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.beneficios-gestao__badge--mobilidade {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.beneficios-gestao__badge--qualidade {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.beneficios-gestao__badge--familia {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.beneficios-gestao__badge--active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.beneficios-gestao__badge--featured {
+  margin-left: 8px;
+  background: #fdf2f8;
+  color: #be185d;
+}
+
+.beneficios-gestao__empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 40px 16px;
+  color: #64748b;
+  text-align: center;
+  font-size: 14px;
+}
+
+.beneficios-gestao__empty i {
+  font-size: 1.75rem;
+  color: #f9a8d4;
+}
+
+.beneficios-gestao__denied {
+  padding: 20px 22px;
+  border-radius: var(--wf-radius);
+  background: #fff;
+  border: 1px dashed #fecaca;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.beneficios-gestao__denied h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #991b1b;
+}
+
+.beneficios-gestao__denied p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.beneficios-gestao__denied-hint {
+  margin-top: 10px !important;
+  font-size: 13px;
+}
+
+/* Formulários */
+.beneficios-gestao__form-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fffbfc;
+  border: 1px dashed #f9a8d4;
+  display: grid;
+  gap: 14px;
+}
+
+.beneficios-gestao__form-card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #9d174d;
+}
+
+.beneficios-gestao__form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.beneficios-gestao__field {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.beneficios-gestao__field--full {
+  grid-column: 1 / -1;
+}
+
+.beneficios-gestao__field input[type="text"],
+.beneficios-gestao__field input[type="number"],
+.beneficios-gestao__field input[type="search"],
+.beneficios-gestao__field select,
+.beneficios-gestao__field textarea,
+.beneficios-gestao__multiselect input[type="text"] {
+  min-height: 42px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #fff;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 400;
+  font-family: inherit;
+}
+
+.beneficios-gestao__field textarea {
+  min-height: 80px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.beneficios-gestao__field-hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.beneficios-gestao__selected-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fce7f3;
+  color: #9d174d;
+  font-size: 13px;
+}
+
+.beneficios-gestao__selected-person i {
+  color: #db2777;
+}
+
+.beneficios-gestao__form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.beneficios-gestao__list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed #fce7f3;
+}
+
+.beneficios-gestao__list-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #9d174d;
+}
+
+.beneficios-gestao__individual,
+.beneficios-gestao__bulk {
+  display: grid;
+  gap: 14px;
+}
+
+/* Modal — createPortal + acima da topbar (z-index 100) */
+.beneficios-gestao__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    16px
+    max(16px, env(safe-area-inset-bottom));
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.beneficios-gestao__modal-dialog {
+  width: min(640px, 100%);
+  height: min(580px, calc(100vh - 32px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: var(--wf-radius, 12px);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.24);
+}
+
+.beneficios-gestao__modal-dialog--wide {
+  width: min(860px, 100%);
+  height: min(680px, calc(100vh - 32px));
+}
+
+.beneficios-gestao__modal-dialog--preview {
+  height: min(760px, calc(100vh - 24px));
+}
+
+.beneficios-gestao__preview {
+  display: grid;
+  gap: 10px;
+}
+
+.beneficios-gestao__preview-frame {
+  position: relative;
+  max-width: 100%;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+.beneficios-gestao__preview-frame .pay-modal__body {
+  max-height: min(420px, 50vh);
+  overflow-y: auto;
+}
+
+.beneficios-gestao__preview-frame .pay-modal__close:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.beneficios-gestao__preview-btn-static {
+  pointer-events: none;
+}
+
+.beneficios-gestao__detail-editor {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #fce7f3;
+  border-radius: 12px;
+  background: #fffbfd;
+}
+
+.beneficios-gestao__detail-editor + .beneficios-gestao__detail-editor {
+  margin-top: 4px;
+}
+
+.beneficios-gestao__detail-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #831843;
+}
+
+.beneficios-gestao__detail-empty {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.beneficios-gestao__detail-list {
+  display: grid;
+  gap: 10px;
+}
+
+.beneficios-gestao__detail-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr) minmax(0, 1.4fr) auto;
+  gap: 8px;
+  align-items: end;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px dashed #fbcfe8;
+}
+
+.beneficios-gestao__detail-row label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.beneficios-gestao__detail-row input {
+  min-height: 38px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.beneficios-gestao__detail-row--note {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.beneficios-gestao__detail-remove {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff1f2;
+  color: #be123c;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  align-self: end;
+}
+
+.beneficios-gestao__detail-remove:hover {
+  background: #ffe4e6;
+}
+
+.beneficios-gestao__modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #fce7f3;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__modal-heading {
+  min-width: 0;
+}
+
+.beneficios-gestao__modal-head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #9d174d;
+}
+
+.beneficios-gestao__modal-subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.beneficios-gestao__modal-close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: #fdf2f8;
+  color: #9d174d;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__modal-close:hover {
+  background: #fce7f3;
+}
+
+.beneficios-gestao__modal-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.beneficios-gestao__modal-body {
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  padding: 16px 20px 0;
+}
+
+.beneficios-gestao__modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 12px 20px;
+  border-top: 1px solid #fce7f3;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__modal-footer-start,
+.beneficios-gestao__modal-footer-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.beneficios-gestao__modal-footer-end {
+  margin-left: auto;
+}
+
+/* Wizard */
+.beneficios-gestao__wizard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.beneficios-gestao__wizard-steps {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #fce7f3;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.beneficios-gestao__wizard-step.is-active {
+  background: #fce7f3;
+  color: #9d174d;
+  font-weight: 600;
+}
+
+.beneficios-gestao__wizard-step.is-done {
+  color: #334155;
+}
+
+.beneficios-gestao__wizard-step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.beneficios-gestao__wizard-step.is-active .beneficios-gestao__wizard-step-index {
+  background: #db2777;
+  color: #fff;
+}
+
+.beneficios-gestao__wizard-step.is-done .beneficios-gestao__wizard-step-index {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+.beneficios-gestao__wizard-step-label {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.beneficios-gestao__wizard-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 8px;
+}
+
+.beneficios-gestao__wizard-form {
+  display: grid;
+  gap: 12px;
+}
+
+.beneficios-gestao__wizard-hint {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.beneficios-gestao__wizard-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.beneficios-gestao__wizard-form input[type="text"],
+.beneficios-gestao__wizard-form input[type="number"],
+.beneficios-gestao__wizard-form input:not([type]),
+.beneficios-gestao__wizard-form select,
+.beneficios-gestao__wizard-form textarea {
+  min-height: 42px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #fff;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 400;
+  font-family: inherit;
+  width: 100%;
+}
+
+.beneficios-gestao__wizard-form textarea {
+  min-height: 88px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.beneficios-gestao__form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+
+.beneficios-gestao__checkbox {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.beneficios-gestao__checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #db2777;
+}
+
+.beneficios-gestao__checkbox--inline {
+  align-self: end;
+  min-height: 42px;
+}
+
+.beneficios-gestao__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+/* Multi-select */
+.beneficios-gestao__multiselect {
+  display: grid;
+  gap: 8px;
+}
+
+.beneficios-gestao__field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.beneficios-gestao__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.beneficios-gestao__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fce7f3;
+  color: #9d174d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.beneficios-gestao__chip button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: #db2777;
+  padding: 0;
+}
+
+.beneficios-gestao__chip-count {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.beneficios-gestao__typeahead-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid #fce7f3;
+  border-radius: 12px;
+  max-height: 220px;
+  overflow: auto;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+.beneficios-gestao__typeahead-list button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  font-family: inherit;
+}
+
+.beneficios-gestao__typeahead-list button:hover {
+  background: #fdf2f8;
+}
+
+.beneficios-gestao__typeahead-list button strong {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.beneficios-gestao__typeahead-list button span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.beneficios-gestao__dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  max-height: 200px;
+  overflow: auto;
+  padding: 10px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.beneficios-gestao__dept-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.beneficios-gestao__dept-option:hover {
+  background: #fdf2f8;
+}
+
+.beneficios-gestao__dept-option input {
+  margin-top: 2px;
+  accent-color: #db2777;
+}
+
+.beneficios-gestao__dept-option em {
+  font-style: normal;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.beneficios-gestao__preview {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fdf2f8;
+  border: 1px dashed #f9a8d4;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.beneficios-gestao__preview strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #9d174d;
+  font-size: 14px;
+}
+
+.beneficios-gestao__preview p {
+  margin: 0;
+}
+
+.beneficios-gestao__preview--empty {
+  color: #64748b;
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.beneficios-gestao__preview-sample {
+  margin: 8px 0 0 !important;
+  font-size: 12px;
+  color: #64748b;
+}
+
+@media (max-width: 720px) {
+  .beneficios-gestao__form-row,
+  .beneficios-gestao__form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beneficios-gestao__toolbar {
+    align-items: stretch;
+  }
+
+  .beneficios-gestao__toolbar-end {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .beneficios-gestao__list-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .beneficios-gestao__wizard-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .beneficios-gestao__wizard-step-label {
+    white-space: normal;
+  }
+
+  .beneficios-gestao__modal-dialog {
+    height: min(620px, calc(100vh - 24px));
+  }
+
+  .beneficios-gestao__modal-dialog--wide {
+    height: min(720px, calc(100vh - 24px));
+  }
+
+  .beneficios-gestao__modal-dialog--preview {
+    height: min(780px, calc(100vh - 16px));
+  }
+
+  .beneficios-gestao__wizard-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .beneficios-gestao__detail-row {
+    grid-template-columns: 1fr;
+  }
+}

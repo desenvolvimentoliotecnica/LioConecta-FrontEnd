@@ -17,6 +17,7 @@ import { PhoneExtensionsPage } from "./components/pessoas/PhoneExtensionsPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
+import { BeneficiosGestaoPage } from "./components/beneficios/BeneficiosGestaoPage";
 import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
 import { FeriasGestaoPage } from "./components/ferias/FeriasGestaoPage";
 import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
@@ -216,6 +217,7 @@ function App() {
         <Route path="/servicos/rh" element={<RhHubPage />} />
         <Route path="/servicos/contracheque" element={<ContrachequePage />} />
         <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
+        <Route path="/servicos/beneficios/gestao" element={<BeneficiosGestaoPage />} />
         <Route path="/servicos/ferias-ausencias" element={<FeriasAusenciasPage />} />
         <Route path="/servicos/ferias-ausencias/gestao" element={<FeriasGestaoPage />} />
         <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />

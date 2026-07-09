@@ -1,6 +1,7 @@
 export type NavLinkItem = {
   label: string;
   path: string;
+  benefitsManageOnly?: boolean;
 };
 
 export type NavDropdown = {
@@ -45,6 +46,7 @@ export const documentosLinks: NavLinkItem[] = [
 
 export const servicosLinks: NavLinkItem[] = [
   { label: "Benefícios", path: "/servicos/beneficios" },
+  { label: "Gestão de benefícios", path: "/servicos/beneficios/gestao", benefitsManageOnly: true },
   { label: "Contracheque", path: "/servicos/contracheque" },
   { label: "Férias e ausências", path: "/servicos/ferias-ausencias" },
   { label: "Gestão de férias", path: "/servicos/ferias-ausencias/gestao" },

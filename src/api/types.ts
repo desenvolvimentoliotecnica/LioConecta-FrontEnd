@@ -589,6 +589,179 @@ export interface BenefitRequestResultDto {
   message: string;
 }
 
+export interface BenefitManagePolicyDto {
+  canManage: boolean;
+}
+
+export interface BenefitDepartmentOptionDto {
+  id: string;
+  name: string;
+  count: number;
+}
+
+export interface BenefitsBootstrapDto {
+  canManage: boolean;
+  categories: string[];
+  statuses: string[];
+  departments: BenefitDepartmentOptionDto[];
+  catalogCount: number;
+}
+
+export interface BenefitCatalogItemDto {
+  id: string;
+  catalogKey: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  isActive: boolean;
+  portalUrl?: string | null;
+  helpText: string;
+  defaultMonthlyValue?: number | null;
+  sortOrder: number;
+  lines: BenefitDetailLineDto[];
+  dependents: BenefitDependentDto[];
+  notes: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertBenefitCatalogRequest {
+  catalogKey: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  isActive: boolean;
+  portalUrl?: string | null;
+  helpText: string;
+  defaultMonthlyValue?: number | null;
+  sortOrder: number;
+  lines: BenefitDetailLineDto[];
+  dependents: BenefitDependentDto[];
+  notes: string[];
+}
+
+export interface BenefitManagementListItemDto {
+  id: string;
+  personId: string;
+  personName: string;
+  departmentName?: string | null;
+  benefitKey: string;
+  title: string;
+  category: string;
+  provider: string;
+  status: string;
+  isActive: boolean;
+  monthlyValue?: number | null;
+  updatedAt: string;
+}
+
+export interface BenefitEmployeeDetailDto {
+  id: string;
+  personId: string;
+  personName: string;
+  departmentName?: string | null;
+  benefitKey: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  isActive: boolean;
+  portalUrl?: string | null;
+  helpText: string;
+  monthlyValue?: number | null;
+  lines: BenefitDetailLineDto[];
+  dependents: BenefitDependentDto[];
+  notes: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertEmployeeBenefitRequest {
+  personId: string;
+  benefitKey: string;
+  title: string;
+  desc: string;
+  category: string;
+  provider: string;
+  status: string;
+  featured: boolean;
+  isActive: boolean;
+  portalUrl?: string | null;
+  helpText: string;
+  monthlyValue?: number | null;
+  lines?: BenefitDetailLineDto[] | null;
+  dependents?: BenefitDependentDto[] | null;
+  notes?: string[] | null;
+}
+
+export interface BenefitAssignmentOverridesDto {
+  monthlyValue?: number | null;
+  isActive?: boolean | null;
+  lines?: BenefitDetailLineDto[] | null;
+  dependents?: BenefitDependentDto[] | null;
+  notes?: string[] | null;
+}
+
+export interface AssignBenefitFromCatalogRequest {
+  personId: string;
+  catalogKey: string;
+  overrides?: BenefitAssignmentOverridesDto | null;
+}
+
+export interface BulkBenefitTargetRequest {
+  personIds?: string[] | null;
+  departmentIds?: string[] | null;
+  excludePersonIds?: string[] | null;
+}
+
+export interface BulkAssignBenefitsRequest {
+  target: BulkBenefitTargetRequest;
+  catalogKey: string;
+  overrides?: BenefitAssignmentOverridesDto | null;
+  onDuplicate?: string | null;
+}
+
+export interface BulkSetActiveBenefitsRequest {
+  target: BulkBenefitTargetRequest;
+  catalogKey?: string | null;
+  isActive: boolean;
+}
+
+export interface BulkBenefitOperationErrorDto {
+  personId: string;
+  message: string;
+}
+
+export interface BulkBenefitOperationResultDto {
+  created: number;
+  updated: number;
+  skipped: number;
+  failed: number;
+  errors: BulkBenefitOperationErrorDto[];
+}
+
+export interface BulkBenefitPreviewPersonDto {
+  id: string;
+  name: string;
+}
+
+export interface BulkBenefitPreviewDto {
+  targetPeopleCount: number;
+  matchingBenefitsCount: number;
+  wouldCreate: number;
+  wouldUpdate: number;
+  wouldSkip: number;
+  samplePeople: BulkBenefitPreviewPersonDto[];
+}
+
 export interface LeaveSummaryDto {
   availableDays: number;
   pendingRequests: number;
