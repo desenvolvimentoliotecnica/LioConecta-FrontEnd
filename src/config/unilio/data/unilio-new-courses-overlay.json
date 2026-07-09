@@ -181,6 +181,101 @@
           "quizJson": "{\"passingScore\":80,\"questions\":[{\"id\":\"q1\",\"text\":\"Segundo Antônio Catharino, RH ágil é principalmente:\",\"options\":[{\"id\":\"a\",\"label\":\"Implantar Scrum/Kanban 100% fiel ao manual\"},{\"id\":\"b\",\"label\":\"Mindset de adaptação rápida às necessidades do negócio\"}],\"correctAnswer\":\"b\"},{\"id\":\"q2\",\"text\":\"Quais subsistemas de RH Antônio aponta com maior ganho imediato de agilidade?\",\"options\":[{\"id\":\"a\",\"label\":\"Folha de pagamento e compliance\"},{\"id\":\"b\",\"label\":\"Treinamento e clima organizacional\"},{\"id\":\"c\",\"label\":\"Recrutamento e shared services (processos transacionais)\"}],\"correctAnswer\":\"c\"},{\"id\":\"q3\",\"text\":\"O que é inception no contexto da Serasa?\",\"options\":[{\"id\":\"a\",\"label\":\"Workshop para desenhar o processo ideal antes de definir o MVP\"},{\"id\":\"b\",\"label\":\"Auditoria anual de conformidade trabalhista\"},{\"id\":\"c\",\"label\":\"Treinamento obrigatório de metodologia Scrum\"}],\"correctAnswer\":\"a\"},{\"id\":\"q4\",\"text\":\"Por que a Serasa investe em front-end customizado sobre o ERP?\",\"options\":[{\"id\":\"a\",\"label\":\"Para substituir completamente o sistema backend\"},{\"id\":\"b\",\"label\":\"Para oferecer experiência simples, rápida e com alta adesão do usuário\"},{\"id\":\"c\",\"label\":\"Para cumprir exigências legais de auditoria\"}],\"correctAnswer\":\"b\"},{\"id\":\"q5\",\"text\":\"Qual é a dica prática de Antônio para implementar ágil no RH?\",\"options\":[{\"id\":\"a\",\"label\":\"Esperar aprovação de um projeto de 2 anos antes de começar\"},{\"id\":\"b\",\"label\":\"Copiar exatamente a metodologia de empresas de tecnologia\"},{\"id\":\"c\",\"label\":\"Começar com MVP — entregar rápido e evoluir incrementalmente\"}],\"correctAnswer\":\"c\"}]}"
         }
       ]
+    },
+    {
+      "seedKey": "curso-devops-github-actions",
+      "thumbnailUrl": "/unilio/courses/devops-github-actions/assets/hero-devops-github.png",
+      "description": "Fluxo DevOps automatizado com GitHub Actions — pipeline CI/CD do zero ao deploy. Baseado no tutorial de Fernanda Kipper (Kipper Dev). Leitura guiada, vídeo completo e avaliação final.",
+      "durationMinutes": 45,
+      "modules": [
+        {
+          "sortOrder": 1,
+          "title": "Introdução",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 3,
+          "articleHtml": "<p><em>Trilha · Tecnologia · DevOps</em></p><img src=\"/unilio/courses/devops-github-actions/assets/hero-devops-github.png\" alt=\"DevOps com GitHub Actions\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><h2>DevOps com GitHub Actions: pipeline CI/CD</h2><p>Aprenda a automatizar integração contínua e deploy com <strong>GitHub Actions</strong> — a ferramenta nativa do GitHub para pipelines de software.</p><ul><li>⏱ 30 min de leitura + vídeo completo (~1h30)</li><li>👥 Desenvolvedores, analistas de TI e líderes técnicos</li><li>📺 Baseado em <strong>Fernanda Kipper | Dev</strong></li></ul><p><strong>Como estudar:</strong> avance pelos módulos na barra lateral. O vídeo complementa a prática hands-on do tutorial original.</p>"
+        },
+        {
+          "sortOrder": 2,
+          "title": "Objetivos de aprendizagem",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 3,
+          "articleHtml": "<h2>Objetivos de aprendizagem</h2><p>Ao concluir este conteúdo, você será capaz de:</p><ul><li><strong>Explicar</strong> o que é DevOps, CI e CD no contexto de entrega de software.</li><li><strong>Identificar</strong> triggers, jobs e steps em um workflow do GitHub Actions.</li><li><strong>Configurar</strong> uma pipeline de integração contínua (install, build, test).</li><li><strong>Reutilizar</strong> actions do Marketplace para acelerar a automação.</li><li><strong>Separar</strong> workflows por ambiente (beta, produção) e validar Pull Requests antes do merge.</li></ul><p><strong>Para refletir:</strong> Hoje o deploy do seu time é manual ou automatizado?</p>"
+        },
+        {
+          "sortOrder": 3,
+          "title": "DevOps, CI/CD e GitHub Actions",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 5,
+          "articleHtml": "<h2>DevOps, CI/CD e GitHub Actions</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-1-conceitos-cicd.png\" alt=\"Fluxo DevOps CI/CD\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p><strong>GitHub Actions</strong> permite automatizar processos a partir de eventos no repositório: push, merge, abertura de issue, comentário e muito mais.</p><h3>O que é uma pipeline?</h3><p>Um <strong>script automatizado</strong> acionado por um gatilho (trigger). Toda vez que o evento configurado ocorre, o workflow executa as etapas definidas.</p><table><thead><tr><th>Conceito</th><th>Significado</th></tr></thead><tbody><tr><td><strong>CI</strong> (Continuous Integration)</td><td>Testar continuamente se o código integrado ainda funciona (build, testes unitários)</td></tr><tr><td><strong>CD</strong> (Continuous Delivery/Deploy)</td><td>Entregar/deployar continuamente quando o código estável chega na branch principal</td></tr><tr><td><strong>Trigger</strong></td><td>Evento que dispara o workflow (ex.: push na main, merge na beta)</td></tr></tbody></table><h3>Exemplos reais</h3><ul><li><strong>Vercel:</strong> deploy automático em merge + preview em Pull Request</li><li><strong>AWS Lambda:</strong> zip do código enviado automaticamente após build</li><li><strong>Qualquer stack:</strong> front, back, mobile, data science — GitHub Actions funciona para todos</li></ul><p><strong>Ponto-chave:</strong> Pipeline bem configurada elimina deploy manual, reduz erros humanos e garante que testes rodem antes de ir para produção.</p>"
+        },
+        {
+          "sortOrder": 4,
+          "title": "Estrutura de workflows (YAML)",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 5,
+          "articleHtml": "<h2>Estrutura de workflows em YAML</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-2-estrutura-workflow.png\" alt=\"Estrutura .github/workflows\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p>Workflows ficam obrigatoriamente em <code>.github/workflows/</code>, com extensão <code>.yml</code> ou <code>.yaml</code>.</p><h3>Anatomia de um workflow</h3><pre><code>name: CI Pipeline\non:\n  push:\n    branches: [main]\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm test</code></pre><table><thead><tr><th>Elemento</th><th>Função</th></tr></thead><tbody><tr><td><code>name</code></td><td>Nome exibido na aba Actions do GitHub</td></tr><tr><td><code>on</code></td><td>Quando executar (push, pull_request, schedule…)</td></tr><tr><td><code>jobs</code></td><td>Etapas macro da pipeline</td></tr><tr><td><code>runs-on</code></td><td>Runner (ubuntu-latest, windows-latest, macos-latest)</td></tr><tr><td><code>steps</code></td><td>Micro-etapas dentro de cada job</td></tr></tbody></table><h3>Jobs vs Steps</h3><p><strong>Job</strong> = etapa macro (ex.: rodar testes unitários). <strong>Steps</strong> = micro-etapas (checkout → setup Node → install → test). Jobs sem <code>needs</code> rodam em paralelo; use <code>needs: [job-anterior]</code> para dependências.</p><p><strong>Importante:</strong> o runner começa vazio — você precisa baixar código, instalar runtime e dependências em cada job.</p>"
+        },
+        {
+          "sortOrder": 5,
+          "title": "Criando sua pipeline de CI",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 6,
+          "articleHtml": "<h2>Criando sua pipeline de CI</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-3-pipeline-ci.png\" alt=\"Pipeline install build test\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p>Pipeline típica de integração contínua segue esta sequência:</p><ol><li><strong>Checkout</strong> — clonar o repositório na branch do evento</li><li><strong>Setup</strong> — configurar runtime (Node, Java, Go…)</li><li><strong>Install</strong> — instalar dependências (<code>npm ci</code>, <code>pip install</code>…)</li><li><strong>Build</strong> — compilar/empacotar a aplicação</li><li><strong>Test</strong> — executar testes unitários e de integração</li></ol><pre><code>name: CI Pipeline\non: [push, pull_request]\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n      - run: npm ci\n        working-directory: ./src\n      - run: npm test\n        working-directory: ./src</code></pre><h3>Deploy (CD)</h3><p>Após o build, o CD pode: gerar zip (ex.: AWS Lambda), fazer upload para S3, publicar em VPS ou acionar action de deploy. Cada projeto tem etapas específicas — mapeie o que você faz manualmente hoje e transforme em <code>run</code> ou <code>uses</code>.</p><p><strong>Segurança:</strong> nunca commite credenciais no YAML. Use <code>${{ secrets.NOME_DA_SECRET }}</code> configurada em Settings → Secrets and variables → Actions.</p>"
+        },
+        {
+          "sortOrder": 6,
+          "title": "Reutilizando Actions do Marketplace",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 5,
+          "articleHtml": "<h2>Reutilizando Actions do Marketplace</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-4-marketplace-actions.png\" alt=\"GitHub Actions Marketplace\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p>Em vez de reinventar a roda, reutilize <strong>actions prontas</strong> com <code>uses:</code>:</p><table><thead><tr><th>Action</th><th>Função</th></tr></thead><tbody><tr><td><code>actions/checkout@v4</code></td><td>Clonar repositório (git clone + checkout da branch)</td></tr><tr><td><code>actions/setup-node@v4</code></td><td>Instalar Node.js em versão específica</td></tr><tr><td><code>actions/setup-java@v4</code></td><td>Configurar JDK</td></tr><tr><td>Actions oficiais AWS/Azure/Docker</td><td>Deploy e integração com cloud (badge verified)</td></tr></tbody></table><h3>uses vs run</h3><ul><li><code>uses: actions/checkout@v4</code> — executa action reutilizável (com parâmetros em <code>with:</code>)</li><li><code>run: npm install</code> — comando shell direto no runner</li></ul><h3>Boas práticas de segurança</h3><ul><li>Prefira actions <strong>oficiais do GitHub</strong> e de empresas verificadas (badge ✓)</li><li>Actions da comunidade: avalie mantenedor, stars e atualizações</li><li>Empresas podem criar actions internas reutilizáveis em todos os projetos</li></ul><p><strong>Na Liotecnica:</strong> padronizar actions internas de deploy reduz duplicação e acelera onboarding de novos repositórios.</p>"
+        },
+        {
+          "sortOrder": 7,
+          "title": "Múltiplos workflows",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 4,
+          "articleHtml": "<h2>Múltiplos workflows no mesmo repositório</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-5-multiplos-workflows.png\" alt=\"Workflows separados por ambiente\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p>Um mesmo evento (ex.: push na beta) pode disparar <strong>vários workflows</strong> simultaneamente — cada arquivo em <code>.github/workflows/</code> é independente.</p><h3>Estratégia por ambiente</h3><table><thead><tr><th>Arquivo</th><th>Branch</th><th>Propósito</th></tr></thead><tbody><tr><td><code>beta-deploy.yml</code></td><td>beta</td><td>Deploy em ambiente de homologação/teste</td></tr><tr><td><code>production-deploy.yml</code></td><td>main</td><td>Deploy em produção</td></tr><tr><td><code>ci-tests.yml</code></td><td>todas</td><td>Testes em qualquer push</td></tr></tbody></table><p>Cada ambiente pode ter variáveis, secrets e etapas diferentes (ex.: banco de homologação vs produção).</p><h3>Proteção de branches</h3><p>Configure <strong>branch protection rules</strong>: exigir Pull Request, aprovações de code owners (<code>CODEOWNERS</code>) e que a pipeline passe antes do merge. Assim, deploy não é acionado por push direto indevido.</p><p><strong>Ponto-chave:</strong> segregar jobs permite paralelizar (testes + deploy) e reaproveitar etapas com <code>needs</code>.</p>"
+        },
+        {
+          "sortOrder": 8,
+          "title": "Pipeline para Pull Requests",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 5,
+          "articleHtml": "<h2>Pipeline para Pull Requests</h2><img src=\"/unilio/courses/devops-github-actions/assets/modulo-6-pull-request.png\" alt=\"Validação em Pull Request\" style=\"max-width:100%;border-radius:8px;margin:12px 0\" /><p>Workflow de PR valida o código <strong>antes do merge</strong> — impedindo que código quebrado entre na branch protegida.</p><pre><code>name: Pull Request CI\non:\n  pull_request:\n    branches: [main, beta]\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n      - run: npm ci\n      - run: npm test</code></pre><h3>Integração com branch rules</h3><p>Em Settings → Branches → Branch protection:</p><ul><li>Require pull request before merging</li><li>Require status checks to pass (selecione o workflow de PR)</li><li>Require review from CODEOWNERS</li></ul><p>Se a pipeline falhar (ex.: teste quebrado, build com erro), o botão de merge fica bloqueado — exatamente o comportamento esperado de CI.</p><p><strong>Exemplo Vercel:</strong> cada PR gera um ambiente de preview automaticamente. O mesmo princípio se aplica a qualquer stack com GitHub Actions.</p>"
+        },
+        {
+          "sortOrder": 9,
+          "title": "Vídeo completo",
+          "contentType": "external",
+          "contentUrl": "https://www.youtube.com/watch?v=df_WMXk7JxE",
+          "durationMinutes": 92
+        },
+        {
+          "sortOrder": 10,
+          "title": "Reflexão guiada",
+          "contentType": "article",
+          "contentUrl": null,
+          "durationMinutes": 5,
+          "articleHtml": "<h2>Reflexão guiada</h2><p>Antes da avaliação final, reflita sobre o fluxo DevOps do seu time. Anote suas respostas em um caderno ou documento pessoal.</p><h3>1. Estado atual</h3><p>Como o deploy é feito hoje no seu projeto ou área? Quais etapas são manuais e poderiam ser automatizadas?</p><h3>2. Primeiro workflow</h3><p>Se você criasse um workflow amanhã, qual seria o trigger (push, PR, merge) e quais steps incluiria?</p><h3>3. Segurança e governança</h3><p>Onde as credenciais de deploy estão hoje? O time usa branch protection e revisão de PR antes de ir para produção?</p>"
+        },
+        {
+          "sortOrder": 11,
+          "title": "Avaliação final",
+          "contentType": "quiz",
+          "contentUrl": null,
+          "durationMinutes": 8,
+          "quizJson": "{\"passingScore\":80,\"questions\":[{\"id\":\"q1\",\"text\":\"Onde os arquivos de workflow do GitHub Actions devem ficar no repositório?\",\"options\":[{\"id\":\"a\",\"label\":\"Na raiz do projeto, como pipeline.yml\"},{\"id\":\"b\",\"label\":\"Em .github/workflows/ com extensão .yml ou .yaml\"}],\"correctAnswer\":\"b\"},{\"id\":\"q2\",\"text\":\"O que significa CI (Continuous Integration)?\",\"options\":[{\"id\":\"a\",\"label\":\"Deploy automático sempre que alguém faz push\"},{\"id\":\"b\",\"label\":\"Verificar continuamente se o código integrado ainda funciona (build e testes)\"},{\"id\":\"c\",\"label\":\"Integrar apenas no final do sprint\"}],\"correctAnswer\":\"b\"},{\"id\":\"q3\",\"text\":\"Qual é a forma correta de usar credenciais sensíveis em um workflow?\",\"options\":[{\"id\":\"a\",\"label\":\"Escrever diretamente no arquivo YAML\"},{\"id\":\"b\",\"label\":\"Usar secrets do repositório (${{ secrets.NOME }})\"},{\"id\":\"c\",\"label\":\"Enviar por e-mail para o time de DevOps\"}],\"correctAnswer\":\"b\"},{\"id\":\"q4\",\"text\":\"Para que serve actions/checkout@v4 em um step?\",\"options\":[{\"id\":\"a\",\"label\":\"Publicar o código no npm\"},{\"id\":\"b\",\"label\":\"Clonar o repositório e fazer checkout da branch do evento\"},{\"id\":\"c\",\"label\":\"Aprovar automaticamente Pull Requests\"}],\"correctAnswer\":\"b\"},{\"id\":\"q5\",\"text\":\"Por que configurar um workflow com on: pull_request?\",\"options\":[{\"id\":\"a\",\"label\":\"Para fazer deploy direto em produção sem revisão\"},{\"id\":\"b\",\"label\":\"Para validar o código antes do merge e bloquear PRs com falhas\"},{\"id\":\"c\",\"label\":\"Para desabilitar testes automatizados\"}],\"correctAnswer\":\"b\"}]}"
+        }
+      ]
     }
   ]
 }

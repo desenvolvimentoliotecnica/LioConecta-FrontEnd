@@ -742,6 +742,36 @@
         { "sortOrder": 10, "title": "Reflexão guiada", "contentType": "article", "durationMinutes": 5 },
         { "sortOrder": 11, "title": "Avaliação final", "contentType": "quiz", "durationMinutes": 8 }
       ]
+    },
+    {
+      "seedKey": "curso-devops-github-actions",
+      "title": "DevOps com GitHub Actions: pipeline CI/CD",
+      "description": "Fluxo DevOps automatizado com GitHub Actions — baseado em Fernanda Kipper (Kipper Dev).",
+      "contentType": "article",
+      "durationMinutes": 45,
+      "isMandatory": false,
+      "area": "Tecnologia",
+      "department": "TI",
+      "rating": 4.8,
+      "instructorName": "Fernanda Kipper",
+      "externalUrl": "https://www.youtube.com/watch?v=df_WMXk7JxE",
+      "provider": "YouTube",
+      "status": "published",
+      "skillSeedKeys": ["devops-cicd"],
+      "tags": ["devops", "github actions", "CI/CD", "pipeline", "automação"],
+      "modules": [
+        { "sortOrder": 1, "title": "Introdução", "contentType": "article", "durationMinutes": 3 },
+        { "sortOrder": 2, "title": "Objetivos de aprendizagem", "contentType": "article", "durationMinutes": 3 },
+        { "sortOrder": 3, "title": "DevOps, CI/CD e GitHub Actions", "contentType": "article", "durationMinutes": 5 },
+        { "sortOrder": 4, "title": "Estrutura de workflows (YAML)", "contentType": "article", "durationMinutes": 5 },
+        { "sortOrder": 5, "title": "Criando sua pipeline de CI", "contentType": "article", "durationMinutes": 6 },
+        { "sortOrder": 6, "title": "Reutilizando Actions do Marketplace", "contentType": "article", "durationMinutes": 5 },
+        { "sortOrder": 7, "title": "Múltiplos workflows", "contentType": "article", "durationMinutes": 4 },
+        { "sortOrder": 8, "title": "Pipeline para Pull Requests", "contentType": "article", "durationMinutes": 5 },
+        { "sortOrder": 9, "title": "Vídeo completo", "contentType": "external", "contentUrl": "https://www.youtube.com/watch?v=df_WMXk7JxE", "durationMinutes": 92 },
+        { "sortOrder": 10, "title": "Reflexão guiada", "contentType": "article", "durationMinutes": 5 },
+        { "sortOrder": 11, "title": "Avaliação final", "contentType": "quiz", "durationMinutes": 8 }
+      ]
     }
   ],
   "paths": [
@@ -851,6 +881,12 @@
       "name": "Segurança do Trabalho",
       "category": "Compliance",
       "description": "Normas regulamentadoras, NR-35 e práticas de SST."
+    },
+    {
+      "seedKey": "devops-cicd",
+      "name": "DevOps e CI/CD",
+      "category": "Tecnologia",
+      "description": "Integração contínua, entrega contínua e automação com GitHub Actions."
     }
   ],
   "assessments": [
@@ -1050,6 +1086,62 @@
             "Começar com MVP — entregar rápido e evoluir incrementalmente"
           ],
           "correctAnswer": "Começar com MVP — entregar rápido e evoluir incrementalmente"
+        }
+      ]
+    },
+    {
+      "courseSeedKey": "curso-devops-github-actions",
+      "title": "Avaliação — DevOps com GitHub Actions",
+      "passingScore": 80,
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Onde os arquivos de workflow do GitHub Actions devem ficar no repositório?",
+          "options": [
+            "Na raiz do projeto, como pipeline.yml",
+            "Em .github/workflows/ com extensão .yml ou .yaml"
+          ],
+          "correctAnswer": "Em .github/workflows/ com extensão .yml ou .yaml"
+        },
+        {
+          "id": "q2",
+          "text": "O que significa CI (Continuous Integration)?",
+          "options": [
+            "Deploy automático sempre que alguém faz push",
+            "Verificar continuamente se o código integrado ainda funciona (build e testes)",
+            "Integrar apenas no final do sprint"
+          ],
+          "correctAnswer": "Verificar continuamente se o código integrado ainda funciona (build e testes)"
+        },
+        {
+          "id": "q3",
+          "text": "Qual é a forma correta de usar credenciais sensíveis em um workflow?",
+          "options": [
+            "Escrever diretamente no arquivo YAML",
+            "Usar secrets do repositório (${{ secrets.NOME }})",
+            "Enviar por e-mail para o time de DevOps"
+          ],
+          "correctAnswer": "Usar secrets do repositório (${{ secrets.NOME }})"
+        },
+        {
+          "id": "q4",
+          "text": "Para que serve actions/checkout@v4 em um step?",
+          "options": [
+            "Publicar o código no npm",
+            "Clonar o repositório e fazer checkout da branch do evento",
+            "Aprovar automaticamente Pull Requests"
+          ],
+          "correctAnswer": "Clonar o repositório e fazer checkout da branch do evento"
+        },
+        {
+          "id": "q5",
+          "text": "Por que configurar um workflow com on: pull_request?",
+          "options": [
+            "Para fazer deploy direto em produção sem revisão",
+            "Para validar o código antes do merge e bloquear PRs com falhas",
+            "Para desabilitar testes automatizados"
+          ],
+          "correctAnswer": "Para validar o código antes do merge e bloquear PRs com falhas"
         }
       ]
     }

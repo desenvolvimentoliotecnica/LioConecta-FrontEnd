@@ -61,6 +61,7 @@ const COURSE_IDS: Record<string, string> = {
   "onboarding-liotecnica": "22222222-2222-2222-2222-22222222001a",
   "curso-gestao-pessoas-lider-rh": "22222222-2222-2222-2222-22222222001b",
   "curso-rh-agil-catharino": "22222222-2222-2222-2222-22222222001c",
+  "curso-devops-github-actions": "22222222-2222-2222-2222-22222222001d",
 };
 
 export const PATH_IDS = {
@@ -80,6 +81,7 @@ const SKILL_LABELS: Record<string, string> = {
   excel: "Excel",
   lgpd: "LGPD",
   "seguranca-trabalho": "Segurança do Trabalho",
+  "devops-cicd": "DevOps e CI/CD",
 };
 
 /** Uses last 4 hex digits of the course GUID tail — mirrors backend ResolveCourseNumericSuffix. */
@@ -151,6 +153,7 @@ const ENROLLMENT_MOCK: Record<string, EnrollmentMock> = {
   "ext-lideranca-negociar": { progressPct: 0, enrollmentStatus: "not_started", completedModules: 0 },
   "curso-gestao-pessoas-lider-rh": { progressPct: 0, enrollmentStatus: "not_started", completedModules: 0 },
   "curso-rh-agil-catharino": { progressPct: 10, enrollmentStatus: "in_progress", completedModules: 1 },
+  "curso-devops-github-actions": { progressPct: 0, enrollmentStatus: "not_started", completedModules: 0 },
 };
 
 function mapModule(seedKey: string, module: SeedModule, isCompleted: boolean): UniLioModuleDto {
