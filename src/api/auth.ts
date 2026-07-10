@@ -164,7 +164,13 @@ export function canAccessLeaveManagement(me: MeDto | undefined): boolean {
   );
 }
 
-
+/** Gestão de ponto: alinhado ao backend (`ponto.manage` / `ponto.approve`). */
+export function canAccessPontoManagement(me: MeDto | undefined): boolean {
+  return (
+    hasPermission(me, PERMISSIONS.ponto.manage) ||
+    hasPermission(me, PERMISSIONS.ponto.approve)
+  );
+}
 
 export function canAccessLoopModule(
 

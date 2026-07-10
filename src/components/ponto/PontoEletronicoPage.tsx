@@ -1,9 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
-import { usePonto, usePontoPeriods } from "../../api/hooks/usePonto";
+import { Link } from "react-router-dom";
+import {
+  extractPontoAdjustmentError,
+  usePonto,
+  usePontoAdjustmentRequest,
+  usePontoPeriods,
+} from "../../api/hooks/usePonto";
+import { canAccessPontoManagement } from "../../api/auth";
+import { useMe } from "../../api/hooks/useMe";
 import type { PontoEntryDto } from "../../api/types";
 import { RhPageHead } from "../servicos/RhPageHead";
 import { sectionMainClass } from "../layout/SectionPageHead";
+import { PontoAdjustmentRequestModal } from "./PontoAdjustmentRequestModal";
+import { PontoAdjustmentResultModal } from "./PontoAdjustmentResultModal";
+import { PontoAdjustmentDetailModal } from "./PontoAdjustmentDetailModal";
+import { PontoAdjustmentsPanel } from "./PontoAdjustmentsPanel";
 import "../../styles/contracheque-page.css";
+import "../../styles/ferias-ausencias-page.css";
 import "../../styles/ponto-eletronico-page.css";
 
 function formatDate(value: string): string {
@@ -32,6 +45,11 @@ function isWeekendWeekday(weekdayLabel: string): boolean {
   return normalized.includes("sabado") || normalized.includes("domingo");
 }
 
+function entryKey(entry: PontoEntryDto): string {
+  if (/^\d{4}-\d{2}-\d{2}/.test(entry.date)) return entry.date.slice(0, 10);
+  return entry.date;
+}
+
 function DateCell({ date, weekdayLabel }: { date: string; weekdayLabel: string }) {
   const weekend = isWeekendWeekday(weekdayLabel);
   const chipClass = `ponto-date-chip${weekend ? " ponto-date-chip--weekend" : ""}`;
@@ -50,9 +68,25 @@ function DateCell({ date, weekdayLabel }: { date: string; weekdayLabel: string }
   );
 }
 
-function EntryRow({ entry }: { entry: PontoEntryDto }) {
+function EntryRow({
+  entry,
+  selected,
+  onToggle,
+}: {
+  entry: PontoEntryDto;
+  selected: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <tr>
+    <tr className={selected ? "ponto-table__row--selected" : undefined}>
+      <td className="ponto-table__check">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={onToggle}
+          aria-label={`Selecionar ${formatDate(entry.date)}`}
+        />
+      </td>
       <DateCell date={entry.date} weekdayLabel={entry.weekdayLabel} />
       <td>{entry.clockIn}</td>
       <td>{entry.lunchOut}</td>
@@ -69,15 +103,30 @@ function EntryRow({ entry }: { entry: PontoEntryDto }) {
 }
 
 export function PontoEletronicoPage() {
+  const meQuery = useMe();
   const periodsQuery = usePontoPeriods();
   const options = periodsQuery.data?.options ?? [];
   const [selectedPeriodKey, setSelectedPeriodKey] = useState<string>("");
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [resultOpen, setResultOpen] = useState(false);
+  const [resultMessage, setResultMessage] = useState<string | null>(null);
+  const [resultProtocol, setResultProtocol] = useState<string | null>(null);
+  const [resultVariant, setResultVariant] = useState<"success" | "error">("success");
+  const [detailId, setDetailId] = useState<string | null>(null);
+
+  const requestMutation = usePontoAdjustmentRequest();
+  const canManage = canAccessPontoManagement(meQuery.data);
 
   useEffect(() => {
     if (options.length === 0 || selectedPeriodKey) return;
     const first = options[0];
     setSelectedPeriodKey(periodKey(first.endMonth, first.endYear));
   }, [options, selectedPeriodKey]);
+
+  useEffect(() => {
+    setSelectedKeys(new Set());
+  }, [selectedPeriodKey]);
 
   const selectedPeriod = useMemo(() => {
     if (!selectedPeriodKey) return options[0] ?? null;
@@ -101,12 +150,44 @@ export function PontoEletronicoPage() {
     periodsQuery.data &&
     `Ciclo: dia ${periodsQuery.data.timesheetPeriodStartDay} ao dia ${periodsQuery.data.timesheetPeriodEndDay} do mês seguinte.`;
 
+  const selectedEntries = useMemo(
+    () => entries.filter((entry) => selectedKeys.has(entryKey(entry))),
+    [entries, selectedKeys],
+  );
+
+  const allSelected = entries.length > 0 && selectedKeys.size === entries.length;
+
+  const toggleAll = () => {
+    if (allSelected) {
+      setSelectedKeys(new Set());
+      return;
+    }
+    setSelectedKeys(new Set(entries.map(entryKey)));
+  };
+
+  const toggleOne = (key: string) => {
+    setSelectedKeys((current) => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
   return (
     <main className={sectionMainClass("rh")}>
       <RhPageHead
         title="Espelho de Ponto"
         current="Ponto eletrônico"
         description={`Consulte batidas e totais do período integrados ao ${data?.provider ?? "TOTVS RM"} - A Sincronização pode levar até 24hs.`}
+        actions={
+          canManage ? (
+            <Link className="leave-btn leave-btn--ghost" to="/servicos/ponto-eletronico/gestao">
+              <i className="fa-solid fa-users" aria-hidden="true" />
+              Gestão de ponto
+            </Link>
+          ) : undefined
+        }
         toolbar={
           <div className="pay-toolbar" aria-label="Filtros do espelho de ponto">
             <div className="pay-toolbar__filters page-filters">
@@ -134,6 +215,18 @@ export function PontoEletronicoPage() {
               </label>
               {periodHelp ? <span className="ponto-period-help">{periodHelp}</span> : null}
             </div>
+            <div className="pay-toolbar__actions">
+              <button
+                type="button"
+                className="leave-btn leave-btn--primary"
+                disabled={selectedEntries.length === 0 || requestMutation.isPending}
+                onClick={() => setRequestOpen(true)}
+              >
+                <i className="fa-solid fa-pen-to-square" aria-hidden="true" />
+                Solicitar ajuste
+                {selectedEntries.length > 0 ? ` (${selectedEntries.length})` : ""}
+              </button>
+            </div>
           </div>
         }
       />
@@ -145,7 +238,7 @@ export function PontoEletronicoPage() {
         <div>
           <div className="welcome-banner__title">Controle de jornada</div>
           <p className="welcome-banner__text">
-            Selecione o período de fechamento para visualizar entrada, saída, intervalo e saldo diário.
+            Selecione um ou mais dias no espelho para solicitar ajuste de ponto ao seu gestor.
           </p>
         </div>
       </div>
@@ -203,6 +296,14 @@ export function PontoEletronicoPage() {
             <table className="ponto-table">
               <thead>
                 <tr>
+                  <th className="ponto-table__check">
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      onChange={toggleAll}
+                      aria-label="Selecionar todos os dias"
+                    />
+                  </th>
                   <th>Data</th>
                   <th>Entrada</th>
                   <th>Saída almoço</th>
@@ -215,14 +316,60 @@ export function PontoEletronicoPage() {
                 </tr>
               </thead>
               <tbody>
-                {entries.map((entry) => (
-                  <EntryRow key={entry.date} entry={entry} />
-                ))}
+                {entries.map((entry) => {
+                  const key = entryKey(entry);
+                  return (
+                    <EntryRow
+                      key={key}
+                      entry={entry}
+                      selected={selectedKeys.has(key)}
+                      onToggle={() => toggleOne(key)}
+                    />
+                  );
+                })}
               </tbody>
             </table>
           )}
         </section>
       ) : null}
+
+      <PontoAdjustmentsPanel onSelect={setDetailId} />
+
+      <PontoAdjustmentRequestModal
+        open={requestOpen}
+        entries={selectedEntries}
+        pending={requestMutation.isPending}
+        onClose={() => setRequestOpen(false)}
+        onSubmit={(payload) => {
+          requestMutation.mutate(payload, {
+            onSuccess: (result) => {
+              setRequestOpen(false);
+              setSelectedKeys(new Set());
+              setResultVariant("success");
+              setResultMessage(result.message);
+              setResultProtocol(result.protocol);
+              setResultOpen(true);
+            },
+            onError: (error) => {
+              setRequestOpen(false);
+              setResultVariant("error");
+              setResultMessage(extractPontoAdjustmentError(error));
+              setResultProtocol(null);
+              setResultOpen(true);
+            },
+          });
+        }}
+      />
+
+      <PontoAdjustmentResultModal
+        open={resultOpen}
+        message={resultMessage}
+        protocol={resultProtocol}
+        variant={resultVariant}
+        onClose={() => setResultOpen(false)}
+      />
+
+      <PontoAdjustmentDetailModal recordId={detailId} onClose={() => setDetailId(null)} />
     </main>
   );
 }

@@ -1,0 +1,31 @@
+{
+  "recordId": "b138057f-b092-480e-8b39-58129555304b",
+  "found": true,
+  "match": {
+    "id": "21cc8521-f86f-4339-a609-42c4a172bdf2",
+    "type": 2,
+    "title": "Nova solicitação de ajuste de ponto",
+    "body": "Leonardo Sabino Mendes solicitou ajuste de ponto (2 dias).",
+    "href": "/servicos/ponto-eletronico/gestao?requestId=b138057f-b092-480e-8b39-58129555304b",
+    "isRead": false,
+    "createdAt": "2026-07-10T17:15:56.318737+00:00"
+  },
+  "recentTitles": [
+    {
+      "title": "Nova solicitação de ajuste de ponto",
+      "href": "/servicos/ponto-eletronico/gestao?requestId=b138057f-b092-480e-8b39-58129555304b"
+    },
+    {
+      "title": "Nova solicitação de ajuste de ponto",
+      "href": "/servicos/ponto-eletronico/gestao?requestId=542221a3-6a3a-49d4-856e-a7af879aa793"
+    },
+    {
+      "title": "Nova solicitação de ajuste de ponto",
+      "href": "/servicos/ponto-eletronico/gestao?requestId=f7005d36-3a63-49d1-b45c-459e0e7190d6"
+    },
+    {
+      "title": "Nova solicitação de ajuste de ponto",
+      "href": "/servicos/ponto-eletronico/gestao?requestId=1e83020e-d7d2-4550-902b-8f502befe176"
+    }
+  ]
+}

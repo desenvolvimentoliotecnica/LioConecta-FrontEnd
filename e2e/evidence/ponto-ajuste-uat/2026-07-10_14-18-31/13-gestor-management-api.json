@@ -1,0 +1,17 @@
+{
+  "recordId": "4849ec71-850c-4493-9b17-1be4444e6993",
+  "items": [
+    {
+      "id": "4849ec71-850c-4493-9b17-1be4444e6993",
+      "serviceRequestId": "38af0a7f-c272-4d82-bc17-5f2775cfb666",
+      "employeeName": "Leonardo Sabino Mendes",
+      "employeeId": "00000887",
+      "email": "leonardo.mendes@liotecnica.com.br",
+      "title": "Ajuste de ponto — 2 dias",
+      "status": "pending",
+      "dayCount": 2,
+      "reason": "E2E-PONTO-1783703911420 — UAT ajuste em massa (2 dias). Esqueci de bater o ponto corretamente.",
+      "createdAt": "2026-07-10T17:18:37.668356+00:00"
+    }
+  ]
+}
