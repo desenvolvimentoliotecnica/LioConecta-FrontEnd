@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
 import type {
+  WorkerConnectivityDto,
   WorkerDefinitionDto,
   WorkerRunDetailDto,
   WorkerRunDto,
@@ -19,14 +20,37 @@ export function useWorkerDefinitions() {
   });
 }
 
-export function useWorkerRuns(workerKey: string, limit = 20, enabled = true) {
+export function useWorkersConnectivity() {
+  return useQuery({
+    queryKey: [...WORKERS_QUERY_KEY, "connectivity"],
+    queryFn: () => api.get<WorkerConnectivityDto>("/admin/workers/connectivity"),
+    retry: config.useMock ? 0 : 1,
+    staleTime: 0,
+    refetchInterval: 30_000,
+    refetchOnMount: "always",
+  });
+}
+
+export function useWorkerRuns(
+  workerKey: string,
+  limit = 20,
+  enabled = true,
+  pollWhileRunning = false,
+) {
   return useQuery({
     queryKey: [...WORKERS_QUERY_KEY, workerKey, "runs", limit],
     queryFn: () =>
       api.get<WorkerRunDto[]>(`/admin/workers/${workerKey}/runs?limit=${limit}`),
     enabled: enabled && Boolean(workerKey),
     retry: config.useMock ? 0 : 1,
-    refetchInterval: enabled ? 15000 : false,
+    refetchInterval: (query) => {
+      if (!enabled) return false;
+      if (pollWhileRunning) {
+        const hasRunning = query.state.data?.some((run) => run.status === "Running");
+        if (hasRunning) return 5000;
+      }
+      return 15_000;
+    },
   });
 }
 

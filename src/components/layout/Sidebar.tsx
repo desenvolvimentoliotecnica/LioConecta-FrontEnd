@@ -99,6 +99,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     permission: PERMISSIONS.analytics.view,
   },
   {
+    label: "Workers",
+    icon: "fa-gears",
+    href: "/admin/workers",
+    activePrefix: "/admin/workers",
+    permission: PERMISSIONS.admin.workersManage,
+  },
+  {
     label: "DB Explorer",
     icon: "fa-database",
     href: "/admin/db-explorer",
