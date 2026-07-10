@@ -79,8 +79,26 @@ export function BeneficiosPage() {
         title="Benefícios"
         current="Benefícios"
         description="Consulte os benefícios disponíveis no seu contrato, elegibilidade, operadoras parceiras e canais para solicitar inclusão ou alterações."
+        actions={
+          <>
+            {showGestaoLink ? (
+              <Link className="beneficios-gestao-btn beneficios-gestao-btn--ghost" to="/servicos/beneficios/gestao">
+                Gestão de benefícios
+              </Link>
+            ) : null}
+            <button
+              type="button"
+              className={`pay-toggle-values${showValues ? " is-active" : ""}`}
+              aria-pressed={showValues}
+              onClick={() => setShowValues((value) => !value)}
+            >
+              <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
+              {showValues ? "Ocultar valores" : "Mostrar valores"}
+            </button>
+          </>
+        }
         toolbar={
-          <div className="pay-toolbar">
+          <div className="pay-toolbar" aria-label="Filtros de benefícios">
             <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
               {FILTERS.map((filter) => (
                 <button
@@ -94,23 +112,10 @@ export function BeneficiosPage() {
               ))}
             </div>
             <div className="pay-toolbar__actions">
-              {showGestaoLink ? (
-                <Link className="beneficios-gestao-btn beneficios-gestao-btn--ghost" to="/servicos/beneficios/gestao">
-                  Gestão de benefícios
-                </Link>
-              ) : null}
-              <button
-                type="button"
-                className={`pay-toggle-values${showValues ? " is-active" : ""}`}
-                aria-pressed={showValues}
-                onClick={() => setShowValues((value) => !value)}
-              >
-                <i className={`fa-regular ${showValues ? "fa-eye" : "fa-eye-slash"}`} aria-hidden="true" />
-                {showValues ? "Ocultar valores" : "Mostrar valores"}
-              </button>
               <label className="pay-search page-search">
                 <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
                 <input
+                  className="page-search__input"
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
