@@ -60,6 +60,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/pessoas/ramais", { pageName: "PhoneExtensions", module: "pessoas" }),
   exact("/pessoas/perfil", { pageName: "PersonProfile", routeTemplate: "/pessoas/perfil/:slug", module: "pessoas" }),
   exact("/grupos", { pageName: "GruposHub", module: "grupos" }),
+  exact("/grupos/meus-grupos", { pageName: "GroupMyGroups", module: "grupos" }),
   exact("/grupos/criar", { pageName: "GroupCreate", module: "grupos" }),
   exact("/grupos/explorar", { pageName: "GroupExplore", module: "grupos" }),
   exact("/grupos/aprovacoes", { pageName: "GroupApprovals", module: "grupos" }),

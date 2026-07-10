@@ -1,0 +1,37 @@
+{
+  "status": 200,
+  "body": {
+    "id": "eeeeeeee-eeee-eeee-eeee-eeeeeeeeee0b",
+    "name": "Privacidade e LGPD",
+    "description": "Governança de dados, políticas de privacidade e conformidade regulatória.",
+    "type": 0,
+    "accessMode": 1,
+    "icon": "fa-building",
+    "status": 1,
+    "isPrivate": false,
+    "owner": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb104",
+      "slug": "ricardo-souza",
+      "name": "Ricardo Souza",
+      "title": "Product Owner",
+      "photoUrl": null,
+      "departmentName": "produto",
+      "location": "Campinas, SP · Produto",
+      "managerSlug": null,
+      "isActive": false,
+      "birthDate": "1991-04-08",
+      "hireDate": "2021-09-01"
+    },
+    "memberCount": 3,
+    "postCount": 0,
+    "topicCount": 0,
+    "isMember": true,
+    "myRole": 2,
+    "createdAt": "2026-04-16T03:18:39.770676+00:00",
+    "submittedAt": null,
+    "expiresAt": null,
+    "reviewedAt": "2026-06-05T03:18:39.769477+00:00",
+    "rejectionReason": null,
+    "approver": null
+  }
+}

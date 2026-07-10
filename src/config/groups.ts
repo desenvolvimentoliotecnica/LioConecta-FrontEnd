@@ -4,7 +4,11 @@ import {
   GROUP_ACCESS_OPEN,
   GROUP_ACCESS_PRIVATE,
   GROUP_ACCESS_REQUIRES_APPROVAL,
+  GROUP_MEMBER_ROLE_MEMBER,
+  GROUP_MEMBER_ROLE_MODERATOR,
+  GROUP_MEMBER_ROLE_OWNER,
   GROUP_STATUS_ACTIVE,
+  GROUP_STATUS_EXPIRED,
   GROUP_STATUS_PENDING,
   GROUP_STATUS_REJECTED,
   GROUP_TYPE_COMUNIDADE,
@@ -12,6 +16,7 @@ import {
   GROUP_TYPE_INTERESSE,
   GROUP_TYPE_PROJETO,
   type GroupAccessMode,
+  type GroupMemberRole,
   type GroupStatus,
   type GroupType,
 } from "../api/types";
@@ -56,6 +61,7 @@ export const GROUP_TYPE_OPTIONS: Array<{
   },
 ];
 
+/** @deprecated Backend não usa mais modo de acesso na criação de grupos. Mantido só por compatibilidade. */
 export const GROUP_ACCESS_OPTIONS: Array<{
   value: GroupAccessMode;
   label: string;
@@ -115,9 +121,26 @@ export function groupStatusLabel(status: GroupStatus): string {
       return "Ativo";
     case GROUP_STATUS_REJECTED:
       return "Rejeitado";
+    case GROUP_STATUS_EXPIRED:
+      return "Expirado";
     case GROUP_STATUS_PENDING:
     default:
       return "Aguardando aprovação";
+  }
+}
+
+/** Classe de tag reaproveitando `.tag`/`.badge` já existentes no CSS global. */
+export function groupStatusBadgeClass(status: GroupStatus): string {
+  switch (status) {
+    case GROUP_STATUS_ACTIVE:
+      return "group-status-badge group-status-badge--active";
+    case GROUP_STATUS_REJECTED:
+      return "group-status-badge group-status-badge--rejected";
+    case GROUP_STATUS_EXPIRED:
+      return "group-status-badge group-status-badge--expired";
+    case GROUP_STATUS_PENDING:
+    default:
+      return "group-status-badge group-status-badge--pending";
   }
 }
 
@@ -125,8 +148,21 @@ export function groupTypeLabel(type: GroupType): string {
   return GROUP_TYPE_OPTIONS.find((option) => option.value === type)?.label ?? "Grupo";
 }
 
+/** @deprecated Backend não usa mais modo de acesso — mantido só por compatibilidade de exibição legada. */
 export function groupAccessLabel(accessMode: GroupAccessMode): string {
   return GROUP_ACCESS_OPTIONS.find((option) => option.value === accessMode)?.label ?? "Aberto";
+}
+
+export function groupMemberRoleLabel(role: GroupMemberRole): string {
+  switch (role) {
+    case GROUP_MEMBER_ROLE_OWNER:
+      return "Proprietário";
+    case GROUP_MEMBER_ROLE_MODERATOR:
+      return "Moderador";
+    case GROUP_MEMBER_ROLE_MEMBER:
+    default:
+      return "Membro";
+  }
 }
 
 export function injectGroupCreatePageStyles(): () => void {

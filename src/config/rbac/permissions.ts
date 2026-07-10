@@ -50,6 +50,11 @@ export const PERMISSIONS = {
     manage: "ponto.manage",
     approve: "ponto.approve",
   },
+  groups: {
+    read: "groups.read",
+    create: "groups.create",
+    approve: "groups.approve",
+  },
 } as const;
 
 export const RBAC_ADMIN_PERMISSIONS = [

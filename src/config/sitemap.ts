@@ -440,7 +440,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry(
           "Aprovações de grupos",
           "/grupos/aprovacoes",
-          "Fila de grupos aguardando aprovação de administrador.",
+          "Fila de criação de grupos para o gestor direto e expirados para admin.",
         ),
       ],
     },

@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { useMyGroups } from "../../api/hooks/useGroups";
+import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLeaveGroup, useMyGroups, useResubmitGroup } from "../../api/hooks/useGroups";
 import {
+  GROUP_MEMBER_ROLE_OWNER,
+  GROUP_STATUS_EXPIRED,
   GROUP_TYPE_COMUNIDADE,
   GROUP_TYPE_DEPARTAMENTAL,
   GROUP_TYPE_INTERESSE,
@@ -11,11 +13,13 @@ import {
 } from "../../api/types";
 import {
   GROUP_TYPE_OPTIONS,
-  groupAccessLabel,
+  groupStatusBadgeClass,
+  groupStatusLabel,
   groupTypeLabel,
   injectGroupExplorePageStyles,
 } from "../../config/groups";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
+import "../../styles/group-status-badges.css";
 
 type MyGroupsFilter = "all" | "departamental" | "projeto" | "interesse" | "comunidade";
 
@@ -64,8 +68,36 @@ function postsLabel(count: number): string {
 }
 
 function MyGroupCard({ group }: { group: GroupDto }) {
+  const navigate = useNavigate();
+  const resubmitGroup = useResubmitGroup();
+  const leaveGroup = useLeaveGroup();
+  const [error, setError] = useState<string | null>(null);
+
   const iconClass = typeIconClass(group.type);
   const typeMeta = GROUP_TYPE_OPTIONS.find((option) => option.value === group.type);
+  const isExpired = group.status === GROUP_STATUS_EXPIRED;
+  const isOwner = group.myRole === GROUP_MEMBER_ROLE_OWNER;
+
+  async function handleResubmit(event: ReactMouseEvent) {
+    event.stopPropagation();
+    setError(null);
+    try {
+      await resubmitGroup.mutateAsync(group.id);
+    } catch {
+      setError("Não foi possível reenviar o grupo para aprovação.");
+    }
+  }
+
+  async function handleLeave(event: ReactMouseEvent) {
+    event.stopPropagation();
+    if (!window.confirm(`Sair do grupo "${group.name}"?`)) return;
+    setError(null);
+    try {
+      await leaveGroup.mutateAsync(group.id);
+    } catch {
+      setError("Não foi possível sair do grupo.");
+    }
+  }
 
   return (
     <article className="group-card" data-type={group.type}>
@@ -80,7 +112,7 @@ function MyGroupCard({ group }: { group: GroupDto }) {
       </div>
       <div className="group-card__tags">
         <span className="group-card__type">{groupTypeLabel(group.type)}</span>
-        <span className="group-card__access">{groupAccessLabel(group.accessMode)}</span>
+        <span className={groupStatusBadgeClass(group.status)}>{groupStatusLabel(group.status)}</span>
       </div>
       <div className="group-card__meta">
         <span>
@@ -90,8 +122,45 @@ function MyGroupCard({ group }: { group: GroupDto }) {
           <i className="fa-regular fa-message" aria-hidden="true" /> {postsLabel(group.postCount)}
         </span>
       </div>
+      {error ? (
+        <p className="page-empty-note" style={{ color: "#b91c1c", margin: 0 }}>
+          {error}
+        </p>
+      ) : null}
       <div className="group-card__footer">
-        <span className="group-card__join group-card__join--member">Membro</span>
+        <button
+          className="group-card__join group-card__join--member"
+          type="button"
+          onClick={() => navigate(`/grupos/${group.id}`)}
+        >
+          Abrir grupo
+        </button>
+        <div className="group-card__actions">
+          {isExpired && isOwner ? (
+            <button
+              className="group-card__btn"
+              type="button"
+              aria-label="Reenviar para aprovação"
+              title="Reenviar para aprovação"
+              disabled={resubmitGroup.isPending}
+              onClick={(event) => void handleResubmit(event)}
+            >
+              <i className="fa-solid fa-rotate-right" aria-hidden="true" />
+            </button>
+          ) : null}
+          {!isOwner ? (
+            <button
+              className="group-card__btn"
+              type="button"
+              aria-label="Sair do grupo"
+              title="Sair do grupo"
+              disabled={leaveGroup.isPending}
+              onClick={(event) => void handleLeave(event)}
+            >
+              <i className="fa-solid fa-right-from-bracket" aria-hidden="true" />
+            </button>
+          ) : null}
+        </div>
       </div>
     </article>
   );
@@ -122,7 +191,7 @@ export function GroupMyGroupsPage() {
         section="grupos"
         title="Meus grupos"
         current="Meus grupos"
-        description="Grupos dos quais você já participa — departamentos, projetos, interesses e comunidades."
+        description="Grupos dos quais você participa — departamentos, projetos, interesses e comunidades."
         toolbar={
           <div className="page-toolbar">
             <div className="page-filters" role="group" aria-label="Filtros">

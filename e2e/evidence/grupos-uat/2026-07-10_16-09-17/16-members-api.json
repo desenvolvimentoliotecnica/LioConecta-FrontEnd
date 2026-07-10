@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "id": "af44262a-05b5-400f-bae4-e2d68c0ae123",
+      "person": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "role": 0,
+      "joinedAt": "2026-07-10T19:09:26.37109+00:00"
+    }
+  ]
+}

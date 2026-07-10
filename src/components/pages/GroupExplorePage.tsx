@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useExploreGroups } from "../../api/hooks/useGroups";
+import { useNavigate } from "react-router-dom";
+import { useExploreGroups, useJoinGroup } from "../../api/hooks/useGroups";
 import {
-  GROUP_ACCESS_OPEN,
   GROUP_TYPE_COMUNIDADE,
   GROUP_TYPE_DEPARTAMENTAL,
   GROUP_TYPE_INTERESSE,
@@ -11,19 +11,12 @@ import {
 } from "../../api/types";
 import {
   GROUP_TYPE_OPTIONS,
-  groupAccessLabel,
   groupTypeLabel,
   injectGroupExplorePageStyles,
 } from "../../config/groups";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 
-type ExploreFilter =
-  | "all"
-  | "popular"
-  | "recent"
-  | "departamental"
-  | "projeto"
-  | "abertos";
+type ExploreFilter = "all" | "popular" | "recent" | "departamental" | "projeto";
 
 const EXPLORE_FILTERS: { id: ExploreFilter; label: string }[] = [
   { id: "all", label: "Todos" },
@@ -31,7 +24,6 @@ const EXPLORE_FILTERS: { id: ExploreFilter; label: string }[] = [
   { id: "recent", label: "Recentes" },
   { id: "departamental", label: "Departamentais" },
   { id: "projeto", label: "Projetos" },
-  { id: "abertos", label: "Abertos" },
 ];
 
 const RECENT_DAYS = 21;
@@ -71,8 +63,6 @@ function matchesExploreFilter(group: GroupDto, filter: ExploreFilter): boolean {
       return group.type === GROUP_TYPE_DEPARTAMENTAL;
     case "projeto":
       return group.type === GROUP_TYPE_PROJETO;
-    case "abertos":
-      return group.accessMode === GROUP_ACCESS_OPEN;
     case "all":
     default:
       return true;
@@ -86,22 +76,25 @@ function postsLabel(count: number): string {
 }
 
 function GroupExploreCard({ group }: { group: GroupDto }) {
+  const navigate = useNavigate();
+  const joinGroup = useJoinGroup();
+  const [joinError, setJoinError] = useState<string | null>(null);
+
   const popular = isPopularGroup(group);
   const recent = isRecentGroup(group);
   const highlightClass = popular || recent ? " is-highlight" : "";
   const iconClass = typeIconClass(group.type);
   const typeMeta = GROUP_TYPE_OPTIONS.find((option) => option.value === group.type);
-  const isOpen = group.accessMode === GROUP_ACCESS_OPEN;
-  const joinLabel = group.isMember
-    ? "Membro"
-    : isOpen
-      ? "Participar"
-      : "Solicitar entrada";
-  const joinClass = group.isMember
-    ? "group-card__join group-card__join--member"
-    : isOpen
-      ? "group-card__join"
-      : "group-card__join group-card__join--approval";
+
+  async function handleJoin() {
+    setJoinError(null);
+    try {
+      await joinGroup.mutateAsync(group.id);
+      navigate(`/grupos/${group.id}`);
+    } catch {
+      setJoinError("Não foi possível entrar no grupo. Tente novamente.");
+    }
+  }
 
   return (
     <article
@@ -109,7 +102,6 @@ function GroupExploreCard({ group }: { group: GroupDto }) {
       data-type={group.type}
       data-popular={popular ? "true" : "false"}
       data-recent={recent ? "true" : "false"}
-      data-access={isOpen ? "open" : "approval"}
     >
       <div className="group-card__head">
         <div className={`group-card__icon group-card__icon--${iconClass}`} aria-hidden="true">
@@ -126,9 +118,6 @@ function GroupExploreCard({ group }: { group: GroupDto }) {
         {!popular && recent ? (
           <span className="group-card__highlight group-card__highlight--new">Novo</span>
         ) : null}
-        <span className={`group-card__access${isOpen ? " group-card__access--open" : ""}`}>
-          {groupAccessLabel(group.accessMode)}
-        </span>
       </div>
       <div className="group-card__meta">
         <span>
@@ -138,20 +127,38 @@ function GroupExploreCard({ group }: { group: GroupDto }) {
           <i className="fa-regular fa-message" aria-hidden="true" /> {postsLabel(group.postCount)}
         </span>
       </div>
+      {joinError ? (
+        <p className="page-empty-note" style={{ color: "#b91c1c", margin: 0 }}>
+          {joinError}
+        </p>
+      ) : null}
       <div className="group-card__footer">
-        <button className={joinClass} type="button" disabled={group.isMember}>
-          {joinLabel}
-        </button>
+        {group.isMember ? (
+          <button
+            className="group-card__join group-card__join--member"
+            type="button"
+            onClick={() => navigate(`/grupos/${group.id}`)}
+          >
+            Abrir grupo
+          </button>
+        ) : (
+          <button
+            className="group-card__join"
+            type="button"
+            disabled={joinGroup.isPending}
+            onClick={() => void handleJoin()}
+          >
+            {joinGroup.isPending ? "Entrando..." : "Participar"}
+          </button>
+        )}
         <div className="group-card__actions">
           <button
             className="group-card__btn"
             type="button"
             aria-label={`Ver detalhes de ${group.name}`}
+            onClick={() => navigate(`/grupos/${group.id}`)}
           >
             <i className="fa-regular fa-eye" aria-hidden="true" />
-          </button>
-          <button className="group-card__btn" type="button" aria-label={`Salvar ${group.name}`}>
-            <i className="fa-regular fa-bookmark" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -223,8 +230,7 @@ export function GroupExplorePage() {
             {groups.length === 1 ? "l" : "is"} para explorar
           </div>
           <p className="welcome-banner__text">
-            Encontre grupos abertos para entrar imediatamente ou solicite participação nos que
-            exigem aprovação do administrador.
+            Clique em Participar para entrar imediatamente em qualquer grupo ativo da plataforma.
           </p>
         </div>
       </div>

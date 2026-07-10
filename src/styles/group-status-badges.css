@@ -1,0 +1,47 @@
+.group-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.group-status-badge--pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.group-status-badge--active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.group-status-badge--rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.group-status-badge--expired {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.group-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
