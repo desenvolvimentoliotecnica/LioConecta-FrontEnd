@@ -999,7 +999,7 @@ export interface LeaveRequestResultDto {
   recordId: string;
   status: string;
   message: string;
-  protocol: string;
+  protocol?: string;
 }
 
 export interface LeaveRequestItemDto {

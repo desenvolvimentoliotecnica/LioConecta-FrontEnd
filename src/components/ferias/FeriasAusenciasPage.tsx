@@ -47,6 +47,7 @@ export function FeriasAusenciasPage() {
   const [requestService, setRequestService] = useState<LeaveServiceDto | null>(null);
   const [helpService, setHelpService] = useState<LeaveServiceDto | null>(null);
   const [requestMessage, setRequestMessage] = useState<string | null>(null);
+  const [requestProtocol, setRequestProtocol] = useState<string | null>(null);
   const [requestError, setRequestError] = useState<string | null>(null);
   const [detailRecordId, setDetailRecordId] = useState<string | null>(
     searchParams.get("requestId"),
@@ -127,12 +128,14 @@ export function FeriasAusenciasPage() {
     endDate?: string;
     days?: number;
     notes?: string;
+    files?: File[];
   }) => {
     requestMutation.mutate(payload, {
       onSuccess: (result) => {
         setRequestService(null);
         setRequestError(null);
         setRequestMessage(result.message);
+        setRequestProtocol(result.protocol ?? null);
       },
       onError: (error) => {
         setRequestError(extractLeaveRequestError(error));
@@ -302,7 +305,11 @@ export function FeriasAusenciasPage() {
       <LeaveRequestResultModal
         open={requestMessage !== null}
         message={requestMessage}
-        onClose={() => setRequestMessage(null)}
+        protocol={requestProtocol}
+        onClose={() => {
+          setRequestMessage(null);
+          setRequestProtocol(null);
+        }}
       />
       <LeaveRequestResultModal
         open={requestError !== null}
