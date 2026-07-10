@@ -122,7 +122,13 @@ export function NotificationsMenu() {
               ))}
           </ul>
         ) : (
-          <p className="notifications-menu__empty">Tudo em dia! Nenhuma notificação pendente.</p>
+          <div className="notifications-menu__empty" role="status">
+            <span className="notifications-menu__empty-icon" aria-hidden="true">
+              <i className="fa-regular fa-bell" />
+            </span>
+            <strong className="notifications-menu__empty-title">Tudo em dia</strong>
+            <p className="notifications-menu__empty-text">Nenhuma notificação pendente no momento.</p>
+          </div>
         )}
         <Link className="notifications-menu__footer" to="/notificacoes" onClick={() => setOpen(false)}>
           Ver todas as notificações
