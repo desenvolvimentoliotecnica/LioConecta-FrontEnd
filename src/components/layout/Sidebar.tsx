@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { canAccessLoopModule, canAccessCompassModule, canAccessPulseModule, canAccessUniLioModule } from "../../api/auth";
+import { canAccessLoopModule, canAccessCompassModule, canAccessPulseModule, canAccessUniLioModule, hasRole } from "../../api/auth";
 import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
@@ -17,6 +17,7 @@ type SidebarItemConfig = {
   spacerBefore?: boolean;
   permission?: string | readonly string[];
   moduleGate?: ModuleGate;
+  adminRoleOnly?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -96,6 +97,13 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     href: "/admin/observabilidade",
     activePrefix: "/admin/observabilidade",
     permission: PERMISSIONS.analytics.view,
+  },
+  {
+    label: "DB Explorer",
+    icon: "fa-database",
+    href: "/admin/db-explorer",
+    activePrefix: "/admin/db-explorer",
+    adminRoleOnly: true,
   },
   {
     label: "E-mail",
@@ -205,6 +213,7 @@ export function Sidebar({ side, expanded, onToggle, activePath = "/" }: SidebarP
   const { data: unilioSettings } = useUniLioSettings();
   const baseItems = side === "left" ? LEFT_ITEMS : RIGHT_ITEMS;
   const items = baseItems.filter((item) => {
+    if (item.adminRoleOnly && !hasRole(me, "Admin")) return false;
     if (item.permission) {
       const granted =
         typeof item.permission === "string"

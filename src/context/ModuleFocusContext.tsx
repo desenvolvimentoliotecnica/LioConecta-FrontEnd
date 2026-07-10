@@ -10,7 +10,7 @@ type ModuleFocusContextValue = {
 
 const ModuleFocusContext = createContext<ModuleFocusContextValue | null>(null);
 
-const FOCUSABLE_MODULE_PREFIXES = ["/loop", "/pulse", "/compass", "/unilio"] as const;
+const FOCUSABLE_MODULE_PREFIXES = ["/loop", "/pulse", "/compass", "/unilio", "/admin/db-explorer"] as const;
 
 function isFocusableModulePath(pathname: string): boolean {
   if (pathname.startsWith("/unilio/curso/")) {

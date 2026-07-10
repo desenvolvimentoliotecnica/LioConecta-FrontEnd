@@ -398,6 +398,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "Hub de logs, métricas, acessos e investigação por correlation ID.",
         ),
         entry(
+          "DB Explorer",
+          "/admin/db-explorer",
+          "Consulta somente leitura ao PostgreSQL da aplicação e ao TOTVS RM — exclusivo para administradores.",
+        ),
+        entry(
           "Workers",
           "/admin/workers",
           "Monitoramento de jobs em background — execuções, logs e disparo manual.",

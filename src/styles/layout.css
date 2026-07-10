@@ -600,7 +600,8 @@ var(--wf-bg) 70%
 .body--module-focus .compass-page,
 .body--module-focus .loop-page,
 .body--module-focus .pulse-page,
-.body--module-focus .unilio-page {
+.body--module-focus .unilio-page,
+.body--module-focus .db-explorer-page {
   max-width: none;
   width: 100%;
 }
