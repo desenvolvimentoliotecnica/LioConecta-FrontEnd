@@ -1,0 +1,159 @@
+{
+  "marker": "E2E-FERIAS-SALDO-CLARITY-1783718476682",
+  "me": {
+    "id": "fd3f99b8-e74e-4832-b5e3-989ff4dff19d",
+    "slug": "elton-costa",
+    "name": "ELTON DE FREITAS COSTA",
+    "email": "elton.costa@liotecnica.com.br",
+    "title": "Anl De Negocios Sr",
+    "photoUrl": null,
+    "departmentName": "Sistemas",
+    "roles": [
+      0
+    ],
+    "permissions": [
+      {
+        "key": "activities.read",
+        "scope": 0
+      },
+      {
+        "key": "benefits.read",
+        "scope": 0
+      },
+      {
+        "key": "calendar.read",
+        "scope": 0
+      },
+      {
+        "key": "documents.read",
+        "scope": 3
+      },
+      {
+        "key": "facilities.request",
+        "scope": 0
+      },
+      {
+        "key": "favorites.manage",
+        "scope": 0
+      },
+      {
+        "key": "feed.interact",
+        "scope": 0
+      },
+      {
+        "key": "feed.read",
+        "scope": 0
+      },
+      {
+        "key": "groups.create",
+        "scope": 0
+      },
+      {
+        "key": "groups.read",
+        "scope": 0
+      },
+      {
+        "key": "helpdesk.read",
+        "scope": 0
+      },
+      {
+        "key": "leave.read",
+        "scope": 0
+      },
+      {
+        "key": "leave.request",
+        "scope": 0
+      },
+      {
+        "key": "legal.request",
+        "scope": 0
+      },
+      {
+        "key": "org_chart.view",
+        "scope": 3
+      },
+      {
+        "key": "payslips.read",
+        "scope": 0
+      },
+      {
+        "key": "people.profile.read",
+        "scope": 0
+      },
+      {
+        "key": "people.read",
+        "scope": 3
+      },
+      {
+        "key": "polls.read",
+        "scope": 0
+      },
+      {
+        "key": "ponto.read",
+        "scope": 0
+      },
+      {
+        "key": "ponto.request",
+        "scope": 0
+      },
+      {
+        "key": "portal.access",
+        "scope": 0
+      },
+      {
+        "key": "ramais.read",
+        "scope": 3
+      },
+      {
+        "key": "sitemap.read",
+        "scope": 0
+      },
+      {
+        "key": "systems.read",
+        "scope": 3
+      },
+      {
+        "key": "unilio.access",
+        "scope": 0
+      },
+      {
+        "key": "unilio.community.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.compliance.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.events.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.events.register",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.assess",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.certificates",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.recommendations.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.skills.read",
+        "scope": 0
+      }
+    ],
+    "subjectType": null,
+    "isTestUser": false
+  }
+}

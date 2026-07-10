@@ -57,6 +57,7 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Solicitações RH", path: "/servicos/solicitacoes-rh" },
   { label: "Ponto eletrônico", path: "/servicos/ponto-eletronico" },
   { label: "Gestão de ponto", path: "/servicos/ponto-eletronico/gestao", pontoManageOnly: true },
+  { label: "Movimentações", path: "/servicos/movimentacoes" },
   { label: "Vale-transporte", path: "/servicos/vale-transporte" },
   { label: "Reembolso de despesas", path: "/servicos/reembolso-despesas" },
   { label: "Adiantamento de viagem", path: "/servicos/adiantamento-viagem" },

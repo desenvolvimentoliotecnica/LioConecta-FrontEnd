@@ -10,6 +10,8 @@ export function validateVacationForm(input: {
   startDate: string;
   endDate: string;
   availableDays: number;
+  acquiringDays?: number;
+  nextLiberationAt?: string | null;
   days?: number;
 }): string | null {
   if (!input.startDate || !input.endDate) {
@@ -27,12 +29,20 @@ export function validateVacationForm(input: {
   }
 
   if (input.availableDays <= 0) {
-    return "Você não possui saldo de férias disponível.";
+    if ((input.acquiringDays ?? 0) > 0) {
+      const liberacao = input.nextLiberationAt
+        ? new Date(input.nextLiberationAt).toLocaleDateString("pt-BR")
+        : null;
+      return liberacao
+        ? `Você ainda não possui dias liberados para gozo. Há ${input.acquiringDays} dia(s) em aquisição (liberação a partir de ${liberacao}).`
+        : `Você ainda não possui dias liberados para gozo. Há ${input.acquiringDays} dia(s) em aquisição.`;
+    }
+    return "Você não possui saldo de férias liberado para solicitação.";
   }
 
   const days = input.days ?? countInclusiveDays(input.startDate, input.endDate);
   if (days > input.availableDays) {
-    return `Saldo insuficiente: ${days} dia(s) solicitado(s), ${input.availableDays} disponível(is).`;
+    return `Saldo insuficiente: ${days} dia(s) solicitado(s), ${input.availableDays} liberado(s) para gozo.`;
   }
 
   return null;

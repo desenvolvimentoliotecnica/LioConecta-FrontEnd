@@ -3,7 +3,9 @@ import {
   downloadLeaveManagementAttachment,
   downloadLeaveManagementPdf,
   openLeaveManagementPdf,
+  useLeaveManagementApprove,
   useLeaveManagementDetail,
+  useLeaveManagementReject,
 } from "../../api/hooks/useLeave";
 import type { LeaveAttachmentMetaDto } from "../../api/types";
 import { formatSensitiveCount } from "../../utils/money";
@@ -39,11 +41,34 @@ function attachmentIconClass(fileName: string, contentType: string): string {
 
 export function LeaveManagementDetailModal({ recordId, onClose }: Props) {
   const detailQuery = useLeaveManagementDetail(recordId);
+  const approveMutation = useLeaveManagementApprove();
+  const rejectMutation = useLeaveManagementReject();
   const detail = detailQuery.data;
   const attachments = detail?.attachments ?? [];
   const [pdfBusy, setPdfBusy] = useState(false);
   const [viewerAttachment, setViewerAttachment] = useState<LeaveAttachmentMetaDto | null>(null);
   const [downloadBusy, setDownloadBusy] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const decisionBusy = approveMutation.isPending || rejectMutation.isPending;
+  const canDecide = detail?.status?.toLowerCase() === "pending";
+
+  const handleDecide = async (action: "approve" | "reject") => {
+    if (!recordId) return;
+    setActionError(null);
+    try {
+      if (action === "approve") {
+        await approveMutation.mutateAsync({ id: recordId });
+      } else {
+        await rejectMutation.mutateAsync({ id: recordId });
+      }
+    } catch {
+      setActionError(
+        action === "approve"
+          ? "Não foi possível aprovar a solicitação."
+          : "Não foi possível rejeitar a solicitação.",
+      );
+    }
+  };
 
   const handlePdf = async (action: "download" | "print") => {
     if (!recordId) return;
@@ -87,6 +112,28 @@ export function LeaveManagementDetailModal({ recordId, onClose }: Props) {
         onClose={handleClose}
         footer={
           <>
+            {canDecide ? (
+              <>
+                <button
+                  type="button"
+                  className="pay-modal__btn"
+                  disabled={decisionBusy}
+                  data-testid="leave-gestao-approve"
+                  onClick={() => void handleDecide("approve")}
+                >
+                  Aprovar
+                </button>
+                <button
+                  type="button"
+                  className="pay-modal__btn pay-modal__btn--ghost"
+                  disabled={decisionBusy}
+                  data-testid="leave-gestao-reject"
+                  onClick={() => void handleDecide("reject")}
+                >
+                  Rejeitar
+                </button>
+              </>
+            ) : null}
             <button
               type="button"
               className="pay-modal__btn"
@@ -111,6 +158,11 @@ export function LeaveManagementDetailModal({ recordId, onClose }: Props) {
       >
         <div className="leave-gestao-detail" data-testid="leave-gestao-detail">
           {detailQuery.isLoading ? <p>Carregando detalhe…</p> : null}
+          {actionError ? (
+            <p className="leave-form__error" role="alert">
+              {actionError}
+            </p>
+          ) : null}
 
           {detail ? (
             <>

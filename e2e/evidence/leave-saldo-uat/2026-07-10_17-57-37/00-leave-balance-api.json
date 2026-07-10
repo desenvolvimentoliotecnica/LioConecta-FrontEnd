@@ -1,0 +1,18 @@
+{
+  "availableDays": 30,
+  "acquiredDays": 30,
+  "scheduledDays": 0,
+  "expiredDays": 0,
+  "periods": [
+    {
+      "label": "2026/2027",
+      "acquiredDays": 30,
+      "usedDays": 0,
+      "availableDays": 30,
+      "expiresAt": "2028-04-12"
+    }
+  ],
+  "notes": [
+    "Saldo consolidado RM: 30 dia(s) disponível(is)."
+  ]
+}

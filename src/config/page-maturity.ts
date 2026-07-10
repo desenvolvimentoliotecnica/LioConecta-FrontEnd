@@ -55,6 +55,7 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/servicos/solicitacoes-rh": "prototype",
   "/servicos/ponto-eletronico": "integrated",
   "/servicos/ponto-eletronico/gestao": "integrated",
+  "/servicos/movimentacoes": "prototype",
   "/servicos/vale-transporte": "prototype",
   "/servicos/reembolso-despesas": "prototype",
   "/servicos/adiantamento-viagem": "prototype",

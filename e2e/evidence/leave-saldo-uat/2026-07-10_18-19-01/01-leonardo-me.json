@@ -1,0 +1,292 @@
+{
+  "marker": "E2E-FERIAS-SALDO-CLARITY-1783718341293",
+  "me": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "email": "leonardo.mendes@liotecnica.com.br",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "roles": [
+      6,
+      0
+    ],
+    "permissions": [
+      {
+        "key": "activities.read",
+        "scope": 0
+      },
+      {
+        "key": "admin.email.manage",
+        "scope": 3
+      },
+      {
+        "key": "admin.integrations.test",
+        "scope": 3
+      },
+      {
+        "key": "admin.ldap.test",
+        "scope": 3
+      },
+      {
+        "key": "admin.settings.manage",
+        "scope": 3
+      },
+      {
+        "key": "admin.totvs.manage",
+        "scope": 3
+      },
+      {
+        "key": "admin.workers.manage",
+        "scope": 3
+      },
+      {
+        "key": "benefits.manage",
+        "scope": 3
+      },
+      {
+        "key": "benefits.read",
+        "scope": 0
+      },
+      {
+        "key": "calendar.read",
+        "scope": 0
+      },
+      {
+        "key": "compass.access",
+        "scope": 3
+      },
+      {
+        "key": "compass.export",
+        "scope": 3
+      },
+      {
+        "key": "compass.financial.read",
+        "scope": 3
+      },
+      {
+        "key": "compass.financial.reconcile",
+        "scope": 3
+      },
+      {
+        "key": "compass.manage",
+        "scope": 3
+      },
+      {
+        "key": "compass.read",
+        "scope": 3
+      },
+      {
+        "key": "documents.read",
+        "scope": 3
+      },
+      {
+        "key": "facilities.request",
+        "scope": 0
+      },
+      {
+        "key": "favorites.manage",
+        "scope": 0
+      },
+      {
+        "key": "feed.interact",
+        "scope": 0
+      },
+      {
+        "key": "feed.read",
+        "scope": 0
+      },
+      {
+        "key": "groups.approve",
+        "scope": 3
+      },
+      {
+        "key": "groups.create",
+        "scope": 0
+      },
+      {
+        "key": "groups.read",
+        "scope": 0
+      },
+      {
+        "key": "helpdesk.read",
+        "scope": 0
+      },
+      {
+        "key": "leave.approve",
+        "scope": 3
+      },
+      {
+        "key": "leave.manage",
+        "scope": 3
+      },
+      {
+        "key": "leave.read",
+        "scope": 0
+      },
+      {
+        "key": "leave.request",
+        "scope": 0
+      },
+      {
+        "key": "legal.request",
+        "scope": 0
+      },
+      {
+        "key": "loop.access",
+        "scope": 3
+      },
+      {
+        "key": "loop.approve",
+        "scope": 3
+      },
+      {
+        "key": "loop.manage",
+        "scope": 3
+      },
+      {
+        "key": "org_chart.edit",
+        "scope": 3
+      },
+      {
+        "key": "org_chart.govern",
+        "scope": 3
+      },
+      {
+        "key": "org_chart.view",
+        "scope": 3
+      },
+      {
+        "key": "payslips.audit",
+        "scope": 3
+      },
+      {
+        "key": "payslips.read",
+        "scope": 0
+      },
+      {
+        "key": "people.profile.read",
+        "scope": 0
+      },
+      {
+        "key": "people.read",
+        "scope": 3
+      },
+      {
+        "key": "people.salary.read",
+        "scope": 3
+      },
+      {
+        "key": "polls.read",
+        "scope": 0
+      },
+      {
+        "key": "ponto.admin",
+        "scope": 3
+      },
+      {
+        "key": "ponto.approve",
+        "scope": 3
+      },
+      {
+        "key": "ponto.manage",
+        "scope": 3
+      },
+      {
+        "key": "ponto.read",
+        "scope": 0
+      },
+      {
+        "key": "ponto.request",
+        "scope": 0
+      },
+      {
+        "key": "portal.access",
+        "scope": 0
+      },
+      {
+        "key": "pulse.access",
+        "scope": 3
+      },
+      {
+        "key": "pulse.manage",
+        "scope": 3
+      },
+      {
+        "key": "ramais.read",
+        "scope": 3
+      },
+      {
+        "key": "rbac.assignments.manage",
+        "scope": 3
+      },
+      {
+        "key": "rbac.roles.manage",
+        "scope": 3
+      },
+      {
+        "key": "rbac.test_users.manage",
+        "scope": 3
+      },
+      {
+        "key": "rh_requests.manage",
+        "scope": 3
+      },
+      {
+        "key": "sitemap.read",
+        "scope": 0
+      },
+      {
+        "key": "systems.read",
+        "scope": 3
+      },
+      {
+        "key": "transport.manage",
+        "scope": 3
+      },
+      {
+        "key": "unilio.access",
+        "scope": 0
+      },
+      {
+        "key": "unilio.community.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.compliance.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.events.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.events.register",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.assess",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.certificates",
+        "scope": 0
+      },
+      {
+        "key": "unilio.learn.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.recommendations.read",
+        "scope": 0
+      },
+      {
+        "key": "unilio.skills.read",
+        "scope": 0
+      }
+    ],
+    "subjectType": null,
+    "isTestUser": false
+  }
+}

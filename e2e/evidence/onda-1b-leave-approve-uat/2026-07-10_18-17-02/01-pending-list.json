@@ -1,0 +1,81 @@
+{
+  "marker": "E2E-1B-LEAVE-1783718222628",
+  "count": 8,
+  "sample": [
+    {
+      "id": "059211e9-a58a-451f-bb08-4a74ebd50066",
+      "serviceRequestId": "11dced48-e475-4385-b557-364c4eda9d8d",
+      "employeeName": "E2E Atestado Colaborador",
+      "employeeId": null,
+      "email": "e2e.atestado.colaborador@liotecnica.com.br",
+      "title": "Registrar Atestado Médico — solicitação",
+      "status": "pending",
+      "rmSyncStatus": null,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "days": 3,
+      "dataSource": "portal",
+      "createdAt": "2026-07-10T12:54:36.039071+00:00"
+    },
+    {
+      "id": "4e5125cb-204e-46d3-9bf6-db019f6b12f8",
+      "serviceRequestId": "75efb0f7-3016-4091-892a-84c4b84b397a",
+      "employeeName": "E2E Atestado Colaborador",
+      "employeeId": null,
+      "email": "e2e.atestado.colaborador@liotecnica.com.br",
+      "title": "Registrar Atestado Médico — solicitação",
+      "status": "pending",
+      "rmSyncStatus": null,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "days": 3,
+      "dataSource": "portal",
+      "createdAt": "2026-07-10T12:52:03.156096+00:00"
+    },
+    {
+      "id": "f4d2d332-5023-4f05-a8b9-c3f8aeb84a61",
+      "serviceRequestId": "ed5f5257-9d96-457a-9ba2-7ef7370d51df",
+      "employeeName": "E2E Atestado Colaborador",
+      "employeeId": null,
+      "email": "e2e.atestado.colaborador@liotecnica.com.br",
+      "title": "Registrar Atestado Médico — solicitação",
+      "status": "pending",
+      "rmSyncStatus": null,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "days": 3,
+      "dataSource": "portal",
+      "createdAt": "2026-07-10T12:48:48.251882+00:00"
+    },
+    {
+      "id": "2f1278d2-b047-41ba-9e76-de6c61e3b79b",
+      "serviceRequestId": "11ad199d-1a82-46f2-8dff-c0f21ae0158f",
+      "employeeName": "Leonardo Sabino Mendes",
+      "employeeId": "00000887",
+      "email": "leonardo.mendes@liotecnica.com.br",
+      "title": "Registrar Atestado Médico — solicitação",
+      "status": "pending",
+      "rmSyncStatus": null,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-13",
+      "days": 4,
+      "dataSource": "portal",
+      "createdAt": "2026-07-10T12:36:29.878523+00:00"
+    },
+    {
+      "id": "82543bc2-111a-4342-a069-24a3395d9ed1",
+      "serviceRequestId": "3714dbbc-3bd3-47f6-8b60-f0d1e289cf5d",
+      "employeeName": "Leonardo Sabino Mendes",
+      "employeeId": "00000887",
+      "email": "leonardo.mendes@liotecnica.com.br",
+      "title": "Registrar Atestado Médico — solicitação",
+      "status": "pending",
+      "rmSyncStatus": null,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "days": null,
+      "dataSource": "portal",
+      "createdAt": "2026-07-10T12:36:22.442388+00:00"
+    }
+  ]
+}

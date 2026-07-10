@@ -1048,6 +1048,8 @@ export interface BulkBenefitPreviewDto {
 
 export interface LeaveSummaryDto {
   availableDays: number;
+  acquiringDays: number;
+  nextLiberationAt?: string | null;
   pendingRequests: number;
   nextScheduledLabel?: string | null;
 }
@@ -1071,13 +1073,18 @@ export interface LeavePeriodDto {
   usedDays: number;
   availableDays: number;
   expiresAt?: string | null;
+  status: "liberado" | "em_aquisicao" | "vencido" | string;
+  liberatesAt?: string | null;
+  contextNote?: string | null;
 }
 
 export interface LeaveBalanceDto {
   availableDays: number;
+  acquiringDays: number;
   acquiredDays: number;
   scheduledDays: number;
   expiredDays: number;
+  nextLiberationAt?: string | null;
   periods: LeavePeriodDto[];
   notes: string[];
 }
