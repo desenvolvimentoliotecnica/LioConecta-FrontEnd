@@ -151,7 +151,7 @@ export function FeriasAusenciasPage() {
         description="Solicite férias, registre ausências, consulte saldos e acompanhe o status das suas solicitações com o time de RH."
         actions={
           showGestaoLink ? (
-            <Link className="pay-btn pay-btn--ghost" to="/servicos/ferias-ausencias/gestao">
+            <Link className="leave-btn leave-btn--ghost" to="/servicos/ferias-ausencias/gestao">
               Gestão de férias
             </Link>
           ) : null

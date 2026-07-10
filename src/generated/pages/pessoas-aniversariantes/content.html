@@ -1,60 +1,58 @@
-        <div class="section-page-head section-page-head--pessoas">
-        <header class="page-header page-header--pessoas">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Início</a>
-            <span class="breadcrumb__sep">/</span>
-            <a href="/pessoas">Pessoas</a>
-            <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Aniversariantes</span>
-          </nav>
-          <div class="page-header__row">
-            <div>
-              <h1 class="page-header__title">Aniversariantes</h1>
-              <p class="page-header__desc">
-                Celebre com quem faz aniversário hoje, esta semana ou ao longo do mês. Envie parabéns e fortaleça o clima de equipe na LioConecta.
-              </p>
-            </div>
-          </div>
-        </header>
-        </div>
+<div class="section-page-head section-page-head--pessoas">
+  <header class="page-header page-header--pessoas">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="/pessoas">Pessoas</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Aniversariantes</span>
+    </nav>
+    <h1 class="page-header__title">Aniversariantes</h1>
+    <div class="page-header__subtitle-row">
+      <p class="page-header__desc">
+        Celebre com quem faz aniversário hoje, esta semana ou ao longo do mês. Envie parabéns e fortaleça o clima de equipe na LioConecta.
+      </p>
+    </div>
+  </header>
+  <hr class="section-page-head__rule" />
+  <div class="page-toolbar">
+    <div class="page-toolbar__filters">
+      <div class="page-filters" id="birthday-filters" role="group" aria-label="Filtros por período">
+        <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+        <button class="filter-chip" type="button" data-filter="today">Hoje</button>
+        <button class="filter-chip" type="button" data-filter="week">Esta semana</button>
+        <button class="filter-chip" type="button" data-filter="month">Este mês</button>
+        <button class="filter-chip" type="button" data-filter="next-month">Próximo mês</button>
+      </div>
+      <div class="page-filters__month">
+        <label class="page-filters__month-label" for="birthday-month-select">Mês</label>
+        <select class="birthday-month-select" id="birthday-month-select" aria-label="Filtrar por mês do ano">
+          <option value="">Todos os meses</option>
+        </select>
+      </div>
+    </div>
+    <label class="page-search" for="birthday-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input
+        id="birthday-search"
+        class="page-search__input"
+        type="search"
+        placeholder="Buscar por nome..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </label>
+  </div>
+</div>
 
-        <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
-          <div>
-            <div class="welcome-banner__title">Aniversariantes</div>
-            <p class="welcome-banner__text" id="birthday-banner-text">Carregando celebrações...</p>
-          </div>
-        </div>
+<div class="welcome-banner">
+  <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-cake-candles"></i></div>
+  <div>
+    <div class="welcome-banner__title">Aniversariantes</div>
+    <p class="welcome-banner__text" id="birthday-banner-text">Carregando celebrações...</p>
+  </div>
+</div>
 
-        <div class="page-toolbar">
-          <div class="page-toolbar__filters">
-            <div class="page-filters" id="birthday-filters" role="group" aria-label="Filtros por período">
-              <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-              <button class="filter-chip" type="button" data-filter="today">Hoje</button>
-              <button class="filter-chip" type="button" data-filter="week">Esta semana</button>
-              <button class="filter-chip" type="button" data-filter="month">Este mês</button>
-              <button class="filter-chip" type="button" data-filter="next-month">Próximo mês</button>
-            </div>
-            <div class="page-filters__month">
-              <label class="page-filters__month-label" for="birthday-month-select">Mês</label>
-              <select class="birthday-month-select" id="birthday-month-select" aria-label="Filtrar por mês do ano">
-                <option value="">Todos os meses</option>
-              </select>
-            </div>
-          </div>
-          <label class="page-search" for="birthday-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <input
-              id="birthday-search"
-              class="page-search__input"
-              type="search"
-              placeholder="Buscar por nome..."
-              autocomplete="off"
-              spellcheck="false"
-            />
-          </label>
-        </div>
+<div class="directory" id="birthday-root" aria-label="Aniversariantes por período"></div>
 
-        <div class="directory" id="birthday-root" aria-label="Aniversariantes por período"></div>
-
-        <p class="page-empty-note" id="birthday-count">Carregando...</p>
+<p class="page-empty-note" id="birthday-count">Carregando...</p>

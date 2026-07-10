@@ -14,11 +14,19 @@
   --sph-chip-border: #cbd5e1;
   --sph-chip-color: #334155;
   --sph-watermark: none;
+  /* Altura mínima — padrão /pessoas/diretorio; cresce se a toolbar precisar */
+  --sph-height: 196px;
+  --sph-toolbar-h: 38px;
 
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: var(--sph-height);
+  height: auto;
   margin-bottom: var(--wf-gap);
-  padding: 18px 20px 14px;
+  padding: 14px 20px 12px;
   border-radius: var(--wf-radius);
   border: 1px solid var(--sph-border);
   background:
@@ -154,10 +162,9 @@
   --sph-chip-border: #fdba74;
   --sph-chip-color: #c2410c;
   --sph-watermark: url("/headers/wm-documentos.png");
-  padding: 14px 18px 12px;
 }
 
-/* Filtros/busca fora do card do header (páginas de documentos) */
+/* Filtros/busca fora do card do header (páginas de documentos) — legado; preferir toolbar no SectionPageHead */
 .main--section-documentos > .page-toolbar {
   margin-bottom: var(--wf-gap);
 }
@@ -201,10 +208,9 @@
   --sph-chip-border: #c4b5fd;
   --sph-chip-color: #6d28d9;
   --sph-watermark: url("/headers/wm-grupos.png");
-  padding: 14px 18px 12px;
 }
 
-/* Filtros/busca fora do card do header (Meus grupos / Explorar) */
+/* Filtros/busca fora do card do header (Meus grupos / Explorar) — legado; preferir toolbar no SectionPageHead */
 .main--section-grupos > .page-toolbar {
   margin-bottom: var(--wf-gap);
 }
@@ -264,11 +270,16 @@
 .section-page-head .page-header {
   position: relative;
   z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .section-page-head [class*="page-header--"] .breadcrumb {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .section-page-head [class*="page-header--"] .breadcrumb a {
@@ -290,37 +301,126 @@
 
 .section-page-head [class*="page-header--"] .page-header__title {
   color: #0f172a;
-  font-size: 26px;
+  font-size: 24px;
   letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-page-head .page-header__subtitle-row,
+.section-page-head .page-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.section-page-head .page-header__subtitle {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.section-page-head .page-header__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .section-page-head [class*="page-header--"] .page-header__desc {
   color: #475569;
-  line-height: 1.5;
+  line-height: 1.45;
+  font-size: 13px;
+  margin: 0;
+  max-width: 640px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(1.45em * 2);
 }
 
 .section-page-head [class*="page-header--"] .page-header__sync-meta {
   color: #64748b;
-  font-size: 13px;
-  line-height: 1.4;
-  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.section-page-head .page-toolbar,
-.section-page-head .pay-toolbar,
-.section-page-head .docs-hub__controls {
+.section-page-head__rule {
   position: relative;
   z-index: 1;
-  margin-bottom: 0;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(226, 232, 240, 0.85);
+  flex-shrink: 0;
+  width: 100%;
+  height: 0;
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
 }
 
-.section-page-head .page-toolbar__filters {
+.section-page-head__toolbar {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  min-height: var(--sph-toolbar-h);
+  height: auto;
+}
+
+.section-page-head__toolbar > .page-toolbar,
+.section-page-head__toolbar > .pay-toolbar,
+.section-page-head__toolbar > .docs-hub__controls,
+.section-page-head > .page-toolbar,
+.section-page-head > .pay-toolbar,
+.section-page-head > .docs-hub__controls {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-top: none;
+  min-height: var(--sph-toolbar-h);
+  height: auto;
+  align-items: center;
+}
+
+/* Legacy: toolbar direto após header (sem <hr> no HTML) */
+.section-page-head > .page-header + .page-toolbar,
+.section-page-head > .page-header + .pay-toolbar,
+.section-page-head > .page-header + .docs-hub__controls {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+  height: auto;
+  min-height: var(--sph-toolbar-h);
+}
+
+.section-page-head .page-toolbar__filters,
+.section-page-head .pay-toolbar__filters,
+.section-page-head .page-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.section-page-head .pay-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -328,7 +428,7 @@
 .section-page-head .pay-search,
 .section-page-head .docs-hub__search {
   min-width: 260px;
-  height: 38px;
+  height: var(--sph-toolbar-h);
   border: 1px solid #cbd5e1;
   background: #fff;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
@@ -339,18 +439,22 @@
 }
 
 .section-page-head .page-search__input,
+.section-page-head .page-search input,
 .section-page-head .pay-search input,
 .section-page-head .docs-hub__search input {
   border: none;
   outline: none;
   background: transparent;
+  box-shadow: none;
   flex: 1;
   min-width: 0;
+  height: 100%;
   font: inherit;
   color: #0f172a;
 }
 
 .section-page-head .page-search__input::placeholder,
+.section-page-head .page-search input::placeholder,
 .section-page-head .pay-search input::placeholder,
 .section-page-head .docs-hub__search input::placeholder {
   color: var(--wf-text-muted);
@@ -378,4 +482,21 @@
   background: var(--sph-chip-bg);
   border-color: var(--sph-chip-border);
   color: var(--sph-chip-color);
+}
+
+.section-page-head .page-toolbar,
+.section-page-head .pay-toolbar,
+.section-page-head .docs-hub__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 12px;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .section-page-head [class*="page-header--"] .page-header__title {
+    white-space: normal;
+  }
 }

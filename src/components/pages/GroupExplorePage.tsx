@@ -185,32 +185,33 @@ export function GroupExplorePage() {
         title="Explorar Grupos"
         current="Explorar grupos"
         description="Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender com outros times e participar de novas iniciativas."
+        toolbar={
+          <div className="page-toolbar">
+            <div className="page-filters" role="group" aria-label="Filtros">
+              {EXPLORE_FILTERS.map((entry) => (
+                <button
+                  key={entry.id}
+                  className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
+                  type="button"
+                  onClick={() => setFilter(entry.id)}
+                >
+                  {entry.label}
+                </button>
+              ))}
+            </div>
+            <label className="page-search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar grupos para participar..."
+                aria-label="Buscar grupos para participar"
+              />
+            </label>
+          </div>
+        }
       />
-
-      <div className="page-toolbar">
-        <div className="page-filters" role="group" aria-label="Filtros">
-          {EXPLORE_FILTERS.map((entry) => (
-            <button
-              key={entry.id}
-              className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
-              type="button"
-              onClick={() => setFilter(entry.id)}
-            >
-              {entry.label}
-            </button>
-          ))}
-        </div>
-        <label className="page-search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar grupos para participar..."
-            aria-label="Buscar grupos para participar"
-          />
-        </label>
-      </div>
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">

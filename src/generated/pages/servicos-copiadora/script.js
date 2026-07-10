@@ -102,9 +102,14 @@
       root.innerHTML = items.map(renderItem).join("");
 
       function applyFilter(filter) {
+        const query = (document.getElementById("fac-copiadora-search")?.value || "").trim().toLowerCase();
         let visible = 0;
         root.querySelectorAll(".benefit-card").forEach(function (card) {
-          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          const catMatch = filter === "all" || card.getAttribute("data-cat") === filter;
+          const title = (card.querySelector(".benefit-card__title")?.textContent || "").toLowerCase();
+          const desc = (card.querySelector(".benefit-card__desc")?.textContent || "").toLowerCase();
+          const textMatch = !query || title.includes(query) || desc.includes(query);
+          const match = catMatch && textMatch;
           card.hidden = !match;
           if (match) visible += 1;
         });
@@ -123,4 +128,13 @@
           applyFilter(chip.getAttribute("data-filter") || "all");
         });
       }
+
+      const searchInput = document.getElementById("fac-copiadora-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          const active = filters ? filters.querySelector(".filter-chip.is-active") : null;
+          applyFilter(active ? active.getAttribute("data-filter") || "all" : "all");
+        });
+      }
     })();
+

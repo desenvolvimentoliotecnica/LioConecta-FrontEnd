@@ -1,41 +1,39 @@
-        <div class="section-page-head section-page-head--pessoas">
-        <header class="page-header page-header--pessoas">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Início</a>
-            <span class="breadcrumb__sep">/</span>
-            <a href="/pessoas">Pessoas</a>
-            <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Novos colaboradores</span>
-          </nav>
-          <div class="page-header__row">
-            <div>
-              <h1 class="page-header__title">Novos Colaboradores</h1>
-              <p class="page-header__desc">
-                Conheça quem acabou de chegar à LioConecta. Dê boas-vindas, conecte-se com os novos times e acompanhe as admissões recentes.
-              </p>
-            </div>
-          </div>
-        </header>
-        </div>
+<div class="section-page-head section-page-head--pessoas">
+  <header class="page-header page-header--pessoas">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="/pessoas">Pessoas</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Novos colaboradores</span>
+    </nav>
+    <h1 class="page-header__title">Novos Colaboradores</h1>
+    <div class="page-header__subtitle-row">
+      <p class="page-header__desc">
+        Conheça quem acabou de chegar à LioConecta. Dê boas-vindas, conecte-se com os novos times e acompanhe as admissões recentes.
+      </p>
+    </div>
+  </header>
+  <hr class="section-page-head__rule" />
+  <div class="page-toolbar">
+    <div class="page-filters" id="newcomers-filters" role="group" aria-label="Filtros">
+      <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+    </div>
+    <div class="page-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      Buscar novos colaboradores...
+    </div>
+  </div>
+</div>
 
-        <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></div>
-          <div>
-            <div class="welcome-banner__title">Boas-vindas aos novos membros!</div>
-            <p class="welcome-banner__text" id="newcomers-banner-text">Carregando admissões do mês...</p>
-          </div>
-        </div>
+<div class="welcome-banner">
+  <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></div>
+  <div>
+    <div class="welcome-banner__title">Boas-vindas aos novos membros!</div>
+    <p class="welcome-banner__text" id="newcomers-banner-text">Carregando admissões do mês...</p>
+  </div>
+</div>
 
-        <div class="page-toolbar">
-          <div class="page-filters" id="newcomers-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-          </div>
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar novos colaboradores...
-          </div>
-        </div>
+<div class="directory" id="newcomers-root" aria-label="Novos colaboradores por mês"></div>
 
-        <div class="directory" id="newcomers-root" aria-label="Novos colaboradores por mês"></div>
-
-        <p class="page-empty-note" id="newcomers-count">Carregando...</p>
+<p class="page-empty-note" id="newcomers-count">Carregando...</p>

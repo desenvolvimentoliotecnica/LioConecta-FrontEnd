@@ -475,6 +475,9 @@
 
 .leave-requests-list__item {
   width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   text-align: left;
   border: 1px dashed var(--wf-border);
   border-radius: 8px;
@@ -487,6 +490,63 @@
 .leave-requests-list__item:hover {
   border-color: #7dd3fc;
   background: #f0f9ff;
+}
+
+.leave-requests-list__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.leave-requests-list__icon--ferias {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0284c7;
+}
+
+.leave-requests-list__icon--licenca {
+  background: #fce7f3;
+  border-color: #f9a8d4;
+  color: #db2777;
+}
+
+.leave-requests-list__icon--afastamento {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  color: #d97706;
+}
+
+.leave-requests-list__icon--consulta {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #7c3aed;
+}
+
+.leave-requests-list__icon--banco {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
+}
+
+.leave-requests-list__icon--outro {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.leave-requests-list__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .leave-requests-list__head {
@@ -511,7 +571,98 @@
 }
 
 .leave-detail__header {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.leave-detail__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.leave-detail__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.leave-detail__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 0 0 14px;
+}
+
+.leave-detail__meta div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.leave-detail__meta dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+}
+
+.leave-detail__meta dt i {
+  width: 12px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.leave-detail__meta dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.leave-detail__meta dd a {
+  color: #0369a1;
+  text-decoration: none;
+}
+
+.leave-detail__meta dd a:hover {
+  text-decoration: underline;
+}
+
+.leave-detail__notes-box {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.leave-detail__notes-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+}
+
+.leave-detail__notes-box .leave-detail__note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #334155;
 }
 
 .leave-detail__period,
@@ -519,6 +670,36 @@
 .leave-detail__status-note {
   font-size: 13px;
   color: var(--wf-text-muted);
+}
+
+.leave-detail__source {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.leave-detail__source i {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: #2563eb;
+}
+
+.leave-detail__status-note {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .leave-detail__meta {
+    grid-template-columns: 1fr;
+  }
 }
 
 .leave-timeline__title {
@@ -530,24 +711,44 @@
 .leave-timeline {
   list-style: none;
   margin: 0 0 16px;
-  padding: 0 0 0 8px;
-  border-left: 2px solid #e2e8f0;
+  padding: 0;
+  border: 0;
 }
 
 .leave-timeline__item {
   position: relative;
-  padding: 0 0 16px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 0 18px;
+}
+
+.leave-timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.leave-timeline__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  bottom: 0;
+  width: 2px;
+  background: #e2e8f0;
 }
 
 .leave-timeline__dot {
-  position: absolute;
-  left: -9px;
-  top: 4px;
-  width: 10px;
-  height: 10px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
   border-radius: 50%;
   background: #0284c7;
   border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #e2e8f0;
 }
 
 .leave-timeline__item--pending .leave-timeline__dot {
@@ -558,20 +759,28 @@
   background: #ef4444;
 }
 
+.leave-timeline__content {
+  min-width: 0;
+  flex: 1;
+}
+
 .leave-timeline__label {
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.35;
   color: #0f172a;
 }
 
 .leave-timeline__when {
   font-size: 12px;
+  line-height: 1.35;
   color: var(--wf-text-muted);
 }
 
 .leave-timeline__detail {
   margin-top: 4px;
   font-size: 12px;
+  line-height: 1.4;
   color: #475569;
 }
 
@@ -582,35 +791,12 @@
   text-align: center;
 }
 
-.leave-gestao-layout {
-  display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.2fr);
-  gap: 20px;
-  align-items: start;
-}
-
-.leave-gestao-filters {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.leave-gestao-filters label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-}
-
-.leave-gestao-filters select,
-.leave-gestao-filters input {
-  border: 1px solid var(--wf-border);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 13px;
+.leave-gestao-list {
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .leave-requests-list__item.is-selected {
@@ -618,19 +804,11 @@
   box-shadow: 0 0 0 1px #7dd3fc;
 }
 
-.leave-gestao-detail,
-.leave-gestao-list {
-  background: #fff;
-  border: 1px solid var(--wf-border);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.leave-gestao-actions {
+.leave-gestao-detail {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0 16px;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
 }
 
 .leave-attachments {
@@ -677,8 +855,20 @@
 }
 
 .leave-attachments__meta i {
-  color: #0369a1;
   font-size: 18px;
+  flex-shrink: 0;
+}
+
+.leave-attachments__icon--pdf {
+  color: #dc2626;
+}
+
+.leave-attachments__icon--image {
+  color: #0891b2;
+}
+
+.leave-attachments__icon--file {
+  color: #64748b;
 }
 
 .leave-attachments__name {
@@ -687,12 +877,6 @@
   font-weight: 600;
   color: #0f172a;
   word-break: break-word;
-}
-
-.leave-attachments__size {
-  display: block;
-  font-size: 12px;
-  color: #64748b;
 }
 
 .leave-attachments__actions {
@@ -765,6 +949,50 @@
   .leave-stats { grid-template-columns: 1fr; }
   .leave-grid { grid-template-columns: 1fr; }
   .leave-form { grid-template-columns: 1fr; }
-  .leave-gestao-layout { grid-template-columns: 1fr; }
-  .leave-gestao-filters { grid-template-columns: 1fr; }
+}
+
+/* Botões — substituem pay-btn (inexistente no design system) */
+.leave-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.leave-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.leave-btn--primary {
+  background: #db2777;
+  color: #fff;
+  border-color: #db2777;
+}
+
+.leave-btn--primary:hover:not(:disabled) {
+  background: #be185d;
+  border-color: #be185d;
+}
+
+.leave-btn--ghost {
+  background: #fff;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.leave-btn--ghost:hover:not(:disabled) {
+  background: #fdf2f8;
+  border-color: #f9a8d4;
+  color: #9d174d;
 }
