@@ -194,9 +194,14 @@ export function Topbar() {
   const { hasPermission } = usePermissions();
   const showBadges = portalUi.maturityBadgesEnabled;
   const canManageBenefits = hasPermission(PERMISSIONS.benefits.manage);
+  const canManageLeave =
+    hasPermission(PERMISSIONS.leave.manage) || hasPermission(PERMISSIONS.leave.approve);
 
-  const filterServicosItem = (item: NavLinkItem) =>
-    !item.benefitsManageOnly || canManageBenefits;
+  const filterServicosItem = (item: NavLinkItem) => {
+    if (item.benefitsManageOnly && !canManageBenefits) return false;
+    if (item.leaveManageOnly && !canManageLeave) return false;
+    return true;
+  };
   const visibleServicosLinks = servicosLinks.filter(filterServicosItem);
 
   return (

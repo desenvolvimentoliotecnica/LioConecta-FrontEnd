@@ -41,9 +41,9 @@ export function FeriasGestaoPage() {
   const listQuery = useLeaveManagementList({
     status: status || undefined,
     q: query || undefined,
-    enabled: meQuery.isSuccess,
+    enabled: meQuery.isSuccess && roleHint,
   });
-  const detailQuery = useLeaveManagementDetail(selectedId);
+  const detailQuery = useLeaveManagementDetail(selectedId && roleHint ? selectedId : null);
 
   useEffect(() => {
     if (requestId) {
@@ -51,8 +51,9 @@ export function FeriasGestaoPage() {
     }
   }, [requestId]);
 
-  const forbidden =
+  const apiForbidden =
     listQuery.error instanceof ApiError && listQuery.error.status === 403;
+  const forbidden = meQuery.isSuccess && (!roleHint || apiForbidden);
 
   const items = useMemo(() => listQuery.data ?? [], [listQuery.data]);
   const detail = detailQuery.data;
@@ -93,15 +94,20 @@ export function FeriasGestaoPage() {
         <section className="leave-gestao-denied" role="alert">
           <h2>Acesso restrito</h2>
           <p>
-            A gestão de férias é disponível para gestores, RH e administradores.
-            Se você deveria ter acesso, peça inclusão em{" "}
-            <code>leave.notify_emails</code> nas Configurações do Backend.
+            A gestão de férias é disponível para quem tem a permissão{" "}
+            <code>leave.manage</code> ou <code>leave.approve</code> (regras RH, Gestor ou Key User RH
+            no Controle de Acesso). O perfil Administrador sozinho não inclui essa permissão.
           </p>
-          {!roleHint ? (
-            <p className="leave-gestao-denied__hint">
-              Seu perfil atual não inclui as roles Manager, HR ou Admin.
-            </p>
-          ) : null}
+          <p className="leave-gestao-denied__hint">
+            Se você deveria gerenciar férias da equipe, peça a regra <strong>Recursos Humanos</strong>{" "}
+            ou <strong>Gestor</strong> em{" "}
+            <Link to="/admin/controle-acesso">Controle de Acesso</Link>.
+          </p>
+          <div className="leave-gestao-denied__actions">
+            <Link className="pay-btn" to="/servicos/ferias-ausencias">
+              Ir para Minhas férias
+            </Link>
+          </div>
         </section>
       ) : (
         <div className="leave-gestao-layout">

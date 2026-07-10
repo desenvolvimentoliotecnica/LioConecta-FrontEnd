@@ -544,6 +544,15 @@
   color: #9a3412;
 }
 
+.leave-gestao-denied__hint a {
+  color: inherit;
+  font-weight: 700;
+}
+
+.leave-gestao-denied__actions {
+  margin-top: 16px;
+}
+
 @media (max-width: 900px) {
   .leave-stats { grid-template-columns: 1fr; }
   .leave-grid { grid-template-columns: 1fr; }
