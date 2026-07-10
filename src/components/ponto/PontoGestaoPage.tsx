@@ -37,6 +37,12 @@ function statusLabel(status: string): string {
   }
 }
 
+function hourBalanceTone(hours: number): "positive" | "negative" | "zero" {
+  if (hours > 0) return "positive";
+  if (hours < 0) return "negative";
+  return "zero";
+}
+
 const STATUS_FILTERS = [
   { id: "", label: "Todos" },
   { id: "pending", label: "Pendente" },
@@ -81,6 +87,10 @@ export function PontoGestaoPage() {
   const forbidden = meQuery.isSuccess && (!roleHint || apiForbidden);
   const items = useMemo(() => listQuery.data ?? [], [listQuery.data]);
   const team = useMemo(() => teamQuery.data ?? [], [teamQuery.data]);
+  const selectedMember = useMemo(
+    () => team.find((m) => m.personId === selectedPersonId) ?? null,
+    [team, selectedPersonId],
+  );
 
   const selectRequest = (id: string) => {
     setSelectedId(id);
@@ -91,6 +101,14 @@ export function PontoGestaoPage() {
     setSelectedId(null);
     setSearchParams({}, { replace: true });
   };
+
+  const personInitials = (name: string) =>
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("");
 
   return (
     <main className={sectionMainClass("rh")}>
@@ -253,7 +271,9 @@ export function PontoGestaoPage() {
                       {member.periodLabel ? ` · ${member.periodLabel}` : ""}
                     </span>
                   </span>
-                  <span className="leave-badge leave-badge--pending">
+                  <span
+                    className={`leave-badge leave-badge--hour-balance leave-badge--hour-balance-${hourBalanceTone(member.balanceHours)}`}
+                  >
                     {formatHours(member.balanceHours, true)}
                   </span>
                 </button>
@@ -269,48 +289,111 @@ export function PontoGestaoPage() {
 
       <ContrachequeModal
         open={selectedPersonId !== null}
-        title="Banco de horas — colaborador"
+        title={
+          selectedMember
+            ? `Banco de horas — ${selectedMember.name}`
+            : "Banco de horas — colaborador"
+        }
         wide
         showValues={showValues}
         onToggleShowValues={() => setShowValues((v) => !v)}
         onClose={() => setSelectedPersonId(null)}
       >
-        {personBhQuery.isLoading ? <p>Carregando…</p> : null}
+        {selectedMember ? (
+          <header className="bh-detail-person">
+            <span className="bh-detail-person__avatar" aria-hidden="true">
+              {personInitials(selectedMember.name)}
+            </span>
+            <div className="bh-detail-person__body">
+              <h3 className="bh-detail-person__name">{selectedMember.name}</h3>
+              <p className="bh-detail-person__meta">
+                {selectedMember.employeeId ? (
+                  <span>Chapa {selectedMember.employeeId}</span>
+                ) : (
+                  <span>Sem chapa no cadastro</span>
+                )}
+                {selectedMember.role ? <span>· {selectedMember.role}</span> : null}
+              </p>
+            </div>
+          </header>
+        ) : null}
+
+        {personBhQuery.isLoading ? <p className="pay-status">Carregando extrato…</p> : null}
         {personBhQuery.data?.userMessage ? (
           <p className="pay-empty">{personBhQuery.data.userMessage}</p>
         ) : null}
         {personBhQuery.data && !personBhQuery.data.userMessage ? (
           <>
-            <div className="pay-summary-row">
-              <div className="pay-summary-box">
-                <div className="pay-summary-box__label">Saldo atual</div>
-                <div className="pay-summary-box__value">
+            <div className="bh-detail-summary">
+              <div className="bh-detail-summary__card">
+                <span className="bh-detail-summary__label">Saldo atual</span>
+                <span
+                  className={`leave-badge leave-badge--hour-balance leave-badge--hour-balance-${hourBalanceTone(personBhQuery.data.balanceHours)}`}
+                >
                   {formatHours(personBhQuery.data.balanceHours, showValues)}
-                </div>
+                </span>
+              </div>
+              <div className="bh-detail-summary__card">
+                <span className="bh-detail-summary__label">Período RM</span>
+                <span className="bh-detail-summary__value">
+                  {personBhQuery.data.periodLabel ??
+                    selectedMember?.periodLabel ??
+                    "—"}
+                </span>
+              </div>
+              <div className="bh-detail-summary__card">
+                <span className="bh-detail-summary__label">Movimentos</span>
+                <span className="bh-detail-summary__value">
+                  {personBhQuery.data.entries.length}
+                </span>
               </div>
             </div>
-            {personBhQuery.data.entries.length === 0 ? (
-              <p className="pay-empty">Sem movimentos recentes.</p>
-            ) : (
-              <table className="pay-table">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Horas</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {personBhQuery.data.entries.map((entry) => (
-                    <tr key={`${entry.date}-${entry.description}-${entry.hours}`}>
-                      <td>{entry.date}</td>
-                      <td>{entry.description}</td>
-                      <td>{formatHours(entry.hours, showValues)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+
+            <div className="bh-detail-ledger">
+              <div className="bh-detail-ledger__head">
+                <h4 className="bh-detail-ledger__title">Extrato recente</h4>
+                {personBhQuery.data.dataSource ? (
+                  <span className="bh-detail-ledger__source">
+                    Fonte: {personBhQuery.data.dataSource}
+                  </span>
+                ) : null}
+              </div>
+
+              {personBhQuery.data.entries.length === 0 ? (
+                <p className="pay-empty">Sem movimentos recentes neste período.</p>
+              ) : (
+                <ul className="bh-detail-ledger__list">
+                  {personBhQuery.data.entries.map((entry) => {
+                    const tone = hourBalanceTone(entry.hours);
+                    const isCredit = entry.hours > 0;
+                    return (
+                      <li
+                        key={`${entry.date}-${entry.description}-${entry.hours}-${entry.type}`}
+                        className="bh-detail-ledger__item"
+                      >
+                        <span
+                          className={`bh-detail-ledger__icon bh-detail-ledger__icon--${tone}`}
+                          aria-hidden="true"
+                        >
+                          <i
+                            className={`fa-solid ${isCredit ? "fa-plus" : entry.hours < 0 ? "fa-minus" : "fa-equals"}`}
+                          />
+                        </span>
+                        <div className="bh-detail-ledger__body">
+                          <span className="bh-detail-ledger__desc">{entry.description}</span>
+                          <span className="bh-detail-ledger__date">{entry.date}</span>
+                        </div>
+                        <span
+                          className={`leave-badge leave-badge--hour-balance leave-badge--hour-balance-${tone} leave-badge--hour-balance-sm`}
+                        >
+                          {formatHours(entry.hours, showValues)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
           </>
         ) : null}
       </ContrachequeModal>

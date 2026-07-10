@@ -501,3 +501,206 @@
     flex-direction: column;
   }
 }
+
+/* Detalhe banco de horas (gestão — modal do colaborador) */
+.bh-detail-person {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 55%, #fef3c7 100%);
+  border: 1px solid #fdba74;
+}
+
+.bh-detail-person__avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #9a3412;
+  background: #fff;
+  border: 1px solid #fdba74;
+}
+
+.bh-detail-person__body {
+  min-width: 0;
+}
+
+.bh-detail-person__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #9a3412;
+  line-height: 1.25;
+}
+
+.bh-detail-person__meta {
+  margin: 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  color: #c2410c;
+}
+
+.bh-detail-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.bh-detail-summary__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.bh-detail-summary__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.bh-detail-summary__value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.bh-detail-ledger {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bh-detail-ledger__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.bh-detail-ledger__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bh-detail-ledger__source {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.bh-detail-ledger__list {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 160px;
+  max-height: min(42vh, 360px);
+  overflow-x: hidden;
+  overflow-y: scroll; /* sempre reserva a barra — deixa claro que há mais itens */
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #e2e8f0;
+}
+
+.bh-detail-ledger__list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bh-detail-ledger__list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.bh-detail-ledger__list::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
+
+.bh-detail-ledger__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.bh-detail-ledger__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.bh-detail-ledger__icon--positive {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.bh-detail-ledger__icon--negative {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.bh-detail-ledger__icon--zero {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.bh-detail-ledger__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bh-detail-ledger__desc {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.bh-detail-ledger__date {
+  font-size: 12px;
+  color: #64748b;
+}
+
+@media (max-width: 700px) {
+  .bh-detail-summary {
+    grid-template-columns: 1fr;
+  }
+}

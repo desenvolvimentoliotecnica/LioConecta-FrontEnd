@@ -1,0 +1,61 @@
+{
+  "directReportsCount": 8,
+  "directReports": [
+    {
+      "slug": "davi-silva",
+      "name": "Davi Oliveira da Silva",
+      "title": "Consultor QualiIT",
+      "photoUrl": null,
+      "departmentName": null
+    },
+    {
+      "slug": "elton-costa",
+      "name": "ELTON DE FREITAS COSTA",
+      "title": "Anl De Negocios Sr",
+      "photoUrl": null,
+      "departmentName": "Sistemas"
+    },
+    {
+      "slug": "gabriel-celso",
+      "name": "Gabriel Victor Laudares Celso",
+      "title": "Analista de Sistemas Pleno",
+      "photoUrl": "/media/people/gabriel-celso.jpg",
+      "departmentName": "Sistemas"
+    },
+    {
+      "slug": "igor-araujo",
+      "name": "Igor Cardoso de Araujo",
+      "title": "Suporte De TI",
+      "photoUrl": "/media/people/igor-araujo.jpg",
+      "departmentName": "Sistemas"
+    },
+    {
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null
+    },
+    {
+      "slug": "luiz-almeida",
+      "name": "Luiz Henrique Franco de Almeida",
+      "title": "Analista de Negócios de TI",
+      "photoUrl": "/media/people/luiz-almeida.jpg",
+      "departmentName": "Sistemas"
+    },
+    {
+      "slug": "marcos-tonooka",
+      "name": "MARCOS RYUJI TONOOKA",
+      "title": "Especialista  De Sistemas",
+      "photoUrl": null,
+      "departmentName": "Sistemas"
+    },
+    {
+      "slug": "matheus-silva",
+      "name": "Matheus Juvino Da Silva",
+      "title": "Suporte De TI",
+      "photoUrl": "/media/people/matheus-silva.jpg",
+      "departmentName": "Sistemas"
+    }
+  ]
+}

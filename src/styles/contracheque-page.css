@@ -376,6 +376,8 @@
   display: flex;
   flex-direction: column;
   min-height: 420px;
+  /* Garante que o corpo role se o conteúdo interno não couber */
+  overflow-y: auto;
 }
 
 .pay-modal__header {

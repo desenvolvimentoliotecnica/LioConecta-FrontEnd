@@ -442,6 +442,45 @@
   color: #b91c1c;
 }
 
+/* Chip de saldo — aba Banco de horas (gestão de ponto); ~2× o badge padrão */
+.leave-badge--hour-balance {
+  align-self: center;
+  flex-shrink: 0;
+  min-width: 4.5rem;
+  justify-content: center;
+  padding: 6px 16px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+}
+
+.leave-badge--hour-balance-positive {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.leave-badge--hour-balance-negative {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.leave-badge--hour-balance-zero {
+  background: #fef3c7;
+  color: #a16207;
+  border-color: #fcd34d;
+}
+
+.leave-badge--hour-balance-sm {
+  min-width: 3.25rem;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .leave-requests-panel {
   margin-bottom: var(--wf-gap);
   padding: 16px;

@@ -1,0 +1,72 @@
+{
+  "marker": "E2E-BH-LUCAS-1783714335431",
+  "count": 8,
+  "members": [
+    {
+      "personId": "4b71330f-f82d-48dc-a0a9-9be42defef56",
+      "name": "Davi Oliveira da Silva",
+      "role": "Consultor QualiIT",
+      "employeeId": null,
+      "balanceHours": 0,
+      "periodLabel": null
+    },
+    {
+      "personId": "fd3f99b8-e74e-4832-b5e3-989ff4dff19d",
+      "name": "ELTON DE FREITAS COSTA",
+      "role": "Anl De Negocios Sr",
+      "employeeId": "00003221",
+      "balanceHours": -1.72,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "1251262b-4de6-4ad5-b326-6c9220b010d7",
+      "name": "Gabriel Victor Laudares Celso",
+      "role": "Analista de Sistemas Pleno",
+      "employeeId": null,
+      "balanceHours": 0,
+      "periodLabel": null
+    },
+    {
+      "personId": "537061a2-9004-4a0a-98a3-797e8e98a796",
+      "name": "Igor Cardoso de Araujo",
+      "role": "Suporte De TI",
+      "employeeId": null,
+      "balanceHours": 0,
+      "periodLabel": null
+    },
+    {
+      "personId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "name": "Leonardo Sabino Mendes",
+      "role": null,
+      "employeeId": "00000887",
+      "balanceHours": 32.65,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "3abfa481-09fd-4f63-a281-611ea1f52bf1",
+      "name": "Luiz Henrique Franco de Almeida",
+      "role": "Analista de Negócios de TI",
+      "employeeId": null,
+      "balanceHours": 0,
+      "periodLabel": null
+    },
+    {
+      "personId": "ecdea5f9-2626-4965-b937-6cb89c40cc97",
+      "name": "MARCOS RYUJI TONOOKA",
+      "role": "Especialista  De Sistemas",
+      "employeeId": "99000061",
+      "balanceHours": -12.28,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "29e81e64-001c-4727-acb6-d79bdb51b8dd",
+      "name": "Matheus Juvino Da Silva",
+      "role": "Suporte De TI",
+      "employeeId": null,
+      "balanceHours": 0,
+      "periodLabel": null
+    }
+  ],
+  "expectedDirectReports": 8,
+  "rhScopeThreshold": 50
+}
