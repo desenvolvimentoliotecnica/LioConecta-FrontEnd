@@ -1,12 +1,36 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { GRUPOS_RECENT, filterGruposSections } from "../../config/grupos-hub";
+import { useExploreGroups, useMyGroups } from "../../api/hooks/useGroups";
+import {
+  GRUPOS_RECENT,
+  buildGruposRecentFromGroups,
+  buildGruposSections,
+  filterGruposSections,
+} from "../../config/grupos-hub";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function GruposHubPage() {
   const [query, setQuery] = useState("");
-  const sections = useMemo(() => filterGruposSections(query), [query]);
+  const { data: myGroups, isLoading: myGroupsLoading } = useMyGroups();
+  const { data: exploreGroups, isLoading: exploreLoading } = useExploreGroups();
+
+  const baseSections = useMemo(
+    () =>
+      buildGruposSections(
+        myGroupsLoading ? null : myGroups?.length ?? null,
+        exploreLoading ? null : exploreGroups?.length ?? null,
+      ),
+    [myGroups, myGroupsLoading, exploreGroups, exploreLoading],
+  );
+  const sections = useMemo(
+    () => filterGruposSections(query, baseSections),
+    [query, baseSections],
+  );
+  const recentItems = useMemo(
+    () => (myGroups && myGroups.length > 0 ? buildGruposRecentFromGroups(myGroups) : GRUPOS_RECENT),
+    [myGroups],
+  );
 
   return (
     <main className={sectionMainClass("grupos")}>
@@ -87,7 +111,7 @@ export function GruposHubPage() {
       <section className="docs-hub__recent" aria-label="Grupos acessados recentemente">
         <h2 className="docs-hub__section-title">Acessados recentemente</h2>
         <ul className="docs-hub__recent-list">
-          {GRUPOS_RECENT.map((item) => (
+          {recentItems.map((item) => (
             <li key={item.id}>
               <Link className="docs-hub__recent-item" to={item.href}>
                 <span className="docs-hub__recent-icon docs-hub__recent-icon--grupo" aria-hidden="true">

@@ -172,6 +172,11 @@ export function canAccessPontoManagement(me: MeDto | undefined): boolean {
   );
 }
 
+/** Aprovação de grupos: alinhado ao backend (`groups.approve`). */
+export function canAccessGroupApprovals(me: MeDto | undefined): boolean {
+  return hasPermission(me, PERMISSIONS.groups.approve);
+}
+
 export function canAccessLoopModule(
 
   me: MeDto | undefined,

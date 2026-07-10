@@ -1,0 +1,1 @@
+UPDATE groups SET "ApproverId" = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103' WHERE "Id" = 'dfc4dbce-83fe-4760-8c89-0e8ead4f566f';

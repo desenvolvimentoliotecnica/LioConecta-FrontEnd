@@ -406,11 +406,13 @@ export interface UploadComunicadoHeroResponseDto {
 export const GROUP_STATUS_PENDING = 0 as const;
 export const GROUP_STATUS_ACTIVE = 1 as const;
 export const GROUP_STATUS_REJECTED = 2 as const;
+export const GROUP_STATUS_EXPIRED = 3 as const;
 
 export type GroupStatus =
   | typeof GROUP_STATUS_PENDING
   | typeof GROUP_STATUS_ACTIVE
-  | typeof GROUP_STATUS_REJECTED;
+  | typeof GROUP_STATUS_REJECTED
+  | typeof GROUP_STATUS_EXPIRED;
 
 export const GROUP_TYPE_DEPARTAMENTAL = 0 as const;
 export const GROUP_TYPE_PROJETO = 1 as const;
@@ -423,30 +425,49 @@ export type GroupType =
   | typeof GROUP_TYPE_INTERESSE
   | typeof GROUP_TYPE_COMUNIDADE;
 
+/** @deprecated Backend não usa mais modo de acesso na criação — grupos usam fluxo de participar + aprovação de cadastro. Mantido só por compatibilidade de tipos. */
 export const GROUP_ACCESS_OPEN = 0 as const;
+/** @deprecated ver GROUP_ACCESS_OPEN */
 export const GROUP_ACCESS_REQUIRES_APPROVAL = 1 as const;
+/** @deprecated ver GROUP_ACCESS_OPEN */
 export const GROUP_ACCESS_PRIVATE = 2 as const;
 
+/** @deprecated ver GROUP_ACCESS_OPEN */
 export type GroupAccessMode =
   | typeof GROUP_ACCESS_OPEN
   | typeof GROUP_ACCESS_REQUIRES_APPROVAL
   | typeof GROUP_ACCESS_PRIVATE;
+
+export const GROUP_MEMBER_ROLE_OWNER = 0 as const;
+export const GROUP_MEMBER_ROLE_MODERATOR = 1 as const;
+export const GROUP_MEMBER_ROLE_MEMBER = 2 as const;
+
+export type GroupMemberRole =
+  | typeof GROUP_MEMBER_ROLE_OWNER
+  | typeof GROUP_MEMBER_ROLE_MODERATOR
+  | typeof GROUP_MEMBER_ROLE_MEMBER;
 
 export interface GroupDto {
   id: string;
   name: string;
   description?: string | null;
   type: GroupType;
-  accessMode: GroupAccessMode;
+  /** @deprecated mantido por compatibilidade — backend não envia mais em novos grupos. */
+  accessMode?: GroupAccessMode;
   icon: string;
   status: GroupStatus;
   isPrivate: boolean;
   owner: PersonSummaryDto;
   memberCount: number;
   postCount: number;
+  topicCount: number;
   isMember: boolean;
+  myRole?: GroupMemberRole | null;
   createdAt: string;
+  submittedAt?: string | null;
   reviewedAt?: string | null;
+  expiresAt?: string | null;
+  approver?: PersonSummaryDto | null;
   rejectionReason?: string | null;
 }
 
@@ -454,12 +475,98 @@ export interface CreateGroupRequest {
   name: string;
   description?: string | null;
   type: GroupType;
-  accessMode: GroupAccessMode;
+  icon: string;
+}
+
+export interface UpdateGroupRequest {
+  name: string;
+  description?: string | null;
+  type: GroupType;
   icon: string;
 }
 
 export interface RejectGroupRequest {
   reason?: string | null;
+}
+
+export interface GroupMemberDto {
+  id: string;
+  person: PersonSummaryDto;
+  role: GroupMemberRole;
+  joinedAt: string;
+}
+
+export interface UpdateGroupMemberRoleRequest {
+  role: GroupMemberRole;
+}
+
+export interface GroupWallPostDto {
+  id: string;
+  author: PersonSummaryDto;
+  content: string;
+  createdAt: string;
+  reactionCount: number;
+  viewerReacted: boolean;
+  canDelete?: boolean;
+}
+
+export interface CreateGroupWallPostRequest {
+  content: string;
+}
+
+export interface GroupTopicDto {
+  id: string;
+  title: string;
+  author: PersonSummaryDto;
+  createdAt: string;
+  replyCount: number;
+  lastActivityAt?: string | null;
+}
+
+export interface GroupTopicReplyDto {
+  id: string;
+  author: PersonSummaryDto;
+  content: string;
+  createdAt: string;
+}
+
+export interface GroupTopicDetailDto extends GroupTopicDto {
+  content: string;
+  replies: GroupTopicReplyDto[];
+}
+
+export interface CreateGroupTopicRequest {
+  title: string;
+  content: string;
+}
+
+export interface CreateGroupTopicReplyRequest {
+  content: string;
+}
+
+export const GROUP_TRANSFER_STATUS_PENDING = 0 as const;
+export const GROUP_TRANSFER_STATUS_APPROVED = 1 as const;
+export const GROUP_TRANSFER_STATUS_REJECTED = 2 as const;
+
+export type GroupTransferStatus =
+  | typeof GROUP_TRANSFER_STATUS_PENDING
+  | typeof GROUP_TRANSFER_STATUS_APPROVED
+  | typeof GROUP_TRANSFER_STATUS_REJECTED;
+
+export interface GroupOwnershipTransferDto {
+  id: string;
+  groupId: string;
+  groupName: string;
+  groupIcon?: string | null;
+  fromPerson: PersonSummaryDto;
+  toPerson: PersonSummaryDto;
+  status: GroupTransferStatus;
+  createdAt: string;
+  resolvedAt?: string | null;
+}
+
+export interface CreateOwnershipTransferRequest {
+  toPersonId: string;
 }
 
 export interface AnalyticsTrendPointDto {

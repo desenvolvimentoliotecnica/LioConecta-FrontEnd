@@ -1,0 +1,49 @@
+{
+  "status": 200,
+  "body": {
+    "id": "95dd03be-34eb-4890-b9a8-3f2ae6eddf3e",
+    "name": "E2E-GRUPOS-1783710557504",
+    "description": "Grupo UAT Orkut-like E2E-GRUPOS-1783710557504",
+    "type": 0,
+    "accessMode": 0,
+    "icon": "fa-users",
+    "status": 1,
+    "isPrivate": false,
+    "owner": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "memberCount": 1,
+    "postCount": 0,
+    "topicCount": 0,
+    "isMember": true,
+    "myRole": 0,
+    "createdAt": "2026-07-10T19:09:26.37109+00:00",
+    "submittedAt": "2026-07-10T19:09:26.37109+00:00",
+    "expiresAt": "2026-07-24T19:09:26.37109+00:00",
+    "reviewedAt": "2026-07-10T19:09:39.0980967+00:00",
+    "rejectionReason": null,
+    "approver": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    }
+  }
+}

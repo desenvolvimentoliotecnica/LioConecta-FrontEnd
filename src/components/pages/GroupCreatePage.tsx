@@ -1,20 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { isAdminUser } from "../../api/auth";
+import { canAccessGroupApprovals } from "../../api/auth";
 import { useCreateGroup } from "../../api/hooks/useGroups";
 import { useMe } from "../../api/hooks/useMe";
+import { GROUP_TYPE_DEPARTAMENTAL, type GroupDto, type GroupType } from "../../api/types";
 import {
-  GROUP_ACCESS_OPEN,
-  GROUP_TYPE_DEPARTAMENTAL,
-  type GroupAccessMode,
-  type GroupDto,
-  type GroupType,
-} from "../../api/types";
-import {
-  GROUP_ACCESS_OPTIONS,
   GROUP_ICON_OPTIONS,
   GROUP_TYPE_OPTIONS,
-  groupAccessLabel,
   groupTypeLabel,
   injectGroupCreatePageStyles,
 } from "../../config/groups";
@@ -22,7 +14,7 @@ import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 
 type ToastState = { type: "success" | "error"; message: string } | null;
 
-function PendingSuccess({ group, isAdmin }: { group: GroupDto; isAdmin: boolean }) {
+function PendingSuccess({ group, canApprove }: { group: GroupDto; canApprove: boolean }) {
   return (
     <main className="main">
       <div className="welcome-banner" style={{ marginBottom: 24 }}>
@@ -41,7 +33,7 @@ function PendingSuccess({ group, isAdmin }: { group: GroupDto; isAdmin: boolean 
         <Link className="btn-secondary" to="/grupos/meus-grupos">
           Ver meus grupos
         </Link>
-        {isAdmin ? (
+        {canApprove ? (
           <Link className="btn-primary" to="/grupos/aprovacoes">
             <i className="fa-solid fa-user-shield" aria-hidden="true" /> Ir para aprovações
           </Link>
@@ -58,12 +50,11 @@ export function GroupCreatePage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState<GroupType>(GROUP_TYPE_DEPARTAMENTAL);
-  const [accessMode, setAccessMode] = useState<GroupAccessMode>(GROUP_ACCESS_OPEN);
   const [icon, setIcon] = useState<string>(GROUP_ICON_OPTIONS[0]);
   const [createdGroup, setCreatedGroup] = useState<GroupDto | null>(null);
   const [toast, setToast] = useState<ToastState>(null);
 
-  const isAdmin = isAdminUser(me);
+  const canApprove = canAccessGroupApprovals(me);
   const canSubmit = name.trim().length > 0 && !createGroup.isPending;
 
   useEffect(() => injectGroupCreatePageStyles(), []);
@@ -82,7 +73,6 @@ export function GroupCreatePage() {
         name: name.trim(),
         description: description.trim() || null,
         type,
-        accessMode,
         icon,
       });
       setCreatedGroup(result);
@@ -92,7 +82,7 @@ export function GroupCreatePage() {
   }
 
   if (createdGroup) {
-    return <PendingSuccess group={createdGroup} isAdmin={isAdmin} />;
+    return <PendingSuccess group={createdGroup} canApprove={canApprove} />;
   }
 
   const previewName = name.trim() || "Nome do grupo";
@@ -115,8 +105,8 @@ export function GroupCreatePage() {
         <div>
           <div className="welcome-banner__title">Novo grupo em poucos passos</div>
           <p className="welcome-banner__text">
-            Preencha as informações abaixo e envie para aprovação. Você poderá convidar membros assim que o
-            grupo for liberado.
+            Preencha as informações abaixo e envie para aprovação. Após a liberação, colegas poderão participar
+            do grupo diretamente pela página Explorar grupos.
           </p>
         </div>
       </div>
@@ -198,36 +188,6 @@ export function GroupCreatePage() {
             </div>
           </section>
 
-          <section className="form-section" aria-labelledby="section-access">
-            <h2 className="form-section__title" id="section-access">
-              Privacidade e acesso
-            </h2>
-            <p className="form-section__desc">Controle quem pode encontrar e entrar no grupo após aprovação.</p>
-            <div className="option-grid option-grid--3" role="radiogroup" aria-label="Privacidade">
-              {GROUP_ACCESS_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  className={`option-card${accessMode === option.value ? " is-selected" : ""}`}
-                  type="button"
-                  onClick={() => setAccessMode(option.value)}
-                >
-                  <div
-                    className="option-card__icon"
-                    style={{
-                      background: option.iconStyle.background,
-                      color: option.iconStyle.color,
-                      borderColor: option.iconStyle.borderColor,
-                    }}
-                  >
-                    <i className={`fa-solid ${option.icon}`} aria-hidden="true" />
-                  </div>
-                  <div className="option-card__title">{option.label}</div>
-                  <p className="option-card__text">{option.description}</p>
-                </button>
-              ))}
-            </div>
-          </section>
-
           <section className="form-section" aria-labelledby="section-icon">
             <h2 className="form-section__title" id="section-icon">
               Ícone do grupo
@@ -274,7 +234,6 @@ export function GroupCreatePage() {
               </div>
               <div className="group-card__meta">
                 <span>{groupTypeLabel(type)}</span>
-                <span>{groupAccessLabel(accessMode)}</span>
                 <span>Aguardando aprovação</span>
               </div>
             </article>

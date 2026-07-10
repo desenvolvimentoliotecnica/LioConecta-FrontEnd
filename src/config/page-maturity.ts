@@ -34,10 +34,11 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/pessoas/organograma": "partial",
   "/pessoas/ramais": "integrated",
 
-  "/grupos/meus-grupos": "partial",
+  "/grupos/meus-grupos": "integrated",
   "/grupos/explorar": "integrated",
   "/grupos/criar": "integrated",
   "/grupos/aprovacoes": "integrated",
+  "/grupos/:id": "integrated",
 
   "/documentos/politicas-internas": "prototype",
   "/documentos/manuais-procedimentos": "prototype",

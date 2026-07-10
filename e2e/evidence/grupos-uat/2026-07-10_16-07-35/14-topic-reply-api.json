@@ -1,0 +1,21 @@
+{
+  "status": 201,
+  "body": {
+    "id": "ecb5497d-61e1-487e-9224-1fb5365a75f3",
+    "author": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "body": "Resposta UAT E2E-GRUPOS-1783710455189",
+    "createdAt": "2026-07-10T19:08:05.0633831+00:00"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "status": 201,
+  "body": {
+    "id": "cc7145d3-88a3-4d2b-a2cf-75ff92c8e3fe",
+    "title": "Tópico UAT E2E-GRUPOS-1783710029074",
+    "body": "Discussão inicial do E2E-GRUPOS-1783710029074",
+    "author": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "createdAt": "2026-07-10T19:01:04.6512161+00:00",
+    "lastActivityAt": "2026-07-10T19:01:04.6512161+00:00",
+    "replies": []
+  }
+}

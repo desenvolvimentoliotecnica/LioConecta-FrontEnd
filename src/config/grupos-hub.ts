@@ -1,3 +1,4 @@
+import type { GroupDto } from "../api/types";
 import { gruposLinks } from "./navigation";
 
 import type { HubRecentItem, HubSection } from "./pessoas-hub";
@@ -67,12 +68,51 @@ export const GRUPOS_RECENT: HubRecentItem[] = [
   },
 ];
 
-export function filterGruposSections(query: string): HubSection[] {
+export function filterGruposSections(
+  query: string,
+  sections: HubSection[] = GRUPOS_SECTIONS,
+): HubSection[] {
   const normalized = query.trim().toLowerCase();
-  if (!normalized) return GRUPOS_SECTIONS;
-  return GRUPOS_SECTIONS.filter(
+  if (!normalized) return sections;
+  return sections.filter(
     (section) =>
       section.label.toLowerCase().includes(normalized) ||
       section.description.toLowerCase().includes(normalized),
   );
+}
+
+export function buildGruposSections(
+  myGroupsCount: number | null,
+  exploreCount: number | null,
+): HubSection[] {
+  return GRUPOS_SECTIONS.map((section) => {
+    if (section.id === "meus-grupos" && myGroupsCount !== null) {
+      return { ...section, count: `${myGroupsCount} grupo${myGroupsCount === 1 ? "" : "s"}` };
+    }
+    if (section.id === "explorar" && exploreCount !== null) {
+      return { ...section, count: `${exploreCount} disponíve${exploreCount === 1 ? "l" : "is"}` };
+    }
+    return section;
+  });
+}
+
+function formatRecentDate(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+export function buildGruposRecentFromGroups(groups: GroupDto[]): HubRecentItem[] {
+  return groups
+    .slice()
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 4)
+    .map((group) => ({
+      id: group.id,
+      title: group.name,
+      section: `${group.memberCount} membro${group.memberCount === 1 ? "" : "s"} · ${group.topicCount} tópicos`,
+      date: formatRecentDate(group.createdAt),
+      href: `/grupos/${group.id}`,
+      icon: "fa-people-group",
+    }));
 }

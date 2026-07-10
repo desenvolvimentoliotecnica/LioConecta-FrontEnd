@@ -10,6 +10,7 @@ import { NoticiasHubPage } from "./components/pages/NoticiasHubPage";
 import { ParabenizacoesHubPage } from "./components/pages/ParabenizacoesHubPage";
 import { GroupApprovalsPage } from "./components/pages/GroupApprovalsPage";
 import { GroupCreatePage } from "./components/pages/GroupCreatePage";
+import { GroupDetailPage } from "./components/pages/GroupDetailPage";
 import { GroupExplorePage } from "./components/pages/GroupExplorePage";
 import { GroupMyGroupsPage } from "./components/pages/GroupMyGroupsPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
@@ -274,6 +275,7 @@ function App() {
         <Route path="/grupos/criar" element={<GroupCreatePage />} />
         <Route path="/grupos/explorar" element={<GroupExplorePage />} />
         <Route path="/grupos/aprovacoes" element={<GroupApprovalsPage />} />
+        <Route path="/grupos/:id" element={<GroupDetailPage />} />
         <Route path="/servicos/rh" element={<RhHubPage />} />
         <Route path="/servicos/contracheque" element={<ContrachequePage />} />
         <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
