@@ -16,22 +16,26 @@
   white-space: nowrap;
 }
 
-.systems-hub__create-btn {
+.systems-hub__create-btn,
+.systems-hub__request-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 40px;
   padding: 0 18px;
-  border: none;
   border-radius: 8px;
-  background: #0f766e;
-  color: #fff;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.systems-hub__create-btn {
+  border: none;
+  background: #0f766e;
+  color: #fff;
   box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
-  transition: background 0.15s ease;
 }
 
 .systems-hub__create-btn:hover {
@@ -43,9 +47,88 @@
   outline-offset: 2px;
 }
 
-.systems-hub__create-btn i {
+.systems-hub__create-btn i,
+.systems-hub__request-btn i {
   font-size: 13px;
   line-height: 1;
+}
+
+.systems-hub__request-btn {
+  border: 1px solid #0f766e;
+  background: #fff;
+  color: #0f766e;
+}
+
+.systems-hub__request-btn:hover {
+  background: #f0fdfa;
+  border-color: #0d9488;
+  color: #0d9488;
+}
+
+.systems-hub__request-btn:focus-visible {
+  outline: 2px solid #5eead4;
+  outline-offset: 2px;
+}
+
+.systems-hub__card-request {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 0.55rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #99f6e4;
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.systems-hub__card-request:hover {
+  background: #ccfbf1;
+  border-color: #5eead4;
+}
+
+.systems-hub__card-request:focus-visible {
+  outline: 2px solid #5eead4;
+  outline-offset: 2px;
+}
+
+.systems-access-request__intro {
+  margin: 0 0 0.85rem;
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.systems-access-request__form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.systems-access-request__notes {
+  padding: 0.75rem 0.85rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.systems-access-request__notes strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+  color: #334155;
+}
+
+.systems-access-request__notes p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #475569;
+  line-height: 1.45;
+  white-space: pre-wrap;
 }
 
 .systems-hub__feedback {

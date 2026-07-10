@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "dfe93f85-ec0f-41b9-a0c5-915fdd5e8e41",
+    "status": "Submitted",
+    "message": "Chamado registrado com sucesso. Protocolo GLPI #234.",
+    "externalRef": "234",
+    "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=234"
+  }
+}
