@@ -1,0 +1,29 @@
+[
+  {
+    "year": 2026,
+    "month": 7,
+    "competence": "Jul/2026",
+    "grossAmount": 4644.58,
+    "netAmount": 4644.58,
+    "publishedAt": "2026-07-15T00:00:00+00:00",
+    "paymentType": "ADIANTAMENTO"
+  },
+  {
+    "year": 2026,
+    "month": 6,
+    "competence": "Jun/2026",
+    "grossAmount": 11687.46,
+    "netAmount": 2686.42,
+    "publishedAt": "2026-06-30T00:00:00+00:00",
+    "paymentType": "FOLHA"
+  },
+  {
+    "year": 2026,
+    "month": 6,
+    "competence": "Jun/2026",
+    "grossAmount": 4644.58,
+    "netAmount": 4644.58,
+    "publishedAt": "2026-06-15T00:00:00+00:00",
+    "paymentType": "ADIANTAMENTO"
+  }
+]

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   downloadCartaConsignacaoPdf,
   downloadComprovantePdf,
@@ -8,6 +9,8 @@ import {
   usePayslipSummary,
 } from "../../api/hooks/usePayslips";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
+import { usePermissions } from "../../hooks/usePermissions";
+import { PERMISSIONS } from "../../config/rbac/permissions";
 import type { PayslipServiceDto } from "../../api/types";
 import { bookmarkIdForService, formatMoney } from "../../utils/money";
 import { pickComparativoPeriods, resolveInformeYear } from "../../utils/payslipHelpers";
@@ -55,6 +58,8 @@ export function ContrachequePage() {
   const [consultaKind, setConsultaKind] = useState<ConsultaKind | null>(null);
   const [informeOpen, setInformeOpen] = useState(false);
   const [helpService, setHelpService] = useState<PayslipServiceDto | null>(null);
+  const { hasPermission } = usePermissions();
+  const canAudit = hasPermission(PERMISSIONS.payslips.audit);
 
   const summaryQuery = usePayslipSummary();
   const servicesQuery = usePayslipServices();
@@ -137,6 +142,14 @@ export function ContrachequePage() {
         current="Contracheque"
         description="Consulte holerites, baixe comprovantes, emita informes de rendimentos e acompanhe sua remuneração com segurança."
         syncMeta={syncMetaLabel}
+        actions={
+          canAudit ? (
+            <Link className="leave-btn leave-btn--ghost" to="/servicos/contracheque/acessos">
+              <i className="fa-solid fa-shield-halved" aria-hidden="true" />
+              Acessos
+            </Link>
+          ) : undefined
+        }
         toolbar={
           <div className="pay-toolbar">
             <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">

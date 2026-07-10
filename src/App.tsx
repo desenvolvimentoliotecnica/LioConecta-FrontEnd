@@ -19,6 +19,7 @@ import { PhoneExtensionsPage } from "./components/pessoas/PhoneExtensionsPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { DocumentsBibliotecaPage } from "./components/pages/DocumentsBibliotecaPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
+import { ContrachequeAcessosPage } from "./components/contracheque/ContrachequeAcessosPage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { BeneficiosGestaoPage } from "./components/beneficios/BeneficiosGestaoPage";
 import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
@@ -278,6 +279,7 @@ function App() {
         <Route path="/grupos/:id" element={<GroupDetailPage />} />
         <Route path="/servicos/rh" element={<RhHubPage />} />
         <Route path="/servicos/contracheque" element={<ContrachequePage />} />
+        <Route path="/servicos/contracheque/acessos" element={<ContrachequeAcessosPage />} />
         <Route path="/servicos/beneficios" element={<BeneficiosPage />} />
         <Route path="/servicos/beneficios/gestao" element={<BeneficiosGestaoPage />} />
         <Route path="/servicos/ferias-ausencias" element={<FeriasAusenciasPage />} />

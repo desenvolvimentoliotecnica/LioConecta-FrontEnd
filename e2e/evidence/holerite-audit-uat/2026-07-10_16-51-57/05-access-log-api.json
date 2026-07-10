@@ -1,0 +1,43 @@
+{
+  "status": 200,
+  "body": {
+    "items": [
+      {
+        "id": "5d99bad0-aaaa-4934-a723-0c916abc44ea",
+        "occurredAt": "2026-07-10T19:52:00.892518+00:00",
+        "actorPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "actorName": "Leonardo Sabino Mendes",
+        "actorEmail": "leonardo.mendes@liotecnica.com.br",
+        "targetPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "targetName": "Leonardo Sabino Mendes",
+        "targetEmployeeId": "00000887",
+        "year": 2026,
+        "month": 7,
+        "competence": "Jul/2026",
+        "action": "download",
+        "result": "Success",
+        "metadataJson": "{\"year\":2026,\"month\":7,\"competence\":\"Jul/2026\",\"targetPersonId\":\"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103\",\"targetEmployeeId\":\"00000887\",\"targetName\":\"Leonardo Sabino Mendes\",\"actorPersonId\":\"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103\",\"action\":\"download\",\"statusCode\":200,\"httpMethod\":\"GET\"}"
+      },
+      {
+        "id": "09bce5e0-0bc3-49e2-ae69-e4da5b189cbe",
+        "occurredAt": "2026-07-10T19:51:59.828956+00:00",
+        "actorPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "actorName": "Leonardo Sabino Mendes",
+        "actorEmail": "leonardo.mendes@liotecnica.com.br",
+        "targetPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "targetName": "Leonardo Sabino Mendes",
+        "targetEmployeeId": "00000887",
+        "year": 2026,
+        "month": 7,
+        "competence": "Jul/2026",
+        "action": "view",
+        "result": "Success",
+        "metadataJson": "{\"year\":2026,\"month\":7,\"competence\":\"Jul/2026\",\"targetPersonId\":\"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103\",\"targetEmployeeId\":\"00000887\",\"targetName\":\"Leonardo Sabino Mendes\",\"actorPersonId\":\"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103\",\"action\":\"view\",\"statusCode\":200,\"httpMethod\":\"GET\"}"
+      }
+    ],
+    "page": 1,
+    "pageSize": 25,
+    "totalCount": 2,
+    "totalPages": 1
+  }
+}

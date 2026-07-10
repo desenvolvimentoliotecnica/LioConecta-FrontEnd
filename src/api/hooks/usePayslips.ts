@@ -6,6 +6,7 @@ import type {
   DescontosConsultaDto,
   FgtsConsultaDto,
   IncomeStatementDto,
+  PagedPayslipAccessLogDto,
   PayslipComparativoDto,
   PayslipDetailDto,
   PayslipListItemDto,
@@ -24,6 +25,42 @@ export function usePayslipSummary() {
     queryFn: () => api.get<PayslipSummaryDto>("/rh/payslips/summary"),
     retry: config.useMock ? 0 : 1,
     staleTime: PAYSLIP_CACHE_MS,
+  });
+}
+
+export function usePayslipAccessLog(params: {
+  from?: string;
+  to?: string;
+  targetPersonId?: string;
+  page?: number;
+  pageSize?: number;
+  enabled?: boolean;
+}) {
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? 25;
+  const search = new URLSearchParams();
+  if (params.from) search.set("from", params.from);
+  if (params.to) search.set("to", params.to);
+  if (params.targetPersonId) search.set("targetPersonId", params.targetPersonId);
+  search.set("page", String(page));
+  search.set("pageSize", String(pageSize));
+
+  return useQuery({
+    queryKey: [
+      ...PAYSLIPS_QUERY_KEY,
+      "access-log",
+      params.from ?? "",
+      params.to ?? "",
+      params.targetPersonId ?? "",
+      page,
+      pageSize,
+    ],
+    queryFn: () =>
+      api.get<PagedPayslipAccessLogDto>(
+        `/rh/payslips/access-log?${search.toString()}`,
+      ),
+    enabled: params.enabled !== false,
+    retry: config.useMock ? 0 : 1,
   });
 }
 

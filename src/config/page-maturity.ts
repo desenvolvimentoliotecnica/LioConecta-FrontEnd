@@ -49,6 +49,7 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/servicos/beneficios": "integrated",
   "/servicos/beneficios/gestao": "integrated",
   "/servicos/contracheque": "integrated",
+  "/servicos/contracheque/acessos": "integrated",
   "/servicos/ferias-ausencias": "integrated",
   "/servicos/ferias-ausencias/gestao": "integrated",
   "/servicos/solicitacoes-rh": "prototype",

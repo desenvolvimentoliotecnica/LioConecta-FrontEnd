@@ -4,6 +4,7 @@ export type NavLinkItem = {
   benefitsManageOnly?: boolean;
   leaveManageOnly?: boolean;
   pontoManageOnly?: boolean;
+  payslipsAuditOnly?: boolean;
 };
 
 export type NavDropdown = {
@@ -50,6 +51,7 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Benefícios", path: "/servicos/beneficios" },
   { label: "Gestão de benefícios", path: "/servicos/beneficios/gestao", benefitsManageOnly: true },
   { label: "Contracheque", path: "/servicos/contracheque" },
+  { label: "Acessos ao contracheque", path: "/servicos/contracheque/acessos", payslipsAuditOnly: true },
   { label: "Férias e ausências", path: "/servicos/ferias-ausencias" },
   { label: "Gestão de férias", path: "/servicos/ferias-ausencias/gestao", leaveManageOnly: true },
   { label: "Solicitações RH", path: "/servicos/solicitacoes-rh" },

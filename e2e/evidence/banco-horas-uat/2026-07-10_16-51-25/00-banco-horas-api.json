@@ -1,0 +1,297 @@
+{
+  "balanceHours": 32.65,
+  "entries": [
+    {
+      "date": "08/07/2026",
+      "description": "Horas extras",
+      "hours": 0.95,
+      "type": "credito"
+    },
+    {
+      "date": "08/07/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.43,
+      "type": "debito"
+    },
+    {
+      "date": "06/07/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "03/07/2026",
+      "description": "Horas extras",
+      "hours": 0.67,
+      "type": "credito"
+    },
+    {
+      "date": "03/07/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.3,
+      "type": "debito"
+    },
+    {
+      "date": "02/07/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "01/07/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "25/06/2026",
+      "description": "Horas extras",
+      "hours": 0.32,
+      "type": "credito"
+    },
+    {
+      "date": "22/06/2026",
+      "description": "Horas extras",
+      "hours": 0.78,
+      "type": "credito"
+    },
+    {
+      "date": "20/06/2026",
+      "description": "Horas extras",
+      "hours": 7,
+      "type": "credito"
+    },
+    {
+      "date": "19/06/2026",
+      "description": "Horas extras",
+      "hours": 2,
+      "type": "credito"
+    },
+    {
+      "date": "17/06/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "15/06/2026",
+      "description": "Horas extras",
+      "hours": 0.3,
+      "type": "credito"
+    },
+    {
+      "date": "15/06/2026",
+      "description": "Débito (atraso)",
+      "hours": -2.35,
+      "type": "debito"
+    },
+    {
+      "date": "10/06/2026",
+      "description": "Horas extras",
+      "hours": 0.42,
+      "type": "credito"
+    },
+    {
+      "date": "10/06/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.1,
+      "type": "debito"
+    },
+    {
+      "date": "08/06/2026",
+      "description": "Horas extras",
+      "hours": 0.5,
+      "type": "credito"
+    },
+    {
+      "date": "08/06/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.1,
+      "type": "debito"
+    },
+    {
+      "date": "03/06/2026",
+      "description": "Horas extras",
+      "hours": 0.9,
+      "type": "credito"
+    },
+    {
+      "date": "03/06/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.2,
+      "type": "debito"
+    },
+    {
+      "date": "02/06/2026",
+      "description": "Horas extras",
+      "hours": 0.45,
+      "type": "credito"
+    },
+    {
+      "date": "02/06/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.95,
+      "type": "debito"
+    },
+    {
+      "date": "01/06/2026",
+      "description": "Horas extras",
+      "hours": 0.8,
+      "type": "credito"
+    },
+    {
+      "date": "29/05/2026",
+      "description": "Horas extras",
+      "hours": 1.03,
+      "type": "credito"
+    },
+    {
+      "date": "27/05/2026",
+      "description": "Horas extras",
+      "hours": 0.15,
+      "type": "credito"
+    },
+    {
+      "date": "25/05/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "22/05/2026",
+      "description": "Horas extras",
+      "hours": 0.83,
+      "type": "credito"
+    },
+    {
+      "date": "20/05/2026",
+      "description": "Horas extras",
+      "hours": 0.97,
+      "type": "credito"
+    },
+    {
+      "date": "20/05/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.77,
+      "type": "debito"
+    },
+    {
+      "date": "18/05/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "15/05/2026",
+      "description": "Horas extras",
+      "hours": 1.1,
+      "type": "credito"
+    },
+    {
+      "date": "13/05/2026",
+      "description": "Horas extras",
+      "hours": 0.75,
+      "type": "credito"
+    },
+    {
+      "date": "11/05/2026",
+      "description": "Horas extras",
+      "hours": 0.9,
+      "type": "credito"
+    },
+    {
+      "date": "08/05/2026",
+      "description": "Horas extras",
+      "hours": 0.63,
+      "type": "credito"
+    },
+    {
+      "date": "08/05/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.62,
+      "type": "debito"
+    },
+    {
+      "date": "06/05/2026",
+      "description": "Horas extras",
+      "hours": 0.92,
+      "type": "credito"
+    },
+    {
+      "date": "04/05/2026",
+      "description": "Horas extras",
+      "hours": 0.8,
+      "type": "credito"
+    },
+    {
+      "date": "29/04/2026",
+      "description": "Horas extras",
+      "hours": 1,
+      "type": "credito"
+    },
+    {
+      "date": "29/04/2026",
+      "description": "Débito (atraso)",
+      "hours": -0.55,
+      "type": "debito"
+    },
+    {
+      "date": "28/04/2026",
+      "description": "Horas extras",
+      "hours": 0.67,
+      "type": "credito"
+    },
+    {
+      "date": "27/04/2026",
+      "description": "Horas extras",
+      "hours": 0.37,
+      "type": "credito"
+    },
+    {
+      "date": "27/04/2026",
+      "description": "Débito (atraso)",
+      "hours": -1.23,
+      "type": "debito"
+    },
+    {
+      "date": "25/04/2026",
+      "description": "Horas extras",
+      "hours": 4,
+      "type": "credito"
+    },
+    {
+      "date": "24/04/2026",
+      "description": "Horas extras",
+      "hours": 1.93,
+      "type": "credito"
+    },
+    {
+      "date": "22/04/2026",
+      "description": "Horas extras",
+      "hours": 0.47,
+      "type": "credito"
+    },
+    {
+      "date": "22/04/2026",
+      "description": "Débito (atraso)",
+      "hours": -1.8,
+      "type": "debito"
+    },
+    {
+      "date": "18/04/2026",
+      "description": "Horas extras",
+      "hours": 4,
+      "type": "credito"
+    },
+    {
+      "date": "16/04/2026",
+      "description": "Horas extras",
+      "hours": 0.45,
+      "type": "credito"
+    }
+  ],
+  "periodLabel": "16/06/2026 – 15/07/2026",
+  "dataSource": "totvs-rm",
+  "availabilityStatus": "available",
+  "userMessage": null
+}

@@ -1103,6 +1103,44 @@ export interface LeaveBancoHorasEntryDto {
 export interface LeaveBancoHorasDto {
   balanceHours: number;
   entries: LeaveBancoHorasEntryDto[];
+  periodLabel?: string | null;
+  dataSource?: string | null;
+  availabilityStatus?: string | null;
+  userMessage?: string | null;
+}
+
+export interface HourBankTeamMemberDto {
+  personId: string;
+  name: string;
+  role?: string | null;
+  employeeId?: string | null;
+  balanceHours: number;
+  periodLabel?: string | null;
+}
+
+export interface PayslipAccessLogItemDto {
+  id: string;
+  occurredAt: string;
+  actorPersonId?: string | null;
+  actorName?: string | null;
+  actorEmail?: string | null;
+  targetPersonId?: string | null;
+  targetName?: string | null;
+  targetEmployeeId?: string | null;
+  year?: number | null;
+  month?: number | null;
+  competence?: string | null;
+  action: string;
+  result: string;
+  metadataJson?: string | null;
+}
+
+export interface PagedPayslipAccessLogDto {
+  items: PayslipAccessLogItemDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }
 
 export interface LeaveTeamMemberDto {
