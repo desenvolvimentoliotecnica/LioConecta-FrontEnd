@@ -991,6 +991,7 @@ export interface CreateLeaveRequestDto {
   endDate?: string | null;
   days?: number | null;
   notes?: string | null;
+  files?: File[];
 }
 
 export interface LeaveRequestResultDto {
@@ -998,6 +999,7 @@ export interface LeaveRequestResultDto {
   recordId: string;
   status: string;
   message: string;
+  protocol: string;
 }
 
 export interface LeaveRequestItemDto {

@@ -42,6 +42,7 @@ import { EmailHubPage } from "./components/admin/EmailHubPage";
 import { EmailConfigPage } from "./components/admin/EmailConfigPage";
 import { OrganogramGovernancePage } from "./components/admin/OrganogramGovernancePage";
 import { ControleAcessoPage } from "./components/admin/ControleAcessoPage";
+import { DbExplorerPage } from "./components/admin/DbExplorerPage";
 import { ComunicadoReader } from "./components/pages/ComunicadoReader";
 import { ComunicadoEditorPage } from "./components/pages/ComunicadoEditorPage";
 import { ComunicadosKindPage } from "./components/pages/ComunicadosKindPage";
@@ -247,6 +248,7 @@ function App() {
         <Route path="/admin/controle-acesso" element={<ControleAcessoPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />
         <Route path="/admin/observabilidade" element={<ObservabilityHubPage />} />
+        <Route path="/admin/db-explorer" element={<DbExplorerPage />} />
         <Route path="/admin/workers" element={<WorkersHubPage />} />
         <Route path="/admin/totvs-rm" element={<TotvsRmConfigPage />} />
         <Route path="/admin/email" element={<EmailHubPage />} />

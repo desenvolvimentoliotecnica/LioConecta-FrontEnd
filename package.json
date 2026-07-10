@@ -25,6 +25,8 @@
   "dependencies": {
     "@azure/msal-browser": "^5.16.0",
     "@azure/msal-react": "^5.5.1",
+    "@codemirror/lang-sql": "^6.10.0",
+    "@dagrejs/dagre": "^3.0.0",
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
     "@fullcalendar/interaction": "^6.1.21",
@@ -45,6 +47,9 @@
     "@tiptap/extension-youtube": "^3.27.1",
     "@tiptap/react": "^3.27.1",
     "@tiptap/starter-kit": "^3.27.1",
+    "@uiw/react-codemirror": "^4.25.11",
+    "@xyflow/react": "^12.11.2",
+    "html-to-image": "^1.11.13",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
