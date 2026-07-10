@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   PARABENIZACOES_HUB_PATH,
-  PARABENIZACOES_RECENT,
   filterParabenizacoesSections,
 } from "../../config/parabenizacoes-hub";
 import "../../styles/documents-hub-page.css";
@@ -23,8 +22,7 @@ export function ParabenizacoesHubPage() {
           <div>
             <h1 className="page-header__title">Parabenizações</h1>
             <p className="page-header__desc">
-              Celebrações no feed, aniversariantes, novos colaboradores e reconhecimentos de
-              carreira — tudo para valorizar as pessoas da Liotécnica.
+              Celebre aniversários, novos colaboradores e conquistas publicadas no feed.
             </p>
           </div>
         </div>
@@ -41,7 +39,7 @@ export function ParabenizacoesHubPage() {
           <div>
             <div className="docs-hub__summary-title">Hub de Parabenizações</div>
             <p className="docs-hub__summary-text">
-              Parabenize colegas, acompanhe celebrações e participe da cultura de reconhecimento.
+              Encontre celebrações no feed e nas listas de pessoas da empresa.
             </p>
           </div>
         </div>
@@ -70,7 +68,7 @@ export function ParabenizacoesHubPage() {
               </span>
               <span className="docs-hub__card-title">{section.label}</span>
               <span className="docs-hub__card-desc">{section.description}</span>
-              <span className="docs-hub__card-count">{section.count}</span>
+              {section.count ? <span className="docs-hub__card-count">{section.count}</span> : null}
               <span className="docs-hub__card-action">
                 Acessar
                 <i className="fa-solid fa-arrow-right" aria-hidden="true" />
@@ -84,31 +82,6 @@ export function ParabenizacoesHubPage() {
           <p>Nenhuma categoria encontrada para a busca informada.</p>
         </div>
       )}
-
-      <section className="docs-hub__recent" aria-label="Parabenizações recentes">
-        <h2 className="docs-hub__section-title">Recentes</h2>
-        <ul className="docs-hub__recent-list">
-          {PARABENIZACOES_RECENT.map((item) => (
-            <li key={item.id}>
-              <Link className="docs-hub__recent-item" to={item.href}>
-                <span
-                  className="docs-hub__recent-icon docs-hub__recent-icon--parabenizacoes"
-                  aria-hidden="true"
-                >
-                  <i className={`fa-solid ${item.icon}`} />
-                </span>
-                <span className="docs-hub__recent-body">
-                  <strong>{item.title}</strong>
-                  <span>
-                    {item.section} · {item.date}
-                  </span>
-                </span>
-                <i className="fa-solid fa-chevron-right docs-hub__recent-chevron" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
     </main>
   );
 }

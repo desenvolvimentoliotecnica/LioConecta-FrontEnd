@@ -56,10 +56,8 @@ export function AnalyticsPage() {
   const footerNote = isLoading
     ? "Carregando dados do analytics..."
     : isError
-      ? "Não foi possível carregar a API — exibindo dados simulados."
-      : view.mockSections.length > 0
-        ? `Dados reais do banco · simulado: ${view.mockSections.join(", ")} · ${PERIOD_LABELS[period]}`
-        : `Dados reais do banco · ${PERIOD_LABELS[period]}`;
+      ? "Não foi possível carregar a API — indicadores exibidos como indisponíveis."
+      : `Dados reais do banco · ${PERIOD_LABELS[period]}`;
 
   return (
     <main className="main">

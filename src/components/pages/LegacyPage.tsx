@@ -9,7 +9,7 @@ import { getPageHeadSection, sectionMainClass, usesSectionPageHead } from "../..
 import { getPageByRoute } from "../../config/routes";
 import { pageAssets } from "../../generated/pagesIndex";
 import { injectScopedPageStyle } from "../../utils/pageInjectedStyles";
-import { useFeedComments, useFeedHashScroll, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
+import { useFeedHashScroll, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
 import type { PageEntry } from "../../types/pages";
 import perfilCss from "../../styles/pessoas-perfil.css?inline";
 import orgModalCss from "../../styles/org-profile-modal.css?inline";
@@ -64,7 +64,6 @@ export function LegacyPage() {
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page?.id === "feed", location.hash);
-  useFeedComments(page?.id === "feed" ? mainRef : ({ current: null } as RefObject<HTMLElement | null>));
 
   useEffect(() => {
     if (!page) return;
@@ -107,7 +106,6 @@ export function LegacyPageById({ page }: { page: PageEntry }) {
   usePageScript(page, contentKey);
   useQuickAccessScroll(mainRef);
   useFeedHashScroll(mainRef, page.id === "feed", location.hash);
-  useFeedComments(page.id === "feed" ? mainRef : ({ current: null } as RefObject<HTMLElement | null>));
 
   useEffect(() => {
     return injectPageStyles(page.id);

@@ -564,6 +564,31 @@ export interface UpdatePreferencesRequest {
   shortcuts?: string[];
 }
 
+export interface BookmarkCatalogItemDto {
+  id: string;
+  seedKey: string;
+  kind: string;
+  title: string;
+  excerpt: string;
+  href: string;
+  icon: string;
+  source: string;
+  isDefault: boolean;
+  sortOrder: number;
+}
+
+export interface DocumentDto {
+  id: string;
+  title: string;
+  description?: string | null;
+  category: string;
+  mediaType?: string | null;
+  isFeatured: boolean;
+  seedKey?: string | null;
+  sharePointUrl: string;
+  modifiedAt: string;
+}
+
 export interface PayslipSummaryDto {
   latestCompetence: string;
   latestNetAmount: number;

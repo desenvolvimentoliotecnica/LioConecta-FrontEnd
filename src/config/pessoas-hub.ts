@@ -7,7 +7,7 @@ export type HubSection = {
   description: string;
   icon: string;
   mod: string;
-  count: string;
+  count?: string;
   disabled?: boolean;
 };
 

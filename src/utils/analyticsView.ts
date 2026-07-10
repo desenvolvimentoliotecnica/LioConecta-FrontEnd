@@ -2,16 +2,8 @@ import type { AnalyticsSnapshotDto } from "../api/types";
 import {
   filterByModule,
   formatNumber,
-  getActivityTrend,
-  getDepartmentEngagement,
-  getKpis,
   getModuleInsights,
-  getPollActivityTrend,
-  getPollKpis,
   getPollModuleInsight,
-  getServiceBreakdown,
-  getTopContent,
-  getTopPolls,
   type AnalyticsModule,
   type AnalyticsPeriod,
   type DepartmentEngagement,
@@ -39,6 +31,16 @@ export type AnalyticsViewModel = {
 
 function hasTrendData(points: TrendPoint[]): boolean {
   return points.some((point) => point.value > 0);
+}
+
+function emptyTrend(period: AnalyticsPeriod): TrendPoint[] {
+  const labels =
+    period === "7d"
+      ? ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+      : period === "12m"
+        ? ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+        : ["S1", "S2", "S3", "S4"];
+  return labels.map((label) => ({ label, value: 0 }));
 }
 
 function formatTopItemValue(item: AnalyticsSnapshotDto["topContent"][number]): string {
@@ -109,17 +111,14 @@ function mapTopPolls(snapshot: AnalyticsSnapshotDto): RankedItem[] {
   }));
 }
 
-function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: AnalyticsPeriod): KpiMetric[] {
-  const mockKpis = getKpis(period);
-  const mockById = new Map(mockKpis.map((kpi) => [kpi.id, kpi]));
-
-  const realKpis: KpiMetric[] = [
+function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto): KpiMetric[] {
+  return [
     {
       id: "active-users",
       label: "Colaboradores ativos",
       value: formatNumber(snapshot.activePeople),
-      delta: mockById.get("active-users")?.delta ?? "—",
-      trend: "up",
+      delta: "dado real",
+      trend: snapshot.activePeople > 0 ? "up" : "neutral",
       icon: "fa-user-check",
       mod: "all",
     },
@@ -127,7 +126,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "engagement-rate",
       label: "Usuários ativos no período",
       value: formatNumber(snapshot.activeUsersInPeriod),
-      delta: mockById.get("engagement-rate")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.activeUsersInPeriod > 0 ? "up" : "neutral",
       icon: "fa-chart-line",
       mod: "engajamento",
@@ -136,7 +135,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "comunicados-read",
       label: "Comunicados lidos",
       value: formatNumber(snapshot.comunicadoReads),
-      delta: mockById.get("comunicados-read")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.comunicadoReads > 0 ? "up" : "neutral",
       icon: "fa-bullhorn",
       mod: "comunicados",
@@ -145,7 +144,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "service-requests",
       label: "Solicitações de serviços",
       value: formatNumber(snapshot.serviceRequests),
-      delta: mockById.get("service-requests")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.serviceRequests > 0 ? "up" : "neutral",
       icon: "fa-clipboard-list",
       mod: "servicos",
@@ -154,7 +153,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "feed-posts",
       label: "Publicações no feed",
       value: formatNumber(snapshot.feedPosts),
-      delta: mockById.get("feed-posts")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.feedPosts > 0 ? "up" : "neutral",
       icon: "fa-rss",
       mod: "feed",
@@ -163,7 +162,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "doc-downloads",
       label: "Documentos catalogados",
       value: formatNumber(snapshot.documents),
-      delta: mockById.get("doc-downloads")?.delta ?? "—",
+      delta: "dado real",
       trend: "neutral",
       icon: "fa-file-arrow-down",
       mod: "documentos",
@@ -172,7 +171,7 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "profile-views",
       label: "Notificações enviadas",
       value: formatNumber(snapshot.notifications),
-      delta: mockById.get("profile-views")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.notifications > 0 ? "up" : "neutral",
       icon: "fa-bell",
       mod: "pessoas",
@@ -181,38 +180,16 @@ function buildKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analytics
       id: "group-interactions",
       label: "Grupos ativos",
       value: formatNumber(snapshot.activeGroups),
-      delta: mockById.get("group-interactions")?.delta ?? "—",
+      delta: "dado real",
       trend: snapshot.activeGroups > 0 ? "up" : "neutral",
       icon: "fa-people-group",
       mod: "grupos",
     },
   ];
-
-  return realKpis.map((kpi) => {
-    const mock = mockById.get(kpi.id);
-    if (!mock) return kpi;
-    const isReal =
-      (kpi.id === "active-users" && snapshot.activePeople > 0) ||
-      (kpi.id === "engagement-rate" && snapshot.activeUsersInPeriod >= 0) ||
-      (kpi.id === "comunicados-read" && snapshot.comunicadoReads >= 0) ||
-      (kpi.id === "service-requests" && snapshot.serviceRequests >= 0) ||
-      (kpi.id === "feed-posts" && snapshot.feedPosts >= 0) ||
-      (kpi.id === "doc-downloads" && snapshot.documents >= 0) ||
-      (kpi.id === "profile-views" && snapshot.notifications >= 0) ||
-      (kpi.id === "group-interactions" && snapshot.activeGroups > 0);
-
-    return {
-      ...kpi,
-      delta: isReal ? "dado real" : mock.delta,
-      trend: isReal ? kpi.trend : mock.trend,
-    };
-  });
 }
 
 function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: AnalyticsPeriod): ModuleInsight[] {
-  const mockModules = getModuleInsights(period);
-  const mockById = new Map(mockModules.map((mod) => [mod.id, mod]));
-
+  const templates = getModuleInsights(period);
   const realStats: Record<string, ModuleInsight> = {
     feed: {
       id: "feed",
@@ -224,7 +201,6 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
         { label: "Reações", value: formatNumber(snapshot.feedReactions) },
         { label: "Comentários", value: formatNumber(snapshot.feedComments) },
       ],
-      highlight: mockById.get("feed")?.highlight,
     },
     comunicados: {
       id: "comunicados",
@@ -236,7 +212,6 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
         { label: "Leituras no período", value: formatNumber(snapshot.comunicadoReads) },
         { label: "Notificações", value: formatNumber(snapshot.notifications) },
       ],
-      highlight: mockById.get("comunicados")?.highlight,
     },
     pessoas: {
       id: "pessoas",
@@ -248,7 +223,6 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
         { label: "Ativos no período", value: formatNumber(snapshot.activeUsersInPeriod) },
         { label: "Mood checks", value: formatNumber(snapshot.moodChecks) },
       ],
-      highlight: mockById.get("pessoas")?.highlight,
     },
     grupos: {
       id: "grupos",
@@ -260,19 +234,17 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
         { label: "Novos membros", value: formatNumber(snapshot.groupMembers) },
         { label: "Posts em grupos", value: formatNumber(snapshot.groupPosts) },
       ],
-      highlight: mockById.get("grupos")?.highlight,
     },
     documentos: {
       id: "documentos",
       title: "Documentos",
       description: "Políticas, manuais, formulários, modelos e biblioteca corporativa.",
-      href: "/documentos/politicas-internas",
+      href: "/documentos/biblioteca",
       stats: [
         { label: "Documentos", value: formatNumber(snapshot.documents) },
-        { label: "Visualizações", value: mockById.get("documentos")?.stats[1]?.value ?? "—" },
-        { label: "Novos uploads", value: mockById.get("documentos")?.stats[2]?.value ?? "—" },
+        { label: "Visualizações", value: "—" },
+        { label: "Novos uploads", value: "—" },
       ],
-      highlight: mockById.get("documentos")?.highlight,
     },
     servicos: {
       id: "servicos",
@@ -281,10 +253,9 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
       href: "/servicos/beneficios",
       stats: [
         { label: "Solicitações", value: formatNumber(snapshot.serviceRequests) },
-        { label: "SLA médio", value: mockById.get("servicos")?.stats[1]?.value ?? "—" },
-        { label: "Satisfação", value: mockById.get("servicos")?.stats[2]?.value ?? "—" },
+        { label: "SLA médio", value: "—" },
+        { label: "Satisfação", value: "—" },
       ],
-      highlight: mockById.get("servicos")?.highlight,
     },
     engajamento: {
       id: "engajamento",
@@ -293,26 +264,22 @@ function buildModulesFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analyt
       href: "/notificacoes",
       stats: [
         { label: "Notificações enviadas", value: formatNumber(snapshot.notifications) },
-        { label: "Taxa de abertura", value: mockById.get("engajamento")?.stats[1]?.value ?? "—" },
-        { label: "Mensagens no chat", value: mockById.get("engajamento")?.stats[2]?.value ?? "—" },
+        { label: "Taxa de abertura", value: "—" },
+        { label: "Mensagens no chat", value: "—" },
       ],
-      highlight: mockById.get("engajamento")?.highlight,
     },
   };
 
-  return mockModules.map((mock) => realStats[mock.id] ?? mock);
+  return templates.map((template) => realStats[template.id] ?? { ...template, stats: template.stats.map((s) => ({ ...s, value: "—" })), highlight: undefined });
 }
 
-function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: AnalyticsPeriod): KpiMetric[] {
-  const mockKpis = getPollKpis(period);
-  const mockById = new Map(mockKpis.map((kpi) => [kpi.id, kpi]));
-
-  const realKpis: KpiMetric[] = [
+function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto): KpiMetric[] {
+  return [
     {
       id: "polls-created",
       label: "Enquetes criadas",
       value: formatNumber(snapshot.pollsCreated ?? 0),
-      delta: mockById.get("polls-created")?.delta ?? "—",
+      delta: "dado real",
       trend: (snapshot.pollsCreated ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-square-plus",
       mod: "enquetes",
@@ -321,7 +288,7 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
       id: "poll-votes",
       label: "Total de votos",
       value: formatNumber(snapshot.pollVotes ?? 0),
-      delta: mockById.get("poll-votes")?.delta ?? "—",
+      delta: "dado real",
       trend: (snapshot.pollVotes ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-check-to-slot",
       mod: "enquetes",
@@ -330,7 +297,7 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
       id: "polls-active",
       label: "Enquetes ativas",
       value: formatNumber(snapshot.activePolls ?? 0),
-      delta: "—",
+      delta: "dado real",
       trend: "neutral",
       icon: "fa-circle-play",
       mod: "enquetes",
@@ -339,7 +306,7 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
       id: "poll-participation",
       label: "Taxa de participação",
       value: `${snapshot.pollParticipationRate ?? 0}%`,
-      delta: mockById.get("poll-participation")?.delta ?? "—",
+      delta: "dado real",
       trend: (snapshot.pollParticipationRate ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-users-viewfinder",
       mod: "enquetes",
@@ -348,7 +315,7 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
       id: "poll-avg-votes",
       label: "Média de votos/enquete",
       value: formatNumber(snapshot.pollAvgVotesPerPoll ?? 0),
-      delta: mockById.get("poll-avg-votes")?.delta ?? "—",
+      delta: "dado real",
       trend: (snapshot.pollAvgVotesPerPoll ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-chart-simple",
       mod: "enquetes",
@@ -357,75 +324,79 @@ function buildPollKpisFromSnapshot(snapshot: AnalyticsSnapshotDto, period: Analy
       id: "polls-closed",
       label: "Enquetes encerradas",
       value: formatNumber(snapshot.pollsClosed ?? 0),
-      delta: mockById.get("polls-closed")?.delta ?? "—",
+      delta: "dado real",
       trend: (snapshot.pollsClosed ?? 0) > 0 ? "up" : "neutral",
       icon: "fa-circle-stop",
       mod: "enquetes",
     },
   ];
+}
 
-  return realKpis.map((kpi) => {
-    const mock = mockById.get(kpi.id);
-    if (!mock) return kpi;
-    const hasRealData =
-      snapshotHasPollAnalytics(snapshot) &&
-      ((kpi.id === "polls-created" && (snapshot.pollsCreated ?? 0) > 0) ||
-        (kpi.id === "poll-votes" && (snapshot.pollVotes ?? 0) > 0) ||
-        (kpi.id === "polls-active" && (snapshot.activePolls ?? 0) > 0) ||
-        (kpi.id === "poll-participation" && (snapshot.pollParticipationRate ?? 0) > 0) ||
-        (kpi.id === "poll-avg-votes" && (snapshot.pollAvgVotesPerPoll ?? 0) > 0) ||
-        (kpi.id === "polls-closed" && (snapshot.pollsClosed ?? 0) > 0));
-
-    return {
-      ...kpi,
-      delta: hasRealData ? "dado real" : mock.delta,
-      trend: hasRealData ? kpi.trend : mock.trend,
-    };
-  });
+function buildEmptyPollSection(period: AnalyticsPeriod): PollSectionView {
+  const insight = getPollModuleInsight(period);
+  return {
+    kpis: buildPollKpisFromSnapshot({
+      period,
+      activePeople: 0,
+      activeUsersInPeriod: 0,
+      feedPosts: 0,
+      feedComments: 0,
+      feedReactions: 0,
+      comunicados: 0,
+      comunicadoReads: 0,
+      activeGroups: 0,
+      groupMembers: 0,
+      groupPosts: 0,
+      notifications: 0,
+      serviceRequests: 0,
+      documents: 0,
+      moodChecks: 0,
+      activityTrend: [],
+      serviceBreakdown: [],
+      departmentEngagement: [],
+      topContent: [],
+    }),
+    activityTrend: emptyTrend(period),
+    activityTrendIsMock: false,
+    topPolls: [],
+    topPollsIsMock: false,
+    moduleInsight: {
+      ...insight,
+      stats: [
+        { label: "Criadas", value: "—" },
+        { label: "Votos", value: "—" },
+        { label: "Participação", value: "—" },
+      ],
+      highlight: undefined,
+    },
+  };
 }
 
 function buildPollSection(
   snapshot: AnalyticsSnapshotDto | null | undefined,
   period: AnalyticsPeriod,
-  mockSections: string[],
 ): PollSectionView {
   if (!snapshot || !snapshotHasPollAnalytics(snapshot)) {
-    if (snapshot && !snapshotHasPollAnalytics(snapshot)) {
-      mockSections.push("métricas de enquetes");
-    }
-    return {
-      kpis: getPollKpis(period),
-      activityTrend: getPollActivityTrend(period),
-      activityTrendIsMock: true,
-      topPolls: getTopPolls(period),
-      topPollsIsMock: true,
-      moduleInsight: getPollModuleInsight(period),
-    };
+    return buildEmptyPollSection(period);
   }
 
   const pollTrend = (snapshot.pollActivityTrend ?? []).map((point) => ({
     label: point.label,
     value: point.value,
   }));
-  const pollTrendIsMock = !hasTrendData(pollTrend);
-  if (pollTrendIsMock) mockSections.push("tendência de votos em enquetes");
-
   const mappedTopPolls = mapTopPolls(snapshot);
-  const topPollsIsMock = mappedTopPolls.length === 0;
-  if (topPollsIsMock) mockSections.push("ranking de enquetes");
-
-  const mockInsight = getPollModuleInsight(period);
-  const kpis = buildPollKpisFromSnapshot(snapshot, period);
+  const kpis = buildPollKpisFromSnapshot(snapshot);
   const byId = new Map(kpis.map((kpi) => [kpi.id, kpi]));
+  const insight = getPollModuleInsight(period);
 
   return {
     kpis,
-    activityTrend: pollTrendIsMock ? getPollActivityTrend(period) : pollTrend,
-    activityTrendIsMock: pollTrendIsMock,
-    topPolls: topPollsIsMock ? getTopPolls(period) : mappedTopPolls,
-    topPollsIsMock,
+    activityTrend: hasTrendData(pollTrend) ? pollTrend : emptyTrend(period),
+    activityTrendIsMock: false,
+    topPolls: mappedTopPolls,
+    topPollsIsMock: false,
     moduleInsight: {
-      ...mockInsight,
+      ...insight,
       stats: [
         { label: "Criadas", value: byId.get("polls-created")?.value ?? "—" },
         { label: "Votos", value: byId.get("poll-votes")?.value ?? "—" },
@@ -434,38 +405,62 @@ function buildPollSection(
       highlight:
         (snapshot.pollVotes ?? 0) > 0
           ? `${formatNumber(snapshot.pollVotes ?? 0)} votos registrados no período`
-          : mockInsight.highlight,
+          : undefined,
     },
   };
 }
 
-export function buildMockAnalyticsView(period: AnalyticsPeriod, module: AnalyticsModule): AnalyticsViewModel {
-  const pollSection = buildPollSection(null, period, []);
+export function buildEmptyAnalyticsView(period: AnalyticsPeriod, module: AnalyticsModule): AnalyticsViewModel {
+  const pollSection = buildEmptyPollSection(period);
+  const emptySnapshot = normalizeSnapshot({
+    period,
+    activePeople: 0,
+    activeUsersInPeriod: 0,
+    feedPosts: 0,
+    feedComments: 0,
+    feedReactions: 0,
+    comunicados: 0,
+    comunicadoReads: 0,
+    activeGroups: 0,
+    groupMembers: 0,
+    groupPosts: 0,
+    notifications: 0,
+    serviceRequests: 0,
+    documents: 0,
+    moodChecks: 0,
+    activityTrend: [],
+    serviceBreakdown: [],
+    departmentEngagement: [],
+    topContent: [],
+  });
+
   return {
     kpis:
       module === "enquetes"
         ? pollSection.kpis
-        : filterByModule(getKpis(period), module),
-    activityTrend: getActivityTrend(period),
-    activityTrendIsMock: true,
+        : filterByModule(buildKpisFromSnapshot(emptySnapshot), module),
+    activityTrend: emptyTrend(period),
+    activityTrendIsMock: false,
     modules:
       module === "all"
-        ? [...getModuleInsights(period), getPollModuleInsight(period)]
+        ? [...buildModulesFromSnapshot(emptySnapshot, period), pollSection.moduleInsight]
         : module === "enquetes"
           ? [pollSection.moduleInsight]
-          : getModuleInsights(period).filter((m) => m.id === module),
-    topContent:
-      module === "enquetes"
-        ? pollSection.topPolls
-        : filterByModule(getTopContent(period), module),
-    topContentIsMock: true,
-    serviceBreakdown: getServiceBreakdown(period),
-    serviceBreakdownIsMock: true,
-    departments: getDepartmentEngagement(),
-    departmentsIsMock: true,
-    mockSections: ["todos os indicadores"],
+          : buildModulesFromSnapshot(emptySnapshot, period).filter((m) => m.id === module),
+    topContent: [],
+    topContentIsMock: false,
+    serviceBreakdown: [],
+    serviceBreakdownIsMock: false,
+    departments: [],
+    departmentsIsMock: false,
+    mockSections: [],
     pollSection: module === "all" || module === "enquetes" ? pollSection : null,
   };
+}
+
+/** @deprecated Use buildEmptyAnalyticsView — kept for call-site compatibility. */
+export function buildMockAnalyticsView(period: AnalyticsPeriod, module: AnalyticsModule): AnalyticsViewModel {
+  return buildEmptyAnalyticsView(period, module);
 }
 
 export function buildAnalyticsView(
@@ -474,46 +469,28 @@ export function buildAnalyticsView(
   module: AnalyticsModule,
 ): AnalyticsViewModel {
   if (!snapshot) {
-    return buildMockAnalyticsView(period, module);
+    return buildEmptyAnalyticsView(period, module);
   }
 
   const normalized = normalizeSnapshot(snapshot);
-  const mockSections: string[] = [];
   const activityTrend = normalized.activityTrend.map((p) => ({ label: p.label, value: p.value }));
-  const activityTrendIsMock = !hasTrendData(activityTrend);
-  const trend = activityTrendIsMock ? getActivityTrend(period) : activityTrend;
-  if (activityTrendIsMock) mockSections.push("tendência de atividade");
+  const trend = hasTrendData(activityTrend) ? activityTrend : emptyTrend(period);
 
-  const serviceBreakdownIsMock = normalized.serviceBreakdown.length === 0;
-  const serviceBreakdown = serviceBreakdownIsMock
-    ? getServiceBreakdown(period)
-    : normalized.serviceBreakdown;
-  if (serviceBreakdownIsMock) mockSections.push("solicitações por área");
-
-  const departmentsIsMock = normalized.departmentEngagement.length === 0;
-  const departments = departmentsIsMock
-    ? getDepartmentEngagement()
-    : normalized.departmentEngagement.map((d) => ({
-        name: d.name,
-        activeUsers: d.activeUsers,
-        engagement: d.engagement,
-      }));
-  if (departmentsIsMock) mockSections.push("engajamento por departamento");
+  const serviceBreakdown = normalized.serviceBreakdown;
+  const departments = normalized.departmentEngagement.map((d) => ({
+    name: d.name,
+    activeUsers: d.activeUsers,
+    engagement: d.engagement,
+  }));
 
   const mappedTop = mapTopContent(normalized);
-  const topContentIsMock = mappedTop.length === 0;
-  const topContent = topContentIsMock
-    ? filterByModule(getTopContent(period), module)
-    : filterByModule(
-        mappedTop.map((item, index) => ({ ...item, rank: index + 1 })),
-        module,
-      );
-  if (topContentIsMock) mockSections.push("conteúdo em destaque");
+  const topContent = filterByModule(
+    mappedTop.map((item, index) => ({ ...item, rank: index + 1 })),
+    module,
+  );
 
   const pollSection =
-    module === "all" || module === "enquetes"
-      ? buildPollSection(normalized, period, mockSections)
-      : null;
+    module === "all" || module === "enquetes" ? buildPollSection(normalized, period) : null;
 
   const modules =
     module === "all"
@@ -526,20 +503,17 @@ export function buildAnalyticsView(
     kpis:
       module === "enquetes"
         ? pollSection!.kpis
-        : filterByModule(buildKpisFromSnapshot(normalized, period), module),
+        : filterByModule(buildKpisFromSnapshot(normalized), module),
     activityTrend: trend,
-    activityTrendIsMock,
+    activityTrendIsMock: false,
     modules,
-    topContent:
-      module === "enquetes"
-        ? pollSection!.topPolls
-        : topContent,
-    topContentIsMock: module === "enquetes" ? pollSection!.topPollsIsMock : topContentIsMock,
+    topContent: module === "enquetes" ? pollSection!.topPolls : topContent,
+    topContentIsMock: false,
     serviceBreakdown,
-    serviceBreakdownIsMock,
+    serviceBreakdownIsMock: false,
     departments,
-    departmentsIsMock,
-    mockSections,
+    departmentsIsMock: false,
+    mockSections: [],
     pollSection,
   };
 }

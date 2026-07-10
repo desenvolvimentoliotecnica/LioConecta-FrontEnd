@@ -11,10 +11,12 @@ import { ParabenizacoesHubPage } from "./components/pages/ParabenizacoesHubPage"
 import { GroupApprovalsPage } from "./components/pages/GroupApprovalsPage";
 import { GroupCreatePage } from "./components/pages/GroupCreatePage";
 import { GroupExplorePage } from "./components/pages/GroupExplorePage";
+import { GroupMyGroupsPage } from "./components/pages/GroupMyGroupsPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { PhoneExtensionsPage } from "./components/pessoas/PhoneExtensionsPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
+import { DocumentsBibliotecaPage } from "./components/pages/DocumentsBibliotecaPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
 import { BeneficiosGestaoPage } from "./components/beneficios/BeneficiosGestaoPage";
@@ -262,10 +264,12 @@ function App() {
         <Route path="/atalhos" element={<ShortcutsPage />} />
         <Route path="/calendario" element={<CalendarPage />} />
         <Route path="/documentos" element={<DocumentsHubPage />} />
+        <Route path="/documentos/biblioteca" element={<DocumentsBibliotecaPage />} />
         <Route path="/comunicados" element={<ComunicadosHubPage />} />
         <Route path="/pessoas" element={<PessoasHubPage />} />
         <Route path="/pessoas/ramais" element={<PhoneExtensionsPage />} />
         <Route path="/grupos" element={<GruposHubPage />} />
+        <Route path="/grupos/meus-grupos" element={<GroupMyGroupsPage />} />
         <Route path="/grupos/criar" element={<GroupCreatePage />} />
         <Route path="/grupos/explorar" element={<GroupExplorePage />} />
         <Route path="/grupos/aprovacoes" element={<GroupApprovalsPage />} />
@@ -292,6 +296,8 @@ function App() {
             page.id === "comunicados-arquivo" ||
             page.id === "grupos-criar-grupo" ||
             page.id === "grupos-explorar" ||
+            page.id === "grupos-meus-grupos" ||
+            page.id === "documentos-biblioteca" ||
             page.id === "servicos-contracheque" ||
             page.id === "servicos-beneficios" ||
             page.id === "servicos-ferias" ||

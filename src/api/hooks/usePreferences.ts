@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../client";
-import { DEFAULT_BOOKMARK_IDS } from "../../config/bookmarks";
 import type { UpdatePreferencesRequest, UserPreferencesDto } from "../types";
 
 export const PREFERENCES_QUERY_KEY = ["preferences"] as const;
@@ -24,29 +23,24 @@ export function useUpdatePreferences() {
   });
 }
 
-export function useToggleBookmark() {
+export function useToggleBookmark(defaultIds: string[] = []) {
   const { data: preferences } = usePreferences();
   const update = useUpdatePreferences();
 
+  const currentIds =
+    preferences?.bookmarks && preferences.bookmarks.length > 0
+      ? preferences.bookmarks
+      : defaultIds;
+
   const toggle = (bookmarkId: string) => {
-    const current =
-      preferences?.bookmarks && preferences.bookmarks.length > 0
-        ? preferences.bookmarks
-        : DEFAULT_BOOKMARK_IDS;
-    const next = current.includes(bookmarkId)
-      ? current.filter((id) => id !== bookmarkId)
-      : [...current, bookmarkId];
+    const next = currentIds.includes(bookmarkId)
+      ? currentIds.filter((id) => id !== bookmarkId)
+      : [...currentIds, bookmarkId];
 
     update.mutate({ bookmarks: next });
   };
 
-  const isSaved = (bookmarkId: string) => {
-    const current =
-      preferences?.bookmarks && preferences.bookmarks.length > 0
-        ? preferences.bookmarks
-        : DEFAULT_BOOKMARK_IDS;
-    return current.includes(bookmarkId);
-  };
+  const isSaved = (bookmarkId: string) => currentIds.includes(bookmarkId);
 
   return { toggle, isSaved, isPending: update.isPending };
 }
