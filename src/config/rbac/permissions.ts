@@ -45,6 +45,9 @@ export const PERMISSIONS = {
     manage: "leave.manage",
     approve: "leave.approve",
   },
+  payslips: {
+    audit: "payslips.audit",
+  },
   ponto: {
     request: "ponto.request",
     manage: "ponto.manage",

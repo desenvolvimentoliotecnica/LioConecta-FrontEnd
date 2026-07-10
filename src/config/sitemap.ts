@@ -190,13 +190,13 @@ export function buildSitemapSections(): SitemapSection[] {
               "/servicos/rh",
               "Página central com atalhos para benefícios, contracheque, férias e solicitações.",
             ),
-            ...servicosLinks.slice(0, 9).map((item) => fromNav(item)),
+            ...servicosLinks.slice(0, 10).map((item) => fromNav(item)),
           ],
         },
         {
           heading: servicosHeadings[1].label,
           icon: servicosHeadings[1].icon,
-          items: servicosLinks.slice(9).map((item) => fromNav(item)),
+          items: servicosLinks.slice(10).map((item) => fromNav(item)),
         },
         {
           heading: servicosHeadings[2].label,

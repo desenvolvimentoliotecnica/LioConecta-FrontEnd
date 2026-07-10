@@ -205,11 +205,13 @@ export function Topbar() {
     hasPermission(PERMISSIONS.leave.manage) || hasPermission(PERMISSIONS.leave.approve);
   const canManagePonto =
     hasPermission(PERMISSIONS.ponto.manage) || hasPermission(PERMISSIONS.ponto.approve);
+  const canAuditPayslips = hasPermission(PERMISSIONS.payslips.audit);
 
   const filterServicosItem = (item: NavLinkItem) => {
     if (item.benefitsManageOnly && !canManageBenefits) return false;
     if (item.leaveManageOnly && !canManageLeave) return false;
     if (item.pontoManageOnly && !canManagePonto) return false;
+    if (item.payslipsAuditOnly && !canAuditPayslips) return false;
     return true;
   };
   const visibleServicosLinks = servicosLinks.filter(filterServicosItem);

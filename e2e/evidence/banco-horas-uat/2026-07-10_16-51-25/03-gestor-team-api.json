@@ -1,0 +1,46 @@
+{
+  "marker": "E2E-BH-1783713085212",
+  "count": 163,
+  "sample": [
+    {
+      "personId": "13ce62a1-4440-4f9c-919f-40ab6899c6c7",
+      "name": "Ademir Dias",
+      "role": "Mecanico De Manutenção",
+      "employeeId": "11500141",
+      "balanceHours": 7.97,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "acaf4a8f-f504-40ed-a232-2012362cdded",
+      "name": "ADEMIR PIRES",
+      "role": "Anl Pcp Sr",
+      "employeeId": "00001469",
+      "balanceHours": 16.28,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "158fc36f-d1ea-4cb8-97f0-3952b031b730",
+      "name": "ADRIANA APARECIDA PINTO DE MEDEIROS",
+      "role": "Tecnico De Qualidade",
+      "employeeId": "00000575",
+      "balanceHours": 26.68,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "50bfbec7-15c5-481b-b26d-5cfac7a17921",
+      "name": "ADRIANA DIAS DE OLIVEIRA",
+      "role": "Anl Transportes Jr",
+      "employeeId": "00000531",
+      "balanceHours": -3.83,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    },
+    {
+      "personId": "5a413c86-f8ff-48d8-ad99-5e9ee958d6c8",
+      "name": "Adriana Maria de Freitas",
+      "role": "Assist Adm",
+      "employeeId": "00000348",
+      "balanceHours": -31.83,
+      "periodLabel": "16/06/2026 – 15/07/2026"
+    }
+  ]
+}

@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, config, ApiError } from "../client";
 import type {
   CreatePontoAdjustmentDto,
+  HourBankTeamMemberDto,
+  LeaveBancoHorasDto,
   PontoAdjustmentDetailDto,
   PontoAdjustmentItemDto,
   PontoAdjustmentManagementDetailDto,
@@ -74,6 +76,33 @@ export function usePontoManagementList(params: {
         `/rh/ponto/adjustments/management?${search.toString()}`,
       ),
     enabled: params.enabled !== false,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHourBankTeam(params: { q?: string; enabled?: boolean }) {
+  const q = params.q?.trim() || undefined;
+  const search = new URLSearchParams();
+  if (q) search.set("q", q);
+  const qs = search.toString();
+
+  return useQuery({
+    queryKey: [...PONTO_QUERY_KEY, "banco-horas", "team", q ?? ""],
+    queryFn: () =>
+      api.get<HourBankTeamMemberDto[]>(
+        `/rh/ponto/banco-horas${qs ? `?${qs}` : ""}`,
+      ),
+    enabled: params.enabled !== false,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHourBankPerson(personId: string | null) {
+  return useQuery({
+    queryKey: [...PONTO_QUERY_KEY, "banco-horas", "person", personId],
+    queryFn: () =>
+      api.get<LeaveBancoHorasDto>(`/rh/ponto/banco-horas/${personId}`),
+    enabled: personId !== null,
     retry: config.useMock ? 0 : 1,
   });
 }
