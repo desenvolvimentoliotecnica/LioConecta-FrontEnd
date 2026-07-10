@@ -11,7 +11,10 @@
   align-items: stretch;
   width: 100%;
   margin: 0;
-  min-height: 180px;
+  /* Fixed height so slides with 1 vs 2 lines of text don't shift the feed layout */
+  height: 200px;
+  min-height: 200px;
+  max-height: 200px;
   border-radius: inherit;
   background-color: #fff7ed;
   background-position: right top;
@@ -47,6 +50,24 @@
   z-index: 1;
   /* Keep title/body clear of side arrows (36px) + arrow inset + gap */
   padding: 20px 56px 36px 64px;
+  min-height: 0;
+}
+
+.announcement--carousel .announcement__content h2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  /* Reserve 2 lines so 1-line titles don't shrink the block */
+  min-height: calc(1.25em * 2);
+}
+
+.announcement--carousel .announcement__content p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(1.5em * 2);
 }
 
 .announcement__hero--link .announcement__cta {
