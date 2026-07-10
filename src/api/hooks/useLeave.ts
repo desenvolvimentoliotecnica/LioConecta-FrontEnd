@@ -145,8 +145,23 @@ export function extractLeaveRequestError(error: unknown): string {
 export function useLeaveRequest() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (body: CreateLeaveRequestDto) =>
-      api.post<LeaveRequestResultDto>("/rh/leave/requests", body),
+    mutationFn: (body: CreateLeaveRequestDto) => {
+      if (body.files && body.files.length > 0) {
+        const formData = new FormData();
+        formData.append("serviceId", body.serviceId);
+        if (body.startDate) formData.append("startDate", body.startDate);
+        if (body.endDate) formData.append("endDate", body.endDate);
+        if (body.days != null) formData.append("days", String(body.days));
+        if (body.notes) formData.append("notes", body.notes);
+        for (const file of body.files) {
+          formData.append("files", file);
+        }
+        return api.upload<LeaveRequestResultDto>("/rh/leave/requests/multipart", formData);
+      }
+
+      const { files: _files, ...jsonBody } = body;
+      return api.post<LeaveRequestResultDto>("/rh/leave/requests", jsonBody);
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: LEAVE_QUERY_KEY });
     },
