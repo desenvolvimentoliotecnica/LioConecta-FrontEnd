@@ -8,7 +8,7 @@ import {
 } from "../../../api/hooks/useRbacAdmin";
 import type { AssignmentModalMode } from "./RbacAssignmentModal";
 import { buildAssignmentPayload, RbacAssignmentModal } from "./RbacAssignmentModal";
-import { apiErrorMessage, subjectTypeLabel, type AssignmentGroup } from "./rbacUi";
+import { apiErrorMessage, subjectTypeLabel, toRbacSubjectTypeApiValue, type AssignmentGroup } from "./rbacUi";
 
 function groupAssignments(items: SubjectRoleAssignmentDto[]): AssignmentGroup[] {
   const map = new Map<string, AssignmentGroup>();
@@ -127,6 +127,51 @@ export function AssignmentsTab() {
     }
   };
 
+  const handleRemove = async (row: AssignmentGroup) => {
+    const confirmed = window.confirm(
+      `Remover todas as regras de ${row.label} (${row.typeLabel})?\n\nO sujeito deixa de aparecer nesta lista. Person e PortalUser do mesmo e-mail são atribuições independentes — remova cada uma se necessário.`,
+    );
+    if (!confirmed) return;
+
+    try {
+      await updateAssignments.mutateAsync({
+        subjectType: toRbacSubjectTypeApiValue(row.subjectType),
+        subjectId: row.subjectId,
+        roleIds: [],
+      });
+      setFeedback(`Atribuição de ${row.label} (${row.typeLabel}) removida.`);
+      setSelectedKeys((prev) => {
+        const next = new Set(prev);
+        next.delete(row.key);
+        return next;
+      });
+    } catch (error) {
+      setFeedback(apiErrorMessage(error));
+    }
+  };
+
+  const handleRemoveSelected = async () => {
+    if (selectedGroups.length === 0) return;
+    const confirmed = window.confirm(
+      `Remover todas as regras de ${selectedGroups.length} sujeito(s) selecionado(s)?`,
+    );
+    if (!confirmed) return;
+
+    try {
+      await bulkUpdateAssignments.mutateAsync({
+        items: selectedGroups.map((row) => ({
+          subjectType: toRbacSubjectTypeApiValue(row.subjectType),
+          subjectId: row.subjectId,
+          roleIds: [],
+        })),
+      });
+      setFeedback(`${selectedGroups.length} atribuição(ões) removida(s).`);
+      setSelectedKeys(new Set());
+    } catch (error) {
+      setFeedback(apiErrorMessage(error));
+    }
+  };
+
   const initialRoleIds =
     modalMode === "edit" && modalSubjects.length === 1
       ? modalSubjects[0]!.roles.map((role) => role.id)
@@ -142,7 +187,8 @@ export function AssignmentsTab() {
           <div className="controle-acesso__intro-title">Atribuições de regras</div>
           <p className="controle-acesso__intro-text">
             Atribua regras a colaboradores do diretório, usuários de teste ou PortalUsers. Use a edição
-            individual ou em massa para ajustar permissões de acesso.
+            individual ou em massa para ajustar permissões de acesso. Person e PortalUser com o mesmo
+            e-mail são sujeitos distintos — as regras não se somam entre tipos.
           </p>
         </div>
       </div>
@@ -171,6 +217,15 @@ export function AssignmentsTab() {
           {selectedKeys.size > 0 ? (
             <span className="controle-acesso__status">{selectedKeys.size} selecionado(s)</span>
           ) : null}
+          <button
+            type="button"
+            className="controle-acesso-btn controle-acesso-btn--danger"
+            disabled={selectedKeys.size === 0 || pending}
+            onClick={() => void handleRemoveSelected()}
+          >
+            <i className="fa-solid fa-user-minus" aria-hidden="true" />
+            Remover selecionados
+          </button>
           <button
             type="button"
             className="controle-acesso-btn controle-acesso-btn--ghost"
@@ -244,14 +299,24 @@ export function AssignmentsTab() {
                     </div>
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      className="controle-acesso-btn controle-acesso-btn--ghost"
-                      disabled={pending}
-                      onClick={() => openModal("edit", [row])}
-                    >
-                      Editar regras
-                    </button>
+                    <div className="controle-acesso__row-actions">
+                      <button
+                        type="button"
+                        className="controle-acesso-btn controle-acesso-btn--ghost"
+                        disabled={pending}
+                        onClick={() => openModal("edit", [row])}
+                      >
+                        Editar regras
+                      </button>
+                      <button
+                        type="button"
+                        className="controle-acesso-btn controle-acesso-btn--danger"
+                        disabled={pending}
+                        onClick={() => void handleRemove(row)}
+                      >
+                        Remover
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -590,14 +590,18 @@ export const BACKEND_CONFIG_HELP: Record<string, BackendConfigHelpEntry> = {
         <HelpLead>
           Configurações de notificação, e-mail e links dos serviços de férias. Chaves em <code>leave.*</code>.
           A aprovação formal continua no RM Labore; o portal notifica e espelha status.
+          O acesso à <strong>Gestão de férias</strong> é controlado pelo RBAC (
+          <code>leave.manage</code> / <code>leave.approve</code>) em{" "}
+          <a href="/admin/controle-acesso">Controle de Acesso</a> — não por estas chaves.
         </HelpLead>
         <HelpHeading>Notificação no portal</HelpHeading>
         <HelpList>
           <li>
-            <code>leave.notify_roles</code> — JSON array de regras (default <code>[&quot;HR&quot;]</code>) além do gestor direto
+            <code>leave.notify_roles</code> — JSON array de regras legadas usadas só para destinatários de
+            notificação (default <code>[&quot;HR&quot;]</code>) além do gestor direto
           </li>
           <li>
-            <code>leave.notify_emails</code> — e-mails adicionais (também usados como allow-list de gestão)
+            <code>leave.notify_emails</code> — e-mails adicionais para notificação (não concedem acesso à gestão)
           </li>
         </HelpList>
         <HelpHeading>E-mail SMTP (override de desenvolvimento)</HelpHeading>

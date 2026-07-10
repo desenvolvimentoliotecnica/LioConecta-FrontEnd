@@ -43,6 +43,7 @@ export const PERMISSIONS = {
   },
   leave: {
     manage: "leave.manage",
+    approve: "leave.approve",
   },
 } as const;
 
@@ -68,4 +69,6 @@ export const DEPRECATED_ACCESS_SETTING_KEYS = [
   "compass.allowed_emails",
   "unilio.allowed_roles",
   "unilio.allowed_emails",
+  "leave.notify_emails",
+  "leave.notify_roles",
 ] as const;

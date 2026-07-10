@@ -166,7 +166,8 @@ export function RbacAssignmentModal({
         {mode !== "create" ? (
           <p className="controle-acesso__readonly-note">
             <i className="fa-solid fa-circle-info" aria-hidden="true" />
-            Alterações em regras podem exigir novo login para refletir permissões no portal.
+            Desmarque todas as regras e salve para remover a atribuição por completo. Alterações podem
+            exigir novo login para refletir no portal.
           </p>
         ) : null}
       </div>
