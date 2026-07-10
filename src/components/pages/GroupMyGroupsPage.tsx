@@ -123,33 +123,32 @@ export function GroupMyGroupsPage() {
         title="Meus grupos"
         current="Meus grupos"
         description="Grupos dos quais você já participa — departamentos, projetos, interesses e comunidades."
-        toolbar={
-          <div className="page-toolbar">
-            <div className="page-filters" role="group" aria-label="Filtros">
-              {MY_GROUPS_FILTERS.map((entry) => (
-                <button
-                  key={entry.id}
-                  className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
-                  type="button"
-                  onClick={() => setFilter(entry.id)}
-                >
-                  {entry.label}
-                </button>
-              ))}
-            </div>
-            <label className="page-search">
-              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar nos meus grupos..."
-                aria-label="Buscar nos meus grupos"
-              />
-            </label>
-          </div>
-        }
       />
+
+      <div className="page-toolbar">
+        <div className="page-filters" role="group" aria-label="Filtros">
+          {MY_GROUPS_FILTERS.map((entry) => (
+            <button
+              key={entry.id}
+              className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
+              type="button"
+              onClick={() => setFilter(entry.id)}
+            >
+              {entry.label}
+            </button>
+          ))}
+        </div>
+        <label className="page-search">
+          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar nos meus grupos..."
+            aria-label="Buscar nos meus grupos"
+          />
+        </label>
+      </div>
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">

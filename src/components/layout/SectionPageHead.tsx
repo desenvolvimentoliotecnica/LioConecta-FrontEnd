@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
   PAGE_HEAD_SECTIONS,
@@ -19,6 +19,10 @@ export type SectionPageHeadProps = {
   actions?: ReactNode;
 };
 
+type SphCssVars = CSSProperties & {
+  ["--sph-watermark"]?: string;
+};
+
 export function SectionPageHead({
   section,
   title,
@@ -29,9 +33,22 @@ export function SectionPageHead({
   actions,
 }: SectionPageHeadProps) {
   const meta = PAGE_HEAD_SECTIONS[section];
+  const watermark = meta.watermark;
+  const style: SphCssVars | undefined = watermark
+    ? { ["--sph-watermark"]: `url("${watermark}")` }
+    : undefined;
 
   return (
-    <div className={`section-page-head section-page-head--${section}`}>
+    <div
+      className={[
+        "section-page-head",
+        `section-page-head--${section}`,
+        watermark ? "section-page-head--watermark" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={style}
+    >
       <header className={`page-header page-header--${section}`}>
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link to="/">Início</Link>
