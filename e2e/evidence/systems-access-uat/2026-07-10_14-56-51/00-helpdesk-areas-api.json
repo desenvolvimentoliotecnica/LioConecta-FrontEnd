@@ -1,0 +1,33 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "id": "ti",
+      "name": "Área TI",
+      "icon": "laptop",
+      "serviceCount": 21,
+      "entityId": 1
+    },
+    {
+      "id": "custo",
+      "name": "Área CUSTO",
+      "icon": "money",
+      "serviceCount": 1,
+      "entityId": 1
+    },
+    {
+      "id": "pricing",
+      "name": "Área PRINCING",
+      "icon": "clipboard",
+      "serviceCount": 6,
+      "entityId": 1
+    },
+    {
+      "id": "financeira",
+      "name": "Área Financeira",
+      "icon": "money",
+      "serviceCount": 2,
+      "entityId": 1
+    }
+  ]
+}

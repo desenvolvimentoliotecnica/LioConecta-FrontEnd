@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../../api/assetUrl";
+import { ApiError } from "../../api/client";
+import { useHelpDeskCreateTicket } from "../../api/hooks/useHelpDesk";
+import { useAppSettings } from "../../api/hooks/useAppSettings";
 import {
   useCreateSystem,
   useDeleteSystem,
@@ -13,11 +16,22 @@ import {
 import { useSystemsSettings } from "../../api/hooks/useSystemsSettings";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import { useMe } from "../../api/hooks/useMe";
-import type { PortalSystemDto } from "../../api/types";
+import type { HelpDeskTicketResultDto, PortalSystemDto } from "../../api/types";
+import { flattenAppSettingsMap } from "../../config/loop/settings";
+import {
+  parseSystemsAccessCategoryIdFromMap,
+  readSystemsAccessCategoryIdFromEnv,
+  type SystemsAccessEnvironment,
+} from "../../config/systems/accessRequest";
 import { canManageSystems } from "../../config/systems/settings";
 import { systemBookmarkId } from "../../config/systems/bookmarks";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
+import { HelpDeskTicketResultModal } from "../help-desk/HelpDeskTicketResultModal";
 import { SystemCardActionsMenu } from "../systems/SystemCardActionsMenu";
+import {
+  SystemAccessRequestModal,
+  type SystemAccessRequestPayload,
+} from "../systems/SystemAccessRequestModal";
 import {
   emptySystemForm,
   formFromDto,
@@ -30,6 +44,7 @@ import "../../styles/documents-hub-page.css";
 import "../../styles/list-page.css";
 import "../../styles/systems-hub-page.css";
 import "../../styles/contracheque-page.css";
+import "../../styles/help-desk-modal.css";
 
 export const SYSTEMS_HUB_PATH = "/servicos/acesso-sistemas";
 
@@ -47,13 +62,43 @@ function SystemCardIcon({ system }: { system: PortalSystemDto }) {
   return <i className={`fa-solid ${system.iconFaClass ?? "fa-table-cells"}`} aria-hidden="true" />;
 }
 
+function createTicketErrorMessage(error: unknown): string {
+  if (!(error instanceof ApiError)) {
+    return "Não foi possível registrar a solicitação. Tente novamente.";
+  }
+
+  if (error.body && typeof error.body === "object") {
+    const record = error.body as Record<string, unknown>;
+    const detail = record.detail ?? record.title ?? record.message;
+    if (typeof detail === "string" && detail.trim()) {
+      return detail;
+    }
+  }
+
+  if (typeof error.body === "string" && error.body.trim()) {
+    return error.body;
+  }
+
+  if (error.status === 422) {
+    return "Seu usuário não foi encontrado no GLPI. Use o mesmo e-mail corporativo cadastrado no Help Desk.";
+  }
+
+  if (error.status === 502) {
+    return "Falha na integração com o GLPI. Tente novamente em alguns minutos.";
+  }
+
+  return "Não foi possível registrar a solicitação. Tente novamente.";
+}
+
 export function SystemsHubPage() {
   const navigate = useNavigate();
   const { data: me } = useMe();
   const { data: settings, isError: settingsError } = useSystemsSettings();
+  const appSettingsQuery = useAppSettings();
   const bootstrap = useSystemsBootstrap();
   const recordClick = useRecordSystemClick();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
+  const createTicketMutation = useHelpDeskCreateTicket();
 
   const [includeInactive, setIncludeInactive] = useState(false);
   const [query, setQuery] = useState("");
@@ -63,6 +108,11 @@ export function SystemsHubPage() {
   const [formInitial, setFormInitial] = useState<SystemFormState>(emptySystemForm);
   const [formError, setFormError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  const [accessOpen, setAccessOpen] = useState(false);
+  const [accessSystemId, setAccessSystemId] = useState<string | null>(null);
+  const [accessError, setAccessError] = useState<string | null>(null);
+  const [ticketResult, setTicketResult] = useState<HelpDeskTicketResultDto | null>(null);
 
   const list = useSystems({
     q: query,
@@ -78,6 +128,13 @@ export function SystemsHubPage() {
   const canManage =
     (bootstrap.data?.canManage ?? false) || (!settingsError && canManageSystems(me, settings));
 
+  const preferredCategoryId = useMemo(() => {
+    const fromEnv = readSystemsAccessCategoryIdFromEnv();
+    if (fromEnv != null) return fromEnv;
+    if (!appSettingsQuery.data) return null;
+    return parseSystemsAccessCategoryIdFromMap(flattenAppSettingsMap(appSettingsQuery.data));
+  }, [appSettingsQuery.data]);
+
   const categoryFilters = useMemo(() => {
     const fromApi = bootstrap.data?.categories ?? [];
     const merged = fromApi.length > 0 ? fromApi : [...SYSTEM_CATEGORY_OPTIONS];
@@ -86,6 +143,7 @@ export function SystemsHubPage() {
 
   const items = list.data ?? [];
   const saving = createMutation.isPending || updateMutation.isPending;
+  const defaultEnvironment = (bootstrap.data?.environment ?? "prd") as SystemsAccessEnvironment;
 
   const openCreate = () => {
     setEditing(null);
@@ -99,6 +157,12 @@ export function SystemsHubPage() {
     setFormInitial(formFromDto(item));
     setFormError(null);
     setEditorOpen(true);
+  };
+
+  const openAccessRequest = (systemId?: string | null) => {
+    setAccessSystemId(systemId ?? null);
+    setAccessError(null);
+    setAccessOpen(true);
   };
 
   const handleOpen = (item: PortalSystemDto) => {
@@ -153,6 +217,20 @@ export function SystemsHubPage() {
     }
   };
 
+  const handleAccessSubmit = (payload: SystemAccessRequestPayload) => {
+    setAccessError(null);
+    createTicketMutation.mutate(payload, {
+      onSuccess: (result) => {
+        setAccessOpen(false);
+        setAccessError(null);
+        setTicketResult(result);
+      },
+      onError: (error) => {
+        setAccessError(createTicketErrorMessage(error));
+      },
+    });
+  };
+
   return (
     <main className={sectionMainClass("ti")}>
       <SectionPageHead
@@ -161,22 +239,32 @@ export function SystemsHubPage() {
         current="Acesso a sistemas"
         description="Hub corporativo de links para sistemas internos e externos, com URLs por ambiente."
         actions={
-          canManage ? (
-            <div className="systems-hub__head-actions">
-              <button type="button" className="systems-hub__create-btn" onClick={openCreate}>
-                <i className="fa-solid fa-plus" aria-hidden="true" />
-                Novo Sistema
-              </button>
-              <label className="systems-hub__inactive-toggle">
-                <input
-                  type="checkbox"
-                  checked={includeInactive}
-                  onChange={(event) => setIncludeInactive(event.target.checked)}
-                />
-                <span>Exibir inativos</span>
-              </label>
-            </div>
-          ) : null
+          <div className="systems-hub__head-actions">
+            <button
+              type="button"
+              className="systems-hub__request-btn"
+              onClick={() => openAccessRequest(null)}
+            >
+              <i className="fa-solid fa-key" aria-hidden="true" />
+              Solicitar acesso
+            </button>
+            {canManage ? (
+              <>
+                <button type="button" className="systems-hub__create-btn" onClick={openCreate}>
+                  <i className="fa-solid fa-plus" aria-hidden="true" />
+                  Novo Sistema
+                </button>
+                <label className="systems-hub__inactive-toggle">
+                  <input
+                    type="checkbox"
+                    checked={includeInactive}
+                    onChange={(event) => setIncludeInactive(event.target.checked)}
+                  />
+                  <span>Exibir inativos</span>
+                </label>
+              </>
+            ) : null}
+          </div>
         }
         toolbar={
           <div className="pay-toolbar" aria-label="Filtros de sistemas">
@@ -265,6 +353,15 @@ export function SystemsHubPage() {
                 <p className="docs-hub__card-desc systems-hub__card-desc">
                   {item.description ?? "Sem descrição."}
                 </p>
+
+                <button
+                  type="button"
+                  className="systems-hub__card-request"
+                  onClick={() => openAccessRequest(item.id)}
+                >
+                  <i className="fa-solid fa-key" aria-hidden="true" />
+                  Solicitar acesso
+                </button>
               </article>
             );
           })}
@@ -288,6 +385,31 @@ export function SystemsHubPage() {
         error={formError}
         onClose={() => setEditorOpen(false)}
         onSubmit={handleSubmit}
+      />
+
+      <SystemAccessRequestModal
+        open={accessOpen}
+        systems={items.filter((item) => item.isActive)}
+        initialSystemId={accessSystemId}
+        defaultEnvironment={defaultEnvironment}
+        preferredCategoryId={preferredCategoryId}
+        pending={createTicketMutation.isPending}
+        errorMessage={accessError}
+        onClose={() => {
+          setAccessOpen(false);
+          setAccessError(null);
+        }}
+        onSubmit={handleAccessSubmit}
+      />
+
+      <HelpDeskTicketResultModal
+        open={ticketResult !== null}
+        result={ticketResult}
+        onClose={() => setTicketResult(null)}
+        onTrack={() => {
+          setTicketResult(null);
+          navigate("/servicos/help-desk?track=1");
+        }}
       />
     </main>
   );

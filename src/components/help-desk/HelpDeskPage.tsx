@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   useHelpDeskCreateTicket,
   useHelpDeskServices,
@@ -59,6 +60,7 @@ function apiErrorDetail(error: unknown): string {
 }
 
 export function HelpDeskPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [openTicket, setOpenTicket] = useState(false);
@@ -74,6 +76,14 @@ export function HelpDeskPage() {
   const createMutation = useHelpDeskCreateTicket();
   const { openCompose } = useEmailCompose();
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
+
+  useEffect(() => {
+    if (searchParams.get("track") !== "1") return;
+    setTrackOpen(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete("track");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const filtered = useMemo(
     () => filterHelpDeskServices(servicesQuery.data ?? [], category, query),

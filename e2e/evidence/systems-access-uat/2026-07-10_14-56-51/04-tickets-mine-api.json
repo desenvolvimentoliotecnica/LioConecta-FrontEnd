@@ -1,0 +1,55 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "ticketId": "234",
+      "subject": "Solicitação de acesso — Fluig",
+      "status": "2",
+      "statusLabel": "Em atendimento (atribuído)",
+      "priorityLabel": "Muito baixa",
+      "createdAt": "2026-07-10T14:56:58-03:00",
+      "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=234",
+      "requesterLabel": null
+    },
+    {
+      "ticketId": "233",
+      "subject": "Solicitação de acesso — Fluig",
+      "status": "2",
+      "statusLabel": "Em atendimento (atribuído)",
+      "priorityLabel": "Muito baixa",
+      "createdAt": "2026-07-10T14:56:34-03:00",
+      "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=233",
+      "requesterLabel": null
+    },
+    {
+      "ticketId": "232",
+      "subject": "Solicitação de acesso — Fluig",
+      "status": "2",
+      "statusLabel": "Em atendimento (atribuído)",
+      "priorityLabel": "Muito baixa",
+      "createdAt": "2026-07-10T14:54:19-03:00",
+      "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=232",
+      "requesterLabel": null
+    },
+    {
+      "ticketId": "231",
+      "subject": "Solicitação de acesso — Fluig",
+      "status": "2",
+      "statusLabel": "Em atendimento (atribuído)",
+      "priorityLabel": "Muito baixa",
+      "createdAt": "2026-07-10T14:53:58-03:00",
+      "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=231",
+      "requesterLabel": null
+    },
+    {
+      "ticketId": "170",
+      "subject": "teste de abertura de chamado pelo portal LioConecta",
+      "status": "5",
+      "statusLabel": "Resolvido",
+      "priorityLabel": "Muito baixa",
+      "createdAt": "2026-07-07T15:32:11-03:00",
+      "externalUrl": "https://servicedesk.liotecnica.com.br/front/ticket.form.php?id=170",
+      "requesterLabel": null
+    }
+  ]
+}
