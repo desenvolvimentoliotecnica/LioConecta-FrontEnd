@@ -84,33 +84,32 @@ export function DocumentsBibliotecaPage() {
         title="Biblioteca Corporativa"
         current="Biblioteca corporativa"
         description="Acervo de conhecimento, história, marca, treinamentos e publicações internas. Explore materiais curados para aprender, compartilhar e preservar a memória da organização."
-        toolbar={
-          <div className="page-toolbar">
-            <div className="page-filters" role="group" aria-label="Filtros">
-              {FILTERS.map((entry) => (
-                <button
-                  key={entry.id}
-                  className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
-                  type="button"
-                  onClick={() => setFilter(entry.id)}
-                >
-                  {entry.label}
-                </button>
-              ))}
-            </div>
-            <label className="page-search">
-              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar no acervo por título ou tema..."
-                aria-label="Buscar no acervo"
-              />
-            </label>
-          </div>
-        }
       />
+
+      <div className="page-toolbar">
+        <div className="page-filters" role="group" aria-label="Filtros">
+          {FILTERS.map((entry) => (
+            <button
+              key={entry.id}
+              className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
+              type="button"
+              onClick={() => setFilter(entry.id)}
+            >
+              {entry.label}
+            </button>
+          ))}
+        </div>
+        <label className="page-search">
+          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar no acervo por título ou tema..."
+            aria-label="Buscar no acervo"
+          />
+        </label>
+      </div>
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">

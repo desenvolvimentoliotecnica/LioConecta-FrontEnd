@@ -1,49 +1,46 @@
 <div class="section-page-head section-page-head--grupos">
-<header class="page-header page-header--grupos">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Início</a>
-            <span class="breadcrumb__sep">/</span>
-            <a href="/grupos">Grupos</a>
-            <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Explorar grupos</span>
-          </nav>
-          <div class="page-header__row">
-            <div>
-              <h1 class="page-header__title">Explorar Grupos</h1>
-              <p class="page-header__desc">
-                Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender com outros times e participar de novas iniciativas.
-              </p>
-            </div>
-          </div>
-        </header>
-
-<div class="page-toolbar">
-          <div class="page-filters" id="explore-filters" role="group" aria-label="Filtros">
-            <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-            <button class="filter-chip" type="button" data-filter="popular">Populares</button>
-            <button class="filter-chip" type="button" data-filter="recent">Recentes</button>
-            <button class="filter-chip" type="button" data-filter="departamental">Departamentais</button>
-            <button class="filter-chip" type="button" data-filter="projeto">Projetos</button>
-            <button class="filter-chip" type="button" data-filter="abertos">Abertos</button>
-          </div>
+  <header class="page-header page-header--grupos">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="/grupos">Grupos</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Explorar grupos</span>
+    </nav>
+    <div class="page-header__row">
+      <div>
+        <h1 class="page-header__title">Explorar Grupos</h1>
+        <p class="page-header__desc">
+          Descubra comunidades, projetos e grupos departamentais para ampliar sua rede, aprender com outros times e participar de novas iniciativas.
+        </p>
+      </div>
+    </div>
+  </header>
 </div>
 
+<div class="page-toolbar">
+  <div class="page-filters" id="explore-filters" role="group" aria-label="Filtros">
+    <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+    <button class="filter-chip" type="button" data-filter="popular">Populares</button>
+    <button class="filter-chip" type="button" data-filter="recent">Recentes</button>
+    <button class="filter-chip" type="button" data-filter="departamental">Departamentais</button>
+    <button class="filter-chip" type="button" data-filter="projeto">Projetos</button>
+    <button class="filter-chip" type="button" data-filter="abertos">Abertos</button>
+  </div>
+  <div class="page-search">
+    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+    Buscar grupos para participar...
+  </div>
+</div>
 
-        <div class="welcome-banner">
-          <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-compass"></i></div>
-          <div>
-            <div class="welcome-banner__title">34 grupos disponíveis para explorar</div>
-            <p class="welcome-banner__text">Encontre grupos abertos para entrar imediatamente ou solicite participação nos que exigem aprovação do administrador.</p>
-          </div>
-        </div>
+<div class="welcome-banner">
+  <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-compass"></i></div>
+  <div>
+    <div class="welcome-banner__title">34 grupos disponíveis para explorar</div>
+    <p class="welcome-banner__text">Encontre grupos abertos para entrar imediatamente ou solicite participação nos que exigem aprovação do administrador.</p>
+  </div>
+</div>
 
-        
-          <div class="page-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            Buscar grupos para participar...
-          </div>
-        </div>
+<div class="groups-grid" id="explore-root" aria-label="Grupos disponíveis"></div>
 
-        <div class="groups-grid" id="explore-root" aria-label="Grupos disponíveis"></div>
-
-        <p class="page-empty-note" id="explore-count">Exibindo 12 grupos</p>
+<p class="page-empty-note" id="explore-count">Exibindo 12 grupos</p>
