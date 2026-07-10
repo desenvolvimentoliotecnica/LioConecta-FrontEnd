@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useMe } from "../../api/hooks/useMe";
 import {
+  downloadLeaveManagementAttachment,
   downloadLeaveManagementPdf,
   openLeaveManagementPdf,
   useLeaveManagementDetail,
@@ -9,11 +10,13 @@ import {
 } from "../../api/hooks/useLeave";
 import { ApiError } from "../../api/client";
 import { canAccessLeaveManagement } from "../../api/auth";
+import type { LeaveAttachmentMetaDto } from "../../api/types";
 import { formatSensitiveCount } from "../../utils/money";
 import { leaveStatusLabel } from "../../utils/leaveHelpers";
 import { RhPageHead } from "../servicos/RhPageHead";
 import { sectionMainClass } from "../layout/SectionPageHead";
 import { LeaveStatusBadge } from "./LeaveStatusBadge";
+import { LeaveAttachmentViewerModal } from "./LeaveAttachmentViewerModal";
 import "../../styles/contracheque-page.css";
 import "../../styles/ferias-ausencias-page.css";
 
@@ -28,6 +31,20 @@ function formatDateTime(value: string): string {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
 }
 
+function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "—";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function attachmentIconClass(fileName: string, contentType: string): string {
+  const lower = `${fileName} ${contentType}`.toLowerCase();
+  if (lower.includes("pdf")) return "fa-file-pdf";
+  if (lower.includes("png") || lower.includes("image")) return "fa-file-image";
+  return "fa-paperclip";
+}
+
 export function FeriasGestaoPage() {
   const meQuery = useMe();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,6 +53,8 @@ export function FeriasGestaoPage() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(requestId);
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [viewerAttachment, setViewerAttachment] = useState<LeaveAttachmentMetaDto | null>(null);
+  const [downloadBusy, setDownloadBusy] = useState<string | null>(null);
 
   const roleHint = canAccessLeaveManagement(meQuery.data);
   const listQuery = useLeaveManagementList({
@@ -57,6 +76,7 @@ export function FeriasGestaoPage() {
 
   const items = useMemo(() => listQuery.data ?? [], [listQuery.data]);
   const detail = detailQuery.data;
+  const attachments = detail?.attachments ?? [];
 
   const selectRequest = (id: string) => {
     setSelectedId(id);
@@ -74,6 +94,20 @@ export function FeriasGestaoPage() {
       }
     } finally {
       setPdfBusy(false);
+    }
+  };
+
+  const handleDownloadAttachment = async (attachment: LeaveAttachmentMetaDto) => {
+    if (!selectedId) return;
+    setDownloadBusy(attachment.storageFileName);
+    try {
+      await downloadLeaveManagementAttachment(
+        selectedId,
+        attachment.storageFileName,
+        attachment.fileName,
+      );
+    } finally {
+      setDownloadBusy(null);
     }
   };
 
@@ -152,6 +186,7 @@ export function FeriasGestaoPage() {
                       <LeaveStatusBadge status={item.status} rmSyncStatus={item.rmSyncStatus} />
                     </div>
                     <div className="leave-requests-list__meta">
+                      <span>{item.title}</span>
                       <span>{item.employeeId ?? item.email}</span>
                       <span>
                         {formatDate(item.startDate)}
@@ -168,7 +203,7 @@ export function FeriasGestaoPage() {
           <section className="leave-gestao-detail" aria-label="Detalhe da solicitação">
             {!selectedId ? (
               <p className="leave-requests-panel__empty">
-                Selecione uma solicitação para ver o detalhe e imprimir o comprovante.
+                Selecione uma solicitação para ver o detalhe e os anexos.
               </p>
             ) : null}
             {detailQuery.isLoading ? <p>Carregando detalhe…</p> : null}
@@ -177,6 +212,7 @@ export function FeriasGestaoPage() {
                 <div className="leave-detail__header">
                   <h2>{detail.employeeName}</h2>
                   <LeaveStatusBadge status={detail.status} rmSyncStatus={detail.rmSyncStatus} />
+                  <p className="leave-detail__period">{detail.title}</p>
                   <p className="leave-detail__period">
                     {detail.employeeId ? `Chapa ${detail.employeeId} · ` : ""}
                     {detail.email}
@@ -191,6 +227,49 @@ export function FeriasGestaoPage() {
                   {detail.notes ? <p className="leave-detail__note">{detail.notes}</p> : null}
                   <p className="leave-detail__source">{detail.approvalNote}</p>
                 </div>
+
+                {attachments.length > 0 ? (
+                  <section className="leave-attachments" aria-label="Documentos anexados">
+                    <h3 className="leave-attachments__title">Documentos anexados</h3>
+                    <ul className="leave-attachments__list">
+                      {attachments.map((attachment) => (
+                        <li key={attachment.storageFileName} className="leave-attachments__item">
+                          <div className="leave-attachments__meta">
+                            <i
+                              className={`fa-solid ${attachmentIconClass(attachment.fileName, attachment.contentType)}`}
+                              aria-hidden="true"
+                            />
+                            <div>
+                              <span className="leave-attachments__name">{attachment.fileName}</span>
+                              <span className="leave-attachments__size">
+                                {formatFileSize(attachment.sizeBytes)}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="leave-attachments__actions">
+                            <button
+                              type="button"
+                              className="pay-btn pay-btn--ghost"
+                              data-testid="leave-attachment-view"
+                              onClick={() => setViewerAttachment(attachment)}
+                            >
+                              Visualizar
+                            </button>
+                            <button
+                              type="button"
+                              className="pay-btn pay-btn--ghost"
+                              data-testid="leave-attachment-download"
+                              disabled={downloadBusy === attachment.storageFileName}
+                              onClick={() => void handleDownloadAttachment(attachment)}
+                            >
+                              Baixar
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
 
                 <div className="leave-gestao-actions">
                   <button
@@ -242,6 +321,15 @@ export function FeriasGestaoPage() {
           </section>
         </div>
       )}
+
+      {selectedId ? (
+        <LeaveAttachmentViewerModal
+          open={viewerAttachment !== null}
+          recordId={selectedId}
+          attachment={viewerAttachment}
+          onClose={() => setViewerAttachment(null)}
+        />
+      ) : null}
     </main>
   );
 }
