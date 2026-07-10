@@ -102,6 +102,28 @@ export function useLeaveManagementDetail(recordId: string | null) {
   });
 }
 
+export function useLeaveManagementApprove() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, comment }: { id: string; comment?: string }) =>
+      api.post<LeaveManagementDetailDto>(`/rh/leave/management/${id}/approve`, { comment: comment ?? null }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: LEAVE_QUERY_KEY });
+    },
+  });
+}
+
+export function useLeaveManagementReject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, comment }: { id: string; comment?: string }) =>
+      api.post<LeaveManagementDetailDto>(`/rh/leave/management/${id}/reject`, { comment: comment ?? null }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: LEAVE_QUERY_KEY });
+    },
+  });
+}
+
 export function useLeaveBancoHoras(enabled: boolean) {
   return useQuery({
     queryKey: [...LEAVE_QUERY_KEY, "banco-horas"],

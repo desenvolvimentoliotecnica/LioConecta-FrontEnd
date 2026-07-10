@@ -35,6 +35,15 @@ const FILTERS = [
   { id: "banco", label: "Banco de horas" },
 ] as const;
 
+function formatLeaveDate(value: string): string {
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (dateOnly) {
+    const [, y, m, d] = dateOnly;
+    return `${d}/${m}/${y}`;
+  }
+  return new Date(value).toLocaleDateString("pt-BR");
+}
+
 export function FeriasAusenciasPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState("all");
@@ -215,7 +224,19 @@ export function FeriasAusenciasPage() {
               ? "…"
               : formatSensitiveCount(summaryQuery.data?.availableDays ?? 0, showValues)}
           </div>
-          <div className="leave-stat__label">Dias de férias disponíveis</div>
+          <div className="leave-stat__label">Dias liberados para gozo</div>
+        </div>
+        <div className="leave-stat">
+          <div className="leave-stat__value">
+            {summaryQuery.isLoading
+              ? "…"
+              : formatSensitiveCount(summaryQuery.data?.acquiringDays ?? 0, showValues)}
+          </div>
+          <div className="leave-stat__label">
+            {summaryQuery.data?.nextLiberationAt
+              ? `Em aquisição (liberação ${formatLeaveDate(summaryQuery.data.nextLiberationAt)})`
+              : "Em aquisição"}
+          </div>
         </div>
         <div className="leave-stat">
           <div className="leave-stat__value">

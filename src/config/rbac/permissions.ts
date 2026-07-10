@@ -45,6 +45,10 @@ export const PERMISSIONS = {
     manage: "leave.manage",
     approve: "leave.approve",
   },
+  rhRequests: {
+    read: "rh_requests.read",
+    manage: "rh_requests.manage",
+  },
   payslips: {
     audit: "payslips.audit",
   },

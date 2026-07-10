@@ -1,0 +1,67 @@
+{
+  "id": "4849ec71-850c-4493-9b17-1be4444e6993",
+  "serviceRequestId": "38af0a7f-c272-4d82-bc17-5f2775cfb666",
+  "employeeName": "Leonardo Sabino Mendes",
+  "employeeId": "00000887",
+  "email": "leonardo.mendes@liotecnica.com.br",
+  "title": "Ajuste de ponto — 2 dias",
+  "status": "approved",
+  "reason": "E2E-PONTO-1783703911420 — UAT ajuste em massa (2 dias). Esqueci de bater o ponto corretamente.",
+  "dayCount": 2,
+  "dataSource": "portal",
+  "createdAt": "2026-07-10T17:18:37.668356+00:00",
+  "days": [
+    {
+      "date": "2026-07-08",
+      "originalClockIn": "07:23",
+      "originalLunchOut": "12:34",
+      "originalLunchIn": "13:14",
+      "originalClockOut": "17:34",
+      "clockIn": "08:15",
+      "lunchOut": "12:34",
+      "lunchIn": "13:14",
+      "clockOut": "17:34"
+    },
+    {
+      "date": "2026-07-06",
+      "originalClockIn": "07:30",
+      "originalLunchOut": "13:08",
+      "originalLunchIn": "13:23",
+      "originalClockOut": "18:26",
+      "clockIn": "07:30",
+      "lunchOut": "13:08",
+      "lunchIn": "13:23",
+      "clockOut": "18:26"
+    }
+  ],
+  "timeline": [
+    {
+      "label": "Solicitação enviada",
+      "status": "completed",
+      "occurredAt": "2026-07-10T17:18:37.668356+00:00",
+      "detail": "Registro criado no portal."
+    },
+    {
+      "label": "Submitted",
+      "status": "submitted",
+      "occurredAt": "2026-07-10T17:18:37.672117+00:00",
+      "detail": null
+    },
+    {
+      "label": "Status: Aprovado",
+      "status": "approved",
+      "occurredAt": "2026-07-10T21:21:49.66312+00:00",
+      "detail": null
+    }
+  ],
+  "infoNote": "Esta solicitação notifica o gestor direto. A correção formal no espelho ocorre após tratamento no RM Labore.",
+  "attachments": [
+    {
+      "fileName": "comprovante-ponto.png",
+      "storageFileName": "f5d6836709984532b1c925ebbeb718c8.png",
+      "contentType": "image/png",
+      "sizeBytes": 78,
+      "url": "/rh/ponto/adjustments/management/4849ec71-850c-4493-9b17-1be4444e6993/attachments/f5d6836709984532b1c925ebbeb718c8.png"
+    }
+  ]
+}

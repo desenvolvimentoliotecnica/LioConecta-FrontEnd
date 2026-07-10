@@ -1,7 +1,9 @@
 import { useState } from "react";
 import {
   downloadPontoManagementAttachment,
+  usePontoManagementApprove,
   usePontoManagementDetail,
+  usePontoManagementReject,
 } from "../../api/hooks/usePonto";
 import type { PontoAttachmentMetaDto } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
@@ -43,9 +45,32 @@ function attachmentIconClass(fileName: string, contentType: string): string {
 
 export function PontoManagementDetailModal({ recordId, onClose }: Props) {
   const detailQuery = usePontoManagementDetail(recordId);
+  const approveMutation = usePontoManagementApprove();
+  const rejectMutation = usePontoManagementReject();
   const detail = detailQuery.data;
   const attachments = detail?.attachments ?? [];
   const [downloadBusy, setDownloadBusy] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const decisionBusy = approveMutation.isPending || rejectMutation.isPending;
+  const canDecide = detail?.status?.toLowerCase() === "pending";
+
+  const handleDecide = async (action: "approve" | "reject") => {
+    if (!recordId) return;
+    setActionError(null);
+    try {
+      if (action === "approve") {
+        await approveMutation.mutateAsync({ id: recordId });
+      } else {
+        await rejectMutation.mutateAsync({ id: recordId });
+      }
+    } catch {
+      setActionError(
+        action === "approve"
+          ? "Não foi possível aprovar o ajuste."
+          : "Não foi possível rejeitar o ajuste.",
+      );
+    }
+  };
 
   const handleDownloadAttachment = async (attachment: PontoAttachmentMetaDto) => {
     if (!recordId) return;
@@ -68,12 +93,41 @@ export function PontoManagementDetailModal({ recordId, onClose }: Props) {
       wide
       onClose={onClose}
       footer={
-        <button type="button" className="pay-modal__btn" onClick={onClose}>
-          Fechar
-        </button>
+        <>
+          {canDecide ? (
+            <>
+              <button
+                type="button"
+                className="pay-modal__btn"
+                disabled={decisionBusy}
+                data-testid="ponto-gestao-approve"
+                onClick={() => void handleDecide("approve")}
+              >
+                Aprovar
+              </button>
+              <button
+                type="button"
+                className="pay-modal__btn pay-modal__btn--ghost"
+                disabled={decisionBusy}
+                data-testid="ponto-gestao-reject"
+                onClick={() => void handleDecide("reject")}
+              >
+                Rejeitar
+              </button>
+            </>
+          ) : null}
+          <button type="button" className="pay-modal__btn" onClick={onClose}>
+            Fechar
+          </button>
+        </>
       }
     >
       {detailQuery.isLoading ? <p>Carregando…</p> : null}
+      {actionError ? (
+        <p className="leave-form__error" role="alert">
+          {actionError}
+        </p>
+      ) : null}
       {detailQuery.isError ? (
         <p className="leave-form__error" role="alert">
           Não foi possível carregar o detalhe da solicitação.

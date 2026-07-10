@@ -1,0 +1,23 @@
+{
+  "availableDays": 0,
+  "acquiringDays": 0,
+  "acquiredDays": 30,
+  "scheduledDays": 0,
+  "expiredDays": 30,
+  "nextLiberationAt": null,
+  "periods": [
+    {
+      "label": "2019/2020",
+      "acquiredDays": 30,
+      "usedDays": 0,
+      "availableDays": 30,
+      "expiresAt": "2021-07-10",
+      "status": "vencido",
+      "liberatesAt": "2020-07-10",
+      "contextNote": "Saldo de 30 dia(s) com vencimento em 10/07/2021 — consulte o RH."
+    }
+  ],
+  "notes": [
+    "30 dia(s) vencidos — consulte o RH."
+  ]
+}

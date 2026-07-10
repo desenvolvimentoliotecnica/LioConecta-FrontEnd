@@ -1,0 +1,48 @@
+{
+  "id": "059211e9-a58a-451f-bb08-4a74ebd50066",
+  "serviceRequestId": "11dced48-e475-4385-b557-364c4eda9d8d",
+  "employeeName": "E2E Atestado Colaborador",
+  "employeeId": null,
+  "email": "e2e.atestado.colaborador@liotecnica.com.br",
+  "title": "Registrar Atestado Médico — solicitação",
+  "status": "approved",
+  "rmSyncStatus": null,
+  "rmExternalId": null,
+  "startDate": "2026-07-10",
+  "endDate": "2026-07-12",
+  "days": 3,
+  "notes": "E2E-RH-1783688060168 — atestado com PDF e PNG",
+  "dataSource": "portal",
+  "createdAt": "2026-07-10T12:54:36.039071+00:00",
+  "timeline": [
+    {
+      "label": "Solicitação enviada",
+      "status": "completed",
+      "occurredAt": "2026-07-10T12:54:36.039071+00:00",
+      "detail": "Registro criado no portal."
+    },
+    {
+      "label": "Status: Aprovado",
+      "status": "approved",
+      "occurredAt": "2026-07-10T21:22:18.438523+00:00",
+      "detail": null
+    }
+  ],
+  "approvalNote": "A aprovação formal da solicitação é feita no RM Labore. O portal apenas registra, notifica e espelha o status.",
+  "attachments": [
+    {
+      "fileName": "atestado-rh-sample.pdf",
+      "storageFileName": "c299cf00374c403187b0cf9ccb2c8595.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 577,
+      "url": "/rh/leave/management/059211e9-a58a-451f-bb08-4a74ebd50066/attachments/c299cf00374c403187b0cf9ccb2c8595.pdf"
+    },
+    {
+      "fileName": "atestado-rh-sample.png",
+      "storageFileName": "942de57778ed4344bebe053daa0b9bae.png",
+      "contentType": "image/png",
+      "sizeBytes": 78,
+      "url": "/rh/leave/management/059211e9-a58a-451f-bb08-4a74ebd50066/attachments/942de57778ed4344bebe053daa0b9bae.png"
+    }
+  ]
+}

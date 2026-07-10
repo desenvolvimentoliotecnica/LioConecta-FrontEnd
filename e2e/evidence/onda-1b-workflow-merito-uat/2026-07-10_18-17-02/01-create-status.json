@@ -1,0 +1,41 @@
+{
+  "status": 201,
+  "body": {
+    "id": "fad76207-7656-428d-a948-90a8c83234b1",
+    "definitionKey": "movimentacao-merito",
+    "definitionName": "Movimentação de mérito",
+    "subjectType": "merit_movement",
+    "subjectId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "subjectName": "Leonardo Sabino Mendes",
+    "status": "pending",
+    "payloadJson": "{\"SubjectPersonId\":\"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103\",\"Cargo\":\"Analista E2E E2E-1B-WF-1783718222687\",\"NovoSalario\":10000,\"Justificativa\":\"E2E-1B-WF-1783718222687\"}",
+    "createdByPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "createdAt": "2026-07-10T21:17:06.125476+00:00",
+    "steps": [
+      {
+        "id": "eed33f45-4ca7-4216-b7ac-7a0cb7fa2b84",
+        "stepKey": "gestor",
+        "order": 1,
+        "assigneeRole": null,
+        "assigneePersonId": "48e39073-7ff9-4db5-ab6a-f2abb928751f",
+        "assigneeName": "LUCAS MUNIZ MACHADO",
+        "status": "pending",
+        "decidedBy": null,
+        "decidedAt": null,
+        "comment": null
+      },
+      {
+        "id": "cba141cc-de1c-4e16-97bb-750abc239b9b",
+        "stepKey": "rh",
+        "order": 2,
+        "assigneeRole": "HR",
+        "assigneePersonId": null,
+        "assigneeName": null,
+        "status": "pending",
+        "decidedBy": null,
+        "decidedAt": null,
+        "comment": null
+      }
+    ]
+  }
+}

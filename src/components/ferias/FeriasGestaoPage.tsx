@@ -66,7 +66,7 @@ export function FeriasGestaoPage() {
       <RhPageHead
         title="Gestão de férias"
         current="Gestão de férias"
-        description="Acompanhe solicitações da equipe. A aprovação formal continua no RM Labore."
+        description="Aprove ou rejeite solicitações da equipe. O write-back ao Totvs RM segue o modo configurado (dry-run / apply com rollback)."
         actions={
           <Link className="leave-btn leave-btn--ghost" to="/servicos/ferias-ausencias">
             <i className="fa-solid fa-arrow-left" aria-hidden="true" />

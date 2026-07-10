@@ -26,6 +26,7 @@ import { FeriasAusenciasPage } from "./components/ferias/FeriasAusenciasPage";
 import { FeriasGestaoPage } from "./components/ferias/FeriasGestaoPage";
 import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
 import { PontoGestaoPage } from "./components/ponto/PontoGestaoPage";
+import { MovimentacoesPage } from "./components/movimentacoes/MovimentacoesPage";
 import { HelpDeskPage } from "./components/help-desk/HelpDeskPage";
 import { CardapioPage } from "./components/facilities/CardapioPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
@@ -286,6 +287,7 @@ function App() {
         <Route path="/servicos/ferias-ausencias/gestao" element={<FeriasGestaoPage />} />
         <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />
         <Route path="/servicos/ponto-eletronico/gestao" element={<PontoGestaoPage />} />
+        <Route path="/servicos/movimentacoes" element={<MovimentacoesPage />} />
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/cardapio" element={<CardapioPage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />

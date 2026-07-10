@@ -119,6 +119,34 @@ export function usePontoManagementDetail(recordId: string | null) {
   });
 }
 
+export function usePontoManagementApprove() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, comment }: { id: string; comment?: string }) =>
+      api.post<PontoAdjustmentManagementDetailDto>(
+        `/rh/ponto/adjustments/management/${id}/approve`,
+        { comment: comment ?? null },
+      ),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: PONTO_ADJUSTMENTS_QUERY_KEY });
+    },
+  });
+}
+
+export function usePontoManagementReject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, comment }: { id: string; comment?: string }) =>
+      api.post<PontoAdjustmentManagementDetailDto>(
+        `/rh/ponto/adjustments/management/${id}/reject`,
+        { comment: comment ?? null },
+      ),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: PONTO_ADJUSTMENTS_QUERY_KEY });
+    },
+  });
+}
+
 export function extractPontoAdjustmentError(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.status === 400 || error.status === 409) {

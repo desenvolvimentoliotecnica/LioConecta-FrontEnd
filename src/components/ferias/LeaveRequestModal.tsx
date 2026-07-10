@@ -43,6 +43,15 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function formatLeaveDateOnly(value: string): string {
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (dateOnly) {
+    const [, y, m, d] = dateOnly;
+    return `${d}/${m}/${y}`;
+  }
+  return new Date(value).toLocaleDateString("pt-BR");
+}
+
 export function LeaveRequestModal({
   open,
   service,
@@ -76,6 +85,8 @@ export function LeaveRequestModal({
   }, [open]);
 
   const availableDays = balanceQuery.data?.availableDays ?? 0;
+  const acquiringDays = balanceQuery.data?.acquiringDays ?? 0;
+  const nextLiberationAt = balanceQuery.data?.nextLiberationAt ?? null;
 
   const computedDays = useMemo(() => {
     if (days) return Number(days);
@@ -122,6 +133,8 @@ export function LeaveRequestModal({
         startDate,
         endDate,
         availableDays,
+        acquiringDays,
+        nextLiberationAt,
         days: computedDays || undefined,
       });
       if (validationError) {
@@ -184,10 +197,24 @@ export function LeaveRequestModal({
           {balanceQuery.isLoading ? (
             <span>Consultando saldo…</span>
           ) : (
-            <span>
-              Saldo disponível:{" "}
-              <strong>{formatSensitiveCount(availableDays, showValues)}</strong> dia(s)
-            </span>
+            <>
+              <span>
+                Liberados para gozo:{" "}
+                <strong>{formatSensitiveCount(availableDays, showValues)}</strong> dia(s)
+              </span>
+              {acquiringDays > 0 ? (
+                <p className="leave-detail__hint">
+                  {nextLiberationAt
+                    ? `${formatSensitiveCount(acquiringDays, showValues)} dia(s) em aquisição — poderão ser solicitados a partir de ${formatLeaveDateOnly(nextLiberationAt)}.`
+                    : `${formatSensitiveCount(acquiringDays, showValues)} dia(s) em aquisição (ainda não liberados).`}
+                </p>
+              ) : null}
+              {availableDays <= 0 ? (
+                <p className="leave-form__error" role="status">
+                  Não é possível solicitar férias sem dias liberados para gozo.
+                </p>
+              ) : null}
+            </>
           )}
         </div>
       ) : null}
