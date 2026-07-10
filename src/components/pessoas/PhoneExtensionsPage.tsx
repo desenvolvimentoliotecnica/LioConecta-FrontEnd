@@ -112,24 +112,22 @@ export function PhoneExtensionsPage() {
       <SectionPageHead
         section="pessoas"
         title="Lista de Ramais"
+        current="Lista de Ramais"
         description="Consulte ramais por nome, departamento ou número. RH e e-mails autorizados podem gerir o cadastro."
+        actions={
+          canManage ? (
+            <button type="button" className="ramais-btn ramais-btn--primary" onClick={openCreate}>
+              <i className="fa-solid fa-plus" aria-hidden="true" />
+              Novo ramal
+            </button>
+          ) : null
+        }
         toolbar={
-          <section className="ramais-page__toolbar" aria-label="Filtros de ramais">
-            <div className="ramais-page__summary">
-              <div className="ramais-page__summary-icon" aria-hidden="true">
-                <i className="fa-solid fa-phone" />
-              </div>
-              <div>
-                <div className="ramais-page__summary-title">Diretório de ramais</div>
-                <p className="ramais-page__summary-text">
-                  {list.isLoading ? "Carregando…" : `${items.length} exibidos · ${total} ativos no total`}
-                </p>
-              </div>
-            </div>
-
-            <label className="page-search ramais-page__search">
+          <div className="page-toolbar" aria-label="Filtros de ramais">
+            <label className="page-search page-search--wide">
               <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
               <input
+                className="page-search__input"
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -137,21 +135,19 @@ export function PhoneExtensionsPage() {
                 aria-label="Pesquisar ramais"
               />
             </label>
-
-            <label className="ramais-page__select">
-              <span className="sr-only">Departamento</span>
-              <select value={department} onChange={(event) => setDepartment(event.target.value)}>
-                <option value="">Todos os departamentos</option>
-                {departmentOptions.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            {canManage ? (
-              <>
+            <div className="page-toolbar__filters">
+              <label className="ramais-page__select">
+                <span className="sr-only">Departamento</span>
+                <select value={department} onChange={(event) => setDepartment(event.target.value)}>
+                  <option value="">Todos os departamentos</option>
+                  {departmentOptions.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {canManage ? (
                 <label className="ramais-page__check">
                   <input
                     type="checkbox"
@@ -160,15 +156,23 @@ export function PhoneExtensionsPage() {
                   />
                   Incluir inativos
                 </label>
-                <button type="button" className="ramais-btn ramais-btn--primary" onClick={openCreate}>
-                  <i className="fa-solid fa-plus" aria-hidden="true" />
-                  Novo ramal
-                </button>
-              </>
-            ) : null}
-          </section>
+              ) : null}
+            </div>
+          </div>
         }
       />
+
+      <div className="welcome-banner welcome-banner--ramais">
+        <div className="welcome-banner__icon" aria-hidden="true">
+          <i className="fa-solid fa-phone" />
+        </div>
+        <div>
+          <div className="welcome-banner__title">Diretório de ramais</div>
+          <p className="welcome-banner__text">
+            {list.isLoading ? "Carregando…" : `${items.length} exibidos · ${total} ativos no total`}
+          </p>
+        </div>
+      </div>
 
       {feedback ? (
         <p className="ramais-page__feedback" role="status">
@@ -206,6 +210,7 @@ export function PhoneExtensionsPage() {
                   </p>
                 </div>
                 <span className="ramais-card__ext" title="Ramal">
+                  <i className="fa-solid fa-phone" aria-hidden="true" />
                   {item.extension}
                 </span>
               </header>

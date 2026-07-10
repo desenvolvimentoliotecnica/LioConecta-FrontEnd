@@ -1,43 +1,41 @@
 <div class="section-page-head section-page-head--ti">
-<header class="page-header page-header--ti">
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <a href="/">Início</a>
-    <span class="breadcrumb__sep">/</span>
-    <a href="/servicos/ti">TI &amp; Suporte</a>
-    <span class="breadcrumb__sep">/</span>
-    <span class="breadcrumb__current">Solicitar equipamento</span>
-  </nav>
-  <div class="page-header__row">
-    <div>
-      <h1 class="page-header__title">Solicitar equipamento</h1>
-      <p class="page-header__desc">Solicite notebooks, monitores, periféricos e acessórios conforme política de TI e elegibilidade do cargo.</p>
+  <header class="page-header page-header--ti">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="/servicos/ti">TI &amp; Suporte</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Solicitar equipamento</span>
+    </nav>
+    <h1 class="page-header__title">Solicitar equipamento</h1>
+    <div class="page-header__subtitle-row">
+      <p class="page-header__desc">
+        Solicite notebooks, monitores, periféricos e acessórios conforme política de TI e elegibilidade do cargo.
+      </p>
     </div>
-  </div>
-</header>
-
-<div class="page-toolbar">
-  <div class="page-filters" id="ti-equip-filters" role="group" aria-label="Filtros">
-    <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
-    <button class="filter-chip" type="button" data-filter="notebook">Notebook</button>
-    <button class="filter-chip" type="button" data-filter="periferico">Periféricos</button>
-    <button class="filter-chip" type="button" data-filter="mobilidade">Mobilidade</button>
-    <button class="filter-chip" type="button" data-filter="acessorio">Acessórios</button>
-  </div>
-</div>
-
-
-<div class="welcome-banner">
-  <div class="welcome-banner__icon" aria-hidden="true"><i class="fa-solid fa-laptop"></i></div>
-  <div>
-    <div class="welcome-banner__title">Inventário corporativo padronizado</div>
-    <p class="welcome-banner__text">Equipamentos seguem catálogo homologado pela TI. Prazo médio de entrega: 5 dias úteis para itens em estoque.</p>
-  </div>
-</div>
-
-
-  <div class="page-search">
-    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-    Buscar equipamentos...
+  </header>
+  <hr class="section-page-head__rule" />
+  <div class="page-toolbar">
+    <div class="page-filters" id="ti-equip-filters" role="group" aria-label="Filtros">
+      <button class="filter-chip is-active" type="button" data-filter="all">Todos</button>
+      <button class="filter-chip" type="button" data-filter="notebook">Notebook</button>
+      <button class="filter-chip" type="button" data-filter="periferico">Periféricos</button>
+      <button class="filter-chip" type="button" data-filter="mobilidade">Mobilidade</button>
+      <button class="filter-chip" type="button" data-filter="acessorio">Acessórios</button>
+      <button class="filter-chip" type="button" data-filter="outros">Outros</button>
+    </div>
+    <label class="page-search" for="ti-equip-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input
+        id="ti-equip-search"
+        class="page-search__input"
+        type="search"
+        placeholder="Buscar equipamentos..."
+        aria-label="Buscar equipamentos"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </label>
   </div>
 </div>
 

@@ -4,7 +4,7 @@ import {
   openLeaveRequestPdf,
   useLeaveRequestDetail,
 } from "../../api/hooks/useLeave";
-import { leaveStatusLabel } from "../../utils/leaveHelpers";
+import { leaveStatusLabel, sortLeaveTimelineNewestFirst } from "../../utils/leaveHelpers";
 import { formatSensitiveCount } from "../../utils/money";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 import { LeaveStatusBadge } from "./LeaveStatusBadge";
@@ -73,7 +73,7 @@ export function LeaveRequestDetailModal({ recordId, showValues, onClose }: Props
           <div className="leave-gestao-actions">
             <button
               type="button"
-              className="pay-btn"
+              className="leave-btn leave-btn--primary"
               disabled={pdfBusy}
               onClick={() => void handlePdf("print")}
             >
@@ -81,7 +81,7 @@ export function LeaveRequestDetailModal({ recordId, showValues, onClose }: Props
             </button>
             <button
               type="button"
-              className="pay-btn pay-btn--ghost"
+              className="leave-btn leave-btn--ghost"
               disabled={pdfBusy}
               onClick={() => void handlePdf("download")}
             >
@@ -91,7 +91,7 @@ export function LeaveRequestDetailModal({ recordId, showValues, onClose }: Props
 
           <h3 className="leave-timeline__title">Linha do tempo</h3>
           <ol className="leave-timeline">
-            {detail.timeline.map((event, index) => (
+            {sortLeaveTimelineNewestFirst(detail.timeline).map((event, index) => (
               <li key={`${event.label}-${index}`} className={`leave-timeline__item leave-timeline__item--${event.status}`}>
                 <div className="leave-timeline__dot" aria-hidden="true" />
                 <div className="leave-timeline__content">

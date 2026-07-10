@@ -506,27 +506,12 @@
   border-top: 1px dashed #e2e8f0;
 }
 
-.benefit-card__actions { display: flex; gap: 4px; }
-
-.benefit-card__btn {
-  width: 28px;
-  height: 28px;
-  border: 1px dashed var(--wf-border);
-  border-radius: 7px;
-  background: #f8fafc;
-  color: #475569;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  cursor: pointer;
-  text-decoration: none;
+.benefit-card__actions {
+  display: none !important;
 }
 
-.benefit-card__btn:hover {
-  background: #ecfeff;
-  color: #0e7490;
-  border-color: #67e8f9;
+.benefit-card__btn {
+  display: none !important;
 }
 
 .benefit-card__open {

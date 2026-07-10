@@ -1,54 +1,51 @@
-        <div class="section-page-head section-page-head--pessoas">
-        <header class="page-header page-header--pessoas">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Início</a>
-            <span class="breadcrumb__sep">/</span>
-            <a href="/pessoas">Pessoas</a>
-            <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__current">Diretório</span>
-          </nav>
-          <div class="page-header__row">
-            <div>
-              <h1 class="page-header__title">Diretório de Pessoas</h1>
-              <p class="page-header__desc">
-                Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
-              </p>
-            </div>
-          </div>
-        </header>
+<div class="section-page-head section-page-head--pessoas">
+  <header class="page-header page-header--pessoas">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Início</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="/pessoas">Pessoas</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Diretório</span>
+    </nav>
+    <h1 class="page-header__title">Diretório de Pessoas</h1>
+    <div class="page-header__subtitle-row">
+      <p class="page-header__desc">
+        Encontre colaboradores da LioConecta por nome, área ou cargo. Consulte contatos e inicie conversas com os times.
+      </p>
+    </div>
+  </header>
+  <hr class="section-page-head__rule" />
+  <div class="page-toolbar">
+    <label class="page-search page-search--wide" for="directory-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input
+        id="directory-search"
+        class="page-search__input"
+        type="search"
+        placeholder="Buscar por nome ou cargo..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </label>
+    <div class="page-toolbar__filters">
+      <label class="page-toolbar__filter-label" for="directory-dept-select">Departamento</label>
+      <select class="directory-dept-select" id="directory-dept-select" aria-label="Filtrar por departamento">
+        <option value="all">Todos os departamentos</option>
+      </select>
+    </div>
+  </div>
+</div>
 
-        <div class="page-toolbar">
-          <label class="page-search page-search--wide" for="directory-search">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <input
-              id="directory-search"
-              class="page-search__input"
-              type="search"
-              placeholder="Buscar por nome ou cargo..."
-              autocomplete="off"
-              spellcheck="false"
-            />
-          </label>
-          <div class="page-toolbar__filters">
-            <label class="page-toolbar__filter-label" for="directory-dept-select">Departamento</label>
-            <select class="directory-dept-select" id="directory-dept-select" aria-label="Filtrar por departamento">
-              <option value="all">Todos os departamentos</option>
-            </select>
-          </div>
-        </div>
-        </div>
+<div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
 
-        <div class="directory" id="directory-root" aria-label="Colaboradores por departamento"></div>
+<p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
 
-        <p class="page-empty-note" id="directory-count">Exibindo 50 colaboradores</p>
-
-        <button
-          type="button"
-          class="directory-scroll-top"
-          id="directory-scroll-top"
-          aria-label="Ir para o topo"
-          hidden
-        >
-          <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
-          <span>Ir para o topo</span>
-        </button>
+<button
+  type="button"
+  class="directory-scroll-top"
+  id="directory-scroll-top"
+  aria-label="Ir para o topo"
+  hidden
+>
+  <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+</button>

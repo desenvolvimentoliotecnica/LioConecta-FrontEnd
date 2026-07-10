@@ -16,7 +16,8 @@
                 "cat": "vpn",
                 "provider": "Fortinet",
                 "status": "disponivel",
-                "featured": true
+                "featured": false,
+                "actionLabel": "Solicitar"
         },
         {
                 "title": "Reset senha VPN",
@@ -24,7 +25,8 @@
                 "cat": "vpn",
                 "provider": "Self-service",
                 "status": "disponivel",
-                "featured": false
+                "featured": false,
+                "actionLabel": "Solicitar"
         },
         {
                 "title": "Acesso RDP / VDI",
@@ -32,7 +34,8 @@
                 "cat": "remoto",
                 "provider": "VMware Horizon",
                 "status": "sob_analise",
-                "featured": false
+                "featured": false,
+                "actionLabel": "Solicitar"
         },
         {
                 "title": "Guia home office",
@@ -40,7 +43,8 @@
                 "cat": "doc",
                 "provider": "Wiki TI",
                 "status": "disponivel",
-                "featured": false
+                "featured": false,
+                "actionLabel": "Visualizar"
         },
         {
                 "title": "Política de acesso remoto",
@@ -48,7 +52,8 @@
                 "cat": "doc",
                 "provider": "Compliance",
                 "status": "disponivel",
-                "featured": false
+                "featured": false,
+                "actionLabel": "Visualizar"
         },
         {
                 "title": "Configurar MFA",
@@ -56,7 +61,8 @@
                 "cat": "vpn",
                 "provider": "Microsoft",
                 "status": "disponivel",
-                "featured": false
+                "featured": false,
+                "actionLabel": "Solicitar"
         }
 ];
       const statusLabels = {"disponivel": "Disponível", "sob_analise": "Sob análise", "indisponivel": "Indisponível"};
@@ -65,6 +71,8 @@
         const featuredClass = item.featured ? " is-featured" : "";
         const statusClass = " benefit-card__status--" + item.status;
         const catBadgeClass = " benefit-card__cat--" + item.cat;
+        const actionLabel = item.actionLabel || "Solicitar";
+        const actionIcon = actionLabel === "Visualizar" ? "fa-regular fa-eye" : "fa-solid fa-paper-plane";
         return `
           <article class="benefit-card${featuredClass}" data-cat="${item.cat}">
             <div class="benefit-card__head">
@@ -84,11 +92,7 @@
               <span><i class="fa-solid fa-server" aria-hidden="true"></i> ${item.provider}</span>
             </div>
             <div class="benefit-card__footer">
-              <a class="benefit-card__open" href="#"><i class="fa-regular fa-eye" aria-hidden="true"></i> Acessar</a>
-              <div class="benefit-card__actions">
-                <a class="benefit-card__btn" href="#" aria-label="Abrir ${item.title}"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
-                <a class="benefit-card__btn" href="#" aria-label="Salvar ${item.title}"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>
-              </div>
+              <a class="benefit-card__open" href="#"><i class="${actionIcon}" aria-hidden="true"></i> ${actionLabel}</a>
             </div>
           </article>`;
       }
@@ -100,9 +104,14 @@
       root.innerHTML = items.map(renderItem).join("");
 
       function applyFilter(filter) {
+        const query = (document.getElementById("ti-vpn-search")?.value || "").trim().toLowerCase();
         let visible = 0;
         root.querySelectorAll(".benefit-card").forEach(function (card) {
-          const match = filter === "all" || card.getAttribute("data-cat") === filter;
+          const catMatch = filter === "all" || card.getAttribute("data-cat") === filter;
+          const title = (card.querySelector(".benefit-card__title")?.textContent || "").toLowerCase();
+          const desc = (card.querySelector(".benefit-card__desc")?.textContent || "").toLowerCase();
+          const textMatch = !query || title.includes(query) || desc.includes(query);
+          const match = catMatch && textMatch;
           card.hidden = !match;
           if (match) visible += 1;
         });
@@ -119,6 +128,14 @@
           filters.querySelectorAll(".filter-chip").forEach(function (btn) { btn.classList.remove("is-active"); });
           chip.classList.add("is-active");
           applyFilter(chip.getAttribute("data-filter") || "all");
+        });
+      }
+
+      const searchInput = document.getElementById("ti-vpn-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          const active = filters ? filters.querySelector(".filter-chip.is-active") : null;
+          applyFilter(active ? active.getAttribute("data-filter") || "all" : "all");
         });
       }
     })();

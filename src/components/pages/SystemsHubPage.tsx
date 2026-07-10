@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../../api/assetUrl";
 import {
@@ -22,12 +22,14 @@ import {
   emptySystemForm,
   formFromDto,
   formToRequest,
+  SYSTEM_CATEGORY_OPTIONS,
   SystemFormModal,
   type SystemFormState,
 } from "../systems/SystemFormModal";
 import "../../styles/documents-hub-page.css";
 import "../../styles/list-page.css";
 import "../../styles/systems-hub-page.css";
+import "../../styles/contracheque-page.css";
 
 export const SYSTEMS_HUB_PATH = "/servicos/acesso-sistemas";
 
@@ -54,13 +56,19 @@ export function SystemsHubPage() {
   const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
 
   const [includeInactive, setIncludeInactive] = useState(false);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("");
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<PortalSystemDto | null>(null);
   const [formInitial, setFormInitial] = useState<SystemFormState>(emptySystemForm);
   const [formError, setFormError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const list = useSystems({ includeInactive });
+  const list = useSystems({
+    q: query,
+    category: category || undefined,
+    includeInactive,
+  });
 
   const createMutation = useCreateSystem();
   const updateMutation = useUpdateSystem();
@@ -69,6 +77,12 @@ export function SystemsHubPage() {
 
   const canManage =
     (bootstrap.data?.canManage ?? false) || (!settingsError && canManageSystems(me, settings));
+
+  const categoryFilters = useMemo(() => {
+    const fromApi = bootstrap.data?.categories ?? [];
+    const merged = fromApi.length > 0 ? fromApi : [...SYSTEM_CATEGORY_OPTIONS];
+    return ["", ...merged];
+  }, [bootstrap.data?.categories]);
 
   const items = list.data ?? [];
   const saving = createMutation.isPending || updateMutation.isPending;
@@ -144,6 +158,7 @@ export function SystemsHubPage() {
       <SectionPageHead
         section="ti"
         title="Acesso a Sistemas"
+        current="Acesso a sistemas"
         description="Hub corporativo de links para sistemas internos e externos, com URLs por ambiente."
         actions={
           canManage ? (
@@ -162,6 +177,35 @@ export function SystemsHubPage() {
               </label>
             </div>
           ) : null
+        }
+        toolbar={
+          <div className="pay-toolbar" aria-label="Filtros de sistemas">
+            <div className="pay-toolbar__filters page-filters" role="group" aria-label="Categorias">
+              {categoryFilters.map((filter) => (
+                <button
+                  key={filter || "all"}
+                  type="button"
+                  className={`filter-chip${category === filter ? " is-active" : ""}`}
+                  onClick={() => setCategory(filter)}
+                >
+                  {filter || "Todos"}
+                </button>
+              ))}
+            </div>
+            <div className="pay-toolbar__actions">
+              <label className="pay-search page-search">
+                <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+                <input
+                  className="page-search__input"
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscar sistemas..."
+                  aria-label="Buscar sistemas"
+                />
+              </label>
+            </div>
+          </div>
         }
       />
 
@@ -228,7 +272,11 @@ export function SystemsHubPage() {
       ) : (
         <div className="docs-hub__empty">
           <i className="fa-regular fa-window-restore" aria-hidden="true" />
-          <p>Nenhum sistema disponível no momento.</p>
+          <p>
+            {query.trim() || category
+              ? "Nenhum sistema encontrado para os filtros selecionados."
+              : "Nenhum sistema disponível no momento."}
+          </p>
         </div>
       )}
 

@@ -84,32 +84,33 @@ export function DocumentsBibliotecaPage() {
         title="Biblioteca Corporativa"
         current="Biblioteca corporativa"
         description="Acervo de conhecimento, história, marca, treinamentos e publicações internas. Explore materiais curados para aprender, compartilhar e preservar a memória da organização."
+        toolbar={
+          <div className="page-toolbar">
+            <div className="page-filters" role="group" aria-label="Filtros">
+              {FILTERS.map((entry) => (
+                <button
+                  key={entry.id}
+                  className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
+                  type="button"
+                  onClick={() => setFilter(entry.id)}
+                >
+                  {entry.label}
+                </button>
+              ))}
+            </div>
+            <label className="page-search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar no acervo por título ou tema..."
+                aria-label="Buscar no acervo"
+              />
+            </label>
+          </div>
+        }
       />
-
-      <div className="page-toolbar">
-        <div className="page-filters" role="group" aria-label="Filtros">
-          {FILTERS.map((entry) => (
-            <button
-              key={entry.id}
-              className={`filter-chip${filter === entry.id ? " is-active" : ""}`}
-              type="button"
-              onClick={() => setFilter(entry.id)}
-            >
-              {entry.label}
-            </button>
-          ))}
-        </div>
-        <label className="page-search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar no acervo por título ou tema..."
-            aria-label="Buscar no acervo"
-          />
-        </label>
-      </div>
 
       <div className="welcome-banner">
         <div className="welcome-banner__icon" aria-hidden="true">
@@ -138,6 +139,8 @@ export function DocumentsBibliotecaPage() {
           {filtered.map((doc) => {
             const media = doc.mediaType ?? "ebook";
             const href = doc.sharePointUrl || "#";
+            const openLabel = media === "video" ? "Assistir" : media === "acervo" ? "Explorar" : "Acessar";
+            const openIcon = media === "video" ? "fa-play" : media === "acervo" ? "fa-folder-open" : "fa-book-open";
             return (
               <article key={doc.id} className={`doc-card${doc.isFeatured ? " is-featured" : ""}`}>
                 <div className="doc-card__icon" aria-hidden="true">
@@ -152,10 +155,10 @@ export function DocumentsBibliotecaPage() {
                   <h2 className="doc-card__title">{doc.title}</h2>
                   <p className="doc-card__desc">{doc.description ?? "Documento corporativo."}</p>
                 </div>
-                <div className="doc-card__actions">
-                  <a className="doc-card__link" href={href} target="_blank" rel="noopener noreferrer">
-                    Abrir
-                    <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                <div className="doc-card__footer">
+                  <a className="doc-card__open" href={href} target="_blank" rel="noopener noreferrer">
+                    <i className={`fa-solid ${openIcon}`} aria-hidden="true" />
+                    {openLabel}
                   </a>
                 </div>
               </article>

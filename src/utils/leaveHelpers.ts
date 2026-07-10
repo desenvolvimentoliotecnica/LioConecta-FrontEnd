@@ -54,3 +54,47 @@ export const LEAVE_STATUS_LABELS: Record<string, string> = {
 export function leaveStatusLabel(status: string): string {
   return LEAVE_STATUS_LABELS[status] ?? status;
 }
+
+/** Linha do tempo: evento mais novo → mais antigo. */
+export function sortLeaveTimelineNewestFirst<T extends { occurredAt: string }>(events: T[]): T[] {
+  return [...events].sort(
+    (a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime(),
+  );
+}
+
+export type LeaveRequestKind = "ferias" | "licenca" | "afastamento" | "consulta" | "banco" | "outro";
+
+/** Infere o tipo da solicitação a partir do título (lista de gestão não traz category). */
+export function leaveRequestKindFromTitle(title: string): LeaveRequestKind {
+  const lower = title.toLowerCase();
+  if (lower.includes("férias") || lower.includes("ferias")) return "ferias";
+  if (lower.includes("licença") || lower.includes("licenca") || lower.includes("maternidade") || lower.includes("paternidade")) {
+    return "licenca";
+  }
+  if (
+    lower.includes("atestado") ||
+    lower.includes("afastamento") ||
+    lower.includes("médico") ||
+    lower.includes("medico")
+  ) {
+    return "afastamento";
+  }
+  if (lower.includes("banco") || lower.includes("hora")) return "banco";
+  if (lower.includes("consulta") || lower.includes("histórico") || lower.includes("historico") || lower.includes("saldo")) {
+    return "consulta";
+  }
+  return "outro";
+}
+
+const LEAVE_KIND_ICONS: Record<LeaveRequestKind, string> = {
+  ferias: "fa-umbrella-beach",
+  licenca: "fa-baby",
+  afastamento: "fa-briefcase-medical",
+  consulta: "fa-clock-rotate-left",
+  banco: "fa-hourglass-half",
+  outro: "fa-calendar-days",
+};
+
+export function leaveRequestIconClass(title: string): string {
+  return LEAVE_KIND_ICONS[leaveRequestKindFromTitle(title)];
+}

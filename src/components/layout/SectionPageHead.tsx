@@ -15,7 +15,9 @@ export type SectionPageHeadProps = {
   current?: string;
   /** Optional sync/status line below the description (e.g. RM syncedAt). */
   syncMeta?: ReactNode;
+  /** Search / filters row (barra de busca | filtros). */
   toolbar?: ReactNode;
+  /** Optional action button aligned with the subtitle row. */
   actions?: ReactNode;
 };
 
@@ -23,6 +25,11 @@ type SphCssVars = CSSProperties & {
   ["--sph-watermark"]?: string;
 };
 
+/**
+ * Standard section header (padrão /pessoas/diretorio):
+ * Breadcrumb → Título → Subtítulo | Botão → hr → busca | filtros
+ * Min-height via `.section-page-head` CSS (cresce se a toolbar precisar).
+ */
 export function SectionPageHead({
   section,
   title,
@@ -44,6 +51,7 @@ export function SectionPageHead({
         "section-page-head",
         `section-page-head--${section}`,
         watermark ? "section-page-head--watermark" : "",
+        toolbar ? "section-page-head--has-toolbar" : "section-page-head--no-toolbar",
       ]
         .filter(Boolean)
         .join(" ")}
@@ -67,16 +75,21 @@ export function SectionPageHead({
             <span className="breadcrumb__current">{meta.hubLabel}</span>
           )}
         </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">{title}</h1>
+
+        <h1 className="page-header__title">{title}</h1>
+
+        <div className="page-header__subtitle-row">
+          <div className="page-header__subtitle">
             <p className="page-header__desc">{description}</p>
             {syncMeta ? <p className="page-header__sync-meta">{syncMeta}</p> : null}
           </div>
-          {actions}
+          {actions ? <div className="page-header__actions">{actions}</div> : null}
         </div>
       </header>
-      {toolbar}
+
+      <hr className="section-page-head__rule" />
+
+      <div className="section-page-head__toolbar">{toolbar}</div>
     </div>
   );
 }

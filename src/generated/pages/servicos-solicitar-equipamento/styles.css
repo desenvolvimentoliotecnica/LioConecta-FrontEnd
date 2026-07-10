@@ -602,6 +602,9 @@ flex-wrap: wrap;
 .benefit-card__icon--seguranca {
   background: #fef3c7; color: #b45309; border-color: #fcd34d;
 }
+.benefit-card__icon--outros {
+  background: #f1f5f9; color: #475569; border-color: #cbd5e1;
+}
 .benefit-card__cat--incidente,
 .benefit-card__cat--notebook,
 .benefit-card__cat--erp,
@@ -617,6 +620,7 @@ flex-wrap: wrap;
 .benefit-card__cat--urgente,
 .benefit-card__cat--acessorio,
 .benefit-card__cat--seguranca { background: #fef3c7; color: #b45309; }
+.benefit-card__cat--outros { background: #f1f5f9; color: #475569; }
 .benefit-card__status--disponivel { background: #dcfce7; color: #15803d; }
 .benefit-card__status--sob_analise { background: #fef3c7; color: #b45309; }
 .topbar__dropdown-menu--services a.is-active {

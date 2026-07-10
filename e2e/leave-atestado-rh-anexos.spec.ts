@@ -376,8 +376,8 @@ test.describe("Atestado — RH vê notificação, detalhe e anexos", () => {
         fullPage: true,
       });
 
-      // 4) Detalhe + anexos (sem aprovação no portal)
-      await expect(rh.page.locator(".leave-gestao-detail")).toBeVisible({ timeout: 20_000 });
+      // 4) Detalhe + anexos (modal — sem aprovação no portal)
+      await expect(rh.page.getByTestId("leave-gestao-detail")).toBeVisible({ timeout: 20_000 });
       await expect(rh.page.locator(".leave-detail__source")).toContainText(/RM Labore/i);
       await expect(rh.page.getByRole("heading", { name: /Documentos anexados/i })).toBeVisible({
         timeout: 20_000,
