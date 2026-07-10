@@ -123,6 +123,13 @@ function Dropdown({
   const close = () => setOpen(false);
   const visibleItems = filterItem ? items.filter(filterItem) : items;
   const rhServicosLinks = visibleServicosLinks ?? servicosLinks;
+  const financeiroPaths = new Set([
+    "/servicos/vale-transporte",
+    "/servicos/reembolso-despesas",
+    "/servicos/adiantamento-viagem",
+  ]);
+  const rhOnlyLinks = rhServicosLinks.filter((item) => !financeiroPaths.has(item.path));
+  const financeiroLinks = rhServicosLinks.filter((item) => financeiroPaths.has(item.path));
 
   return (
     <div className={`topbar__dropdown${open ? " is-open" : ""}`} ref={ref}>
@@ -151,13 +158,13 @@ function Dropdown({
             <span className={`topbar__menu-heading ${servicosHeadings[0].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[0].icon}`} aria-hidden="true" /> {servicosHeadings[0].label}
             </span>
-            {rhServicosLinks.slice(0, 8).map((item) => (
+            {rhOnlyLinks.map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[1].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[1].icon}`} aria-hidden="true" /> {servicosHeadings[1].label}
             </span>
-            {rhServicosLinks.slice(8, 10).map((item) => (
+            {financeiroLinks.map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
             <span className={`topbar__menu-heading ${servicosHeadings[2].className}`} role="presentation">
@@ -196,10 +203,13 @@ export function Topbar() {
   const canManageBenefits = hasPermission(PERMISSIONS.benefits.manage);
   const canManageLeave =
     hasPermission(PERMISSIONS.leave.manage) || hasPermission(PERMISSIONS.leave.approve);
+  const canManagePonto =
+    hasPermission(PERMISSIONS.ponto.manage) || hasPermission(PERMISSIONS.ponto.approve);
 
   const filterServicosItem = (item: NavLinkItem) => {
     if (item.benefitsManageOnly && !canManageBenefits) return false;
     if (item.leaveManageOnly && !canManageLeave) return false;
+    if (item.pontoManageOnly && !canManagePonto) return false;
     return true;
   };
   const visibleServicosLinks = servicosLinks.filter(filterServicosItem);

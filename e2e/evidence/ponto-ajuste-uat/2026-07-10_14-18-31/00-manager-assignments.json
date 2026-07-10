@@ -1,0 +1,24 @@
+{
+  "managerEmail": "e2e.ponto.gestor@liotecnica.com.br",
+  "subjectCount": 1,
+  "assignments": [
+    {
+      "id": "0a62ac51-ba35-4742-993a-020077c34056",
+      "subjectType": 2,
+      "subjectId": "c3359f72-437c-4dd2-b119-2ce9779c38b5",
+      "subjectLabel": "e2e.ponto.gestor@liotecnica.com.br",
+      "roleId": "7a6b8323-328a-470c-92a5-a3584bd78ad8",
+      "roleName": "Key User RH",
+      "assignedAt": "2026-07-10T17:04:36.41315+00:00"
+    },
+    {
+      "id": "66cb976a-fc1a-4980-b6f6-6b70b32bf089",
+      "subjectType": 2,
+      "subjectId": "c3359f72-437c-4dd2-b119-2ce9779c38b5",
+      "subjectLabel": "e2e.ponto.gestor@liotecnica.com.br",
+      "roleId": "1e61800c-a2e4-406a-af94-6d2ed62905e0",
+      "roleName": "Colaborador",
+      "assignedAt": "2026-07-10T17:04:36.41315+00:00"
+    }
+  ]
+}

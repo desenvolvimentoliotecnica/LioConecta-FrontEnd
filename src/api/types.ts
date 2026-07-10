@@ -1389,6 +1389,113 @@ export interface PontoPeriodSettingsDto {
   options: PontoPeriodOptionDto[];
 }
 
+export interface CreatePontoAdjustmentDayDto {
+  date: string;
+  originalClockIn?: string | null;
+  originalLunchOut?: string | null;
+  originalLunchIn?: string | null;
+  originalClockOut?: string | null;
+  clockIn: string;
+  lunchOut: string;
+  lunchIn: string;
+  clockOut: string;
+}
+
+export interface CreatePontoAdjustmentDto {
+  reason: string;
+  days: CreatePontoAdjustmentDayDto[];
+  files?: File[];
+}
+
+export interface PontoAttachmentMetaDto {
+  fileName: string;
+  storageFileName: string;
+  contentType: string;
+  sizeBytes: number;
+  url: string;
+}
+
+export interface PontoAdjustmentResultDto {
+  requestId: string;
+  recordId: string;
+  status: string;
+  message: string;
+  protocol: string;
+}
+
+export interface PontoAdjustmentDayDetailDto {
+  date: string;
+  originalClockIn: string;
+  originalLunchOut: string;
+  originalLunchIn: string;
+  originalClockOut: string;
+  clockIn: string;
+  lunchOut: string;
+  lunchIn: string;
+  clockOut: string;
+}
+
+export interface PontoAdjustmentTimelineEventDto {
+  label: string;
+  status: string;
+  occurredAt: string;
+  detail?: string | null;
+}
+
+export interface PontoAdjustmentItemDto {
+  id: string;
+  serviceRequestId?: string | null;
+  title: string;
+  status: string;
+  dayCount: number;
+  reason: string;
+  createdAt: string;
+}
+
+export interface PontoAdjustmentDetailDto {
+  id: string;
+  serviceRequestId?: string | null;
+  title: string;
+  status: string;
+  reason: string;
+  dayCount: number;
+  createdAt: string;
+  days: PontoAdjustmentDayDetailDto[];
+  timeline: PontoAdjustmentTimelineEventDto[];
+  attachments: PontoAttachmentMetaDto[];
+}
+
+export interface PontoAdjustmentManagementItemDto {
+  id: string;
+  serviceRequestId?: string | null;
+  employeeName: string;
+  employeeId?: string | null;
+  email: string;
+  title: string;
+  status: string;
+  dayCount: number;
+  reason: string;
+  createdAt: string;
+}
+
+export interface PontoAdjustmentManagementDetailDto {
+  id: string;
+  serviceRequestId?: string | null;
+  employeeName: string;
+  employeeId?: string | null;
+  email: string;
+  title: string;
+  status: string;
+  reason: string;
+  dayCount: number;
+  dataSource?: string | null;
+  createdAt: string;
+  days: PontoAdjustmentDayDetailDto[];
+  timeline: PontoAdjustmentTimelineEventDto[];
+  infoNote: string;
+  attachments: PontoAttachmentMetaDto[];
+}
+
 export interface TotvsRmConnectionTestResponse {
   success: boolean;
   message: string;

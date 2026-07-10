@@ -45,6 +45,11 @@ export const PERMISSIONS = {
     manage: "leave.manage",
     approve: "leave.approve",
   },
+  ponto: {
+    request: "ponto.request",
+    manage: "ponto.manage",
+    approve: "ponto.approve",
+  },
 } as const;
 
 export const RBAC_ADMIN_PERMISSIONS = [
@@ -71,4 +76,6 @@ export const DEPRECATED_ACCESS_SETTING_KEYS = [
   "unilio.allowed_emails",
   "leave.notify_emails",
   "leave.notify_roles",
+  "ponto.notify_emails",
+  "ponto.notify_roles",
 ] as const;

@@ -3,6 +3,7 @@ export type NavLinkItem = {
   path: string;
   benefitsManageOnly?: boolean;
   leaveManageOnly?: boolean;
+  pontoManageOnly?: boolean;
 };
 
 export type NavDropdown = {
@@ -53,6 +54,7 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Gestão de férias", path: "/servicos/ferias-ausencias/gestao", leaveManageOnly: true },
   { label: "Solicitações RH", path: "/servicos/solicitacoes-rh" },
   { label: "Ponto eletrônico", path: "/servicos/ponto-eletronico" },
+  { label: "Gestão de ponto", path: "/servicos/ponto-eletronico/gestao", pontoManageOnly: true },
   { label: "Vale-transporte", path: "/servicos/vale-transporte" },
   { label: "Reembolso de despesas", path: "/servicos/reembolso-despesas" },
   { label: "Adiantamento de viagem", path: "/servicos/adiantamento-viagem" },

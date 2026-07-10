@@ -70,6 +70,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/servicos/ferias-ausencias", { pageName: "FeriasAusencias", module: "rh" }),
   exact("/servicos/ferias-ausencias/gestao", { pageName: "FeriasGestao", module: "rh" }),
   exact("/servicos/ponto-eletronico", { pageName: "PontoEletronico", module: "rh" }),
+  exact("/servicos/ponto-eletronico/gestao", { pageName: "PontoGestao", module: "rh" }),
   exact("/servicos/ti", { pageName: "TiHub", module: "ti" }),
   exact("/servicos/acesso-sistemas", { pageName: "SystemsHub", module: "ti" }),
   exact("/enquetes", { pageName: "EnquetesHub", module: "enquetes" }),
