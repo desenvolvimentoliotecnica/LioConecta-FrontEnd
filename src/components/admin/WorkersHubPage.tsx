@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { usePermissions } from "../../hooks/usePermissions";
 import { usePortalConfirm } from "../../hooks/usePortalConfirm";
@@ -198,12 +198,12 @@ function statusSortRank(status?: string | null): number {
   return 2;
 }
 
+/** Finished-run duration only — avoids Date.now() so probe snapshots stay render-stable. */
 function durationMs(startedAtUtc?: string | null, finishedAtUtc?: string | null): number {
-  if (!startedAtUtc) return -1;
+  if (!startedAtUtc || !finishedAtUtc) return -1;
   const start = new Date(startedAtUtc).getTime();
-  if (Number.isNaN(start)) return -1;
-  const end = finishedAtUtc ? new Date(finishedAtUtc).getTime() : Date.now();
-  if (Number.isNaN(end) || end < start) return -1;
+  const end = new Date(finishedAtUtc).getTime();
+  if (Number.isNaN(start) || Number.isNaN(end) || end < start) return -1;
   return end - start;
 }
 
@@ -222,31 +222,38 @@ function WorkerRowProbe({
   const failed = isFailedStatus(lastRun?.status);
   const lastAtRaw = lastRun?.finishedAtUtc ?? lastRun?.startedAtUtc;
   const lastAtMs = lastAtRaw ? new Date(lastAtRaw).getTime() : 0;
-  const snapshot: WorkerRowMeta = {
+  // Snapshot duration must stay stable across renders — never use Date.now() here
+  // (live duration is only for display via formatDuration in WorkerRowStatus).
+  const snapshotDurationMs = durationMs(lastRun?.startedAtUtc, lastRun?.finishedAtUtc);
+  const statusRank = statusSortRank(lastRun?.status);
+  const lastAtMsSafe = Number.isNaN(lastAtMs) ? 0 : lastAtMs;
+  const trigger = (lastRun?.triggerSource ?? "").toLowerCase();
+  const interval = worker.defaultIntervalMinutes ?? -1;
+  const label = worker.label;
+
+  useEffect(() => {
+    onSnapshot(worker.key, {
+      running,
+      overdue,
+      failed,
+      statusRank,
+      lastAtMs: lastAtMsSafe,
+      durationMs: snapshotDurationMs,
+      trigger,
+      interval,
+      label,
+    });
+  }, [
+    worker.key,
     running,
     overdue,
     failed,
-    statusRank: statusSortRank(lastRun?.status),
-    lastAtMs: Number.isNaN(lastAtMs) ? 0 : lastAtMs,
-    durationMs: durationMs(lastRun?.startedAtUtc, lastRun?.finishedAtUtc),
-    trigger: (lastRun?.triggerSource ?? "").toLowerCase(),
-    interval: worker.defaultIntervalMinutes ?? -1,
-    label: worker.label,
-  };
-
-  useEffect(() => {
-    onSnapshot(worker.key, snapshot);
-  }, [
-    worker.key,
-    snapshot.running,
-    snapshot.overdue,
-    snapshot.failed,
-    snapshot.statusRank,
-    snapshot.lastAtMs,
-    snapshot.durationMs,
-    snapshot.trigger,
-    snapshot.interval,
-    snapshot.label,
+    statusRank,
+    lastAtMsSafe,
+    snapshotDurationMs,
+    trigger,
+    interval,
+    label,
     onSnapshot,
   ]);
 
@@ -304,29 +311,26 @@ export function WorkersHubPage() {
   const components = connectivityQuery.data?.components ?? [];
   const selectedWorker = workers.find((worker) => worker.key === selectedKey) ?? null;
 
-  const handleRowSnapshot = useMemo(
-    () => (key: string, snapshot: WorkerRowMeta) => {
-      setRowMeta((prev) => {
-        const current = prev[key];
-        if (
-          current &&
-          current.running === snapshot.running &&
-          current.overdue === snapshot.overdue &&
-          current.failed === snapshot.failed &&
-          current.statusRank === snapshot.statusRank &&
-          current.lastAtMs === snapshot.lastAtMs &&
-          current.durationMs === snapshot.durationMs &&
-          current.trigger === snapshot.trigger &&
-          current.interval === snapshot.interval &&
-          current.label === snapshot.label
-        ) {
-          return prev;
-        }
-        return { ...prev, [key]: snapshot };
-      });
-    },
-    [],
-  );
+  const handleRowSnapshot = useCallback((key: string, snapshot: WorkerRowMeta) => {
+    setRowMeta((prev) => {
+      const current = prev[key];
+      if (
+        current &&
+        current.running === snapshot.running &&
+        current.overdue === snapshot.overdue &&
+        current.failed === snapshot.failed &&
+        current.statusRank === snapshot.statusRank &&
+        current.lastAtMs === snapshot.lastAtMs &&
+        current.durationMs === snapshot.durationMs &&
+        current.trigger === snapshot.trigger &&
+        current.interval === snapshot.interval &&
+        current.label === snapshot.label
+      ) {
+        return prev;
+      }
+      return { ...prev, [key]: snapshot };
+    });
+  }, []);
 
   const handleSort = (column: SortKey) => {
     if (sortKey === column) {
