@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { usePermissions } from "../../hooks/usePermissions";
 import { usePortalConfirm } from "../../hooks/usePortalConfirm";
 import { PERMISSIONS } from "../../config/rbac/permissions";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import {
   useTriggerWorker,
   useWorkerDefinitions,
-  useWorkerRunDetail,
   useWorkerRuns,
   useWorkersConnectivity,
 } from "../../api/hooks/useWorkers";
@@ -15,13 +15,25 @@ import type {
   WorkerDefinitionDto,
   WorkerRunDto,
 } from "../../api/types";
+import { WorkerHistoryModal } from "./WorkerHistoryModal";
+import {
+  formatDateTime,
+  formatDuration,
+  isFailedStatus,
+  isSuccessStatus,
+  isWorkerRunningStatus,
+  statusLabel,
+  statusTone,
+  triggerLabel,
+  triggerTone,
+} from "./workerUi";
 import "../../styles/workers-hub-page.css";
 
 const CONNECTIVITY_LINKS: Record<string, { href: string; label: string }> = {
   api: { href: "/admin/observabilidade", label: "Observabilidade" },
-  postgres: { href: "/admin/configuracoes-backend?category=database", label: "Config. Portal DB" },
-  redis: { href: "/admin/configuracoes-backend?category=redis", label: "Config. Redis" },
-  "totvs-rm": { href: "/admin/totvs-rm", label: "Configurar RM" },
+  postgres: { href: "/admin/configuracoes-backend?category=database", label: "Portal DB" },
+  redis: { href: "/admin/configuracoes-backend?category=redis", label: "Redis" },
+  "totvs-rm": { href: "/admin/totvs-rm", label: "TOTVS RM" },
 };
 
 const DEPENDENCY_LABELS: Record<string, string> = {
@@ -31,28 +43,12 @@ const DEPENDENCY_LABELS: Record<string, string> = {
   "totvs-rm": "TOTVS RM",
 };
 
-function formatDateTime(value?: string | null): string {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("pt-BR", {
-    dateStyle: "short",
-    timeStyle: "medium",
-  }).format(new Date(value));
-}
-
-function statusTone(status: string): string {
-  switch (status) {
-    case "Success":
-      return "workers-status--success";
-    case "Running":
-      return "workers-status--running";
-    case "PartialFailure":
-      return "workers-status--warning";
-    case "Failed":
-      return "workers-status--danger";
-    default:
-      return "workers-status--neutral";
-  }
-}
+const CONNECTIVITY_ICONS: Record<string, string> = {
+  api: "fa-server",
+  postgres: "fa-database",
+  redis: "fa-bolt",
+  "totvs-rm": "fa-building",
+};
 
 function isWorkerOverdue(
   worker: WorkerDefinitionDto,
@@ -63,7 +59,7 @@ function isWorkerOverdue(
 
   const lastScheduled = runs?.find((run) => run.triggerSource === "scheduled");
   if (!lastScheduled) return false;
-  if (lastScheduled.status === "Running") return false;
+  if (isWorkerRunningStatus(lastScheduled.status)) return false;
 
   const reference = lastScheduled.finishedAtUtc ?? lastScheduled.startedAtUtc;
   const ageMs = Date.now() - new Date(reference).getTime();
@@ -82,104 +78,27 @@ function unresolvedDependencies(
   });
 }
 
-function ConnectivitySection({
-  components,
-  checkedAtUtc,
-  isFetching,
-  isError,
-  onRefresh,
-}: {
-  components: WorkerConnectivityComponentDto[];
-  checkedAtUtc?: string;
-  isFetching: boolean;
-  isError: boolean;
-  onRefresh: () => void;
-}) {
-  return (
-    <section className="workers-connectivity" aria-label="Infraestrutura">
-      <div className="workers-connectivity__head">
-        <div>
-          <h2 className="workers-connectivity__title">Infraestrutura</h2>
-          <p className="workers-connectivity__desc">
-            Status de API, Portal DB, Redis e TOTVS RM
-            {checkedAtUtc ? ` · verificado às ${formatDateTime(checkedAtUtc)}` : ""}.
-          </p>
-        </div>
-        <button
-          type="button"
-          className="workers-btn workers-btn--ghost"
-          onClick={onRefresh}
-          disabled={isFetching}
-        >
-          {isFetching ? "Atualizando…" : "Atualizar"}
-        </button>
-      </div>
-      {isError ? (
-        <p className="workers-empty">Não foi possível carregar o status de conectividade.</p>
-      ) : (
-        <div className="workers-connectivity__grid">
-          {components.map((component) => {
-            const link = CONNECTIVITY_LINKS[component.id];
-            return (
-              <article
-                key={component.id}
-                className={`workers-connectivity-card${component.healthy ? " is-healthy" : " is-down"}`}
-              >
-                <div className="workers-connectivity-card__head">
-                  <h3>{component.label}</h3>
-                  <span
-                    className={`workers-status ${
-                      component.healthy ? "workers-status--success" : "workers-status--danger"
-                    }`}
-                  >
-                    {component.healthy ? "Saudável" : "Indisponível"}
-                  </span>
-                </div>
-                <dl className="workers-connectivity-card__meta">
-                  <div>
-                    <dt>Latência</dt>
-                    <dd>{component.latencyMs != null ? `${component.latencyMs} ms` : "—"}</dd>
-                  </div>
-                  <div>
-                    <dt>Detalhe</dt>
-                    <dd>{component.message ?? (component.healthy ? "OK" : "—")}</dd>
-                  </div>
-                </dl>
-                {link ? (
-                  <Link className="workers-btn workers-btn--ghost" to={link.href}>
-                    {link.label}
-                  </Link>
-                ) : null}
-              </article>
-            );
-          })}
-        </div>
-      )}
-    </section>
-  );
-}
-
-function WorkerCard({
+function WorkerRowStatus({
   worker,
+  components,
   selected,
   onSelect,
   onRequestTrigger,
   triggering,
-  components,
 }: {
   worker: WorkerDefinitionDto;
+  components: WorkerConnectivityComponentDto[] | undefined;
   selected: boolean;
   onSelect: () => void;
   onRequestTrigger: () => void;
   triggering: boolean;
-  components: WorkerConnectivityComponentDto[] | undefined;
 }) {
   const runsQuery = useWorkerRuns(worker.key, 10, true, true);
   const lastRun = runsQuery.data?.[0];
   const overdue = isWorkerOverdue(worker, runsQuery.data);
   const blockedDeps = unresolvedDependencies(worker, components);
   const blocked = blockedDeps.length > 0;
-  const running = Boolean(runsQuery.data?.some((run) => run.status === "Running"));
+  const running = Boolean(runsQuery.data?.some((run) => isWorkerRunningStatus(run.status)));
   const triggerDisabled = triggering || running || blocked;
   const blockReason = blocked
     ? `Dependência indisponível: ${blockedDeps.map((id) => DEPENDENCY_LABELS[id] ?? id).join(", ")}`
@@ -188,143 +107,183 @@ function WorkerCard({
       : undefined;
 
   return (
-    <article className={`workers-card${selected ? " is-selected" : ""}`}>
-      <div className="workers-card__head">
-        <div>
-          <h2 className="workers-card__title">{worker.label}</h2>
-          <p className="workers-card__desc">{worker.description}</p>
-          <div className="workers-card__badges">
+    <tr className={selected ? "is-selected" : undefined}>
+      <td className="workers-col--worker">
+        <div className="workers-row__worker">
+          <button type="button" className="workers-row__name" onClick={onSelect} title={worker.key}>
+            <span className="workers-row__title">{worker.label}</span>
+          </button>
+          <div className="workers-row__flags">
             <span
               className={`workers-status ${
-                worker.hostedInWorkersProcess
-                  ? "workers-status--success"
-                  : "workers-status--neutral"
+                worker.hostedInWorkersProcess ? "workers-status--success" : "workers-status--neutral"
               }`}
             >
-              {worker.hostedInWorkersProcess ? "Agendado no Workers" : "Só Dev / manual"}
+              {worker.hostedInWorkersProcess ? "Host Workers" : "Só Dev"}
             </span>
-            {overdue ? (
-              <span className="workers-status workers-status--warning">Atrasado</span>
-            ) : null}
-            {running ? (
-              <span className="workers-status workers-status--running">Em execução</span>
-            ) : null}
+            {overdue ? <span className="workers-status workers-status--warning">Atrasado</span> : null}
           </div>
         </div>
+      </td>
+      <td>
         {lastRun ? (
-          <span className={`workers-status ${statusTone(lastRun.status)}`}>{lastRun.status}</span>
+          <span className={`workers-status ${statusTone(lastRun.status)}`}>
+            {statusLabel(lastRun.status)}
+          </span>
         ) : (
-          <span className="workers-status workers-status--neutral">Sem execuções</span>
+          <span className="workers-status workers-status--neutral">Sem runs</span>
         )}
-      </div>
-      <dl className="workers-card__meta">
-        <div>
-          <dt>Intervalo configurado</dt>
-          <dd>{worker.defaultIntervalMinutes ?? "—"} min</dd>
-        </div>
-        <div>
-          <dt>Última execução</dt>
-          <dd>{formatDateTime(lastRun?.finishedAtUtc ?? lastRun?.startedAtUtc)}</dd>
-        </div>
-        <div>
-          <dt>Trigger</dt>
-          <dd>{lastRun?.triggerSource ?? "—"}</dd>
-        </div>
-      </dl>
-      <div className="workers-card__actions">
-        {worker.key === "totvs-timesheet-sync" ||
-        worker.key === "totvs-payslip-sync" ||
-        worker.key === "totvs-leave-sync" ||
-        worker.key === "totvs-employee-sync" ||
-        worker.key === "leave-writeback" ? (
-          <Link className="workers-btn workers-btn--ghost" to="/admin/totvs-rm">
-            Configurar RM
-          </Link>
-        ) : null}
-        {worker.key === "graph-directory-sync" || worker.key === "graph-sync" ? (
-          <Link
-            className="workers-btn workers-btn--ghost"
-            to="/admin/configuracoes-backend?category=graph"
+      </td>
+      <td>{worker.defaultIntervalMinutes != null ? `${worker.defaultIntervalMinutes} min` : "—"}</td>
+      <td>{formatDateTime(lastRun?.finishedAtUtc ?? lastRun?.startedAtUtc)}</td>
+      <td>{formatDuration(lastRun?.startedAtUtc, lastRun?.finishedAtUtc)}</td>
+      <td>
+        {lastRun?.triggerSource ? (
+          <span className={`workers-status ${triggerTone(lastRun.triggerSource)}`}>
+            {triggerLabel(lastRun.triggerSource)}
+          </span>
+        ) : (
+          <span className="workers-status workers-status--neutral">—</span>
+        )}
+      </td>
+      <td className="workers-col--actions">
+        <div className="workers-row__actions">
+          <button
+            type="button"
+            className="workers-icon-btn"
+            onClick={onSelect}
+            title="Ver histórico"
+            aria-label="Ver histórico"
           >
-            Configurar Graph
-          </Link>
-        ) : null}
-        <button type="button" className="workers-btn workers-btn--ghost" onClick={onSelect}>
-          Ver histórico
-        </button>
-        <button
-          type="button"
-          className="workers-btn workers-btn--primary"
-          onClick={onRequestTrigger}
-          disabled={triggerDisabled}
-          title={blockReason}
-          aria-disabled={triggerDisabled}
-        >
-          {triggering ? "Disparando…" : running ? "Em execução…" : "Executar agora"}
-        </button>
-      </div>
-      {triggerDisabled && blockReason ? (
-        <p className="workers-card__hint">{blockReason}</p>
-      ) : null}
-    </article>
+            <i className="fa-solid fa-clock-rotate-left" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="workers-icon-btn workers-icon-btn--primary"
+            onClick={onRequestTrigger}
+            disabled={triggerDisabled}
+            title={blockReason ?? "Executar agora"}
+            aria-label={running ? "Em execução" : "Executar agora"}
+            aria-disabled={triggerDisabled}
+          >
+            <i
+              className={`fa-solid ${
+                triggering ? "fa-spinner fa-spin" : running ? "fa-hourglass-half" : "fa-play"
+              }`}
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }
 
-function RunDetailPanel({
-  workerKey,
-  runId,
-  onClose,
-}: {
-  workerKey: string;
-  runId: string;
-  onClose: () => void;
-}) {
-  const detailQuery = useWorkerRunDetail(workerKey, runId, true);
-  const run = detailQuery.data?.run;
-  const logs = detailQuery.data?.logs ?? [];
+type WorkerRowMeta = {
+  running: boolean;
+  overdue: boolean;
+  failed: boolean;
+  statusRank: number;
+  lastAtMs: number;
+  durationMs: number;
+  trigger: string;
+  interval: number;
+  label: string;
+};
 
+function statusSortRank(status?: string | null): number {
+  if (isWorkerRunningStatus(status)) return 0;
+  if (isFailedStatus(status)) return 1;
+  if (isSuccessStatus(status)) return 3;
+  return 2;
+}
+
+function durationMs(startedAtUtc?: string | null, finishedAtUtc?: string | null): number {
+  if (!startedAtUtc) return -1;
+  const start = new Date(startedAtUtc).getTime();
+  if (Number.isNaN(start)) return -1;
+  const end = finishedAtUtc ? new Date(finishedAtUtc).getTime() : Date.now();
+  if (Number.isNaN(end) || end < start) return -1;
+  return end - start;
+}
+
+/** Collects last-run snapshot for KPI strip and sorting. */
+function WorkerRowProbe({
+  worker,
+  onSnapshot,
+}: {
+  worker: WorkerDefinitionDto;
+  onSnapshot: (key: string, snapshot: WorkerRowMeta) => void;
+}) {
+  const runsQuery = useWorkerRuns(worker.key, 10, true, true);
+  const lastRun = runsQuery.data?.[0];
+  const running = Boolean(runsQuery.data?.some((run) => isWorkerRunningStatus(run.status)));
+  const overdue = isWorkerOverdue(worker, runsQuery.data);
+  const failed = isFailedStatus(lastRun?.status);
+  const lastAtRaw = lastRun?.finishedAtUtc ?? lastRun?.startedAtUtc;
+  const lastAtMs = lastAtRaw ? new Date(lastAtRaw).getTime() : 0;
+  const snapshot: WorkerRowMeta = {
+    running,
+    overdue,
+    failed,
+    statusRank: statusSortRank(lastRun?.status),
+    lastAtMs: Number.isNaN(lastAtMs) ? 0 : lastAtMs,
+    durationMs: durationMs(lastRun?.startedAtUtc, lastRun?.finishedAtUtc),
+    trigger: (lastRun?.triggerSource ?? "").toLowerCase(),
+    interval: worker.defaultIntervalMinutes ?? -1,
+    label: worker.label,
+  };
+
+  useEffect(() => {
+    onSnapshot(worker.key, snapshot);
+  }, [
+    worker.key,
+    snapshot.running,
+    snapshot.overdue,
+    snapshot.failed,
+    snapshot.statusRank,
+    snapshot.lastAtMs,
+    snapshot.durationMs,
+    snapshot.trigger,
+    snapshot.interval,
+    snapshot.label,
+    onSnapshot,
+  ]);
+
+  return null;
+}
+
+type SortKey = "label" | "status" | "interval" | "lastAt" | "duration" | "trigger";
+type SortDir = "asc" | "desc";
+
+function SortHeader({
+  label,
+  column,
+  sortKey,
+  sortDir,
+  onSort,
+  align = "center",
+}: {
+  label: string;
+  column: SortKey;
+  sortKey: SortKey;
+  sortDir: SortDir;
+  onSort: (column: SortKey) => void;
+  align?: "left" | "center";
+}) {
+  const active = sortKey === column;
   return (
-    <section className="workers-detail" aria-label="Detalhe da execução">
-      <div className="workers-detail__head">
-        <div>
-          <h3>Execução {runId.slice(0, 8)}</h3>
-          {run ? (
-            <p>
-              {formatDateTime(run.startedAtUtc)} → {formatDateTime(run.finishedAtUtc)} ·{" "}
-              <span className={`workers-status ${statusTone(run.status)}`}>{run.status}</span>
-            </p>
-          ) : null}
-        </div>
-        <button type="button" className="workers-btn workers-btn--ghost" onClick={onClose}>
-          Fechar
-        </button>
-      </div>
-      {run?.errorMessage ? <p className="workers-detail__error">{run.errorMessage}</p> : null}
-      <div className="workers-logs">
-        {logs.length === 0 ? (
-          <p className="workers-empty">Nenhum log registrado.</p>
-        ) : (
-          <table className="workers-logs__table">
-            <thead>
-              <tr>
-                <th>Hora</th>
-                <th>Nível</th>
-                <th>Mensagem</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log) => (
-                <tr key={log.id}>
-                  <td>{formatDateTime(log.loggedAtUtc)}</td>
-                  <td>{log.level}</td>
-                  <td>{log.message}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </section>
+    <th className={align === "left" ? "workers-col--worker" : undefined} aria-sort={active ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+      <button type="button" className={`workers-sort${active ? " is-active" : ""}`} onClick={() => onSort(column)}>
+        <span>{label}</span>
+        <i
+          className={`fa-solid ${
+            active ? (sortDir === "asc" ? "fa-sort-up" : "fa-sort-down") : "fa-sort"
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+    </th>
   );
 }
 
@@ -337,17 +296,99 @@ export function WorkersHubPage() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
-  const historyRef = useRef<HTMLElement | null>(null);
-
-  const runsQuery = useWorkerRuns(selectedKey ?? "", 20, Boolean(selectedKey), true);
-
-  useEffect(() => {
-    if (!selectedKey || !historyRef.current) return;
-    historyRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [selectedKey, runsQuery.isFetching]);
+  const [rowMeta, setRowMeta] = useState<Record<string, WorkerRowMeta>>({});
+  const [sortKey, setSortKey] = useState<SortKey>("label");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   const workers = definitionsQuery.data ?? [];
   const components = connectivityQuery.data?.components ?? [];
+  const selectedWorker = workers.find((worker) => worker.key === selectedKey) ?? null;
+
+  const handleRowSnapshot = useMemo(
+    () => (key: string, snapshot: WorkerRowMeta) => {
+      setRowMeta((prev) => {
+        const current = prev[key];
+        if (
+          current &&
+          current.running === snapshot.running &&
+          current.overdue === snapshot.overdue &&
+          current.failed === snapshot.failed &&
+          current.statusRank === snapshot.statusRank &&
+          current.lastAtMs === snapshot.lastAtMs &&
+          current.durationMs === snapshot.durationMs &&
+          current.trigger === snapshot.trigger &&
+          current.interval === snapshot.interval &&
+          current.label === snapshot.label
+        ) {
+          return prev;
+        }
+        return { ...prev, [key]: snapshot };
+      });
+    },
+    [],
+  );
+
+  const handleSort = (column: SortKey) => {
+    if (sortKey === column) {
+      setSortDir((dir) => (dir === "asc" ? "desc" : "asc"));
+      return;
+    }
+    setSortKey(column);
+    setSortDir(column === "label" || column === "trigger" ? "asc" : "desc");
+  };
+
+  const sortedWorkers = useMemo(() => {
+    const list = [...workers];
+    const factor = sortDir === "asc" ? 1 : -1;
+    list.sort((a, b) => {
+      const ma = rowMeta[a.key];
+      const mb = rowMeta[b.key];
+      let cmp = 0;
+      switch (sortKey) {
+        case "label":
+          cmp = a.label.localeCompare(b.label, "pt-BR");
+          break;
+        case "status":
+          cmp = (ma?.statusRank ?? 9) - (mb?.statusRank ?? 9);
+          if (cmp === 0) cmp = Number(mb?.overdue ?? false) - Number(ma?.overdue ?? false);
+          break;
+        case "interval":
+          cmp = (ma?.interval ?? -1) - (mb?.interval ?? -1);
+          break;
+        case "lastAt":
+          cmp = (ma?.lastAtMs ?? 0) - (mb?.lastAtMs ?? 0);
+          break;
+        case "duration":
+          cmp = (ma?.durationMs ?? -1) - (mb?.durationMs ?? -1);
+          break;
+        case "trigger":
+          cmp = (ma?.trigger ?? "").localeCompare(mb?.trigger ?? "", "pt-BR");
+          break;
+        default:
+          cmp = 0;
+      }
+      if (cmp === 0) cmp = a.label.localeCompare(b.label, "pt-BR");
+      return cmp * factor;
+    });
+    return list;
+  }, [workers, rowMeta, sortKey, sortDir]);
+
+  const kpis = useMemo(() => {
+    const values = Object.values(rowMeta);
+    return {
+      total: workers.length,
+      running: values.filter((v) => v.running).length,
+      overdue: values.filter((v) => v.overdue).length,
+      failed: values.filter((v) => v.failed).length,
+      infraUp: components.filter((c) => c.healthy).length,
+      infraTotal: components.length,
+    };
+  }, [rowMeta, workers.length, components]);
+
+  const closeHistory = () => {
+    setSelectedKey(null);
+    setSelectedRunId(null);
+  };
 
   const executeTrigger = async (workerKey: string) => {
     setFeedback(null);
@@ -378,11 +419,9 @@ export function WorkersHubPage() {
     await executeTrigger(worker.key);
   };
 
-  const sortedRuns = useMemo(() => (runsQuery.data ?? []).slice(), [runsQuery.data]);
-
   if (meLoading) {
     return (
-      <main className="main">
+      <main className={sectionMainClass("plataforma")}>
         <p className="workers-empty">Carregando permissões…</p>
       </main>
     );
@@ -393,140 +432,257 @@ export function WorkersHubPage() {
   }
 
   return (
-    <main className="main">
+    <main className={`${sectionMainClass("plataforma")} workers-dash`}>
       {confirmModal}
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Workers</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Workers de integração</h1>
-            <p className="page-header__desc">
-              Acompanhe execuções, logs, conectividade e dispare sincronizações manualmente.
-            </p>
-          </div>
-        </div>
-      </header>
+      {workers.map((worker) => (
+        <WorkerRowProbe key={`kpi-${worker.key}`} worker={worker} onSnapshot={handleRowSnapshot} />
+      ))}
 
-      <ConnectivitySection
-        components={components}
-        checkedAtUtc={connectivityQuery.data?.checkedAtUtc}
-        isFetching={connectivityQuery.isFetching}
-        isError={connectivityQuery.isError}
-        onRefresh={() => void connectivityQuery.refetch()}
+      <SectionPageHead
+        section="plataforma"
+        title="Workers"
+        current="Workers"
+        description="Monitoramento operacional de jobs, conectividade e disparo manual."
+        syncMeta={
+          connectivityQuery.data?.checkedAtUtc
+            ? `Infra verificada às ${formatDateTime(connectivityQuery.data.checkedAtUtc)}`
+            : undefined
+        }
+        actions={
+          <div className="workers-dash__header-actions">
+            <Link className="workers-head-action" to="/admin/totvs-rm">
+              <i className="fa-solid fa-building" aria-hidden="true" />
+              TOTVS RM
+            </Link>
+            <Link
+              className="workers-head-action"
+              to="/admin/configuracoes-backend?category=workers"
+            >
+              <i className="fa-solid fa-sliders" aria-hidden="true" />
+              Intervalos
+            </Link>
+            <button
+              type="button"
+              className="workers-icon-btn"
+              onClick={() => void connectivityQuery.refetch()}
+              disabled={connectivityQuery.isFetching}
+              title="Atualizar infraestrutura"
+              aria-label="Atualizar infraestrutura"
+            >
+              <i
+                className={`fa-solid ${connectivityQuery.isFetching ? "fa-spinner fa-spin" : "fa-arrows-rotate"}`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        }
       />
 
-      <section className="workers-hub__intro" aria-label="Resumo">
-        <div className="workers-hub__intro-head">
-          <div className="workers-hub__intro-icon" aria-hidden="true">
-            <i className="fa-solid fa-gears" />
+      <section className="workers-kpi" aria-label="Resumo operacional">
+        <article className="workers-kpi__card workers-kpi__card--total">
+          <div className="workers-kpi__head">
+            <span className="workers-kpi__icon" aria-hidden="true">
+              <i className="fa-solid fa-gears" />
+            </span>
+            <span className="workers-kpi__hint">Catálogo</span>
           </div>
-          <div>
-            <div className="workers-hub__intro-title">Jobs em background</div>
-            <p className="workers-hub__intro-text">
-              Sincronizações TOTVS RM, Microsoft Graph, encerramento de enquetes, holerite, férias e
-              e-mail. Cada worker registra execuções e logs para auditoria operacional.
-            </p>
-            <p className="workers-hub__intro-note">
-              Em desenvolvimento, os workers agendados rodam junto com a API. Em produção, use o
-              processo <code>LioConecta.Workers</code>.
-            </p>
+          <div className="workers-kpi__value">{kpis.total}</div>
+          <div className="workers-kpi__label">Workers</div>
+        </article>
+        <article className="workers-kpi__card workers-kpi__card--running">
+          <div className="workers-kpi__head">
+            <span className="workers-kpi__icon" aria-hidden="true">
+              <i className="fa-solid fa-play" />
+            </span>
+            <span className="workers-kpi__hint">Agora</span>
           </div>
+          <div className="workers-kpi__value">{kpis.running}</div>
+          <div className="workers-kpi__label">Em execução</div>
+        </article>
+        <article className="workers-kpi__card workers-kpi__card--overdue">
+          <div className="workers-kpi__head">
+            <span className="workers-kpi__icon" aria-hidden="true">
+              <i className="fa-solid fa-clock" />
+            </span>
+            <span className="workers-kpi__hint">Alerta</span>
+          </div>
+          <div className="workers-kpi__value">{kpis.overdue}</div>
+          <div className="workers-kpi__label">Atrasados</div>
+        </article>
+        <article className="workers-kpi__card workers-kpi__card--failed">
+          <div className="workers-kpi__head">
+            <span className="workers-kpi__icon" aria-hidden="true">
+              <i className="fa-solid fa-triangle-exclamation" />
+            </span>
+            <span className="workers-kpi__hint">Última run</span>
+          </div>
+          <div className="workers-kpi__value">{kpis.failed}</div>
+          <div className="workers-kpi__label">Com falha</div>
+        </article>
+        <article className="workers-kpi__card workers-kpi__card--infra">
+          <div className="workers-kpi__head">
+            <span className="workers-kpi__icon" aria-hidden="true">
+              <i className="fa-solid fa-heart-pulse" />
+            </span>
+            <span className="workers-kpi__hint">Health</span>
+          </div>
+          <div className="workers-kpi__value">
+            {kpis.infraUp}/{kpis.infraTotal || 4}
+          </div>
+          <div className="workers-kpi__label">Infra OK</div>
+        </article>
+      </section>
+
+      <section className="workers-infra" aria-label="Conectividade">
+        <div className="workers-infra__head">
+          <h2>Conectividade</h2>
         </div>
-        <div className="workers-hub__intro-toolbar">
-          <Link className="workers-btn workers-btn--ghost" to="/admin/totvs-rm">
-            Configurar TOTVS RM
-          </Link>
-          <Link
-            className="workers-btn workers-btn--ghost"
-            to="/admin/configuracoes-backend?category=workers"
-          >
-            Configurar intervalos
-          </Link>
-        </div>
+        {connectivityQuery.isError ? (
+          <p className="workers-empty workers-empty--error" role="alert">
+            Não foi possível carregar o status de conectividade
+            {connectivityQuery.error instanceof Error && connectivityQuery.error.message
+              ? ` (${connectivityQuery.error.message})`
+              : ""}
+            . Se a API local estiver antiga, reinicie o processo{" "}
+            <code>LioConecta.Api</code> para carregar o endpoint{" "}
+            <code>/admin/workers/connectivity</code>.
+          </p>
+        ) : (
+          <div className="workers-infra__strip">
+            {(components.length
+              ? components
+              : [
+                  { id: "api", label: "API", healthy: false, latencyMs: null, message: "…" },
+                  { id: "postgres", label: "Portal DB", healthy: false, latencyMs: null, message: "…" },
+                  { id: "redis", label: "Redis", healthy: false, latencyMs: null, message: "…" },
+                  { id: "totvs-rm", label: "TOTVS RM", healthy: false, latencyMs: null, message: "…" },
+                ]
+            ).map((component) => {
+              const link = CONNECTIVITY_LINKS[component.id];
+              const content = (
+                <>
+                  <span className="workers-infra__icon" aria-hidden="true">
+                    <i className={`fa-solid ${CONNECTIVITY_ICONS[component.id] ?? "fa-circle"}`} />
+                  </span>
+                  <span className="workers-infra__meta">
+                    <span className="workers-infra__name">{component.label}</span>
+                    <span className="workers-infra__latency">
+                      {component.latencyMs != null ? `${component.latencyMs} ms` : "—"}
+                      {component.message && !component.healthy ? ` · ${component.message}` : ""}
+                    </span>
+                  </span>
+                  <span
+                    className={`workers-infra__dot${component.healthy ? " is-up" : " is-down"}`}
+                    title={component.healthy ? "Saudável" : "Indisponível"}
+                  />
+                </>
+              );
+              return link ? (
+                <Link
+                  key={component.id}
+                  className={`workers-infra__chip${component.healthy ? " is-up" : " is-down"}`}
+                  to={link.href}
+                >
+                  {content}
+                </Link>
+              ) : (
+                <div
+                  key={component.id}
+                  className={`workers-infra__chip${component.healthy ? " is-up" : " is-down"}`}
+                >
+                  {content}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {feedback ? <p className="workers-feedback">{feedback}</p> : null}
 
-      {definitionsQuery.isError ? (
-        <p className="workers-empty">Não foi possível carregar os workers.</p>
-      ) : (
-        <div className="workers-grid">
-          {workers.map((worker) => (
-            <WorkerCard
-              key={worker.key}
-              worker={worker}
-              selected={selectedKey === worker.key}
-              components={components}
-              onSelect={() => {
-                setSelectedKey(worker.key);
-                setSelectedRunId(null);
-              }}
-              onRequestTrigger={() => void requestTrigger(worker)}
-              triggering={triggerMutation.isPending && triggerMutation.variables === worker.key}
-            />
-          ))}
+      <section className="workers-board" aria-label="Lista de workers">
+        <div className="workers-board__head">
+          <h2>Jobs</h2>
+          <p>Abra o histórico pelo ícone de relógio para ver execuções e logs.</p>
         </div>
-      )}
-
-      {selectedKey ? (
-        <section
-          ref={historyRef}
-          className="workers-history"
-          aria-label="Histórico de execuções"
-        >
-          <h2>
-            Histórico — {workers.find((worker) => worker.key === selectedKey)?.label ?? selectedKey}
-          </h2>
-          {runsQuery.isLoading ? (
-            <p className="workers-empty">Carregando execuções…</p>
-          ) : sortedRuns.length === 0 ? (
-            <p className="workers-empty">Nenhuma execução registrada.</p>
-          ) : (
-            <table className="workers-history__table">
+        {definitionsQuery.isError ? (
+          <p className="workers-empty">Não foi possível carregar os workers.</p>
+        ) : (
+          <div className="workers-board__table-wrap">
+            <table className="workers-board__table">
               <thead>
                 <tr>
-                  <th>Início</th>
-                  <th>Fim</th>
-                  <th>Status</th>
-                  <th>Trigger</th>
-                  <th />
+                  <SortHeader
+                    label="Worker"
+                    column="label"
+                    sortKey={sortKey}
+                    sortDir={sortDir}
+                    onSort={handleSort}
+                    align="left"
+                  />
+                  <SortHeader label="Status" column="status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+                  <SortHeader
+                    label="Intervalo"
+                    column="interval"
+                    sortKey={sortKey}
+                    sortDir={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Última execução"
+                    column="lastAt"
+                    sortKey={sortKey}
+                    sortDir={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Tempo última execução"
+                    column="duration"
+                    sortKey={sortKey}
+                    sortDir={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Trigger"
+                    column="trigger"
+                    sortKey={sortKey}
+                    sortDir={sortDir}
+                    onSort={handleSort}
+                  />
+                  <th className="workers-col--actions">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedRuns.map((run: WorkerRunDto) => (
-                  <tr key={run.id}>
-                    <td>{formatDateTime(run.startedAtUtc)}</td>
-                    <td>{formatDateTime(run.finishedAtUtc)}</td>
-                    <td>
-                      <span className={`workers-status ${statusTone(run.status)}`}>{run.status}</span>
-                    </td>
-                    <td>{run.triggerSource}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className="workers-btn workers-btn--ghost"
-                        onClick={() => setSelectedRunId(run.id)}
-                      >
-                        Detalhe
-                      </button>
-                    </td>
-                  </tr>
+                {sortedWorkers.map((worker) => (
+                  <WorkerRowStatus
+                    key={worker.key}
+                    worker={worker}
+                    components={components}
+                    selected={selectedKey === worker.key}
+                    onSelect={() => {
+                      setSelectedKey(worker.key);
+                      setSelectedRunId(null);
+                    }}
+                    onRequestTrigger={() => void requestTrigger(worker)}
+                    triggering={
+                      triggerMutation.isPending && triggerMutation.variables === worker.key
+                    }
+                  />
                 ))}
               </tbody>
             </table>
-          )}
-        </section>
-      ) : null}
+          </div>
+        )}
+      </section>
 
-      {selectedKey && selectedRunId ? (
-        <RunDetailPanel
-          workerKey={selectedKey}
-          runId={selectedRunId}
-          onClose={() => setSelectedRunId(null)}
+      {selectedWorker ? (
+        <WorkerHistoryModal
+          open
+          workerKey={selectedWorker.key}
+          workerLabel={selectedWorker.label}
+          selectedRunId={selectedRunId}
+          onSelectRun={setSelectedRunId}
+          onClose={closeHistory}
         />
       ) : null}
     </main>

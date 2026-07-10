@@ -10,6 +10,11 @@ import type {
 
 export const WORKERS_QUERY_KEY = ["admin", "workers"] as const;
 
+function isRunningStatus(status?: string | null): boolean {
+  const s = (status ?? "").trim().toLowerCase();
+  return s === "running" || s === "inprogress" || s === "in_progress";
+}
+
 export function useWorkerDefinitions() {
   return useQuery({
     queryKey: [...WORKERS_QUERY_KEY, "definitions"],
@@ -46,7 +51,7 @@ export function useWorkerRuns(
     refetchInterval: (query) => {
       if (!enabled) return false;
       if (pollWhileRunning) {
-        const hasRunning = query.state.data?.some((run) => run.status === "Running");
+        const hasRunning = query.state.data?.some((run) => isRunningStatus(run.status));
         if (hasRunning) return 5000;
       }
       return 15_000;
@@ -66,8 +71,7 @@ export function useWorkerRunDetail(
     enabled: Boolean(workerKey && runId),
     refetchInterval: (query) => {
       if (!pollWhileRunning) return false;
-      const status = query.state.data?.run.status;
-      return status === "Running" ? 5000 : false;
+      return isRunningStatus(query.state.data?.run.status) ? 5000 : false;
     },
     retry: config.useMock ? 0 : 1,
   });
