@@ -1,0 +1,25 @@
+{
+  "id": "059211e9-a58a-451f-bb08-4a74ebd50066",
+  "employeeName": "E2E Atestado Colaborador",
+  "title": "Registrar Atestado Médico — solicitação",
+  "notes": "E2E-RH-1783688060168 — atestado com PDF e PNG",
+  "approvalNote": "A aprovação formal da solicitação é feita no RM Labore. O portal apenas registra, notifica e espelha o status.",
+  "attachments": [
+    {
+      "fileName": "atestado-rh-sample.pdf",
+      "storageFileName": "c299cf00374c403187b0cf9ccb2c8595.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 577,
+      "url": "/rh/leave/management/059211e9-a58a-451f-bb08-4a74ebd50066/attachments/c299cf00374c403187b0cf9ccb2c8595.pdf"
+    },
+    {
+      "fileName": "atestado-rh-sample.png",
+      "storageFileName": "942de57778ed4344bebe053daa0b9bae.png",
+      "contentType": "image/png",
+      "sizeBytes": 78,
+      "url": "/rh/leave/management/059211e9-a58a-451f-bb08-4a74ebd50066/attachments/942de57778ed4344bebe053daa0b9bae.png"
+    }
+  ],
+  "downloadStatus": 200,
+  "downloadBytes": 577
+}

@@ -1047,6 +1047,14 @@ export interface LeaveTimelineEventDto {
   detail?: string | null;
 }
 
+export interface LeaveAttachmentMetaDto {
+  fileName: string;
+  storageFileName: string;
+  contentType: string;
+  sizeBytes: number;
+  url: string;
+}
+
 export interface LeaveRequestDetailDto {
   id: string;
   serviceRequestId?: string | null;
@@ -1060,6 +1068,7 @@ export interface LeaveRequestDetailDto {
   dataSource?: string | null;
   createdAt: string;
   timeline: LeaveTimelineEventDto[];
+  attachments?: LeaveAttachmentMetaDto[];
 }
 
 export interface LeaveManagementItemDto {
@@ -1096,6 +1105,7 @@ export interface LeaveManagementDetailDto {
   createdAt: string;
   timeline: LeaveTimelineEventDto[];
   approvalNote: string;
+  attachments?: LeaveAttachmentMetaDto[];
 }
 
 export type AuditSource = "HttpRequest" | "EntityChange";

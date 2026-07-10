@@ -197,3 +197,24 @@ export async function openLeaveManagementPdf(recordId: string) {
   window.open(url, "_blank", "noopener,noreferrer");
   window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
+
+export async function fetchLeaveManagementAttachmentBlob(
+  recordId: string,
+  storageFileName: string,
+): Promise<Blob> {
+  return api.getBlob(
+    `/rh/leave/management/${recordId}/attachments/${encodeURIComponent(storageFileName)}`,
+  );
+}
+
+export async function downloadLeaveManagementAttachment(
+  recordId: string,
+  storageFileName: string,
+  fileName: string,
+) {
+  await downloadBlobWithToast(
+    fetchLeaveManagementAttachmentBlob(recordId, storageFileName),
+    fileName,
+    "Anexo baixado com sucesso.",
+  );
+}
