@@ -1,0 +1,32 @@
+---
+description: Ao criar ou alterar workers, registrar monitoramento na hub /admin/workers
+alwaysApply: true
+---
+
+# Workers — monitoramento obrigatório
+
+Quando criar ou alterar um **background worker** (job `BackgroundService` / sync TOTVS / Graph / e-mail / etc.):
+
+## Checklist (backend + hub)
+
+1. **Key** em `LioConecta.Backend/.../WorkerKeys.cs`
+2. **Entrada** em `WorkerRegistry.All` com label, descrição, intervalo, `HostedInWorkersProcess` e `DependsOn` (`api` | `postgres` | `redis` | `totvs-rm`)
+3. **Setting** de intervalo em `AppSettingKeys` + catálogo `workers` (se configurável)
+4. **Job** em `LioConecta.Workers/Jobs/` usando `IWorkerRunRecorder.ExecuteAsync` + logs via contexto
+5. **Registro** `AddHostedService<>` em `LioConecta.Workers/Program.cs` **e** no bloco Dev de `LioConecta.Api/Program.cs` — manter `HostedInWorkersProcess` alinhado
+6. **Trigger manual** — case em `WorkerTriggerService.TriggerAsync`
+7. **UI** — aparece via `GET /api/v1/admin/workers`; customizar card só se precisar de link de config
+8. **Conectividade** — dependências cobertas por `GET /api/v1/admin/workers/connectivity` (não inventar health paralelo)
+9. Validar em `/admin/workers`: listagem, badges (host/atrasado), gate “Executar agora”, disparo, logs
+
+## Frontend
+
+- Menu direito: item Workers com `PERMISSIONS.admin.workersManage`
+- Hub: [`src/components/admin/WorkersHubPage.tsx`](src/components/admin/WorkersHubPage.tsx)
+- Hooks: [`src/api/hooks/useWorkers.ts`](src/api/hooks/useWorkers.ts)
+
+## Não fazer
+
+- Hangfire / Quartz
+- Incluir TOTVS RM em `/health/ready`
+- Usar `adminRoleOnly` para Workers — use RBAC `admin.workers.manage`

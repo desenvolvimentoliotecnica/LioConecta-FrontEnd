@@ -1,15 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { usePermissions } from "../../hooks/usePermissions";
+import { usePortalConfirm } from "../../hooks/usePortalConfirm";
 import { PERMISSIONS } from "../../config/rbac/permissions";
 import {
   useTriggerWorker,
   useWorkerDefinitions,
   useWorkerRunDetail,
   useWorkerRuns,
+  useWorkersConnectivity,
 } from "../../api/hooks/useWorkers";
-import type { WorkerDefinitionDto, WorkerRunDto } from "../../api/types";
+import type {
+  WorkerConnectivityComponentDto,
+  WorkerDefinitionDto,
+  WorkerRunDto,
+} from "../../api/types";
 import "../../styles/workers-hub-page.css";
+
+const CONNECTIVITY_LINKS: Record<string, { href: string; label: string }> = {
+  api: { href: "/admin/observabilidade", label: "Observabilidade" },
+  postgres: { href: "/admin/configuracoes-backend?category=database", label: "Config. Portal DB" },
+  redis: { href: "/admin/configuracoes-backend?category=redis", label: "Config. Redis" },
+  "totvs-rm": { href: "/admin/totvs-rm", label: "Configurar RM" },
+};
+
+const DEPENDENCY_LABELS: Record<string, string> = {
+  api: "API",
+  postgres: "Portal DB",
+  redis: "Redis",
+  "totvs-rm": "TOTVS RM",
+};
 
 function formatDateTime(value?: string | null): string {
   if (!value) return "—";
@@ -34,21 +54,138 @@ function statusTone(status: string): string {
   }
 }
 
+function isWorkerOverdue(
+  worker: WorkerDefinitionDto,
+  runs: WorkerRunDto[] | undefined,
+): boolean {
+  const interval = worker.defaultIntervalMinutes;
+  if (interval == null || interval <= 0) return false;
+
+  const lastScheduled = runs?.find((run) => run.triggerSource === "scheduled");
+  if (!lastScheduled) return false;
+  if (lastScheduled.status === "Running") return false;
+
+  const reference = lastScheduled.finishedAtUtc ?? lastScheduled.startedAtUtc;
+  const ageMs = Date.now() - new Date(reference).getTime();
+  return ageMs > interval * 2 * 60_000;
+}
+
+function unresolvedDependencies(
+  worker: WorkerDefinitionDto,
+  components: WorkerConnectivityComponentDto[] | undefined,
+): string[] {
+  if (!components?.length) return [];
+  const byId = new Map(components.map((c) => [c.id, c]));
+  return (worker.dependsOn ?? []).filter((id) => {
+    const component = byId.get(id);
+    return !component || !component.healthy;
+  });
+}
+
+function ConnectivitySection({
+  components,
+  checkedAtUtc,
+  isFetching,
+  isError,
+  onRefresh,
+}: {
+  components: WorkerConnectivityComponentDto[];
+  checkedAtUtc?: string;
+  isFetching: boolean;
+  isError: boolean;
+  onRefresh: () => void;
+}) {
+  return (
+    <section className="workers-connectivity" aria-label="Infraestrutura">
+      <div className="workers-connectivity__head">
+        <div>
+          <h2 className="workers-connectivity__title">Infraestrutura</h2>
+          <p className="workers-connectivity__desc">
+            Status de API, Portal DB, Redis e TOTVS RM
+            {checkedAtUtc ? ` · verificado às ${formatDateTime(checkedAtUtc)}` : ""}.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="workers-btn workers-btn--ghost"
+          onClick={onRefresh}
+          disabled={isFetching}
+        >
+          {isFetching ? "Atualizando…" : "Atualizar"}
+        </button>
+      </div>
+      {isError ? (
+        <p className="workers-empty">Não foi possível carregar o status de conectividade.</p>
+      ) : (
+        <div className="workers-connectivity__grid">
+          {components.map((component) => {
+            const link = CONNECTIVITY_LINKS[component.id];
+            return (
+              <article
+                key={component.id}
+                className={`workers-connectivity-card${component.healthy ? " is-healthy" : " is-down"}`}
+              >
+                <div className="workers-connectivity-card__head">
+                  <h3>{component.label}</h3>
+                  <span
+                    className={`workers-status ${
+                      component.healthy ? "workers-status--success" : "workers-status--danger"
+                    }`}
+                  >
+                    {component.healthy ? "Saudável" : "Indisponível"}
+                  </span>
+                </div>
+                <dl className="workers-connectivity-card__meta">
+                  <div>
+                    <dt>Latência</dt>
+                    <dd>{component.latencyMs != null ? `${component.latencyMs} ms` : "—"}</dd>
+                  </div>
+                  <div>
+                    <dt>Detalhe</dt>
+                    <dd>{component.message ?? (component.healthy ? "OK" : "—")}</dd>
+                  </div>
+                </dl>
+                {link ? (
+                  <Link className="workers-btn workers-btn--ghost" to={link.href}>
+                    {link.label}
+                  </Link>
+                ) : null}
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function WorkerCard({
   worker,
   selected,
   onSelect,
-  onTrigger,
+  onRequestTrigger,
   triggering,
+  components,
 }: {
   worker: WorkerDefinitionDto;
   selected: boolean;
   onSelect: () => void;
-  onTrigger: () => void;
+  onRequestTrigger: () => void;
   triggering: boolean;
+  components: WorkerConnectivityComponentDto[] | undefined;
 }) {
-  const runsQuery = useWorkerRuns(worker.key, 1);
+  const runsQuery = useWorkerRuns(worker.key, 10, true, true);
   const lastRun = runsQuery.data?.[0];
+  const overdue = isWorkerOverdue(worker, runsQuery.data);
+  const blockedDeps = unresolvedDependencies(worker, components);
+  const blocked = blockedDeps.length > 0;
+  const running = Boolean(runsQuery.data?.some((run) => run.status === "Running"));
+  const triggerDisabled = triggering || running || blocked;
+  const blockReason = blocked
+    ? `Dependência indisponível: ${blockedDeps.map((id) => DEPENDENCY_LABELS[id] ?? id).join(", ")}`
+    : running
+      ? "Execução em andamento"
+      : undefined;
 
   return (
     <article className={`workers-card${selected ? " is-selected" : ""}`}>
@@ -56,6 +193,23 @@ function WorkerCard({
         <div>
           <h2 className="workers-card__title">{worker.label}</h2>
           <p className="workers-card__desc">{worker.description}</p>
+          <div className="workers-card__badges">
+            <span
+              className={`workers-status ${
+                worker.hostedInWorkersProcess
+                  ? "workers-status--success"
+                  : "workers-status--neutral"
+              }`}
+            >
+              {worker.hostedInWorkersProcess ? "Agendado no Workers" : "Só Dev / manual"}
+            </span>
+            {overdue ? (
+              <span className="workers-status workers-status--warning">Atrasado</span>
+            ) : null}
+            {running ? (
+              <span className="workers-status workers-status--running">Em execução</span>
+            ) : null}
+          </div>
         </div>
         {lastRun ? (
           <span className={`workers-status ${statusTone(lastRun.status)}`}>{lastRun.status}</span>
@@ -78,12 +232,16 @@ function WorkerCard({
         </div>
       </dl>
       <div className="workers-card__actions">
-        {worker.key === "totvs-timesheet-sync" ? (
+        {worker.key === "totvs-timesheet-sync" ||
+        worker.key === "totvs-payslip-sync" ||
+        worker.key === "totvs-leave-sync" ||
+        worker.key === "totvs-employee-sync" ||
+        worker.key === "leave-writeback" ? (
           <Link className="workers-btn workers-btn--ghost" to="/admin/totvs-rm">
             Configurar RM
           </Link>
         ) : null}
-        {worker.key === "graph-directory-sync" ? (
+        {worker.key === "graph-directory-sync" || worker.key === "graph-sync" ? (
           <Link
             className="workers-btn workers-btn--ghost"
             to="/admin/configuracoes-backend?category=graph"
@@ -97,12 +255,17 @@ function WorkerCard({
         <button
           type="button"
           className="workers-btn workers-btn--primary"
-          onClick={onTrigger}
-          disabled={triggering || lastRun?.status === "Running"}
+          onClick={onRequestTrigger}
+          disabled={triggerDisabled}
+          title={blockReason}
+          aria-disabled={triggerDisabled}
         >
-          {triggering ? "Disparando…" : "Executar agora"}
+          {triggering ? "Disparando…" : running ? "Em execução…" : "Executar agora"}
         </button>
       </div>
+      {triggerDisabled && blockReason ? (
+        <p className="workers-card__hint">{blockReason}</p>
+      ) : null}
     </article>
   );
 }
@@ -167,14 +330,16 @@ function RunDetailPanel({
 
 export function WorkersHubPage() {
   const { hasPermission, isLoading: meLoading } = usePermissions();
+  const { ask, confirmModal } = usePortalConfirm();
   const definitionsQuery = useWorkerDefinitions();
+  const connectivityQuery = useWorkersConnectivity();
   const triggerMutation = useTriggerWorker();
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const historyRef = useRef<HTMLElement | null>(null);
 
-  const runsQuery = useWorkerRuns(selectedKey ?? "", 20, Boolean(selectedKey));
+  const runsQuery = useWorkerRuns(selectedKey ?? "", 20, Boolean(selectedKey), true);
 
   useEffect(() => {
     if (!selectedKey || !historyRef.current) return;
@@ -182,8 +347,9 @@ export function WorkersHubPage() {
   }, [selectedKey, runsQuery.isFetching]);
 
   const workers = definitionsQuery.data ?? [];
+  const components = connectivityQuery.data?.components ?? [];
 
-  const handleTrigger = async (workerKey: string) => {
+  const executeTrigger = async (workerKey: string) => {
     setFeedback(null);
     try {
       const result = await triggerMutation.mutateAsync(workerKey);
@@ -195,10 +361,24 @@ export function WorkersHubPage() {
     }
   };
 
-  const sortedRuns = useMemo(
-    () => (runsQuery.data ?? []).slice(),
-    [runsQuery.data],
-  );
+  const requestTrigger = async (worker: WorkerDefinitionDto) => {
+    const confirmed = await ask({
+      title: "Executar worker agora?",
+      message: (
+        <>
+          Confirma a execução manual de <strong>{worker.label}</strong> (
+          <code>{worker.key}</code>)? Isso dispara o job imediatamente, fora do agendamento.
+        </>
+      ),
+      confirmLabel: "Executar agora",
+      cancelLabel: "Cancelar",
+      variant: "warning",
+    });
+    if (!confirmed) return;
+    await executeTrigger(worker.key);
+  };
+
+  const sortedRuns = useMemo(() => (runsQuery.data ?? []).slice(), [runsQuery.data]);
 
   if (meLoading) {
     return (
@@ -214,6 +394,7 @@ export function WorkersHubPage() {
 
   return (
     <main className="main">
+      {confirmModal}
       <header className="page-header">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link to="/">Início</Link>
@@ -224,11 +405,19 @@ export function WorkersHubPage() {
           <div>
             <h1 className="page-header__title">Workers de integração</h1>
             <p className="page-header__desc">
-              Acompanhe execuções, logs e dispare sincronizações manualmente.
+              Acompanhe execuções, logs, conectividade e dispare sincronizações manualmente.
             </p>
           </div>
         </div>
       </header>
+
+      <ConnectivitySection
+        components={components}
+        checkedAtUtc={connectivityQuery.data?.checkedAtUtc}
+        isFetching={connectivityQuery.isFetching}
+        isError={connectivityQuery.isError}
+        onRefresh={() => void connectivityQuery.refetch()}
+      />
 
       <section className="workers-hub__intro" aria-label="Resumo">
         <div className="workers-hub__intro-head">
@@ -238,8 +427,8 @@ export function WorkersHubPage() {
           <div>
             <div className="workers-hub__intro-title">Jobs em background</div>
             <p className="workers-hub__intro-text">
-              Sincronizações TOTVS RM, Microsoft Graph, encerramento de enquetes e espelho de ponto.
-              Cada worker registra execuções e logs para auditoria operacional.
+              Sincronizações TOTVS RM, Microsoft Graph, encerramento de enquetes, holerite, férias e
+              e-mail. Cada worker registra execuções e logs para auditoria operacional.
             </p>
             <p className="workers-hub__intro-note">
               Em desenvolvimento, os workers agendados rodam junto com a API. Em produção, use o
@@ -271,11 +460,12 @@ export function WorkersHubPage() {
               key={worker.key}
               worker={worker}
               selected={selectedKey === worker.key}
+              components={components}
               onSelect={() => {
                 setSelectedKey(worker.key);
                 setSelectedRunId(null);
               }}
-              onTrigger={() => void handleTrigger(worker.key)}
+              onRequestTrigger={() => void requestTrigger(worker)}
               triggering={triggerMutation.isPending && triggerMutation.variables === worker.key}
             />
           ))}

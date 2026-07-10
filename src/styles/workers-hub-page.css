@@ -9,6 +9,99 @@
     0 8px 20px rgba(15, 23, 42, 0.08);
 }
 
+.workers-connectivity {
+  margin-bottom: var(--wf-gap);
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px dashed var(--wf-border);
+  border-radius: var(--wf-radius);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.workers-connectivity__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.workers-connectivity__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.workers-connectivity__desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--wf-text-muted);
+}
+
+.workers-connectivity__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.workers-connectivity-card {
+  padding: 14px 16px;
+  border: 1px dashed var(--wf-border);
+  border-radius: 10px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workers-connectivity-card.is-healthy {
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+}
+
+.workers-connectivity-card.is-down {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.workers-connectivity-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.workers-connectivity-card__head h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.workers-connectivity-card__meta {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.workers-connectivity-card__meta dt {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--wf-text-muted);
+}
+
+.workers-connectivity-card__meta dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  word-break: break-word;
+}
+
 .workers-hub__intro-head {
   display: flex;
   align-items: flex-start;
@@ -109,6 +202,19 @@
   font-size: 13px;
   color: var(--wf-text-muted);
   line-height: 1.45;
+}
+
+.workers-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.workers-card__hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #b45309;
 }
 
 .workers-card__meta {
@@ -307,12 +413,22 @@
   font-size: 13px;
 }
 
+@media (max-width: 1100px) {
+  .workers-connectivity__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .workers-grid {
     grid-template-columns: 1fr;
   }
 
   .workers-card__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .workers-connectivity__grid {
     grid-template-columns: 1fr;
   }
 }

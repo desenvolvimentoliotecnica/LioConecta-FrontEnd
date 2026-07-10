@@ -1305,6 +1305,21 @@ export interface WorkerDefinitionDto {
   description: string;
   intervalSettingKey?: string | null;
   defaultIntervalMinutes?: number | null;
+  hostedInWorkersProcess: boolean;
+  dependsOn: string[];
+}
+
+export interface WorkerConnectivityComponentDto {
+  id: string;
+  label: string;
+  healthy: boolean;
+  latencyMs?: number | null;
+  message?: string | null;
+}
+
+export interface WorkerConnectivityDto {
+  checkedAtUtc: string;
+  components: WorkerConnectivityComponentDto[];
 }
 
 export interface WorkerRunDto {
