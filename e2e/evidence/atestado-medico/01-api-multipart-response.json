@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "ok": true,
+  "body": {
+    "requestId": "3714dbbc-3bd3-47f6-8b60-f0d1e289cf5d",
+    "recordId": "82543bc2-111a-4342-a069-24a3395d9ed1",
+    "status": "Submitted",
+    "message": "Atestado médico enviado com sucesso. Protocolo: LC-82543BC2. O RH foi notificado.",
+    "protocol": "LC-82543BC2"
+  }
+}
