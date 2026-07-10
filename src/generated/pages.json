@@ -3,7 +3,7 @@
     "id": "feed",
     "htmlFile": "intranet-wireframe.html",
     "route": "/",
-    "hasScript": true,
+    "hasScript": false,
     "externals": []
   },
   {

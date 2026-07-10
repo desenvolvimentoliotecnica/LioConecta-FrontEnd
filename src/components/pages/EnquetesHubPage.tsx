@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ENQUETES_HUB_PATH, ENQUETES_RECENT, filterEnquetesSections } from "../../config/enquetes-hub";
+import { ENQUETES_HUB_PATH, filterEnquetesSections } from "../../config/enquetes-hub";
 import "../../styles/documents-hub-page.css";
 
 export function EnquetesHubPage() {
@@ -63,7 +63,7 @@ export function EnquetesHubPage() {
               </span>
               <span className="docs-hub__card-title">{section.label}</span>
               <span className="docs-hub__card-desc">{section.description}</span>
-              <span className="docs-hub__card-count">{section.count}</span>
+              {section.count ? <span className="docs-hub__card-count">{section.count}</span> : null}
               <span className="docs-hub__card-action">
                 Acessar
                 <i className="fa-solid fa-arrow-right" aria-hidden="true" />
@@ -77,28 +77,6 @@ export function EnquetesHubPage() {
           <p>Nenhuma categoria encontrada para a busca informada.</p>
         </div>
       )}
-
-      <section className="docs-hub__recent" aria-label="Enquetes recentes">
-        <h2 className="docs-hub__section-title">Recentes no feed</h2>
-        <ul className="docs-hub__recent-list">
-          {ENQUETES_RECENT.map((item) => (
-            <li key={item.id}>
-              <Link className="docs-hub__recent-item" to={item.href}>
-                <span className="docs-hub__recent-icon docs-hub__recent-icon--enquetes" aria-hidden="true">
-                  <i className={`fa-solid ${item.icon}`} />
-                </span>
-                <span className="docs-hub__recent-body">
-                  <strong>{item.title}</strong>
-                  <span>
-                    {item.section} · {item.date}
-                  </span>
-                </span>
-                <i className="fa-solid fa-chevron-right docs-hub__recent-chevron" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
     </main>
   );
 }

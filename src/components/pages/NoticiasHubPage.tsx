@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { NOTICIAS_HUB_PATH, NOTICIAS_RECENT, filterNoticiasSections } from "../../config/noticias-hub";
+import { NOTICIAS_HUB_PATH, filterNoticiasSections } from "../../config/noticias-hub";
 import "../../styles/documents-hub-page.css";
 
 export function NoticiasHubPage() {
@@ -19,8 +19,7 @@ export function NoticiasHubPage() {
           <div>
             <h1 className="page-header__title">Notícias</h1>
             <p className="page-header__desc">
-              Destaques editoriais no feed, comunicados oficiais e publicações departamentais —
-              fique por dentro do que acontece na Liotécnica.
+              Acompanhe publicações do feed e comunicados oficiais, departamentais e arquivados.
             </p>
           </div>
         </div>
@@ -34,7 +33,7 @@ export function NoticiasHubPage() {
           <div>
             <div className="docs-hub__summary-title">Hub de Notícias</div>
             <p className="docs-hub__summary-text">
-              Acesse notícias do feed, releases institucionais e atualizações por área.
+              Acesse o feed e os canais de comunicados para ficar por dentro das novidades.
             </p>
           </div>
         </div>
@@ -63,7 +62,7 @@ export function NoticiasHubPage() {
               </span>
               <span className="docs-hub__card-title">{section.label}</span>
               <span className="docs-hub__card-desc">{section.description}</span>
-              <span className="docs-hub__card-count">{section.count}</span>
+              {section.count ? <span className="docs-hub__card-count">{section.count}</span> : null}
               <span className="docs-hub__card-action">
                 Acessar
                 <i className="fa-solid fa-arrow-right" aria-hidden="true" />
@@ -77,28 +76,6 @@ export function NoticiasHubPage() {
           <p>Nenhuma categoria encontrada para a busca informada.</p>
         </div>
       )}
-
-      <section className="docs-hub__recent" aria-label="Notícias recentes">
-        <h2 className="docs-hub__section-title">Recentes</h2>
-        <ul className="docs-hub__recent-list">
-          {NOTICIAS_RECENT.map((item) => (
-            <li key={item.id}>
-              <Link className="docs-hub__recent-item" to={item.href}>
-                <span className="docs-hub__recent-icon docs-hub__recent-icon--noticias" aria-hidden="true">
-                  <i className={`fa-solid ${item.icon}`} />
-                </span>
-                <span className="docs-hub__recent-body">
-                  <strong>{item.title}</strong>
-                  <span>
-                    {item.section} · {item.date}
-                  </span>
-                </span>
-                <i className="fa-solid fa-chevron-right docs-hub__recent-chevron" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
     </main>
   );
 }

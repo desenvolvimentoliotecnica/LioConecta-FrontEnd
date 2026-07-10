@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useBookmarkCatalog } from "../../api/hooks/useBookmarkCatalog";
 import { usePreferences, useUpdatePreferences } from "../../api/hooks/usePreferences";
 import { useSystems } from "../../api/hooks/useSystems";
-import { BOOKMARKS, BOOKMARK_FILTERS, DEFAULT_BOOKMARK_IDS, filterBookmarks, type BookmarkKind } from "../../config/bookmarks";
+import {
+  BOOKMARK_FILTERS,
+  filterBookmarks,
+  normalizeBookmarkKind,
+  type BookmarkItem,
+  type BookmarkKind,
+} from "../../config/bookmarks";
 import { systemBookmarkItems } from "../../config/systems/bookmarks";
 import "../../styles/hub-pages.css";
-
-const DEFAULT_SAVED_IDS = DEFAULT_BOOKMARK_IDS;
 
 function BookmarkOpenLink({ href, title }: { href: string; title: string }) {
   if (/^https?:\/\//i.test(href)) {
@@ -26,28 +31,73 @@ function BookmarkOpenLink({ href, title }: { href: string; title: string }) {
   );
 }
 
+function formatSavedAt(iso?: string): { savedAt: string; savedDateTime: string } {
+  const date = iso ? new Date(iso) : new Date();
+  if (Number.isNaN(date.getTime())) {
+    const now = new Date();
+    return {
+      savedAt: now.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" }),
+      savedDateTime: now.toISOString(),
+    };
+  }
+  return {
+    savedAt: date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" }),
+    savedDateTime: date.toISOString(),
+  };
+}
+
 export function BookmarksPage() {
   const [kind, setKind] = useState<BookmarkKind>("all");
   const [query, setQuery] = useState("");
   const { data: preferences } = usePreferences();
+  const { data: catalog = [], isLoading: catalogLoading } = useBookmarkCatalog();
   const updatePreferences = useUpdatePreferences();
   const { data: systems = [] } = useSystems({ includeInactive: true });
 
-  const savedIds = useMemo(
-    () => new Set(preferences?.bookmarks.length ? preferences.bookmarks : DEFAULT_SAVED_IDS),
-    [preferences?.bookmarks],
+  const defaultIds = useMemo(
+    () => catalog.filter((item) => item.isDefault).map((item) => item.seedKey),
+    [catalog],
   );
 
+  const savedIds = useMemo(() => {
+    if (preferences?.bookmarks && preferences.bookmarks.length > 0) {
+      return new Set(preferences.bookmarks);
+    }
+    return new Set(defaultIds);
+  }, [preferences?.bookmarks, defaultIds]);
+
+  const catalogByKey = useMemo(() => {
+    const map = new Map(catalog.map((item) => [item.seedKey, item]));
+    return map;
+  }, [catalog]);
+
   const allBookmarks = useMemo(() => {
-    const staticBookmarks = BOOKMARKS.filter((item) => savedIds.has(item.id));
+    const fromCatalog: BookmarkItem[] = [];
+    for (const id of savedIds) {
+      const entry = catalogByKey.get(id);
+      if (!entry) continue;
+      const { savedAt, savedDateTime } = formatSavedAt();
+      fromCatalog.push({
+        id: entry.seedKey,
+        kind: normalizeBookmarkKind(entry.kind),
+        title: entry.title,
+        excerpt: entry.excerpt,
+        href: entry.href,
+        icon: entry.icon,
+        savedAt,
+        savedDateTime,
+        source: entry.source,
+      });
+    }
+
     const dynamicSystemBookmarks = systemBookmarkItems(systems, savedIds);
-    const knownIds = new Set(staticBookmarks.map((item) => item.id));
+    const knownIds = new Set(fromCatalog.map((item) => item.id));
 
     return [
-      ...staticBookmarks,
+      ...fromCatalog,
       ...dynamicSystemBookmarks.filter((item) => !knownIds.has(item.id)),
     ];
-  }, [savedIds, systems]);
+  }, [savedIds, catalogByKey, systems]);
 
   const filtered = useMemo(() => filterBookmarks(allBookmarks, kind, query), [allBookmarks, kind, query]);
 
@@ -118,7 +168,11 @@ export function BookmarksPage() {
         </div>
       </section>
 
-      {filtered.length > 0 ? (
+      {catalogLoading ? (
+        <div className="hub-page__empty">
+          <p>Carregando catálogo de bookmarks...</p>
+        </div>
+      ) : filtered.length > 0 ? (
         <ul className="hub-page__list hub-page__list--bookmarks" aria-label="Bookmarks salvos">
           {filtered.map((item) => (
             <li key={item.id}>

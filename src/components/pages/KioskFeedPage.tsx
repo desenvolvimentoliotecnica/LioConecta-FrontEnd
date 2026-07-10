@@ -7,7 +7,7 @@ import {
   splitFeedHtml,
 } from "../../config/feed";
 import { getPageById } from "../../config/routes";
-import { useFeedComments, usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
+import { usePageScript, useQuickAccessScroll } from "../../hooks/usePageScript";
 import { FeedAnnouncementCarousel } from "../feed/FeedAnnouncementCarousel";
 
 export function KioskFeedPage() {
@@ -17,7 +17,6 @@ export function KioskFeedPage() {
 
   usePageScript(feedPage, contentKey);
   useQuickAccessScroll(mainRef);
-  useFeedComments(mainRef);
 
   useEffect(() => {
     return injectFeedPageStyles("kiosk");
