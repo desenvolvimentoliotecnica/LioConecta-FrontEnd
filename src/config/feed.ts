@@ -2,7 +2,9 @@ import { pageAssets } from "../generated/pagesIndex";
 import { injectScopedPageStyle } from "../utils/pageInjectedStyles";
 
 export const FEED_PAGE_ID = "feed";
+/** Exact open tag used in legacy HTML; also accept extra attrs (e.g. aria-hidden). */
 export const FEED_GRID_MARKER = '<div class="feed-grid">';
+const FEED_GRID_OPEN_RE = /<div\s+class="feed-grid"(?:\s[^>]*)?>/;
 
 const FEED_SCROLL_OVERRIDES = `
 .main.main--feed-scroll {
@@ -30,11 +32,11 @@ export function getFeedHtml(): string {
 }
 
 export function splitFeedHtml(html: string): { beforeFeedGrid: string; feedGridAndAfter: string } | null {
-  if (!html.includes(FEED_GRID_MARKER)) return null;
-  const splitIndex = html.indexOf(FEED_GRID_MARKER);
+  const match = FEED_GRID_OPEN_RE.exec(html);
+  if (!match || match.index === undefined) return null;
   return {
-    beforeFeedGrid: html.slice(0, splitIndex),
-    feedGridAndAfter: html.slice(splitIndex),
+    beforeFeedGrid: html.slice(0, match.index),
+    feedGridAndAfter: html.slice(match.index),
   };
 }
 
