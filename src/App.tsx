@@ -16,6 +16,9 @@ import { GroupMyGroupsPage } from "./components/pages/GroupMyGroupsPage";
 import { GruposHubPage } from "./components/pages/GruposHubPage";
 import { PessoasHubPage } from "./components/pages/PessoasHubPage";
 import { PhoneExtensionsPage } from "./components/pessoas/PhoneExtensionsPage";
+import { BirthdaysPage } from "./components/pessoas/BirthdaysPage";
+import { NewHiresPage } from "./components/pessoas/NewHiresPage";
+import { FeedbackPage, FeedbackTriagePage, MoodAnalyticsPage } from "./components/pages/F3Pages";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { DocumentsBibliotecaPage } from "./components/pages/DocumentsBibliotecaPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
@@ -272,6 +275,8 @@ function App() {
         <Route path="/comunicados" element={<ComunicadosHubPage />} />
         <Route path="/pessoas" element={<PessoasHubPage />} />
         <Route path="/pessoas/ramais" element={<PhoneExtensionsPage />} />
+        <Route path="/pessoas/aniversariantes" element={<BirthdaysPage />} />
+        <Route path="/pessoas/novos-colaboradores" element={<NewHiresPage />} />
         <Route path="/grupos" element={<GruposHubPage />} />
         <Route path="/grupos/meus-grupos" element={<GroupMyGroupsPage />} />
         <Route path="/grupos/criar" element={<GroupCreatePage />} />
@@ -290,6 +295,9 @@ function App() {
         <Route path="/servicos/movimentacoes" element={<MovimentacoesPage />} />
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/cardapio" element={<CardapioPage />} />
+        <Route path="/servicos/clima" element={<MoodAnalyticsPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/feedback/triagem" element={<FeedbackTriagePage />} />
         <Route path="/servicos/ti" element={<TiHubPage />} />
         <Route path="/servicos/acesso-sistemas" element={<SystemsHubPage />} />
         <Route path="/enquetes" element={<EnquetesHubPage />} />
@@ -298,6 +306,8 @@ function App() {
         {pageRegistry.map((page) => {
           if (
             page.id === "pessoas-perfil" ||
+            page.id === "pessoas-aniversariantes" ||
+            page.id === "pessoas-novos-colaboradores" ||
             page.id === "comunicados-oficiais" ||
             page.id === "comunicados-departamentais" ||
             page.id === "comunicados-urgentes" ||

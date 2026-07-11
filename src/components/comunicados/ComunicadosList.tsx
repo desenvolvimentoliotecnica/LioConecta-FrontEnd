@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
-import { useComunicadosArchivedList, useComunicadosList } from "../../api/hooks/useComunicados";
+import { useState } from "react";
+import { useArchiveComunicado, useComunicadosArchivedList, useComunicadosList } from "../../api/hooks/useComunicados";
+import { COMUNICADO_STATUS_ARCHIVED, COMUNICADO_STATUS_DRAFT, COMUNICADO_STATUS_PUBLISHED, COMUNICADO_STATUS_SCHEDULED, type ComunicadoStatus } from "../../api/types";
+import { PERMISSIONS } from "../../config/rbac/permissions";
+import { usePermissions } from "../../hooks/usePermissions";
 import type { ComunicadoKind, ComunicadoListItemDto } from "../../api/types";
 import {
   COMUNICADO_KIND_ARQUIVO,
@@ -22,6 +26,12 @@ const KIND_TAG: Record<
   [COMUNICADO_KIND_URGENTE]: { label: "Urgente", className: "tag--urgent" },
   [COMUNICADO_KIND_ARQUIVO]: { label: "Arquivo", className: "tag--archive" },
 };
+const STATUS_LABEL: Record<ComunicadoStatus, string> = {
+  [COMUNICADO_STATUS_DRAFT]: "Rascunho",
+  [COMUNICADO_STATUS_SCHEDULED]: "Agendado",
+  [COMUNICADO_STATUS_PUBLISHED]: "Publicado",
+  [COMUNICADO_STATUS_ARCHIVED]: "Arquivado",
+};
 
 function formatListDate(value?: string | null): string {  if (!value) return "";
   const date = new Date(value);
@@ -42,6 +52,8 @@ function ComunicadoCard({
   config: ComunicadosPageConfig;
   featured?: boolean;
 }) {
+  const { hasPermission } = usePermissions();
+  const archive = useArchiveComunicado();
   const heroImage = item.heroImageUrl ?? "/bg-announcement.png";
   const readerId = comunicadoReaderId(item);
   const tag = config.listMode === "archived" ? KIND_TAG[item.kind] : { label: config.tagLabel, className: config.tagClass };
@@ -55,6 +67,7 @@ function ComunicadoCard({
       <div className="official-card__body">
         <div className="official-card__meta">
           <span className={`tag${tagClass}`}>{tag.label}</span>
+          <span className="tag">{STATUS_LABEL[item.status]}</span>
           <span className="official-card__date">{formatListDate(displayDate)}</span>          <div className="official-card__author">
             <UserAvatar className="avatar" photoUrl={item.author.photoUrl} />
             {item.author.name}
@@ -65,6 +78,9 @@ function ComunicadoCard({
         <Link className="official-card__cta" to={`/comunicados/leitura?id=${encodeURIComponent(readerId)}`}>
           Ler comunicado completo →
         </Link>
+        {hasPermission(PERMISSIONS.comunicados.manage) && item.status !== COMUNICADO_STATUS_ARCHIVED ? (
+          <button type="button" className="official-card__cta" onClick={() => void archive.mutateAsync({ id: item.id })} disabled={archive.isPending}>Arquivar</button>
+        ) : null}
       </div>
     </article>
   );
@@ -86,7 +102,7 @@ export function ComunicadosListToolbar({ config }: { config: ComunicadosPageConf
       </div>
       <div className="page-search">
         <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-        Buscar comunicados...
+        Buscar comunicados
       </div>
     </div>
   );
@@ -104,26 +120,30 @@ export function ComunicadosList({
   const archiveQuery = useComunicadosArchivedList();
   const { isLoading, isError } = isArchive ? archiveQuery : kindQuery;
   const items = isArchive ? (archiveQuery.data ?? []) : (kindQuery.data?.items ?? []);
+  const [query, setQuery] = useState("");
+  const filteredItems = items.filter((item) =>
+    `${item.title} ${item.excerpt ?? ""} ${item.author.name}`.toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR")),
+  );
   return (
     <>
-      {showToolbar ? <ComunicadosListToolbar config={config} /> : null}
+      {showToolbar ? <div className="page-toolbar"><div className="page-search"><i className="fa-solid fa-magnifying-glass" aria-hidden="true" /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar comunicados..." aria-label="Buscar comunicados" /></div></div> : null}
 
       {isLoading ? (
         <p className="page-empty-note">Carregando comunicados...</p>
       ) : isError ? (
         <p className="page-empty-note">Não foi possível carregar os comunicados.</p>
-      ) : items.length === 0 ? (
+      ) : filteredItems.length === 0 ? (
         <p className="page-empty-note">Nenhum comunicado encontrado.</p>
       ) : (
         <section className="official-list" aria-label={config.listAriaLabel}>
-          {items.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <ComunicadoCard key={item.id} item={item} config={config} featured={index === 0} />
           ))}
         </section>
       )}
 
       {!isLoading && !isError ? (
-        <p className="page-empty-note">{config.countLabel(items.length)}</p>
+        <p className="page-empty-note">{config.countLabel(filteredItems.length)}</p>
       ) : null}
     </>
   );

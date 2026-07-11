@@ -10,8 +10,10 @@ import type {
   ComunicadoDto,
   ComunicadoKind,
   ComunicadoListItemDto,
+  ComunicadoMetricsDto,
   CreateComunicadoRequest,
   PagedResult,
+  UpdateComunicadoRequest,
 } from "../types";
 
 export const COMUNICADOS_QUERY_KEY = ["comunicados"] as const;
@@ -32,6 +34,17 @@ export function useComunicadosList(kind: ComunicadoKind, limit = 50) {
       }
       return api.get<PagedResult<ComunicadoListItemDto>>(`/comunicados?kind=${kind}&limit=${limit}`);
     },
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useManageComunicadosList(archived = false, limit = 100) {
+  return useQuery({
+    queryKey: [...COMUNICADOS_QUERY_KEY, "manage", archived, limit],
+    queryFn: () =>
+      api.get<PagedResult<ComunicadoListItemDto>>(
+        `/comunicados?manage=true&archived=${archived}&limit=${limit}`,
+      ),
     retry: config.useMock ? 0 : 1,
   });
 }
@@ -106,8 +119,12 @@ export function useCreateComunicado() {
           },
           heroImageUrl: body.heroImageUrl,
           isMandatory: body.isMandatory,
-          publishedAt: body.publishedAt ?? new Date().toISOString(),
+          publishedAt: body.status === 2 ? new Date().toISOString() : null,
           isReadByViewer: false,
+          status: body.status,
+          scheduledAt: body.scheduledAt ?? null,
+          audienceType: body.audienceType,
+          audienceDepartmentIds: body.audienceDepartmentIds ?? null,
         };
       }
       return api.post<ComunicadoDto>("/comunicados", body);
@@ -119,5 +136,38 @@ export function useCreateComunicado() {
       void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: COMUNICADOS_HUB_QUERY_KEY });
     },
+  });
+}
+
+function useComunicadoAction<T>(path: (id: string) => string, method: "post" | "patch") {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, body }: { id: string; body?: T }) => {
+      if (config.useMock) throw new Error("Mock mode — API call skipped");
+      return method === "patch"
+        ? api.patch<ComunicadoDto>(path(id), body)
+        : api.post<ComunicadoDto>(path(id), body);
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: COMUNICADOS_QUERY_KEY }),
+  });
+}
+
+export function useUpdateComunicado() {
+  return useComunicadoAction<UpdateComunicadoRequest>((id) => `/comunicados/${id}`, "patch");
+}
+export function usePublishComunicado() {
+  return useComunicadoAction<void>((id) => `/comunicados/${id}/publish`, "post");
+}
+export function useArchiveComunicado() {
+  return useComunicadoAction<void>((id) => `/comunicados/${id}/archive`, "post");
+}
+export function useScheduleComunicado() {
+  return useComunicadoAction<{ scheduledAt: string }>((id) => `/comunicados/${id}/schedule`, "post");
+}
+export function useComunicadoMetrics(id: string) {
+  return useQuery({
+    queryKey: [...COMUNICADOS_QUERY_KEY, "metrics", id],
+    queryFn: () => api.get<ComunicadoMetricsDto>(`/comunicados/${id}/metrics`),
+    enabled: Boolean(id) && !config.useMock,
   });
 }

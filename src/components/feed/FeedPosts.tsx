@@ -1,9 +1,10 @@
-import { Children, type ReactNode } from "react";
+import { Children, type ReactNode, useState } from "react";
 import { useFeed } from "../../api/hooks/useFeed";
 import { config } from "../../api/client";
 import { FeedPostCard } from "./FeedPostCard";
 import { distributeRoundRobin, useFeedColumnCount } from "./feed-masonry";
 import { useFeedPostDeepLink } from "./useFeedPostDeepLink";
+import { POST_TYPE_COMUNICADO, POST_TYPE_NEWS, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../../api/types";
 import "./feed-deep-link.css";
 
 type FeedPostsProps = {
@@ -13,8 +14,9 @@ type FeedPostsProps = {
 
 export function FeedPosts({ leading }: FeedPostsProps = {}) {
   const { data, isLoading, isError } = useFeed();
+  const [type, setType] = useState<number | null>(null);
   const columnCount = useFeedColumnCount();
-  const posts = data?.items ?? [];
+  const posts = (data?.items ?? []).filter((post) => type === null || post.type === type);
 
   useFeedPostDeepLink(posts, isLoading);
 
@@ -57,6 +59,11 @@ export function FeedPosts({ leading }: FeedPostsProps = {}) {
 
   return (
     <div className="feed-api-posts" aria-label="Publicações do feed">
+      <div className="page-filters" role="group" aria-label="Tipo de publicação">
+        {[[null, "Todos"], [POST_TYPE_SOCIAL, "Social"], [POST_TYPE_NEWS, "Notícia"], [POST_TYPE_COMUNICADO, "Comunicado"], [POST_TYPE_POLL, "Enquete"]].map(([value, label]) => (
+          <button key={String(value)} type="button" className={`filter-chip${type === value ? " is-active" : ""}`} onClick={() => setType(value as number | null)}>{label}</button>
+        ))}
+      </div>
       {isError ? (
         <p className="feed-api-posts__status feed-api-posts__status--error" role="alert">
           Não foi possível carregar todas as publicações do feed.

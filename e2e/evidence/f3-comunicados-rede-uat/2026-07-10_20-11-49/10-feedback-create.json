@@ -1,0 +1,16 @@
+{
+  "status": 201,
+  "body": {
+    "id": "84575b3c-0ece-49f1-bd7a-963ac525f055",
+    "category": 0,
+    "status": 0,
+    "subject": "E2E-F3-1783725109579 assunto",
+    "message": "E2E-F3-1783725109579 mensagem de feedback UAT",
+    "isAnonymous": false,
+    "responseText": null,
+    "assigneeId": null,
+    "author": null,
+    "createdAt": "2026-07-10T23:11:52.994397+00:00",
+    "respondedAt": null
+  }
+}

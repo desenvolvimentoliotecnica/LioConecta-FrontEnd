@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "body": {
+    "comunicadoId": "36f7e025-9a56-4daa-bac9-465d027439e7",
+    "eligibleReaders": 1053,
+    "readCount": 0,
+    "readPercent": 0
+  }
+}
