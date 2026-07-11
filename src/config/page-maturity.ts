@@ -29,8 +29,8 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/comunicados/arquivo": "integrated",
 
   "/pessoas/diretorio": "partial",
-  "/pessoas/novos-colaboradores": "partial",
-  "/pessoas/aniversariantes": "partial",
+  "/pessoas/novos-colaboradores": "integrated",
+  "/pessoas/aniversariantes": "integrated",
   "/pessoas/organograma": "partial",
   "/pessoas/ramais": "integrated",
 
@@ -53,6 +53,9 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/servicos/ferias-ausencias": "integrated",
   "/servicos/ferias-ausencias/gestao": "integrated",
   "/servicos/solicitacoes-rh": "prototype",
+  "/servicos/clima": "integrated",
+  "/feedback": "integrated",
+  "/feedback/triagem": "integrated",
   "/servicos/ponto-eletronico": "integrated",
   "/servicos/ponto-eletronico/gestao": "integrated",
   "/servicos/movimentacoes": "prototype",

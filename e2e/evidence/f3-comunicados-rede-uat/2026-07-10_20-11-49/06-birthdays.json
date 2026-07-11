@@ -1,0 +1,45 @@
+{
+  "status": 200,
+  "count": 35,
+  "sample": [
+    {
+      "id": "8207890b-5e62-4829-bcb7-4ed0e77d6eae",
+      "slug": "roberto-junior",
+      "name": "ROBERTO BORGES DOS SANTOS JUNIOR",
+      "title": "Executivo De Vendas Jr",
+      "photoUrl": null,
+      "departmentName": "Comercial",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1980-07-01",
+      "hireDate": "2024-02-05"
+    },
+    {
+      "id": "8c2549ab-0396-40a8-98b3-34386a5ec3e9",
+      "slug": "carlos-moretto",
+      "name": "Carlos Eduardo Salema de Moretto",
+      "title": "Executivo De Vendas Pl",
+      "photoUrl": null,
+      "departmentName": "Comercial",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1974-07-01",
+      "hireDate": "2016-07-13"
+    },
+    {
+      "id": "ef2a1a79-8208-48f4-bfa6-f2c2c18bb09a",
+      "slug": "ronaldo",
+      "name": "JOSE RONALDO DE ANDRADE SILVA",
+      "title": "Sup. Manutencao Iii",
+      "photoUrl": null,
+      "departmentName": "Manutencao",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1959-07-01",
+      "hireDate": "1997-10-01"
+    }
+  ]
+}

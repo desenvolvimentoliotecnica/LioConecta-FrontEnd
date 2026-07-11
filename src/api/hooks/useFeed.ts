@@ -11,7 +11,7 @@ import type {
   PollDto,
   UploadPostMediaResponseDto,
 } from "../types";
-import { POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../types";
+import { POST_TYPE_CELEBRATION, POST_TYPE_NEWS, POST_TYPE_POLL, POST_TYPE_SOCIAL } from "../types";
 
 export const FEED_QUERY_KEY = ["feed"] as const;
 export const FEED_LIKE_REACTION = "like";
@@ -318,6 +318,27 @@ export function useCreatePost() {
     onSuccess: (post) => {
       prependPostToFeedCache(queryClient, post);
     },
+  });
+}
+
+export function useCreateTypedPost(type: typeof POST_TYPE_CELEBRATION | typeof POST_TYPE_NEWS) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ content, metadata }: { content: string; metadata?: Record<string, unknown> | null }) =>
+      api.post<FeedPostDto>("/feed/posts", { type, content: content.trim(), metadata }),
+    onSuccess: (post) => {
+      prependPostToFeedCache(queryClient, post);
+      void queryClient.invalidateQueries({ queryKey: ["feed", "news"] });
+    },
+  });
+}
+
+export function usePinPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, isPinned }: { id: string; isPinned: boolean }) =>
+      api.patch<FeedPostDto>(`/feed/posts/${id}/pin`, { isPinned }),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY }),
   });
 }
 

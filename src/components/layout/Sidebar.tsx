@@ -68,6 +68,9 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
 
 const RIGHT_ITEMS: SidebarItemConfig[] = [
   { label: "Minhas atividades", icon: "fa-list-check", href: "/minhas-atividades" },
+  { label: "Feedback", icon: "fa-message", href: "/feedback", permission: PERMISSIONS.feedback.submit },
+  { label: "Clima", icon: "fa-face-smile", href: "/servicos/clima", permission: PERMISSIONS.mood.analytics },
+  { label: "Triagem feedback", icon: "fa-list-check", href: "/feedback/triagem", permission: PERMISSIONS.feedback.triage },
   { label: "Analytics", icon: "fa-chart-pie", href: "/analytics", permission: PERMISSIONS.analytics.view },
   {
     label: "Config. Backend",

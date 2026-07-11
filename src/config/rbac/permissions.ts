@@ -62,6 +62,26 @@ export const PERMISSIONS = {
     create: "groups.create",
     approve: "groups.approve",
   },
+  comunicados: {
+    read: "comunicados.read",
+    publishOfficial: "comunicados.publish.official",
+    publishDepartmental: "comunicados.publish.departmental",
+    publishUrgent: "comunicados.publish.urgent",
+    manage: "comunicados.manage",
+  },
+  feed: {
+    manage: "feed.manage",
+  },
+  news: {
+    manage: "news.manage",
+  },
+  mood: {
+    analytics: "mood.analytics",
+  },
+  feedback: {
+    submit: "feedback.submit",
+    triage: "feedback.triage",
+  },
 } as const;
 
 export const RBAC_ADMIN_PERMISSIONS = [

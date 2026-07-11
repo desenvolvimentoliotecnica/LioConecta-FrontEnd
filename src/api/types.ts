@@ -226,6 +226,8 @@ export const POST_TYPE_SOCIAL = 0 as const;
 export const POST_TYPE_COMUNICADO = 1 as const;
 export const POST_TYPE_POLL = 2 as const;
 export const POST_TYPE_CELEBRATION = 3 as const;
+export const POST_TYPE_NEWS = 4 as const;
+export const POST_TYPE_MOOD_CHECK = 5 as const;
 
 export interface PersonSummaryDto {
   id: string;
@@ -246,6 +248,11 @@ export interface BirthdayPersonDto {
   departmentName?: string | null;
   birthDate: string;
   photoUrl?: string | null;
+}
+
+export interface NewHirePersonDto extends PersonSummaryDto {
+  hiredAt?: string | null;
+  hireDate?: string | null;
 }
 
 export interface CommentDto {
@@ -339,6 +346,10 @@ export interface ComunicadoDto {
   isMandatory: boolean;
   publishedAt?: string | null;
   isReadByViewer: boolean;
+  status: ComunicadoStatus;
+  scheduledAt?: string | null;
+  audienceType: ComunicadoAudienceType;
+  audienceDepartmentIds?: string[] | null;
 }
 
 export interface ComunicadoListItemDto {
@@ -353,6 +364,10 @@ export interface ComunicadoListItemDto {
   publishedAt?: string | null;
   archivedAt?: string | null;
   isReadByViewer: boolean;
+  status: ComunicadoStatus;
+  scheduledAt?: string | null;
+  audienceType: ComunicadoAudienceType;
+  audienceDepartmentIds?: string[] | null;
 }
 
 export interface ComunicadoHubDto {
@@ -371,7 +386,96 @@ export interface CreateComunicadoRequest {
   content?: Record<string, unknown> | null;
   heroImageUrl?: string | null;
   isMandatory: boolean;
-  publishedAt?: string | null;
+  status: ComunicadoStatus;
+  scheduledAt?: string | null;
+  audienceType: ComunicadoAudienceType;
+  audienceDepartmentIds?: string[] | null;
+}
+
+export const COMUNICADO_STATUS_DRAFT = 0 as const;
+export const COMUNICADO_STATUS_SCHEDULED = 1 as const;
+export const COMUNICADO_STATUS_PUBLISHED = 2 as const;
+export const COMUNICADO_STATUS_ARCHIVED = 3 as const;
+export type ComunicadoStatus =
+  | typeof COMUNICADO_STATUS_DRAFT
+  | typeof COMUNICADO_STATUS_SCHEDULED
+  | typeof COMUNICADO_STATUS_PUBLISHED
+  | typeof COMUNICADO_STATUS_ARCHIVED;
+export const COMUNICADO_AUDIENCE_ALL = 0 as const;
+export const COMUNICADO_AUDIENCE_DEPARTMENTS = 1 as const;
+export type ComunicadoAudienceType =
+  | typeof COMUNICADO_AUDIENCE_ALL
+  | typeof COMUNICADO_AUDIENCE_DEPARTMENTS;
+export type UpdateComunicadoRequest = Partial<CreateComunicadoRequest>;
+export interface ComunicadoMetricsDto {
+  totalRecipients?: number;
+  readCount?: number;
+  unreadCount?: number;
+  [key: string]: unknown;
+}
+
+export interface NewsItemDto {
+  id: string;
+  title?: string | null;
+  content: string;
+  excerpt?: string | null;
+  author?: PersonSummaryDto | null;
+  createdAt: string;
+  isPinned?: boolean;
+  metadata?: Record<string, unknown> | null;
+}
+
+export interface MoodMetricsDto {
+  from: string;
+  to: string;
+  total: number;
+  byMood: Record<string, number>;
+  daily: Array<{ date: string; total: number; byMood: Record<string, number> }>;
+  byDepartment: Array<{ departmentName: string; total: number; byMood: Record<string, number> }>;
+}
+
+export const FEEDBACK_CATEGORY_SUGGESTION = 0 as const;
+export const FEEDBACK_CATEGORY_PRAISE = 1 as const;
+export const FEEDBACK_CATEGORY_COMPLAINT = 2 as const;
+export const FEEDBACK_CATEGORY_OTHER = 3 as const;
+export type FeedbackCategory =
+  | typeof FEEDBACK_CATEGORY_SUGGESTION
+  | typeof FEEDBACK_CATEGORY_PRAISE
+  | typeof FEEDBACK_CATEGORY_COMPLAINT
+  | typeof FEEDBACK_CATEGORY_OTHER;
+export const FEEDBACK_STATUS_RECEIVED = 0 as const;
+export const FEEDBACK_STATUS_IN_REVIEW = 1 as const;
+export const FEEDBACK_STATUS_RESPONDED = 2 as const;
+export const FEEDBACK_STATUS_CLOSED = 3 as const;
+export type FeedbackStatus =
+  | typeof FEEDBACK_STATUS_RECEIVED
+  | typeof FEEDBACK_STATUS_IN_REVIEW
+  | typeof FEEDBACK_STATUS_RESPONDED
+  | typeof FEEDBACK_STATUS_CLOSED;
+
+export interface CreateFeedbackRequest {
+  category: FeedbackCategory;
+  subject: string;
+  message: string;
+  isAnonymous: boolean;
+}
+export interface FeedbackDto {
+  id: string;
+  category: FeedbackCategory;
+  status: FeedbackStatus;
+  subject: string;
+  message: string;
+  isAnonymous: boolean;
+  responseText?: string | null;
+  assigneeId?: string | null;
+  author?: PersonSummaryDto | null;
+  createdAt: string;
+  respondedAt?: string | null;
+}
+export interface UpdateFeedbackRequest {
+  status: FeedbackStatus;
+  responseText?: string | null;
+  assigneeId?: string | null;
 }
 
 export interface ComunicadoHeroTemplateDto {

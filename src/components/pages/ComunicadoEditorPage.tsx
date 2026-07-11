@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCreateComunicado } from "../../api/hooks/useComunicados";
+import {
+  COMUNICADO_AUDIENCE_ALL,
+  COMUNICADO_AUDIENCE_DEPARTMENTS,
+  COMUNICADO_STATUS_DRAFT,
+  COMUNICADO_STATUS_PUBLISHED,
+  COMUNICADO_STATUS_SCHEDULED,
+  type ComunicadoAudienceType,
+} from "../../api/types";
+import { useOrgChartDepartments } from "../../api/hooks/useOrgChartGovernance";
 import { ComunicadoHeroImagePicker } from "../comunicados/ComunicadoHeroImagePicker";
 import {
   type ComunicadosPageConfig,
@@ -22,12 +31,16 @@ function execFormat(command: string, value?: string) {
 export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
   const navigate = useNavigate();
   const createComunicado = useCreateComunicado();
+  const departmentsQuery = useOrgChartDepartments();
   const bodyRef = useRef<HTMLDivElement>(null);
 
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [heroImageUrl, setHeroImageUrl] = useState("");
   const [isMandatory, setIsMandatory] = useState(config.mandatoryDefault ?? false);
+  const [audienceType, setAudienceType] = useState<ComunicadoAudienceType>(COMUNICADO_AUDIENCE_ALL);
+  const [audienceDepartmentIds, setAudienceDepartmentIds] = useState<string[]>([]);
+  const [scheduledAt, setScheduledAt] = useState("");
   const [toast, setToast] = useState<ToastState>(null);
 
   const canPublish = title.trim().length > 0;
@@ -48,7 +61,7 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
     bodyRef.current?.focus();
   }
 
-  async function handlePublish() {
+  async function submit(status: typeof COMUNICADO_STATUS_DRAFT | typeof COMUNICADO_STATUS_SCHEDULED | typeof COMUNICADO_STATUS_PUBLISHED) {
     if (!canPublish || isPublishing) return;
 
     const html = bodyRef.current?.innerHTML.trim() ?? "";
@@ -68,16 +81,23 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
         content: { html },
         heroImageUrl: heroImageUrl.trim() || null,
         isMandatory,
-        publishedAt: new Date().toISOString(),
+          status,
+          scheduledAt: status === COMUNICADO_STATUS_SCHEDULED ? new Date(scheduledAt).toISOString() : null,
+          audienceType,
+          audienceDepartmentIds: audienceType === COMUNICADO_AUDIENCE_DEPARTMENTS ? audienceDepartmentIds : null,
       });
 
-      showToast("success", "Comunicado publicado com sucesso!");
+      showToast("success", status === COMUNICADO_STATUS_DRAFT ? "Rascunho salvo com sucesso!" : status === COMUNICADO_STATUS_SCHEDULED ? "Comunicado agendado com sucesso!" : "Comunicado publicado com sucesso!");
       window.setTimeout(() => {
         navigate(`/comunicados/leitura?id=${encodeURIComponent(comunicadoReaderId(result))}`);
       }, 600);
     } catch {
       showToast("error", "Não foi possível publicar. Verifique permissões e tente novamente.");
     }
+  }
+
+  function handlePublish() {
+    void submit(COMUNICADO_STATUS_PUBLISHED);
   }
 
   return (
@@ -216,6 +236,14 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
             <div className="comunicado-editor__panel-header">Publicar</div>
             <div className="comunicado-editor__panel-body">
               <div className="comunicado-editor__actions">
+                <button type="button" className="comunicado-editor__secondary" onClick={() => void submit(COMUNICADO_STATUS_DRAFT)} disabled={!canPublish || isPublishing}>
+                  Salvar rascunho
+                </button>
+                <label className="comunicado-editor__schedule">
+                  Agendar
+                  <input type="datetime-local" value={scheduledAt} onChange={(event) => setScheduledAt(event.target.value)} />
+                  <button type="button" className="comunicado-editor__secondary" onClick={() => void submit(COMUNICADO_STATUS_SCHEDULED)} disabled={!canPublish || !scheduledAt || isPublishing}>Confirmar</button>
+                </label>
                 <button
                   type="button"
                   className="comunicado-editor__publish"
@@ -230,7 +258,7 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
                   ) : (
                     <>
                       <i className="fa-solid fa-paper-plane" aria-hidden="true" />
-                      Publicar comunicado
+                      Publicar agora
                     </>
                   )}
                 </button>
@@ -248,6 +276,25 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
                 value={heroImageUrl}
                 onChange={setHeroImageUrl}
               />
+            </div>
+          </div>
+
+          <div className="comunicado-editor__panel">
+            <div className="comunicado-editor__panel-header">Público</div>
+            <div className="comunicado-editor__panel-body">
+              <label className="comunicado-editor__checkbox">
+                <input type="radio" checked={audienceType === COMUNICADO_AUDIENCE_ALL} onChange={() => setAudienceType(COMUNICADO_AUDIENCE_ALL)} />
+                <span>Todos os colaboradores</span>
+              </label>
+              <label className="comunicado-editor__checkbox">
+                <input type="radio" checked={audienceType === COMUNICADO_AUDIENCE_DEPARTMENTS} onChange={() => setAudienceType(COMUNICADO_AUDIENCE_DEPARTMENTS)} />
+                <span>Departamentos selecionados</span>
+              </label>
+              {audienceType === COMUNICADO_AUDIENCE_DEPARTMENTS ? (
+                <select multiple value={audienceDepartmentIds} onChange={(event) => setAudienceDepartmentIds(Array.from(event.currentTarget.selectedOptions, (option) => option.value))} aria-label="Departamentos destinatários">
+                  {(departmentsQuery.data ?? []).filter((department) => department.isActive).map((department) => <option key={department.id} value={department.id}>{department.name}</option>)}
+                </select>
+              ) : null}
             </div>
           </div>
 

@@ -1,0 +1,26 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "id": "5eff6053-7e1a-43e0-a7eb-b210bef64435",
+      "title": "E2E-F3-1783725109579 Notícia F3",
+      "excerpt": "",
+      "heroImageUrl": null,
+      "author": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "publishedAt": "2026-07-10T23:11:52.616164+00:00",
+      "href": null
+    }
+  ]
+}
