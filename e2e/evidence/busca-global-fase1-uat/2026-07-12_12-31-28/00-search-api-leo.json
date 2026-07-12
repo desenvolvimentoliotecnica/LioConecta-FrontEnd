@@ -1,0 +1,135 @@
+{
+  "people": [
+    {
+      "id": "cc40bd00-2bca-45d9-862d-e2ea8c4db3eb",
+      "slug": "eudes-lemos",
+      "name": "Eudes Leonardo Brasilino Lemos",
+      "title": "Aux. Producao",
+      "photoUrl": null,
+      "departmentName": "Administracao Fabrica",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "9e2f90fa-fc41-40ba-b4bd-9dd0181f82b8",
+      "slug": "jose-leopoldino",
+      "name": "Jose Luiz Leopoldino",
+      "title": null,
+      "photoUrl": null,
+      "departmentName": "Manutencao",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "bd7c0742-e902-4d31-8fc0-b7cfdfdd4f9d",
+      "slug": "leonardo-almeida",
+      "name": "Leonardo Almeida da Silva",
+      "title": "Operador Maquinas Ii",
+      "photoUrl": null,
+      "departmentName": "Fabrica",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "8bb5fefa-daf3-4f86-b18f-7e283c2d3d16",
+      "slug": "leonardo-andrade",
+      "name": "Leonardo Jose Andrade",
+      "title": "TECNICO DE SEG DO TRABALHO PL",
+      "photoUrl": null,
+      "departmentName": "SSMA",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    {
+      "id": "4a5c9bc8-b223-435e-9d96-a6f2e9e4b3bf",
+      "slug": "leonardo-santos",
+      "name": "Leonardo Santos Silva",
+      "title": "Operador Produção",
+      "photoUrl": null,
+      "departmentName": "Fabrica",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "5acda3e0-355c-4308-9bca-b2332bf123e7",
+      "slug": "leonardo-alves",
+      "name": "Leonardo Teixeira Alves",
+      "title": "Assistente de Compras",
+      "photoUrl": "/media/people/leonardo-alves.jpg",
+      "departmentName": "Compras",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    {
+      "id": "c73a8be8-af82-401d-b401-9449986c6fc3",
+      "slug": "leonardo-oliveira",
+      "name": "Leonardo Weishaupt Domingues Oliveira",
+      "title": "Aprendiz",
+      "photoUrl": null,
+      "departmentName": "Fabrica",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    }
+  ],
+  "documents": [],
+  "comunicados": [],
+  "groups": [],
+  "systems": [],
+  "feedPosts": [],
+  "uniLioCourses": [],
+  "ramais": [
+    {
+      "id": "7769b8b0-ba3e-4fb3-9b75-17fb40730678",
+      "name": "LEONARDO RUSSI OCAMPO",
+      "extension": "Sem Ramal",
+      "department": "COMERCIAL B2C",
+      "title": "ANALISTA DE NEGÓCIOS SÊNIOR",
+      "email": "leonardo.ocampo@liotecnica.com.br"
+    },
+    {
+      "id": "55ccd811-a667-4adb-a6cd-bd42fba0a870",
+      "name": "LEONARDO TEIXEIRA ALVES",
+      "extension": "2570",
+      "department": "COMPRAS",
+      "title": "ASSISTENTE DE COMPRAS",
+      "email": "leonardo.alves@liotecnica.com.br"
+    }
+  ],
+  "knowledge": [],
+  "calendarEvents": [],
+  "bookmarks": []
+}

@@ -10,7 +10,8 @@ export type PageHeadSection =
   | "comunicados"
   | "noticias"
   | "plataforma"
-  | "atividades";
+  | "atividades"
+  | "busca";
 
 export type PageHeadSectionMeta = {
   hubPath?: string;
@@ -74,6 +75,10 @@ export const PAGE_HEAD_SECTIONS: Record<PageHeadSection, PageHeadSectionMeta> = 
   },
   atividades: {
     hubLabel: "Minhas atividades",
+    watermark: "/headers/wm-plataforma.png",
+  },
+  busca: {
+    hubLabel: "Busca",
     watermark: "/headers/wm-plataforma.png",
   },
 };

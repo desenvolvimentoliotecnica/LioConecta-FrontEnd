@@ -320,6 +320,11 @@ export function buildSitemapSections(): SitemapSection[] {
         entry("Analytics", "/analytics", "Indicadores e métricas de uso do portal."),
         entry("Ajuda", "/ajuda", "Central de ajuda e perguntas frequentes."),
         entry(
+          "Busca",
+          "/busca",
+          "Busca global de pessoas, grupos, comunicados, documentos e páginas do portal.",
+        ),
+        entry(
           "Acesso ao portal",
           "/acesso",
           "Login corporativo por LDAP — página pública de autenticação.",
