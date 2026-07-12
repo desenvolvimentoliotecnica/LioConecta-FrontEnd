@@ -264,9 +264,11 @@ export function FeedPostCard({ post }: Props) {
         >
           <i className="fa-regular fa-comment" aria-hidden="true" /> {post.commentCount}
         </button>
-        <span className="action">
-          <i className="fa-regular fa-share-from-square" aria-hidden="true" /> Compartilhar
-        </span>
+        {!isOwner ? (
+          <span className="action">
+            <i className="fa-regular fa-share-from-square" aria-hidden="true" /> Compartilhar
+          </span>
+        ) : null}
       </div>
 
       {showComments ? (

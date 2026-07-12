@@ -1,0 +1,54 @@
+{
+  "status": 200,
+  "body": {
+    "from": "2026-06-12",
+    "to": "2026-07-12",
+    "total": 4,
+    "byMood": {
+      "Great": 1,
+      "NeedSupport": 1,
+      "Good": 2
+    },
+    "daily": [
+      {
+        "date": "2026-07-04",
+        "total": 1,
+        "byMood": {
+          "Good": 1
+        }
+      },
+      {
+        "date": "2026-07-05",
+        "total": 1,
+        "byMood": {
+          "Good": 1
+        }
+      },
+      {
+        "date": "2026-07-08",
+        "total": 1,
+        "byMood": {
+          "NeedSupport": 1
+        }
+      },
+      {
+        "date": "2026-07-10",
+        "total": 1,
+        "byMood": {
+          "Great": 1
+        }
+      }
+    ],
+    "byDepartment": [
+      {
+        "departmentName": "Sem departamento",
+        "total": 4,
+        "byMood": {
+          "Great": 1,
+          "NeedSupport": 1,
+          "Good": 2
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,344 @@
+/* Triagem de feedback — RH */
+
+.feedback-triage__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: var(--wf-gap);
+}
+
+.feedback-triage__kpi {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+.feedback-triage__kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.1;
+}
+
+.feedback-triage__kpi-label {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.feedback-triage__list {
+  display: grid;
+  gap: 14px;
+  margin-bottom: var(--wf-gap);
+}
+
+.feedback-triage__card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.05),
+    0 8px 20px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 14px;
+}
+
+.feedback-triage__card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.feedback-triage__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.feedback-triage__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.feedback-triage__badge--received {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.feedback-triage__badge--review {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.feedback-triage__badge--responded {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.feedback-triage__badge--closed {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.feedback-triage__badge--category {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.feedback-triage__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.feedback-triage__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.feedback-triage__author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feedback-triage__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.feedback-triage__avatar.avatar--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.feedback-triage__author-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.feedback-triage__author-meta {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.feedback-triage__subject {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.feedback-triage__message {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+.feedback-triage__response {
+  display: grid;
+  gap: 6px;
+}
+
+.feedback-triage__response label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.feedback-triage__response textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 96px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  color: #0f172a;
+  line-height: 1.5;
+  resize: vertical;
+  background: #fff;
+}
+
+.feedback-triage__response textarea:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #93c5fd;
+}
+
+.feedback-triage__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.feedback-triage__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-triage__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feedback-triage__btn--secondary {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+}
+
+.feedback-triage__btn--secondary:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.feedback-triage__btn--primary {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.25);
+}
+
+.feedback-triage__btn--primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.feedback-triage__btn--danger {
+  border: 1px solid #fecaca;
+  background: #fff;
+  color: #b91c1c;
+}
+
+.feedback-triage__btn--danger:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.feedback-triage__toast {
+  position: fixed;
+  top: calc(var(--wf-topbar-h, 64px) + 16px);
+  right: 24px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.feedback-triage__toast--error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.feedback-triage__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 240px;
+  padding: 40px 24px;
+  background: #fff;
+  border: 1px dashed #e2e8f0;
+  border-radius: 12px;
+  text-align: center;
+  color: #64748b;
+}
+
+.feedback-triage__empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.feedback-triage__empty-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.feedback-triage__empty-text {
+  margin: 0;
+  max-width: 360px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .feedback-triage__kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .feedback-triage__kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-triage__actions {
+    flex-direction: column;
+  }
+
+  .feedback-triage__btn {
+    width: 100%;
+  }
+}

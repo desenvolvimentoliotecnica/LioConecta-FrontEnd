@@ -324,11 +324,31 @@ export function useCreatePost() {
 export function useCreateTypedPost(type: typeof POST_TYPE_CELEBRATION | typeof POST_TYPE_NEWS) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ content, metadata }: { content: string; metadata?: Record<string, unknown> | null }) =>
-      api.post<FeedPostDto>("/feed/posts", { type, content: content.trim(), metadata }),
-    onSuccess: (post) => {
-      prependPostToFeedCache(queryClient, post);
+    mutationFn: ({
+      content,
+      metadata,
+      scheduledAt,
+    }: {
+      content: string;
+      metadata?: Record<string, unknown> | null;
+      scheduledAt?: string | null;
+    }) =>
+      api.post<FeedPostDto>("/feed/posts", {
+        type,
+        content: content.trim(),
+        metadata,
+        scheduledAt: scheduledAt || null,
+      }),
+    onSuccess: (post, variables) => {
+      const isScheduled =
+        Boolean(variables.scheduledAt) &&
+        !Number.isNaN(new Date(variables.scheduledAt!).getTime()) &&
+        new Date(variables.scheduledAt!).getTime() > Date.now();
+      if (!isScheduled) {
+        prependPostToFeedCache(queryClient, post);
+      }
       void queryClient.invalidateQueries({ queryKey: ["feed", "news"] });
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
     },
   });
 }
@@ -338,7 +358,10 @@ export function usePinPost() {
   return useMutation({
     mutationFn: ({ id, isPinned }: { id: string; isPinned: boolean }) =>
       api.patch<FeedPostDto>(`/feed/posts/${id}/pin`, { isPinned }),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: ["feed", "news"] });
+    },
   });
 }
 

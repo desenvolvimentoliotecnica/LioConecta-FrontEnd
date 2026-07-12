@@ -8,6 +8,7 @@ export type PageHeadSection =
   | "documentos"
   | "grupos"
   | "comunicados"
+  | "noticias"
   | "plataforma";
 
 export type PageHeadSectionMeta = {
@@ -58,6 +59,11 @@ export const PAGE_HEAD_SECTIONS: Record<PageHeadSection, PageHeadSectionMeta> = 
   comunicados: {
     hubPath: "/comunicados",
     hubLabel: "Comunicados",
+    watermark: "/headers/wm-comunicados.png",
+  },
+  noticias: {
+    hubPath: "/noticias",
+    hubLabel: "Notícias",
     watermark: "/headers/wm-comunicados.png",
   },
   plataforma: {

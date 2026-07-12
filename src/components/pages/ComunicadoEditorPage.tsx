@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCreateComunicado } from "../../api/hooks/useComunicados";
 import {
@@ -14,8 +14,8 @@ import { ComunicadoHeroImagePicker } from "../comunicados/ComunicadoHeroImagePic
 import {
   type ComunicadosPageConfig,
   comunicadoReaderId,
-  injectComunicadosPageStyles,
 } from "../../config/comunicados-pages";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/comunicado-editor.css";
 
 type ToastState = { type: "success" | "error"; message: string } | null;
@@ -45,8 +45,6 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
 
   const canPublish = title.trim().length > 0;
   const isPublishing = createComunicado.isPending;
-
-  useEffect(() => injectComunicadosPageStyles(config.pageId), [config.pageId]);
 
   function showToast(type: "success" | "error", message: string) {
     setToast({ type, message });
@@ -101,7 +99,7 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
   }
 
   return (
-    <main className="main comunicado-editor">
+    <main className={`${sectionMainClass("comunicados")} comunicado-editor`}>
       {toast && (
         <div
           className={`comunicado-editor__toast comunicado-editor__toast--${toast.type}`}
@@ -115,23 +113,18 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
         </div>
       )}
 
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <Link to="/comunicados">Comunicados</Link>
-          <span className="breadcrumb__sep">/</span>
-          <Link to={config.path}>{config.breadcrumbCurrent}</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Novo</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">{config.editorTitle}</h1>
-            <p className="page-header__desc">{config.editorDescription}</p>
-          </div>
-        </div>
-      </header>
+      <SectionPageHead
+        section="comunicados"
+        title={config.editorTitle}
+        current={`${config.breadcrumbCurrent} · Novo`}
+        description={config.editorDescription}
+        actions={
+          <Link to={config.path} className="comunicado-editor__header-back">
+            <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+            Voltar à listagem
+          </Link>
+        }
+      />
 
       <div className="comunicado-editor__layout">
         <section className="comunicado-editor__main" aria-label="Editor">
@@ -236,14 +229,38 @@ export function ComunicadoEditorPage({ config }: ComunicadoEditorPageProps) {
             <div className="comunicado-editor__panel-header">Publicar</div>
             <div className="comunicado-editor__panel-body">
               <div className="comunicado-editor__actions">
-                <button type="button" className="comunicado-editor__secondary" onClick={() => void submit(COMUNICADO_STATUS_DRAFT)} disabled={!canPublish || isPublishing}>
+                <button
+                  type="button"
+                  className="comunicado-editor__secondary"
+                  onClick={() => void submit(COMUNICADO_STATUS_DRAFT)}
+                  disabled={!canPublish || isPublishing}
+                >
                   Salvar rascunho
                 </button>
-                <label className="comunicado-editor__schedule">
-                  Agendar
-                  <input type="datetime-local" value={scheduledAt} onChange={(event) => setScheduledAt(event.target.value)} />
-                  <button type="button" className="comunicado-editor__secondary" onClick={() => void submit(COMUNICADO_STATUS_SCHEDULED)} disabled={!canPublish || !scheduledAt || isPublishing}>Confirmar</button>
-                </label>
+
+                <div className="comunicado-editor__field">
+                  <label htmlFor="comunicado-schedule-at">Agendar publicação</label>
+                  <input
+                    id="comunicado-schedule-at"
+                    type="datetime-local"
+                    value={scheduledAt}
+                    onChange={(event) => setScheduledAt(event.target.value)}
+                    aria-describedby="comunicado-schedule-hint"
+                  />
+                  <p id="comunicado-schedule-hint" className="comunicado-editor__field-hint">
+                    Escolha data e hora para publicação automática.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="comunicado-editor__secondary"
+                  onClick={() => void submit(COMUNICADO_STATUS_SCHEDULED)}
+                  disabled={!canPublish || !scheduledAt || isPublishing}
+                >
+                  <i className="fa-regular fa-clock" aria-hidden="true" />
+                  Confirmar agendamento
+                </button>
+
                 <button
                   type="button"
                   className="comunicado-editor__publish"

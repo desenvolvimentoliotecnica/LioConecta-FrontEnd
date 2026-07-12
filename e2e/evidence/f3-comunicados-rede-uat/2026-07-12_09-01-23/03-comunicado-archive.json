@@ -1,0 +1,34 @@
+{
+  "status": 200,
+  "body": {
+    "id": "82470491-b77f-4808-be2c-54b2ce2e0240",
+    "slug": "e2e-f3-1783857683566-comunicado-cms",
+    "kind": 0,
+    "title": "E2E-F3-1783857683566 Comunicado CMS",
+    "excerpt": "UAT F3 CMS",
+    "content": {
+      "html": "<p>E2E-F3-1783857683566 corpo</p>"
+    },
+    "author": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "heroImageUrl": null,
+    "isMandatory": false,
+    "status": 3,
+    "scheduledAt": null,
+    "audienceType": 0,
+    "audienceDepartmentIds": [],
+    "publishedAt": "2026-07-12T12:01:23.982665+00:00",
+    "isReadByViewer": false
+  }
+}

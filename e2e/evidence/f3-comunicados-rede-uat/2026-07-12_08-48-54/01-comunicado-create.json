@@ -1,0 +1,34 @@
+{
+  "status": 201,
+  "body": {
+    "id": "d491bb0b-1d06-4a52-9e1f-895ffffbcd4b",
+    "slug": "e2e-f3-1783856934044-comunicado-cms",
+    "kind": 0,
+    "title": "E2E-F3-1783856934044 Comunicado CMS",
+    "excerpt": "UAT F3 CMS",
+    "content": {
+      "html": "<p>E2E-F3-1783856934044 corpo</p>"
+    },
+    "author": {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "slug": "",
+      "name": "Desconhecido",
+      "title": null,
+      "photoUrl": null,
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": null,
+      "hireDate": null
+    },
+    "heroImageUrl": null,
+    "isMandatory": false,
+    "status": 2,
+    "scheduledAt": null,
+    "audienceType": 0,
+    "audienceDepartmentIds": [],
+    "publishedAt": "2026-07-12T11:48:55.3318495+00:00",
+    "isReadByViewer": false
+  }
+}

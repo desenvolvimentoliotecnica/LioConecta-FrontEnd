@@ -12,6 +12,7 @@ import {
   type SitemapEntry,
   type SitemapSection,
 } from "../../config/sitemap";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/sitemap-page.css";
 
 const ALL_SECTIONS = buildSitemapSections();
@@ -124,25 +125,31 @@ export function SitemapPage() {
   };
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Mapa do site</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Mapa do site</h1>
-            <p className="page-header__desc">
-              Navegue por todas as páginas do LioConecta — feed, comunicados, pessoas, grupos,
-              documentos, serviços digitais, utilitários e quiosque.
-            </p>
+    <main className={`${sectionMainClass("plataforma")} sitemap-page`}>
+      <SectionPageHead
+        section="plataforma"
+        title="Mapa do site"
+        current="Mapa do site"
+        description="Navegue por todas as páginas do LioConecta — feed, comunicados, pessoas, grupos, documentos, serviços digitais, utilitários e quiosque."
+        toolbar={
+          <div className="page-toolbar" aria-label="Busca no mapa do site">
+            <div className="page-toolbar__filters" aria-hidden="true" />
+            <label className="page-search page-search--wide">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                className="page-search__input"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar páginas, rotas ou descrições..."
+                aria-label="Buscar no mapa do site"
+              />
+            </label>
           </div>
-        </div>
-      </header>
+        }
+      />
 
-      <section className="sitemap-page__controls" aria-label="Busca no mapa do site">
+      <section className="sitemap-page__controls" aria-label="Resumo do mapa">
         <div className="sitemap-page__summary">
           <div className="sitemap-page__summary-icon" aria-hidden="true">
             <i className="fa-solid fa-sitemap" />
@@ -155,17 +162,6 @@ export function SitemapPage() {
             </p>
           </div>
         </div>
-
-        <label className="page-search sitemap-page__search">
-          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar páginas, rotas ou descrições..."
-            aria-label="Buscar no mapa do site"
-          />
-        </label>
       </section>
 
       {filteredSections.length > 0 ? (

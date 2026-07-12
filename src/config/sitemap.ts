@@ -92,11 +92,6 @@ export function buildSitemapSections(): SitemapSection[] {
           "/parabenizacoes",
           "Celebrações no feed, aniversariantes, novos colaboradores e reconhecimentos.",
         ),
-        entry(
-          "Hub Notícias",
-          "/noticias",
-          "Notícias editoriais do feed e atalhos para comunicados institucionais.",
-        ),
       ],
     },
     {
@@ -109,7 +104,11 @@ export function buildSitemapSections(): SitemapSection[] {
           "/comunicados",
           "Página central com atalhos para oficiais, departamentais, urgentes e arquivo.",
         ),
-        ...comunicadosLinks.map((item) => fromNav(item)),
+        ...comunicadosLinks.map((item) =>
+          item.path === "/noticias"
+            ? fromNav(item, "Notícias editoriais e publicações institucionais da empresa.")
+            : fromNav(item),
+        ),
         entry(
           "Novo comunicado oficial",
           "/comunicados/oficiais/novo",
@@ -190,13 +189,24 @@ export function buildSitemapSections(): SitemapSection[] {
               "/servicos/rh",
               "Página central com atalhos para benefícios, contracheque, férias e solicitações.",
             ),
-            ...servicosLinks.slice(0, 10).map((item) => fromNav(item)),
+        ...servicosLinks.slice(0, 10).map((item) =>
+          item.path === "/feedback"
+            ? fromNav(
+                item,
+                "Canal com o RH (sugestões) e feedback 1:1 entre colegas — visível ao autor, à pessoa alvo e ao gestor dela.",
+              )
+            : fromNav(item),
+        ),
           ],
         },
         {
           heading: servicosHeadings[1].label,
           icon: servicosHeadings[1].icon,
-          items: servicosLinks.slice(10).map((item) => fromNav(item)),
+          items: servicosLinks.slice(10).map((item) =>
+            item.path === "/feedback/triagem"
+              ? fromNav(item, "Fila do RH para analisar e responder feedbacks do canal formal (não inclui 1:1).")
+              : fromNav(item),
+          ),
         },
         {
           heading: servicosHeadings[2].label,

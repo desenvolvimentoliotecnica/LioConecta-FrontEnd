@@ -313,6 +313,7 @@ export interface CreatePostRequest {
   type: number;
   content: string;
   metadata?: Record<string, unknown> | null;
+  scheduledAt?: string | null;
 }
 
 export interface UploadPostMediaResponseDto {
@@ -416,13 +417,13 @@ export interface ComunicadoMetricsDto {
 
 export interface NewsItemDto {
   id: string;
-  title?: string | null;
-  content: string;
-  excerpt?: string | null;
-  author?: PersonSummaryDto | null;
-  createdAt: string;
+  title: string;
+  excerpt: string;
+  heroImageUrl?: string | null;
+  author: PersonSummaryDto;
+  publishedAt: string;
+  href?: string | null;
   isPinned?: boolean;
-  metadata?: Record<string, unknown> | null;
 }
 
 export interface MoodMetricsDto {
@@ -458,6 +459,7 @@ export interface CreateFeedbackRequest {
   subject: string;
   message: string;
   isAnonymous: boolean;
+  targetPersonId?: string | null;
 }
 export interface FeedbackDto {
   id: string;
@@ -471,6 +473,8 @@ export interface FeedbackDto {
   author?: PersonSummaryDto | null;
   createdAt: string;
   respondedAt?: string | null;
+  targetPersonId?: string | null;
+  target?: PersonSummaryDto | null;
 }
 export interface UpdateFeedbackRequest {
   status: FeedbackStatus;

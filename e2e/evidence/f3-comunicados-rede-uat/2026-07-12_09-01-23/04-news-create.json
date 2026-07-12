@@ -1,0 +1,32 @@
+{
+  "status": 201,
+  "body": {
+    "id": "f8ba9fd0-c41e-4153-b876-8acb88ff9ffb",
+    "type": 4,
+    "content": "E2E-F3-1783857683566 corpo da notícia F3 para validação UAT.",
+    "author": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "createdAt": "2026-07-12T12:01:30.547955+00:00",
+    "isPinned": false,
+    "metadata": {
+      "title": "E2E-F3-1783857683566 Notícia F3",
+      "excerpt": "Resumo curto da notícia criada no UAT F3."
+    },
+    "commentCount": 0,
+    "reactionCount": 0,
+    "viewerReaction": null,
+    "comments": [],
+    "poll": null
+  }
+}
