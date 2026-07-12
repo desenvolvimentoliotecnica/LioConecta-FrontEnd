@@ -46,6 +46,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/bookmarks", { pageName: "Bookmarks", module: "home" }),
   exact("/atalhos", { pageName: "Shortcuts", module: "home" }),
   exact("/calendario", { pageName: "Calendar", module: "home" }),
+  exact("/documentos/wiki", { pageName: "Wiki", module: "documentos" }),
   exact("/documentos", { pageName: "Documents", module: "documentos" }),
   exact("/comunicados", { pageName: "ComunicadosHub", module: "comunicados" }),
   exact("/comunicados/leitura", { pageName: "ComunicadoReader", module: "comunicados" }),

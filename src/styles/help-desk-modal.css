@@ -184,7 +184,8 @@
   gap: 8px;
 }
 
-.hd-knowledge-list__item a {
+.hd-knowledge-list__item a,
+.hd-knowledge-list__item .hd-knowledge-list__link {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -194,9 +195,15 @@
   text-decoration: none;
   color: inherit;
   transition: background 0.15s ease;
+  width: 100%;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
-.hd-knowledge-list__item a:hover {
+.hd-knowledge-list__item a:hover,
+.hd-knowledge-list__item .hd-knowledge-list__link:hover {
   background: #ecfeff;
   border-color: #67e8f9;
 }

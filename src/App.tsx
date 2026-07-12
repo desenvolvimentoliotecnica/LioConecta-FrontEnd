@@ -23,6 +23,9 @@ import { FeedbackTriagePage } from "./components/pages/FeedbackTriagePage";
 import { MoodAnalyticsPage } from "./components/pages/MoodAnalyticsPage";
 import { DocumentsHubPage } from "./components/pages/DocumentsHubPage";
 import { DocumentsBibliotecaPage } from "./components/pages/DocumentsBibliotecaPage";
+import { WikiHubPage } from "./components/wiki/WikiHubPage";
+import { WikiArticlePage } from "./components/wiki/WikiArticlePage";
+import { WikiEditorPage } from "./components/wiki/WikiEditorPage";
 import { ContrachequePage } from "./components/contracheque/ContrachequePage";
 import { ContrachequeAcessosPage } from "./components/contracheque/ContrachequeAcessosPage";
 import { BeneficiosPage } from "./components/beneficios/BeneficiosPage";
@@ -276,6 +279,10 @@ function App() {
         <Route path="/calendario" element={<CalendarPage />} />
         <Route path="/documentos" element={<DocumentsHubPage />} />
         <Route path="/documentos/biblioteca" element={<DocumentsBibliotecaPage />} />
+        <Route path="/documentos/wiki" element={<WikiHubPage />} />
+        <Route path="/documentos/wiki/novo" element={<WikiEditorPage />} />
+        <Route path="/documentos/wiki/:slug/editar" element={<WikiEditorPage />} />
+        <Route path="/documentos/wiki/:slug" element={<WikiArticlePage />} />
         <Route path="/comunicados" element={<ComunicadosHubPage />} />
         <Route path="/pessoas" element={<PessoasHubPage />} />
         <Route path="/pessoas/ramais" element={<PhoneExtensionsPage />} />

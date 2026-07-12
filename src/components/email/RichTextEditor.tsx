@@ -12,6 +12,8 @@ type RichTextEditorProps = {
   placeholder?: string;
   disabled?: boolean;
   minHeight?: number;
+  /** When true, enables H2/H3 in StarterKit and toolbar. */
+  enableHeadings?: boolean;
 };
 
 function ToolbarButton({
@@ -44,11 +46,12 @@ export function RichTextEditor({
   placeholder = "Escreva sua mensagem…",
   disabled = false,
   minHeight = 180,
+  enableHeadings = false,
 }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: false,
+        heading: enableHeadings ? { levels: [2, 3] } : false,
       }),
       Underline,
       Link.configure({
@@ -98,6 +101,22 @@ export function RichTextEditor({
   return (
     <div className={`email-rich-text${disabled ? " is-disabled" : ""}`}>
       <div className="email-rich-text__toolbar" role="toolbar" aria-label="Formatação">
+        {enableHeadings ? (
+          <>
+            <ToolbarButton
+              label="Título 2"
+              icon="fa-heading"
+              active={editor.isActive("heading", { level: 2 })}
+              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            />
+            <ToolbarButton
+              label="Título 3"
+              icon="fa-font"
+              active={editor.isActive("heading", { level: 3 })}
+              onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            />
+          </>
+        ) : null}
         <ToolbarButton
           label="Negrito"
           icon="fa-bold"

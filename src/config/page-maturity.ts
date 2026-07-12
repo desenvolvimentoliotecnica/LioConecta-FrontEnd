@@ -45,6 +45,8 @@ export const PAGE_MATURITY: Record<string, PageMaturity> = {
   "/documentos/formularios": "prototype",
   "/documentos/modelos": "prototype",
   "/documentos/biblioteca": "prototype",
+  "/documentos/wiki": "partial",
+  "/documentos/wiki/:slug": "partial",
 
   "/servicos/beneficios": "integrated",
   "/servicos/beneficios/gestao": "integrated",

@@ -69,6 +69,10 @@ export const PERMISSIONS = {
     publishUrgent: "comunicados.publish.urgent",
     manage: "comunicados.manage",
   },
+  wiki: {
+    read: "wiki.read",
+    manage: "wiki.manage",
+  },
   feed: {
     manage: "feed.manage",
   },
