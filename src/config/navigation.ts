@@ -22,6 +22,7 @@ export const comunicadosLinks: NavLinkItem[] = [
   { label: "Departamentais", path: "/comunicados/departamentais" },
   { label: "Urgentes", path: "/comunicados/urgentes" },
   { label: "Arquivo", path: "/comunicados/arquivo" },
+  { label: "Notícias", path: "/noticias" },
 ];
 
 export const pessoasLinks: NavLinkItem[] = [
@@ -143,7 +144,12 @@ export function isDocumentosSectionActive(pathname: string): boolean {
 }
 
 export function isComunicadosSectionActive(pathname: string): boolean {
-  return pathname === "/comunicados" || pathname.startsWith("/comunicados/");
+  return (
+    pathname === "/comunicados" ||
+    pathname.startsWith("/comunicados/") ||
+    pathname === "/noticias" ||
+    pathname.startsWith("/noticias/")
+  );
 }
 
 export function isDropdownActive(pathname: string, items: NavLinkItem[]): boolean {

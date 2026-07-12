@@ -1,0 +1,71 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "id": "f8ba9fd0-c41e-4153-b876-8acb88ff9ffb",
+      "title": "E2E-F3-1783857683566 Notícia F3",
+      "excerpt": "Resumo curto da notícia criada no UAT F3.",
+      "heroImageUrl": null,
+      "author": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "publishedAt": "2026-07-12T12:01:30.547955+00:00",
+      "href": null,
+      "isPinned": false
+    },
+    {
+      "id": "6436296d-5f2f-419b-9a7d-7bd3363c8a68",
+      "title": "E2E-F3-1783856934044 Notícia F3",
+      "excerpt": "Resumo curto da notícia criada no UAT F3.",
+      "heroImageUrl": null,
+      "author": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "publishedAt": "2026-07-12T11:48:58.881901+00:00",
+      "href": null,
+      "isPinned": false
+    },
+    {
+      "id": "5eff6053-7e1a-43e0-a7eb-b210bef64435",
+      "title": "E2E-F3-1783725109579 Notícia F3",
+      "excerpt": "E2E-F3-1783725109579 Notícia F3",
+      "heroImageUrl": null,
+      "author": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "publishedAt": "2026-07-10T23:11:52.616164+00:00",
+      "href": null,
+      "isPinned": false
+    }
+  ]
+}

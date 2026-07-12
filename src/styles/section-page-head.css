@@ -57,6 +57,7 @@
 .section-page-head--documentos,
 .section-page-head--grupos,
 .section-page-head--comunicados,
+.section-page-head--noticias,
 .section-page-head--plataforma {
   background-color: var(--sph-bg-base);
   background-image:
@@ -83,6 +84,7 @@
 .section-page-head--documentos::before,
 .section-page-head--grupos::before,
 .section-page-head--comunicados::before,
+.section-page-head--noticias::before,
 .section-page-head--plataforma::before {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 50%);
 }
@@ -253,6 +255,17 @@
   --sph-chip-bg: #ffedd5;
   --sph-chip-border: #fdba74;
   --sph-chip-color: #c2410c;
+  --sph-watermark: url("/headers/wm-comunicados.png");
+}
+
+.section-page-head--noticias {
+  --sph-border: rgba(94, 234, 212, 0.55);
+  --sph-bg-base: #f0fdfa;
+  --sph-bg-accent: rgba(240, 253, 250, 0.84);
+  --sph-shadow: rgba(13, 148, 136, 0.06);
+  --sph-chip-bg: #ccfbf1;
+  --sph-chip-border: #5eead4;
+  --sph-chip-color: #0f766e;
   --sph-watermark: url("/headers/wm-comunicados.png");
 }
 

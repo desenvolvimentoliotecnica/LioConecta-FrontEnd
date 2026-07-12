@@ -1,0 +1,44 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "id": "8dea160f-62a9-4a3f-884c-a6547fd1094e",
+      "slug": "rodrigo-abreu",
+      "name": "RODRIGO SILVA DE ABREU",
+      "title": "Tecnico De Seg Do Trabalho Pl",
+      "photoUrl": "/media/people/rodrigo-abreu.jpg",
+      "departmentName": "SSMA",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1991-04-18",
+      "hireDate": "2026-06-08"
+    },
+    {
+      "id": "e0554698-6379-481c-affd-67da1fdcc5d9",
+      "slug": "fabio-junior",
+      "name": "Fabio Bernardes Da Silva Junior",
+      "title": "Sup. Manutenção II",
+      "photoUrl": null,
+      "departmentName": "Manutenção",
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1988-03-04",
+      "hireDate": "2026-05-11"
+    },
+    {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "status": 200,
+  "body": {
+    "id": "365c8246-28be-48d8-b7ff-be3d9a68400f",
+    "category": 0,
+    "status": 2,
+    "subject": "E2E-F3-1783856934044 assunto",
+    "message": "E2E-F3-1783856934044 mensagem de feedback UAT",
+    "isAnonymous": false,
+    "responseText": "Resposta UAT F3",
+    "assigneeId": null,
+    "author": {
+      "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+      "slug": "leonardo-mendes",
+      "name": "Leonardo Sabino Mendes",
+      "title": null,
+      "photoUrl": "/media/people/leonardo-mendes.jpg",
+      "departmentName": null,
+      "location": null,
+      "managerSlug": null,
+      "isActive": true,
+      "birthDate": "1984-07-06",
+      "hireDate": "2026-04-13"
+    },
+    "createdAt": "2026-07-12T11:48:59.735468+00:00",
+    "respondedAt": "2026-07-12T11:48:59.8978726+00:00"
+  }
+}

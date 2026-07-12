@@ -41,6 +41,15 @@ export function useFeedback(status?: string) {
   });
 }
 
+export function useMyFeedback(enabled = true) {
+  return useQuery({
+    queryKey: ["feedback", "mine"],
+    queryFn: () => api.get<FeedbackDto[]>("/feedback/mine"),
+    enabled,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
 export function useCreateFeedback() {
   const client = useQueryClient();
   return useMutation({
