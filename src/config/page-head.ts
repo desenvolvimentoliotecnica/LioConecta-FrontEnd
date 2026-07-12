@@ -146,6 +146,7 @@ const SECTION_PAGE_HEAD_IDS = new Set<string>([
   "documentos-manuais",
   "documentos-modelos",
   "documentos-politicas",
+  "documentos-wiki",
   "grupos-criar-grupo",
   "grupos-explorar",
   "grupos-meus-grupos",

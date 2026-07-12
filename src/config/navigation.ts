@@ -46,6 +46,7 @@ export const documentosLinks: NavLinkItem[] = [
   { label: "Formulários", path: "/documentos/formularios" },
   { label: "Modelos de documentos", path: "/documentos/modelos" },
   { label: "Biblioteca corporativa", path: "/documentos/biblioteca" },
+  { label: "Wiki", path: "/documentos/wiki" },
 ];
 
 export const servicosLinks: NavLinkItem[] = [

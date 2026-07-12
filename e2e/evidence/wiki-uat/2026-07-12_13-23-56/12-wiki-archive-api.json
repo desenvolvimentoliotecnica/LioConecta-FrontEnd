@@ -1,0 +1,19 @@
+{
+  "status": 200,
+  "body": {
+    "id": "d66edd49-8ab3-4d63-ab9c-7a3e48bc6475",
+    "slug": "e2e-wiki-1783873436392",
+    "title": "E2E-WIKI-1783873436392",
+    "summary": "Editado UAT — E2E-WIKI-1783873436392",
+    "category": "software",
+    "bodyHtml": "<p>Conteudo UAT E2E-WIKI-1783873436392</p>",
+    "status": 2,
+    "createdAt": "2026-07-12T16:24:18.181213+00:00",
+    "updatedAt": "2026-07-12T16:24:25.7871346+00:00",
+    "publishedAt": "2026-07-12T16:24:19.007727+00:00",
+    "archivedAt": "2026-07-12T16:24:25.7871346+00:00",
+    "authorId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "authorName": "Leonardo Sabino Mendes",
+    "url": "/documentos/wiki/e2e-wiki-1783873436392"
+  }
+}

@@ -64,6 +64,15 @@ export const DOCUMENT_SECTIONS: DocumentSection[] = [
     mod: "biblioteca",
     count: "56 publicações",
   },
+  {
+    id: "wiki",
+    label: documentosLinks[5].label,
+    path: documentosLinks[5].path,
+    description: "Base de conhecimento de TI — acesso, hardware e software.",
+    icon: "fa-book-open",
+    mod: "wiki",
+    count: "6 artigos",
+  },
 ];
 
 export const RECENT_DOCUMENTS: RecentDocument[] = [

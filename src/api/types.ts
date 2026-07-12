@@ -2157,6 +2157,66 @@ export interface HelpDeskKnowledgeArticleDto {
   url: string;
 }
 
+export const WIKI_ARTICLE_STATUS_DRAFT = 0 as const;
+export const WIKI_ARTICLE_STATUS_PUBLISHED = 1 as const;
+export const WIKI_ARTICLE_STATUS_ARCHIVED = 2 as const;
+export type WikiArticleStatus =
+  | typeof WIKI_ARTICLE_STATUS_DRAFT
+  | typeof WIKI_ARTICLE_STATUS_PUBLISHED
+  | typeof WIKI_ARTICLE_STATUS_ARCHIVED;
+
+export interface WikiArticleListItemDto {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  category: string;
+  status: WikiArticleStatus;
+  updatedAt: string;
+  publishedAt?: string | null;
+  url: string;
+}
+
+export interface WikiArticleDto {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  category: string;
+  bodyHtml: string;
+  status: WikiArticleStatus;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string | null;
+  archivedAt?: string | null;
+  authorId: string;
+  authorName?: string | null;
+  url: string;
+}
+
+export interface WikiCategoryDto {
+  id: string;
+  label: string;
+  count: number;
+}
+
+export interface CreateWikiArticleRequest {
+  title: string;
+  summary?: string | null;
+  category: string;
+  bodyHtml: string;
+  slug?: string | null;
+  status?: WikiArticleStatus;
+}
+
+export type UpdateWikiArticleRequest = {
+  title?: string | null;
+  summary?: string | null;
+  category?: string | null;
+  bodyHtml?: string | null;
+  slug?: string | null;
+};
+
 export interface HelpDeskAreaDto {
   id: string;
   name: string;

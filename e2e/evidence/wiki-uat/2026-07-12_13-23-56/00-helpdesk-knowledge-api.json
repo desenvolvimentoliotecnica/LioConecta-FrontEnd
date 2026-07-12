@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ddddddddddddddddddddddddddddd001",
+    "title": "VPN instável ou desconectando",
+    "summary": "Passos para reconectar VPN corporativa no Windows e macOS.",
+    "category": "acesso",
+    "updatedAt": "2026-07-10T18:00:00+00:00",
+    "url": "/documentos/wiki/vpn-instavel"
+  },
+  {
+    "id": "ddddddddddddddddddddddddddddd002",
+    "title": "Redefinir senha de rede",
+    "summary": "Fluxo de reset de senha AD via portal de autoatendimento.",
+    "category": "acesso",
+    "updatedAt": "2026-07-07T17:00:00+00:00",
+    "url": "/documentos/wiki/reset-senha"
+  },
+  {
+    "id": "ddddddddddddddddddddddddddddd003",
+    "title": "Impressora corporativa offline",
+    "summary": "Verificar fila, driver e conexão de rede da impressora.",
+    "category": "hardware",
+    "updatedAt": "2026-07-04T14:00:00+00:00",
+    "url": "/documentos/wiki/impressora-offline"
+  },
+  {
+    "id": "ddddddddddddddddddddddddddddd004",
+    "title": "Outlook não sincroniza",
+    "summary": "Soluções para caixa de entrada travada ou perfil corrompido.",
+    "category": "software",
+    "updatedAt": "2026-06-30T19:00:00+00:00",
+    "url": "/documentos/wiki/outlook-sync"
+  },
+  {
+    "id": "ddddddddddddddddddddddddddddd005",
+    "title": "Solicitar troca de notebook",
+    "summary": "Critérios de elegibilidade e prazos para substituição de equipamento.",
+    "category": "hardware",
+    "updatedAt": "2026-06-27T13:00:00+00:00",
+    "url": "/documentos/wiki/troca-notebook"
+  },
+  {
+    "id": "ddddddddddddddddddddddddddddd006",
+    "title": "Conectar à rede Wi-Fi corporativa",
+    "summary": "Configuração de certificado e autenticação 802.1X.",
+    "category": "acesso",
+    "updatedAt": "2026-06-22T12:30:00+00:00",
+    "url": "/documentos/wiki/wifi-corporativo"
+  }
+]

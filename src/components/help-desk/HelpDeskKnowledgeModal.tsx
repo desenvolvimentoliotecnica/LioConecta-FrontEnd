@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useHelpDeskKnowledge } from "../../api/hooks/useHelpDesk";
 import type { HelpDeskServiceDto } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
@@ -14,7 +15,12 @@ function formatDate(value: string): string {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("pt-BR");
 }
 
+function isInternalPath(url: string): boolean {
+  return url.startsWith("/");
+}
+
 export function HelpDeskKnowledgeModal({ open, service, onClose }: Props) {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   const knowledgeQuery = useHelpDeskKnowledge(debounced, open);
@@ -31,7 +37,26 @@ export function HelpDeskKnowledgeModal({ open, service, onClose }: Props) {
     onClose();
   };
 
-  const wikiUrl = service?.portalUrl ?? "https://wiki.dev.local/ti";
+  const wikiUrl = service?.portalUrl ?? "/documentos/wiki";
+
+  const openWiki = () => {
+    if (isInternalPath(wikiUrl)) {
+      navigate(wikiUrl);
+      handleClose();
+      return;
+    }
+    navigate("/documentos/wiki");
+    handleClose();
+  };
+
+  const openArticle = (url: string) => {
+    if (isInternalPath(url)) {
+      navigate(url);
+      handleClose();
+      return;
+    }
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <ContrachequeModal
@@ -40,14 +65,9 @@ export function HelpDeskKnowledgeModal({ open, service, onClose }: Props) {
       onClose={handleClose}
       footer={
         <>
-          <a
-            className="pay-modal__btn pay-modal__btn--ghost"
-            href={wikiUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" /> Abrir Wiki
-          </a>
+          <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={openWiki}>
+            <i className="fa-solid fa-book-open" aria-hidden="true" /> Abrir Wiki
+          </button>
           <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={handleClose}>
             Fechar
           </button>
@@ -78,23 +98,41 @@ export function HelpDeskKnowledgeModal({ open, service, onClose }: Props) {
       ) : null}
 
       <ul className="hd-knowledge-list">
-        {(knowledgeQuery.data ?? []).map((article) => (
-          <li key={article.id} className="hd-knowledge-list__item">
-            <a href={article.url} target="_blank" rel="noopener noreferrer">
-              <span className="hd-knowledge-list__icon" aria-hidden="true">
-                <i className="fa-regular fa-file-lines" />
-              </span>
-              <span className="hd-knowledge-list__body">
-                <strong>{article.title}</strong>
-                <span>{article.summary}</span>
-                <small>
-                  {article.category} · Atualizado em {formatDate(article.updatedAt)}
-                </small>
-              </span>
-              <i className="fa-solid fa-arrow-up-right-from-square hd-knowledge-list__ext" aria-hidden="true" />
-            </a>
-          </li>
-        ))}
+        {(knowledgeQuery.data ?? []).map((article) => {
+          const internal = isInternalPath(article.url);
+          return (
+            <li key={article.id} className="hd-knowledge-list__item">
+              {internal ? (
+                <button type="button" className="hd-knowledge-list__link" onClick={() => openArticle(article.url)}>
+                  <span className="hd-knowledge-list__icon" aria-hidden="true">
+                    <i className="fa-regular fa-file-lines" />
+                  </span>
+                  <span className="hd-knowledge-list__body">
+                    <strong>{article.title}</strong>
+                    <span>{article.summary}</span>
+                    <small>
+                      {article.category} · Atualizado em {formatDate(article.updatedAt)}
+                    </small>
+                  </span>
+                </button>
+              ) : (
+                <a href={article.url} target="_blank" rel="noopener noreferrer">
+                  <span className="hd-knowledge-list__icon" aria-hidden="true">
+                    <i className="fa-regular fa-file-lines" />
+                  </span>
+                  <span className="hd-knowledge-list__body">
+                    <strong>{article.title}</strong>
+                    <span>{article.summary}</span>
+                    <small>
+                      {article.category} · Atualizado em {formatDate(article.updatedAt)}
+                    </small>
+                  </span>
+                  <i className="fa-solid fa-arrow-up-right-from-square hd-knowledge-list__ext" aria-hidden="true" />
+                </a>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       {!knowledgeQuery.isLoading && (knowledgeQuery.data?.length ?? 0) === 0 ? (
