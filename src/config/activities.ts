@@ -552,8 +552,8 @@ export function groupActivitiesByDate(activities: Activity[], todayKey = current
       label: formatDiaryDateLabel(dateKey, todayKey),
       activities: slices.sort(
         (a, b) =>
-          (parseActivityDate(a.sliceStart)?.getTime() ?? 0) -
-          (parseActivityDate(b.sliceStart)?.getTime() ?? 0),
+          (parseActivityDate(b.sliceStart)?.getTime() ?? 0) -
+          (parseActivityDate(a.sliceStart)?.getTime() ?? 0),
       ),
     }));
 }
