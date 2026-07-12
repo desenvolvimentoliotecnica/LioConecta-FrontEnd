@@ -25,10 +25,17 @@ export type Activity = {
 
 export type ActivityFilter = "mine" | "all" | "today" | "week" | "open";
 
+export type DiaryActivitySlice = {
+  activity: Activity;
+  /** Instantes da fatia neste dia (ISO). */
+  sliceStart: string;
+  sliceEnd: string;
+};
+
 export type DiaryGroup = {
   dateKey: string;
   label: string;
-  activities: Activity[];
+  activities: DiaryActivitySlice[];
 };
 
 export const ACTIVITY_FILTERS: { id: ActivityFilter; label: string }[] = [
@@ -47,7 +54,11 @@ export function currentTodayKey(): string {
 
 /** Interpreta valor de `<input type="datetime-local">` como horário local do navegador. */
 export function parseDatetimeLocal(value: string): Date | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value.trim());
+  const trimmed = value.trim();
+  // Não tratar ISO com fuso (Z / ±HH:MM) como datetime-local — senão UTC vira wall-clock local (+3h no BRT).
+  if (/[zZ]|[+-]\d{2}:\d{2}$/.test(trimmed)) return null;
+
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(trimmed);
   if (!match) return null;
 
   const [, year, month, day, hour, minute] = match;
@@ -80,10 +91,19 @@ export function apiDatetimeToLocalInput(value: string | null | undefined): strin
 }
 
 export function parseActivityDate(value: string): Date | null {
-  const local = parseDatetimeLocal(value);
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  // ISO da API (com Z/offset) — sempre via Date nativo (não confundir com datetime-local).
+  if (/[zZ]|[+-]\d{2}:\d{2}/.test(trimmed)) {
+    const parsed = new Date(trimmed);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  const local = parseDatetimeLocal(trimmed);
   if (local) return local;
 
-  const parsed = new Date(value);
+  const parsed = new Date(trimmed);
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
@@ -155,11 +175,296 @@ export function parseDateKey(key: string): { year: number; month: number; day: n
 export function formatTime(iso: string): string {
   const date = parseActivityDate(iso);
   if (!date) return iso.slice(11, 16);
-  return date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  return date.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Sao_Paulo",
+  });
 }
 
 export function formatTimeRange(start: string, end: string): string {
-  return `${formatTime(start)} – ${formatTime(end)}`;
+  const startLabel = formatTime(start);
+  const endLabel = formatTime(end);
+  return startLabel === endLabel ? startLabel : `${startLabel} – ${endLabel}`;
+}
+
+/** Mínimo de duração contabilizada (mesma regra do DIRETRIZ / tasks.json). */
+export const MIN_ACTIVITY_DURATION_MINUTES = 30;
+
+/** Início da janela útil no dia (08:00). Antes disso não conta (madrugada). */
+export const WORK_DAY_START_HOUR = 8;
+
+/** Fim da janela útil no dia (22:00). Das 22:00 às 08:00 do dia seguinte não conta. */
+export const WORK_DAY_END_HOUR = 22;
+
+/** Duração entre início e conclusão (ex.: "1h 36min", "45min", "30min"). */
+export function formatActivityDuration(start: string, end: string): string | null {
+  const minutes = activityDurationMinutes(start, end);
+  if (minutes == null) return null;
+  return formatMinutesAsDuration(minutes);
+}
+
+/** Minutos brutos entre dois instantes (sem mínimo). */
+export function activityDurationMinutesRaw(start: string, end: string): number | null {
+  const startDate = parseActivityDate(start);
+  const endDate = parseActivityDate(end);
+  if (!startDate || !endDate) return null;
+
+  const diffMs = endDate.getTime() - startDate.getTime();
+  if (diffMs < 0) return null;
+  return Math.round(diffMs / 60_000);
+}
+
+/** Duração com piso de 30 min (commits/intervalos curtos contam como 30). */
+export function activityDurationMinutes(
+  start: string,
+  end: string,
+  options?: { applyMinimum?: boolean },
+): number | null {
+  const raw = activityDurationMinutesRaw(start, end);
+  if (raw == null) return null;
+  if (options?.applyMinimum === false) return raw;
+  return Math.max(raw, MIN_ACTIVITY_DURATION_MINUTES);
+}
+
+export function formatMinutesAsDuration(totalMinutes: number): string {
+  if (totalMinutes < 1) return "< 1min";
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes}min`;
+  if (minutes === 0) return `${hours}h`;
+  return `${hours}h ${minutes}min`;
+}
+
+/** Preferir start/due do Planner (backfill de commits); fallback criação→atualização. */
+export function activityTimelineBounds(activity: Activity): { start: string; end: string } {
+  const start = activity.startDate || activity.createdAt;
+  const end = activity.endDate || activity.updatedAt || activity.createdAt;
+  return { start, end };
+}
+
+type TimeIntervalMs = { startMs: number; endMs: number };
+
+function dateKeyFromLocalDate(date: Date): string {
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function localDayBoundsMs(dateKey: string): { dayStartMs: number; dayEndMs: number } {
+  const { year, month, day } = parseDateKey(dateKey);
+  const dayStartMs = new Date(year, month, day, 0, 0, 0, 0).getTime();
+  const dayEndMs = new Date(year, month, day + 1, 0, 0, 0, 0).getTime();
+  return { dayStartMs, dayEndMs };
+}
+
+/** Recorta um intervalo ao dia civil local; null se não houver sobreposição. */
+export function clipIntervalToDateKey(
+  interval: TimeIntervalMs,
+  dateKey: string,
+): TimeIntervalMs | null {
+  const { dayStartMs, dayEndMs } = localDayBoundsMs(dateKey);
+  const startMs = Math.max(interval.startMs, dayStartMs);
+  const endMs = Math.min(interval.endMs, dayEndMs);
+  if (endMs <= startMs) return null;
+  return { startMs, endMs };
+}
+
+/**
+ * Recorta à janela útil do dia (08:00–22:00).
+ * Exclui madrugada (00:00–08:00) e noite (22:00–24:00) — o “sono” 22h→08h.
+ */
+export function clipIntervalToWorkDay(
+  interval: TimeIntervalMs,
+  dateKey: string,
+): TimeIntervalMs | null {
+  const { year, month, day } = parseDateKey(dateKey);
+  const windowStartMs = new Date(year, month, day, WORK_DAY_START_HOUR, 0, 0, 0).getTime();
+  const windowEndMs = new Date(year, month, day, WORK_DAY_END_HOUR, 0, 0, 0).getTime();
+  const startMs = Math.max(interval.startMs, windowStartMs);
+  const endMs = Math.min(interval.endMs, windowEndMs);
+  if (endMs <= startMs) return null;
+  return { startMs, endMs };
+}
+
+/** Expande o intervalo bruto em fatias úteis por dia (08:00–22:00, sáb/dom inclusive). */
+export function expandToWorkDayIntervals(interval: TimeIntervalMs): TimeIntervalMs[] {
+  return dateKeysSpannedByInterval(interval).flatMap((dateKey) => {
+    const clipped = clipIntervalToWorkDay(interval, dateKey);
+    return clipped ? [clipped] : [];
+  });
+}
+
+/**
+ * Dias civis cobertos pelo intervalo [start, end) — inclui sábado e domingo.
+ * Não há salto de fim de semana: cada dia civil conta.
+ */
+export function dateKeysSpannedByInterval(interval: TimeIntervalMs): string[] {
+  const keys: string[] = [];
+  const cursor = new Date(interval.startMs);
+  cursor.setHours(0, 0, 0, 0);
+
+  while (cursor.getTime() < interval.endMs) {
+    keys.push(dateKeyFromLocalDate(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return keys;
+}
+
+/**
+ * Intervalo de trabalho de uma atividade concluída, com piso de 30 min
+ * (recua o início quando o span bruto for menor).
+ */
+export function activityWorkInterval(
+  activity: Activity,
+  options?: { applyMinimum?: boolean },
+): TimeIntervalMs | null {
+  if (activity.percentComplete < 100) return null;
+  const { start, end } = activityTimelineBounds(activity);
+  const startDate = parseActivityDate(start);
+  const endDate = parseActivityDate(end);
+  if (!startDate || !endDate) return null;
+
+  let startMs = startDate.getTime();
+  let endMs = endDate.getTime();
+  if (endMs < startMs) return null;
+
+  const applyMinimum = options?.applyMinimum !== false;
+  const rawMinutes = Math.round((endMs - startMs) / 60_000);
+  if (applyMinimum && rawMinutes < MIN_ACTIVITY_DURATION_MINUTES) {
+    startMs = endMs - MIN_ACTIVITY_DURATION_MINUTES * 60_000;
+  }
+
+  return { startMs, endMs };
+}
+
+/**
+ * Fatias da atividade por dia civil (inclui sábado e domingo).
+ * Só conta 08:00–22:00; o intervalo 22:00→08:00 não gera tempo nem card vazio.
+ */
+export function activityDiarySlices(activity: Activity): DiaryActivitySlice[] {
+  const completedInterval = activityWorkInterval(activity);
+
+  if (completedInterval) {
+    return expandToWorkDayIntervals(completedInterval).map((clipped) => ({
+      activity,
+      sliceStart: new Date(clipped.startMs).toISOString(),
+      sliceEnd: new Date(clipped.endMs).toISOString(),
+    }));
+  }
+
+  // Em andamento / sem intervalo útil: um único dia (criação), sem janela forçada.
+  const { start, end } = activityTimelineBounds(activity);
+  const startDate = parseActivityDate(start);
+  const endDate = parseActivityDate(end);
+  const startMs = startDate?.getTime() ?? Date.now();
+  const endMs = Math.max(endDate?.getTime() ?? startMs, startMs);
+
+  return [
+    {
+      activity,
+      sliceStart: new Date(startMs).toISOString(),
+      sliceEnd: new Date(endMs).toISOString(),
+    },
+  ];
+}
+
+/** União de intervalos sobrepostos → minutos de parede (tempo efetivo). */
+export function mergeIntervalsMinutes(intervals: TimeIntervalMs[]): number {
+  if (intervals.length === 0) return 0;
+
+  const sorted = [...intervals].sort((a, b) => a.startMs - b.startMs);
+  const merged: TimeIntervalMs[] = [{ ...sorted[0] }];
+
+  for (let i = 1; i < sorted.length; i += 1) {
+    const current = sorted[i];
+    const last = merged[merged.length - 1];
+    if (current.startMs <= last.endMs) {
+      last.endMs = Math.max(last.endMs, current.endMs);
+    } else {
+      merged.push({ ...current });
+    }
+  }
+
+  return merged.reduce(
+    (sum, interval) => sum + Math.round((interval.endMs - interval.startMs) / 60_000),
+    0,
+  );
+}
+
+/**
+ * Tempo efetivo do dia: une tarefas simultâneas na janela 08:00–22:00.
+ * Com `dateKey`, usa só a fatia útil daquele dia.
+ */
+export function sumCompletedDurationMinutes(
+  activities: Activity[],
+  dateKey?: string,
+): number | null {
+  const intervals: TimeIntervalMs[] = [];
+
+  for (const activity of activities) {
+    const full = activityWorkInterval(activity);
+    if (!full) continue;
+    if (dateKey) {
+      const clipped = clipIntervalToWorkDay(full, dateKey);
+      if (clipped) intervals.push(clipped);
+    } else {
+      intervals.push(...expandToWorkDayIntervals(full));
+    }
+  }
+
+  if (intervals.length === 0) return null;
+
+  const merged = mergeIntervalsMinutes(intervals);
+  if (merged < 1) return null;
+  return merged;
+}
+
+/** Rótulo do total do dia (tempo efetivo naquele dia civil). */
+export function sumCompletedDurationLabel(
+  activities: Activity[],
+  dateKey?: string,
+): string | null {
+  const minutes = sumCompletedDurationMinutes(activities, dateKey);
+  if (minutes == null) return null;
+  return formatMinutesAsDuration(minutes);
+}
+
+export function formatTimeRangeWithDuration(
+  start: string,
+  end: string,
+  options?: { applyMinimum?: boolean },
+): {
+  range: string;
+  duration: string | null;
+} {
+  const applyMinimum = options?.applyMinimum !== false;
+  const raw = activityDurationMinutesRaw(start, end);
+  const durationMinutes = activityDurationMinutes(start, end, { applyMinimum });
+  const duration = durationMinutes == null ? null : formatMinutesAsDuration(durationMinutes);
+
+  // Intervalo curto (< 30 min): exibir fim − 30min → fim para bater com a duração assumida.
+  if (applyMinimum && raw != null && raw < MIN_ACTIVITY_DURATION_MINUTES) {
+    const endDate = parseActivityDate(end);
+    if (endDate) {
+      const adjustedStart = new Date(
+        endDate.getTime() - MIN_ACTIVITY_DURATION_MINUTES * 60_000,
+      ).toISOString();
+      return {
+        range: formatTimeRange(adjustedStart, end),
+        duration,
+      };
+    }
+  }
+
+  const range = formatTimeRange(start, end);
+  if (!duration) return { range, duration: null };
+  return { range, duration };
+}
+
+/** Data civil usada no diário/filtros — criação real, não start/due sintético do Planner. */
+export function activityDiaryDate(activity: Activity): string {
+  return activity.createdAt || activity.startDate;
 }
 
 export function formatDiaryDateLabel(dateKey: string, todayKey = currentTodayKey()): string {
@@ -201,11 +506,15 @@ export function filterActivities(
   const normalized = query.trim().toLowerCase();
 
   return activities.filter((activity) => {
-    const dateKey = toDateKey(activity.startDate);
+    const sliceKeys = activityDiarySlices(activity).map((slice) =>
+      toDateKey(slice.sliceStart),
+    );
+    // Fallback se fatia vazia
+    const dateKeys = sliceKeys.length > 0 ? sliceKeys : [toDateKey(activityDiaryDate(activity))];
 
     if (filter === "mine" && !activity.canEdit) return false;
-    if (filter === "today" && dateKey !== todayKey) return false;
-    if (filter === "week" && !isSameWeek(dateKey, todayKey)) return false;
+    if (filter === "today" && !dateKeys.includes(todayKey)) return false;
+    if (filter === "week" && !dateKeys.some((key) => isSameWeek(key, todayKey))) return false;
     if (filter === "open" && activity.percentComplete >= 100) return false;
 
     if (!normalized) return true;
@@ -225,29 +534,26 @@ export function filterActivities(
 }
 
 export function groupActivitiesByDate(activities: Activity[], todayKey = currentTodayKey()): DiaryGroup[] {
-  const sorted = [...activities].sort(
-    (a, b) =>
-      (parseActivityDate(a.startDate)?.getTime() ?? 0) -
-      (parseActivityDate(b.startDate)?.getTime() ?? 0),
-  );
+  const map = new Map<string, DiaryActivitySlice[]>();
 
-  const map = new Map<string, Activity[]>();
-  sorted.forEach((activity) => {
-    const key = toDateKey(activity.startDate);
-    const list = map.get(key) ?? [];
-    list.push(activity);
-    map.set(key, list);
-  });
+  for (const activity of activities) {
+    for (const slice of activityDiarySlices(activity)) {
+      const key = toDateKey(slice.sliceStart);
+      const list = map.get(key) ?? [];
+      list.push(slice);
+      map.set(key, list);
+    }
+  }
 
   return Array.from(map.entries())
     .sort(([a], [b]) => b.localeCompare(a))
-    .map(([dateKey, groupActivities]) => ({
+    .map(([dateKey, slices]) => ({
       dateKey,
       label: formatDiaryDateLabel(dateKey, todayKey),
-      activities: groupActivities.sort(
+      activities: slices.sort(
         (a, b) =>
-          (parseActivityDate(a.startDate)?.getTime() ?? 0) -
-          (parseActivityDate(b.startDate)?.getTime() ?? 0),
+          (parseActivityDate(a.sliceStart)?.getTime() ?? 0) -
+          (parseActivityDate(b.sliceStart)?.getTime() ?? 0),
       ),
     }));
 }

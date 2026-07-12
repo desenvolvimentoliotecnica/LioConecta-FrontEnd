@@ -9,7 +9,8 @@ export type PageHeadSection =
   | "grupos"
   | "comunicados"
   | "noticias"
-  | "plataforma";
+  | "plataforma"
+  | "atividades";
 
 export type PageHeadSectionMeta = {
   hubPath?: string;
@@ -69,6 +70,10 @@ export const PAGE_HEAD_SECTIONS: Record<PageHeadSection, PageHeadSectionMeta> = 
   plataforma: {
     hubPath: "/admin/configuracoes-backend",
     hubLabel: "Administração",
+    watermark: "/headers/wm-plataforma.png",
+  },
+  atividades: {
+    hubLabel: "Minhas atividades",
     watermark: "/headers/wm-plataforma.png",
   },
 };

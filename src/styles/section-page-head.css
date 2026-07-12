@@ -58,7 +58,8 @@
 .section-page-head--grupos,
 .section-page-head--comunicados,
 .section-page-head--noticias,
-.section-page-head--plataforma {
+.section-page-head--plataforma,
+.section-page-head--atividades {
   background-color: var(--sph-bg-base);
   background-image:
     linear-gradient(
@@ -85,7 +86,8 @@
 .section-page-head--grupos::before,
 .section-page-head--comunicados::before,
 .section-page-head--noticias::before,
-.section-page-head--plataforma::before {
+.section-page-head--plataforma::before,
+.section-page-head--atividades::before {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 50%);
 }
 
@@ -270,6 +272,17 @@
 }
 
 .section-page-head--plataforma {
+  --sph-border: rgba(147, 197, 253, 0.55);
+  --sph-bg-base: #eff6ff;
+  --sph-bg-accent: rgba(239, 246, 255, 0.84);
+  --sph-shadow: rgba(37, 99, 235, 0.06);
+  --sph-chip-bg: #dbeafe;
+  --sph-chip-border: #93c5fd;
+  --sph-chip-color: #1d4ed8;
+  --sph-watermark: url("/headers/wm-plataforma.png");
+}
+
+.section-page-head--atividades {
   --sph-border: rgba(147, 197, 253, 0.55);
   --sph-bg-base: #eff6ff;
   --sph-bg-accent: rgba(239, 246, 255, 0.84);

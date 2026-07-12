@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import {
@@ -16,16 +16,86 @@ import {
   computePercentFromTasks,
   createActivityDraft,
   filterActivities,
-  formatTimeRange,
+  formatTimeRangeWithDuration,
   groupActivitiesByDate,
   newId,
   parseActivityDate,
   plannerTaskToActivity,
+  sumCompletedDurationLabel,
   type Activity,
   type ActivityFilter,
   type ActivityTask,
 } from "../../config/activities";
+import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/activities-page.css";
+
+const ACTIVITIES_PAGE_SIZE = 12;
+
+const GITHUB_URL_RE = /https?:\/\/(?:www\.)?github\.com\/[^\s<>"'\)\]]+/gi;
+
+function githubLinkLabel(url: string): string {
+  if (/\/commit\//i.test(url)) return "Ver no GitHub";
+  if (/\/pull\//i.test(url) || /\/pulls\//i.test(url)) return "Ver pull request";
+  if (/\/issues\//i.test(url)) return "Ver issue";
+  return "Abrir no GitHub";
+}
+
+function splitGithubUrl(raw: string): { url: string; trailing: string } {
+  const url = raw.replace(/[.,;:!?)\]\}]+$/g, "");
+  return { url, trailing: raw.slice(url.length) };
+}
+
+function ActivityDescription({ text }: { text: string }) {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+  const re = new RegExp(GITHUB_URL_RE.source, "gi");
+  let match: RegExpExecArray | null;
+
+  while ((match = re.exec(text)) !== null) {
+    const { url, trailing } = splitGithubUrl(match[0]);
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    nodes.push(
+      <a
+        key={`gh-${key++}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="activities-page__gh-link"
+      >
+        <i className="fa-brands fa-github" aria-hidden="true" />
+        {githubLinkLabel(url)}
+      </a>,
+    );
+    if (trailing) nodes.push(trailing);
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return <div className="activities-page__entry-desc">{nodes}</div>;
+}
+
+function sliceGroupsByActivityCount(
+  groups: ReturnType<typeof groupActivitiesByDate>,
+  visibleCount: number,
+) {
+  let remaining = visibleCount;
+  const visible: typeof groups = [];
+
+  for (const group of groups) {
+    if (remaining <= 0) break;
+    const activities = group.activities.slice(0, remaining);
+    remaining -= activities.length;
+    visible.push({ ...group, activities });
+  }
+
+  return visible;
+}
 
 type FormState = {
   title: string;
@@ -281,6 +351,8 @@ export function ActivitiesPage() {
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Activity | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(ACTIVITIES_PAGE_SIZE);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const activities = useMemo(
     () => (data?.tasks ?? []).map(plannerTaskToActivity),
@@ -294,6 +366,32 @@ export function ActivitiesPage() {
 
   const groups = useMemo(() => groupActivitiesByDate(filtered), [filtered]);
   const summary = useMemo(() => activitySummary(activities), [activities]);
+  const visibleGroups = useMemo(
+    () => sliceGroupsByActivityCount(groups, visibleCount),
+    [groups, visibleCount],
+  );
+  const hasMore = filtered.length > visibleCount;
+
+  useEffect(() => {
+    setVisibleCount(ACTIVITIES_PAGE_SIZE);
+  }, [filter, query]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisibleCount((count) => count + ACTIVITIES_PAGE_SIZE);
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore, visibleCount, visibleGroups.length]);
 
   const defaultBucketId = buckets[0]?.id;
   const isSaving = createTask.isPending || updateTask.isPending || deleteTask.isPending;
@@ -354,21 +452,17 @@ export function ActivitiesPage() {
   const planTitle = data?.planTitle?.trim();
 
   return (
-    <main className="main">
-      <header className="page-header">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link to="/">Início</Link>
-          <span className="breadcrumb__sep">/</span>
-          <span className="breadcrumb__current">Minhas atividades</span>
-        </nav>
-        <div className="page-header__row">
-          <div>
-            <h1 className="page-header__title">Minhas atividades</h1>
-            <p className="page-header__desc">
-              Tarefas do plano {planTitle ? `«${planTitle}»` : "Microsoft Planner"} — acompanhe entregas da
-              equipe e gerencie as atividades atribuídas a você.
-            </p>
-          </div>
+    <main className={sectionMainClass("atividades")}>
+      <SectionPageHead
+        section="atividades"
+        title="Minhas atividades"
+        description={`Tarefas do plano ${planTitle ? `«${planTitle}»` : "Microsoft Planner"} — acompanhe entregas da equipe e gerencie as atividades atribuídas a você.`}
+        syncMeta={
+          !isLoading && data?.plannerEnabled
+            ? `${summary.total} tarefas · ${summary.open} em andamento · média de ${summary.avg}% concluído · ${summary.tasksDone}/${summary.tasksTotal} itens de checklist`
+            : null
+        }
+        actions={
           <button
             type="button"
             className="activities-page__new-btn"
@@ -377,8 +471,37 @@ export function ActivitiesPage() {
           >
             <i className="fa-solid fa-plus" aria-hidden="true" /> Nova atividade
           </button>
-        </div>
-      </header>
+        }
+        toolbar={
+          <div className="pay-toolbar" aria-label="Filtros de atividades">
+            <div className="pay-toolbar__filters page-filters" role="group" aria-label="Filtros">
+              {ACTIVITY_FILTERS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`filter-chip${filter === item.id ? " is-active" : ""}`}
+                  onClick={() => setFilter(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="pay-toolbar__actions">
+              <label className="pay-search page-search">
+                <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+                <input
+                  className="page-search__input"
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscar por título, responsável ou checklist"
+                  aria-label="Buscar atividades"
+                />
+              </label>
+            </div>
+          </div>
+        }
+      />
 
       {!data?.plannerEnabled && !isLoading ? (
         <div className="activities-page__banner activities-page__banner--info" role="status">
@@ -392,46 +515,6 @@ export function ActivitiesPage() {
           {actionError}
         </div>
       ) : null}
-
-      <section className="activities-page__controls" aria-label="Resumo e filtros">
-        <div className="activities-page__summary">
-          <div className="activities-page__summary-icon" aria-hidden="true">
-            <i className="fa-solid fa-book-open" />
-          </div>
-          <div>
-            <div className="activities-page__summary-title">Plano da equipe</div>
-            <p className="activities-page__summary-text">
-              {summary.total} tarefas · {summary.open} em andamento · média de {summary.avg}% concluído ·{" "}
-              {summary.tasksDone}/{summary.tasksTotal} itens de checklist feitos
-            </p>
-          </div>
-        </div>
-
-        <div className="activities-page__toolbar">
-          <div className="activities-page__filters">
-            {ACTIVITY_FILTERS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`filter-chip${filter === item.id ? " is-active" : ""}`}
-                onClick={() => setFilter(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <label className="page-search activities-page__search">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar por título, responsável ou checklist"
-              aria-label="Buscar atividades"
-            />
-          </label>
-        </div>
-      </section>
 
       <div className="activities-page__layout">
         <section className="activities-page__diary" aria-label="Diário de atividades">
@@ -460,102 +543,142 @@ export function ActivitiesPage() {
               ) : null}
             </div>
           ) : (
-            groups.map((group) => (
-              <article key={group.dateKey} className="activities-page__day">
-                <header className="activities-page__day-header">
-                  <h2>{group.label}</h2>
-                  <span>{group.activities.length} tarefa(s)</span>
-                </header>
+            <>
+              {visibleGroups.map((group) => {
+                const fullGroup = groups.find((item) => item.dateKey === group.dateKey) ?? group;
+                const daySlices = fullGroup.activities;
+                const dayTotal = daySlices.length;
+                const dayHours = sumCompletedDurationLabel(
+                  daySlices.map((slice) => slice.activity),
+                  group.dateKey,
+                );
+                return (
+                  <article key={group.dateKey} className="activities-page__day">
+                    <header className="activities-page__day-header">
+                      <h2>{group.label}</h2>
+                      <span className="activities-page__day-stats">
+                        {dayTotal} tarefa(s)
+                        {dayHours ? ` · ${dayHours}` : ""}
+                      </span>
+                    </header>
 
-                <div className="activities-page__timeline">
-                  {group.activities.map((activity) => (
-                    <div
-                      key={activity.id}
-                      className={`activities-page__entry${activity.canEdit ? "" : " is-readonly"}`}
-                    >
-                      <div className="activities-page__entry-time">
-                        {formatTimeRange(activity.startDate, activity.endDate)}
-                      </div>
-                      <div className="activities-page__entry-card">
-                        <div className="activities-page__entry-head">
-                          <div>
-                            <h3>{activity.title}</h3>
-                            <div className="activities-page__entry-meta">
-                              {activity.bucketName ? (
-                                <span className="activities-page__bucket">{activity.bucketName}</span>
+                    <div className="activities-page__timeline">
+                      {group.activities.map((slice) => {
+                        const activity = slice.activity;
+                        const { range, duration } = formatTimeRangeWithDuration(
+                          slice.sliceStart,
+                          slice.sliceEnd,
+                          { applyMinimum: false },
+                        );
+                        return (
+                          <div
+                            key={`${activity.id}-${group.dateKey}`}
+                            className={`activities-page__entry${activity.canEdit ? "" : " is-readonly"}`}
+                          >
+                            <div className="activities-page__entry-time">
+                              <span className="activities-page__entry-time-range">{range}</span>
+                              {duration ? (
+                                <span className="activities-page__entry-time-duration">{duration}</span>
                               ) : null}
-                              {activity.assignees && activity.assignees.length > 0 ? (
-                                <span className="activities-page__assignees">
-                                  {activity.assignees.map((assignee) => assignee.name).join(", ")}
-                                </span>
+                            </div>
+                            <div className="activities-page__entry-card">
+                              <div className="activities-page__entry-head">
+                                <div>
+                                  <h3>{activity.title}</h3>
+                                  <div className="activities-page__entry-meta">
+                                    {activity.bucketName ? (
+                                      <span className="activities-page__bucket">{activity.bucketName}</span>
+                                    ) : null}
+                                    {activity.assignees && activity.assignees.length > 0 ? (
+                                      <span className="activities-page__assignees">
+                                        {activity.assignees.map((assignee) => assignee.name).join(", ")}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                </div>
+                                <div className="activities-page__entry-actions">
+                                  {activity.plannerUrl ? (
+                                    <a
+                                      href={activity.plannerUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      aria-label="Abrir no Planner"
+                                      className="activities-page__planner-link"
+                                    >
+                                      <i className="fa-brands fa-microsoft" aria-hidden="true" />
+                                    </a>
+                                  ) : null}
+                                  <button
+                                    type="button"
+                                    aria-label="Editar atividade"
+                                    disabled={!activity.canEdit || isSaving}
+                                    onClick={() => setEditing(activity)}
+                                  >
+                                    <i className="fa-solid fa-pen" aria-hidden="true" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    aria-label="Excluir atividade"
+                                    disabled={!activity.canEdit || isSaving}
+                                    onClick={() => void deleteActivity(activity)}
+                                  >
+                                    <i className="fa-solid fa-trash-can" aria-hidden="true" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {activity.description ? (
+                                <ActivityDescription text={activity.description} />
+                              ) : null}
+
+                              <div className="activities-page__progress">
+                                <div className="activities-page__progress-bar">
+                                  <span style={{ width: `${activity.percentComplete}%` }} />
+                                </div>
+                                <strong>{activity.percentComplete}%</strong>
+                              </div>
+
+                              {activity.tasks.length > 0 ? (
+                                <ul className="activities-page__tasks">
+                                  {activity.tasks.map((task) => (
+                                    <li key={task.id}>
+                                      <label>
+                                        <input
+                                          type="checkbox"
+                                          checked={task.done}
+                                          disabled={!activity.canEdit || isSaving}
+                                          onChange={() => void toggleTask(activity, task.id)}
+                                        />
+                                        <span className={task.done ? "is-done" : undefined}>{task.text}</span>
+                                      </label>
+                                    </li>
+                                  ))}
+                                </ul>
                               ) : null}
                             </div>
                           </div>
-                          <div className="activities-page__entry-actions">
-                            {activity.plannerUrl ? (
-                              <a
-                                href={activity.plannerUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Abrir no Planner"
-                                className="activities-page__planner-link"
-                              >
-                                <i className="fa-brands fa-microsoft" aria-hidden="true" />
-                              </a>
-                            ) : null}
-                            <button
-                              type="button"
-                              aria-label="Editar atividade"
-                              disabled={!activity.canEdit || isSaving}
-                              onClick={() => setEditing(activity)}
-                            >
-                              <i className="fa-solid fa-pen" aria-hidden="true" />
-                            </button>
-                            <button
-                              type="button"
-                              aria-label="Excluir atividade"
-                              disabled={!activity.canEdit || isSaving}
-                              onClick={() => void deleteActivity(activity)}
-                            >
-                              <i className="fa-solid fa-trash-can" aria-hidden="true" />
-                            </button>
-                          </div>
-                        </div>
-
-                        {activity.description ? (
-                          <p className="activities-page__entry-desc">{activity.description}</p>
-                        ) : null}
-
-                        <div className="activities-page__progress">
-                          <div className="activities-page__progress-bar">
-                            <span style={{ width: `${activity.percentComplete}%` }} />
-                          </div>
-                          <strong>{activity.percentComplete}%</strong>
-                        </div>
-
-                        {activity.tasks.length > 0 ? (
-                          <ul className="activities-page__tasks">
-                            {activity.tasks.map((task) => (
-                              <li key={task.id}>
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    checked={task.done}
-                                    disabled={!activity.canEdit || isSaving}
-                                    onChange={() => void toggleTask(activity, task.id)}
-                                  />
-                                  <span className={task.done ? "is-done" : undefined}>{task.text}</span>
-                                </label>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </div>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </article>
+                );
+              })}
+
+              {hasMore ? (
+                <div
+                  ref={loadMoreRef}
+                  className="activities-page__load-more"
+                  aria-live="polite"
+                >
+                  <span className="activities-page__load-more-spinner" aria-hidden="true" />
+                  Carregando mais atividades…
                 </div>
-              </article>
-            ))
+              ) : filtered.length > ACTIVITIES_PAGE_SIZE ? (
+                <p className="activities-page__end-note">
+                  Todas as {filtered.length} atividades foram carregadas.
+                </p>
+              ) : null}
+            </>
           )}
         </section>
 

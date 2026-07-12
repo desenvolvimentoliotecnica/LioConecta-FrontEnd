@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultura de Segurança da Informação no dia a dia</title>
+  <link rel="stylesheet" href="css/course.css">
+</head>
+<body>
+  <div class="uat-banner" id="uat-banner" hidden>Modo UAT — todos os módulos desbloqueados</div>
+
+  <header class="course-header">
+    <div class="course-header__brand">
+      <div class="course-header__logo" aria-hidden="true">SI</div>
+      <div>
+        <h1 class="course-header__title">Cultura de Segurança da Informação no dia a dia</h1>
+        <div class="course-header__meta">
+          SCORM 1.2 · UniLio Demo
+          <span class="scorm-badge" id="scorm-badge">Offline</span>
+        </div>
+      </div>
+    </div>
+    <div class="course-header__student">
+      <span>Participante</span>
+      <strong id="student-name">—</strong>
+    </div>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-wrap__label">
+      <span>Progresso do curso</span>
+      <span id="progress-label">0%</span>
+    </div>
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar__fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="course-layout">
+    <nav class="course-sidebar" aria-label="Módulos do curso">
+      <ul class="sidebar-nav__list" id="sidebar-nav"></ul>
+    </nav>
+
+    <main class="course-main" id="course-main">
+      <article class="module-panel" id="module-panel"></article>
+    </main>
+  </div>
+
+  <script src="js/scorm-api.js?v=20260712c"></script>
+  <script src="js/illustrations.js?v=20260712c"></script>
+  <script src="js/course.js?v=20260712c"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import {
   useAddUniLioModule,
@@ -13,6 +13,7 @@ import {
   useUpdateUniLioModule,
   useUpsertUniLioCourseAssessment,
   useWithdrawUniLioCourse,
+  useUploadUniLioScormPackage,
   type UniLioUpsertAssessmentRequest,
   type UniLioUpsertCourseRequest,
   type UniLioUpsertModuleRequest,
@@ -37,6 +38,13 @@ import {
   defaultQuestionnaireDraft,
   serializeQuestionnaireDraft,
 } from "../../../utils/unilioQuestionnaire";
+import {
+  formatUniLioAttachmentSize,
+} from "../../../utils/unilioAttachments";
+import {
+  UNILIO_SCORM_ACCEPT,
+  UNILIO_SCORM_MAX_BYTES,
+} from "../../../utils/unilioAttachments";
 
 import "../../../styles/unilio-aprovacao.css";
 import "../../../styles/comunicado-hero-image-modal.css";
@@ -44,6 +52,7 @@ import "../../../styles/comunicado-hero-image-modal.css";
 import "../../../styles/unilio-instrutor-page.css";
 
 import "../../../styles/unilio-questions.css";
+import "../../../styles/unilio-scorm.css";
 
 const EMPTY_COURSE: UniLioUpsertCourseRequest = {
   title: "",
@@ -77,12 +86,28 @@ const AUTHORING_STEPS = [
   "Envie para aprovação quando estiver pronto para publicação.",
 ];
 
+const AUTHORING_STEPS_SCORM = [
+  "Defina título, descrição e classificação do curso.",
+
+  "Salve como rascunho para liberar o envio do pacote SCORM.",
+
+  "Faça upload do arquivo .zip SCORM gerado pela sua ferramenta de autoria.",
+
+  "Defina a nota mínima de aprovação (se aplicável).",
+
+  "Envie para aprovação quando estiver pronto para publicação.",
+];
+
 export function UniLioCourseEditPage() {
   const { courseId } = useParams<{ courseId: string }>();
 
   const isNew = courseId === "novo";
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const preferScorm =
+    searchParams.get("tipo")?.toLowerCase() === "scorm" ||
+    searchParams.get("type")?.toLowerCase() === "scorm";
 
   const { data: meta } = useUniLioMeta();
 
@@ -103,12 +128,24 @@ export function UniLioCourseEditPage() {
   const deleteModule = useDeleteUniLioModule(courseId ?? "");
   const upsertAssessment = useUpsertUniLioCourseAssessment(courseId ?? "");
   const deleteAssessment = useDeleteUniLioCourseAssessment(courseId ?? "");
+  const uploadScorm = useUploadUniLioScormPackage(courseId ?? "");
 
-  const [form, setForm] = useState<UniLioUpsertCourseRequest>(EMPTY_COURSE);
+  const [form, setForm] = useState<UniLioUpsertCourseRequest>(() =>
+    preferScorm ? { ...EMPTY_COURSE, contentType: "scorm" } : EMPTY_COURSE,
+  );
   const [initialized, setInitialized] = useState(isNew);
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [assessmentModalOpen, setAssessmentModalOpen] = useState(false);
   const [newModuleType, setNewModuleType] = useState("article");
+  const [scormPassingScore, setScormPassingScore] = useState<number>(70);
+  const [scormUploadStatus, setScormUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
+  const [scormUploadError, setScormUploadError] = useState<string | null>(null);
+  const scormFileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isNew || !preferScorm) return;
+    setForm((f) => (f.contentType === "scorm" ? f : { ...f, contentType: "scorm" }));
+  }, [isNew, preferScorm]);
 
   const areaOptions = useMemo(() => {
     const values = new Set(meta.areas);
@@ -126,16 +163,15 @@ export function UniLioCourseEditPage() {
     return Array.from(values);
   }, [form.department, meta.departments]);
 
-  const contentTypeOptions = useMemo(
-    () =>
-      meta.contentTypes.map((type) => ({
-        value: type,
-
-        label: CONTENT_TYPE_LABELS[type as UniLioContentType] ?? type,
-      })),
-
-    [meta.contentTypes],
-  );
+  const contentTypeOptions = useMemo(() => {
+    const types = meta.contentTypes.includes("scorm")
+      ? meta.contentTypes
+      : [...meta.contentTypes, "scorm"];
+    return types.map((type) => ({
+      value: type,
+      label: CONTENT_TYPE_LABELS[type as UniLioContentType] ?? type,
+    }));
+  }, [meta.contentTypes]);
 
   const moduleTypeOptions = MODULE_CONTENT_TYPE_OPTIONS;
 
@@ -167,7 +203,13 @@ export function UniLioCourseEditPage() {
         visibilityJson: existing.visibilityJson,
 
         tags: existing.tags,
+
+        scormPassingScore: existing.scormPassingScore ?? null,
       });
+
+      if (existing.scormPassingScore != null) {
+        setScormPassingScore(existing.scormPassingScore);
+      }
 
       setInitialized(true);
     }
@@ -182,8 +224,9 @@ export function UniLioCourseEditPage() {
   }
 
   async function handleSave() {
+    const payload = { ...form, scormPassingScore };
     if (isNew) {
-      const created = await createCourse.mutateAsync(form);
+      const created = await createCourse.mutateAsync(payload);
 
       navigate(
         `/unilio/instrutor/curso/${String((created as { id: string }).id)}/editar`,
@@ -193,7 +236,7 @@ export function UniLioCourseEditPage() {
       return;
     }
 
-    await updateCourse.mutateAsync(form);
+    await updateCourse.mutateAsync(payload);
   }
 
   async function handleSubmit() {
@@ -275,12 +318,31 @@ export function UniLioCourseEditPage() {
     ? parseAssessmentQuestionsJson(existing.assessment.questionsJson).length
     : 0;
 
+  const isScorm = form.contentType === "scorm" || (!isNew && existing?.contentType === "scorm");
+
   const canEdit =
     isNew || existing?.status === "draft" || existing?.status === "rejected";
 
   const isPendingApproval = existing?.status === "pending_approval";
 
   const isSaving = createCourse.isPending || updateCourse.isPending;
+
+  async function handleScormFileChange(file: File) {
+    if (file.size > UNILIO_SCORM_MAX_BYTES) {
+      setScormUploadStatus("error");
+      setScormUploadError(`Arquivo muito grande. Máximo: ${formatUniLioAttachmentSize(UNILIO_SCORM_MAX_BYTES)}`);
+      return;
+    }
+    setScormUploadStatus("uploading");
+    setScormUploadError(null);
+    try {
+      await uploadScorm.mutateAsync({ file, passingScore: scormPassingScore });
+      setScormUploadStatus("success");
+    } catch {
+      setScormUploadStatus("error");
+      setScormUploadError("Falha ao enviar o pacote SCORM. Verifique o arquivo e tente novamente.");
+    }
+  }
 
   async function handleWithdraw() {
     if (!courseId || isNew) return;
@@ -299,12 +361,18 @@ export function UniLioCourseEditPage() {
         <div className="unilio-authoring-page-head__title-row">
           <div>
             <h1 className="unilio-page__title">
-              {isNew ? "Novo curso" : "Editar curso"}
+              {isNew
+                ? isScorm
+                  ? "Novo curso SCORM"
+                  : "Novo curso"
+                : "Editar curso"}
             </h1>
 
             <p className="unilio-page__desc">
               {isNew
-                ? "Cadastre as informações iniciais do curso. Depois de salvar, você poderá adicionar módulos e enviar para aprovação."
+                ? isScorm
+                  ? "Informe os metadados, salve o rascunho e faça o upload do pacote .zip SCORM 1.2 para enviar à aprovação."
+                  : "Cadastre as informações iniciais do curso. Depois de salvar, você poderá adicionar módulos e enviar para aprovação."
                 : "Atualize metadados, módulos e envie novamente quando o conteúdo estiver pronto."}
             </p>
           </div>
@@ -619,14 +687,114 @@ export function UniLioCourseEditPage() {
               <h2>Como funciona</h2>
 
               <ol className="unilio-authoring-steps">
-                {AUTHORING_STEPS.map((step) => (
+                {(isScorm ? AUTHORING_STEPS_SCORM : AUTHORING_STEPS).map((step) => (
                   <li key={step}>{step}</li>
                 ))}
               </ol>
             </section>
           ) : null}
 
-          {!isNew && existing ? (
+          {!isNew && existing && isScorm ? (
+            <section className="unilio-authoring-aside__card">
+              <div className="unilio-authoring-modules__head">
+                <div>
+                  <h2>Pacote SCORM</h2>
+                  <p>Envie o arquivo .zip gerado pela sua ferramenta de autoria.</p>
+                </div>
+              </div>
+
+              <div className="unilio-scorm-panel">
+                <label className="unilio-authoring-field">
+                  <span className="unilio-authoring-field__label">Nota mínima de aprovação (%)</span>
+                  <input
+                    className="unilio-authoring-field__control"
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={scormPassingScore}
+                    disabled={!canEdit}
+                    onChange={(e) => {
+                      const v = Number(e.target.value);
+                      setScormPassingScore(v);
+                      setForm((f) => ({ ...f, scormPassingScore: v }));
+                    }}
+                  />
+                </label>
+
+                {existing.scormPackage ? (
+                  <div className="unilio-scorm-panel__package">
+                    <i className="fa-solid fa-file-zipper unilio-scorm-panel__package-icon" aria-hidden="true" />
+                    <div className="unilio-scorm-panel__package-meta">
+                      <div className="unilio-scorm-panel__package-name">
+                        {existing.scormPackage.originalFileName}
+                      </div>
+                      <div className="unilio-scorm-panel__package-detail">
+                        {existing.scormPackage.manifestTitle} · {existing.scormPackage.scoCount} SCO{existing.scormPackage.scoCount !== 1 ? "s" : ""} · {formatUniLioAttachmentSize(existing.scormPackage.sizeBytes)}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {canEdit ? (
+                  <>
+                    <input
+                      ref={scormFileInputRef}
+                      type="file"
+                      accept={UNILIO_SCORM_ACCEPT}
+                      className="sr-only"
+                      aria-label="Selecionar pacote SCORM"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          void handleScormFileChange(file);
+                        }
+                        e.target.value = "";
+                      }}
+                    />
+
+                    <button
+                      type="button"
+                      className="unilio-scorm-dropzone"
+                      onClick={() => scormFileInputRef.current?.click()}
+                      disabled={uploadScorm.isPending}
+                    >
+                      <i className="fa-solid fa-cloud-arrow-up unilio-scorm-dropzone__icon" aria-hidden="true" />
+                      <span className="unilio-scorm-dropzone__label">
+                        {existing.scormPackage ? "Substituir pacote SCORM" : "Selecionar arquivo .zip"}
+                      </span>
+                      <span className="unilio-scorm-dropzone__hint">
+                        Máximo {formatUniLioAttachmentSize(UNILIO_SCORM_MAX_BYTES)}
+                      </span>
+                    </button>
+                  </>
+                ) : null}
+
+                {scormUploadStatus === "uploading" ? (
+                  <div className="unilio-scorm-upload-status unilio-scorm-upload-status--uploading">
+                    <i className="fa-solid fa-spinner fa-spin" aria-hidden="true" />
+                    Enviando pacote SCORM…
+                  </div>
+                ) : null}
+
+                {scormUploadStatus === "success" ? (
+                  <div className="unilio-scorm-upload-status unilio-scorm-upload-status--success">
+                    <i className="fa-solid fa-circle-check" aria-hidden="true" />
+                    Pacote SCORM enviado com sucesso.
+                  </div>
+                ) : null}
+
+                {scormUploadStatus === "error" && scormUploadError ? (
+                  <div className="unilio-scorm-upload-status unilio-scorm-upload-status--error">
+                    <i className="fa-solid fa-circle-xmark" aria-hidden="true" />
+                    {scormUploadError}
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+
+          {!isNew && existing && !isScorm ? (
             <section className="unilio-authoring-aside__card unilio-authoring-modules">
               <div className="unilio-authoring-modules__head">
                 <div>
@@ -705,7 +873,7 @@ export function UniLioCourseEditPage() {
             </section>
           ) : null}
 
-          {!isNew && existing ? (
+          {!isNew && existing && !isScorm ? (
             <section className="unilio-authoring-aside__card unilio-authoring-assessment">
               <div className="unilio-authoring-modules__head">
                 <div>

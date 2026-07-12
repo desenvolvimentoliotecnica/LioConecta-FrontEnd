@@ -18,8 +18,10 @@ import { UniLioCourseRecommendationsModal } from "./UniLioCourseRecommendationsM
 import { UniLioCourseFeedbackModal } from "./UniLioCourseFeedbackModal";
 import { UniLioModuleQuestionModal } from "./UniLioModuleQuestionModal";
 import { UniLioModuleQuestionsDrawer } from "./UniLioModuleQuestionsDrawer";
+import { UniLioScormPlayer } from "./scorm/UniLioScormPlayer";
 import "../../styles/unilio-player.css";
 import "../../styles/unilio-questions.css";
+import "../../styles/unilio-scorm.css";
 
 type Props = {
   course: UniLioCourseDetail;
@@ -50,6 +52,10 @@ function resolveModuleMedia(module: UniLioModule, course: UniLioCourseDetail) {
 
   if (type === "article" || type === "quiz") {
     return { kind: "empty" as const };
+  }
+
+  if (type === "scorm" || course.contentType === "scorm") {
+    return { kind: "scorm" as const };
   }
 
   const rawUrl =
@@ -109,6 +115,11 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
     [activeModule, course],
   );
 
+  const isScormCourse =
+    course.contentType === "scorm" ||
+    orderedModules.some((m) => m.contentType === "scorm") ||
+    media?.kind === "scorm";
+
   const quizPayload = useMemo(
     () =>
       activeModule?.contentType === "quiz"
@@ -118,6 +129,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
   );
 
   const [quizPassed, setQuizPassed] = useState(false);
+  const [scormCompletable, setScormCompletable] = useState(false);
   const [showCourseFeedback, setShowCourseFeedback] = useState(false);
   const [showCourseRecommendations, setShowCourseRecommendations] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
@@ -135,6 +147,7 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
 
   useEffect(() => {
     setQuizPassed(false);
+    setScormCompletable(false);
     setQuestionsDrawerOpen(false);
     contentRef.current?.scrollTo({ top: 0 });
   }, [activeModuleId]);
@@ -190,6 +203,87 @@ export function UniLioPlayer({ course, isFallback = false }: Props) {
 
     void completeModule(module);
   };
+
+  if (isScormCourse) {
+    const scormModule = activeModule ?? orderedModules[0] ?? null;
+    const scormDone = Boolean(scormModule?.isCompleted) || scormCompletable;
+
+    return (
+      <div className="unilio-player-focus unilio-player-focus--scorm">
+        <header className="unilio-player-focus__topbar">
+          <div className="unilio-player-focus__topbar-start">
+            <Link to="/unilio/catalogo" className="unilio-player-focus__back" title="Voltar ao catálogo">
+              <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+              <span>Catálogo</span>
+            </Link>
+            <div className="unilio-player-focus__course-meta">
+              <h1 className="unilio-player-focus__title">{course.title}</h1>
+              <p className="unilio-player-focus__subtitle">Pacote SCORM 1.2</p>
+            </div>
+          </div>
+          <div className="unilio-player-focus__topbar-end">
+            <div className="unilio-player-focus__progress-chip" aria-label={`Progresso: ${course.progressPct}%`}>
+              <span>{scormDone ? "SCORM concluído" : "Em andamento"}</span>
+              <strong>{course.progressPct}%</strong>
+            </div>
+          </div>
+        </header>
+
+        <div className="unilio-player unilio-player--scorm">
+          <section className="unilio-player__content unilio-player__content--scorm" aria-label="Conteúdo SCORM">
+            <div className="unilio-player__scorm-stage">
+              <UniLioScormPlayer
+                courseId={course.id}
+                onCompletable={() => setScormCompletable(true)}
+              />
+            </div>
+            <footer className="unilio-player__content-foot unilio-player__content-foot--scorm">
+              <div className="unilio-player__foot-actions">
+                {scormModule && !scormModule.isCompleted ? (
+                  <button
+                    type="button"
+                    className="unilio-player__complete-btn"
+                    disabled={completeMutation.isPending || !scormCompletable}
+                    onClick={() => requestModuleCompletion(scormModule)}
+                  >
+                    {completeMutation.isPending
+                      ? "Salvando…"
+                      : !scormCompletable
+                        ? "Conclua o pacote SCORM para finalizar"
+                        : (
+                          <>
+                            Finalizar curso
+                            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                          </>
+                        )}
+                  </button>
+                ) : scormModule?.isCompleted ? (
+                  <p className="unilio-player__done-msg">
+                    <i className="fa-solid fa-circle-check" aria-hidden="true" /> Curso SCORM concluído
+                  </p>
+                ) : null}
+              </div>
+            </footer>
+          </section>
+        </div>
+
+        <UniLioCourseFeedbackModal
+          open={showCourseFeedback}
+          courseTitle={course.title}
+          busy={completeMutation.isPending}
+          onSubmit={(payload) => void handleCourseFeedbackSubmit(payload)}
+        />
+
+        <UniLioCourseRecommendationsModal
+          open={showCourseRecommendations}
+          completedCourseTitle={course.title}
+          items={courseRecommendations.items}
+          isLoading={recommendationsLoading}
+          onGoToCatalog={() => setShowCourseRecommendations(false)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="unilio-player-focus">

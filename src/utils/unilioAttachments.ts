@@ -18,3 +18,7 @@ export const UNILIO_MODULE_ATTACHMENT_ACCEPT =
   ".pdf,.zip,.rar,.7z,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv";
 
 export const UNILIO_MODULE_ATTACHMENT_MAX_BYTES = 26_214_400;
+
+export const UNILIO_SCORM_ACCEPT = ".zip,application/zip";
+
+export const UNILIO_SCORM_MAX_BYTES = 209_715_200;

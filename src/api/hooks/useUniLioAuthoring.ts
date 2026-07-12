@@ -46,6 +46,18 @@ export type UniLioAuthoringAssessment = {
   questionsJson: string;
 };
 
+export type UniLioScormPackageInfo = {
+  id: string;
+  moduleId: string;
+  version: string;
+  manifestTitle: string;
+  launchUrl: string;
+  scoCount: number;
+  originalFileName: string;
+  sizeBytes: number;
+  uploadedAt: string;
+};
+
 export type UniLioAuthoringCourse = {
   id: string;
   seedKey: string;
@@ -67,6 +79,8 @@ export type UniLioAuthoringCourse = {
   publishedAt?: string | null;
   submittedAt?: string | null;
   rejectionReason?: string | null;
+  scormPassingScore?: number | null;
+  scormPackage?: UniLioScormPackageInfo | null;
   modules: UniLioAuthoringModule[];
   assessment?: UniLioAuthoringAssessment | null;
 };
@@ -85,6 +99,7 @@ export type UniLioUpsertCourseRequest = {
   provider?: string | null;
   visibilityJson?: string | null;
   tags?: string[];
+  scormPassingScore?: number | null;
 };
 
 export type UniLioUpsertModuleRequest = {
@@ -169,6 +184,20 @@ function mapAssessment(raw: Record<string, unknown>): UniLioAuthoringAssessment 
   };
 }
 
+function mapScormPackage(raw: Record<string, unknown>): UniLioScormPackageInfo {
+  return {
+    id: String(raw.id ?? raw.Id ?? ""),
+    moduleId: String(raw.moduleId ?? raw.ModuleId ?? ""),
+    version: String(raw.version ?? raw.Version ?? "1.2"),
+    manifestTitle: String(raw.manifestTitle ?? raw.ManifestTitle ?? ""),
+    launchUrl: String(raw.launchUrl ?? raw.LaunchUrl ?? ""),
+    scoCount: Number(raw.scoCount ?? raw.ScoCount ?? 1),
+    originalFileName: String(raw.originalFileName ?? raw.OriginalFileName ?? ""),
+    sizeBytes: Number(raw.sizeBytes ?? raw.SizeBytes ?? 0),
+    uploadedAt: String(raw.uploadedAt ?? raw.UploadedAt ?? ""),
+  };
+}
+
 function mapCourse(raw: Record<string, unknown>): UniLioAuthoringCourse {
   return {
     id: String(raw.id),
@@ -191,6 +220,10 @@ function mapCourse(raw: Record<string, unknown>): UniLioAuthoringCourse {
     publishedAt: raw.publishedAt ? String(raw.publishedAt) : null,
     submittedAt: raw.submittedAt ? String(raw.submittedAt) : null,
     rejectionReason: raw.rejectionReason ? String(raw.rejectionReason) : null,
+    scormPassingScore: raw.scormPassingScore != null ? Number(raw.scormPassingScore) : null,
+    scormPackage: raw.scormPackage
+      ? mapScormPackage(raw.scormPackage as Record<string, unknown>)
+      : null,
     modules: Array.isArray(raw.modules)
       ? raw.modules.map((m) => mapModule(m as Record<string, unknown>))
       : [],
@@ -416,6 +449,24 @@ export function useDeleteUniLioCourseAssessment(courseId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.delete(`/unilio/authoring/courses/${courseId}/assessment`),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
+  });
+}
+
+export function useUploadUniLioScormPackage(courseId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ file, passingScore }: { file: File; passingScore?: number }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      if (passingScore != null) {
+        formData.append("passingScore", String(passingScore));
+      }
+      return api.upload<Record<string, unknown>>(
+        `/unilio/authoring/courses/${courseId}/scorm-package`,
+        formData,
+      );
+    },
     onSuccess: () => void qc.invalidateQueries({ queryKey: [...AUTHORING_KEY, "course", courseId] }),
   });
 }

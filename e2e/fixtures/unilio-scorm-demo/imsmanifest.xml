@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="unilio-scorm-demo-seginfo" version="1.0"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+                      http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="ORG-UNILIO-SEGINFO">
+    <organization identifier="ORG-UNILIO-SEGINFO">
+      <title>Cultura de Segurança da Informação no dia a dia</title>
+      <item identifier="ITEM-SCO-1" identifierref="RES-SCO-1">
+        <title>Cultura de Segurança da Informação no dia a dia</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-SCO-1" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="css/course.css"/>
+      <file href="js/scorm-api.js"/>
+      <file href="js/illustrations.js"/>
+      <file href="js/course.js"/>
+      <file href="assets/hero.svg"/>
+      <file href="assets/objectives.svg"/>
+      <file href="assets/importance.svg"/>
+      <file href="assets/passwords.svg"/>
+      <file href="assets/phishing.svg"/>
+      <file href="assets/remote-work.svg"/>
+      <file href="assets/lgpd.svg"/>
+      <file href="assets/incidents.svg"/>
+      <file href="assets/video-summary.svg"/>
+      <file href="assets/reflection.svg"/>
+      <file href="assets/quiz.svg"/>
+    </resource>
+  </resources>
+</manifest>
