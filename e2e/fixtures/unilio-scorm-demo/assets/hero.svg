@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Boas-vindas">
+  <defs>
+    <linearGradient id="hero-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ccfbf1"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="20" fill="url(#hero-bg)"/>
+  <path d="M100 35 L155 62 V105 C155 138 100 165 100 165 C100 165 45 138 45 105 V62 Z" fill="#0f766e" opacity="0.15"/>
+  <path d="M100 42 L148 66 V104 C148 133 100 158 100 158 C100 158 52 133 52 104 V66 Z" fill="#0f766e"/>
+  <path d="M100 58 L88 72 L76 68 L82 84 L70 94 L88 92 L100 106 L112 92 L130 94 L118 84 L124 68 L112 72 Z" fill="#fff" opacity="0.9"/>
+  <circle cx="100" cy="78" r="12" fill="none" stroke="#fff" stroke-width="3"/>
+  <rect x="94" y="88" width="12" height="18" rx="3" fill="#fff" opacity="0.85"/>
+</svg>

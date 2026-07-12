@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "id": "a29c64f8-b3dc-4835-8514-c15f462a4eea",
+      "courseId": "b7f0ff9f-de75-4492-8a9a-1c6ec1c347d3",
+      "courseTitle": "UAT SCORM Segurança 1783862350870",
+      "certificateCode": "UNILIO-2026-35CA6D2B",
+      "issuedAt": "2026-07-12T13:19:20.10104+00:00",
+      "area": "TI"
+    },
+    {
+      "id": "8280f3ae-f0ea-4935-bb8d-1524a7711adb",
+      "courseId": "22222222-2222-2222-2222-222222220018",
+      "courseTitle": "Segurança da Informação para Colaboradores",
+      "certificateCode": "UNILIO-2026-01CE90C8",
+      "issuedAt": "2026-07-09T15:33:49.429845+00:00",
+      "area": "Compliance"
+    },
+    {
+      "id": "5c8d58e5-790e-451f-90ac-032e63679f28",
+      "courseId": "22222222-2222-2222-2222-222222220012",
+      "courseTitle": "LGPD: Entendimentos Básicos e Cuidados Necessários",
+      "certificateCode": "UNILIO-2026-0F93ED20",
+      "issuedAt": "2026-07-09T15:29:14.2635+00:00",
+      "area": "Compliance"
+    },
+    {
+      "id": "9df0f6c4-bd62-4d43-b180-3bec252b2b12",
+      "courseId": "22222222-2222-2222-2222-22222222000b",
+      "courseTitle": "NR-35 Trabalho em Altura — Treinamento Completo",
+      "certificateCode": "UNILIO-2026-959CC6F9",
+      "issuedAt": "2026-07-09T15:22:34.394243+00:00",
+      "area": "Compliance"
+    },
+    {
+      "id": "55555555-5555-5555-5555-000000999999",
+      "courseId": "22222222-2222-2222-2222-222222220005",
+      "courseTitle": "Introdução ao Sistema APPCC (HACCP)",
+      "certificateCode": "UNILIO-APPCC-2026-MARIA",
+      "issuedAt": "2026-06-10T19:30:00+00:00",
+      "area": "Qualidade"
+    }
+  ]
+}

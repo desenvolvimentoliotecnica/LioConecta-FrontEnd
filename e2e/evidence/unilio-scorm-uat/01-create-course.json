@@ -1,0 +1,30 @@
+{
+  "id": "b7f0ff9f-de75-4492-8a9a-1c6ec1c347d3",
+  "seedKey": "uat-scorm-segurana-1783862350870",
+  "title": "UAT SCORM Segurança 1783862350870",
+  "description": "Curso SCORM de UAT — Cultura de Segurança da Informação.",
+  "contentType": "scorm",
+  "durationMinutes": 45,
+  "isMandatory": false,
+  "area": "TI",
+  "department": "Geral",
+  "instructorName": "UAT UniLio",
+  "instructorPersonId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+  "thumbnailUrl": null,
+  "externalUrl": null,
+  "provider": "Fixture UniLio",
+  "status": "draft",
+  "visibilityJson": null,
+  "tags": [
+    "scorm",
+    "uat",
+    "seguranca"
+  ],
+  "publishedAt": null,
+  "submittedAt": null,
+  "rejectionReason": null,
+  "modules": [],
+  "assessment": null,
+  "scormPassingScore": 70,
+  "scormPackage": null
+}

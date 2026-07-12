@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Trabalho remoto">
+  <rect width="200" height="200" rx="20" fill="#f1f5f9"/>
+  <rect x="40" y="50" width="120" height="80" rx="6" fill="#334155"/>
+  <rect x="48" y="58" width="104" height="64" rx="3" fill="#e2e8f0"/>
+  <rect x="70" y="130" width="60" height="8" rx="3" fill="#64748b"/>
+  <rect x="60" y="138" width="80" height="6" rx="2" fill="#94a3b8"/>
+  <circle cx="155" cy="70" r="25" fill="#0f766e" opacity="0.15"/>
+  <path d="M145 70 C145 58 165 58 165 70 C165 82 155 88 155 95" fill="none" stroke="#0f766e" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="155" cy="52" r="4" fill="#0f766e"/>
+  <rect x="30" y="155" width="30" height="20" rx="4" fill="#14b8a6" opacity="0.4"/>
+  <text x="45" y="169" text-anchor="middle" font-size="8" fill="#0f766e">VPN</text>
+</svg>

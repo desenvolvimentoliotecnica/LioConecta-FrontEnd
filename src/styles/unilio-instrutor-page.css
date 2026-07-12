@@ -1,3 +1,20 @@
+.unilio-instrutor-page__actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.unilio-instrutor-page__scorm-btn {
+  border-color: #0f766e;
+  color: #0f766e;
+}
+
+.unilio-instrutor-page__scorm-btn:hover {
+  background: #f0fdfa;
+}
+
 .unilio-instrutor-courses {
   display: flex;
   flex-direction: column;

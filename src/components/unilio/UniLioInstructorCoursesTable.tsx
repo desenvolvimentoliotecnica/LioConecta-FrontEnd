@@ -134,7 +134,7 @@ function CourseActions({
     return (
       <div className="unilio-instrutor-table__actions">
         <TableIconAction
-          label="Editar curso"
+          label="Editar (reverter para rascunho)"
           icon="fa-pen"
           disabled={withdrawBusy}
           onClick={() => onEditPending(course.id)}

@@ -1,0 +1,17 @@
+{
+  "courseId": "b7f0ff9f-de75-4492-8a9a-1c6ec1c347d3",
+  "moduleId": "beac0c60-d1f8-494d-a1da-18c05b3c4a2d",
+  "packageId": "cb1f9f74-d53f-4445-a24f-bae3c25fb8e0",
+  "launchUrl": "/unilio/scorm/cb1f9f74d53f4445a24fbae3c25fb8e0/index.html",
+  "lessonStatus": "not attempted",
+  "scoreRaw": null,
+  "scoreMin": 0,
+  "scoreMax": 100,
+  "sessionTime": null,
+  "lessonLocation": null,
+  "suspendData": null,
+  "studentId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbb103",
+  "studentName": "Leonardo Sabino Mendes",
+  "passingScore": 70,
+  "courseCompletable": false
+}

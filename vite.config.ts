@@ -23,6 +23,15 @@ const apiProxy = {
     target: "http://localhost:5148",
     changeOrigin: true,
   },
+  // Only static package/attachment files from API — not SPA routes like /unilio/instrutor
+  "/unilio/scorm": {
+    target: "http://localhost:5148",
+    changeOrigin: true,
+  },
+  "/unilio/modules": {
+    target: "http://localhost:5148",
+    changeOrigin: true,
+  },
 } as const;
 
 export default defineConfig({
