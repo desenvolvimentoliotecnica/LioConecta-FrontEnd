@@ -130,6 +130,7 @@ const RIGHT_ITEMS: SidebarItemConfig[] = [
     permission: PERMISSIONS.admin.settingsManage,
   },
   { label: "Ajuda", icon: "fa-circle-question", href: "/ajuda" },
+  { label: "Busca", icon: "fa-magnifying-glass", href: "/busca" },
   { label: "Mapa do site", icon: "fa-sitemap", href: "/mapa-do-site" },
   { label: "Favoritos", icon: "fa-star", href: "/favoritos" },
   { label: "Bookmarks", icon: "fa-bookmark", href: "/bookmarks" },

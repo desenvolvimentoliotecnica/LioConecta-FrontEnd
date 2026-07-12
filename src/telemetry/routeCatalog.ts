@@ -40,6 +40,7 @@ const ROUTE_DEFINITIONS: RouteDefinition[] = [
   exact("/admin/governanca/organograma", { pageName: "OrganogramGovernance", module: "admin" }),
   exact("/minhas-atividades", { pageName: "Activities", module: "home" }),
   exact("/ajuda", { pageName: "Help", module: "home" }),
+  exact("/busca", { pageName: "GlobalSearch", module: "home" }),
   exact("/mapa-do-site", { pageName: "Sitemap", module: "home" }),
   exact("/favoritos", { pageName: "Favorites", module: "home" }),
   exact("/bookmarks", { pageName: "Bookmarks", module: "home" }),

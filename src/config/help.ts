@@ -65,9 +65,9 @@ export const HELP_ARTICLES: HelpArticle[] = [
     category: "inicio",
     question: "Como navegar pelo portal?",
     answer:
-      "O menu superior concentra Feed, Comunicados, Pessoas, Grupos, Documentos e Serviços. Os menus laterais dão acesso rápido a Início, Analytics, Ajuda e atalhos. Use a busca global para encontrar pessoas, grupos e documentos.",
-    href: "/",
-    hrefLabel: "Voltar ao feed",
+      "O menu superior concentra Feed, Comunicados, Pessoas, Grupos, Documentos e Serviços. Os menus laterais dão acesso rápido a Início, Analytics, Ajuda e atalhos. Use a busca global (Ctrl+K) para encontrar pessoas, grupos, comunicados, documentos, sistemas, cursos UniLio, ramais e mais — ou abra /busca para ver todos os resultados e refinar por tipo.",
+    href: "/busca",
+    hrefLabel: "Abrir busca global",
   },
   {
     id: "publicar-feed",

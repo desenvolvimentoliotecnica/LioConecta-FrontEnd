@@ -804,6 +804,94 @@ export interface DocumentDto {
   modifiedAt: string;
 }
 
+/** Tipos de conteúdo suportados por GET /api/v1/search (fases 1–3). */
+export type GlobalSearchContentType =
+  | "people"
+  | "documents"
+  | "comunicados"
+  | "groups"
+  | "pages"
+  | "systems"
+  | "feed"
+  | "unilio"
+  | "ramais"
+  | "knowledge"
+  | "calendar"
+  | "bookmarks";
+
+export interface SearchSystemHitDto {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  category: string;
+}
+
+export interface SearchFeedHitDto {
+  id: string;
+  contentPreview: string;
+  authorName?: string | null;
+  createdAt: string;
+}
+
+export interface SearchUniLioHitDto {
+  id: string;
+  title: string;
+  description?: string | null;
+  instructorName: string;
+  area: string;
+}
+
+export interface SearchRamalHitDto {
+  id: string;
+  name: string;
+  extension: string;
+  department: string;
+  title?: string | null;
+  email?: string | null;
+}
+
+export interface SearchKnowledgeHitDto {
+  id: string;
+  title: string;
+  summary: string;
+  category: string;
+  url: string;
+}
+
+export interface SearchCalendarHitDto {
+  id: string;
+  title: string;
+  location?: string | null;
+  startAt: string;
+  endAt: string;
+}
+
+export interface SearchBookmarkHitDto {
+  id: string;
+  title: string;
+  excerpt: string;
+  href: string;
+  kind: string;
+}
+
+export interface GlobalSearchResultDto {
+  people: PersonSummaryDto[];
+  documents: DocumentDto[];
+  comunicados: ComunicadoListItemDto[];
+  groups: GroupDto[];
+  systems?: SearchSystemHitDto[];
+  feedPosts?: SearchFeedHitDto[];
+  /** ASP.NET camelCase de UniLioCourses */
+  uniLioCourses?: SearchUniLioHitDto[];
+  /** alias defensivo */
+  unilioCourses?: SearchUniLioHitDto[];
+  ramais?: SearchRamalHitDto[];
+  knowledge?: SearchKnowledgeHitDto[];
+  calendarEvents?: SearchCalendarHitDto[];
+  bookmarks?: SearchBookmarkHitDto[];
+}
+
 export interface PayslipSummaryDto {
   latestCompetence: string;
   latestNetAmount: number;

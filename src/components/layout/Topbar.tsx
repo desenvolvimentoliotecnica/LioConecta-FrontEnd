@@ -28,6 +28,7 @@ import { closeOtherMenus } from "./NotificationsMenu";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { UserMenu } from "./UserMenu";
 import { useMenuCloseSync } from "./NotificationsMenu";
+import { GlobalSearch } from "./GlobalSearch";
 
 function MaturityBadge({ path }: { path: string }) {
   const meta = MATURITY_META[getPageMaturity(path)];
@@ -249,21 +250,7 @@ export function Topbar() {
         </nav>
       </div>
 
-      <div className="search">
-        <label className="search__field">
-          <span className="search__icon" aria-hidden="true">
-            <i className="fa-solid fa-magnifying-glass" />
-          </span>
-          <input
-            type="search"
-            className="search__input"
-            placeholder="Buscar pessoas, grupos, documentos..."
-            aria-label="Buscar pessoas, grupos, documentos e mais"
-            autoComplete="off"
-            spellCheck={false}
-          />
-        </label>
-      </div>
+      <GlobalSearch />
 
       <div className="topbar__actions">
         <NotificationsMenu />

@@ -43,6 +43,7 @@ import { FavoritesPage } from "./components/pages/FavoritesPage";
 import { ShortcutsPage } from "./components/pages/ShortcutsPage";
 import { HelpPage } from "./components/pages/HelpPage";
 import { SitemapPage } from "./components/pages/SitemapPage";
+import { GlobalSearchPage } from "./components/pages/GlobalSearchPage";
 import { AnalyticsPage } from "./components/pages/AnalyticsPage";
 import { BackendConfigPage } from "./components/pages/BackendConfigPage";
 import { AuditTrailPage } from "./components/pages/AuditTrailPage";
@@ -267,6 +268,7 @@ function App() {
         <Route path="/admin/governanca/organograma" element={<OrganogramGovernancePage />} />
         <Route path="/minhas-atividades" element={<ActivitiesPage />} />
         <Route path="/ajuda" element={<HelpPage />} />
+        <Route path="/busca" element={<GlobalSearchPage />} />
         <Route path="/mapa-do-site" element={<SitemapPage />} />
         <Route path="/favoritos" element={<FavoritesPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
