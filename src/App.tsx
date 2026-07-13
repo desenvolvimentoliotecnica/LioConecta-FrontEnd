@@ -71,6 +71,8 @@ import {
 import { NotificationsPage } from "./components/pages/NotificationsPage";
 import { KioskFeedPage } from "./components/pages/KioskFeedPage";
 import { LegacyPage, LegacyPageById } from "./components/pages/LegacyPage";
+import { FinanceiroLegacyGate } from "./components/auth/FinanceiroLegacyGate";
+import { PERMISSIONS } from "./config/rbac/permissions";
 import { pageRegistry } from "./config/routes";
 import { LoopAccessGate } from "./components/loop/LoopAccessGate";
 import { LoopShell } from "./components/loop/LoopShell";
@@ -306,6 +308,42 @@ function App() {
         <Route path="/servicos/ponto-eletronico/gestao" element={<PontoGestaoPage />} />
         <Route path="/servicos/movimentacoes" element={<MovimentacoesPage />} />
         <Route path="/servicos/solicitacoes-rh" element={<SolicitacoesRhPage />} />
+        <Route
+          path="/servicos/vale-transporte"
+          element={
+            <FinanceiroLegacyGate
+              moduleName="Vale-transporte"
+              permissionHint={PERMISSIONS.transport.read}
+              permissions={[PERMISSIONS.transport.read, PERMISSIONS.transport.manage]}
+            >
+              <LegacyPage />
+            </FinanceiroLegacyGate>
+          }
+        />
+        <Route
+          path="/servicos/reembolso-despesas"
+          element={
+            <FinanceiroLegacyGate
+              moduleName="Reembolso de despesas"
+              permissionHint={PERMISSIONS.reimbursement.read}
+              permissions={[PERMISSIONS.reimbursement.read, PERMISSIONS.reimbursement.manage]}
+            >
+              <LegacyPage />
+            </FinanceiroLegacyGate>
+          }
+        />
+        <Route
+          path="/servicos/adiantamento-viagem"
+          element={
+            <FinanceiroLegacyGate
+              moduleName="Adiantamento de viagem"
+              permissionHint={PERMISSIONS.travelAdvance.read}
+              permissions={[PERMISSIONS.travelAdvance.read, PERMISSIONS.travelAdvance.manage]}
+            >
+              <LegacyPage />
+            </FinanceiroLegacyGate>
+          }
+        />
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/cardapio" element={<CardapioPage />} />
         <Route path="/servicos/clima" element={<MoodAnalyticsPage />} />
@@ -334,6 +372,9 @@ function App() {
             page.id === "servicos-ferias" ||
             page.id === "servicos-ponto" ||
             page.id === "servicos-solicitacoes-rh" ||
+            page.id === "servicos-vale-transporte" ||
+            page.id === "servicos-reembolso" ||
+            page.id === "servicos-adiantamento" ||
             page.id === "servicos-help-desk" ||
             page.id === "servicos-acesso-sistemas"
           ) {

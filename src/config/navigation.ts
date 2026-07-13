@@ -1,3 +1,5 @@
+import { PERMISSIONS } from "./rbac/permissions";
+
 export type NavLinkItem = {
   label: string;
   path: string;
@@ -5,6 +7,8 @@ export type NavLinkItem = {
   leaveManageOnly?: boolean;
   pontoManageOnly?: boolean;
   payslipsAuditOnly?: boolean;
+  /** Single key or OR-list — hide unless the user has at least one. */
+  permission?: string | readonly string[];
 };
 
 export type NavDropdown = {
@@ -63,9 +67,21 @@ export const servicosLinks: NavLinkItem[] = [
   { label: "Ponto eletrônico", path: "/servicos/ponto-eletronico" },
   { label: "Gestão de ponto", path: "/servicos/ponto-eletronico/gestao", pontoManageOnly: true },
   { label: "Movimentações", path: "/servicos/movimentacoes" },
-  { label: "Vale-transporte", path: "/servicos/vale-transporte" },
-  { label: "Reembolso de despesas", path: "/servicos/reembolso-despesas" },
-  { label: "Adiantamento de viagem", path: "/servicos/adiantamento-viagem" },
+  {
+    label: "Vale-transporte",
+    path: "/servicos/vale-transporte",
+    permission: [PERMISSIONS.transport.read, PERMISSIONS.transport.manage],
+  },
+  {
+    label: "Reembolso de despesas",
+    path: "/servicos/reembolso-despesas",
+    permission: [PERMISSIONS.reimbursement.read, PERMISSIONS.reimbursement.manage],
+  },
+  {
+    label: "Adiantamento de viagem",
+    path: "/servicos/adiantamento-viagem",
+    permission: [PERMISSIONS.travelAdvance.read, PERMISSIONS.travelAdvance.manage],
+  },
 ];
 
 export const tiLinks: NavLinkItem[] = [

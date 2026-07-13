@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useMe } from "../../api/hooks/useMe";
 import { RH_RECENT, RH_HUB_PATH, filterRhSections } from "../../config/rh-hub";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/documents-hub-page.css";
 
 export function RhHubPage() {
   const [query, setQuery] = useState("");
-  const sections = useMemo(() => filterRhSections(query), [query]);
+  const meQuery = useMe();
+  const sections = useMemo(
+    () => filterRhSections(query, meQuery.data),
+    [query, meQuery.data],
+  );
 
   return (
     <main className={sectionMainClass("rh")}>

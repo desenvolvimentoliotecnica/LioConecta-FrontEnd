@@ -32,6 +32,18 @@ export const PERMISSIONS = {
   benefits: {
     manage: "benefits.manage",
   },
+  transport: {
+    read: "transport.read",
+    manage: "transport.manage",
+  },
+  reimbursement: {
+    read: "reimbursement.read",
+    manage: "reimbursement.manage",
+  },
+  travelAdvance: {
+    read: "travel_advance.read",
+    manage: "travel_advance.manage",
+  },
   systems: {
     manage: "systems.manage",
   },

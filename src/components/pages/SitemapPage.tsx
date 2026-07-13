@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { canAccessNavPermission } from "../../api/auth";
+import { useMe } from "../../api/hooks/useMe";
 import { usePortalUiSettings } from "../../api/hooks/usePortalUiSettings";
 import { MATURITY_META } from "../../config/page-maturity";
 import type { PageMaturity } from "../../config/page-maturity";
@@ -7,6 +9,7 @@ import {
   SITEMAP_DEFAULT_EXPANDED,
   buildSitemapSections,
   countSitemapEntries,
+  filterSitemapByAccess,
   filterSitemapSections,
   getSectionEntries,
   type SitemapEntry,
@@ -16,7 +19,6 @@ import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import "../../styles/sitemap-page.css";
 
 const ALL_SECTIONS = buildSitemapSections();
-const TOTAL_ENTRIES = countSitemapEntries(ALL_SECTIONS);
 
 function MaturityBadge({ maturity }: { maturity: PageMaturity }) {
   const meta = MATURITY_META[maturity];
@@ -88,15 +90,29 @@ function SectionBody({ section, showBadges }: { section: SitemapSection; showBad
 
 export function SitemapPage() {
   const { data: portalUi } = usePortalUiSettings();
+  const meQuery = useMe();
   const showBadges = portalUi.maturityBadgesEnabled;
   const [query, setQuery] = useState("");
   const [openSections, setOpenSections] = useState<Set<string>>(
     () => new Set(SITEMAP_DEFAULT_EXPANDED),
   );
 
+  const accessibleSections = useMemo(
+    () =>
+      filterSitemapByAccess(ALL_SECTIONS, (permission) =>
+        canAccessNavPermission(meQuery.data, permission),
+      ),
+    [meQuery.data],
+  );
+
+  const totalEntries = useMemo(
+    () => countSitemapEntries(accessibleSections),
+    [accessibleSections],
+  );
+
   const filteredSections = useMemo(
-    () => filterSitemapSections(ALL_SECTIONS, query),
-    [query],
+    () => filterSitemapSections(accessibleSections, query),
+    [accessibleSections, query],
   );
 
   const visibleCount = useMemo(
@@ -210,7 +226,7 @@ export function SitemapPage() {
       )}
 
       <p className="page-empty-note">
-        Exibindo {visibleCount} de {TOTAL_ENTRIES} páginas do portal
+        Exibindo {visibleCount} de {totalEntries} páginas do portal
       </p>
     </main>
   );

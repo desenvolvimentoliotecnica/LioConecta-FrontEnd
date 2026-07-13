@@ -357,6 +357,26 @@
   border-top: 1px dashed var(--wf-border);
 }
 
+.loop-settings__subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0 0;
+  border-top: 1px dashed var(--wf-border);
+}
+
+.loop-settings__subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.loop-settings__row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 12px;
+}
+
 .loop-settings .org-governance__alert {
   margin-top: 16px;
   margin-bottom: 0;
