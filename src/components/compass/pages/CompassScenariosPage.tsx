@@ -168,6 +168,15 @@ function exportRowsCsv(
   URL.revokeObjectURL(url);
 }
 
+const DESC_MAX_LEN = 45;
+
+function truncateDescription(value: string): { display: string; title?: string } {
+  const full = value.trim();
+  if (!full) return { display: "—" };
+  if (full.length <= DESC_MAX_LEN) return { display: full };
+  return { display: `${full.slice(0, DESC_MAX_LEN)}…`, title: full };
+}
+
 function ScenarioSortFilterHeader({
   label,
   column,
@@ -177,6 +186,8 @@ function ScenarioSortFilterHeader({
   filterValue,
   onFilterChange,
   filterPlaceholder,
+  align = "left",
+  autoFit = true,
 }: {
   label: string;
   column: CompassScenarioSortBy;
@@ -186,10 +197,21 @@ function ScenarioSortFilterHeader({
   filterValue?: string;
   onFilterChange?: (value: string) => void;
   filterPlaceholder?: string;
+  align?: "left" | "center" | "right";
+  autoFit?: boolean;
 }) {
   const active = sortBy === column;
+  const className = [
+    "compass-col-head",
+    autoFit ? "compass-col-head--autofit" : "compass-col-head--desc",
+    align === "center" ? "compass-col-head--center" : "",
+    align === "right" ? "compass-col-head--right" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <th className="compass-col-head" aria-sort={active ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
+    <th className={className} aria-sort={active ? (sortDir === "asc" ? "ascending" : "descending") : "none"}>
       <button type="button" className={`compass-col-sort${active ? " is-active" : ""}`} onClick={() => onSort(column)}>
         <span>{label}</span>
         <i
@@ -580,7 +602,7 @@ export function CompassScenariosPage() {
           ) : (
             <>
               <div className="compass-table-wrap">
-                <table className="audit-trail-page__table">
+                <table className="audit-trail-page__table compass-scenarios-table">
                   <thead>
                     <tr>
                       <ScenarioSortFilterHeader
@@ -592,6 +614,7 @@ export function CompassScenariosPage() {
                         filterValue={columnFiltersInput.sku}
                         onFilterChange={(v) => updateColumnFilter("sku", v)}
                         filterPlaceholder="SKU…"
+                        align="center"
                       />
                       <ScenarioSortFilterHeader
                         label="Descrição"
@@ -602,6 +625,7 @@ export function CompassScenariosPage() {
                         filterValue={columnFiltersInput.skuDescription}
                         onFilterChange={(v) => updateColumnFilter("skuDescription", v)}
                         filterPlaceholder="Descrição…"
+                        autoFit={false}
                       />
                       {!isPesoFinanceiro ? (
                         <ScenarioSortFilterHeader
@@ -636,6 +660,7 @@ export function CompassScenariosPage() {
                         filterValue={columnFiltersInput.entity}
                         onFilterChange={(v) => updateColumnFilter("entity", v)}
                         filterPlaceholder="Entity…"
+                        align="center"
                       />
                       <ScenarioSortFilterHeader
                         label="Valor"
@@ -643,26 +668,40 @@ export function CompassScenariosPage() {
                         sortBy={sortBy}
                         sortDir={sortDir}
                         onSort={toggleSort}
+                        align="right"
                       />
                     </tr>
                   </thead>
                   <tbody>
-                    {(rowsPage?.items ?? []).map((row, index) => (
-                      <tr key={`${row.sku}-${row.cliente}-${row.ung}-${index}`}>
-                        <td>{row.sku.replace(/^SKU_/, "")}</td>
-                        <td>{row.skuDescription?.trim() ? row.skuDescription : "—"}</td>
-                        {!isPesoFinanceiro ? (
-                          <td title={row.cliente !== "NA_Cliente" ? row.cliente : undefined}>
-                            {formatCliente(row)}
+                    {(rowsPage?.items ?? []).map((row, index) => {
+                      const desc = truncateDescription(row.skuDescription ?? "");
+                      return (
+                        <tr key={`${row.sku}-${row.cliente}-${row.ung}-${index}`}>
+                          <td className="compass-scenarios-cell--sku">{row.sku.replace(/^SKU_/, "")}</td>
+                          <td className="compass-scenarios-cell--desc" title={desc.title}>
+                            {desc.display}
                           </td>
-                        ) : null}
-                        {!isPesoFinanceiro ? (
-                          <td title={row.ung !== "NA_UNG" ? row.ung : undefined}>{formatUng(row)}</td>
-                        ) : null}
-                        <td>{row.entity}</td>
-                        <td>{formatAmount(row.amount)}</td>
-                      </tr>
-                    ))}
+                          {!isPesoFinanceiro ? (
+                            <td
+                              className="compass-scenarios-cell--autofit"
+                              title={row.cliente !== "NA_Cliente" ? row.cliente : undefined}
+                            >
+                              {formatCliente(row)}
+                            </td>
+                          ) : null}
+                          {!isPesoFinanceiro ? (
+                            <td
+                              className="compass-scenarios-cell--autofit"
+                              title={row.ung !== "NA_UNG" ? row.ung : undefined}
+                            >
+                              {formatUng(row)}
+                            </td>
+                          ) : null}
+                          <td className="compass-scenarios-cell--entity">{row.entity}</td>
+                          <td className="compass-scenarios-cell--valor">{formatAmount(row.amount)}</td>
+                        </tr>
+                      );
+                    })}
                     {!rowsPage?.items.length ? (
                       <tr>
                         <td colSpan={isPesoFinanceiro ? 4 : 6}>Nenhuma linha encontrada para a busca/filtros.</td>

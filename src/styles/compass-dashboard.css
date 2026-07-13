@@ -864,9 +864,66 @@
   margin-bottom: 0.85rem;
 }
 
+.compass-scenarios-table {
+  width: 100%;
+  table-layout: auto;
+}
+
 .compass-col-head {
   vertical-align: top;
-  min-width: 7.5rem;
+}
+
+.compass-col-head--autofit {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.compass-col-head--desc {
+  width: auto;
+  min-width: 12rem;
+}
+
+.compass-col-head--center .compass-col-sort {
+  justify-content: center;
+  text-align: center;
+}
+
+.compass-col-head--right .compass-col-sort {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.compass-col-head--center .compass-col-filter,
+.compass-col-head--right .compass-col-filter {
+  margin-inline: auto;
+}
+
+.compass-col-head--autofit .compass-col-filter {
+  width: auto;
+  min-width: 4.5rem;
+  max-width: 8rem;
+}
+
+.compass-scenarios-cell--autofit,
+.compass-scenarios-cell--sku,
+.compass-scenarios-cell--entity,
+.compass-scenarios-cell--valor {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.compass-scenarios-cell--sku,
+.compass-scenarios-cell--entity {
+  text-align: center;
+}
+
+.compass-scenarios-cell--valor {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.compass-scenarios-cell--desc {
+  white-space: nowrap;
 }
 
 .compass-col-sort {
