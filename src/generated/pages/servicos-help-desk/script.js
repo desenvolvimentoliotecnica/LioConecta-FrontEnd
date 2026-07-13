@@ -35,30 +35,6 @@
                 "provider": "Wiki TI",
                 "status": "disponivel",
                 "featured": false
-        },
-        {
-                "title": "Chat ao vivo",
-                "desc": "Atendimento síncrono com analista de plantão em horário comercial estendido (7h–22h).",
-                "cat": "urgente",
-                "provider": "Teams TI",
-                "status": "disponivel",
-                "featured": false
-        },
-        {
-                "title": "E-mail suporte",
-                "desc": "Canal assíncrono para demandas não urgentes. Resposta em até 1 dia útil.",
-                "cat": "solicitacao",
-                "provider": "ti.suporte@liotecnica.com.br",
-                "status": "disponivel",
-                "featured": false
-        },
-        {
-                "title": "Telefone plantão",
-                "desc": "Linha exclusiva para incidentes críticos que impactam produção ou segurança.",
-                "cat": "urgente",
-                "provider": "Ramal 5500",
-                "status": "disponivel",
-                "featured": false
         }
 ];
       const statusLabels = {"disponivel": "Disponível", "sob_analise": "Sob análise", "indisponivel": "Indisponível"};

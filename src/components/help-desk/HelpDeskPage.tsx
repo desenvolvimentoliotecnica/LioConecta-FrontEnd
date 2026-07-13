@@ -204,7 +204,7 @@ export function HelpDeskPage() {
               : `Central de atendimento TI — ${openTickets} chamado${openTickets === 1 ? "" : "s"} aberto${openTickets === 1 ? "" : "s"}`}
           </div>
           <p className="welcome-banner__text">
-            Tempo médio de resposta: {avgResponse}. Use o chat interno ou abra um ticket pelo portal.
+            Tempo médio de resposta: {avgResponse}. Consulte a base de conhecimento ou abra um ticket pelo portal.
           </p>
         </div>
       </div>
