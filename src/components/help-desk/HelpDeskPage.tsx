@@ -11,25 +11,18 @@ import type { HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/type
 import { bookmarkIdForHelpDesk } from "../../utils/money";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import { useEmailCompose } from "../email/EmailComposeProvider";
-import { filterHelpDeskServices, HelpDeskServiceCard } from "./HelpDeskServiceCard";
+import { HelpDeskServiceCard } from "./HelpDeskServiceCard";
 import { HelpDeskKnowledgeModal } from "./HelpDeskKnowledgeModal";
 import { HelpDeskLiveChatModal } from "./HelpDeskLiveChatModal";
 import { HelpDeskOpenTicketModal } from "./HelpDeskOpenTicketModal";
 import { HelpDeskPhoneModal } from "./HelpDeskPhoneModal";
+import { HelpDeskTicketListPanel } from "./HelpDeskTicketListPanel";
 import { HelpDeskTicketResultModal } from "./HelpDeskTicketResultModal";
 import { HelpDeskTrackTicketModal } from "./HelpDeskTrackTicketModal";
 import "../../styles/contracheque-page.css";
 import "../../styles/beneficios-page.css";
 import "../../styles/help-desk-page.css";
 import "../../styles/help-desk-modal.css";
-
-const FILTERS = [
-  { id: "all", label: "Todos" },
-  { id: "incidente", label: "Incidentes" },
-  { id: "solicitacao", label: "Solicitações" },
-  { id: "duvida", label: "Dúvidas" },
-  { id: "urgente", label: "Urgente" },
-] as const;
 
 function apiErrorDetail(error: unknown): string {
   if (!(error instanceof ApiError)) {
@@ -61,8 +54,6 @@ function apiErrorDetail(error: unknown): string {
 
 export function HelpDeskPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [category, setCategory] = useState("all");
-  const [query, setQuery] = useState("");
   const [openTicket, setOpenTicket] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
   const [knowledgeService, setKnowledgeService] = useState<HelpDeskServiceDto | null>(null);
@@ -85,10 +76,7 @@ export function HelpDeskPage() {
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
 
-  const filtered = useMemo(
-    () => filterHelpDeskServices(servicesQuery.data ?? [], category, query),
-    [servicesQuery.data, category, query],
-  );
+  const services = useMemo(() => servicesQuery.data ?? [], [servicesQuery.data]);
 
   const openPortal = (service: HelpDeskServiceDto) => {
     if (!service.portalUrl) return;
@@ -162,35 +150,6 @@ export function HelpDeskPage() {
         title="Help Desk"
         current="Help Desk"
         description="Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da Liotécnica."
-        toolbar={
-          <div className="page-toolbar">
-            <label className="page-search page-search--wide">
-              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-              <input
-                className="page-search__input"
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar chamados e artigos..."
-                aria-label="Buscar chamados e artigos"
-              />
-            </label>
-            <div className="page-toolbar__filters">
-              <div className="page-filters" role="group" aria-label="Filtros">
-                {FILTERS.map((filter) => (
-                  <button
-                    key={filter.id}
-                    type="button"
-                    className={`filter-chip${category === filter.id ? " is-active" : ""}`}
-                    onClick={() => setCategory(filter.id)}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        }
       />
 
       <div className="welcome-banner welcome-banner--help-desk">
@@ -217,12 +176,12 @@ export function HelpDeskPage() {
 
       <div className="benefits-grid" aria-label="Help Desk">
         {servicesQuery.isLoading
-          ? Array.from({ length: 4 }).map((_, index) => (
+          ? Array.from({ length: 3 }).map((_, index) => (
               <article key={index} className="benefit-card" aria-hidden="true">
                 <p>Carregando…</p>
               </article>
             ))
-          : filtered.map((service) => (
+          : services.map((service) => (
               <HelpDeskServiceCard
                 key={service.id}
                 service={service}
@@ -234,9 +193,7 @@ export function HelpDeskPage() {
             ))}
       </div>
 
-      <p className="page-empty-note">
-        Exibindo {filtered.length} serviço{filtered.length === 1 ? "" : "s"}
-      </p>
+      <HelpDeskTicketListPanel canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false} />
 
       <HelpDeskOpenTicketModal
         open={openTicket}
