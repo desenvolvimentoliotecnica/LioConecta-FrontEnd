@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { api, config } from "../client";
 import type { CompassScenarioRowsPageDto, CompassScenariosDto } from "../types";
 
@@ -8,6 +8,28 @@ export type CompassScenariosFilters = {
   scenario?: string;
   years?: string;
   period?: string;
+};
+
+export type CompassScenarioSortBy =
+  | "sku"
+  | "skuDescription"
+  | "cliente"
+  | "ung"
+  | "entity"
+  | "amount";
+
+export type CompassScenarioSortDir = "asc" | "desc";
+
+export type CompassScenarioRowFilters = CompassScenariosFilters & {
+  search?: string;
+  ung?: string;
+  sku?: string;
+  skuDescription?: string;
+  cliente?: string;
+  ungLabel?: string;
+  entity?: string;
+  sortBy?: CompassScenarioSortBy;
+  sortDir?: CompassScenarioSortDir;
 };
 
 export const SCENARIO_YEARS = ["FY26"] as const;
@@ -142,7 +164,7 @@ const MOCK_ROWS: Record<string, CompassScenarioRowsPageDto> = {
 };
 
 function buildQueryString(
-  filters: CompassScenariosFilters & { search?: string; ung?: string; page?: number; pageSize?: number },
+  filters: CompassScenarioRowFilters & { page?: number; pageSize?: number },
 ): string {
   const params = new URLSearchParams();
   if (filters.version) params.set("version", filters.version);
@@ -151,10 +173,28 @@ function buildQueryString(
   if (filters.period) params.set("period", filters.period);
   if (filters.search) params.set("search", filters.search);
   if (filters.ung) params.set("ung", filters.ung);
+  if (filters.sku) params.set("sku", filters.sku);
+  if (filters.skuDescription) params.set("skuDescription", filters.skuDescription);
+  if (filters.cliente) params.set("cliente", filters.cliente);
+  if (filters.ungLabel) params.set("ungLabel", filters.ungLabel);
+  if (filters.entity) params.set("entity", filters.entity);
+  if (filters.sortBy) params.set("sortBy", filters.sortBy);
+  if (filters.sortDir) params.set("sortDir", filters.sortDir);
   if (filters.page) params.set("page", String(filters.page));
   if (filters.pageSize) params.set("pageSize", String(filters.pageSize));
   const qs = params.toString();
   return qs ? `?${qs}` : "";
+}
+
+export function hasActiveRowFilters(filters: CompassScenarioRowFilters): boolean {
+  return Boolean(
+    filters.search?.trim() ||
+      filters.sku?.trim() ||
+      filters.skuDescription?.trim() ||
+      filters.cliente?.trim() ||
+      filters.ungLabel?.trim() ||
+      filters.entity?.trim(),
+  );
 }
 
 export function useCompassScenarios(filters: CompassScenariosFilters = {}) {
@@ -183,37 +223,75 @@ export function useCompassScenarios(filters: CompassScenariosFilters = {}) {
   };
 }
 
+type RowsMode = "page" | "infinite";
+
 export function useCompassScenarioRows(
   scenarioId: string | null,
-  filters: CompassScenariosFilters & { search?: string; ung?: string },
-  page: number,
-  pageSize = 25,
+  filters: CompassScenarioRowFilters,
+  options: { mode: RowsMode; page?: number; pageSize?: number },
 ) {
-  const query = useQuery({
-    queryKey: ["compass", "scenarios", scenarioId, "rows", filters, page, pageSize],
+  const pageSize = options.pageSize ?? 25;
+  const page = options.page ?? 1;
+  const infinite = options.mode === "infinite";
+  const enabled = !config.useMock && Boolean(scenarioId);
+
+  const pageQuery = useQuery({
+    queryKey: ["compass", "scenarios", scenarioId, "rows", "page", filters, page, pageSize],
     queryFn: () =>
       api.get<CompassScenarioRowsPageDto>(
         `/compass/scenarios/${scenarioId}/rows${buildQueryString({ ...filters, page, pageSize })}`,
       ),
-    enabled: !config.useMock && Boolean(scenarioId),
+    enabled: enabled && !infinite,
     staleTime: 30_000,
   });
 
-  const isFallback = config.useMock || query.isError;
+  const infiniteQuery = useInfiniteQuery({
+    queryKey: ["compass", "scenarios", scenarioId, "rows", "infinite", filters, pageSize],
+    queryFn: ({ pageParam }) =>
+      api.get<CompassScenarioRowsPageDto>(
+        `/compass/scenarios/${scenarioId}/rows${buildQueryString({
+          ...filters,
+          page: pageParam,
+          pageSize,
+        })}`,
+      ),
+    enabled: enabled && infinite,
+    initialPageParam: 1,
+    getNextPageParam: (last) => (last.page < last.totalPages ? last.page + 1 : undefined),
+    staleTime: 30_000,
+  });
 
-  const data = useMemo(() => {
+  const isFallback = config.useMock || (infinite ? infiniteQuery.isError : pageQuery.isError);
+
+  const data = useMemo((): CompassScenarioRowsPageDto | null => {
     if (!scenarioId) return null;
-    if (config.useMock || query.isError) {
+    if (config.useMock || isFallback) {
       return MOCK_ROWS[scenarioId] ?? null;
     }
-    return query.data ?? null;
-  }, [scenarioId, query.data, query.isError]);
+    if (infinite) {
+      const pages = infiniteQuery.data?.pages;
+      if (!pages?.length) return null;
+      const first = pages[0];
+      return {
+        ...first,
+        items: pages.flatMap((p) => p.items),
+        page: pages[pages.length - 1]?.page ?? first.page,
+      };
+    }
+    return pageQuery.data ?? null;
+  }, [scenarioId, isFallback, infinite, infiniteQuery.data, pageQuery.data]);
 
   return {
     data,
-    isLoading: !config.useMock && Boolean(scenarioId) && query.isLoading,
-    isError: !config.useMock && query.isError,
+    isLoading:
+      !config.useMock &&
+      Boolean(scenarioId) &&
+      (infinite ? infiniteQuery.isLoading : pageQuery.isLoading),
+    isFetchingNextPage: infinite && !config.useMock && infiniteQuery.isFetchingNextPage,
+    hasNextPage: infinite && !config.useMock && Boolean(infiniteQuery.hasNextPage),
+    fetchNextPage: infiniteQuery.fetchNextPage,
+    isError: !config.useMock && (infinite ? infiniteQuery.isError : pageQuery.isError),
     isFallback,
-    refetch: query.refetch,
+    refetch: infinite ? infiniteQuery.refetch : pageQuery.refetch,
   };
 }
