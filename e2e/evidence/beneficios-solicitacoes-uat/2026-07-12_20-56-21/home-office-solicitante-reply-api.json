@@ -1,0 +1,102 @@
+{
+  "id": "07834d5c-c350-45ef-a8de-71ab3c368a3b",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "home-office",
+    "benefitTitle": "Auxílio Home Office",
+    "notes": "E2E-BEN-ALL-1783900581034-home-office — UAT E2E pedido de alteração/informação sobre Auxílio Home Office."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:56:43.466657+00:00",
+  "updatedAt": "2026-07-12T23:56:46.82438+00:00",
+  "events": [
+    {
+      "id": "6aac6040-2cec-4a5c-ab08-9660c82718ea",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:43.466657+00:00",
+      "details": {}
+    },
+    {
+      "id": "0cb060eb-2ea1-4191-be1c-b493755386b2",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:46.031205+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Auxílio Home Office): recebemos o pedido E2E-BEN-ALL-1783900581034-home-office.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "42528718130f473599b11f1835542d7d.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/42528718130f473599b11f1835542d7d.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a437c298-5c76-4026-86ca-596ed4550ae1",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:46.82438+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Auxílio Home Office): confirmo informações do E2E-BEN-ALL-1783900581034-home-office."
+      }
+    }
+  ]
+}

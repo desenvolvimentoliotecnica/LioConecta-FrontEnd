@@ -1,0 +1,80 @@
+{
+  "id": "e2ba599c-c0e5-40f5-bbca-f744d7ef1221",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "vale-alimentacao",
+    "benefitTitle": "Vale-alimentação",
+    "notes": "E2E-BEN-ALL-1783900581034-vale-alimentacao — UAT E2E pedido de alteração/informação sobre Vale-alimentação."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:17.926142+00:00",
+  "updatedAt": "2026-07-12T23:57:20.409351+00:00",
+  "events": [
+    {
+      "id": "050e3d1c-6f31-4934-97e6-c9ce669985cc",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:17.926142+00:00",
+      "details": {}
+    },
+    {
+      "id": "83f0806d-6c07-4a1a-8b1f-18c4e0a8db52",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:20.409351+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Vale-alimentação): recebemos o pedido E2E-BEN-ALL-1783900581034-vale-alimentacao.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "753df02c53954a1fbaa476d289201d1e.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/753df02c53954a1fbaa476d289201d1e.png"
+          }
+        ]
+      }
+    }
+  ]
+}

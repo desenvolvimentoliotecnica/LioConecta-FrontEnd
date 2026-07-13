@@ -1,0 +1,80 @@
+{
+  "id": "51857d35-5f27-498f-9fa7-180d0d970e7a",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "creche",
+    "benefitTitle": "Auxílio Creche",
+    "notes": "E2E-SR-RH-1783897262694 preciso incluir mais um filho no auxílio creche — UAT E2E."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:01:06.894894+00:00",
+  "updatedAt": "2026-07-12T23:01:09.387786+00:00",
+  "events": [
+    {
+      "id": "bdb510a6-66e5-4111-b953-8f5579f25b6e",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:01:06.894894+00:00",
+      "details": {}
+    },
+    {
+      "id": "c09dd945-42c7-456a-a249-80c25969d8b2",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:01:09.387786+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH: recebemos o pedido E2E-SR-RH-1783897262694. Segue orientação.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "177757a3b8484c1bbcf92a0c58207f4a.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/177757a3b8484c1bbcf92a0c58207f4a.png"
+          }
+        ]
+      }
+    }
+  ]
+}

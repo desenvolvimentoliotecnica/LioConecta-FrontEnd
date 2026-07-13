@@ -2097,7 +2097,16 @@ export type ServiceRequestStatus =
   | "Approved"
   | "Rejected"
   | "Completed"
-  | "Cancelled";
+  | "Cancelled"
+  | "AwaitingConfirmation";
+
+export interface ServiceRequestAttachmentMetaDto {
+  fileName: string;
+  storageFileName: string;
+  contentType: string;
+  sizeBytes: number;
+  url: string;
+}
 
 export type ServiceCategory = "RH" | "Financeiro" | "TI" | "Facilities" | "Juridico";
 

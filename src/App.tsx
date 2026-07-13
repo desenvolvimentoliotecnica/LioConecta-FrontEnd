@@ -35,6 +35,7 @@ import { FeriasGestaoPage } from "./components/ferias/FeriasGestaoPage";
 import { PontoEletronicoPage } from "./components/ponto/PontoEletronicoPage";
 import { PontoGestaoPage } from "./components/ponto/PontoGestaoPage";
 import { MovimentacoesPage } from "./components/movimentacoes/MovimentacoesPage";
+import { SolicitacoesRhPage } from "./components/pages/SolicitacoesRhPage";
 import { HelpDeskPage } from "./components/help-desk/HelpDeskPage";
 import { CardapioPage } from "./components/facilities/CardapioPage";
 import { RhHubPage } from "./components/pages/RhHubPage";
@@ -304,6 +305,7 @@ function App() {
         <Route path="/servicos/ponto-eletronico" element={<PontoEletronicoPage />} />
         <Route path="/servicos/ponto-eletronico/gestao" element={<PontoGestaoPage />} />
         <Route path="/servicos/movimentacoes" element={<MovimentacoesPage />} />
+        <Route path="/servicos/solicitacoes-rh" element={<SolicitacoesRhPage />} />
         <Route path="/servicos/help-desk" element={<HelpDeskPage />} />
         <Route path="/servicos/cardapio" element={<CardapioPage />} />
         <Route path="/servicos/clima" element={<MoodAnalyticsPage />} />
@@ -331,6 +333,7 @@ function App() {
             page.id === "servicos-beneficios" ||
             page.id === "servicos-ferias" ||
             page.id === "servicos-ponto" ||
+            page.id === "servicos-solicitacoes-rh" ||
             page.id === "servicos-help-desk" ||
             page.id === "servicos-acesso-sistemas"
           ) {

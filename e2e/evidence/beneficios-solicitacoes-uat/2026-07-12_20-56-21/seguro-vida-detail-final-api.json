@@ -1,0 +1,123 @@
+{
+  "id": "e9b28cfe-9bac-475f-b4e5-600f1d537c82",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "Approved",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "seguro-vida",
+    "benefitTitle": "Seguro de Vida",
+    "notes": "E2E-BEN-ALL-1783900581034-seguro-vida — UAT E2E pedido de alteração/informação sobre Seguro de Vida."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:09.92394+00:00",
+  "updatedAt": "2026-07-12T23:57:15.304636+00:00",
+  "events": [
+    {
+      "id": "63f2694b-3347-4b37-a14e-8bca1ee2424f",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:09.92394+00:00",
+      "details": {}
+    },
+    {
+      "id": "91736f5b-c522-4f4b-8f54-02de846618ff",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:12.109335+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Seguro de Vida): recebemos o pedido E2E-BEN-ALL-1783900581034-seguro-vida.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "89793ae800924ddba1a6c539bf162c79.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/89793ae800924ddba1a6c539bf162c79.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "93e06d7e-8b1f-4ac0-9d72-a38971dff461",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:13.741918+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Seguro de Vida): confirmo informações do E2E-BEN-ALL-1783900581034-seguro-vida."
+      }
+    },
+    {
+      "id": "1a5db72c-0b1e-46e7-925c-2fc967e624b9",
+      "eventType": "Approved",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:15.304636+00:00",
+      "details": {
+        "comment": "Aprovado UAT E2E-BEN-ALL-1783900581034-seguro-vida"
+      }
+    }
+  ]
+}

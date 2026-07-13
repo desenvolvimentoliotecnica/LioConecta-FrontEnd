@@ -1,0 +1,80 @@
+{
+  "id": "133132a8-379e-457e-a0cb-dd317af78609",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "vale-transporte",
+    "benefitTitle": "Vale-transporte",
+    "notes": "E2E-BEN-ALL-1783900581034-vale-transporte — UAT E2E pedido de alteração/informação sobre Vale-transporte."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:31.598147+00:00",
+  "updatedAt": "2026-07-12T23:57:33.782608+00:00",
+  "events": [
+    {
+      "id": "0bea64bb-3926-4455-97d9-0ad39ea9a499",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:31.598147+00:00",
+      "details": {}
+    },
+    {
+      "id": "40bd0e50-8153-4cb8-b101-545dcc66b20a",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:33.782608+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Vale-transporte): recebemos o pedido E2E-BEN-ALL-1783900581034-vale-transporte.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "b223ff2d77b34bdc9ee7dbf95672d4a1.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/b223ff2d77b34bdc9ee7dbf95672d4a1.png"
+          }
+        ]
+      }
+    }
+  ]
+}

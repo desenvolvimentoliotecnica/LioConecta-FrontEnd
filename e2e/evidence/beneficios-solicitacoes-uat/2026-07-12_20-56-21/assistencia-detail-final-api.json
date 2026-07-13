@@ -1,0 +1,123 @@
+{
+  "id": "4340ba89-13e8-48b5-8a1c-02cabdf5e8ba",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "Approved",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "assistencia",
+    "benefitTitle": "Programa de Assistência",
+    "notes": "E2E-BEN-ALL-1783900581034-assistencia — UAT E2E pedido de alteração/informação sobre Programa de Assistência."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:03.296364+00:00",
+  "updatedAt": "2026-07-12T23:57:06.729706+00:00",
+  "events": [
+    {
+      "id": "f3856580-4423-4af7-9228-443a984f075a",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:03.296364+00:00",
+      "details": {}
+    },
+    {
+      "id": "0289ff36-9834-4c23-a489-c835cfff6caf",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:05.534118+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Programa de Assistência): recebemos o pedido E2E-BEN-ALL-1783900581034-assistencia.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "5cf54b5b851749ddafbf5893f20b78fc.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/5cf54b5b851749ddafbf5893f20b78fc.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3467b048-71db-4cbc-80f9-dcde46dfa9ee",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:06.066543+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Programa de Assistência): confirmo informações do E2E-BEN-ALL-1783900581034-assistencia."
+      }
+    },
+    {
+      "id": "b221293d-c4af-4681-bf15-5a223b170126",
+      "eventType": "Approved",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:06.729706+00:00",
+      "details": {
+        "comment": "Aprovado UAT E2E-BEN-ALL-1783900581034-assistencia"
+      }
+    }
+  ]
+}

@@ -124,7 +124,6 @@ export function BenefitDetailPreviewContent({
 
 export function BenefitDetailEmployeePreview({ detail }: { detail: BenefitDetailPreviewData }) {
   const [showValues, setShowValues] = useState(true);
-  const isOptional = detail.status === "opcional";
 
   return (
     <div className="beneficios-gestao__preview">
@@ -154,11 +153,9 @@ export function BenefitDetailEmployeePreview({ detail }: { detail: BenefitDetail
             </button>
           </div>
           <div className="pay-modal__footer-end">
-            {isOptional ? (
-              <button type="button" className="pay-modal__btn" tabIndex={-1} disabled>
-                Solicitar alteração
-              </button>
-            ) : null}
+            <button type="button" className="pay-modal__btn" tabIndex={-1} disabled>
+              Solicitar alteração ou informação
+            </button>
             {detail.portalUrl ? (
               <span className="pay-modal__btn pay-modal__btn--ghost beneficios-gestao__preview-btn-static">
                 Abrir portal

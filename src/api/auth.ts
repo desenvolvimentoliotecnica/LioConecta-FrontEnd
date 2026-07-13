@@ -164,6 +164,11 @@ export function canAccessLeaveManagement(me: MeDto | undefined): boolean {
   );
 }
 
+/** Fila de solicitações RH (benefícios/contracheque): `rh_requests.manage`. */
+export function canAccessRhRequestsManagement(me: MeDto | undefined): boolean {
+  return hasPermission(me, PERMISSIONS.rhRequests.manage);
+}
+
 /** Gestão de ponto: alinhado ao backend (`ponto.manage` / `ponto.approve`). */
 export function canAccessPontoManagement(me: MeDto | undefined): boolean {
   return (

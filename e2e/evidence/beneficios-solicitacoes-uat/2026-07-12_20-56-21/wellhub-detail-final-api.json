@@ -1,0 +1,123 @@
+{
+  "id": "8d32f5d9-21c0-4d6c-990b-e0697d7fe65f",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "Approved",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "wellhub",
+    "benefitTitle": "Wellhub (Gympass)",
+    "notes": "E2E-BEN-ALL-1783900581034-wellhub — UAT E2E pedido de alteração/informação sobre Wellhub (Gympass)."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:38.46002+00:00",
+  "updatedAt": "2026-07-12T23:57:42.315504+00:00",
+  "events": [
+    {
+      "id": "b9612405-f572-4924-8d8e-4b33bccb5c05",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:38.46002+00:00",
+      "details": {}
+    },
+    {
+      "id": "c6065abd-7ab1-42e2-99be-b6f99a527820",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:40.46034+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Wellhub (Gympass)): recebemos o pedido E2E-BEN-ALL-1783900581034-wellhub.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "89868049551848d1aa7358197f7bd5e6.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/89868049551848d1aa7358197f7bd5e6.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3a9562bb-842a-4604-a9d0-ceb3cef52faf",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:41.285826+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Wellhub (Gympass)): confirmo informações do E2E-BEN-ALL-1783900581034-wellhub."
+      }
+    },
+    {
+      "id": "fb325a72-4265-48d2-830c-58b004b75998",
+      "eventType": "Approved",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:42.315504+00:00",
+      "details": {
+        "comment": "Aprovado UAT E2E-BEN-ALL-1783900581034-wellhub"
+      }
+    }
+  ]
+}
