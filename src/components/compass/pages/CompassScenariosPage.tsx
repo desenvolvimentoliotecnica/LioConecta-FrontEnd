@@ -37,14 +37,28 @@ function unitLabel(scenarioId: string): string {
 
 function exportRowsCsv(
   scenarioName: string,
-  rows: { sku: string; cliente: string; ung: string; entity: string; amount: number }[],
+  rows: {
+    sku: string;
+    skuDescription: string;
+    cliente: string;
+    ung: string;
+    entity: string;
+    amount: number;
+  }[],
+  includeClienteUng: boolean,
 ) {
-  const header = ["SKU", "Cliente", "UN", "Entity", "Valor"];
+  const header = includeClienteUng
+    ? ["SKU", "Descricao", "Cliente", "UN", "Entity", "Valor"]
+    : ["SKU", "Descricao", "Entity", "Valor"];
   const lines = [
     header.join(";"),
-    ...rows.map((r) =>
-      [r.sku, r.cliente, r.ung, r.entity, r.amount.toString().replace(".", ",")].join(";"),
-    ),
+    ...rows.map((r) => {
+      const amount = r.amount.toString().replace(".", ",");
+      if (includeClienteUng) {
+        return [r.sku, r.skuDescription || "", r.cliente, r.ung, r.entity, amount].join(";");
+      }
+      return [r.sku, r.skuDescription || "", r.entity, amount].join(";");
+    }),
   ];
   const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -99,6 +113,10 @@ export function CompassScenariosPage() {
   } = useCompassScenarioRows(selectedId, { ...filters, search: search || undefined }, page, PAGE_SIZE);
 
   const selectedScenario: CompassScenarioItemDto | undefined = scenarios.find((s) => s.id === selectedId);
+  const isPesoFinanceiro = selectedId === "peso-financeiro";
+  const searchPlaceholder = isPesoFinanceiro
+    ? "Ex.: OVOMALTINE ou 120501011"
+    : "Ex.: SKU_12007 ou PENNACCHI";
 
   return (
     <main className="compass-page">
@@ -198,17 +216,17 @@ export function CompassScenariosPage() {
           infoId="nav-cenarios"
           desc={
             rowsPage
-              ? `${rowsPage.totalCount.toLocaleString("pt-BR")} linha(s) · total ${formatAmount(rowsPage.totalAmount)} · página ${rowsPage.page} de ${Math.max(rowsPage.totalPages, 1)}`
+              ? `${rowsPage.totalCount.toLocaleString("pt-BR")} linha(s) · total ${formatAmount(rowsPage.totalAmount)} · página ${rowsPage.page} de ${Math.max(rowsPage.totalPages, 1)}${isPesoFinanceiro ? " · consolidado por SKU (sem cliente/UN)" : ""}`
               : "Carregando detalhe…"
           }
         >
           <div className="compass-scenarios-detail-toolbar">
             <label className="compass-scenarios-toolbar__field compass-scenarios-toolbar__field--grow">
-              <span>Buscar SKU ou cliente</span>
+              <span>{isPesoFinanceiro ? "Buscar SKU ou descrição" : "Buscar SKU ou cliente"}</span>
               <input
                 type="search"
                 value={searchInput}
-                placeholder="Ex.: SKU_12007 ou PENNACCHI"
+                placeholder={searchPlaceholder}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
             </label>
@@ -218,7 +236,7 @@ export function CompassScenariosPage() {
               disabled={!rowsPage?.items.length}
               onClick={() => {
                 if (rowsPage?.items.length) {
-                  exportRowsCsv(selectedScenario.name, rowsPage.items);
+                  exportRowsCsv(selectedScenario.name, rowsPage.items, !isPesoFinanceiro);
                 }
               }}
             >
@@ -235,8 +253,9 @@ export function CompassScenariosPage() {
                   <thead>
                     <tr>
                       <th>SKU</th>
-                      <th>Cliente</th>
-                      <th>UN</th>
+                      <th>Descrição</th>
+                      {!isPesoFinanceiro ? <th>Cliente</th> : null}
+                      {!isPesoFinanceiro ? <th>UN</th> : null}
                       <th>Entity</th>
                       <th>Valor</th>
                     </tr>
@@ -245,15 +264,20 @@ export function CompassScenariosPage() {
                     {(rowsPage?.items ?? []).map((row, index) => (
                       <tr key={`${row.sku}-${row.cliente}-${row.ung}-${index}`}>
                         <td>{row.sku.replace(/^SKU_/, "")}</td>
-                        <td>{row.cliente === "NA_Cliente" ? "—" : row.cliente}</td>
-                        <td>{row.ung === "NA_UNG" ? "—" : row.ung}</td>
+                        <td>{row.skuDescription?.trim() ? row.skuDescription : "—"}</td>
+                        {!isPesoFinanceiro ? (
+                          <td>{row.cliente === "NA_Cliente" ? "—" : row.cliente}</td>
+                        ) : null}
+                        {!isPesoFinanceiro ? (
+                          <td>{row.ung === "NA_UNG" ? "—" : row.ung}</td>
+                        ) : null}
                         <td>{row.entity}</td>
                         <td>{formatAmount(row.amount)}</td>
                       </tr>
                     ))}
                     {!rowsPage?.items.length ? (
                       <tr>
-                        <td colSpan={5}>Nenhuma linha encontrada para a busca/filtros.</td>
+                        <td colSpan={isPesoFinanceiro ? 4 : 6}>Nenhuma linha encontrada para a busca/filtros.</td>
                       </tr>
                     ) : null}
                   </tbody>
