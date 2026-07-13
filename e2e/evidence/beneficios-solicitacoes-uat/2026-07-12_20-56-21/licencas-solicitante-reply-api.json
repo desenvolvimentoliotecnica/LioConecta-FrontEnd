@@ -1,0 +1,102 @@
+{
+  "id": "b7bdfc0c-0127-4a02-90ce-f60a32aa6a52",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "licencas",
+    "benefitTitle": "Licenças e Afastamentos",
+    "notes": "E2E-BEN-ALL-1783900581034-licencas — UAT E2E pedido de alteração/informação sobre Licenças e Afastamentos."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:56:50.098667+00:00",
+  "updatedAt": "2026-07-12T23:56:53.535856+00:00",
+  "events": [
+    {
+      "id": "333fbdd7-2ce6-4435-83d2-0a09789f9a87",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:50.098667+00:00",
+      "details": {}
+    },
+    {
+      "id": "adf72913-09d1-4417-886c-9925e7611c2a",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:52.890871+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Licenças e Afastamentos): recebemos o pedido E2E-BEN-ALL-1783900581034-licencas.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "6f077e42830b4021a2a6e4347f6e5bb2.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/6f077e42830b4021a2a6e4347f6e5bb2.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "54a92cc2-946d-4d77-9d4b-125986c52a43",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:53.535856+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Licenças e Afastamentos): confirmo informações do E2E-BEN-ALL-1783900581034-licencas."
+      }
+    }
+  ]
+}

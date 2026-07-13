@@ -1,0 +1,123 @@
+{
+  "id": "1e3671ce-f514-43c1-96fc-a2195932133a",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "Approved",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "creche",
+    "benefitTitle": "Auxílio Creche",
+    "notes": "E2E-BEN-ALL-1783900581034-creche — UAT E2E pedido de alteração/informação sobre Auxílio Creche."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:56:37.055619+00:00",
+  "updatedAt": "2026-07-12T23:56:40.824163+00:00",
+  "events": [
+    {
+      "id": "81f70d03-3dec-4767-93d8-7130cd0b1533",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:37.055619+00:00",
+      "details": {}
+    },
+    {
+      "id": "b04ae397-09eb-4d00-8ba3-cbc214395268",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:38.958501+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Auxílio Creche): recebemos o pedido E2E-BEN-ALL-1783900581034-creche.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "db038d2e1f8b44c0af3a42748dbdc71e.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/db038d2e1f8b44c0af3a42748dbdc71e.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "c76afbcf-2404-4aef-a5db-4691efe01ade",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:39.667125+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Auxílio Creche): confirmo informações do E2E-BEN-ALL-1783900581034-creche."
+      }
+    },
+    {
+      "id": "b6b76bac-431d-42eb-9df9-c0ddfabdeb68",
+      "eventType": "Approved",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:56:40.824163+00:00",
+      "details": {
+        "comment": "Aprovado UAT E2E-BEN-ALL-1783900581034-creche"
+      }
+    }
+  ]
+}

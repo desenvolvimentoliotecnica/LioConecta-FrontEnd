@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "creche",
+    "title": "Auxílio Creche",
+    "marker": "E2E-BEN-ALL-1783900581034-creche",
+    "requestId": "1e3671ce-f514-43c1-96fc-a2195932133a",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "home-office",
+    "title": "Auxílio Home Office",
+    "marker": "E2E-BEN-ALL-1783900581034-home-office",
+    "requestId": "07834d5c-c350-45ef-a8de-71ab3c368a3b",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "licencas",
+    "title": "Licenças e Afastamentos",
+    "marker": "E2E-BEN-ALL-1783900581034-licencas",
+    "requestId": "b7bdfc0c-0127-4a02-90ce-f60a32aa6a52",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "previdencia",
+    "title": "Previdência Privada",
+    "marker": "E2E-BEN-ALL-1783900581034-previdencia",
+    "requestId": "79802d71-96bd-4efb-8da5-febb5378eddd",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "assistencia",
+    "title": "Programa de Assistência",
+    "marker": "E2E-BEN-ALL-1783900581034-assistencia",
+    "requestId": "4340ba89-13e8-48b5-8a1c-02cabdf5e8ba",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "seguro-vida",
+    "title": "Seguro de Vida",
+    "marker": "E2E-BEN-ALL-1783900581034-seguro-vida",
+    "requestId": "e9b28cfe-9bac-475f-b4e5-600f1d537c82",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "vale-alimentacao",
+    "title": "Vale-alimentação",
+    "marker": "E2E-BEN-ALL-1783900581034-vale-alimentacao",
+    "requestId": "e2ba599c-c0e5-40f5-bbca-f744d7ef1221",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "vale-refeicao",
+    "title": "Vale-refeição",
+    "marker": "E2E-BEN-ALL-1783900581034-vale-refeicao",
+    "requestId": "4098ce66-9d53-4c08-8de0-8c92459590d8",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "vale-transporte",
+    "title": "Vale-transporte",
+    "marker": "E2E-BEN-ALL-1783900581034-vale-transporte",
+    "requestId": "133132a8-379e-457e-a0cb-dd317af78609",
+    "status": "Approved",
+    "passed": true
+  },
+  {
+    "slug": "wellhub",
+    "title": "Wellhub (Gympass)",
+    "marker": "E2E-BEN-ALL-1783900581034-wellhub",
+    "requestId": "8d32f5d9-21c0-4d6c-990b-e0697d7fe65f",
+    "status": "Approved",
+    "passed": true
+  }
+]

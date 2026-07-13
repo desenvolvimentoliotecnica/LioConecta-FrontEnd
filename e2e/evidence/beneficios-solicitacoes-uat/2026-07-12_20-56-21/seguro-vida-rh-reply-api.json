@@ -1,0 +1,80 @@
+{
+  "id": "e9b28cfe-9bac-475f-b4e5-600f1d537c82",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "seguro-vida",
+    "benefitTitle": "Seguro de Vida",
+    "notes": "E2E-BEN-ALL-1783900581034-seguro-vida — UAT E2E pedido de alteração/informação sobre Seguro de Vida."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:09.92394+00:00",
+  "updatedAt": "2026-07-12T23:57:12.109335+00:00",
+  "events": [
+    {
+      "id": "63f2694b-3347-4b37-a14e-8bca1ee2424f",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:09.92394+00:00",
+      "details": {}
+    },
+    {
+      "id": "91736f5b-c522-4f4b-8f54-02de846618ff",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:12.109335+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Seguro de Vida): recebemos o pedido E2E-BEN-ALL-1783900581034-seguro-vida.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "89793ae800924ddba1a6c539bf162c79.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/89793ae800924ddba1a6c539bf162c79.png"
+          }
+        ]
+      }
+    }
+  ]
+}

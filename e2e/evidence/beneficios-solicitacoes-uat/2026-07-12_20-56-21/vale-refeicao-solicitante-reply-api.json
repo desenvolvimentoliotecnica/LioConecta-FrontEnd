@@ -1,0 +1,102 @@
+{
+  "id": "4098ce66-9d53-4c08-8de0-8c92459590d8",
+  "type": "servicos-beneficios",
+  "category": 0,
+  "status": "InReview",
+  "requester": {
+    "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+    "slug": "leonardo-mendes",
+    "name": "Leonardo Sabino Mendes",
+    "title": null,
+    "photoUrl": "/media/people/leonardo-mendes.jpg",
+    "departmentName": null,
+    "location": null,
+    "managerSlug": null,
+    "isActive": true,
+    "birthDate": "1984-07-06",
+    "hireDate": "2026-04-13"
+  },
+  "payload": {
+    "benefitId": "vale-refeicao",
+    "benefitTitle": "Vale-refeição",
+    "notes": "E2E-BEN-ALL-1783900581034-vale-refeicao — UAT E2E pedido de alteração/informação sobre Vale-refeição."
+  },
+  "assigneeTeam": null,
+  "externalRef": null,
+  "createdAt": "2026-07-12T23:57:24.6754+00:00",
+  "updatedAt": "2026-07-12T23:57:28.148862+00:00",
+  "events": [
+    {
+      "id": "1a6343a0-31c3-4e5a-b1fd-224727810433",
+      "eventType": "Submitted",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:24.6754+00:00",
+      "details": {}
+    },
+    {
+      "id": "d6ebc9df-17fd-45d8-9edb-d9a18c23688b",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:27.493698+00:00",
+      "details": {
+        "role": "rh",
+        "message": "RH (Vale-refeição): recebemos o pedido E2E-BEN-ALL-1783900581034-vale-refeicao.",
+        "attachments": [
+          {
+            "fileName": "anexo-rh-resposta.png",
+            "storageFileName": "149ad3b2595b4b129f37e1f449c90203.png",
+            "contentType": "image/png",
+            "sizeBytes": 78,
+            "url": "/service-requests/attachments/149ad3b2595b4b129f37e1f449c90203.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "be21c9c1-5cf2-4015-b9eb-21e8c0aea405",
+      "eventType": "Message",
+      "actor": {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb103",
+        "slug": "leonardo-mendes",
+        "name": "Leonardo Sabino Mendes",
+        "title": null,
+        "photoUrl": "/media/people/leonardo-mendes.jpg",
+        "departmentName": null,
+        "location": null,
+        "managerSlug": null,
+        "isActive": true,
+        "birthDate": "1984-07-06",
+        "hireDate": "2026-04-13"
+      },
+      "createdAt": "2026-07-12T23:57:28.148862+00:00",
+      "details": {
+        "role": "requester",
+        "message": "Solicitante (Vale-refeição): confirmo informações do E2E-BEN-ALL-1783900581034-vale-refeicao."
+      }
+    }
+  ]
+}

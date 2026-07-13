@@ -59,9 +59,9 @@ export function BeneficiosPage() {
     }
   };
 
-  const handleRequest = (benefitId: string) => {
+  const handleRequest = (benefitId: string, notes: string) => {
     requestMutation.mutate(
-      { benefitId, notes: "Solicitação via portal de benefícios" },
+      { benefitId, notes },
       {
         onSuccess: (result) => {
           setDetailId(null);
@@ -200,6 +200,7 @@ export function BeneficiosPage() {
         open={detailId !== null}
         benefitId={detailId}
         showValues={showValues}
+        requesting={requestMutation.isPending}
         onToggleShowValues={() => setShowValues((value) => !value)}
         onClose={() => setDetailId(null)}
         onRequest={handleRequest}

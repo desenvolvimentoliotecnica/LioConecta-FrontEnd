@@ -38,7 +38,7 @@ function flattenSitemap(): PortalPageHit[] {
 
 function canSeePath(path: string, me: MeDto | undefined | null): boolean {
   if (path.startsWith("/admin")) {
-    return canAccessAdminArea(me) || canAccessRbacAdmin(me);
+    return canAccessAdminArea(me ?? undefined) || canAccessRbacAdmin(me ?? undefined);
   }
   if (path.startsWith("/unilio")) return hasPermission(me ?? undefined, PERMISSIONS.unilio.access);
   if (path.startsWith("/loop")) return hasPermission(me ?? undefined, PERMISSIONS.loop.access);

@@ -1,0 +1,16 @@
+{
+  "requestId": "cf362aeb-b6b7-4183-896e-9fefbd7ad140",
+  "marker": "E2E-SR-RH-1783897178080",
+  "benefit": {
+    "id": "creche",
+    "title": "Auxílio Creche",
+    "desc": "Subsídio para filhos até 6 anos conforme comprovantes e limites definidos em política de benefícios.",
+    "category": "familia",
+    "provider": "RH Lio",
+    "status": "opcional",
+    "featured": false,
+    "isActive": true,
+    "portalUrl": null,
+    "monthlyValue": null
+  }
+}
