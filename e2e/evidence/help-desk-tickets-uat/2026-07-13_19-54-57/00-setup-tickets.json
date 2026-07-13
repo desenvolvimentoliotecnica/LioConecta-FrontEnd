@@ -1,0 +1,36 @@
+{
+  "marker": "E2E-HD-LIST-1783983297530",
+  "count": 32,
+  "sample": [
+    {
+      "ticketId": "90000",
+      "subject": "E2E-HD-LIST-1783983297530 chamado 01 — Muito alta",
+      "status": "new",
+      "statusLabel": "Novo",
+      "priorityLabel": "Muito alta",
+      "createdAt": "2026-07-13T22:54:57.530Z",
+      "externalUrl": null,
+      "requesterLabel": "Leonardo Sabino Mendes"
+    },
+    {
+      "ticketId": "90001",
+      "subject": "E2E-HD-LIST-1783983297530 chamado 02 — Alta",
+      "status": "processing",
+      "statusLabel": "Em andamento",
+      "priorityLabel": "Alta",
+      "createdAt": "2026-07-13T21:54:57.530Z",
+      "externalUrl": null,
+      "requesterLabel": "Maria Silva"
+    },
+    {
+      "ticketId": "90002",
+      "subject": "E2E-HD-LIST-1783983297530 chamado 03 — Média",
+      "status": "pending",
+      "statusLabel": "Pendente",
+      "priorityLabel": "Média",
+      "createdAt": "2026-07-13T20:54:57.530Z",
+      "externalUrl": null,
+      "requesterLabel": "Leonardo Sabino Mendes"
+    }
+  ]
+}
