@@ -3,10 +3,9 @@ import { useHelpDeskAreas, useHelpDeskCategories } from "../../api/hooks/useHelp
 import type { PortalSystemDto } from "../../api/types";
 import {
   SYSTEMS_ACCESS_ENVIRONMENTS,
-  SYSTEMS_ACCESS_TI_AREA_ID,
   type SystemsAccessEnvironment,
 } from "../../config/systems/accessRequest";
-import { findAreaById } from "../help-desk/helpDeskAreaCatalog";
+import { resolveSystemsAccessArea } from "../help-desk/helpDeskAreaCatalog";
 import { formatCategoryPath } from "../help-desk/helpDeskCategoryTree";
 import { helpDeskQueryErrorMessage } from "../help-desk/helpDeskQueryError";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
@@ -68,11 +67,11 @@ export function SystemAccessRequestModal({
 
   const areasQuery = useHelpDeskAreas(open);
   const areas = areasQuery.data ?? [];
-  const tiArea = findAreaById(areas, SYSTEMS_ACCESS_TI_AREA_ID) ?? areas[0] ?? null;
+  const tiArea = resolveSystemsAccessArea(areas);
 
   const categoriesQuery = useHelpDeskCategories(
-    tiArea?.id ?? SYSTEMS_ACCESS_TI_AREA_ID,
-    open && Boolean(tiArea || areasQuery.isSuccess),
+    tiArea?.id ?? "",
+    open && Boolean(tiArea),
   );
   const categories = categoriesQuery.data ?? [];
 
@@ -115,7 +114,7 @@ export function SystemAccessRequestModal({
       return;
     }
     if (!tiArea) {
-      setLocalError("Área TI do Help Desk indisponível. Tente novamente mais tarde.");
+      setLocalError("Entidade GLPI indisponível para Help Desk. Tente novamente mais tarde.");
       return;
     }
     if (categoryId == null) {

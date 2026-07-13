@@ -265,7 +265,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
             <>
               <p className="hd-modal__intro">
                 <i className="fa-solid fa-table-cells" aria-hidden="true" />
-                Escolha a área para ver os serviços disponíveis.
+                Escolha a entidade GLPI para ver os serviços disponíveis.
               </p>
 
               {areasQuery.isLoading ? (
@@ -278,7 +278,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
                   )}
                 </p>
               ) : areas.length === 0 ? (
-                <p className="hd-modal__empty">Nenhuma área configurada.</p>
+                <p className="hd-modal__empty">Nenhuma entidade encontrada no GLPI.</p>
               ) : (
                 <div className="hd-wizard__area-grid" role="list">
                   {areas.map((item) => (
@@ -324,8 +324,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
                 </p>
               ) : catalogItems.length === 0 ? (
                 <p className="hd-modal__empty">
-                  Nenhum serviço disponível nesta área. Verifique a integração GLPI ou os IDs em{" "}
-                  <code>helpdesk.glpi_areas</code>.
+                  Nenhum serviço disponível nesta entidade GLPI. Verifique as categorias ITIL no Service Desk.
                 </p>
               ) : (
                 renderCategoryGrid(catalogItems, handleCatalogSelect)
