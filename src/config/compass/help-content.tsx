@@ -1,12 +1,14 @@
+export type CompassHelpText = string | readonly string[];
+
 export type CompassHelpContent = {
   title: string;
-  oQueE: string;
-  origemHyperion?: string;
-  colunas?: string;
-  formulas?: string;
-  filtros?: string;
-  interpretacao?: string;
-  exemplo?: string;
+  oQueE: CompassHelpText;
+  origemHyperion?: CompassHelpText;
+  colunas?: CompassHelpText;
+  formulas?: CompassHelpText;
+  filtros?: CompassHelpText;
+  interpretacao?: CompassHelpText;
+  exemplo?: CompassHelpText;
 };
 
 const hyperionBase =
@@ -272,9 +274,23 @@ export const COMPASS_HELP: Record<string, CompassHelpContent> = {
     origemHyperion: "Fase Coleta = export EPBCS; Revisão Financeira = validação IBP Atual vs Anterior.",
   },
   "shell-persona": {
-    title: "Persona IBP",
-    oQueE: "Perfil de acesso — Executivo (todas diretorias), Planejador (diretoria scoped) ou Contribuidor (somente leitura).",
-    interpretacao: "Escopo derivado da diretoria associada ao usuário no plano integrado.",
+    title: "Seu perfil no Compass",
+    oQueE: [
+      "Este selo no topo mostra como o Compass se apresenta para você: o quanto da empresa você enxerga e o tipo de acompanhamento que faz sentido no seu dia a dia.",
+      "Não é um cargo formal nem uma função de RH — é só a forma de organizar a visão de cada pessoa no planejamento do negócio, para que cada um veja o que precisa sem se perder em informação de outras áreas.",
+    ],
+    interpretacao: [
+      "Há três jeitos principais de usar o Compass:",
+      "Executivo — visão ampla de toda a empresa. Serve para quem acompanha o resultado consolidado, compara áreas e precisa do panorama completo antes das reuniões de planejamento.",
+      "Planejador — foco na sua diretoria. Os números e filtros já vêm alinhados à área em que você atua, para trabalhar o plano com mais profundidade no seu recorte.",
+      "Contribuidor — também vê o recorte da sua área, mas principalmente para acompanhar e consultar. É a visão de quem participa do ciclo sem precisar alterar o que já está em análise.",
+      "O nome que aparece no selo é o seu perfil neste momento. Ele segue a área à qual você está ligado no ciclo de planejamento e pode ser diferente do de um colega de outra diretoria.",
+    ],
+    exemplo: [
+      "Se o selo mostrar Executivo, você pode navegar por todas as diretorias e comparar o conjunto.",
+      "Se mostrar Planejador, a tela já favorece a sua área — o detalhe do que importa para o seu time.",
+      "Se mostrar Contribuidor, você acompanha o andamento com tranquilidade; as ações de mudança ficam mais limitadas.",
+    ],
   },
   "fallback-banner": {
     title: "Dados locais (fallback)",

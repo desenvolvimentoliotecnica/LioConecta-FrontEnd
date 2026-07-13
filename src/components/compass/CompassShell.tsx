@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useCompassMeta } from "../../api/hooks/useCompassMeta";
 import { useCompassDashboard } from "../../api/hooks/useCompassDashboard";
 import { useMe } from "../../api/hooks/useMe";
@@ -17,6 +17,8 @@ import "../../styles/compass-help.css";
 export function CompassShell() {
   const [navCollapsed, setNavCollapsed] = useState(false);
   const { focusMode } = useModuleFocus();
+  const location = useLocation();
+  const hideGlobalFilters = /\/compass\/cenarios\/?$/.test(location.pathname);
   const { filters, setDiretoria, setUnidade, setFamilia, setTipo, setSearch, resetFilters } = useCompassFilters();
   const { data: me } = useMe();
   const { data: meta, isFallback: metaFallback } = useCompassMeta();
@@ -74,81 +76,83 @@ export function CompassShell() {
 
           <CompassFallbackBanner show={isFallback} />
 
-          <div className="compass-shell__toolbar">
-            <div className="compass-shell__search">
-              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-              <input
-                type="search"
-                placeholder="Buscar diretoria, unidade, família, conta…"
-                value={filters.search ?? ""}
-                onChange={(e) => setSearch(e.target.value || undefined)}
-                aria-label="Busca no Compass"
-              />
-              <CompassInfoButton infoId="filter-search" />
+          {!hideGlobalFilters ? (
+            <div className="compass-shell__toolbar">
+              <div className="compass-shell__search">
+                <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+                <input
+                  type="search"
+                  placeholder="Buscar diretoria, unidade, família, conta…"
+                  value={filters.search ?? ""}
+                  onChange={(e) => setSearch(e.target.value || undefined)}
+                  aria-label="Busca no Compass"
+                />
+                <CompassInfoButton infoId="filter-search" />
+              </div>
+
+              <div className="compass-shell__filters">
+                <select
+                  className="compass-shell__select"
+                  value={filters.diretoria ?? ""}
+                  onChange={(e) => setDiretoria(e.target.value || undefined)}
+                  aria-label="Filtrar por diretoria"
+                >
+                  <option value="">Todas as diretorias</option>
+                  {visibleDirectorias.map((d) => (
+                    <option key={d.value} value={d.label}>
+                      {d.label}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className="compass-shell__select"
+                  value={filters.unidade ?? ""}
+                  onChange={(e) => setUnidade(e.target.value || undefined)}
+                  aria-label="Filtrar por unidade"
+                >
+                  <option value="">Todas as unidades</option>
+                  {meta.unidades.map((u) => (
+                    <option key={u.value} value={u.label}>
+                      {u.label}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className="compass-shell__select"
+                  value={filters.familia ?? ""}
+                  onChange={(e) => setFamilia(e.target.value || undefined)}
+                  aria-label="Filtrar por família"
+                >
+                  <option value="">Todas as famílias</option>
+                  {meta.familias.map((f) => (
+                    <option key={f.value} value={f.label}>
+                      {f.label}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className="compass-shell__select"
+                  value={filters.tipo ?? ""}
+                  onChange={(e) => setTipo(e.target.value || undefined)}
+                  aria-label="Filtrar por tipo"
+                >
+                  <option value="">Todos os tipos</option>
+                  {meta.tipos.map((t) => (
+                    <option key={t.value} value={t.label}>
+                      {t.label}
+                    </option>
+                  ))}
+                </select>
+
+                <button type="button" className="compass-shell__reset" onClick={resetFilters}>
+                  Limpar filtros
+                </button>
+              </div>
             </div>
-
-            <div className="compass-shell__filters">
-              <select
-                className="compass-shell__select"
-                value={filters.diretoria ?? ""}
-                onChange={(e) => setDiretoria(e.target.value || undefined)}
-                aria-label="Filtrar por diretoria"
-              >
-                <option value="">Todas as diretorias</option>
-                {visibleDirectorias.map((d) => (
-                  <option key={d.value} value={d.label}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                className="compass-shell__select"
-                value={filters.unidade ?? ""}
-                onChange={(e) => setUnidade(e.target.value || undefined)}
-                aria-label="Filtrar por unidade"
-              >
-                <option value="">Todas as unidades</option>
-                {meta.unidades.map((u) => (
-                  <option key={u.value} value={u.label}>
-                    {u.label}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                className="compass-shell__select"
-                value={filters.familia ?? ""}
-                onChange={(e) => setFamilia(e.target.value || undefined)}
-                aria-label="Filtrar por família"
-              >
-                <option value="">Todas as famílias</option>
-                {meta.familias.map((f) => (
-                  <option key={f.value} value={f.label}>
-                    {f.label}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                className="compass-shell__select"
-                value={filters.tipo ?? ""}
-                onChange={(e) => setTipo(e.target.value || undefined)}
-                aria-label="Filtrar por tipo"
-              >
-                <option value="">Todos os tipos</option>
-                {meta.tipos.map((t) => (
-                  <option key={t.value} value={t.label}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
-
-              <button type="button" className="compass-shell__reset" onClick={resetFilters}>
-                Limpar filtros
-              </button>
-            </div>
-          </div>
+          ) : null}
         </header>
 
         <Outlet context={{ persona, meta, isFallback }} />

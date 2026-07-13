@@ -59,8 +59,12 @@
 
 .compass-help p {
   margin: 0;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #334155;
+}
+
+.compass-help p + p {
+  margin-top: 0.7rem;
 }
 
 .compass-fallback-banner {

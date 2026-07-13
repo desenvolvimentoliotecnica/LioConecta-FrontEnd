@@ -864,6 +864,128 @@
   margin-bottom: 0.85rem;
 }
 
+.compass-col-head {
+  vertical-align: top;
+  min-width: 7.5rem;
+}
+
+.compass-col-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 0.35rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: inherit;
+  text-align: left;
+}
+
+.compass-col-sort i {
+  opacity: 0.45;
+  font-size: 0.75rem;
+}
+
+.compass-col-sort.is-active,
+.compass-col-sort.is-active i {
+  color: #1d4ed8;
+  opacity: 1;
+}
+
+.compass-col-filter {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.3rem 0.45rem;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.compass-col-filter:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+  border-color: #60a5fa;
+}
+
+.compass-scenarios-infinite {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.compass-scenarios-infinite__sentinel {
+  height: 1px;
+  width: 100%;
+}
+
+.compass-scenarios-carousel {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.compass-scenarios-carousel__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.35rem 0.15rem 0.85rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.compass-scenarios-carousel__track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.compass-scenarios-carousel__track::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.compass-scenarios-carousel__nav {
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.compass-scenarios-carousel__nav:hover:not(:disabled) {
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.compass-scenarios-carousel__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .compass-scenarios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -872,12 +994,16 @@
 }
 
 .compass-scenario-card {
+  flex: 0 0 min(280px, 82vw);
+  width: min(280px, 82vw);
+  scroll-snap-align: start;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.25rem;
   position: relative;
   text-align: left;
+  overflow: hidden;
 }
 
 .compass-scenario-card--interactive {
@@ -895,6 +1021,16 @@
   outline-offset: 2px;
 }
 
+.compass-scenario-card--mock {
+  cursor: default;
+  opacity: 0.78;
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+}
+
+.compass-scenario-card--mock:disabled {
+  color: inherit;
+}
+
 .compass-scenario-card--selected {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
@@ -910,6 +1046,11 @@
   color: #fff;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
+  white-space: nowrap;
+}
+
+.compass-scenario-card__badge--soon {
+  background: #64748b;
 }
 
 .compass-scenario-card__icon {
@@ -926,8 +1067,12 @@
 
 .compass-scenario-card h2 {
   margin: 0 0 0.35rem;
+  padding-right: 4.5rem;
   font-size: 1.05rem;
   color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compass-scenario-card p {
@@ -935,7 +1080,9 @@
   color: #64748b;
   font-size: 0.88rem;
   line-height: 1.35;
-  min-height: 2.4em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compass-scenario-card__kpi {
@@ -943,6 +1090,7 @@
   flex-direction: column;
   gap: 0.15rem;
   margin-bottom: 0.75rem;
+  min-width: 0;
 }
 
 .compass-scenario-card__kpi-label {
@@ -950,6 +1098,9 @@
   color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compass-scenario-card__kpi-value {
@@ -958,6 +1109,9 @@
   color: #0f172a;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compass-scenario-card__meta {
@@ -967,6 +1121,13 @@
   gap: 0.5rem;
   font-size: 0.8rem;
   color: #64748b;
+  min-width: 0;
+}
+
+.compass-scenario-card__meta > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compass-scenario-card__cta {
@@ -975,6 +1136,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.compass-scenario-card--mock .compass-scenario-card__cta {
+  color: #94a3b8;
 }
 
 .compass-scenario-card__stats {
