@@ -2640,6 +2640,7 @@ export interface CompassScenariosDto {
 
 export interface CompassScenarioRowDto {
   sku: string;
+  skuDescription: string;
   cliente: string;
   ung: string;
   entity: string;
