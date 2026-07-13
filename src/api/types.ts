@@ -2614,6 +2614,53 @@ export interface CompassAggregatesDto {
   };
 }
 
+export interface CompassScenarioFiltersDto {
+  version: string;
+  scenario: string;
+  years: string;
+  period: string;
+}
+
+export interface CompassScenarioItemDto {
+  id: string;
+  account: string;
+  name: string;
+  description: string;
+  rowCount: number;
+  totalAmount: number;
+  status: string;
+}
+
+export interface CompassScenariosDto {
+  configured: boolean;
+  message?: string | null;
+  filters: CompassScenarioFiltersDto;
+  scenarios: CompassScenarioItemDto[];
+}
+
+export interface CompassScenarioRowDto {
+  sku: string;
+  cliente: string;
+  ung: string;
+  entity: string;
+  amount: number;
+}
+
+export interface CompassScenarioRowsPageDto {
+  scenarioId: string;
+  account: string;
+  name: string;
+  configured: boolean;
+  message?: string | null;
+  filters: CompassScenarioFiltersDto;
+  items: CompassScenarioRowDto[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalAmount: number;
+  totalPages: number;
+}
+
 export interface CompassDashboardDto {
   snapshot: CompassSnapshotDto;
   currentPhaseLabel: string;
