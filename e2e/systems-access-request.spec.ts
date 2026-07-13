@@ -34,7 +34,7 @@ const SYSTEM = {
   sortOrder: 1,
 };
 
-const AREAS = [{ id: "ti", name: "Área TI", icon: "laptop", serviceCount: 2, entityId: 1 }];
+const AREAS = [{ id: "1", name: "Root entity", icon: "folder", serviceCount: 2, entityId: 1 }];
 
 const CATEGORIES = [
   {

@@ -15,7 +15,8 @@ export const SYSTEMS_ACCESS_PREFERRED_ROOT_NAMES = [
   "Sistemas Corporativos",
 ] as const;
 
-export const SYSTEMS_ACCESS_TI_AREA_ID = "ti";
+/** Preferência de entidade GLPI (id numérico). Áreas do wizard passam a ser entidades GLPI. */
+export const SYSTEMS_ACCESS_PREFERRED_ENTITY_ID = 1;
 
 export const SYSTEMS_ACCESS_ENVIRONMENTS = [
   { value: "dev", label: "Dev" },

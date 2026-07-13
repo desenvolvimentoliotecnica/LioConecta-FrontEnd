@@ -16,10 +16,7 @@ const ME = {
 };
 
 const AREAS = [
-  { id: "ti", name: "Área TI", icon: "laptop", serviceCount: 21, entityId: 1 },
-  { id: "custo", name: "Área CUSTO", icon: "money", serviceCount: 1, entityId: 1 },
-  { id: "pricing", name: "Área PRINCING", icon: "clipboard", serviceCount: 6, entityId: 1 },
-  { id: "financeira", name: "Área Financeira", icon: "money", serviceCount: 2, entityId: 1 },
+  { id: "1", name: "Root entity", icon: "folder", serviceCount: 21, entityId: 1 },
 ];
 
 const TI_ROOT_CATEGORIES = [
@@ -74,8 +71,16 @@ async function mockHelpDeskApi(page: import("@playwright/test").Page) {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify({ openTickets: 0, avgResponseLabel: "2h" }),
+      body: JSON.stringify({ openTickets: 0, avgResponseLabel: "2h", canViewAllTickets: false }),
     });
+  });
+
+  await page.route("**/api/v1/ti/help-desk/tickets/mine**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
+  });
+
+  await page.route("**/api/v1/ti/help-desk/tickets/all**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
   });
 
   await page.route("**/api/v1/ti/help-desk/services", async (route) => {
@@ -105,7 +110,7 @@ async function mockHelpDeskApi(page: import("@playwright/test").Page) {
 
   await page.route("**/api/v1/ti/help-desk/categories**", async (route) => {
     const url = new URL(route.request().url());
-    if (url.searchParams.get("areaId") !== "ti") {
+    if (url.searchParams.get("areaId") !== "1") {
       await route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
       return;
     }
@@ -129,14 +134,17 @@ async function mockHelpDeskApi(page: import("@playwright/test").Page) {
   });
 }
 
-test.describe("Help Desk wizard — catálogo Área TI", () => {
+test.describe("Help Desk wizard — catálogo por entidade GLPI", () => {
   test.setTimeout(60_000);
 
   test.beforeAll(() => {
     fs.mkdirSync(evidenceDir, { recursive: true });
   });
 
-  test("exibe 21 serviços após selecionar Área TI", async ({ page }) => {
+  test("exibe 21 serviços após selecionar entidade GLPI", async ({ page, context }) => {
+    await context.addInitScript(() => {
+      sessionStorage.setItem("lioconecta.auth.token", "e2e-mock-token");
+    });
     await mockHelpDeskApi(page);
     await page.goto("/servicos/help-desk");
     await expect(page.getByRole("heading", { name: "Help Desk" })).toBeVisible({ timeout: 15_000 });
@@ -146,9 +154,9 @@ test.describe("Help Desk wizard — catálogo Área TI", () => {
     const wizard = page.getByRole("dialog", { name: "Abrir chamado" });
     await expect(wizard).toBeVisible();
 
-    await wizard.getByRole("listitem").filter({ hasText: "Área TI" }).click();
+    await wizard.getByRole("listitem").filter({ hasText: "Root entity" }).click();
     await expect(wizard.getByText("Área selecionada")).toBeVisible();
-    await expect(wizard.getByText("Área TI").first()).toBeVisible();
+    await expect(wizard.getByText("Root entity").first()).toBeVisible();
 
     const catalogCards = wizard.locator(".hd-wizard__card");
     await expect(catalogCards).toHaveCount(21, { timeout: 10_000 });
