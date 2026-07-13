@@ -2284,11 +2284,19 @@ export interface HelpDeskTicketEventDto {
   author?: string | null;
 }
 
+export interface HelpDeskTicketAttachmentDto {
+  documentId: string;
+  fileName: string;
+  contentType?: string | null;
+  sizeBytes?: number | null;
+}
+
 export interface HelpDeskTicketDetailDto {
   summary: HelpDeskTicketListItemDto;
   description: string;
   assignee?: string | null;
   events: HelpDeskTicketEventDto[];
+  attachments?: HelpDeskTicketAttachmentDto[];
 }
 
 export type OrgPositionSource = "graph" | "manual";
