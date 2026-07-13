@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, config } from "../client";
+import { downloadBlobWithToast } from "../../utils/payslipToast";
 
 import type {
 
@@ -152,6 +153,27 @@ export function useHelpDeskTicketDetail(ticketId: string | null, enabled: boolea
 
   });
 
+}
+
+export async function fetchHelpDeskTicketAttachmentBlob(
+  ticketId: string,
+  documentId: string,
+): Promise<Blob> {
+  return api.getBlob(
+    `/ti/help-desk/tickets/${encodeURIComponent(ticketId)}/attachments/${encodeURIComponent(documentId)}`,
+  );
+}
+
+export async function downloadHelpDeskTicketAttachment(
+  ticketId: string,
+  documentId: string,
+  fileName: string,
+) {
+  await downloadBlobWithToast(
+    fetchHelpDeskTicketAttachmentBlob(ticketId, documentId),
+    fileName,
+    "Anexo baixado com sucesso.",
+  );
 }
 
 
