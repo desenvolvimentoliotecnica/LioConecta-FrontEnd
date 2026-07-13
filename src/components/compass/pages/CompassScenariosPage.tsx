@@ -35,27 +35,48 @@ function unitLabel(scenarioId: string): string {
   return "peso";
 }
 
+function formatCliente(row: { cliente: string; clienteNome?: string }): string {
+  if (row.cliente === "NA_Cliente") return "—";
+  return row.clienteNome?.trim() || row.cliente.replace(/^CLI_/, "") || "—";
+}
+
+function formatUng(row: { ung: string; ungNome?: string }): string {
+  if (row.ung === "NA_UNG") return "—";
+  return row.ungNome?.trim() || row.ung.replace(/^UN_/, "UN ") || "—";
+}
+
 function exportRowsCsv(
   scenarioName: string,
   rows: {
     sku: string;
     skuDescription: string;
     cliente: string;
+    clienteNome: string;
     ung: string;
+    ungNome: string;
     entity: string;
     amount: number;
   }[],
   includeClienteUng: boolean,
 ) {
   const header = includeClienteUng
-    ? ["SKU", "Descricao", "Cliente", "UN", "Entity", "Valor"]
+    ? ["SKU", "Descricao", "Cliente", "ClienteCodigo", "UN", "UNCodigo", "Entity", "Valor"]
     : ["SKU", "Descricao", "Entity", "Valor"];
   const lines = [
     header.join(";"),
     ...rows.map((r) => {
       const amount = r.amount.toString().replace(".", ",");
       if (includeClienteUng) {
-        return [r.sku, r.skuDescription || "", r.cliente, r.ung, r.entity, amount].join(";");
+        return [
+          r.sku,
+          r.skuDescription || "",
+          formatCliente(r),
+          r.cliente,
+          formatUng(r),
+          r.ung,
+          r.entity,
+          amount,
+        ].join(";");
       }
       return [r.sku, r.skuDescription || "", r.entity, amount].join(";");
     }),
@@ -116,7 +137,7 @@ export function CompassScenariosPage() {
   const isPesoFinanceiro = selectedId === "peso-financeiro";
   const searchPlaceholder = isPesoFinanceiro
     ? "Ex.: OVOMALTINE ou 120501011"
-    : "Ex.: SKU_12007 ou PENNACCHI";
+    : "Ex.: AB BR07, Food Service ou 120501";
 
   return (
     <main className="compass-page">
@@ -222,7 +243,7 @@ export function CompassScenariosPage() {
         >
           <div className="compass-scenarios-detail-toolbar">
             <label className="compass-scenarios-toolbar__field compass-scenarios-toolbar__field--grow">
-              <span>{isPesoFinanceiro ? "Buscar SKU ou descrição" : "Buscar SKU ou cliente"}</span>
+              <span>{isPesoFinanceiro ? "Buscar SKU ou descrição" : "Buscar SKU, cliente ou UN"}</span>
               <input
                 type="search"
                 value={searchInput}
@@ -266,10 +287,12 @@ export function CompassScenariosPage() {
                         <td>{row.sku.replace(/^SKU_/, "")}</td>
                         <td>{row.skuDescription?.trim() ? row.skuDescription : "—"}</td>
                         {!isPesoFinanceiro ? (
-                          <td>{row.cliente === "NA_Cliente" ? "—" : row.cliente}</td>
+                          <td title={row.cliente !== "NA_Cliente" ? row.cliente : undefined}>
+                            {formatCliente(row)}
+                          </td>
                         ) : null}
                         {!isPesoFinanceiro ? (
-                          <td>{row.ung === "NA_UNG" ? "—" : row.ung}</td>
+                          <td title={row.ung !== "NA_UNG" ? row.ung : undefined}>{formatUng(row)}</td>
                         ) : null}
                         <td>{row.entity}</td>
                         <td>{formatAmount(row.amount)}</td>
