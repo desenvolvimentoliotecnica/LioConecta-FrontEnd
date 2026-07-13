@@ -634,7 +634,7 @@ export function BackendConfigPage() {
           <ConfigSectionHead
             titleId="compass-module-title"
             title="Compass IBP — módulo"
-            description="Habilita ou desabilita o módulo Compass no portal. Permissões de acesso são gerenciadas em Controle de acesso (RBAC)."
+            description="Habilita o módulo Compass e configura Host/Usuário/Senha do Datalake para os cenários IBP. Permissões de acesso são gerenciadas em Controle de acesso (RBAC)."
             helpCategoryId={COMPASS_MODULE_ID}
             onOpenHelp={setHelpCategory}
           />
