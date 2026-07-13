@@ -338,9 +338,28 @@ export function UniLioCourseEditPage() {
     try {
       await uploadScorm.mutateAsync({ file, passingScore: scormPassingScore });
       setScormUploadStatus("success");
-    } catch {
+    } catch (err) {
       setScormUploadStatus("error");
-      setScormUploadError("Falha ao enviar o pacote SCORM. Verifique o arquivo e tente novamente.");
+      let detail = "Verifique o arquivo e tente novamente.";
+      if (err && typeof err === "object" && "body" in err) {
+        const body = (err as { body?: unknown }).body;
+        if (body && typeof body === "object") {
+          const record = body as Record<string, unknown>;
+          const candidate =
+            (typeof record.detail === "string" && record.detail) ||
+            (typeof record.title === "string" && record.title) ||
+            (typeof record.message === "string" && record.message) ||
+            null;
+          if (candidate) detail = candidate;
+        } else if (typeof body === "string" && body.trim()) {
+          detail = body.trim();
+        }
+      } else if (err instanceof Error && err.message.includes("404")) {
+        detail = "Endpoint SCORM indisponível na API (404). O backend precisa do deploy da feature SCORM.";
+      } else if (err instanceof Error && err.message.trim()) {
+        detail = err.message;
+      }
+      setScormUploadError(`Falha ao enviar o pacote SCORM. ${detail}`);
     }
   }
 

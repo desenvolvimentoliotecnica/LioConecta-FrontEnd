@@ -1,6 +1,7 @@
 import {
   canAccessAdminArea,
   canAccessRbacAdmin,
+  canAccessServicosPath,
   hasPermission,
 } from "../api/auth";
 import type { MeDto } from "../api/types";
@@ -56,6 +57,17 @@ function canSeePath(path: string, me: MeDto | undefined | null): boolean {
   if (path === "/feedback" || path.startsWith("/feedback/")) {
     return hasPermission(me ?? undefined, PERMISSIONS.feedback.submit);
   }
+  if (
+    path === "/servicos/vale-transporte" ||
+    path === "/servicos/reembolso-despesas" ||
+    path === "/servicos/adiantamento-viagem" ||
+    path === "/servicos/beneficios/gestao" ||
+    path === "/servicos/ferias-ausencias/gestao" ||
+    path === "/servicos/ponto-eletronico/gestao" ||
+    path === "/servicos/contracheque/acessos"
+  ) {
+    return canAccessServicosPath(me ?? undefined, path);
+  }
   return true;
 }
 
@@ -84,4 +96,4 @@ export function searchPortalPages(
     })
     .slice(0, limit);
 }
-
+

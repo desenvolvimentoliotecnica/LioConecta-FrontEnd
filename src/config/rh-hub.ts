@@ -1,3 +1,5 @@
+import { canAccessServicosNavItem } from "../api/auth";
+import type { MeDto } from "../api/types";
 import { servicosLinks } from "./navigation";
 import type { HubRecentItem, HubSection } from "./pessoas-hub";
 
@@ -39,7 +41,7 @@ const RH_MOD: Record<string, string> = {
   "vale-transporte": "vale-transporte",
 };
 
-export const RH_SECTIONS: HubSection[] = servicosLinks.map((link) => {
+function toRhSection(link: (typeof servicosLinks)[number]): HubSection {
   const slug = link.path.split("/").pop() ?? link.path;
   return {
     id: slug,
@@ -50,7 +52,9 @@ export const RH_SECTIONS: HubSection[] = servicosLinks.map((link) => {
     mod: RH_MOD[slug] ?? slug,
     count: RH_COUNTS[slug] ?? "Disponível",
   };
-});
+}
+
+export const RH_SECTIONS: HubSection[] = servicosLinks.map(toRhSection);
 
 export const RH_RECENT: HubRecentItem[] = [
   {
@@ -87,10 +91,13 @@ export const RH_RECENT: HubRecentItem[] = [
   },
 ];
 
-export function filterRhSections(query: string): HubSection[] {
+export function filterRhSections(query: string, me?: MeDto | null): HubSection[] {
+  const visible = servicosLinks
+    .filter((link) => canAccessServicosNavItem(me ?? undefined, link))
+    .map(toRhSection);
   const normalized = query.trim().toLowerCase();
-  if (!normalized) return RH_SECTIONS;
-  return RH_SECTIONS.filter(
+  if (!normalized) return visible;
+  return visible.filter(
     (section) =>
       section.label.toLowerCase().includes(normalized) ||
       section.description.toLowerCase().includes(normalized),

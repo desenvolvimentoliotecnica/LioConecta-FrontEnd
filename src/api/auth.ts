@@ -1,11 +1,8 @@
 import type { DataScope, EffectivePermissionDto, MeDto, UserRole } from "./types";
-
+import { servicosLinks } from "../config/navigation";
 import {
-
   PERMISSIONS,
-
   RBAC_ADMIN_PERMISSIONS as RBAC_ADMIN_PERMISSION_KEYS,
-
 } from "../config/rbac/permissions";
 
 
@@ -180,6 +177,57 @@ export function canAccessPontoManagement(me: MeDto | undefined): boolean {
 /** Aprovação de grupos: alinhado ao backend (`groups.approve`). */
 export function canAccessGroupApprovals(me: MeDto | undefined): boolean {
   return hasPermission(me, PERMISSIONS.groups.approve);
+}
+
+/** Nav `permission` field: string = required key; array = OR. */
+export function canAccessNavPermission(
+  me: MeDto | undefined,
+  permission?: string | readonly string[],
+): boolean {
+  if (!permission) return true;
+  if (typeof permission === "string") return hasPermission(me, permission);
+  return hasAnyPermission(me, permission);
+}
+
+/** Serviços Topbar/hub: flags *Only + campo `permission`. */
+export function canAccessServicosNavItem(
+  me: MeDto | undefined,
+  item: {
+    benefitsManageOnly?: boolean;
+    leaveManageOnly?: boolean;
+    pontoManageOnly?: boolean;
+    payslipsAuditOnly?: boolean;
+    permission?: string | readonly string[];
+  },
+): boolean {
+  if (item.benefitsManageOnly && !hasPermission(me, PERMISSIONS.benefits.manage)) return false;
+  if (
+    item.leaveManageOnly &&
+    !hasPermission(me, PERMISSIONS.leave.manage) &&
+    !hasPermission(me, PERMISSIONS.leave.approve)
+  ) {
+    return false;
+  }
+  if (
+    item.pontoManageOnly &&
+    !hasPermission(me, PERMISSIONS.ponto.manage) &&
+    !hasPermission(me, PERMISSIONS.ponto.approve)
+  ) {
+    return false;
+  }
+  if (item.payslipsAuditOnly && !hasPermission(me, PERMISSIONS.payslips.audit)) return false;
+  return canAccessNavPermission(me, item.permission);
+}
+
+/** Lookup permission requirement for a Serviços path (sitemap / busca / deep link). */
+export function getServicosNavPermission(path: string): string | readonly string[] | undefined {
+  return servicosLinks.find((item) => item.path === path)?.permission;
+}
+
+export function canAccessServicosPath(me: MeDto | undefined, path: string): boolean {
+  const item = servicosLinks.find((link) => link.path === path);
+  if (!item) return true;
+  return canAccessServicosNavItem(me, item);
 }
 
 export function canAccessLoopModule(

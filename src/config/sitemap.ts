@@ -26,6 +26,8 @@ export type SitemapEntry = {
   description?: string;
   disabled?: boolean;
   maturity?: PageMaturity;
+  /** When set, mapa/busca ocultam o item sem a permissão. */
+  permission?: string | readonly string[];
 };
 
 export type SitemapSubsection = {
@@ -51,6 +53,7 @@ function fromNav(item: NavLinkItem, description?: string): SitemapEntry {
     description,
     disabled: item.path === "#",
     maturity: getPageMaturity(item.path),
+    permission: item.permission,
   };
 }
 
@@ -517,4 +520,27 @@ export function filterSitemapSections(
   }
 
   return filtered;
+}
+
+/** Remove entries the user cannot access (RBAC on NavLinkItem.permission). */
+export function filterSitemapByAccess(
+  sections: SitemapSection[],
+  canAccess: (permission?: string | readonly string[]) => boolean,
+): SitemapSection[] {
+  const keep = (entry: SitemapEntry) => canAccess(entry.permission);
+
+  return sections
+    .map((section) => {
+      if (section.items) {
+        return { ...section, items: section.items.filter(keep) };
+      }
+      if (section.subsections) {
+        const subsections = section.subsections
+          .map((sub) => ({ ...sub, items: sub.items.filter(keep) }))
+          .filter((sub) => sub.items.length > 0);
+        return { ...section, subsections };
+      }
+      return section;
+    })
+    .filter((section) => (section.items?.length ?? 0) > 0 || (section.subsections?.length ?? 0) > 0);
 }

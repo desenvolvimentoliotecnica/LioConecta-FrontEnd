@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { canAccessServicosNavItem } from "../../api/auth";
 import { usePortalUiSettings } from "../../api/hooks/usePortalUiSettings";
-import { PERMISSIONS } from "../../config/rbac/permissions";
 import { usePermissions } from "../../hooks/usePermissions";
 import { MATURITY_META, getPageMaturity } from "../../config/page-maturity";
 import type { NavLinkItem } from "../../config/navigation";
@@ -162,12 +162,16 @@ function Dropdown({
             {rhOnlyLinks.map((item) => (
               <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
             ))}
-            <span className={`topbar__menu-heading ${servicosHeadings[1].className}`} role="presentation">
-              <i className={`fa-solid ${servicosHeadings[1].icon}`} aria-hidden="true" /> {servicosHeadings[1].label}
-            </span>
-            {financeiroLinks.map((item) => (
-              <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
-            ))}
+            {financeiroLinks.length > 0 ? (
+              <>
+                <span className={`topbar__menu-heading ${servicosHeadings[1].className}`} role="presentation">
+                  <i className={`fa-solid ${servicosHeadings[1].icon}`} aria-hidden="true" /> {servicosHeadings[1].label}
+                </span>
+                {financeiroLinks.map((item) => (
+                  <MenuItemLink key={item.path} item={item} showBadges={showBadges} onNavigate={close} />
+                ))}
+              </>
+            ) : null}
             <span className={`topbar__menu-heading ${servicosHeadings[2].className}`} role="presentation">
               <i className={`fa-solid ${servicosHeadings[2].icon}`} aria-hidden="true" /> {servicosHeadings[2].label}
             </span>
@@ -199,22 +203,10 @@ function Dropdown({
 
 export function Topbar() {
   const { data: portalUi } = usePortalUiSettings();
-  const { hasPermission } = usePermissions();
+  const { me } = usePermissions();
   const showBadges = portalUi.maturityBadgesEnabled;
-  const canManageBenefits = hasPermission(PERMISSIONS.benefits.manage);
-  const canManageLeave =
-    hasPermission(PERMISSIONS.leave.manage) || hasPermission(PERMISSIONS.leave.approve);
-  const canManagePonto =
-    hasPermission(PERMISSIONS.ponto.manage) || hasPermission(PERMISSIONS.ponto.approve);
-  const canAuditPayslips = hasPermission(PERMISSIONS.payslips.audit);
 
-  const filterServicosItem = (item: NavLinkItem) => {
-    if (item.benefitsManageOnly && !canManageBenefits) return false;
-    if (item.leaveManageOnly && !canManageLeave) return false;
-    if (item.pontoManageOnly && !canManagePonto) return false;
-    if (item.payslipsAuditOnly && !canAuditPayslips) return false;
-    return true;
-  };
+  const filterServicosItem = (item: NavLinkItem) => canAccessServicosNavItem(me, item);
   const visibleServicosLinks = servicosLinks.filter(filterServicosItem);
 
   return (
