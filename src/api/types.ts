@@ -2642,7 +2642,9 @@ export interface CompassScenarioRowDto {
   sku: string;
   skuDescription: string;
   cliente: string;
+  clienteNome: string;
   ung: string;
+  ungNome: string;
   entity: string;
   amount: number;
 }
