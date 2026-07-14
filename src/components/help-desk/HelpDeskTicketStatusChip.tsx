@@ -24,11 +24,19 @@ function statusModifier(status: string): string {
   }
 }
 
+export function formatHelpDeskStatusLabel(label: string): string {
+  const trimmed = label.trim();
+  if (/^em atendimento/i.test(trimmed)) {
+    return "Em atendimento";
+  }
+  return trimmed;
+}
+
 export function HelpDeskTicketStatusChip({ status, label }: Props) {
   const modifier = statusModifier(status);
   return (
     <span className={`hd-ticket-status hd-ticket-status--${modifier}`}>
-      {label}
+      {formatHelpDeskStatusLabel(label)}
     </span>
   );
 }

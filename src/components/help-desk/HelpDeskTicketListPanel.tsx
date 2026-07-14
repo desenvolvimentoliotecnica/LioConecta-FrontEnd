@@ -6,26 +6,42 @@ import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
 const PAGE_SIZE = 15;
 const SCOPE = "90d";
+const SUBJECT_MAX = 40;
 
 type TicketView = "mine" | "all";
-type SortKey = "default" | "createdAtDesc" | "createdAtAsc" | "priority" | "status" | "subject";
+type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "createdAt";
+type SortDir = "asc" | "desc";
 
 type Props = {
   canViewAllTickets?: boolean;
 };
 
-const SORT_OPTIONS: { id: SortKey; label: string }[] = [
-  { id: "default", label: "Padrão" },
-  { id: "createdAtDesc", label: "Mais recentes" },
-  { id: "createdAtAsc", label: "Mais antigos" },
-  { id: "priority", label: "Prioridade" },
-  { id: "status", label: "Status" },
-  { id: "subject", label: "Assunto (A–Z)" },
-];
-
 function formatDate(value: string): string {
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
+  if (Number.isNaN(date.getTime())) return value;
+  return date
+    .toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(",", "");
+}
+
+function toTitleCase(value: string): string {
+  return value
+    .trim()
+    .toLocaleLowerCase("pt-BR")
+    .replace(/(^|[\s([{/'-])(\S)/g, (_, prefix: string, char: string) => prefix + char.toLocaleUpperCase("pt-BR"));
+}
+
+function truncateSubject(value: string): { text: string; full: string } {
+  const full = value.trim();
+  if (full.length <= SUBJECT_MAX) return { text: full, full };
+  return { text: `${full.slice(0, SUBJECT_MAX).trimEnd()}…`, full };
 }
 
 function priorityRank(label: string): number {
@@ -38,23 +54,34 @@ function priorityRank(label: string): number {
   return 5;
 }
 
-/** Padrão: Pendente → Em atendimento (atribuído) → Resolvido → Fechado; demais status no meio. */
+function priorityModifier(label: string): string {
+  const normalized = label.trim().toLowerCase();
+  if (normalized.includes("muito alta") || normalized.includes("crítica") || normalized.includes("critica")) {
+    return "critical";
+  }
+  if (normalized.includes("alta") || normalized.includes("high") || normalized.includes("urgent")) return "high";
+  if (normalized.includes("média") || normalized.includes("media") || normalized.includes("medium")) return "medium";
+  if (normalized.includes("muito baixa")) return "lowest";
+  if (normalized.includes("baixa") || normalized.includes("low")) return "low";
+  return "unknown";
+}
+
 function defaultStatusRank(status: string): number {
   switch (status) {
     case "4":
-      return 0; // Pendente
+      return 0;
     case "1":
-      return 1; // Novo
+      return 1;
     case "2":
-      return 2; // Em atendimento (atribuído)
+      return 2;
     case "3":
-      return 3; // Em atendimento (planejado)
+      return 3;
     case "10":
-      return 4; // Aprovação
+      return 4;
     case "5":
-      return 5; // Resolvido
+      return 5;
     case "6":
-      return 6; // Fechado
+      return 6;
     default:
       return 7;
   }
@@ -64,34 +91,52 @@ function compareCreatedAtAsc(a: HelpDeskTicketListItemDto, b: HelpDeskTicketList
   return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 }
 
-function sortTickets(items: HelpDeskTicketListItemDto[], sort: SortKey): HelpDeskTicketListItemDto[] {
+function sortTickets(
+  items: HelpDeskTicketListItemDto[],
+  column: SortColumn | null,
+  direction: SortDir,
+): HelpDeskTicketListItemDto[] {
   const next = [...items];
+  const dir = direction === "asc" ? 1 : -1;
+
   next.sort((a, b) => {
-    switch (sort) {
-      case "default": {
-        const byStatus = defaultStatusRank(a.status) - defaultStatusRank(b.status);
-        if (byStatus !== 0) return byStatus;
-        return compareCreatedAtAsc(a, b);
-      }
-      case "createdAtAsc":
-        return compareCreatedAtAsc(a, b);
-      case "priority": {
-        const byPriority = priorityRank(a.priorityLabel) - priorityRank(b.priorityLabel);
-        if (byPriority !== 0) return byPriority;
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      }
-      case "status": {
-        const byStatus = defaultStatusRank(a.status) - defaultStatusRank(b.status);
-        if (byStatus !== 0) return byStatus;
-        return compareCreatedAtAsc(a, b);
-      }
-      case "subject":
-        return a.subject.localeCompare(b.subject, "pt-BR");
-      case "createdAtDesc":
-      default:
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    if (!column) {
+      const byStatus = defaultStatusRank(a.status) - defaultStatusRank(b.status);
+      if (byStatus !== 0) return byStatus;
+      return compareCreatedAtAsc(a, b);
     }
+
+    let result = 0;
+    switch (column) {
+      case "ticketId":
+        result = Number(a.ticketId) - Number(b.ticketId);
+        if (Number.isNaN(result)) result = a.ticketId.localeCompare(b.ticketId, "pt-BR");
+        break;
+      case "subject":
+        result = a.subject.localeCompare(b.subject, "pt-BR");
+        break;
+      case "requester":
+        result = (a.requesterLabel ?? "").localeCompare(b.requesterLabel ?? "", "pt-BR");
+        break;
+      case "priority":
+        result = priorityRank(a.priorityLabel) - priorityRank(b.priorityLabel);
+        break;
+      case "status":
+        result = defaultStatusRank(a.status) - defaultStatusRank(b.status);
+        break;
+      case "createdAt":
+        result = compareCreatedAtAsc(a, b);
+        break;
+      default:
+        result = 0;
+    }
+
+    if (result === 0 && column !== "createdAt") {
+      result = compareCreatedAtAsc(a, b);
+    }
+    return result * dir;
   });
+
   return next;
 }
 
@@ -106,6 +151,7 @@ function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): 
     ticket.requesterLabel ?? "",
     ticket.status,
     ticket.statusLabel,
+    ticket.priorityLabel,
   ]
     .join(" ")
     .toLowerCase();
@@ -113,9 +159,46 @@ function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): 
   return haystack.includes(q);
 }
 
+function SortHeader({
+  label,
+  column,
+  activeColumn,
+  direction,
+  align = "center",
+  onSort,
+}: {
+  label: string;
+  column: SortColumn;
+  activeColumn: SortColumn | null;
+  direction: SortDir;
+  align?: "left" | "center";
+  onSort: (column: SortColumn) => void;
+}) {
+  const active = activeColumn === column;
+  return (
+    <th className={`hd-ticket-list__th hd-ticket-list__th--${align}${active ? " is-sorted" : ""}`}>
+      <button
+        type="button"
+        className="hd-ticket-list__sort-btn"
+        aria-label={`Ordenar por ${label}`}
+        onClick={() => onSort(column)}
+      >
+        <span>{label}</span>
+        <i
+          className={`fa-solid ${
+            active ? (direction === "asc" ? "fa-sort-up" : "fa-sort-down") : "fa-sort"
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+    </th>
+  );
+}
+
 export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
   const [view, setView] = useState<TicketView>(canViewAllTickets ? "all" : "mine");
-  const [sort, setSort] = useState<SortKey>("default");
+  const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
@@ -144,7 +227,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
     return items.filter((ticket) => matchesTicketSearch(ticket, search));
   }, [ticketsQuery.data, search]);
 
-  const sorted = useMemo(() => sortTickets(filtered, sort), [filtered, sort]);
+  const sorted = useMemo(() => sortTickets(filtered, sortColumn, sortDir), [filtered, sortColumn, sortDir]);
 
   const visible = useMemo(() => sorted.slice(0, visibleCount), [sorted, visibleCount]);
   const hasMore = sorted.length > visibleCount;
@@ -153,7 +236,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [view, sort, search, ticketsQuery.data]);
+  }, [view, sortColumn, sortDir, search, ticketsQuery.data]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -172,6 +255,15 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
     observer.observe(node);
     return () => observer.disconnect();
   }, [hasMore, visibleCount, visible.length]);
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDir((current) => (current === "asc" ? "desc" : "asc"));
+      return;
+    }
+    setSortColumn(column);
+    setSortDir(column === "createdAt" || column === "priority" ? "desc" : "asc");
+  };
 
   return (
     <>
@@ -228,21 +320,6 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                 </button>
               </div>
             ) : null}
-
-            <label className="hd-ticket-list__sort">
-              <span className="hd-ticket-list__sort-label">Ordenar</span>
-              <select
-                value={sort}
-                aria-label="Ordenar chamados"
-                onChange={(event) => setSort(event.target.value as SortKey)}
-              >
-                {SORT_OPTIONS.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
           </div>
         </div>
 
@@ -267,39 +344,97 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
             <table className="pay-table hd-track__table hd-ticket-list__table">
               <thead>
                 <tr>
-                  <th>Protocolo</th>
-                  <th>Assunto</th>
-                  {showRequester ? <th>Solicitante</th> : null}
-                  <th>Prioridade</th>
-                  <th>Status</th>
-                  <th>Abertura</th>
-                  <th className="hd-track__actions-col">Ações</th>
+                  <SortHeader
+                    label="Protocolo"
+                    column="ticketId"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Assunto"
+                    column="subject"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    align="left"
+                    onSort={handleSort}
+                  />
+                  {showRequester ? (
+                    <SortHeader
+                      label="Solicitante"
+                      column="requester"
+                      activeColumn={sortColumn}
+                      direction={sortDir}
+                      align="left"
+                      onSort={handleSort}
+                    />
+                  ) : null}
+                  <SortHeader
+                    label="Prioridade"
+                    column="priority"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Status"
+                    column="status"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    onSort={handleSort}
+                  />
+                  <SortHeader
+                    label="Abertura"
+                    column="createdAt"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    onSort={handleSort}
+                  />
+                  <th className="hd-track__actions-col hd-ticket-list__th hd-ticket-list__th--center">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {visible.map((ticket) => (
-                  <tr key={ticket.ticketId} data-ticket-id={ticket.ticketId}>
-                    <td>#{ticket.ticketId}</td>
-                    <td>{ticket.subject}</td>
-                    {showRequester ? <td>{ticket.requesterLabel ?? "—"}</td> : null}
-                    <td>{ticket.priorityLabel}</td>
-                    <td>
-                      <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
-                    </td>
-                    <td>{formatDate(ticket.createdAt)}</td>
-                    <td className="hd-track__actions-col">
-                      <button
-                        type="button"
-                        className="hd-track__view-btn"
-                        aria-label={`Visualizar chamado #${ticket.ticketId}`}
-                        title="Visualizar detalhes"
-                        onClick={() => setDetailTicket(ticket)}
-                      >
-                        <i className="fa-solid fa-eye" aria-hidden="true" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {visible.map((ticket) => {
+                  const subject = truncateSubject(ticket.subject);
+                  const requester = ticket.requesterLabel?.trim()
+                    ? toTitleCase(ticket.requesterLabel)
+                    : "—";
+                  return (
+                    <tr key={ticket.ticketId} data-ticket-id={ticket.ticketId}>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center">#{ticket.ticketId}</td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--subject" title={subject.full}>
+                        {subject.text}
+                      </td>
+                      {showRequester ? (
+                        <td className="hd-ticket-list__td hd-ticket-list__td--requester">{requester}</td>
+                      ) : null}
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                        <span
+                          className={`hd-ticket-priority hd-ticket-priority--${priorityModifier(ticket.priorityLabel)}`}
+                        >
+                          {ticket.priorityLabel}
+                        </span>
+                      </td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                        <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
+                      </td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__td--date">
+                        {formatDate(ticket.createdAt)}
+                      </td>
+                      <td className="hd-track__actions-col hd-ticket-list__td hd-ticket-list__td--center">
+                        <button
+                          type="button"
+                          className="hd-track__view-btn"
+                          aria-label={`Visualizar chamado #${ticket.ticketId}`}
+                          title="Visualizar detalhes"
+                          onClick={() => setDetailTicket(ticket)}
+                        >
+                          <i className="fa-solid fa-eye" aria-hidden="true" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 
