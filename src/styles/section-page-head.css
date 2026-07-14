@@ -330,11 +330,32 @@
   font-size: 24px;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  margin: 0 0 6px;
+  margin: 0;
   flex-shrink: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.section-page-head .page-header__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 6px;
+}
+
+.section-page-head .page-header__title-row .page-header__title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.section-page-head .page-header__title-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .section-page-head .page-header__subtitle-row,

@@ -17,6 +17,8 @@ export type SectionPageHeadProps = {
   syncMeta?: ReactNode;
   /** Search / filters row (barra de busca | filtros). */
   toolbar?: ReactNode;
+  /** Optional actions aligned with the title row (right side). */
+  titleActions?: ReactNode;
   /** Optional action button aligned with the subtitle row. */
   actions?: ReactNode;
 };
@@ -37,6 +39,7 @@ export function SectionPageHead({
   current,
   syncMeta,
   toolbar,
+  titleActions,
   actions,
 }: SectionPageHeadProps) {
   const meta = PAGE_HEAD_SECTIONS[section];
@@ -76,7 +79,10 @@ export function SectionPageHead({
           )}
         </nav>
 
-        <h1 className="page-header__title">{title}</h1>
+        <div className="page-header__title-row">
+          <h1 className="page-header__title">{title}</h1>
+          {titleActions ? <div className="page-header__title-actions">{titleActions}</div> : null}
+        </div>
 
         <div className="page-header__subtitle-row">
           <div className="page-header__subtitle">
