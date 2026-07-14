@@ -1018,6 +1018,16 @@
   padding: 4px 10px;
   font-size: 11px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  max-width: min(280px, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+span.hd-wizard__crumb {
+  cursor: default;
 }
 
 .hd-wizard__crumb.is-current {

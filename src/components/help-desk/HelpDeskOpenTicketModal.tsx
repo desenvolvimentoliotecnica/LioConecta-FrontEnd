@@ -16,7 +16,6 @@ import type {
 } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 import {
-  findAreaById,
   formatAreaServiceCount,
   getAreaIconClass,
 } from "./helpDeskAreaCatalog";
@@ -24,7 +23,6 @@ import { helpDeskQueryErrorMessage } from "./helpDeskQueryError";
 import {
   buildFormCategoryPath,
   formsInCategory,
-  formatFormCategoryPath,
   getChildFormCategories,
   getRootFormCategories,
   hasChildFormCategories,
@@ -376,7 +374,6 @@ function HelpDeskPeopleMultiPicker({
 
 export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, onSubmit }: Props) {
   const [phase, setPhase] = useState<WizardPhase>("area");
-  const [areaId, setAreaId] = useState<string | null>(null);
   const [entityId, setEntityId] = useState<number | null>(null);
   const [currentParentId, setCurrentParentId] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -417,8 +414,64 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     return formsInCategory(forms, categoryId);
   }, [forms, categoryId]);
 
-  const selectedArea = areaId !== null ? findAreaById(areas, areaId) : null;
   const selectedForm = formId !== null ? forms.find((item) => item.id === formId) : null;
+  const categoryPath = useMemo(() => {
+    if (categoryId == null) return [] as HelpDeskFormCategoryDto[];
+    return buildFormCategoryPath(formCategories, categoryId);
+  }, [formCategories, categoryId]);
+  const formBreadcrumbLabel = schema?.name?.trim() || selectedForm?.name?.trim() || null;
+
+  const openCategoryFromBreadcrumb = (item: HelpDeskFormCategoryDto) => {
+    setCurrentParentId(item.id);
+    setCategoryId(item.id);
+    setFormId(null);
+    setAnswers({});
+    setFilesByQuestion({});
+    setLocalError(null);
+    setPhase("services");
+  };
+
+  const renderWizardBreadcrumb = () => {
+    if (phase === "area") return null;
+
+    const categoryTrail =
+      phase === "catalog" ? [] : phase === "services" ? servicesBreadcrumb : categoryPath;
+    const showFormChip = phase === "details" && Boolean(formBreadcrumbLabel);
+
+    return (
+      <nav className="hd-wizard__breadcrumb" aria-label="Navegação do wizard">
+        <button type="button" className="hd-wizard__crumb" onClick={resetToArea}>
+          Início
+        </button>
+        <button
+          type="button"
+          className={`hd-wizard__crumb${phase === "catalog" ? " is-current" : ""}`}
+          onClick={resetToCatalog}
+        >
+          Catálogo
+        </button>
+        {categoryTrail.map((item, index) => {
+          const isLastCategory = index === categoryTrail.length - 1;
+          const isCurrent = phase === "services" && isLastCategory && !showFormChip;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={`hd-wizard__crumb${isCurrent ? " is-current" : ""}`}
+              onClick={() => openCategoryFromBreadcrumb(item)}
+            >
+              {item.name}
+            </button>
+          );
+        })}
+        {showFormChip ? (
+          <span className="hd-wizard__crumb is-current" aria-current="page">
+            {formBreadcrumbLabel}
+          </span>
+        ) : null}
+      </nav>
+    );
+  };
 
   const flatQuestions = useMemo(
     () => schema?.sections.flatMap((section) => section.questions) ?? [],
@@ -428,7 +481,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   useEffect(() => {
     if (!open) return;
     setPhase("area");
-    setAreaId(null);
     setEntityId(null);
     setCurrentParentId(null);
     setCategoryId(null);
@@ -447,7 +499,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
   const resetToArea = () => {
     setPhase("area");
-    setAreaId(null);
     setEntityId(null);
     setCurrentParentId(null);
     setCategoryId(null);
@@ -477,7 +528,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   };
 
   const handleAreaSelect = (item: HelpDeskAreaDto) => {
-    setAreaId(item.id);
     setEntityId(item.entityId);
     setCurrentParentId(null);
     setCategoryId(null);
@@ -984,11 +1034,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "catalog" ? (
             <>
-              <nav className="hd-wizard__breadcrumb" aria-label="Navegação do catálogo">
-                <button type="button" className="hd-wizard__crumb is-current" onClick={resetToArea}>
-                  Início
-                </button>
-              </nav>
+              {renderWizardBreadcrumb()}
 
               {formCategoriesQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando formulários…</p>
@@ -1008,28 +1054,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "services" ? (
             <>
-              <nav className="hd-wizard__breadcrumb" aria-label="Navegação dos formulários">
-                <button type="button" className="hd-wizard__crumb" onClick={resetToArea}>
-                  Início
-                </button>
-                <button type="button" className="hd-wizard__crumb" onClick={resetToCatalog}>
-                  Catálogo
-                </button>
-                {servicesBreadcrumb.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={`hd-wizard__crumb${item.id === currentParentId ? " is-current" : ""}`}
-                    onClick={() => {
-                      setCurrentParentId(item.id);
-                      setCategoryId(item.id);
-                      setFormId(null);
-                    }}
-                  >
-                    {item.name}
-                  </button>
-                ))}
-              </nav>
+              {renderWizardBreadcrumb()}
 
               {childCategories.length > 0 ? renderCategoryGrid(childCategories, handleChildCategorySelect) : null}
 
@@ -1045,25 +1070,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "details" ? (
             <>
-              <nav className="hd-wizard__path" aria-label="Seleção atual">
-                {selectedArea ? <span className="hd-wizard__path-item">{selectedArea.name}</span> : null}
-                {categoryId !== null ? (
-                  <>
-                    <i className="fa-solid fa-chevron-right hd-wizard__path-sep" aria-hidden="true" />
-                    <span className="hd-wizard__path-item">
-                      {formatFormCategoryPath(formCategories, categoryId)}
-                    </span>
-                  </>
-                ) : null}
-                {(selectedForm || schema) ? (
-                  <>
-                    <i className="fa-solid fa-chevron-right hd-wizard__path-sep" aria-hidden="true" />
-                    <span className="hd-wizard__path-item is-current">
-                      {schema?.name ?? selectedForm?.name}
-                    </span>
-                  </>
-                ) : null}
-              </nav>
+              {renderWizardBreadcrumb()}
 
               {schemaQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando perguntas do formulário…</p>
