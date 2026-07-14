@@ -360,22 +360,30 @@
 .hd-desc-fields {
   margin: 0;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
 }
 
 .hd-desc-field {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(140px, 34%) minmax(0, 1fr);
-  gap: 8px 14px;
-  align-items: start;
-  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 6px;
+  padding: 8px 10px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
+}
+
+.hd-desc-field--full {
+  grid-column: 1 / -1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 
 .hd-desc-field dt {
@@ -385,6 +393,7 @@
   line-height: 1.35;
   color: #64748b;
   text-transform: none;
+  flex: 0 0 auto;
 }
 
 .hd-desc-field dd {
@@ -394,6 +403,12 @@
   color: var(--wf-text, #0f172a);
   white-space: pre-wrap;
   word-break: break-word;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hd-desc-field--full dd {
+  width: 100%;
 }
 
 .hd-ticket-detail__description--html {
@@ -1008,8 +1023,13 @@
     grid-template-columns: 1fr;
   }
 
-  .hd-desc-field {
+  .hd-desc-fields {
     grid-template-columns: 1fr;
+  }
+
+  .hd-desc-field {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 4px;
   }
 

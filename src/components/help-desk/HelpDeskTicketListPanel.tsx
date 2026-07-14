@@ -8,13 +8,14 @@ const PAGE_SIZE = 15;
 const SCOPE = "90d";
 
 type TicketView = "mine" | "all";
-type SortKey = "createdAtDesc" | "createdAtAsc" | "priority" | "status" | "subject";
+type SortKey = "default" | "createdAtDesc" | "createdAtAsc" | "priority" | "status" | "subject";
 
 type Props = {
   canViewAllTickets?: boolean;
 };
 
 const SORT_OPTIONS: { id: SortKey; label: string }[] = [
+  { id: "default", label: "Padrão" },
   { id: "createdAtDesc", label: "Mais recentes" },
   { id: "createdAtAsc", label: "Mais antigos" },
   { id: "priority", label: "Prioridade" },
@@ -37,21 +38,52 @@ function priorityRank(label: string): number {
   return 5;
 }
 
+/** Padrão: Pendente → Em atendimento (atribuído) → Resolvido → Fechado; demais status no meio. */
+function defaultStatusRank(status: string): number {
+  switch (status) {
+    case "4":
+      return 0; // Pendente
+    case "1":
+      return 1; // Novo
+    case "2":
+      return 2; // Em atendimento (atribuído)
+    case "3":
+      return 3; // Em atendimento (planejado)
+    case "10":
+      return 4; // Aprovação
+    case "5":
+      return 5; // Resolvido
+    case "6":
+      return 6; // Fechado
+    default:
+      return 7;
+  }
+}
+
+function compareCreatedAtAsc(a: HelpDeskTicketListItemDto, b: HelpDeskTicketListItemDto): number {
+  return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+}
+
 function sortTickets(items: HelpDeskTicketListItemDto[], sort: SortKey): HelpDeskTicketListItemDto[] {
   const next = [...items];
   next.sort((a, b) => {
     switch (sort) {
+      case "default": {
+        const byStatus = defaultStatusRank(a.status) - defaultStatusRank(b.status);
+        if (byStatus !== 0) return byStatus;
+        return compareCreatedAtAsc(a, b);
+      }
       case "createdAtAsc":
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        return compareCreatedAtAsc(a, b);
       case "priority": {
         const byPriority = priorityRank(a.priorityLabel) - priorityRank(b.priorityLabel);
         if (byPriority !== 0) return byPriority;
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
       case "status": {
-        const byStatus = a.statusLabel.localeCompare(b.statusLabel, "pt-BR");
+        const byStatus = defaultStatusRank(a.status) - defaultStatusRank(b.status);
         if (byStatus !== 0) return byStatus;
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return compareCreatedAtAsc(a, b);
       }
       case "subject":
         return a.subject.localeCompare(b.subject, "pt-BR");
@@ -83,7 +115,7 @@ function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): 
 
 export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
   const [view, setView] = useState<TicketView>(canViewAllTickets ? "all" : "mine");
-  const [sort, setSort] = useState<SortKey>("createdAtDesc");
+  const [sort, setSort] = useState<SortKey>("default");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
