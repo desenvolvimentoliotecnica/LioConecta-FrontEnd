@@ -7,7 +7,7 @@ import {
 } from "../../api/hooks/useHelpDesk";
 import { ApiError } from "../../api/client";
 import { useToggleBookmark } from "../../api/hooks/usePreferences";
-import type { HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/types";
+import type { CreateHelpDeskTicketRequestDto, HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/types";
 import { bookmarkIdForHelpDesk } from "../../utils/money";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import { useEmailCompose } from "../email/EmailComposeProvider";
@@ -120,13 +120,7 @@ export function HelpDeskPage() {
     }
   };
 
-  const handleCreateTicket = (payload: {
-    subject: string;
-    priority: string;
-    entityId: number;
-    categoryId: number;
-    description: string;
-  }) => {
+  const handleCreateTicket = (payload: CreateHelpDeskTicketRequestDto) => {
     setCreateError(null);
     createMutation.mutate(payload, {
       onSuccess: (result) => {

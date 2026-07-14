@@ -16,39 +16,89 @@ const ME = {
 };
 
 const AREAS = [
-  { id: "1", name: "Root entity", icon: "folder", serviceCount: 21, entityId: 1 },
+  { id: "1", name: "Root entity", icon: "folder", serviceCount: 2, entityId: 1 },
 ];
 
-const TI_ROOT_CATEGORIES = [
-  "Armazenamento",
-  "Backup e Recuperação",
-  "Cloud e DevOps",
-  "Compras e Licenças",
-  "Comunicação e Colaboração",
-  "Conformidade e Auditoria",
-  "Documentação e Treinamento",
-  "Equipamentos do Usuário",
-  "Identidade e Acessos",
-  "Impressão e Digitalização",
-  "Incidentes",
-  "Infraestrutura e Servidores",
-  "ITSM / GLPI",
-  "Mobilidade",
-  "Projetos De Dados",
-  "Projetos de Infraestrutura",
-  "Projetos De Sistemas",
-  "Projetos e Mudanças",
-  "Rede e Conectividade",
-  "Segurança da Informação",
-  "Sistemas Corporativos",
-].map((name, index) => ({
-  id: index + 1,
-  name,
-  fullName: name,
-  parentId: null,
-  hasChildren: true,
-  entityId: 1,
-}));
+const FORM_CATEGORIES = [
+  {
+    id: 1,
+    name: "Área TI",
+    completeName: "Área TI",
+    parentId: null,
+    level: 1,
+    formCount: 0,
+  },
+  {
+    id: 2,
+    name: "SOLICITAÇÕES",
+    completeName: "Área TI > SOLICITAÇÕES",
+    parentId: 1,
+    level: 2,
+    formCount: 1,
+  },
+  {
+    id: 3,
+    name: "INCIDENTES",
+    completeName: "Área TI > INCIDENTES",
+    parentId: 1,
+    level: 2,
+    formCount: 1,
+  },
+];
+
+const FORMS = [
+  {
+    id: 20,
+    name: "Suporte — Estação de trabalho",
+    description: "Problemas em computador, impressora ou periféricos.",
+    illustration: null,
+    categoryId: 2,
+  },
+  {
+    id: 21,
+    name: "Incidente — Rede",
+    description: "Quedas e lentidão de rede.",
+    illustration: null,
+    categoryId: 3,
+  },
+];
+
+const FORM_SCHEMA = {
+  id: 20,
+  name: "Suporte — Estação de trabalho",
+  description: null,
+  categoryId: 2,
+  sections: [
+    {
+      id: 1,
+      name: "Detalhes",
+      questions: [
+        {
+          id: 101,
+          name: "Assunto",
+          type: "Glpi\\Form\\QuestionType\\QuestionTypeShortText",
+          fieldKind: "text",
+          isMandatory: true,
+          description: null,
+          defaultValue: null,
+          horizontalRank: null,
+          options: [],
+        },
+        {
+          id: 102,
+          name: "Descrição",
+          type: "Glpi\\Form\\QuestionType\\QuestionTypeLongText",
+          fieldKind: "longtext",
+          isMandatory: true,
+          description: null,
+          defaultValue: null,
+          horizontalRank: null,
+          options: [],
+        },
+      ],
+    },
+  ],
+};
 
 async function mockHelpDeskApi(page: import("@playwright/test").Page) {
   await page.route("**/health", async (route) => {
@@ -97,7 +147,7 @@ async function mockHelpDeskApi(page: import("@playwright/test").Page) {
           status: "disponivel",
           featured: true,
           action: "modal",
-          helpText: "Abra um ticket no GLPI pelo assistente em três passos.",
+          helpText: "Abra um ticket no GLPI pelo assistente com formulários nativos.",
           portalUrl: null,
         },
       ]),
@@ -108,40 +158,45 @@ async function mockHelpDeskApi(page: import("@playwright/test").Page) {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(AREAS) });
   });
 
-  await page.route("**/api/v1/ti/help-desk/categories**", async (route) => {
-    const url = new URL(route.request().url());
-    if (url.searchParams.get("areaId") !== "1") {
-      await route.fulfill({ status: 200, contentType: "application/json", body: "[]" });
-      return;
-    }
-    const childCategories = TI_ROOT_CATEGORIES.flatMap((root) => [
-      root,
-      {
-        id: root.id + 500,
-        name: `${root.name} — Solicitação`,
-        fullName: `${root.name} > Solicitação`,
-        parentId: root.id,
-        hasChildren: false,
-        entityId: 1,
-      },
-    ]);
-
+  await page.route("**/api/v1/ti/help-desk/form-categories", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(childCategories),
+      body: JSON.stringify(FORM_CATEGORIES),
+    });
+  });
+
+  await page.route("**/api/v1/ti/help-desk/forms**", async (route) => {
+    const url = new URL(route.request().url());
+    const formIdMatch = url.pathname.match(/\/forms\/(\d+)$/);
+    if (formIdMatch) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(FORM_SCHEMA),
+      });
+      return;
+    }
+
+    const categoryId = Number(url.searchParams.get("categoryId") ?? "0");
+    const filtered =
+      categoryId > 0 ? FORMS.filter((item) => item.categoryId === categoryId) : FORMS;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(filtered),
     });
   });
 }
 
-test.describe("Help Desk wizard — catálogo por entidade GLPI", () => {
+test.describe("Help Desk wizard — formulários nativos GLPI", () => {
   test.setTimeout(60_000);
 
   test.beforeAll(() => {
     fs.mkdirSync(evidenceDir, { recursive: true });
   });
 
-  test("exibe 21 serviços após selecionar entidade GLPI", async ({ page, context }) => {
+  test("navega categorias e formulários após selecionar entidade GLPI", async ({ page, context }) => {
     await context.addInitScript(() => {
       sessionStorage.setItem("lioconecta.auth.token", "e2e-mock-token");
     });
@@ -156,23 +211,31 @@ test.describe("Help Desk wizard — catálogo por entidade GLPI", () => {
 
     await wizard.getByRole("listitem").filter({ hasText: "Root entity" }).click();
     await expect(wizard.getByText("Área selecionada")).toBeVisible();
-    await expect(wizard.getByText("Root entity").first()).toBeVisible();
-
-    const catalogCards = wizard.locator(".hd-wizard__card");
-    await expect(catalogCards).toHaveCount(21, { timeout: 10_000 });
-    await expect(wizard.getByRole("listitem").filter({ hasText: "Armazenamento" })).toBeVisible();
-    await expect(wizard.getByRole("listitem").filter({ hasText: "Sistemas Corporativos" })).toBeVisible();
+    await expect(wizard.getByRole("listitem").filter({ hasText: "Área TI" })).toBeVisible();
 
     await page.screenshot({
-      path: path.join(evidenceDir, "01-area-ti-catalog-21-items.png"),
+      path: path.join(evidenceDir, "01-area-ti-form-categories.png"),
       fullPage: true,
     });
 
-    await wizard.getByRole("listitem").filter({ hasText: "Incidentes" }).first().click();
-    await expect(wizard.getByText("Catálogo").first()).toBeVisible();
-    await expect(wizard.getByRole("listitem").filter({ hasText: /Incidentes — Solicitação/i })).toBeVisible();
+    await wizard.getByRole("listitem").filter({ hasText: "Área TI" }).click();
+    await expect(wizard.getByRole("listitem").filter({ hasText: "SOLICITAÇÕES" })).toBeVisible();
+    await expect(wizard.getByRole("listitem").filter({ hasText: "INCIDENTES" })).toBeVisible();
+
+    await wizard.getByRole("listitem").filter({ hasText: "SOLICITAÇÕES" }).click();
+    await expect(wizard.getByRole("listitem").filter({ hasText: "Suporte — Estação de trabalho" })).toBeVisible();
+
     await page.screenshot({
-      path: path.join(evidenceDir, "02-area-ti-drill-down.png"),
+      path: path.join(evidenceDir, "02-area-ti-forms-list.png"),
+      fullPage: true,
+    });
+
+    await wizard.getByRole("listitem").filter({ hasText: "Suporte — Estação de trabalho" }).click();
+    await expect(wizard.getByText("Assunto")).toBeVisible();
+    await expect(wizard.getByText("Descrição")).toBeVisible();
+
+    await page.screenshot({
+      path: path.join(evidenceDir, "03-form-details.png"),
       fullPage: true,
     });
   });

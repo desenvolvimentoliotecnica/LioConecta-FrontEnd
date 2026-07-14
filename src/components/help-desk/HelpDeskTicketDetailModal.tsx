@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   downloadHelpDeskTicketAttachment,
   useHelpDeskTicketDetail,
@@ -72,7 +72,15 @@ export function HelpDeskTicketDetailModal({
   const detailQuery = useHelpDeskTicketDetail(ticketId, open && ticketId !== null);
   const detail = detailQuery.data;
   const summary = detail?.summary ?? preview;
+  const requesterLabel =
+    detail?.summary.requesterLabel?.trim() ||
+    preview?.requesterLabel?.trim() ||
+    null;
   const attachments = detail?.attachments ?? [];
+  const previewableAttachments = useMemo(
+    () => attachments.filter(canPreviewAttachment),
+    [attachments],
+  );
   const isLoadingDetail = detailQuery.isLoading || (detailQuery.isFetching && !detail);
 
   const [viewerAttachment, setViewerAttachment] = useState<HelpDeskTicketAttachmentDto | null>(null);
@@ -155,10 +163,10 @@ export function HelpDeskTicketDetailModal({
                 <dt>Assunto:</dt>
                 <dd>{summary.subject}</dd>
               </div>
-              {showRequester && summary.requesterLabel ? (
+              {showRequester ? (
                 <div>
                   <dt>Solicitante:</dt>
-                  <dd>{summary.requesterLabel}</dd>
+                  <dd>{requesterLabel ?? "—"}</dd>
                 </div>
               ) : null}
               <div>
@@ -301,7 +309,8 @@ export function HelpDeskTicketDetailModal({
       <HelpDeskAttachmentViewerModal
         open={viewerAttachment !== null}
         ticketId={ticketId}
-        attachment={viewerAttachment}
+        attachments={previewableAttachments}
+        initialDocumentId={viewerAttachment?.documentId ?? null}
         onClose={() => setViewerAttachment(null)}
       />
     </>
