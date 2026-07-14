@@ -23,7 +23,6 @@ import {
 import { helpDeskQueryErrorMessage } from "./helpDeskQueryError";
 import {
   buildFormCategoryPath,
-  findFormCategoryById,
   formsInCategory,
   formatFormCategoryPath,
   getChildFormCategories,
@@ -63,6 +62,10 @@ function sanitizeDefaultValue(
   if (!raw?.trim()) return null;
   const value = raw.trim();
   const kind = (fieldKind || "").toLowerCase();
+
+  // Nunca pré-preencher colaboradores/cópia (IDs GLPI, GUIDs, etc.).
+  if (kind === "user" || kind === "users") return null;
+
   if (value === "0" || value === "-1" || value.includes("items_id")) return null;
   if (value.startsWith("{")) {
     try {
@@ -72,15 +75,10 @@ function sanitizeDefaultValue(
           ? parsed.items_id
           : Number.parseInt(String(parsed.items_id ?? "0"), 10);
       if (!(id > 0)) return null;
-      // IDs GLPI de usuário não devem virar chip de colaborador.
-      if (kind === "user" || kind === "users") return null;
       return String(id);
     } catch {
       return null;
     }
-  }
-  if ((kind === "user" || kind === "users") && /^\d+$/.test(value)) {
-    return null;
   }
   return value;
 }
@@ -158,6 +156,17 @@ function formatPersonAnswer(person: PersonSummaryDto): string {
   return meta ? `${person.name} (${meta})` : person.name;
 }
 
+function isOpaquePersonToken(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  if (/^\d+$/.test(trimmed)) return true;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(trimmed)) {
+    return true;
+  }
+  if (trimmed.includes("items_id")) return true;
+  return false;
+}
+
 function HelpDeskPersonPicker({
   value,
   onChange,
@@ -175,6 +184,13 @@ function HelpDeskPersonPicker({
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const search = usePeopleSearch(query, open);
+  const displayValue = isOpaquePersonToken(value) ? "" : value;
+
+  useEffect(() => {
+    if (isOpaquePersonToken(value)) {
+      onChange("");
+    }
+  }, [value, onChange]);
 
   useEffect(() => {
     const onDocClick = (event: MouseEvent) => {
@@ -188,11 +204,11 @@ function HelpDeskPersonPicker({
 
   return (
     <div className="hd-person-picker" ref={rootRef}>
-      {value.trim() ? (
+      {displayValue.trim() ? (
         <div className="hd-person-picker__selected">
           <span className="hd-person-picker__chip">
             <i className="fa-solid fa-user" aria-hidden="true" />
-            {value}
+            {displayValue}
             <button
               type="button"
               aria-label="Limpar colaborador"
@@ -213,7 +229,7 @@ function HelpDeskPersonPicker({
           id={inputId}
           type="text"
           value={query}
-          required={required && !value.trim()}
+          required={required && !displayValue.trim()}
           placeholder={placeholder ?? "Digite o nome para buscar no diretório…"}
           autoComplete="off"
           role="combobox"
@@ -404,8 +420,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   }, [forms, categoryId]);
 
   const selectedArea = areaId !== null ? findAreaById(areas, areaId) : null;
-  const selectedCatalogBranch =
-    currentParentId !== null ? findFormCategoryById(formCategories, currentParentId) : null;
   const selectedForm = formId !== null ? forms.find((item) => item.id === formId) : null;
 
   const flatQuestions = useMemo(
@@ -937,11 +951,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "area" ? (
             <>
-              <p className="hd-modal__intro">
-                <i className="fa-solid fa-table-cells" aria-hidden="true" />
-                Escolha a entidade GLPI para abrir o chamado.
-              </p>
-
               {areasQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando áreas…</p>
               ) : areasQuery.isError ? (
@@ -977,23 +986,11 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "catalog" ? (
             <>
-              {selectedArea ? (
-                <div className="hd-wizard__summary">
-                  <span className="hd-wizard__summary-label">Área selecionada</span>
-                  <strong>{selectedArea.name}</strong>
-                </div>
-              ) : null}
-
               <nav className="hd-wizard__breadcrumb" aria-label="Navegação do catálogo">
                 <button type="button" className="hd-wizard__crumb is-current" onClick={resetToArea}>
                   Início
                 </button>
               </nav>
-
-              <p className="hd-modal__intro">
-                <i className="fa-solid fa-list-check" aria-hidden="true" />
-                Escolha a categoria do formulário no Service Desk.
-              </p>
 
               {formCategoriesQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando formulários…</p>
@@ -1013,20 +1010,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "services" ? (
             <>
-              {selectedArea ? (
-                <div className="hd-wizard__summary">
-                  <span className="hd-wizard__summary-label">Área</span>
-                  <strong>{selectedArea.name}</strong>
-                </div>
-              ) : null}
-
-              {selectedCatalogBranch ? (
-                <div className="hd-wizard__summary">
-                  <span className="hd-wizard__summary-label">Catálogo</span>
-                  <strong>{selectedCatalogBranch.completeName ?? selectedCatalogBranch.name}</strong>
-                </div>
-              ) : null}
-
               <nav className="hd-wizard__breadcrumb" aria-label="Navegação dos formulários">
                 <button type="button" className="hd-wizard__crumb" onClick={resetToArea}>
                   Início
@@ -1050,28 +1033,14 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
                 ))}
               </nav>
 
-              {childCategories.length > 0 ? (
-                <>
-                  <p className="hd-modal__intro">
-                    <i className="fa-solid fa-folder-open" aria-hidden="true" />
-                    Subcategorias
-                  </p>
-                  {renderCategoryGrid(childCategories, handleChildCategorySelect)}
-                </>
-              ) : null}
+              {childCategories.length > 0 ? renderCategoryGrid(childCategories, handleChildCategorySelect) : null}
 
               {formsQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando formulários…</p>
               ) : serviceForms.length === 0 && childCategories.length === 0 ? (
                 <p className="hd-modal__empty">Nenhum formulário disponível nesta categoria.</p>
               ) : serviceForms.length > 0 ? (
-                <>
-                  <p className="hd-modal__intro">
-                    <i className="fa-solid fa-file-lines" aria-hidden="true" />
-                    Selecione o formulário de atendimento
-                  </p>
-                  {renderFormGrid(serviceForms)}
-                </>
+                renderFormGrid(serviceForms)
               ) : null}
             </>
           ) : null}
