@@ -170,20 +170,21 @@ export function HelpDeskTicketDetailModal({
                 <dd>{formatDate(summary.createdAt)}</dd>
               </div>
               {detail ? (
-                <>
-                  <div className="hd-ticket-detail__full">
-                    <dt>Descrição:</dt>
-                    <dd>
-                      <HelpDeskTicketDescription value={detail.description} />
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Atribuído a:</dt>
-                    <dd>{detail.assignee?.trim() || "Não atribuído"}</dd>
-                  </div>
-                </>
+                <div>
+                  <dt>Atribuído a:</dt>
+                  <dd>{detail.assignee?.trim() || "Não atribuído"}</dd>
+                </div>
               ) : null}
             </dl>
+
+            {detail ? (
+              <section className="hd-ticket-detail__description-block" aria-label="Descrição do chamado">
+                <h3 className="hd-modal__section-title">
+                  <i className="fa-solid fa-align-left" aria-hidden="true" /> Descrição
+                </h3>
+                <HelpDeskTicketDescription value={detail.description} />
+              </section>
+            ) : null}
 
             {detail?.resolution ? (
               <section className="hd-ticket-resolution" aria-label="Resolução do chamado">

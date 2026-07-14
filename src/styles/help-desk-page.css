@@ -1,5 +1,26 @@
 /* Help Desk page — tema cyan/teal (portado de servicos-help-desk legacy) */
 
+.hd-header-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.hd-header-summary__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0e7490;
+}
+
+.hd-header-summary__text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #155e75;
+}
+
 .welcome-banner--help-desk {
   background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
   border-color: #67e8f9;
@@ -105,11 +126,16 @@
 
 .hd-ticket-list__head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  flex-wrap: nowrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 14px;
+}
+
+.hd-ticket-list__head > :first-child {
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .hd-ticket-list__title {
@@ -123,24 +149,32 @@
   margin: 4px 0 0;
   font-size: 0.85rem;
   color: #155e75;
+  white-space: nowrap;
 }
 
 .hd-ticket-list__controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .hd-ticket-list__controls .hd-track__view-toggle {
   margin-bottom: 0;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .hd-ticket-list__search {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-width: min(260px, 100%);
+  flex: 1 1 160px;
+  min-width: 140px;
+  max-width: 220px;
   padding: 6px 10px;
   border: 1px solid #99f6e4;
   border-radius: 8px;
@@ -151,6 +185,7 @@
 .hd-ticket-list__search i {
   font-size: 0.8rem;
   opacity: 0.75;
+  flex: 0 0 auto;
 }
 
 .hd-ticket-list__search input {
@@ -171,9 +206,11 @@
 .hd-ticket-list__sort {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex: 0 0 auto;
   font-size: 0.85rem;
   color: #0f766e;
+  white-space: nowrap;
 }
 
 .hd-ticket-list__sort-label {
@@ -181,7 +218,8 @@
 }
 
 .hd-ticket-list__sort select {
-  min-width: 160px;
+  min-width: 132px;
+  max-width: 160px;
   padding: 6px 10px;
   border: 1px solid #99f6e4;
   border-radius: 8px;
