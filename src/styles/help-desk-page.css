@@ -276,8 +276,7 @@
 
 .hd-ticket-list__table-wrap {
   max-height: 420px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   border: 1px solid #cffafe;
   border-radius: 10px;
   background: #fff;
@@ -286,6 +285,7 @@
 .hd-ticket-list__table {
   margin: 0;
   width: 100%;
+  min-width: 720px;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -294,12 +294,13 @@
 .hd-ticket-list__td {
   white-space: nowrap;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hd-ticket-list__th--center,
 .hd-ticket-list__td--center {
   text-align: center;
-  width: 1%;
 }
 
 .hd-ticket-list__table td.hd-ticket-list__td--center {
@@ -307,10 +308,10 @@
 }
 
 .hd-ticket-list__cell {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  max-width: 100%;
 }
 
 .hd-ticket-list__th--left,
@@ -320,11 +321,36 @@
   text-align: left;
 }
 
-.hd-ticket-list__td--subject {
-  width: 16%;
-  max-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.hd-ticket-list__col--ticketId {
+  width: 5.5rem;
+}
+
+.hd-ticket-list__col--subject {
+  width: 18%;
+}
+
+.hd-ticket-list__col--requester {
+  width: 12%;
+}
+
+.hd-ticket-list__col--priority {
+  width: 7rem;
+}
+
+.hd-ticket-list__col--status {
+  width: 8rem;
+}
+
+.hd-ticket-list__col--assignee {
+  width: 10%;
+}
+
+.hd-ticket-list__col--createdAt {
+  width: 8.25rem;
+}
+
+.hd-ticket-list__col--actions {
+  width: 3.25rem;
 }
 
 .hd-ticket-list__subject {
@@ -332,14 +358,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.hd-ticket-list__td--requester,
-.hd-ticket-list__td--assignee {
-  width: 12%;
-  max-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .hd-ticket-list__td--date {
@@ -351,7 +369,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  width: 100%;
+  max-width: 100%;
   border: 0;
   background: transparent;
   color: inherit;
@@ -365,7 +383,14 @@
   justify-content: flex-start;
 }
 
+.hd-ticket-list__sort-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hd-ticket-list__sort-btn i {
+  flex: 0 0 auto;
   font-size: 11px;
   opacity: 0.55;
 }
