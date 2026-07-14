@@ -276,7 +276,8 @@
 
 .hd-ticket-list__table-wrap {
   max-height: 420px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   border: 1px solid #cffafe;
   border-radius: 10px;
   background: #fff;
@@ -285,7 +286,7 @@
 .hd-ticket-list__table {
   margin: 0;
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -320,14 +321,25 @@
 }
 
 .hd-ticket-list__td--subject {
-  max-width: 28rem;
+  width: 16%;
+  max-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.hd-ticket-list__subject {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hd-ticket-list__td--requester,
 .hd-ticket-list__td--assignee {
-  width: 1%;
+  width: 12%;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hd-ticket-list__td--date {

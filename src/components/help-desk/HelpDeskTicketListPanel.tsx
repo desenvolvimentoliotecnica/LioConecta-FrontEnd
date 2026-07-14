@@ -6,7 +6,7 @@ import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
 const PAGE_SIZE = 15;
 const SCOPE = "all";
-const SUBJECT_MAX = 40;
+const SUBJECT_MAX = 22;
 
 type TicketView = "mine" | "all";
 type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "assignee" | "createdAt";
@@ -427,7 +427,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                         <span className="hd-ticket-list__cell">#{ticket.ticketId}</span>
                       </td>
                       <td className="hd-ticket-list__td hd-ticket-list__td--subject" title={subject.full}>
-                        {subject.text}
+                        <span className="hd-ticket-list__subject">{subject.text}</span>
                       </td>
                       {showRequester ? (
                         <td className="hd-ticket-list__td hd-ticket-list__td--requester">{requester}</td>
