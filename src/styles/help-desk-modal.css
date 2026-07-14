@@ -60,6 +60,7 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  position: relative;
 }
 
 .hd-modal-form__field--full {
@@ -1177,12 +1178,59 @@
   color: #334155;
 }
 
+.hd-modal-form__file-drop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 10px 14px;
+  border: 1px dashed #94a3b8;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.hd-modal-form__file-drop input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.hd-modal-form__file-drop:hover {
+  border-color: #f97316;
+  background: #fff7ed;
+}
+
 .hd-person-picker {
   position: relative;
   display: grid;
   gap: 8px;
 }
 
+.hd-person-picker__control {
+  position: relative;
+}
+
+.hd-person-picker__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.hd-person-picker__control input {
+  padding-left: 34px !important;
+}
+
+.hd-person-picker__selected,
 .hd-person-picker__chips {
   display: flex;
   flex-wrap: wrap;
@@ -1200,6 +1248,11 @@
   background: #f8fafc;
   font-size: 12px;
   color: #334155;
+}
+
+.hd-person-picker__chip i {
+  color: #64748b;
+  font-size: 11px;
 }
 
 .hd-person-picker__chip button {
