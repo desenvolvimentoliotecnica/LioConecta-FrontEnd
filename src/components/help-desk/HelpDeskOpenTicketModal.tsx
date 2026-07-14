@@ -75,12 +75,57 @@ function sanitizeDefaultValue(raw: string | null | undefined): string | null {
   return value;
 }
 
+/** Prefer API fieldKind; fallback by GLPI type / rótulo quando o kind vier genérico. */
+function resolveUiFieldKind(question: HelpDeskFormQuestionDto): string {
+  const kind = (question.fieldKind || "").trim().toLowerCase();
+  if (kind === "user" || kind === "users" || kind === "file" || kind === "itilcategory") {
+    return kind;
+  }
+
+  const type = (question.type || "").toLowerCase();
+  const name = (question.name || "").toLowerCase();
+  const itemType = (question.itemType || "").toLowerCase();
+
+  if (type.includes("questiontypefile") || name.includes("anex") || name.includes("evidên") || name.includes("evidenc")) {
+    return "file";
+  }
+  if (
+    type.includes("questiontypeobserver") ||
+    type.includes("questiontyperequester") ||
+    name.includes("cópia") ||
+    name.includes("copia") ||
+    name.includes("em copia") ||
+    name.includes("em cópia")
+  ) {
+    return "users";
+  }
+  if (
+    itemType === "user" ||
+    type.includes("questiontypeitem") ||
+    name.includes("colaborador") ||
+    name.includes("usuário") ||
+    name.includes("usuario")
+  ) {
+    if (itemType === "itilcategory") return "itilcategory";
+    if (
+      itemType === "user" ||
+      name.includes("colaborador") ||
+      name.includes("usuário") ||
+      name.includes("usuario")
+    ) {
+      return "user";
+    }
+  }
+
+  return kind || "text";
+}
+
 function initialAnswersFromSchema(
   questions: HelpDeskFormQuestionDto[],
 ): Record<number, string> {
   const next: Record<number, string> = {};
   for (const question of questions) {
-    if (question.fieldKind === "file") continue;
+    if (resolveUiFieldKind(question) === "file") continue;
     const sanitized = sanitizeDefaultValue(question.defaultValue);
     if (sanitized) {
       next[question.id] = sanitized;
@@ -91,7 +136,9 @@ function initialAnswersFromSchema(
 
 function questionOptions(question: HelpDeskFormQuestionDto) {
   if (question.options.length > 0) return question.options;
-  if (question.fieldKind === "urgency") return DEFAULT_URGENCY_OPTIONS;
+  if (resolveUiFieldKind(question) === "urgency" || question.fieldKind === "urgency") {
+    return DEFAULT_URGENCY_OPTIONS;
+  }
   return [];
 }
 
@@ -114,8 +161,9 @@ function HelpDeskPersonPicker({
   const inputId = useId();
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const query = usePeopleSearch(value, open);
+  const search = usePeopleSearch(query, open);
 
   useEffect(() => {
     const onDocClick = (event: MouseEvent) => {
@@ -125,33 +173,56 @@ function HelpDeskPersonPicker({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  const results = query.data ?? [];
+  const results = search.data ?? [];
 
   return (
     <div className="hd-person-picker" ref={rootRef}>
-      <input
-        id={inputId}
-        type="text"
-        value={value}
-        required={required}
-        placeholder={placeholder ?? "Buscar colaborador…"}
-        autoComplete="off"
-        role="combobox"
-        aria-expanded={open}
-        aria-controls={listId}
-        aria-autocomplete="list"
-        onChange={(event) => {
-          onChange(event.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-      />
-      {open && value.trim().length >= 2 ? (
+      {value.trim() ? (
+        <div className="hd-person-picker__selected">
+          <span className="hd-person-picker__chip">
+            <i className="fa-solid fa-user" aria-hidden="true" />
+            {value}
+            <button
+              type="button"
+              aria-label="Limpar colaborador"
+              onClick={() => {
+                onChange("");
+                setQuery("");
+                setOpen(true);
+              }}
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      ) : null}
+      <div className="hd-person-picker__control">
+        <i className="fa-solid fa-magnifying-glass hd-person-picker__icon" aria-hidden="true" />
+        <input
+          id={inputId}
+          type="text"
+          value={query}
+          required={required && !value.trim()}
+          placeholder={placeholder ?? "Digite o nome para buscar no diretório…"}
+          autoComplete="off"
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={listId}
+          aria-autocomplete="list"
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+        />
+      </div>
+      <span className="hd-modal-form__hint">Busque no diretório de pessoas (mín. 2 letras).</span>
+      {open && query.trim().length >= 2 ? (
         <ul id={listId} className="hd-person-picker__list" role="listbox">
-          {query.isFetching ? (
+          {search.isFetching ? (
             <li className="hd-person-picker__empty">Buscando…</li>
           ) : results.length === 0 ? (
-            <li className="hd-person-picker__empty">Nenhuma pessoa encontrada — use texto livre.</li>
+            <li className="hd-person-picker__empty">Nenhuma pessoa encontrada.</li>
           ) : (
             results.map((person) => (
               <li key={person.id}>
@@ -161,6 +232,7 @@ function HelpDeskPersonPicker({
                   className="hd-person-picker__option"
                   onClick={() => {
                     onChange(formatPersonAnswer(person));
+                    setQuery("");
                     setOpen(false);
                   }}
                 >
@@ -228,6 +300,7 @@ function HelpDeskPeopleMultiPicker({
         <div className="hd-person-picker__chips">
           {selected.map((label) => (
             <span key={label} className="hd-person-picker__chip">
+              <i className="fa-solid fa-user" aria-hidden="true" />
               {label}
               <button type="button" aria-label={`Remover ${label}`} onClick={() => removePerson(label)}>
                 ×
@@ -236,30 +309,40 @@ function HelpDeskPeopleMultiPicker({
           ))}
         </div>
       ) : null}
-      <input
-        id={inputId}
-        type="text"
-        value={query}
-        placeholder={placeholder ?? "Buscar e adicionar…"}
-        autoComplete="off"
-        onChange={(event) => {
-          setQuery(event.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-      />
+      <div className="hd-person-picker__control">
+        <i className="fa-solid fa-magnifying-glass hd-person-picker__icon" aria-hidden="true" />
+        <input
+          id={inputId}
+          type="text"
+          value={query}
+          placeholder={placeholder ?? "Digite o nome para adicionar em cópia…"}
+          autoComplete="off"
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+        />
+      </div>
+      <span className="hd-modal-form__hint">Busque no diretório de pessoas (mín. 2 letras).</span>
       {open && query.trim().length >= 2 ? (
         <ul className="hd-person-picker__list" role="listbox">
-          {(search.data ?? []).map((person) => (
-            <li key={person.id}>
-              <button type="button" className="hd-person-picker__option" onClick={() => addPerson(person)}>
-                <strong>{person.name}</strong>
-                <span>
-                  {[person.title, person.departmentName].filter(Boolean).join(" · ") || person.slug}
-                </span>
-              </button>
-            </li>
-          ))}
+          {search.isFetching ? (
+            <li className="hd-person-picker__empty">Buscando…</li>
+          ) : (search.data ?? []).length === 0 ? (
+            <li className="hd-person-picker__empty">Nenhuma pessoa encontrada.</li>
+          ) : (
+            (search.data ?? []).map((person) => (
+              <li key={person.id}>
+                <button type="button" className="hd-person-picker__option" onClick={() => addPerson(person)}>
+                  <strong>{person.name}</strong>
+                  <span>
+                    {[person.title, person.departmentName].filter(Boolean).join(" · ") || person.slug}
+                  </span>
+                </button>
+              </li>
+            ))
+          )}
         </ul>
       ) : null}
     </div>
@@ -458,7 +541,8 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   const validateAnswers = (): string | null => {
     for (const question of flatQuestions) {
       if (!question.isMandatory) continue;
-      if (question.fieldKind === "file") {
+      const kind = resolveUiFieldKind(question);
+      if (kind === "file") {
         const files = filesByQuestion[question.id] ?? [];
         if (files.length === 0) {
           return `Anexe ao menos um arquivo em: ${question.name}`;
@@ -498,7 +582,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
         priority: "media",
         description: "",
         answers: flatQuestions
-          .filter((question) => question.fieldKind !== "file")
+          .filter((question) => resolveUiFieldKind(question) !== "file")
           .map((question) => ({
             questionId: question.id,
             value: answers[question.id]?.trim() ?? "",
@@ -579,6 +663,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   );
 
   const renderQuestionField = (question: HelpDeskFormQuestionDto) => {
+    const kind = resolveUiFieldKind(question);
     const options = questionOptions(question);
     const value = answers[question.id] ?? "";
     const label = (
@@ -591,18 +676,22 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       <span className="hd-modal-form__hint">{question.description}</span>
     ) : null;
 
-    if (question.fieldKind === "file") {
+    if (kind === "file") {
       const files = filesByQuestion[question.id] ?? [];
       return (
         <div key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
           {hint}
-          <input
-            type="file"
-            multiple
-            onChange={(event) => setQuestionFiles(question.id, event.target.files)}
-            required={question.isMandatory}
-          />
+          <label className="hd-modal-form__file-drop">
+            <i className="fa-solid fa-paperclip" aria-hidden="true" />
+            <span>Escolher arquivos…</span>
+            <input
+              type="file"
+              multiple
+              onChange={(event) => setQuestionFiles(question.id, event.target.files)}
+              required={question.isMandatory && files.length === 0}
+            />
+          </label>
           {files.length > 0 ? (
             <ul className="hd-modal-form__file-list">
               {files.map((file) => (
@@ -618,22 +707,22 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       );
     }
 
-    if (question.fieldKind === "user") {
+    if (kind === "user") {
       return (
-        <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
+        <div key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
           {hint}
           <HelpDeskPersonPicker
             value={value}
             onChange={(next) => setAnswer(question.id, next)}
             required={question.isMandatory}
-            placeholder="Selecione o colaborador…"
+            placeholder="Digite o nome do colaborador…"
           />
-        </label>
+        </div>
       );
     }
 
-    if (question.fieldKind === "users") {
+    if (kind === "users") {
       return (
         <div key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
@@ -641,13 +730,13 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
           <HelpDeskPeopleMultiPicker
             value={value}
             onChange={(next) => setAnswer(question.id, next)}
-            placeholder="Buscar quem receberá cópia…"
+            placeholder="Digite o nome para adicionar em cópia…"
           />
         </div>
       );
     }
 
-    if (question.fieldKind === "itilcategory" || (question.fieldKind === "glpiitem" && options.length > 0)) {
+    if (kind === "itilcategory" || (kind === "glpiitem" && options.length > 0)) {
       return (
         <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
@@ -668,7 +757,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       );
     }
 
-    if (question.fieldKind === "longtext") {
+    if (kind === "longtext") {
       return (
         <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
@@ -683,7 +772,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       );
     }
 
-    if (question.fieldKind === "radio" || question.fieldKind === "urgency") {
+    if (kind === "radio" || kind === "urgency") {
       return (
         <fieldset key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           <legend className="hd-modal-form__label">
@@ -709,7 +798,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       );
     }
 
-    if (question.fieldKind === "checkbox") {
+    if (kind === "checkbox") {
       const selected = new Set(
         value
           .split("|")
@@ -743,7 +832,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       );
     }
 
-    if (question.fieldKind === "dropdown" && options.length > 0) {
+    if (kind === "dropdown" && options.length > 0) {
       return (
         <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
@@ -765,11 +854,11 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     }
 
     const inputType =
-      question.fieldKind === "email"
+      kind === "email"
         ? "email"
-        : question.fieldKind === "number"
+        : kind === "number"
           ? "number"
-          : question.fieldKind === "date"
+          : kind === "date"
             ? "date"
             : "text";
 
