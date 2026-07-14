@@ -8,17 +8,13 @@ import {
 import { usePeopleSearch } from "../../api/hooks/usePhoneExtensions";
 import type {
   CreateHelpDeskTicketRequestDto,
-  HelpDeskAreaDto,
   HelpDeskFormCategoryDto,
   HelpDeskFormQuestionDto,
   HelpDeskFormSummaryDto,
   PersonSummaryDto,
 } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
-import {
-  formatAreaServiceCount,
-  getAreaIconClass,
-} from "./helpDeskAreaCatalog";
+import { resolveSystemsAccessArea } from "./helpDeskAreaCatalog";
 import { helpDeskQueryErrorMessage } from "./helpDeskQueryError";
 import {
   buildFormCategoryPath,
@@ -29,7 +25,6 @@ import {
 } from "./helpDeskFormCategoryTree";
 
 const WIZARD_STEPS = [
-  { id: "area", label: "Área" },
   { id: "catalog", label: "Catálogo" },
   { id: "services", label: "Formulários" },
   { id: "details", label: "Detalhes" },
@@ -373,7 +368,7 @@ function HelpDeskPeopleMultiPicker({
 }
 
 export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, onSubmit }: Props) {
-  const [phase, setPhase] = useState<WizardPhase>("area");
+  const [phase, setPhase] = useState<WizardPhase>("catalog");
   const [entityId, setEntityId] = useState<number | null>(null);
   const [currentParentId, setCurrentParentId] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -385,7 +380,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   const areasQuery = useHelpDeskAreas(open);
   const areas = areasQuery.data ?? [];
 
-  const formCategoriesQuery = useHelpDeskFormCategories(open && phase !== "area");
+  const formCategoriesQuery = useHelpDeskFormCategories(open && entityId != null);
   const formCategories = formCategoriesQuery.data ?? [];
 
   const formsQuery = useHelpDeskForms(
@@ -432,15 +427,13 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   };
 
   const renderWizardBreadcrumb = () => {
-    if (phase === "area") return null;
-
     const categoryTrail =
       phase === "catalog" ? [] : phase === "services" ? servicesBreadcrumb : categoryPath;
     const showFormChip = phase === "details" && Boolean(formBreadcrumbLabel);
 
     return (
       <nav className="hd-wizard__breadcrumb" aria-label="Navegação do wizard">
-        <button type="button" className="hd-wizard__crumb" onClick={resetToArea}>
+        <button type="button" className="hd-wizard__crumb" onClick={resetToCatalog}>
           Início
         </button>
         <button
@@ -480,7 +473,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
   useEffect(() => {
     if (!open) return;
-    setPhase("area");
+    setPhase("catalog");
     setEntityId(null);
     setCurrentParentId(null);
     setCategoryId(null);
@@ -491,22 +484,35 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   }, [open]);
 
   useEffect(() => {
+    if (!open || areasQuery.isLoading) return;
+
+    if (areasQuery.isError) {
+      setEntityId(null);
+      setLocalError(
+        helpDeskQueryErrorMessage(
+          areasQuery.error,
+          "Não foi possível carregar a área padrão do catálogo GLPI.",
+        ),
+      );
+      return;
+    }
+
+    const preferred = resolveSystemsAccessArea(areas);
+    if (!preferred) {
+      setEntityId(null);
+      setLocalError("Nenhuma entidade encontrada no GLPI.");
+      return;
+    }
+
+    setEntityId(preferred.entityId);
+  }, [open, areas, areasQuery.isLoading, areasQuery.isError, areasQuery.error]);
+
+  useEffect(() => {
     if (!schema) return;
     setAnswers(initialAnswersFromSchema(flatQuestions));
     setFilesByQuestion({});
     setLocalError(null);
   }, [schema, flatQuestions]);
-
-  const resetToArea = () => {
-    setPhase("area");
-    setEntityId(null);
-    setCurrentParentId(null);
-    setCategoryId(null);
-    setFormId(null);
-    setAnswers({});
-    setFilesByQuestion({});
-    setLocalError(null);
-  };
 
   const resetToCatalog = () => {
     setPhase("catalog");
@@ -525,16 +531,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setAnswers({});
     setFilesByQuestion({});
     setPhase("services");
-  };
-
-  const handleAreaSelect = (item: HelpDeskAreaDto) => {
-    setEntityId(item.entityId);
-    setCurrentParentId(null);
-    setCategoryId(null);
-    setFormId(null);
-    setAnswers({});
-    setFilesByQuestion({});
-    setPhase("catalog");
   };
 
   const handleCatalogSelect = (item: HelpDeskFormCategoryDto) => {
@@ -590,9 +586,6 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
       return;
     }
 
-    if (phase === "catalog") {
-      resetToArea();
-    }
   };
 
   const setAnswer = (questionId: number, value: string) => {
@@ -962,7 +955,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
           <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={onClose}>
             Cancelar
           </button>
-          {phase !== "area" ? (
+          {phase !== "catalog" ? (
             <button type="button" className="pay-modal__btn pay-modal__btn--ghost" onClick={handleBack}>
               Voltar
             </button>
@@ -997,46 +990,13 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
             </p>
           ) : null}
 
-          {phase === "area" ? (
-            <>
-              {areasQuery.isLoading ? (
-                <p className="hd-modal__empty">Carregando áreas…</p>
-              ) : areasQuery.isError ? (
-                <p className="hd-modal__error" role="alert">
-                  {helpDeskQueryErrorMessage(
-                    areasQuery.error,
-                    "Não foi possível carregar as áreas do catálogo GLPI.",
-                  )}
-                </p>
-              ) : areas.length === 0 ? (
-                <p className="hd-modal__empty">Nenhuma entidade encontrada no GLPI.</p>
-              ) : (
-                <div className="hd-wizard__area-grid" role="list">
-                  {areas.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className="hd-wizard__area-card"
-                      role="listitem"
-                      onClick={() => handleAreaSelect(item)}
-                    >
-                      <span className="hd-wizard__area-icon" aria-hidden="true">
-                        <i className={getAreaIconClass(item.icon)} />
-                      </span>
-                      <span className="hd-wizard__area-title">{item.name}</span>
-                      <span className="hd-wizard__area-meta">{formatAreaServiceCount(item.serviceCount)}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : null}
-
           {phase === "catalog" ? (
             <>
               {renderWizardBreadcrumb()}
 
-              {formCategoriesQuery.isLoading ? (
+              {areasQuery.isLoading || entityId == null ? (
+                <p className="hd-modal__empty">Carregando catálogo…</p>
+              ) : formCategoriesQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando formulários…</p>
               ) : formCategoriesQuery.isError ? (
                 <p className="hd-modal__error" role="alert">

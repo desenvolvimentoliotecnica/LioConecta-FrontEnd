@@ -16,7 +16,7 @@ const ME = {
 };
 
 const AREAS = [
-  { id: "1", name: "Root entity", icon: "folder", serviceCount: 2, entityId: 1 },
+  { id: "1", name: "TI", icon: "laptop", serviceCount: 123, entityId: 1 },
 ];
 
 const FORM_CATEGORIES = [
@@ -196,7 +196,7 @@ test.describe("Help Desk wizard — formulários nativos GLPI", () => {
     fs.mkdirSync(evidenceDir, { recursive: true });
   });
 
-  test("navega categorias e formulários após selecionar entidade GLPI", async ({ page, context }) => {
+  test("abre no catálogo com TI pré-selecionada e navega formulários", async ({ page, context }) => {
     await context.addInitScript(() => {
       sessionStorage.setItem("lioconecta.auth.token", "e2e-mock-token");
     });
@@ -204,17 +204,25 @@ test.describe("Help Desk wizard — formulários nativos GLPI", () => {
     await page.goto("/servicos/help-desk");
     await expect(page.getByRole("heading", { name: "Help Desk" })).toBeVisible({ timeout: 15_000 });
 
-    const openTicketCard = page.getByRole("article").filter({ hasText: "Abrir chamado" });
-    await openTicketCard.getByRole("button", { name: "Acessar" }).click();
+    const openTicket =
+      page.getByRole("button", { name: "Abrir chamado" }).first();
+    if (await openTicket.isVisible().catch(() => false)) {
+      await openTicket.click();
+    } else {
+      const openTicketCard = page.getByRole("article").filter({ hasText: "Abrir chamado" });
+      await openTicketCard.getByRole("button", { name: "Acessar" }).click();
+    }
+
     const wizard = page.getByRole("dialog", { name: "Abrir chamado" });
     await expect(wizard).toBeVisible();
 
-    await wizard.getByRole("listitem").filter({ hasText: "Root entity" }).click();
-    await expect(wizard.getByText("Área selecionada")).toBeVisible();
+    await expect(wizard.locator(".hd-wizard__step")).toHaveCount(3);
+    await expect(wizard.locator(".hd-wizard__step-label").filter({ hasText: "Área" })).toHaveCount(0);
+    await expect(wizard.locator(".hd-wizard__step.is-active .hd-wizard__step-label")).toHaveText("Catálogo");
     await expect(wizard.getByRole("listitem").filter({ hasText: "Área TI" })).toBeVisible();
 
     await page.screenshot({
-      path: path.join(evidenceDir, "01-area-ti-form-categories.png"),
+      path: path.join(evidenceDir, "01-catalog-first-step.png"),
       fullPage: true,
     });
 
