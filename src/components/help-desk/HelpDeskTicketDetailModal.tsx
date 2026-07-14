@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   downloadHelpDeskTicketAttachment,
-  fetchHelpDeskTicketAttachmentBlob,
   useHelpDeskTicketDetail,
 } from "../../api/hooks/useHelpDesk";
 import type { HelpDeskTicketAttachmentDto, HelpDeskTicketListItemDto } from "../../api/types";
-import { ImageLightbox } from "../feed/ImageLightbox";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
+import { HelpDeskAttachmentViewerModal } from "./HelpDeskAttachmentViewerModal";
 import { HelpDeskTicketDescription } from "./HelpDeskTicketDescription";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
@@ -47,11 +46,19 @@ function isImageAttachment(attachment: HelpDeskTicketAttachmentDto): boolean {
   );
 }
 
+function isPdfAttachment(attachment: HelpDeskTicketAttachmentDto): boolean {
+  const ct = (attachment.contentType ?? "").toLowerCase();
+  const name = attachment.fileName.toLowerCase();
+  return ct.includes("pdf") || name.endsWith(".pdf");
+}
+
+function canPreviewAttachment(attachment: HelpDeskTicketAttachmentDto): boolean {
+  return isImageAttachment(attachment) || isPdfAttachment(attachment);
+}
+
 function attachmentIconClass(attachment: HelpDeskTicketAttachmentDto): string {
   if (isImageAttachment(attachment)) return "fa-file-image";
-  const name = attachment.fileName.toLowerCase();
-  const ct = (attachment.contentType ?? "").toLowerCase();
-  if (ct.includes("pdf") || name.endsWith(".pdf")) return "fa-file-pdf";
+  if (isPdfAttachment(attachment)) return "fa-file-pdf";
   return "fa-paperclip";
 }
 
@@ -68,40 +75,18 @@ export function HelpDeskTicketDetailModal({
   const attachments = detail?.attachments ?? [];
   const isLoadingDetail = detailQuery.isLoading || (detailQuery.isFetching && !detail);
 
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
-  const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
+  const [viewerAttachment, setViewerAttachment] = useState<HelpDeskTicketAttachmentDto | null>(null);
   const [downloadLoadingId, setDownloadLoadingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) {
-      setLightbox((current) => {
-        if (current?.src.startsWith("blob:")) URL.revokeObjectURL(current.src);
-        return null;
-      });
-      setPreviewLoadingId(null);
+      setViewerAttachment(null);
       setDownloadLoadingId(null);
     }
   }, [open]);
 
   const title = ticketId ? `Chamado #${ticketId}` : "Detalhes do chamado";
   const externalUrl = summary?.externalUrl;
-
-  const openLightbox = async (attachment: HelpDeskTicketAttachmentDto) => {
-    if (!ticketId) return;
-    setPreviewLoadingId(attachment.documentId);
-    try {
-      const blob = await fetchHelpDeskTicketAttachmentBlob(ticketId, attachment.documentId);
-      const src = URL.createObjectURL(blob);
-      setLightbox((current) => {
-        if (current?.src.startsWith("blob:")) URL.revokeObjectURL(current.src);
-        return { src, alt: attachment.fileName };
-      });
-    } catch {
-      // toast handled by API layer where available; keep silent fallback
-    } finally {
-      setPreviewLoadingId(null);
-    }
-  };
 
   const handleDownload = async (attachment: HelpDeskTicketAttachmentDto) => {
     if (!ticketId) return;
@@ -120,6 +105,7 @@ export function HelpDeskTicketDetailModal({
         title={title}
         wide
         stacked
+        closeOnEscape={viewerAttachment === null}
         onClose={onClose}
         footer={
           <>
@@ -192,12 +178,33 @@ export function HelpDeskTicketDetailModal({
                     </dd>
                   </div>
                   <div>
-                    <dt>Equipe:</dt>
-                    <dd>{detail.assignee ?? "TI — Service Desk"}</dd>
+                    <dt>Atribuído a:</dt>
+                    <dd>{detail.assignee?.trim() || "Não atribuído"}</dd>
                   </div>
                 </>
               ) : null}
             </dl>
+
+            {detail?.resolution ? (
+              <section className="hd-ticket-resolution" aria-label="Resolução do chamado">
+                <h3 className="hd-modal__section-title">
+                  <i className="fa-solid fa-circle-check" aria-hidden="true" /> Resolução
+                </h3>
+                <div className="hd-ticket-resolution__meta">
+                  {detail.resolution.author ? (
+                    <span>
+                      <strong>Resolvido por:</strong> {detail.resolution.author}
+                    </span>
+                  ) : null}
+                  {detail.resolution.resolvedAt ? (
+                    <span>
+                      <strong>Em:</strong> {formatDate(detail.resolution.resolvedAt)}
+                    </span>
+                  ) : null}
+                </div>
+                <HelpDeskTicketDescription value={detail.resolution.content} />
+              </section>
+            ) : null}
 
             {attachments.length > 0 ? (
               <section className="hd-ticket-attachments" aria-label="Anexos do chamado">
@@ -207,7 +214,7 @@ export function HelpDeskTicketDetailModal({
                 <ul className="hd-ticket-attachments__list">
                   {attachments.map((attachment) => {
                     const sizeLabel = formatSize(attachment.sizeBytes);
-                    const canPreview = isImageAttachment(attachment);
+                    const canPreview = canPreviewAttachment(attachment);
                     return (
                       <li key={attachment.documentId} className="hd-ticket-attachments__item">
                         <div className="hd-ticket-attachments__meta">
@@ -229,17 +236,9 @@ export function HelpDeskTicketDetailModal({
                               className="hd-track__view-btn"
                               title="Visualizar"
                               aria-label={`Visualizar ${attachment.fileName}`}
-                              disabled={previewLoadingId === attachment.documentId}
-                              onClick={() => void openLightbox(attachment)}
+                              onClick={() => setViewerAttachment(attachment)}
                             >
-                              <i
-                                className={`fa-solid ${
-                                  previewLoadingId === attachment.documentId
-                                    ? "fa-spinner fa-spin"
-                                    : "fa-eye"
-                                }`}
-                                aria-hidden="true"
-                              />
+                              <i className="fa-solid fa-eye" aria-hidden="true" />
                             </button>
                           ) : null}
                           <button
@@ -267,39 +266,43 @@ export function HelpDeskTicketDetailModal({
               </section>
             ) : null}
 
-            {detail && detail.events.length > 0 ? (
+            {detail ? (
               <>
                 <h3 className="hd-modal__section-title">
                   <i className="fa-solid fa-clock-rotate-left" aria-hidden="true" /> Histórico
                 </h3>
-                <ul className="hd-track__events">
-                  {detail.events.map((event, index) => (
-                    <li key={`${event.createdAt}-${index}`}>
-                      <strong>{event.eventType}</strong>
-                      {event.author ? <span> — {event.author}</span> : null}
-                      <span>{formatDate(event.createdAt)}</span>
-                    </li>
-                  ))}
-                </ul>
+                {detail.events.length > 0 ? (
+                  <ul className="hd-track__events">
+                    {detail.events.map((event, index) => (
+                      <li key={`${event.createdAt}-${index}`}>
+                        <div className="hd-track__event-head">
+                          <strong>
+                            {event.kind === "solution" ? "Solução" : "Acompanhamento"}
+                          </strong>
+                          {event.author ? <span> — {event.author}</span> : null}
+                          <span className="hd-track__event-date">{formatDate(event.createdAt)}</span>
+                        </div>
+                        <HelpDeskTicketDescription value={event.content} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="hd-ticket-detail__empty-history">
+                    Nenhum acompanhamento público registrado neste chamado.
+                  </p>
+                )}
               </>
             ) : null}
           </div>
         ) : null}
       </ContrachequeModal>
 
-      {lightbox ? (
-        <ImageLightbox
-          open
-          src={lightbox.src}
-          alt={lightbox.alt}
-          onClose={() => {
-            setLightbox((current) => {
-              if (current?.src.startsWith("blob:")) URL.revokeObjectURL(current.src);
-              return null;
-            });
-          }}
-        />
-      ) : null}
+      <HelpDeskAttachmentViewerModal
+        open={viewerAttachment !== null}
+        ticketId={ticketId}
+        attachment={viewerAttachment}
+        onClose={() => setViewerAttachment(null)}
+      />
     </>
   );
 }

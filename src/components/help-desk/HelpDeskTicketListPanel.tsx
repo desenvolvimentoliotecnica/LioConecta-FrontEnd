@@ -63,9 +63,28 @@ function sortTickets(items: HelpDeskTicketListItemDto[], sort: SortKey): HelpDes
   return next;
 }
 
+function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+
+  const haystack = [
+    ticket.ticketId,
+    `#${ticket.ticketId}`,
+    ticket.subject,
+    ticket.requesterLabel ?? "",
+    ticket.status,
+    ticket.statusLabel,
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return haystack.includes(q);
+}
+
 export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
   const [view, setView] = useState<TicketView>("mine");
   const [sort, setSort] = useState<SortKey>("createdAtDesc");
+  const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -74,18 +93,22 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
   const allQuery = useHelpDeskAllTickets(view === "all" && canViewAllTickets, SCOPE);
   const ticketsQuery = view === "all" ? allQuery : mineQuery;
 
-  const sorted = useMemo(
-    () => sortTickets(ticketsQuery.data ?? [], sort),
-    [ticketsQuery.data, sort],
-  );
+  const filtered = useMemo(() => {
+    const items = ticketsQuery.data ?? [];
+    if (!search.trim()) return items;
+    return items.filter((ticket) => matchesTicketSearch(ticket, search));
+  }, [ticketsQuery.data, search]);
+
+  const sorted = useMemo(() => sortTickets(filtered, sort), [filtered, sort]);
 
   const visible = useMemo(() => sorted.slice(0, visibleCount), [sorted, visibleCount]);
   const hasMore = sorted.length > visibleCount;
   const showRequester = view === "all";
+  const totalLoaded = ticketsQuery.data?.length ?? 0;
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [view, sort, ticketsQuery.data]);
+  }, [view, sort, search, ticketsQuery.data]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -114,11 +137,24 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
             <p className="hd-ticket-list__subtitle">
               {ticketsQuery.isLoading
                 ? "Carregando chamados…"
-                : `${sorted.length} chamado${sorted.length === 1 ? "" : "s"} (últimos 90 dias)`}
+                : search.trim()
+                  ? `${sorted.length} de ${totalLoaded} chamado${totalLoaded === 1 ? "" : "s"} (últimos 90 dias)`
+                  : `${sorted.length} chamado${sorted.length === 1 ? "" : "s"} (últimos 90 dias)`}
             </p>
           </div>
 
           <div className="hd-ticket-list__controls">
+            <label className="hd-ticket-list__search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="search"
+                value={search}
+                placeholder="Buscar nº, assunto, solicitante, status…"
+                aria-label="Buscar chamados por número, assunto, solicitante ou status"
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </label>
+
             {canViewAllTickets ? (
               <div className="hd-track__view-toggle" role="tablist" aria-label="Visão dos chamados">
                 <button
@@ -173,9 +209,11 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
 
         {!ticketsQuery.isLoading && !ticketsQuery.isError && sorted.length === 0 ? (
           <p className="page-empty-note">
-            {view === "all"
-              ? "Nenhum chamado encontrado na fila (últimos 90 dias)."
-              : "Nenhum chamado encontrado nos últimos 90 dias."}
+            {search.trim()
+              ? "Nenhum chamado corresponde à busca."
+              : view === "all"
+                ? "Nenhum chamado encontrado na fila (últimos 90 dias)."
+                : "Nenhum chamado encontrado nos últimos 90 dias."}
           </p>
         ) : null}
 
