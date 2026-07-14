@@ -109,6 +109,24 @@ type Props = {
   value?: string | null;
 };
 
+function isFullWidthField(field: DescriptionField): boolean {
+  const label = field.label.trim().toLowerCase();
+  if (
+    label.includes("descri") ||
+    label.includes("detalhadamente") ||
+    label.includes("detalhe") ||
+    label.includes("observ") ||
+    label.includes("coment") ||
+    label.includes("mensagem")
+  ) {
+    return true;
+  }
+
+  const value = field.value.trim();
+  if (value.includes("\n")) return true;
+  return value.length >= 80;
+}
+
 export function HelpDeskTicketDescription({ value }: Props) {
   const content = value?.trim();
   if (!content) {
@@ -124,12 +142,18 @@ export function HelpDeskTicketDescription({ value }: Props) {
             <section key={`section-${sectionIndex}`} className="hd-desc-section">
               {section.title ? <h4 className="hd-desc-section__title">{section.title}</h4> : null}
               <dl className="hd-desc-fields">
-                {section.fields.map((field, fieldIndex) => (
-                  <div key={`field-${sectionIndex}-${fieldIndex}`} className="hd-desc-field">
-                    <dt>{field.label}:</dt>
-                    <dd>{field.value}</dd>
-                  </div>
-                ))}
+                {section.fields.map((field, fieldIndex) => {
+                  const fullWidth = isFullWidthField(field);
+                  return (
+                    <div
+                      key={`field-${sectionIndex}-${fieldIndex}`}
+                      className={`hd-desc-field${fullWidth ? " hd-desc-field--full" : ""}`}
+                    >
+                      <dt>{field.label}:</dt>
+                      <dd>{field.value}</dd>
+                    </div>
+                  );
+                })}
               </dl>
             </section>
           ))}
