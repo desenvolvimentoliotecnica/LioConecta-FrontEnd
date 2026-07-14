@@ -56,9 +56,13 @@ type Props = {
   onSubmit: (payload: CreateHelpDeskTicketRequestDto, files: File[]) => void;
 };
 
-function sanitizeDefaultValue(raw: string | null | undefined): string | null {
+function sanitizeDefaultValue(
+  raw: string | null | undefined,
+  fieldKind?: string,
+): string | null {
   if (!raw?.trim()) return null;
   const value = raw.trim();
+  const kind = (fieldKind || "").toLowerCase();
   if (value === "0" || value === "-1" || value.includes("items_id")) return null;
   if (value.startsWith("{")) {
     try {
@@ -67,10 +71,16 @@ function sanitizeDefaultValue(raw: string | null | undefined): string | null {
         typeof parsed.items_id === "number"
           ? parsed.items_id
           : Number.parseInt(String(parsed.items_id ?? "0"), 10);
-      return id > 0 ? String(id) : null;
+      if (!(id > 0)) return null;
+      // IDs GLPI de usuário não devem virar chip de colaborador.
+      if (kind === "user" || kind === "users") return null;
+      return String(id);
     } catch {
       return null;
     }
+  }
+  if ((kind === "user" || kind === "users") && /^\d+$/.test(value)) {
+    return null;
   }
   return value;
 }
@@ -125,8 +135,9 @@ function initialAnswersFromSchema(
 ): Record<number, string> {
   const next: Record<number, string> = {};
   for (const question of questions) {
-    if (resolveUiFieldKind(question) === "file") continue;
-    const sanitized = sanitizeDefaultValue(question.defaultValue);
+    const kind = resolveUiFieldKind(question);
+    if (kind === "file") continue;
+    const sanitized = sanitizeDefaultValue(question.defaultValue, kind);
     if (sanitized) {
       next[question.id] = sanitized;
     }
