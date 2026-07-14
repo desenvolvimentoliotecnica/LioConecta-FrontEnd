@@ -243,7 +243,6 @@ function HelpDeskPersonPicker({
           onFocus={() => setOpen(true)}
         />
       </div>
-      <span className="hd-modal-form__hint">Busque no diretório de pessoas (mín. 2 letras).</span>
       {open && query.trim().length >= 2 ? (
         <ul id={listId} className="hd-person-picker__list" role="listbox">
           {search.isFetching ? (
@@ -351,7 +350,6 @@ function HelpDeskPeopleMultiPicker({
           onFocus={() => setOpen(true)}
         />
       </div>
-      <span className="hd-modal-form__hint">Busque no diretório de pessoas (mín. 2 letras).</span>
       {open && query.trim().length >= 2 ? (
         <ul className="hd-person-picker__list" role="listbox">
           {search.isFetching ? (
