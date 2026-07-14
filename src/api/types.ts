@@ -2336,6 +2336,7 @@ export interface HelpDeskTicketListItemDto {
   createdAt: string;
   externalUrl?: string | null;
   requesterLabel?: string | null;
+  assigneeLabel?: string | null;
 }
 
 export interface HelpDeskTicketEventDto {

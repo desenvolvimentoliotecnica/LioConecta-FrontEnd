@@ -129,12 +129,21 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
                   {showRequester ? <th>Solicitante</th> : null}
                   <th>Prioridade</th>
                   <th>Status</th>
+                  <th>Atribuído a</th>
                   <th>Abertura</th>
                   <th className="hd-track__actions-col">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((ticket: HelpDeskTicketListItemDto) => (
+                {filtered.map((ticket: HelpDeskTicketListItemDto) => {
+                  const showAssignee =
+                    ticket.status === "2" ||
+                    ticket.status === "3" ||
+                    ticket.status === "5" ||
+                    ticket.status === "6";
+                  const assignee =
+                    showAssignee && ticket.assigneeLabel?.trim() ? ticket.assigneeLabel.trim() : "—";
+                  return (
                   <tr key={ticket.ticketId}>
                     <td>#{ticket.ticketId}</td>
                     <td>{ticket.subject}</td>
@@ -143,6 +152,7 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
                     <td>
                       <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
                     </td>
+                    <td>{assignee}</td>
                     <td>{formatDate(ticket.createdAt)}</td>
                     <td className="hd-track__actions-col">
                       <button
@@ -156,7 +166,8 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
                       </button>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           ) : null}

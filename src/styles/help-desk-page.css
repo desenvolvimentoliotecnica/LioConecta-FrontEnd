@@ -314,7 +314,8 @@
 
 .hd-ticket-list__th--left,
 .hd-ticket-list__td--subject,
-.hd-ticket-list__td--requester {
+.hd-ticket-list__td--requester,
+.hd-ticket-list__td--assignee {
   text-align: left;
 }
 
@@ -324,7 +325,8 @@
   text-overflow: ellipsis;
 }
 
-.hd-ticket-list__td--requester {
+.hd-ticket-list__td--requester,
+.hd-ticket-list__td--assignee {
   width: 1%;
 }
 

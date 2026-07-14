@@ -9,7 +9,7 @@ const SCOPE = "all";
 const SUBJECT_MAX = 40;
 
 type TicketView = "mine" | "all";
-type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "createdAt";
+type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "assignee" | "createdAt";
 type SortDir = "asc" | "desc";
 
 type Props = {
@@ -36,6 +36,16 @@ function toTitleCase(value: string): string {
     .trim()
     .toLocaleLowerCase("pt-BR")
     .replace(/(^|[\s([{/'-])(\S)/g, (_, prefix: string, char: string) => prefix + char.toLocaleUpperCase("pt-BR"));
+}
+
+function showsAssignee(status: string): boolean {
+  return status === "2" || status === "3" || status === "5" || status === "6";
+}
+
+function formatAssignee(ticket: HelpDeskTicketListItemDto): string {
+  if (!showsAssignee(ticket.status)) return "—";
+  const label = ticket.assigneeLabel?.trim();
+  return label ? toTitleCase(label) : "—";
 }
 
 function truncateSubject(value: string): { text: string; full: string } {
@@ -124,6 +134,9 @@ function sortTickets(
       case "status":
         result = defaultStatusRank(a.status) - defaultStatusRank(b.status);
         break;
+      case "assignee":
+        result = formatAssignee(a).localeCompare(formatAssignee(b), "pt-BR");
+        break;
       case "createdAt":
         result = compareCreatedAtAsc(a, b);
         break;
@@ -149,6 +162,7 @@ function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): 
     `#${ticket.ticketId}`,
     ticket.subject,
     ticket.requesterLabel ?? "",
+    ticket.assigneeLabel ?? "",
     ticket.status,
     ticket.statusLabel,
     ticket.priorityLabel,
@@ -384,6 +398,14 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                     onSort={handleSort}
                   />
                   <SortHeader
+                    label="Atribuído a"
+                    column="assignee"
+                    activeColumn={sortColumn}
+                    direction={sortDir}
+                    align="left"
+                    onSort={handleSort}
+                  />
+                  <SortHeader
                     label="Abertura"
                     column="createdAt"
                     activeColumn={sortColumn}
@@ -424,6 +446,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                           <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
                         </span>
                       </td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--assignee">{formatAssignee(ticket)}</td>
                       <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__td--date">
                         <span className="hd-ticket-list__cell">{formatDate(ticket.createdAt)}</span>
                       </td>
