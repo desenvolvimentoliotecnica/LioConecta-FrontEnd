@@ -1,22 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   uploadHelpDeskTicketAttachment,
   useHelpDeskCreateTicket,
-  useHelpDeskServices,
   useHelpDeskSummary,
 } from "../../api/hooks/useHelpDesk";
 import { ApiError } from "../../api/client";
-import { useToggleBookmark } from "../../api/hooks/usePreferences";
 import type { CreateHelpDeskTicketRequestDto, HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/types";
-import { bookmarkIdForHelpDesk } from "../../utils/money";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
-import { useEmailCompose } from "../email/EmailComposeProvider";
-import { HelpDeskServiceCard } from "./HelpDeskServiceCard";
 import { HelpDeskKnowledgeModal } from "./HelpDeskKnowledgeModal";
-import { HelpDeskLiveChatModal } from "./HelpDeskLiveChatModal";
 import { HelpDeskOpenTicketModal } from "./HelpDeskOpenTicketModal";
-import { HelpDeskPhoneModal } from "./HelpDeskPhoneModal";
 import { HelpDeskTicketListPanel } from "./HelpDeskTicketListPanel";
 import { HelpDeskTicketResultModal } from "./HelpDeskTicketResultModal";
 import { HelpDeskTrackTicketModal } from "./HelpDeskTrackTicketModal";
@@ -24,6 +17,19 @@ import "../../styles/contracheque-page.css";
 import "../../styles/beneficios-page.css";
 import "../../styles/help-desk-page.css";
 import "../../styles/help-desk-modal.css";
+
+const KNOWLEDGE_SERVICE: HelpDeskServiceDto = {
+  id: "base-conhecimento",
+  title: "Base de conhecimento",
+  desc: "Artigos, tutoriais e soluções para problemas frequentes de hardware, software e acesso.",
+  category: "duvida",
+  provider: "Wiki TI",
+  status: "disponivel",
+  featured: false,
+  action: "Consultar",
+  helpText: "Busque por palavra-chave antes de abrir chamado. Muitos problemas comuns já possuem solução documentada.",
+  portalUrl: "/documentos/wiki",
+};
 
 function apiErrorDetail(error: unknown): string {
   if (error instanceof ApiError) {
@@ -61,18 +67,13 @@ export function HelpDeskPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openTicket, setOpenTicket] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
-  const [knowledgeService, setKnowledgeService] = useState<HelpDeskServiceDto | null>(null);
-  const [chatService, setChatService] = useState<HelpDeskServiceDto | null>(null);
-  const [phoneService, setPhoneService] = useState<HelpDeskServiceDto | null>(null);
+  const [knowledgeOpen, setKnowledgeOpen] = useState(false);
   const [ticketResult, setTicketResult] = useState<HelpDeskTicketResultDto | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
   const [createPending, setCreatePending] = useState(false);
 
   const summaryQuery = useHelpDeskSummary();
-  const servicesQuery = useHelpDeskServices();
   const createMutation = useHelpDeskCreateTicket();
-  const { openCompose } = useEmailCompose();
-  const { toggle: toggleBookmark, isSaved } = useToggleBookmark();
 
   useEffect(() => {
     if (searchParams.get("track") !== "1") return;
@@ -81,50 +82,6 @@ export function HelpDeskPage() {
     next.delete("track");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
-
-  const services = useMemo(() => servicesQuery.data ?? [], [servicesQuery.data]);
-
-  const openPortal = (service: HelpDeskServiceDto) => {
-    if (!service.portalUrl) return;
-    if (service.portalUrl.startsWith("mailto:")) {
-      window.location.href = service.portalUrl;
-      return;
-    }
-    window.open(service.portalUrl, "_blank", "noopener,noreferrer");
-  };
-
-  const handleAccess = (service: HelpDeskServiceDto) => {
-    switch (service.id) {
-      case "abrir-chamado":
-        setOpenTicket(true);
-        break;
-      case "acompanhar-ticket":
-        setTrackOpen(true);
-        break;
-      case "base-conhecimento":
-        setKnowledgeService(service);
-        break;
-      case "chat-ao-vivo":
-        setChatService(service);
-        break;
-      case "email-suporte":
-        openCompose({
-          to: [{ email: "ti.suporte@liotecnica.com.br", name: "Suporte TI" }],
-          lockedTo: true,
-          subject: "Suporte TI — ",
-          source: "help-desk",
-        });
-        break;
-      case "telefone-plantao":
-        setPhoneService(service);
-        break;
-      default:
-        if (service.portalUrl) {
-          openPortal(service);
-        }
-        break;
-    }
-  };
 
   const handleCreateTicket = async (payload: CreateHelpDeskTicketRequestDto, files: File[]) => {
     setCreateError(null);
@@ -181,6 +138,26 @@ export function HelpDeskPage() {
         title="Help Desk"
         current="Help Desk"
         description="Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da Liotécnica."
+        titleActions={
+          <div className="hd-header-actions">
+            <button
+              type="button"
+              className="hd-header-actions__btn hd-header-actions__btn--primary"
+              onClick={() => setOpenTicket(true)}
+            >
+              <i className="fa-solid fa-ticket" aria-hidden="true" />
+              Abrir chamado
+            </button>
+            <button
+              type="button"
+              className="hd-header-actions__btn"
+              onClick={() => setKnowledgeOpen(true)}
+            >
+              <i className="fa-solid fa-book-open" aria-hidden="true" />
+              Base de conhecimento
+            </button>
+          </div>
+        }
         toolbar={
           <div className="hd-header-summary" aria-live="polite">
             <p className="hd-header-summary__title">
@@ -193,31 +170,6 @@ export function HelpDeskPage() {
           </div>
         }
       />
-
-      {servicesQuery.isError ? (
-        <p className="page-empty-note" role="alert">
-          Não foi possível carregar os serviços. Verifique se a API está online.
-        </p>
-      ) : null}
-
-      <div className="benefits-grid" aria-label="Help Desk">
-        {servicesQuery.isLoading
-          ? Array.from({ length: 3 }).map((_, index) => (
-              <article key={index} className="benefit-card" aria-hidden="true">
-                <p>Carregando…</p>
-              </article>
-            ))
-          : services.map((service) => (
-              <HelpDeskServiceCard
-                key={service.id}
-                service={service}
-                bookmarkSaved={isSaved(bookmarkIdForHelpDesk(service.id))}
-                onAccess={handleAccess}
-                onPortal={openPortal}
-                onBookmark={(item) => toggleBookmark(bookmarkIdForHelpDesk(item.id))}
-              />
-            ))}
-      </div>
 
       <HelpDeskTicketListPanel canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false} />
 
@@ -239,22 +191,9 @@ export function HelpDeskPage() {
         onClose={() => setTrackOpen(false)}
       />
       <HelpDeskKnowledgeModal
-        open={knowledgeService !== null}
-        service={knowledgeService}
-        onClose={() => setKnowledgeService(null)}
-      />
-      <HelpDeskLiveChatModal
-        open={chatService !== null}
-        service={chatService}
-        onClose={() => setChatService(null)}
-        onOpenTeams={() => {
-          if (chatService?.portalUrl) openPortal(chatService);
-        }}
-      />
-      <HelpDeskPhoneModal
-        open={phoneService !== null}
-        service={phoneService}
-        onClose={() => setPhoneService(null)}
+        open={knowledgeOpen}
+        service={KNOWLEDGE_SERVICE}
+        onClose={() => setKnowledgeOpen(false)}
       />
       <HelpDeskTicketResultModal
         open={ticketResult !== null}
