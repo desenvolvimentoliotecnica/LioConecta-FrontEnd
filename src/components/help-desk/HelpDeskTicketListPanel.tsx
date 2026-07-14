@@ -82,12 +82,25 @@ function matchesTicketSearch(ticket: HelpDeskTicketListItemDto, query: string): 
 }
 
 export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
-  const [view, setView] = useState<TicketView>("mine");
+  const [view, setView] = useState<TicketView>(canViewAllTickets ? "all" : "mine");
   const [sort, setSort] = useState<SortKey>("createdAtDesc");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const defaultedToAllRef = useRef(canViewAllTickets);
+
+  useEffect(() => {
+    if (!canViewAllTickets) {
+      defaultedToAllRef.current = false;
+      setView("mine");
+      return;
+    }
+    if (!defaultedToAllRef.current) {
+      defaultedToAllRef.current = true;
+      setView("all");
+    }
+  }, [canViewAllTickets]);
 
   const mineQuery = useHelpDeskTickets(view === "mine", SCOPE);
   const allQuery = useHelpDeskAllTickets(view === "all" && canViewAllTickets, SCOPE);
@@ -149,7 +162,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
               <input
                 type="search"
                 value={search}
-                placeholder="Buscar nº, assunto, solicitante, status…"
+                placeholder="Buscar chamado…"
                 aria-label="Buscar chamados por número, assunto, solicitante ou status"
                 onChange={(event) => setSearch(event.target.value)}
               />

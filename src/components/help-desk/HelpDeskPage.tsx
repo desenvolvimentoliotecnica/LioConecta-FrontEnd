@@ -140,6 +140,11 @@ export function HelpDeskPage() {
     });
   };
 
+  const pendingTickets = summaryQuery.data?.openTickets ?? 0;
+  const avgResponse = summaryQuery.data?.avgResponseLabel ?? "2h críticos · 8h solicitações";
+  const pendingLabel =
+    pendingTickets === 1 ? "1 chamado pendente" : `${pendingTickets} chamados pendentes`;
+
   return (
     <main className={sectionMainClass("ti")}>
       <SectionPageHead
@@ -147,6 +152,19 @@ export function HelpDeskPage() {
         title="Help Desk"
         current="Help Desk"
         description="Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da Liotécnica."
+        toolbar={
+          <div className="hd-header-summary" aria-live="polite">
+            <p className="hd-header-summary__title">
+              {summaryQuery.isLoading
+                ? "Central de atendimento TI — carregando fila…"
+                : `Central de atendimento TI — ${pendingLabel}`}
+            </p>
+            <p className="hd-header-summary__text">
+              Tempo médio de resposta: {avgResponse}. Consulte a base de conhecimento ou abra um
+              ticket pelo portal.
+            </p>
+          </div>
+        }
       />
 
       {servicesQuery.isError ? (
