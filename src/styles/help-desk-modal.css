@@ -978,6 +978,38 @@
   margin: 0 0 12px;
 }
 
+.hd-wizard__path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.hd-wizard__path-sep {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.hd-wizard__path-item {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hd-wizard__path-item.is-current {
+  color: #0f172a;
+  font-weight: 600;
+}
+
 .hd-wizard__crumb {
   border: none;
   background: #f1f5f9;
