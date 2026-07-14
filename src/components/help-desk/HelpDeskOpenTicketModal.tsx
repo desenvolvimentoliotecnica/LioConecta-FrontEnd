@@ -1078,31 +1078,25 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
 
           {phase === "details" ? (
             <>
-              <p className="hd-modal__intro">
-                <i className="fa-solid fa-ticket" aria-hidden="true" />
-                Preencha o formulário do Service Desk. O protocolo será criado automaticamente no GLPI.
-              </p>
-
-              {selectedArea ? (
-                <div className="hd-wizard__summary hd-wizard__summary--compact">
-                  <span className="hd-wizard__summary-label">Área</span>
-                  <strong>{selectedArea.name}</strong>
-                </div>
-              ) : null}
-
-              {categoryId !== null ? (
-                <div className="hd-wizard__summary hd-wizard__summary--compact">
-                  <span className="hd-wizard__summary-label">Categoria</span>
-                  <strong>{formatFormCategoryPath(formCategories, categoryId)}</strong>
-                </div>
-              ) : null}
-
-              {(selectedForm || schema) ? (
-                <div className="hd-wizard__summary hd-wizard__summary--compact">
-                  <span className="hd-wizard__summary-label">Formulário</span>
-                  <strong>{schema?.name ?? selectedForm?.name}</strong>
-                </div>
-              ) : null}
+              <nav className="hd-wizard__path" aria-label="Seleção atual">
+                {selectedArea ? <span className="hd-wizard__path-item">{selectedArea.name}</span> : null}
+                {categoryId !== null ? (
+                  <>
+                    <i className="fa-solid fa-chevron-right hd-wizard__path-sep" aria-hidden="true" />
+                    <span className="hd-wizard__path-item">
+                      {formatFormCategoryPath(formCategories, categoryId)}
+                    </span>
+                  </>
+                ) : null}
+                {(selectedForm || schema) ? (
+                  <>
+                    <i className="fa-solid fa-chevron-right hd-wizard__path-sep" aria-hidden="true" />
+                    <span className="hd-wizard__path-item is-current">
+                      {schema?.name ?? selectedForm?.name}
+                    </span>
+                  </>
+                ) : null}
+              </nav>
 
               {schemaQuery.isLoading ? (
                 <p className="hd-modal__empty">Carregando perguntas do formulário…</p>
