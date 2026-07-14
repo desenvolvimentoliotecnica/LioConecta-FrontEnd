@@ -28,8 +28,8 @@ type Props = {
   onBookmark: (service: HelpDeskServiceDto) => void;
 };
 
-/** Cards internos: só o botão Acessar — sem externo/bookmark. */
-const HIDE_SECONDARY_ACTIONS = new Set([
+/** Cards internos: só título, descrição e Acessar. */
+const SIMPLIFIED_SERVICE_CARDS = new Set([
   "abrir-chamado",
   "acompanhar-ticket",
   "base-conhecimento",
@@ -38,7 +38,7 @@ const HIDE_SECONDARY_ACTIONS = new Set([
 export function HelpDeskServiceCard({ service, bookmarkSaved, onAccess, onPortal, onBookmark }: Props) {
   const catClass = ` benefit-card__cat--${service.category}`;
   const statusClass = ` benefit-card__status--${service.status}`;
-  const showSecondaryActions = !HIDE_SECONDARY_ACTIONS.has(service.id);
+  const simplified = SIMPLIFIED_SERVICE_CARDS.has(service.id);
 
   return (
     <article
@@ -57,24 +57,28 @@ export function HelpDeskServiceCard({ service, bookmarkSaved, onAccess, onPortal
           <p className="benefit-card__desc">{service.desc}</p>
         </div>
       </div>
-      <div className="benefit-card__tags">
-        <span className={`benefit-card__cat${catClass}`}>
-          {CAT_LABELS[service.category] ?? service.category}
-        </span>
-        <span className={`benefit-card__status${statusClass}`}>
-          {STATUS_LABELS[service.status] ?? service.status}
-        </span>
-      </div>
-      <div className="benefit-card__meta">
-        <span>
-          <i className="fa-solid fa-server" aria-hidden="true" /> {service.provider}
-        </span>
-      </div>
+      {!simplified ? (
+        <>
+          <div className="benefit-card__tags">
+            <span className={`benefit-card__cat${catClass}`}>
+              {CAT_LABELS[service.category] ?? service.category}
+            </span>
+            <span className={`benefit-card__status${statusClass}`}>
+              {STATUS_LABELS[service.status] ?? service.status}
+            </span>
+          </div>
+          <div className="benefit-card__meta">
+            <span>
+              <i className="fa-solid fa-server" aria-hidden="true" /> {service.provider}
+            </span>
+          </div>
+        </>
+      ) : null}
       <div className="benefit-card__footer">
         <button type="button" className="benefit-card__open" onClick={() => onAccess(service)}>
           <i className="fa-regular fa-eye" aria-hidden="true" /> Acessar
         </button>
-        {showSecondaryActions ? (
+        {!simplified ? (
           <div className="benefit-card__actions">
             <button
               type="button"
