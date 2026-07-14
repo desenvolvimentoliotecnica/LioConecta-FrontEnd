@@ -2279,8 +2279,15 @@ export interface HelpDeskTicketListItemDto {
 }
 
 export interface HelpDeskTicketEventDto {
-  eventType: string;
+  kind: string;
+  content: string;
   createdAt: string;
+  author?: string | null;
+}
+
+export interface HelpDeskTicketResolutionDto {
+  content: string;
+  resolvedAt?: string | null;
   author?: string | null;
 }
 
@@ -2295,6 +2302,7 @@ export interface HelpDeskTicketDetailDto {
   summary: HelpDeskTicketListItemDto;
   description: string;
   assignee?: string | null;
+  resolution?: HelpDeskTicketResolutionDto | null;
   events: HelpDeskTicketEventDto[];
   attachments?: HelpDeskTicketAttachmentDto[];
 }

@@ -140,9 +140,6 @@ export function HelpDeskPage() {
     });
   };
 
-  const openTickets = summaryQuery.data?.openTickets ?? 0;
-  const avgResponse = summaryQuery.data?.avgResponseLabel ?? "2h críticos · 8h solicitações";
-
   return (
     <main className={sectionMainClass("ti")}>
       <SectionPageHead
@@ -151,22 +148,6 @@ export function HelpDeskPage() {
         current="Help Desk"
         description="Abra chamados, acompanhe tickets em andamento e consulte canais de suporte técnico da Liotécnica."
       />
-
-      <div className="welcome-banner welcome-banner--help-desk">
-        <div className="welcome-banner__icon" aria-hidden="true">
-          <i className="fa-solid fa-headset" />
-        </div>
-        <div>
-          <div className="welcome-banner__title">
-            {summaryQuery.isLoading
-              ? "Carregando central de atendimento…"
-              : `Central de atendimento TI — ${openTickets} chamado${openTickets === 1 ? "" : "s"} aberto${openTickets === 1 ? "" : "s"}`}
-          </div>
-          <p className="welcome-banner__text">
-            Tempo médio de resposta: {avgResponse}. Consulte a base de conhecimento ou abra um ticket pelo portal.
-          </p>
-        </div>
-      </div>
 
       {servicesQuery.isError ? (
         <p className="page-empty-note" role="alert">
