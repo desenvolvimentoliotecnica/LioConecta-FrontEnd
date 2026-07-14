@@ -2142,6 +2142,8 @@ export interface HelpDeskSummaryDto {
   openTickets: number;
   avgResponseLabel: string;
   canViewAllTickets?: boolean;
+  pendingTickets?: number;
+  inProgressTickets?: number;
 }
 
 export interface HelpDeskServiceDto {
@@ -2281,6 +2283,9 @@ export interface HelpDeskFormQuestionDto {
   defaultValue?: string | null;
   horizontalRank?: number | null;
   options: HelpDeskFormOptionDto[];
+  itemType?: string | null;
+  rootItemsId?: number | null;
+  isMultiple?: boolean;
 }
 
 export interface HelpDeskFormSectionDto {

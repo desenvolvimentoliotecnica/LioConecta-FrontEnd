@@ -1,16 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   useHelpDeskAreas,
   useHelpDeskFormCategories,
   useHelpDeskFormSchema,
   useHelpDeskForms,
 } from "../../api/hooks/useHelpDesk";
+import { usePeopleSearch } from "../../api/hooks/usePhoneExtensions";
 import type {
   CreateHelpDeskTicketRequestDto,
   HelpDeskAreaDto,
   HelpDeskFormCategoryDto,
   HelpDeskFormQuestionDto,
   HelpDeskFormSummaryDto,
+  PersonSummaryDto,
 } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 import {
@@ -51,8 +53,27 @@ type Props = {
   pending: boolean;
   errorMessage?: string | null;
   onClose: () => void;
-  onSubmit: (payload: CreateHelpDeskTicketRequestDto) => void;
+  onSubmit: (payload: CreateHelpDeskTicketRequestDto, files: File[]) => void;
 };
+
+function sanitizeDefaultValue(raw: string | null | undefined): string | null {
+  if (!raw?.trim()) return null;
+  const value = raw.trim();
+  if (value === "0" || value === "-1" || value.includes("items_id")) return null;
+  if (value.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(value) as { items_id?: number | string };
+      const id =
+        typeof parsed.items_id === "number"
+          ? parsed.items_id
+          : Number.parseInt(String(parsed.items_id ?? "0"), 10);
+      return id > 0 ? String(id) : null;
+    } catch {
+      return null;
+    }
+  }
+  return value;
+}
 
 function initialAnswersFromSchema(
   questions: HelpDeskFormQuestionDto[],
@@ -60,8 +81,9 @@ function initialAnswersFromSchema(
   const next: Record<number, string> = {};
   for (const question of questions) {
     if (question.fieldKind === "file") continue;
-    if (question.defaultValue?.trim()) {
-      next[question.id] = question.defaultValue.trim();
+    const sanitized = sanitizeDefaultValue(question.defaultValue);
+    if (sanitized) {
+      next[question.id] = sanitized;
     }
   }
   return next;
@@ -73,6 +95,177 @@ function questionOptions(question: HelpDeskFormQuestionDto) {
   return [];
 }
 
+function formatPersonAnswer(person: PersonSummaryDto): string {
+  const meta = [person.title, person.departmentName].filter(Boolean).join(" · ");
+  return meta ? `${person.name} (${meta})` : person.name;
+}
+
+function HelpDeskPersonPicker({
+  value,
+  onChange,
+  required,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  placeholder?: string;
+}) {
+  const inputId = useId();
+  const listId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const query = usePeopleSearch(value, open);
+
+  useEffect(() => {
+    const onDocClick = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const results = query.data ?? [];
+
+  return (
+    <div className="hd-person-picker" ref={rootRef}>
+      <input
+        id={inputId}
+        type="text"
+        value={value}
+        required={required}
+        placeholder={placeholder ?? "Buscar colaborador…"}
+        autoComplete="off"
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        onChange={(event) => {
+          onChange(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+      />
+      {open && value.trim().length >= 2 ? (
+        <ul id={listId} className="hd-person-picker__list" role="listbox">
+          {query.isFetching ? (
+            <li className="hd-person-picker__empty">Buscando…</li>
+          ) : results.length === 0 ? (
+            <li className="hd-person-picker__empty">Nenhuma pessoa encontrada — use texto livre.</li>
+          ) : (
+            results.map((person) => (
+              <li key={person.id}>
+                <button
+                  type="button"
+                  role="option"
+                  className="hd-person-picker__option"
+                  onClick={() => {
+                    onChange(formatPersonAnswer(person));
+                    setOpen(false);
+                  }}
+                >
+                  <strong>{person.name}</strong>
+                  <span>
+                    {[person.title, person.departmentName].filter(Boolean).join(" · ") || person.slug}
+                  </span>
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+function HelpDeskPeopleMultiPicker({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}) {
+  const inputId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const search = usePeopleSearch(query, open);
+
+  const selected = useMemo(
+    () =>
+      value
+        .split("|")
+        .map((item) => item.trim())
+        .filter(Boolean),
+    [value],
+  );
+
+  useEffect(() => {
+    const onDocClick = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const addPerson = (person: PersonSummaryDto) => {
+    const label = formatPersonAnswer(person);
+    if (selected.includes(label)) return;
+    onChange([...selected, label].join("|"));
+    setQuery("");
+    setOpen(false);
+  };
+
+  const removePerson = (label: string) => {
+    onChange(selected.filter((item) => item !== label).join("|"));
+  };
+
+  return (
+    <div className="hd-person-picker hd-person-picker--multi" ref={rootRef}>
+      {selected.length > 0 ? (
+        <div className="hd-person-picker__chips">
+          {selected.map((label) => (
+            <span key={label} className="hd-person-picker__chip">
+              {label}
+              <button type="button" aria-label={`Remover ${label}`} onClick={() => removePerson(label)}>
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      ) : null}
+      <input
+        id={inputId}
+        type="text"
+        value={query}
+        placeholder={placeholder ?? "Buscar e adicionar…"}
+        autoComplete="off"
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+      />
+      {open && query.trim().length >= 2 ? (
+        <ul className="hd-person-picker__list" role="listbox">
+          {(search.data ?? []).map((person) => (
+            <li key={person.id}>
+              <button type="button" className="hd-person-picker__option" onClick={() => addPerson(person)}>
+                <strong>{person.name}</strong>
+                <span>
+                  {[person.title, person.departmentName].filter(Boolean).join(" · ") || person.slug}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, onSubmit }: Props) {
   const [phase, setPhase] = useState<WizardPhase>("area");
   const [areaId, setAreaId] = useState<string | null>(null);
@@ -81,6 +274,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [formId, setFormId] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [filesByQuestion, setFilesByQuestion] = useState<Record<number, File[]>>({});
   const [localError, setLocalError] = useState<string | null>(null);
 
   const areasQuery = useHelpDeskAreas(open);
@@ -134,12 +328,14 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setCategoryId(null);
     setFormId(null);
     setAnswers({});
+    setFilesByQuestion({});
     setLocalError(null);
   }, [open]);
 
   useEffect(() => {
     if (!schema) return;
     setAnswers(initialAnswersFromSchema(flatQuestions));
+    setFilesByQuestion({});
     setLocalError(null);
   }, [schema, flatQuestions]);
 
@@ -151,6 +347,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setCategoryId(null);
     setFormId(null);
     setAnswers({});
+    setFilesByQuestion({});
     setLocalError(null);
   };
 
@@ -160,6 +357,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setCategoryId(null);
     setFormId(null);
     setAnswers({});
+    setFilesByQuestion({});
     setLocalError(null);
   };
 
@@ -168,6 +366,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setCategoryId(item.id);
     setFormId(null);
     setAnswers({});
+    setFilesByQuestion({});
     setPhase("services");
   };
 
@@ -178,6 +377,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setCategoryId(null);
     setFormId(null);
     setAnswers({});
+    setFilesByQuestion({});
     setPhase("catalog");
   };
 
@@ -213,6 +413,7 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     if (phase === "details") {
       setFormId(null);
       setAnswers({});
+      setFilesByQuestion({});
       setLocalError(null);
       setPhase("services");
       return;
@@ -242,11 +443,30 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     setAnswers((current) => ({ ...current, [questionId]: value }));
   };
 
+  const setQuestionFiles = (questionId: number, files: FileList | null) => {
+    setFilesByQuestion((current) => ({
+      ...current,
+      [questionId]: files ? Array.from(files) : [],
+    }));
+  };
+
+  const collectedFiles = useMemo(
+    () => Object.values(filesByQuestion).flat(),
+    [filesByQuestion],
+  );
+
   const validateAnswers = (): string | null => {
     for (const question of flatQuestions) {
-      if (!question.isMandatory || question.fieldKind === "file") continue;
+      if (!question.isMandatory) continue;
+      if (question.fieldKind === "file") {
+        const files = filesByQuestion[question.id] ?? [];
+        if (files.length === 0) {
+          return `Anexe ao menos um arquivo em: ${question.name}`;
+        }
+        continue;
+      }
       const value = answers[question.id]?.trim() ?? "";
-      if (!value) {
+      if (!value || value.includes("items_id")) {
         return `Preencha o campo obrigatório: ${question.name}`;
       }
     }
@@ -269,21 +489,24 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     }
 
     setLocalError(null);
-    onSubmit({
-      entityId,
-      formId,
-      categoryId: 0,
-      subject: schema?.name ?? "",
-      priority: "media",
-      description: "",
-      answers: flatQuestions
-        .filter((question) => question.fieldKind !== "file")
-        .map((question) => ({
-          questionId: question.id,
-          value: answers[question.id]?.trim() ?? "",
-        }))
-        .filter((item) => item.value.length > 0),
-    });
+    onSubmit(
+      {
+        entityId,
+        formId,
+        categoryId: 0,
+        subject: schema?.name ?? "",
+        priority: "media",
+        description: "",
+        answers: flatQuestions
+          .filter((question) => question.fieldKind !== "file")
+          .map((question) => ({
+            questionId: question.id,
+            value: answers[question.id]?.trim() ?? "",
+          }))
+          .filter((item) => item.value.length > 0 && !item.value.includes("items_id")),
+      },
+      collectedFiles,
+    );
   };
 
   const stepState = (target: WizardPhase) => {
@@ -369,13 +592,79 @@ export function HelpDeskOpenTicketModal({ open, pending, errorMessage, onClose, 
     ) : null;
 
     if (question.fieldKind === "file") {
+      const files = filesByQuestion[question.id] ?? [];
       return (
         <div key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
           {label}
-          <p className="hd-modal-form__hint">
-            Anexe arquivos depois de abrir o chamado, na tela de detalhes do ticket.
-          </p>
+          {hint}
+          <input
+            type="file"
+            multiple
+            onChange={(event) => setQuestionFiles(question.id, event.target.files)}
+            required={question.isMandatory}
+          />
+          {files.length > 0 ? (
+            <ul className="hd-modal-form__file-list">
+              {files.map((file) => (
+                <li key={`${file.name}-${file.size}-${file.lastModified}`}>{file.name}</li>
+              ))}
+            </ul>
+          ) : (
+            <span className="hd-modal-form__hint">
+              Os arquivos serão anexados ao chamado logo após a abertura.
+            </span>
+          )}
         </div>
+      );
+    }
+
+    if (question.fieldKind === "user") {
+      return (
+        <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
+          {label}
+          {hint}
+          <HelpDeskPersonPicker
+            value={value}
+            onChange={(next) => setAnswer(question.id, next)}
+            required={question.isMandatory}
+            placeholder="Selecione o colaborador…"
+          />
+        </label>
+      );
+    }
+
+    if (question.fieldKind === "users") {
+      return (
+        <div key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
+          {label}
+          {hint}
+          <HelpDeskPeopleMultiPicker
+            value={value}
+            onChange={(next) => setAnswer(question.id, next)}
+            placeholder="Buscar quem receberá cópia…"
+          />
+        </div>
+      );
+    }
+
+    if (question.fieldKind === "itilcategory" || (question.fieldKind === "glpiitem" && options.length > 0)) {
+      return (
+        <label key={question.id} className="hd-modal-form__field hd-modal-form__field--full">
+          {label}
+          {hint}
+          <select
+            value={value}
+            onChange={(e) => setAnswer(question.id, e.target.value)}
+            required={question.isMandatory}
+          >
+            <option value="">Selecione…</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
       );
     }
 
