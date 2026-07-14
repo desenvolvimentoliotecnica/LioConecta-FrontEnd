@@ -26,7 +26,6 @@ function formatDate(value: string): string {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
     })
     .replace(",", "");
 }
@@ -190,7 +189,9 @@ function SortHeader({
 }) {
   const active = activeColumn === column;
   return (
-    <th className={`hd-ticket-list__th hd-ticket-list__th--${align}${active ? " is-sorted" : ""}`}>
+    <th
+      className={`hd-ticket-list__th hd-ticket-list__th--${align} hd-ticket-list__col--${column}${active ? " is-sorted" : ""}`}
+    >
       <button
         type="button"
         className="hd-ticket-list__sort-btn"
@@ -412,7 +413,9 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                     direction={sortDir}
                     onSort={handleSort}
                   />
-                  <th className="hd-track__actions-col hd-ticket-list__th hd-ticket-list__th--center">Ações</th>
+                  <th className="hd-track__actions-col hd-ticket-list__th hd-ticket-list__th--center hd-ticket-list__col--actions">
+                    Ações
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -421,18 +424,24 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                   const requester = ticket.requesterLabel?.trim()
                     ? toTitleCase(ticket.requesterLabel)
                     : "—";
+                  const assignee = formatAssignee(ticket);
                   return (
                     <tr key={ticket.ticketId} data-ticket-id={ticket.ticketId}>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--ticketId">
                         <span className="hd-ticket-list__cell">#{ticket.ticketId}</span>
                       </td>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--subject" title={subject.full}>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--subject hd-ticket-list__col--subject" title={subject.full}>
                         <span className="hd-ticket-list__subject">{subject.text}</span>
                       </td>
                       {showRequester ? (
-                        <td className="hd-ticket-list__td hd-ticket-list__td--requester">{requester}</td>
+                        <td
+                          className="hd-ticket-list__td hd-ticket-list__td--requester hd-ticket-list__col--requester"
+                          title={requester !== "—" ? requester : undefined}
+                        >
+                          {requester}
+                        </td>
                       ) : null}
-                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--priority">
                         <span className="hd-ticket-list__cell">
                           <span
                             className={`hd-ticket-priority hd-ticket-priority--${priorityModifier(ticket.priorityLabel)}`}
@@ -441,16 +450,21 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                           </span>
                         </span>
                       </td>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--status">
                         <span className="hd-ticket-list__cell">
                           <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
                         </span>
                       </td>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--assignee">{formatAssignee(ticket)}</td>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__td--date">
+                      <td
+                        className="hd-ticket-list__td hd-ticket-list__td--assignee hd-ticket-list__col--assignee"
+                        title={assignee !== "—" ? assignee : undefined}
+                      >
+                        {assignee}
+                      </td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__td--date hd-ticket-list__col--createdAt">
                         <span className="hd-ticket-list__cell">{formatDate(ticket.createdAt)}</span>
                       </td>
-                      <td className="hd-track__actions-col hd-ticket-list__td hd-ticket-list__td--center">
+                      <td className="hd-track__actions-col hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--actions">
                         <span className="hd-ticket-list__cell">
                           <button
                             type="button"
