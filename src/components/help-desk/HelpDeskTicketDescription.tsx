@@ -127,6 +127,15 @@ function isFullWidthField(field: DescriptionField): boolean {
   return value.length >= 80;
 }
 
+function isRedundantDescriptionLabel(label: string): boolean {
+  const normalized = label
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  return normalized === "descricao" || normalized === "description";
+}
+
 export function HelpDeskTicketDescription({ value }: Props) {
   const content = value?.trim();
   if (!content) {
@@ -140,16 +149,19 @@ export function HelpDeskTicketDescription({ value }: Props) {
         <div className="hd-ticket-detail__description hd-ticket-detail__description--structured">
           {sections.map((section, sectionIndex) => (
             <section key={`section-${sectionIndex}`} className="hd-desc-section">
-              {section.title ? <h4 className="hd-desc-section__title">{section.title}</h4> : null}
+              {section.title && !isRedundantDescriptionLabel(section.title) ? (
+                <h4 className="hd-desc-section__title">{section.title}</h4>
+              ) : null}
               <dl className="hd-desc-fields">
                 {section.fields.map((field, fieldIndex) => {
                   const fullWidth = isFullWidthField(field);
+                  const hideLabel = isRedundantDescriptionLabel(field.label);
                   return (
                     <div
                       key={`field-${sectionIndex}-${fieldIndex}`}
-                      className={`hd-desc-field${fullWidth ? " hd-desc-field--full" : ""}`}
+                      className={`hd-desc-field${fullWidth ? " hd-desc-field--full" : ""}${hideLabel ? " hd-desc-field--unlabeled" : ""}`}
                     >
-                      <dt>{field.label}:</dt>
+                      {hideLabel ? null : <dt>{field.label}:</dt>}
                       <dd>{field.value}</dd>
                     </div>
                   );
