@@ -23,6 +23,12 @@ import type {
 
   HelpDeskGlpiEntityDto,
 
+  HelpDeskFormCategoryDto,
+
+  HelpDeskFormSummaryDto,
+
+  HelpDeskFormSchemaDto,
+
   HelpDeskTicketResultDto,
 
 } from "../types";
@@ -206,6 +212,41 @@ export function useHelpDeskCategories(areaId: string | null, enabled: boolean) {
         `/ti/help-desk/categories?areaId=${encodeURIComponent(String(areaId))}`,
       ),
     enabled: enabled && areaId !== null && areaId.length > 0,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHelpDeskFormCategories(enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "form-categories"],
+    queryFn: () => api.get<HelpDeskFormCategoryDto[]>("/ti/help-desk/form-categories"),
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHelpDeskForms(categoryId: number | null, enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "forms", categoryId],
+    queryFn: () =>
+      api.get<HelpDeskFormSummaryDto[]>(
+        categoryId != null && categoryId > 0
+          ? `/ti/help-desk/forms?categoryId=${categoryId}`
+          : "/ti/help-desk/forms",
+      ),
+    enabled: enabled && categoryId != null && categoryId > 0,
+    staleTime: 5 * 60 * 1000,
+    retry: config.useMock ? 0 : 1,
+  });
+}
+
+export function useHelpDeskFormSchema(formId: number | null, enabled: boolean) {
+  return useQuery({
+    queryKey: [...HELP_DESK_QUERY_KEY, "form-schema", formId],
+    queryFn: () => api.get<HelpDeskFormSchemaDto>(`/ti/help-desk/forms/${formId}`),
+    enabled: enabled && formId != null && formId > 0,
     staleTime: 5 * 60 * 1000,
     retry: config.useMock ? 0 : 1,
   });

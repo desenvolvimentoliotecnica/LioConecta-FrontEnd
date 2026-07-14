@@ -2235,11 +2235,66 @@ export interface HelpDeskAreaDto {
 }
 
 export interface CreateHelpDeskTicketRequestDto {
-  subject: string;
-  priority: string;
+  subject?: string | null;
+  priority?: string | null;
   entityId: number;
+  categoryId?: number;
+  description?: string | null;
+  formId?: number | null;
+  answers?: HelpDeskFormAnswerDto[] | null;
+}
+
+export interface HelpDeskFormAnswerDto {
+  questionId: number;
+  value: string;
+}
+
+export interface HelpDeskFormCategoryDto {
+  id: number;
+  name: string;
+  completeName?: string | null;
+  parentId?: number | null;
+  level: number;
+  formCount: number;
+}
+
+export interface HelpDeskFormSummaryDto {
+  id: number;
+  name: string;
+  description?: string | null;
+  illustration?: string | null;
   categoryId: number;
-  description: string;
+}
+
+export interface HelpDeskFormOptionDto {
+  value: string;
+  label: string;
+}
+
+export interface HelpDeskFormQuestionDto {
+  id: number;
+  name: string;
+  type: string;
+  fieldKind: string;
+  isMandatory: boolean;
+  description?: string | null;
+  defaultValue?: string | null;
+  horizontalRank?: number | null;
+  options: HelpDeskFormOptionDto[];
+}
+
+export interface HelpDeskFormSectionDto {
+  id: number;
+  name: string;
+  questions: HelpDeskFormQuestionDto[];
+}
+
+export interface HelpDeskFormSchemaDto {
+  id: number;
+  name: string;
+  description?: string | null;
+  categoryId: number;
+  sections: HelpDeskFormSectionDto[];
 }
 
 export interface HelpDeskGlpiEntityDto {
