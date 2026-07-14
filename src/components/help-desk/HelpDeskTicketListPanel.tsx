@@ -401,7 +401,9 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                     : "—";
                   return (
                     <tr key={ticket.ticketId} data-ticket-id={ticket.ticketId}>
-                      <td className="hd-ticket-list__td hd-ticket-list__td--center">#{ticket.ticketId}</td>
+                      <td className="hd-ticket-list__td hd-ticket-list__td--center">
+                        <span className="hd-ticket-list__cell">#{ticket.ticketId}</span>
+                      </td>
                       <td className="hd-ticket-list__td hd-ticket-list__td--subject" title={subject.full}>
                         {subject.text}
                       </td>
@@ -409,28 +411,34 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                         <td className="hd-ticket-list__td hd-ticket-list__td--requester">{requester}</td>
                       ) : null}
                       <td className="hd-ticket-list__td hd-ticket-list__td--center">
-                        <span
-                          className={`hd-ticket-priority hd-ticket-priority--${priorityModifier(ticket.priorityLabel)}`}
-                        >
-                          {ticket.priorityLabel}
+                        <span className="hd-ticket-list__cell">
+                          <span
+                            className={`hd-ticket-priority hd-ticket-priority--${priorityModifier(ticket.priorityLabel)}`}
+                          >
+                            {ticket.priorityLabel}
+                          </span>
                         </span>
                       </td>
                       <td className="hd-ticket-list__td hd-ticket-list__td--center">
-                        <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
+                        <span className="hd-ticket-list__cell">
+                          <HelpDeskTicketStatusChip status={ticket.status} label={ticket.statusLabel} />
+                        </span>
                       </td>
                       <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__td--date">
-                        {formatDate(ticket.createdAt)}
+                        <span className="hd-ticket-list__cell">{formatDate(ticket.createdAt)}</span>
                       </td>
                       <td className="hd-track__actions-col hd-ticket-list__td hd-ticket-list__td--center">
-                        <button
-                          type="button"
-                          className="hd-track__view-btn"
-                          aria-label={`Visualizar chamado #${ticket.ticketId}`}
-                          title="Visualizar detalhes"
-                          onClick={() => setDetailTicket(ticket)}
-                        >
-                          <i className="fa-solid fa-eye" aria-hidden="true" />
-                        </button>
+                        <span className="hd-ticket-list__cell">
+                          <button
+                            type="button"
+                            className="hd-track__view-btn"
+                            aria-label={`Visualizar chamado #${ticket.ticketId}`}
+                            title="Visualizar detalhes"
+                            onClick={() => setDetailTicket(ticket)}
+                          >
+                            <i className="fa-solid fa-eye" aria-hidden="true" />
+                          </button>
+                        </span>
                       </td>
                     </tr>
                   );

@@ -258,6 +258,17 @@
   width: 1%;
 }
 
+.hd-ticket-list__table td.hd-ticket-list__td--center {
+  text-align: center;
+}
+
+.hd-ticket-list__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .hd-ticket-list__th--left,
 .hd-ticket-list__td--subject,
 .hd-ticket-list__td--requester {
