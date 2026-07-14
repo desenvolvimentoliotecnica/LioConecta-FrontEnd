@@ -8,6 +8,7 @@ import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 import { HelpDeskAttachmentViewerModal } from "./HelpDeskAttachmentViewerModal";
 import { HelpDeskTicketDescription } from "./HelpDeskTicketDescription";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
+import { helpDeskPriorityModifier } from "./helpDeskPriority";
 
 type Props = {
   open: boolean;
@@ -171,7 +172,13 @@ export function HelpDeskTicketDetailModal({
               ) : null}
               <div>
                 <dt>Prioridade:</dt>
-                <dd>{summary.priorityLabel}</dd>
+                <dd>
+                  <span
+                    className={`hd-ticket-priority hd-ticket-priority--${helpDeskPriorityModifier(summary.priorityLabel)}`}
+                  >
+                    {summary.priorityLabel}
+                  </span>
+                </dd>
               </div>
               <div>
                 <dt>Abertura:</dt>
@@ -186,121 +193,118 @@ export function HelpDeskTicketDetailModal({
             </dl>
 
             {detail ? (
-              <section className="hd-ticket-detail__description-block" aria-label="Descrição do chamado">
-                <h3 className="hd-modal__section-title">
-                  <i className="fa-solid fa-align-left" aria-hidden="true" /> Descrição
-                </h3>
-                <HelpDeskTicketDescription value={detail.description} />
-              </section>
-            ) : null}
+              <div className="hd-ticket-detail__scroll">
+                <section className="hd-ticket-detail__description-block" aria-label="Descrição do chamado">
+                  <HelpDeskTicketDescription value={detail.description} />
+                </section>
 
-            {detail?.resolution ? (
-              <section className="hd-ticket-resolution" aria-label="Resolução do chamado">
-                <h3 className="hd-modal__section-title">
-                  <i className="fa-solid fa-circle-check" aria-hidden="true" /> Resolução
-                </h3>
-                <div className="hd-ticket-resolution__meta">
-                  {detail.resolution.author ? (
-                    <span>
-                      <strong>Resolvido por:</strong> {detail.resolution.author}
-                    </span>
-                  ) : null}
-                  {detail.resolution.resolvedAt ? (
-                    <span>
-                      <strong>Em:</strong> {formatDate(detail.resolution.resolvedAt)}
-                    </span>
-                  ) : null}
-                </div>
-                <HelpDeskTicketDescription value={detail.resolution.content} />
-              </section>
-            ) : null}
+                {detail.resolution ? (
+                  <section className="hd-ticket-resolution" aria-label="Resolução do chamado">
+                    <h3 className="hd-modal__section-title">
+                      <i className="fa-solid fa-circle-check" aria-hidden="true" /> Resolução
+                    </h3>
+                    <div className="hd-ticket-resolution__meta">
+                      {detail.resolution.author ? (
+                        <span>
+                          <strong>Resolvido por:</strong> {detail.resolution.author}
+                        </span>
+                      ) : null}
+                      {detail.resolution.resolvedAt ? (
+                        <span>
+                          <strong>Em:</strong> {formatDate(detail.resolution.resolvedAt)}
+                        </span>
+                      ) : null}
+                    </div>
+                    <HelpDeskTicketDescription value={detail.resolution.content} />
+                  </section>
+                ) : null}
 
-            {attachments.length > 0 ? (
-              <section className="hd-ticket-attachments" aria-label="Anexos do chamado">
-                <h3 className="hd-modal__section-title">
-                  <i className="fa-solid fa-paperclip" aria-hidden="true" /> Anexos
-                </h3>
-                <ul className="hd-ticket-attachments__list">
-                  {attachments.map((attachment) => {
-                    const sizeLabel = formatSize(attachment.sizeBytes);
-                    const canPreview = canPreviewAttachment(attachment);
-                    return (
-                      <li key={attachment.documentId} className="hd-ticket-attachments__item">
-                        <div className="hd-ticket-attachments__meta">
-                          <i
-                            className={`fa-solid ${attachmentIconClass(attachment)}`}
-                            aria-hidden="true"
-                          />
-                          <div>
-                            <span className="hd-ticket-attachments__name">{attachment.fileName}</span>
-                            {sizeLabel ? (
-                              <span className="hd-ticket-attachments__size">{sizeLabel}</span>
-                            ) : null}
+                {attachments.length > 0 ? (
+                  <section className="hd-ticket-attachments" aria-label="Anexos do chamado">
+                    <h3 className="hd-modal__section-title">
+                      <i className="fa-solid fa-paperclip" aria-hidden="true" /> Anexos
+                    </h3>
+                    <ul className="hd-ticket-attachments__list">
+                      {attachments.map((attachment) => {
+                        const sizeLabel = formatSize(attachment.sizeBytes);
+                        const canPreview = canPreviewAttachment(attachment);
+                        return (
+                          <li key={attachment.documentId} className="hd-ticket-attachments__item">
+                            <div className="hd-ticket-attachments__meta">
+                              <i
+                                className={`fa-solid ${attachmentIconClass(attachment)}`}
+                                aria-hidden="true"
+                              />
+                              <div>
+                                <span className="hd-ticket-attachments__name">{attachment.fileName}</span>
+                                {sizeLabel ? (
+                                  <span className="hd-ticket-attachments__size">{sizeLabel}</span>
+                                ) : null}
+                              </div>
+                            </div>
+                            <div className="hd-ticket-attachments__actions">
+                              {canPreview ? (
+                                <button
+                                  type="button"
+                                  className="hd-track__view-btn"
+                                  title="Visualizar"
+                                  aria-label={`Visualizar ${attachment.fileName}`}
+                                  onClick={() => setViewerAttachment(attachment)}
+                                >
+                                  <i className="fa-solid fa-eye" aria-hidden="true" />
+                                </button>
+                              ) : null}
+                              <button
+                                type="button"
+                                className="hd-track__view-btn"
+                                title="Baixar"
+                                aria-label={`Baixar ${attachment.fileName}`}
+                                disabled={downloadLoadingId === attachment.documentId}
+                                onClick={() => void handleDownload(attachment)}
+                              >
+                                <i
+                                  className={`fa-solid ${
+                                    downloadLoadingId === attachment.documentId
+                                      ? "fa-spinner fa-spin"
+                                      : "fa-download"
+                                  }`}
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </section>
+                ) : null}
+
+                <section aria-label="Histórico do chamado">
+                  <h3 className="hd-modal__section-title">
+                    <i className="fa-solid fa-clock-rotate-left" aria-hidden="true" /> Histórico
+                  </h3>
+                  {detail.events.length > 0 ? (
+                    <ul className="hd-track__events">
+                      {detail.events.map((event, index) => (
+                        <li key={`${event.createdAt}-${index}`}>
+                          <div className="hd-track__event-head">
+                            <strong>
+                              {event.kind === "solution" ? "Solução" : "Acompanhamento"}
+                            </strong>
+                            {event.author ? <span> — {event.author}</span> : null}
+                            <span className="hd-track__event-date">{formatDate(event.createdAt)}</span>
                           </div>
-                        </div>
-                        <div className="hd-ticket-attachments__actions">
-                          {canPreview ? (
-                            <button
-                              type="button"
-                              className="hd-track__view-btn"
-                              title="Visualizar"
-                              aria-label={`Visualizar ${attachment.fileName}`}
-                              onClick={() => setViewerAttachment(attachment)}
-                            >
-                              <i className="fa-solid fa-eye" aria-hidden="true" />
-                            </button>
-                          ) : null}
-                          <button
-                            type="button"
-                            className="hd-track__view-btn"
-                            title="Baixar"
-                            aria-label={`Baixar ${attachment.fileName}`}
-                            disabled={downloadLoadingId === attachment.documentId}
-                            onClick={() => void handleDownload(attachment)}
-                          >
-                            <i
-                              className={`fa-solid ${
-                                downloadLoadingId === attachment.documentId
-                                  ? "fa-spinner fa-spin"
-                                  : "fa-download"
-                              }`}
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ) : null}
-
-            {detail ? (
-              <>
-                <h3 className="hd-modal__section-title">
-                  <i className="fa-solid fa-clock-rotate-left" aria-hidden="true" /> Histórico
-                </h3>
-                {detail.events.length > 0 ? (
-                  <ul className="hd-track__events">
-                    {detail.events.map((event, index) => (
-                      <li key={`${event.createdAt}-${index}`}>
-                        <div className="hd-track__event-head">
-                          <strong>
-                            {event.kind === "solution" ? "Solução" : "Acompanhamento"}
-                          </strong>
-                          {event.author ? <span> — {event.author}</span> : null}
-                          <span className="hd-track__event-date">{formatDate(event.createdAt)}</span>
-                        </div>
-                        <HelpDeskTicketDescription value={event.content} />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="hd-ticket-detail__empty-history">
-                    Nenhum acompanhamento público registrado neste chamado.
-                  </p>
-                )}
-              </>
+                          <HelpDeskTicketDescription value={event.content} />
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="hd-ticket-detail__empty-history">
+                      Nenhum acompanhamento público registrado neste chamado.
+                    </p>
+                  )}
+                </section>
+              </div>
             ) : null}
           </div>
         ) : null}

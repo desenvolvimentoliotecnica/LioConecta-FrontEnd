@@ -3,6 +3,7 @@ import { useHelpDeskAllTickets, useHelpDeskTickets } from "../../api/hooks/useHe
 import type { HelpDeskTicketListItemDto } from "../../api/types";
 import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
+import { helpDeskPriorityModifier } from "./helpDeskPriority";
 
 const PAGE_SIZE = 15;
 const SCOPE = "all";
@@ -61,18 +62,6 @@ function priorityRank(label: string): number {
   if (normalized.includes("baixa") || normalized.includes("low")) return 3;
   if (normalized.includes("muito baixa")) return 4;
   return 5;
-}
-
-function priorityModifier(label: string): string {
-  const normalized = label.trim().toLowerCase();
-  if (normalized.includes("muito alta") || normalized.includes("crítica") || normalized.includes("critica")) {
-    return "critical";
-  }
-  if (normalized.includes("alta") || normalized.includes("high") || normalized.includes("urgent")) return "high";
-  if (normalized.includes("média") || normalized.includes("media") || normalized.includes("medium")) return "medium";
-  if (normalized.includes("muito baixa")) return "lowest";
-  if (normalized.includes("baixa") || normalized.includes("low")) return "low";
-  return "unknown";
 }
 
 function defaultStatusRank(status: string): number {
@@ -444,7 +433,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                       <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--priority">
                         <span className="hd-ticket-list__cell">
                           <span
-                            className={`hd-ticket-priority hd-ticket-priority--${priorityModifier(ticket.priorityLabel)}`}
+                            className={`hd-ticket-priority hd-ticket-priority--${helpDeskPriorityModifier(ticket.priorityLabel)}`}
                           >
                             {ticket.priorityLabel}
                           </span>
