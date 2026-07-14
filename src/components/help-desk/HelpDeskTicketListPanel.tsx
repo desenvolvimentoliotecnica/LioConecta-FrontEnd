@@ -5,7 +5,7 @@ import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
 const PAGE_SIZE = 15;
-const SCOPE = "90d";
+const SCOPE = "all";
 const SUBJECT_MAX = 40;
 
 type TicketView = "mine" | "all";
@@ -275,8 +275,8 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
               {ticketsQuery.isLoading
                 ? "Carregando chamados…"
                 : search.trim()
-                  ? `${sorted.length} de ${totalLoaded} chamado${totalLoaded === 1 ? "" : "s"} (últimos 90 dias)`
-                  : `${sorted.length} chamado${sorted.length === 1 ? "" : "s"} (últimos 90 dias)`}
+                  ? `${sorted.length} de ${totalLoaded} chamado${totalLoaded === 1 ? "" : "s"}`
+                  : `${sorted.length} chamado${sorted.length === 1 ? "" : "s"}`}
             </p>
           </div>
 
@@ -334,8 +334,8 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
             {search.trim()
               ? "Nenhum chamado corresponde à busca."
               : view === "all"
-                ? "Nenhum chamado encontrado na fila (últimos 90 dias)."
-                : "Nenhum chamado encontrado nos últimos 90 dias."}
+                ? "Nenhum chamado encontrado na fila."
+                : "Nenhum chamado encontrado."}
           </p>
         ) : null}
 

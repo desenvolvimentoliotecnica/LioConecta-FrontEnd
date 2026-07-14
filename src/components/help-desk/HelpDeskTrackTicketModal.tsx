@@ -22,7 +22,7 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
   const [query, setQuery] = useState("");
   const [view, setView] = useState<TicketView>("mine");
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
-  const scope = "90d";
+  const scope = "all";
 
   const mineQuery = useHelpDeskTickets(open && view === "mine", scope);
   const allQuery = useHelpDeskAllTickets(open && view === "all" && canViewAllTickets, scope);
@@ -115,8 +115,8 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
           {!ticketsQuery.isLoading && filtered.length === 0 ? (
             <p className="hd-modal__empty">
               {view === "all"
-                ? "Nenhum chamado encontrado na fila (últimos 90 dias)."
-                : "Nenhum chamado encontrado nos últimos 90 dias."}
+                ? "Nenhum chamado encontrado na fila."
+                : "Nenhum chamado encontrado."}
             </p>
           ) : null}
 
