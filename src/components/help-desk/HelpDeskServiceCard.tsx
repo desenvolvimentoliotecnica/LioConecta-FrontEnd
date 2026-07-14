@@ -28,9 +28,17 @@ type Props = {
   onBookmark: (service: HelpDeskServiceDto) => void;
 };
 
+/** Cards internos: só o botão Acessar — sem externo/bookmark. */
+const HIDE_SECONDARY_ACTIONS = new Set([
+  "abrir-chamado",
+  "acompanhar-ticket",
+  "base-conhecimento",
+]);
+
 export function HelpDeskServiceCard({ service, bookmarkSaved, onAccess, onPortal, onBookmark }: Props) {
   const catClass = ` benefit-card__cat--${service.category}`;
   const statusClass = ` benefit-card__status--${service.status}`;
+  const showSecondaryActions = !HIDE_SECONDARY_ACTIONS.has(service.id);
 
   return (
     <article
@@ -66,30 +74,32 @@ export function HelpDeskServiceCard({ service, bookmarkSaved, onAccess, onPortal
         <button type="button" className="benefit-card__open" onClick={() => onAccess(service)}>
           <i className="fa-regular fa-eye" aria-hidden="true" /> Acessar
         </button>
-        <div className="benefit-card__actions">
-          <button
-            type="button"
-            className="benefit-card__btn"
-            aria-label={`Abrir ${service.title}`}
-            disabled={!service.portalUrl}
-            title={service.portalUrl ? "Abrir canal externo" : "Canal externo indisponível"}
-            onClick={() => onPortal(service)}
-          >
-            <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className={`benefit-card__btn${bookmarkSaved ? " is-saved" : ""}`}
-            aria-label={`Salvar ${service.title}`}
-            aria-pressed={bookmarkSaved}
-            onClick={() => onBookmark(service)}
-          >
-            <i
-              className={`${bookmarkSaved ? "fa-solid" : "fa-regular"} fa-bookmark`}
-              aria-hidden="true"
-            />
-          </button>
-        </div>
+        {showSecondaryActions ? (
+          <div className="benefit-card__actions">
+            <button
+              type="button"
+              className="benefit-card__btn"
+              aria-label={`Abrir ${service.title}`}
+              disabled={!service.portalUrl}
+              title={service.portalUrl ? "Abrir canal externo" : "Canal externo indisponível"}
+              onClick={() => onPortal(service)}
+            >
+              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className={`benefit-card__btn${bookmarkSaved ? " is-saved" : ""}`}
+              aria-label={`Salvar ${service.title}`}
+              aria-pressed={bookmarkSaved}
+              onClick={() => onBookmark(service)}
+            >
+              <i
+                className={`${bookmarkSaved ? "fa-solid" : "fa-regular"} fa-bookmark`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        ) : null}
       </div>
     </article>
   );
