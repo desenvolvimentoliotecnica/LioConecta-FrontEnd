@@ -14,6 +14,10 @@
   color: #0e7490;
 }
 
+.hd-header-summary__counts {
+  font-weight: 700;
+}
+
 .hd-header-summary__text {
   margin: 0;
   font-size: 0.82rem;

@@ -182,6 +182,18 @@ export async function downloadHelpDeskTicketAttachment(
   );
 }
 
+export async function uploadHelpDeskTicketAttachment(
+  ticketId: string,
+  file: File,
+): Promise<void> {
+  const formData = new FormData();
+  formData.append("file", file, file.name);
+  await api.upload(
+    `/ti/help-desk/tickets/${encodeURIComponent(ticketId)}/attachments`,
+    formData,
+  );
+}
+
 
 
 export function useHelpDeskAreas(enabled: boolean) {

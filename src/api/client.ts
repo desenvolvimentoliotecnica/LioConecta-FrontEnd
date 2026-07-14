@@ -132,7 +132,16 @@ export async function apiUpload<T>(path: string, formData: FormData): Promise<T>
     throw new ApiError(`API ${response.status}: ${path}`, response.status, body, correlationId ?? undefined);
   }
 
-  return (await response.json()) as T;
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await response.text();
+  if (!text.trim()) {
+    return undefined as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 export const api = {
