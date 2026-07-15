@@ -240,13 +240,17 @@
         </div>
 
         <div class="profile-gallery-lightbox" id="profile-gallery-lightbox" hidden role="dialog" aria-modal="true" aria-label="Visualização da mídia">
-          <div class="profile-gallery-lightbox__backdrop" data-close-gallery-lightbox></div>
-          <div class="profile-gallery-lightbox__dialog">
+          <div class="profile-gallery-lightbox__shell">
             <button class="profile-gallery-lightbox__close" type="button" data-close-gallery-lightbox aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            <button class="profile-gallery-lightbox__nav profile-gallery-lightbox__nav--prev" type="button" id="profile-gallery-prev" aria-label="Mídia anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
             <div class="profile-gallery-lightbox__media" id="profile-gallery-lightbox-media"></div>
-            <div class="profile-gallery-lightbox__actions">
-              <a class="profile-btn profile-btn--primary" id="profile-gallery-view-post" href="/feed">Ver postagem</a>
-              <button class="profile-btn" type="button" data-close-gallery-lightbox>Fechar</button>
+            <button class="profile-gallery-lightbox__nav profile-gallery-lightbox__nav--next" type="button" id="profile-gallery-next" aria-label="Próxima mídia"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+            <div class="profile-gallery-lightbox__footer">
+              <span class="profile-gallery-lightbox__counter" id="profile-gallery-counter"></span>
+              <div class="profile-gallery-lightbox__actions">
+                <a class="profile-btn profile-btn--primary" id="profile-gallery-view-post" href="/feed">Ver postagem</a>
+                <button class="profile-btn" type="button" data-close-gallery-lightbox>Fechar</button>
+              </div>
             </div>
           </div>
         </div>
