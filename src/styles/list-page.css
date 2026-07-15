@@ -583,7 +583,7 @@ min-height: 140px;
 
 .post-media {
   margin: 12px 16px 0;
-  height: 180px;
+  aspect-ratio: 1 / 1;
   border: 1px solid var(--wf-border);
   border-radius: 8px;
   overflow: hidden;
@@ -625,6 +625,7 @@ min-height: 140px;
 }
 
 .post-media--video {
+  aspect-ratio: auto;
   height: auto;
   min-height: 180px;
   max-height: 420px;
@@ -637,6 +638,7 @@ min-height: 140px;
 }
 
 .post-media--tall {
+  aspect-ratio: auto;
   height: 220px;
 }
 
@@ -688,6 +690,7 @@ min-height: 140px;
 
 .post-media--banner {
   margin: 0;
+  aspect-ratio: auto;
   height: 120px;
   border: none;
   border-radius: 0;
