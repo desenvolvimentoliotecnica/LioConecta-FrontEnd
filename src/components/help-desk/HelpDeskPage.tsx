@@ -144,7 +144,7 @@ export function HelpDeskPage() {
         toolbar={
           <div className="hd-header-summary" aria-live="polite">
             <p className="hd-header-summary__title">
-              Central de atendimento TI — {queueLabel}
+              Meus chamados — {queueLabel}
             </p>
             <p className="hd-header-summary__text">
               Tempo médio de resposta: {avgResponse}. Consulte a base de conhecimento ou abra um
