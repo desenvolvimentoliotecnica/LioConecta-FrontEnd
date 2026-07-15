@@ -209,7 +209,13 @@ export function FeedComposer() {
             {attachments.map((attachment) => (
               <div key={attachment.id} className="feed-composer__preview">
                 {attachment.file.type.startsWith("video/") ? (
-                  <video src={attachment.previewUrl} controls muted playsInline />
+                  <video
+                    src={attachment.previewUrl}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    aria-label="Pré-visualização de vídeo"
+                  />
                 ) : (
                   <img src={attachment.previewUrl} alt="Pré-visualização" />
                 )}
