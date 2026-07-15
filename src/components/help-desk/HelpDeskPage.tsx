@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   uploadHelpDeskTicketAttachment,
   useHelpDeskCreateTicket,
   useHelpDeskSummary,
 } from "../../api/hooks/useHelpDesk";
 import { ApiError } from "../../api/client";
-import type { CreateHelpDeskTicketRequestDto, HelpDeskServiceDto, HelpDeskTicketResultDto } from "../../api/types";
+import type { CreateHelpDeskTicketRequestDto, HelpDeskTicketResultDto } from "../../api/types";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
-import { HelpDeskKnowledgeModal } from "./HelpDeskKnowledgeModal";
 import { HelpDeskOpenTicketModal } from "./HelpDeskOpenTicketModal";
 import { HelpDeskTicketListPanel } from "./HelpDeskTicketListPanel";
 import { HelpDeskTicketResultModal } from "./HelpDeskTicketResultModal";
@@ -18,18 +17,7 @@ import "../../styles/beneficios-page.css";
 import "../../styles/help-desk-page.css";
 import "../../styles/help-desk-modal.css";
 
-const KNOWLEDGE_SERVICE: HelpDeskServiceDto = {
-  id: "base-conhecimento",
-  title: "Base de conhecimento",
-  desc: "Artigos, tutoriais e soluções para problemas frequentes de hardware, software e acesso.",
-  category: "duvida",
-  provider: "Wiki TI",
-  status: "disponivel",
-  featured: false,
-  action: "Consultar",
-  helpText: "Busque por palavra-chave antes de abrir chamado. Muitos problemas comuns já possuem solução documentada.",
-  portalUrl: "/documentos/wiki",
-};
+const WIKI_HREF = "/documentos/wiki/";
 
 function apiErrorDetail(error: unknown): string {
   if (error instanceof ApiError) {
@@ -67,7 +55,6 @@ export function HelpDeskPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openTicket, setOpenTicket] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
-  const [knowledgeOpen, setKnowledgeOpen] = useState(false);
   const [ticketResult, setTicketResult] = useState<HelpDeskTicketResultDto | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
   const [createPending, setCreatePending] = useState(false);
@@ -148,14 +135,10 @@ export function HelpDeskPage() {
               <i className="fa-solid fa-ticket" aria-hidden="true" />
               Abrir chamado
             </button>
-            <button
-              type="button"
-              className="hd-header-actions__btn"
-              onClick={() => setKnowledgeOpen(true)}
-            >
+            <Link to={WIKI_HREF} className="hd-header-actions__btn">
               <i className="fa-solid fa-book-open" aria-hidden="true" />
               Base de conhecimento
-            </button>
+            </Link>
           </div>
         }
         toolbar={
@@ -189,11 +172,6 @@ export function HelpDeskPage() {
         open={trackOpen}
         canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false}
         onClose={() => setTrackOpen(false)}
-      />
-      <HelpDeskKnowledgeModal
-        open={knowledgeOpen}
-        service={KNOWLEDGE_SERVICE}
-        onClose={() => setKnowledgeOpen(false)}
       />
       <HelpDeskTicketResultModal
         open={ticketResult !== null}
