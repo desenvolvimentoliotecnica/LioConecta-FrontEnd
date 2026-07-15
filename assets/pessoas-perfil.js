@@ -644,7 +644,9 @@
     nextCursor: null,
     hasMore: false,
     loading: false,
-    bound: false
+    bound: false,
+    lightboxIndex: -1,
+    keyHandler: null
   };
 
   function resolveMediaAssetUrl(url) {
@@ -667,14 +669,80 @@
     }
   }
 
+  function isGalleryLightboxOpen() {
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    return !!(lightbox && !lightbox.hidden);
+  }
+
+  function updateGalleryLightboxControls() {
+    var prevBtn = document.getElementById("profile-gallery-prev");
+    var nextBtn = document.getElementById("profile-gallery-next");
+    var counter = document.getElementById("profile-gallery-counter");
+    var total = galleryState.items.length;
+    var index = galleryState.lightboxIndex;
+    var hasMultiple = total > 1;
+
+    if (prevBtn) {
+      prevBtn.disabled = !hasMultiple || index <= 0;
+      prevBtn.hidden = !hasMultiple;
+    }
+    if (nextBtn) {
+      nextBtn.disabled = !hasMultiple || index >= total - 1;
+      nextBtn.hidden = !hasMultiple;
+    }
+    if (counter) {
+      counter.textContent = total > 0 && index >= 0 ? index + 1 + " / " + total : "";
+    }
+  }
+
+  function unbindGalleryLightboxKeys() {
+    if (galleryState.keyHandler) {
+      document.removeEventListener("keydown", galleryState.keyHandler);
+      galleryState.keyHandler = null;
+    }
+  }
+
+  function bindGalleryLightboxKeys() {
+    unbindGalleryLightboxKeys();
+    galleryState.keyHandler = function (event) {
+      if (!isGalleryLightboxOpen()) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeGalleryLightbox();
+        return;
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showGalleryLightboxAt(galleryState.lightboxIndex - 1);
+        return;
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showGalleryLightboxAt(galleryState.lightboxIndex + 1);
+      }
+    };
+    document.addEventListener("keydown", galleryState.keyHandler);
+  }
+
   function closeGalleryLightbox() {
     var lightbox = document.getElementById("profile-gallery-lightbox");
     if (lightbox) lightbox.hidden = true;
     var mediaHost = document.getElementById("profile-gallery-lightbox-media");
     if (mediaHost) mediaHost.innerHTML = "";
+    galleryState.lightboxIndex = -1;
+    unbindGalleryLightboxKeys();
+    document.body.classList.remove("profile-gallery-lightbox-open");
   }
 
-  function openGalleryLightbox(item) {
+  function showGalleryLightboxAt(index) {
+    if (!galleryState.items.length) return;
+    if (index < 0 || index >= galleryState.items.length) return;
+    galleryState.lightboxIndex = index;
+    renderGalleryLightboxItem(galleryState.items[index]);
+    updateGalleryLightboxControls();
+  }
+
+  function renderGalleryLightboxItem(item) {
     var lightbox = document.getElementById("profile-gallery-lightbox");
     var mediaHost = document.getElementById("profile-gallery-lightbox-media");
     var viewPost = document.getElementById("profile-gallery-view-post");
@@ -701,6 +769,28 @@
       viewPost.href = postId ? "/feed?post=" + encodeURIComponent(postId) : "/feed";
     }
     lightbox.hidden = false;
+    document.body.classList.add("profile-gallery-lightbox-open");
+    bindGalleryLightboxKeys();
+  }
+
+  function openGalleryLightbox(item) {
+    var index = galleryState.items.indexOf(item);
+    if (index < 0) {
+      for (var i = 0; i < galleryState.items.length; i++) {
+        var candidate = galleryState.items[i];
+        var sameUrl =
+          (candidate.url || candidate.Url) === (item.url || item.Url);
+        var samePost =
+          String(candidate.postId || candidate.PostId || "") ===
+          String(item.postId || item.PostId || "");
+        if (sameUrl && samePost) {
+          index = i;
+          break;
+        }
+      }
+    }
+    if (index < 0) index = 0;
+    showGalleryLightboxAt(index);
   }
 
   function renderGalleryGrid() {
@@ -843,6 +933,19 @@
         el.addEventListener("click", function () {
           closeGalleryLightbox();
         });
+      });
+    }
+
+    var prevBtn = document.getElementById("profile-gallery-prev");
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        showGalleryLightboxAt(galleryState.lightboxIndex - 1);
+      });
+    }
+    var nextBtn = document.getElementById("profile-gallery-next");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        showGalleryLightboxAt(galleryState.lightboxIndex + 1);
       });
     }
 
