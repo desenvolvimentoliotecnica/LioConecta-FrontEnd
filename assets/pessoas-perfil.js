@@ -25,6 +25,23 @@
     return value;
   }
 
+  function openPersonChat(email, teamsUpn) {
+    var chatEmail = email || teamsUpn;
+    if (!chatEmail) return;
+    var chat = global.LioChat;
+    if (chat && chat.enabled && typeof chat.openConversationByEmail === "function") {
+      chat.openConversationByEmail(chatEmail);
+      return;
+    }
+    var teamsTarget = teamsUpn || email;
+    if (!teamsTarget) return;
+    window.open(
+      "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(teamsTarget),
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
   var deptColors = {
     Executiva: { stroke: "#a78bfa", badge: "#ede9fe", text: "#6d28d9" },
     Produto: { stroke: "#93c5fd", badge: "#dbeafe", text: "#1d4ed8" },
@@ -365,7 +382,7 @@
       jul: 7, ago: 8, set: 9, out: 10, nov: 11, dez: 12
     };
     Object.keys(monthMap).some(function (abbr) {
-      if (text.indexOf(abr) !== -1) {
+      if (text.indexOf(abbr) !== -1) {
         month = monthMap[abbr];
         return true;
       }
@@ -620,12 +637,235 @@
     });
   }
 
-  function mountProfileModalsToBody() {
-    document.querySelectorAll(".profile-edit-modal, .profile-vcard-modal").forEach(function (modal) {
-      if (modal.parentElement !== document.body) {
-        document.body.appendChild(modal);
+  var galleryState = {
+    slug: "",
+    personName: "",
+    items: [],
+    nextCursor: null,
+    hasMore: false,
+    loading: false,
+    bound: false
+  };
+
+  function resolveMediaAssetUrl(url) {
+    if (!url || typeof url !== "string") return "";
+    var trimmed = url.trim();
+    if (!trimmed) return "";
+    if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
+    var path = trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+    var servedByBackend =
+      path.indexOf("/posts/") === 0 ||
+      path.indexOf("/media/") === 0 ||
+      path.indexOf("/systems/") === 0;
+    if (!servedByBackend) return path;
+    var base = (global.LioApi && global.LioApi.baseUrl) || "";
+    if (!/^https?:\/\//i.test(base)) return path;
+    try {
+      return new URL(base).origin + path;
+    } catch (_error) {
+      return path;
+    }
+  }
+
+  function closeGalleryLightbox() {
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    if (lightbox) lightbox.hidden = true;
+    var mediaHost = document.getElementById("profile-gallery-lightbox-media");
+    if (mediaHost) mediaHost.innerHTML = "";
+  }
+
+  function openGalleryLightbox(item) {
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    var mediaHost = document.getElementById("profile-gallery-lightbox-media");
+    var viewPost = document.getElementById("profile-gallery-view-post");
+    if (!lightbox || !mediaHost || !item) return;
+
+    mediaHost.innerHTML = "";
+    var src = resolveMediaAssetUrl(item.url || item.Url);
+    var mediaType = String(item.mediaType || item.MediaType || "image").toLowerCase();
+    if (mediaType === "video") {
+      var video = document.createElement("video");
+      video.src = src;
+      video.controls = true;
+      video.playsInline = true;
+      mediaHost.appendChild(video);
+    } else {
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = "Mídia da postagem";
+      mediaHost.appendChild(img);
+    }
+
+    var postId = item.postId || item.PostId || "";
+    if (viewPost) {
+      viewPost.href = postId ? "/feed?post=" + encodeURIComponent(postId) : "/feed";
+    }
+    lightbox.hidden = false;
+  }
+
+  function renderGalleryGrid() {
+    var grid = document.getElementById("profile-gallery-grid");
+    var empty = document.getElementById("profile-gallery-empty");
+    var loadMore = document.getElementById("profile-gallery-load-more");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    galleryState.items.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "profile-gallery-item";
+      var src = resolveMediaAssetUrl(item.url || item.Url);
+      var mediaType = String(item.mediaType || item.MediaType || "image").toLowerCase();
+      if (mediaType === "video") {
+        var video = document.createElement("video");
+        video.src = src;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        btn.appendChild(video);
+        var badge = document.createElement("span");
+        badge.className = "profile-gallery-item__badge";
+        badge.innerHTML = '<i class="fa-solid fa-play" aria-hidden="true"></i>';
+        btn.appendChild(badge);
+      } else {
+        var img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+        btn.appendChild(img);
       }
+      btn.addEventListener("click", function () {
+        openGalleryLightbox(item);
+      });
+      grid.appendChild(btn);
     });
+
+    var hasItems = galleryState.items.length > 0;
+    if (empty) empty.hidden = hasItems || galleryState.loading;
+    if (loadMore) loadMore.hidden = !galleryState.hasMore;
+  }
+
+  function setGalleryStatus(message, visible) {
+    var status = document.getElementById("profile-gallery-status");
+    if (!status) return;
+    status.textContent = message || "";
+    status.hidden = !visible;
+  }
+
+  function fetchGalleryPage(reset) {
+    if (!galleryState.slug || galleryState.loading) return Promise.resolve();
+    if (!global.LioApi || global.LioApi.useMock) {
+      galleryState.items = [];
+      galleryState.hasMore = false;
+      galleryState.nextCursor = null;
+      setGalleryStatus("Galeria indisponível no modo demonstração.", true);
+      renderGalleryGrid();
+      return Promise.resolve();
+    }
+
+    galleryState.loading = true;
+    setGalleryStatus(reset ? "Carregando mídias…" : "Carregando mais…", true);
+    var path = "/people/" + encodeURIComponent(galleryState.slug) + "/post-media?limit=40";
+    if (!reset && galleryState.nextCursor) {
+      path += "&cursor=" + encodeURIComponent(galleryState.nextCursor);
+    }
+
+    return global.LioApi
+      .get(path)
+      .then(function (page) {
+        var items = (page && (page.items || page.Items)) || [];
+        if (reset) {
+          galleryState.items = items.slice();
+        } else {
+          galleryState.items = galleryState.items.concat(items);
+        }
+        galleryState.nextCursor = (page && (page.nextCursor || page.NextCursor)) || null;
+        galleryState.hasMore = !!(page && (page.hasMore || page.HasMore));
+        setGalleryStatus("", false);
+        renderGalleryGrid();
+      })
+      .catch(function (error) {
+        var status = error && (error.status || error.statusCode);
+        if (status === 403) {
+          setGalleryStatus("Você não tem permissão para ver esta galeria.", true);
+        } else {
+          setGalleryStatus("Não foi possível carregar a galeria. Tente de novo.", true);
+        }
+        if (reset) {
+          galleryState.items = [];
+          renderGalleryGrid();
+        }
+      })
+      .finally(function () {
+        galleryState.loading = false;
+        var loadMore = document.getElementById("profile-gallery-load-more");
+        if (loadMore) loadMore.disabled = false;
+      });
+  }
+
+  function openGalleryModal(person) {
+    var modal = document.getElementById("profile-gallery-modal");
+    if (!modal || !person) return;
+    var title = document.getElementById("profile-gallery-title");
+    galleryState.slug = person.id || person.slug || "";
+    galleryState.personName = person.name || "";
+    galleryState.items = [];
+    galleryState.nextCursor = null;
+    galleryState.hasMore = false;
+    if (title) {
+      title.textContent = galleryState.personName
+        ? "Galeria — " + galleryState.personName
+        : "Galeria";
+    }
+    closeGalleryLightbox();
+    modal.hidden = false;
+    renderGalleryGrid();
+    fetchGalleryPage(true);
+  }
+
+  function setupGalleryModal() {
+    if (galleryState.bound) return;
+    galleryState.bound = true;
+
+    var modal = document.getElementById("profile-gallery-modal");
+    if (modal) {
+      modal.querySelectorAll("[data-close-gallery]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          modal.hidden = true;
+          closeGalleryLightbox();
+        });
+      });
+    }
+
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    if (lightbox) {
+      lightbox.querySelectorAll("[data-close-gallery-lightbox]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          closeGalleryLightbox();
+        });
+      });
+    }
+
+    var loadMore = document.getElementById("profile-gallery-load-more");
+    if (loadMore) {
+      loadMore.addEventListener("click", function () {
+        if (!galleryState.hasMore || galleryState.loading) return;
+        loadMore.disabled = true;
+        fetchGalleryPage(false);
+      });
+    }
+  }
+
+  function mountProfileModalsToBody() {
+    document
+      .querySelectorAll(
+        ".profile-edit-modal, .profile-vcard-modal, .profile-gallery-modal, .profile-gallery-lightbox"
+      )
+      .forEach(function (modal) {
+        if (modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+      });
   }
 
   var currentPerson = null;
@@ -914,8 +1154,108 @@
     document.getElementById("profile-history").innerHTML = renderHistory(person.history);
   }
 
+  function resolveProfileAvatarUrl(person) {
+    if (!person) return "";
+    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrlFromSource === "function") {
+      return global.PersonAvatar.resolvePhotoUrlFromSource(person) || "";
+    }
+    if (global.PersonAvatar && typeof global.PersonAvatar.resolvePhotoUrl === "function") {
+      var candidate =
+        person.portalPhotoUrl ||
+        person.PortalPhotoUrl ||
+        person.img ||
+        person.photoUrl ||
+        person.PhotoUrl ||
+        "";
+      return global.PersonAvatar.resolvePhotoUrl(candidate) || candidate || "";
+    }
+    return (
+      person.portalPhotoUrl ||
+      person.PortalPhotoUrl ||
+      person.img ||
+      person.photoUrl ||
+      person.PhotoUrl ||
+      ""
+    );
+  }
+
+  function openAvatarPickerForProfile() {
+    if (!canEditProfile() || !currentPerson) return;
+
+    if (!global.AvatarPicker || typeof global.AvatarPicker.open !== "function") {
+      console.warn("[ProfilePage] AvatarPicker indisponível.");
+      return;
+    }
+
+    var graphPhotoUrl =
+      currentPerson.graphPhotoUrl ||
+      (global.PersonAvatar && global.PersonAvatar.resolveGraphPhotoUrl(currentPerson.img));
+
+    global.AvatarPicker.open({
+      mode: "me",
+      isSelf: true,
+      slug: currentPerson.id,
+      personName: currentPerson.name,
+      photoUrl: currentPerson.img,
+      graphPhotoUrl: graphPhotoUrl,
+      currentUrl: resolveProfileAvatarUrl(currentPerson),
+      onSaved: function (savedUrl, result) {
+        if (result) {
+          applyUpdatedProfile(result);
+        } else {
+          currentPerson.img = savedUrl || graphPhotoUrl || "";
+          renderProfileAvatar(currentPerson);
+        }
+        if (canEditProfile()) {
+          var updatedPhotoUrl =
+            (result && (result.photoUrl || result.PhotoUrl)) || savedUrl || graphPhotoUrl || null;
+          window.dispatchEvent(
+            new CustomEvent("lio:me-avatar-updated", {
+              detail: { photoUrl: updatedPhotoUrl },
+            })
+          );
+        }
+        if (typeof global.reloadOrganogram === "function") {
+          global.reloadOrganogram();
+        }
+      }
+    });
+  }
+
+  function bindProfileAvatarChangeButton() {
+    var changeBtn = document.getElementById("profile-avatar-change");
+    if (!changeBtn) return;
+
+    var canEdit = canEditProfile();
+    changeBtn.hidden = !canEdit;
+    changeBtn.onclick = canEdit
+      ? function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openAvatarPickerForProfile();
+        }
+      : null;
+  }
+
+  function renderProfileAvatar(person) {
+    var avatarEl = document.getElementById("profile-avatar");
+    if (!avatarEl) return;
+
+    var src = resolveProfileAvatarUrl(person);
+    if (src) {
+      avatarEl.src = src;
+      avatarEl.hidden = false;
+    } else {
+      avatarEl.removeAttribute("src");
+      avatarEl.hidden = true;
+    }
+    avatarEl.alt = "Foto de " + person.name;
+    bindProfileAvatarChangeButton();
+  }
+
   function updateOverviewFromPerson(person) {
     refreshEditableSections(person);
+    renderProfileAvatar(person);
   }
 
   function applyUpdatedProfile(dto) {
@@ -1005,10 +1345,23 @@
   }
 
   var editModalsInitialized = false;
+  var avatarPickerDelegationBound = false;
 
   function setupProfileEditModals() {
+    if (!avatarPickerDelegationBound) {
+      avatarPickerDelegationBound = true;
+      document.addEventListener("click", function (event) {
+        var btn = event.target.closest("#profile-avatar-change");
+        if (!btn || btn.hidden) return;
+        event.preventDefault();
+        event.stopPropagation();
+        openAvatarPickerForProfile();
+      });
+    }
+
     if (editModalsInitialized) return;
     editModalsInitialized = true;
+
     document.querySelectorAll("[data-edit-section]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         openEditModal(btn.getAttribute("data-edit-section"));
@@ -1223,15 +1576,7 @@
     renderBreadcrumb(person, hierarchy.chain);
     renderBirthdayBanner(person);
 
-    var avatarEl = document.getElementById("profile-avatar");
-    if (person.img) {
-      avatarEl.src = person.img;
-      avatarEl.hidden = false;
-    } else {
-      avatarEl.removeAttribute("src");
-      avatarEl.hidden = true;
-    }
-    avatarEl.alt = "Foto de " + person.name;
+    renderProfileAvatar(person);
     document.getElementById("profile-name").textContent = person.name;
     document.getElementById("profile-role").textContent = person.title;
     document.getElementById("profile-dept").textContent = person.dept;
@@ -1284,8 +1629,16 @@
         };
       }
     }
-    document.getElementById("profile-teams-btn").href =
-      "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email || "");
+    var teamsBtn = document.getElementById("profile-teams-btn");
+    if (teamsBtn) {
+      teamsBtn.href = contact.email
+        ? "https://teams.microsoft.com/l/chat/0/0?users=" + encodeURIComponent(contact.email)
+        : "#";
+      teamsBtn.onclick = function (event) {
+        event.preventDefault();
+        openPersonChat(contact.email, contact.teams || contact.email);
+      };
+    }
     document.getElementById("profile-schedule-btn").href =
       "https://outlook.office.com/calendar/action/compose?subject=Reuni%C3%A3o%20com%20" + encodeURIComponent(person.name);
     document.getElementById("profile-org-link").href = orgChartHref(person.id);
@@ -1295,6 +1648,12 @@
     document.getElementById("profile-vcard-btn").onclick = function () {
       openVCardModal(person);
     };
+    var galleryBtn = document.getElementById("profile-gallery-btn");
+    if (galleryBtn) {
+      galleryBtn.onclick = function () {
+        openGalleryModal(person);
+      };
+    }
     document.getElementById("profile-print-btn").onclick = function () {
       window.print();
     };
@@ -1356,6 +1715,10 @@
   function mapApiProfileToLegacy(dto) {
     VIEWER_ROLE = mapViewerRole(dto.viewerContext);
     var personalData = parseJsonField(dto.personalData, {}) || {};
+    var portalFromPersonal =
+      personalData.portalAvatarUrl ||
+      personalData.PortalAvatarUrl ||
+      null;
     var availability = parseJsonField(personalData.availability, personalData.availability) || {};
     var stats = parseJsonField(personalData.stats, {}) || {};
     var skills = (dto.skills || []).map(function (skill) {
@@ -1375,7 +1738,16 @@
       name: dto.name || "",
       title: dto.title || "",
       dept: dto.departmentName || "",
-      img: dto.photoUrl || "",
+      img:
+        dto.photoUrl ||
+        dto.PhotoUrl ||
+        dto.portalPhotoUrl ||
+        dto.PortalPhotoUrl ||
+        portalFromPersonal ||
+        "",
+      graphPhotoUrl: dto.graphPhotoUrl || dto.GraphPhotoUrl || null,
+      portalPhotoUrl:
+        dto.portalPhotoUrl || dto.PortalPhotoUrl || portalFromPersonal || null,
       aboutMe: personalData.aboutMe || personalData.bio || dto.bio || "",
       bio: personalData.bio || dto.bio || "",
       pronouns: personalData.pronouns || dto.pronouns || "",
@@ -1517,6 +1889,7 @@
   function init() {
     var loadId = ++activeLoadId;
     setupVCardModal();
+    setupGalleryModal();
     mountProfileModalsToBody();
     setupProfileEditModals();
     var profileId = getProfileId();
@@ -1572,6 +1945,7 @@
     init: init,
     bumpLoadGeneration: function () {
       activeLoadId += 1;
+      editModalsInitialized = false;
     },
     setViewerRole: function (role) {
       VIEWER_ROLE = role;

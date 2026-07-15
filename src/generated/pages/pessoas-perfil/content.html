@@ -53,6 +53,7 @@
               </div>
               <div class="profile-hero__actions">
                 <button class="profile-panel__edit" type="button" data-edit-section="pronouns" hidden>Editar</button>
+                <button class="profile-btn" type="button" id="profile-gallery-btn"><i class="fa-regular fa-images" aria-hidden="true"></i> Galeria</button>
                 <button class="profile-btn" type="button" id="profile-email-btn"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button>
                 <a class="profile-btn" id="profile-teams-btn" href="#"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Teams</a>
                 <a class="profile-btn" id="profile-schedule-btn" href="#"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Agendar</a>
@@ -216,6 +217,36 @@
             <div class="profile-vcard-modal__actions">
               <button class="profile-btn profile-btn--primary" type="button" id="profile-vcard-download">Baixar vCard</button>
               <button class="profile-btn" type="button" data-close-vcard>Fechar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-gallery-modal" id="profile-gallery-modal" hidden role="dialog" aria-modal="true" aria-labelledby="profile-gallery-title">
+          <div class="profile-gallery-modal__backdrop" data-close-gallery></div>
+          <div class="profile-gallery-modal__dialog">
+            <header class="profile-gallery-modal__header">
+              <h2 class="profile-gallery-modal__title" id="profile-gallery-title">Galeria</h2>
+              <button class="profile-gallery-modal__close" type="button" data-close-gallery aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="profile-gallery-modal__body">
+              <p class="profile-gallery-modal__status" id="profile-gallery-status" hidden></p>
+              <div class="profile-gallery-grid" id="profile-gallery-grid"></div>
+              <p class="profile-gallery-empty" id="profile-gallery-empty" hidden>Nenhuma mídia nas postagens ainda.</p>
+              <div class="profile-gallery-modal__footer">
+                <button class="profile-btn" type="button" id="profile-gallery-load-more" hidden>Carregar mais</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-gallery-lightbox" id="profile-gallery-lightbox" hidden role="dialog" aria-modal="true" aria-label="Visualização da mídia">
+          <div class="profile-gallery-lightbox__backdrop" data-close-gallery-lightbox></div>
+          <div class="profile-gallery-lightbox__dialog">
+            <button class="profile-gallery-lightbox__close" type="button" data-close-gallery-lightbox aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            <div class="profile-gallery-lightbox__media" id="profile-gallery-lightbox-media"></div>
+            <div class="profile-gallery-lightbox__actions">
+              <a class="profile-btn profile-btn--primary" id="profile-gallery-view-post" href="/feed">Ver postagem</a>
+              <button class="profile-btn" type="button" data-close-gallery-lightbox>Fechar</button>
             </div>
           </div>
         </div>
