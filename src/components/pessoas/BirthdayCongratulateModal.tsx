@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   BIRTHDAY_CARD_TEMPLATES,
   defaultBirthdayMessage,
@@ -84,7 +85,7 @@ export function BirthdayCongratulateModal({
     });
   }
 
-  return (
+  return createPortal(
     <div className="birthday-congrats-modal" role="presentation">
       <button
         type="button"
@@ -263,6 +264,7 @@ export function BirthdayCongratulateModal({
           </div>
         </div>
       ) : null}
-    </div>
+    </div>,
+    document.body,
   );
 }
