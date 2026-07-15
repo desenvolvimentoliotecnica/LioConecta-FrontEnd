@@ -766,7 +766,7 @@
 
     var postId = item.postId || item.PostId || "";
     if (viewPost) {
-      viewPost.href = postId ? "/feed?post=" + encodeURIComponent(postId) : "/feed";
+      viewPost.href = postId ? "/?post=" + encodeURIComponent(postId) : "/";
     }
     lightbox.hidden = false;
     document.body.classList.add("profile-gallery-lightbox-open");
