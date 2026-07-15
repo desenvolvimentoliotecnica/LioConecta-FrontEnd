@@ -59,6 +59,9 @@
 
 .feed-composer__preview {
   position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--wf-border, #e2e8f0);
