@@ -1,0 +1,301 @@
+.birthday-congrats-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+}
+
+.birthday-congrats-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(15, 23, 42, 0.55);
+  cursor: pointer;
+}
+
+.birthday-congrats-modal__dialog {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: min(92vh, 900px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.25);
+  overflow: hidden;
+}
+
+.birthday-congrats-modal__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.birthday-congrats-modal__title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.birthday-congrats-modal__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.birthday-congrats-modal__close {
+  border: 0;
+  background: transparent;
+  color: #64748b;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.birthday-congrats-modal__body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: grid;
+  gap: 18px;
+}
+
+.birthday-congrats-modal__field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.birthday-congrats-modal__field textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 96px;
+  font: inherit;
+  color: #0f172a;
+}
+
+.birthday-congrats-modal__field small {
+  color: #94a3b8;
+  justify-self: end;
+}
+
+.birthday-congrats-modal__gallery-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.birthday-congrats-modal__gallery-head h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  color: #0f172a;
+}
+
+.birthday-congrats-modal__clear-card {
+  border: 0;
+  background: transparent;
+  color: #7c3aed;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.birthday-congrats-modal__clear-card:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.birthday-congrats-modal__hint {
+  margin: 6px 0 10px;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.birthday-congrats-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.birthday-congrats-modal__card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 2px solid transparent;
+}
+
+.birthday-congrats-modal__card.is-selected {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+}
+
+.birthday-congrats-modal__card-pick {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.birthday-congrats-modal__card-pick img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.birthday-congrats-modal__card-zoom {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.65);
+  color: #fff;
+  cursor: pointer;
+}
+
+.birthday-congrats-modal__card-label {
+  display: block;
+  padding: 6px 8px 8px;
+  font-size: 0.75rem;
+  color: #475569;
+  text-align: center;
+}
+
+.birthday-congrats-modal__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.birthday-congrats-modal__btn {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.birthday-congrats-modal__btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.birthday-congrats-modal__btn--primary {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: #fff;
+}
+
+.birthday-congrats-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.birthday-congrats-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(2, 6, 23, 0.92);
+  cursor: pointer;
+}
+
+.birthday-congrats-lightbox__shell {
+  position: relative;
+  width: min(920px, 100%);
+  height: min(92vh, 920px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.birthday-congrats-lightbox__shell > img {
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  justify-self: center;
+}
+
+.birthday-congrats-lightbox__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.7);
+  color: #fff;
+  cursor: pointer;
+}
+
+.birthday-congrats-lightbox__nav {
+  grid-row: 1;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.55);
+  color: #fff;
+  cursor: pointer;
+}
+
+.birthday-congrats-lightbox__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.birthday-congrats-lightbox__footer {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .birthday-congrats-modal__footer {
+    flex-direction: column-reverse;
+  }
+
+  .birthday-congrats-modal__btn {
+    width: 100%;
+  }
+}

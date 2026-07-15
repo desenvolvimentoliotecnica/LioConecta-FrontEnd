@@ -6,6 +6,10 @@ import type { BirthdayPersonDto } from "../../api/types";
 import { POST_TYPE_CELEBRATION } from "../../api/types";
 import { SectionPageHead, sectionMainClass } from "../layout/SectionPageHead";
 import { UserAvatar } from "../ui/UserAvatar";
+import {
+  BirthdayCongratulateModal,
+  type BirthdayCongratulatePayload,
+} from "./BirthdayCongratulateModal";
 import "../../styles/birthdays-page.css";
 
 const PERIODS = [
@@ -103,6 +107,7 @@ export function BirthdaysPage() {
   const [days, setDays] = useState(1);
   const [query, setQuery] = useState("");
   const [toast, setToast] = useState<ToastState>(null);
+  const [selectedPerson, setSelectedPerson] = useState<BirthdayPersonDto | null>(null);
   const birthdays = useBirthdays(days);
   const celebrate = useCreateTypedPost(POST_TYPE_CELEBRATION);
 
@@ -126,19 +131,36 @@ export function BirthdaysPage() {
     window.setTimeout(() => setToast(null), 3200);
   }
 
-  async function handleCongratulate(person: BirthdayPersonDto) {
-    if (!person.id || celebrate.isPending) return;
+  async function handleSubmitCongrats(payload: BirthdayCongratulatePayload) {
+    const person = selectedPerson;
+    if (!person?.id || celebrate.isPending) return;
+
+    const metadata: Record<string, unknown> = {
+      celebratedPersonId: person.id,
+      celebratedPersonName: person.name,
+      celebratedPersonSlug: person.slug,
+      kind: "birthday",
+    };
+
+    if (payload.card) {
+      metadata.birthdayCardId = payload.card.id;
+      metadata.mediaUrl = payload.card.url;
+      metadata.mediaType = "image";
+      metadata.mediaItems = [{ url: payload.card.url, mediaType: "image" }];
+    }
+
     try {
       await celebrate.mutateAsync({
-        content: `Parabéns, ${person.name}! 🎉`,
-        metadata: {
-          celebratedPersonId: person.id,
-          celebratedPersonName: person.name,
-          celebratedPersonSlug: person.slug,
-          kind: "birthday",
-        },
+        content: payload.message,
+        metadata,
       });
-      showToast("success", `Parabéns enviados para ${person.name}.`);
+      setSelectedPerson(null);
+      showToast(
+        "success",
+        payload.card
+          ? `Parabéns com cartão enviados para ${person.name}.`
+          : `Parabéns enviados para ${person.name}.`,
+      );
     } catch {
       showToast("error", "Não foi possível enviar a parabenização. Tente novamente.");
     }
@@ -220,7 +242,7 @@ export function BirthdaysPage() {
               key={person.id ?? person.slug}
               person={person}
               celebrating={celebrate.isPending}
-              onCongratulate={(target) => void handleCongratulate(target)}
+              onCongratulate={(target) => setSelectedPerson(target)}
             />
           ))}
         </section>
@@ -232,6 +254,16 @@ export function BirthdaysPage() {
           <p>Nenhum aniversariante encontrado para os filtros selecionados.</p>
         </div>
       ) : null}
+
+      <BirthdayCongratulateModal
+        open={Boolean(selectedPerson)}
+        person={selectedPerson}
+        submitting={celebrate.isPending}
+        onClose={() => {
+          if (!celebrate.isPending) setSelectedPerson(null);
+        }}
+        onSubmit={(payload) => void handleSubmitCongrats(payload)}
+      />
     </main>
   );
 }
