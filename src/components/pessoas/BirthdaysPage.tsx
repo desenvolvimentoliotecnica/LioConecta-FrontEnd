@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { ApiError } from "../../api/client";
 import { useBirthdays } from "../../api/hooks/useBirthdays";
 import { useCreateTypedPost } from "../../api/hooks/useFeed";
 import type { BirthdayPersonDto } from "../../api/types";
@@ -60,7 +62,8 @@ function BirthdayCard({
 }) {
   const today = isBirthdayToday(person.birthDate);
   const dateLabel = formatBirthdayLabel(person.birthDate);
-  const canCongratulate = Boolean(person.id);
+  const alreadyCongratulated = Boolean(person.alreadyCongratulatedByMe);
+  const canCongratulate = Boolean(person.id) && !alreadyCongratulated;
 
   return (
     <article className={`birthdays-page__card${today ? " is-today" : ""}`}>
@@ -86,13 +89,22 @@ function BirthdayCard({
       <div className="birthdays-page__actions">
         <button
           type="button"
-          className="birthdays-page__btn birthdays-page__btn--primary"
+          className={`birthdays-page__btn birthdays-page__btn--primary${alreadyCongratulated ? " is-done" : ""}`}
           disabled={!canCongratulate || celebrating}
           onClick={() => onCongratulate(person)}
-          title={canCongratulate ? undefined : "Não é possível parabenizar este colaborador agora"}
+          title={
+            alreadyCongratulated
+              ? "Você já parabenizou esta pessoa neste ano"
+              : canCongratulate
+                ? undefined
+                : "Não é possível parabenizar este colaborador agora"
+          }
         >
-          <i className="fa-solid fa-gift" aria-hidden="true" />
-          Parabenizar
+          <i
+            className={`fa-solid ${alreadyCongratulated ? "fa-check" : "fa-gift"}`}
+            aria-hidden="true"
+          />
+          {alreadyCongratulated ? "Parabenizado" : "Parabenizar"}
         </button>
         <Link to={profileHref(person)} className="birthdays-page__btn birthdays-page__btn--secondary">
           <i className="fa-regular fa-user" aria-hidden="true" />
@@ -104,6 +116,7 @@ function BirthdayCard({
 }
 
 export function BirthdaysPage() {
+  const queryClient = useQueryClient();
   const [days, setDays] = useState(1);
   const [query, setQuery] = useState("");
   const [toast, setToast] = useState<ToastState>(null);
@@ -131,9 +144,19 @@ export function BirthdaysPage() {
     window.setTimeout(() => setToast(null), 3200);
   }
 
+  function markPersonCongratulated(personId: string) {
+    queryClient.setQueriesData<BirthdayPersonDto[]>(
+      { queryKey: ["people", "birthdays"] },
+      (current) =>
+        current?.map((person) =>
+          person.id === personId ? { ...person, alreadyCongratulatedByMe: true } : person,
+        ),
+    );
+  }
+
   async function handleSubmitCongrats(payload: BirthdayCongratulatePayload) {
     const person = selectedPerson;
-    if (!person?.id || celebrate.isPending) return;
+    if (!person?.id || celebrate.isPending || person.alreadyCongratulatedByMe) return;
 
     const metadata: Record<string, unknown> = {
       celebratedPersonId: person.id,
@@ -154,6 +177,8 @@ export function BirthdaysPage() {
         content: payload.message,
         metadata,
       });
+      markPersonCongratulated(person.id);
+      void queryClient.invalidateQueries({ queryKey: ["people", "birthdays"] });
       setSelectedPerson(null);
       showToast(
         "success",
@@ -161,8 +186,19 @@ export function BirthdaysPage() {
           ? `Parabéns com cartão enviados para ${person.name}.`
           : `Parabéns enviados para ${person.name}.`,
       );
-    } catch {
-      showToast("error", "Não foi possível enviar a parabenização. Tente novamente.");
+    } catch (error) {
+      const apiMessage =
+        error instanceof ApiError &&
+        error.body &&
+        typeof error.body === "object" &&
+        "message" in error.body &&
+        typeof (error.body as { message?: unknown }).message === "string"
+          ? (error.body as { message: string }).message.trim()
+          : "";
+      showToast(
+        "error",
+        apiMessage || "Não foi possível enviar a parabenização. Tente novamente.",
+      );
     }
   }
 

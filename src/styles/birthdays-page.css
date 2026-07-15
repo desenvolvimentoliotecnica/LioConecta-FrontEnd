@@ -212,6 +212,13 @@
   cursor: not-allowed;
 }
 
+.birthdays-page__btn--primary.is-done:disabled {
+  opacity: 1;
+  background: #e2e8f0;
+  color: #475569;
+  box-shadow: none;
+}
+
 .birthdays-page__btn--secondary {
   border: 1px solid #cbd5e1;
   background: #fff;
