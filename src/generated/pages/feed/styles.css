@@ -667,8 +667,12 @@ a.announcement__cta:hover {
 }
 
 .post-media {
+  display: block;
+  box-sizing: border-box;
   margin: 12px 16px 0;
-  height: 180px;
+  width: calc(100% - 32px);
+  height: auto;
+  aspect-ratio: 1 / 1;
   border: 1px solid var(--wf-border);
   border-radius: 8px;
   overflow: hidden;
