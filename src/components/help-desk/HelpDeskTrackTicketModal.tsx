@@ -1,15 +1,20 @@
-import { useMemo, useState } from "react";
-import { useHelpDeskAllTickets, useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
+import { useEffect, useMemo, useState } from "react";
+import {
+  useHelpDeskAllTickets,
+  useHelpDeskAssignedTickets,
+  useHelpDeskTickets,
+} from "../../api/hooks/useHelpDesk";
 import type { HelpDeskTicketListItemDto } from "../../api/types";
 import { ContrachequeModal } from "../contracheque/ContrachequeModal";
 import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
 
-type TicketView = "mine" | "all";
+type TicketView = "mine" | "assigned" | "all";
 
 type Props = {
   open: boolean;
   canViewAllTickets?: boolean;
+  isTechnician?: boolean;
   onClose: () => void;
 };
 
@@ -18,15 +23,41 @@ function formatDate(value: string): string {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
 }
 
-export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onClose }: Props) {
+function modalTitle(view: TicketView): string {
+  switch (view) {
+    case "assigned":
+      return "Atribuídos a mim";
+    case "all":
+      return "Fila completa GLPI";
+    default:
+      return "Acompanhar ticket";
+  }
+}
+
+export function HelpDeskTrackTicketModal({
+  open,
+  canViewAllTickets = false,
+  isTechnician = false,
+  onClose,
+}: Props) {
   const [query, setQuery] = useState("");
   const [view, setView] = useState<TicketView>("mine");
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
   const scope = "all";
+  const technician = isTechnician || canViewAllTickets;
+
+  useEffect(() => {
+    if (!technician && view !== "mine") {
+      setView("mine");
+      setDetailTicket(null);
+    }
+  }, [technician, view]);
 
   const mineQuery = useHelpDeskTickets(open && view === "mine", scope);
-  const allQuery = useHelpDeskAllTickets(open && view === "all" && canViewAllTickets, scope);
-  const ticketsQuery = view === "all" ? allQuery : mineQuery;
+  const assignedQuery = useHelpDeskAssignedTickets(open && view === "assigned" && technician, scope);
+  const allQuery = useHelpDeskAllTickets(open && view === "all" && technician, scope);
+  const ticketsQuery =
+    view === "assigned" ? assignedQuery : view === "all" ? allQuery : mineQuery;
 
   const filtered = useMemo(() => {
     const items = ticketsQuery.data ?? [];
@@ -47,13 +78,13 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
     onClose();
   };
 
-  const showRequester = view === "all";
+  const showRequester = view !== "mine";
 
   return (
     <>
       <ContrachequeModal
         open={open}
-        title={view === "all" ? "Fila completa GLPI" : "Acompanhar ticket"}
+        title={modalTitle(view)}
         wide
         closeOnEscape={detailTicket === null}
         onClose={handleClose}
@@ -64,7 +95,7 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
         }
       >
         <div className="hd-track">
-          {canViewAllTickets ? (
+          {technician ? (
             <div className="hd-track__view-toggle" role="tablist" aria-label="Visão dos chamados">
               <button
                 type="button"
@@ -77,6 +108,18 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
                 }}
               >
                 Meus chamados
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === "assigned"}
+                className={`filter-chip${view === "assigned" ? " is-active" : ""}`}
+                onClick={() => {
+                  setView("assigned");
+                  setDetailTicket(null);
+                }}
+              >
+                Atribuídos a mim
               </button>
               <button
                 type="button"
@@ -116,7 +159,9 @@ export function HelpDeskTrackTicketModal({ open, canViewAllTickets = false, onCl
             <p className="hd-modal__empty">
               {view === "all"
                 ? "Nenhum chamado encontrado na fila."
-                : "Nenhum chamado encontrado."}
+                : view === "assigned"
+                  ? "Nenhum chamado atribuído a você."
+                  : "Nenhum chamado encontrado."}
             </p>
           ) : null}
 

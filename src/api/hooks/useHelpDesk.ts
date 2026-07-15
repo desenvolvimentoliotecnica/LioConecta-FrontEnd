@@ -145,6 +145,30 @@ export function useHelpDeskAllTickets(enabled: boolean, scope = "open") {
 
 
 
+export function useHelpDeskAssignedTickets(enabled: boolean, scope = "open") {
+
+  return useQuery({
+
+    queryKey: [...HELP_DESK_QUERY_KEY, "tickets", "assigned", scope],
+
+    queryFn: () =>
+
+      api.get<HelpDeskTicketListItemDto[]>(
+
+        `/ti/help-desk/tickets/assigned?scope=${encodeURIComponent(scope)}`,
+
+      ),
+
+    enabled,
+
+    retry: config.useMock ? 0 : 1,
+
+  });
+
+}
+
+
+
 export function useHelpDeskTicketDetail(ticketId: string | null, enabled: boolean) {
 
   return useQuery({

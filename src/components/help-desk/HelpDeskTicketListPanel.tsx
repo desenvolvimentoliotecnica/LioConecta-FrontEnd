@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
+import {
+  useHelpDeskAllTickets,
+  useHelpDeskAssignedTickets,
+  useHelpDeskSummary,
+  useHelpDeskTickets,
+} from "../../api/hooks/useHelpDesk";
 import type { HelpDeskTicketListItemDto } from "../../api/types";
 import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
@@ -9,6 +14,7 @@ const PAGE_SIZE = 15;
 const SCOPE = "all";
 const SUBJECT_MAX = 22;
 
+type TicketView = "mine" | "assigned" | "all";
 type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "assignee" | "createdAt";
 type SortDir = "asc" | "desc";
 
@@ -200,9 +206,27 @@ export function HelpDeskTicketListPanel() {
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
+  const [view, setView] = useState<TicketView>("mine");
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const ticketsQuery = useHelpDeskTickets(true, SCOPE);
+  const summaryQuery = useHelpDeskSummary();
+  const isTechnician =
+    summaryQuery.data?.isTechnician === true || summaryQuery.data?.canViewAllTickets === true;
+
+  useEffect(() => {
+    if (!isTechnician && view !== "mine") {
+      setView("mine");
+      setDetailTicket(null);
+    }
+  }, [isTechnician, view]);
+
+  const mineQuery = useHelpDeskTickets(view === "mine", SCOPE);
+  const assignedQuery = useHelpDeskAssignedTickets(view === "assigned" && isTechnician, SCOPE);
+  const allQuery = useHelpDeskAllTickets(view === "all" && isTechnician, SCOPE);
+  const ticketsQuery =
+    view === "assigned" ? assignedQuery : view === "all" ? allQuery : mineQuery;
+
+  const showRequester = view !== "mine";
 
   const filtered = useMemo(() => {
     const items = ticketsQuery.data ?? [];
@@ -218,7 +242,7 @@ export function HelpDeskTicketListPanel() {
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [sortColumn, sortDir, search, ticketsQuery.data]);
+  }, [sortColumn, sortDir, search, ticketsQuery.data, view]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -245,6 +269,12 @@ export function HelpDeskTicketListPanel() {
     }
     setSortColumn(column);
     setSortDir(column === "createdAt" || column === "priority" ? "desc" : "asc");
+  };
+
+  const selectView = (next: TicketView) => {
+    setView(next);
+    setDetailTicket(null);
+    setSearch("");
   };
 
   return (
@@ -274,10 +304,38 @@ export function HelpDeskTicketListPanel() {
               />
             </label>
 
-            <div className="hd-track__view-toggle" aria-label="Visão dos chamados">
-              <span className="filter-chip is-active" aria-current="true">
+            <div className="hd-track__view-toggle" role="tablist" aria-label="Visão dos chamados">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === "mine"}
+                className={`filter-chip${view === "mine" ? " is-active" : ""}`}
+                onClick={() => selectView("mine")}
+              >
                 Meus chamados
-              </span>
+              </button>
+              {isTechnician ? (
+                <>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={view === "assigned"}
+                    className={`filter-chip${view === "assigned" ? " is-active" : ""}`}
+                    onClick={() => selectView("assigned")}
+                  >
+                    Atribuídos a mim
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={view === "all"}
+                    className={`filter-chip${view === "all" ? " is-active" : ""}`}
+                    onClick={() => selectView("all")}
+                  >
+                    Fila completa
+                  </button>
+                </>
+              ) : null}
             </div>
           </div>
         </div>
@@ -316,6 +374,16 @@ export function HelpDeskTicketListPanel() {
                     align="left"
                     onSort={handleSort}
                   />
+                  {showRequester ? (
+                    <SortHeader
+                      label="Solicitante"
+                      column="requester"
+                      activeColumn={sortColumn}
+                      direction={sortDir}
+                      align="left"
+                      onSort={handleSort}
+                    />
+                  ) : null}
                   <SortHeader
                     label="Prioridade"
                     column="priority"
@@ -362,6 +430,11 @@ export function HelpDeskTicketListPanel() {
                       <td className="hd-ticket-list__td hd-ticket-list__td--subject hd-ticket-list__col--subject" title={subject.full}>
                         <span className="hd-ticket-list__subject">{subject.text}</span>
                       </td>
+                      {showRequester ? (
+                        <td className="hd-ticket-list__td hd-ticket-list__col--requester">
+                          {ticket.requesterLabel?.trim() ? toTitleCase(ticket.requesterLabel) : "—"}
+                        </td>
+                      ) : null}
                       <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--priority">
                         <span className="hd-ticket-list__cell">
                           <span
@@ -429,6 +502,7 @@ export function HelpDeskTicketListPanel() {
         open={detailTicket !== null}
         ticketId={detailTicket?.ticketId ?? null}
         preview={detailTicket}
+        showRequester={showRequester}
         onClose={() => setDetailTicket(null)}
       />
     </>

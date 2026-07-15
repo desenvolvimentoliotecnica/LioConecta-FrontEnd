@@ -2146,6 +2146,7 @@ export interface HelpDeskSummaryDto {
   canViewAllTickets?: boolean;
   pendingTickets?: number;
   inProgressTickets?: number;
+  isTechnician?: boolean;
 }
 
 export interface HelpDeskServiceDto {

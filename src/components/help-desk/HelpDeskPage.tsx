@@ -171,6 +171,7 @@ export function HelpDeskPage() {
       <HelpDeskTrackTicketModal
         open={trackOpen}
         canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false}
+        isTechnician={summaryQuery.data?.isTechnician ?? false}
         onClose={() => setTrackOpen(false)}
       />
       <HelpDeskTicketResultModal
