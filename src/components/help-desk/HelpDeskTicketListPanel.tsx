@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useHelpDeskAllTickets, useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
+import { useHelpDeskTickets } from "../../api/hooks/useHelpDesk";
 import type { HelpDeskTicketListItemDto } from "../../api/types";
 import { HelpDeskTicketDetailModal } from "./HelpDeskTicketDetailModal";
 import { HelpDeskTicketStatusChip } from "./HelpDeskTicketStatusChip";
@@ -9,13 +9,8 @@ const PAGE_SIZE = 15;
 const SCOPE = "all";
 const SUBJECT_MAX = 22;
 
-type TicketView = "mine" | "all";
 type SortColumn = "ticketId" | "subject" | "requester" | "priority" | "status" | "assignee" | "createdAt";
 type SortDir = "asc" | "desc";
-
-type Props = {
-  canViewAllTickets?: boolean;
-};
 
 function formatDate(value: string): string {
   const date = new Date(value);
@@ -199,31 +194,15 @@ function SortHeader({
   );
 }
 
-export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
-  const [view, setView] = useState<TicketView>(canViewAllTickets ? "all" : "mine");
+export function HelpDeskTicketListPanel() {
   const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [detailTicket, setDetailTicket] = useState<HelpDeskTicketListItemDto | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const defaultedToAllRef = useRef(canViewAllTickets);
 
-  useEffect(() => {
-    if (!canViewAllTickets) {
-      defaultedToAllRef.current = false;
-      setView("mine");
-      return;
-    }
-    if (!defaultedToAllRef.current) {
-      defaultedToAllRef.current = true;
-      setView("all");
-    }
-  }, [canViewAllTickets]);
-
-  const mineQuery = useHelpDeskTickets(view === "mine", SCOPE);
-  const allQuery = useHelpDeskAllTickets(view === "all" && canViewAllTickets, SCOPE);
-  const ticketsQuery = view === "all" ? allQuery : mineQuery;
+  const ticketsQuery = useHelpDeskTickets(true, SCOPE);
 
   const filtered = useMemo(() => {
     const items = ticketsQuery.data ?? [];
@@ -235,12 +214,11 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
 
   const visible = useMemo(() => sorted.slice(0, visibleCount), [sorted, visibleCount]);
   const hasMore = sorted.length > visibleCount;
-  const showRequester = view === "all";
   const totalLoaded = ticketsQuery.data?.length ?? 0;
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [view, sortColumn, sortDir, search, ticketsQuery.data]);
+  }, [sortColumn, sortDir, search, ticketsQuery.data]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -296,34 +274,11 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
               />
             </label>
 
-            {canViewAllTickets ? (
-              <div className="hd-track__view-toggle" role="tablist" aria-label="Visão dos chamados">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={view === "mine"}
-                  className={`filter-chip${view === "mine" ? " is-active" : ""}`}
-                  onClick={() => {
-                    setView("mine");
-                    setDetailTicket(null);
-                  }}
-                >
-                  Meus chamados
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={view === "all"}
-                  className={`filter-chip${view === "all" ? " is-active" : ""}`}
-                  onClick={() => {
-                    setView("all");
-                    setDetailTicket(null);
-                  }}
-                >
-                  Fila completa
-                </button>
-              </div>
-            ) : null}
+            <div className="hd-track__view-toggle" aria-label="Visão dos chamados">
+              <span className="filter-chip is-active" aria-current="true">
+                Meus chamados
+              </span>
+            </div>
           </div>
         </div>
 
@@ -337,9 +292,7 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
           <p className="page-empty-note">
             {search.trim()
               ? "Nenhum chamado corresponde à busca."
-              : view === "all"
-                ? "Nenhum chamado encontrado na fila."
-                : "Nenhum chamado encontrado."}
+              : "Nenhum chamado encontrado."}
           </p>
         ) : null}
 
@@ -363,16 +316,6 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                     align="left"
                     onSort={handleSort}
                   />
-                  {showRequester ? (
-                    <SortHeader
-                      label="Solicitante"
-                      column="requester"
-                      activeColumn={sortColumn}
-                      direction={sortDir}
-                      align="left"
-                      onSort={handleSort}
-                    />
-                  ) : null}
                   <SortHeader
                     label="Prioridade"
                     column="priority"
@@ -410,9 +353,6 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
               <tbody>
                 {visible.map((ticket) => {
                   const subject = truncateSubject(ticket.subject);
-                  const requester = ticket.requesterLabel?.trim()
-                    ? toTitleCase(ticket.requesterLabel)
-                    : "—";
                   const assignee = formatAssignee(ticket);
                   return (
                     <tr key={ticket.ticketId} data-ticket-id={ticket.ticketId}>
@@ -422,14 +362,6 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
                       <td className="hd-ticket-list__td hd-ticket-list__td--subject hd-ticket-list__col--subject" title={subject.full}>
                         <span className="hd-ticket-list__subject">{subject.text}</span>
                       </td>
-                      {showRequester ? (
-                        <td
-                          className="hd-ticket-list__td hd-ticket-list__td--requester hd-ticket-list__col--requester"
-                          title={requester !== "—" ? requester : undefined}
-                        >
-                          {requester}
-                        </td>
-                      ) : null}
                       <td className="hd-ticket-list__td hd-ticket-list__td--center hd-ticket-list__col--priority">
                         <span className="hd-ticket-list__cell">
                           <span
@@ -497,7 +429,6 @@ export function HelpDeskTicketListPanel({ canViewAllTickets = false }: Props) {
         open={detailTicket !== null}
         ticketId={detailTicket?.ticketId ?? null}
         preview={detailTicket}
-        showRequester={showRequester}
         onClose={() => setDetailTicket(null)}
       />
     </>

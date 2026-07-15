@@ -154,7 +154,7 @@ export function HelpDeskPage() {
         }
       />
 
-      <HelpDeskTicketListPanel canViewAllTickets={summaryQuery.data?.canViewAllTickets ?? false} />
+      <HelpDeskTicketListPanel />
 
       <HelpDeskOpenTicketModal
         open={openTicket}
