@@ -257,6 +257,12 @@
   color: #b91c1c;
 }
 
+.feed-api-posts__sentinel {
+  height: 1px;
+  width: 100%;
+  pointer-events: none;
+}
+
 .action--button {
   border: none;
   background: transparent;

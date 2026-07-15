@@ -2,8 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { api, config } from "../../api/client";
-import { FEED_QUERY_KEY } from "../../api/hooks/useFeed";
-import type { FeedPostDto, PagedResult } from "../../api/types";
+import {
+  DEFAULT_FEED_PAGE_SIZE,
+  feedInfiniteQueryKey,
+  type FeedInfiniteData,
+} from "../../api/hooks/useFeed";
+import type { FeedPostDto } from "../../api/types";
 
 export const FEED_POST_QUERY_PARAM = "post";
 export const FEED_POST_FOCUS_EVENT = "lio:focus-feed-post";
@@ -61,7 +65,11 @@ function focusFeedPostElement(postId: string): Promise<boolean> {
   });
 }
 
-export function useFeedPostDeepLink(posts: FeedPostDto[], isLoading: boolean, feedLimit = 20) {
+export function useFeedPostDeepLink(
+  posts: FeedPostDto[],
+  isLoading: boolean,
+  feedLimit = DEFAULT_FEED_PAGE_SIZE,
+) {
   const [searchParams, setSearchParams] = useSearchParams();
   const postIdFromUrl = searchParams.get(FEED_POST_QUERY_PARAM);
   const [focusRequestId, setFocusRequestId] = useState<string | null>(null);
@@ -90,10 +98,26 @@ export function useFeedPostDeepLink(posts: FeedPostDto[], isLoading: boolean, fe
 
       try {
         const post = await api.get<FeedPostDto>(`/feed/posts/${postId}`);
-        queryClient.setQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, feedLimit], (current) => {
-          if (!current) return current;
-          if (current.items.some((item) => item.id === post.id)) return current;
-          return { ...current, items: [post, ...current.items] };
+        queryClient.setQueryData<FeedInfiniteData>(feedInfiniteQueryKey(feedLimit), (current) => {
+          if (!current?.pages.length) {
+            return {
+              pages: [{ items: [post], hasMore: false, nextCursor: null }],
+              pageParams: [null],
+            };
+          }
+
+          const alreadyPresent = current.pages.some((page) =>
+            page.items.some((item) => item.id === post.id),
+          );
+          if (alreadyPresent) return current;
+
+          return {
+            ...current,
+            pages: current.pages.map((page, index) => {
+              if (index !== 0) return page;
+              return { ...page, items: [post, ...page.items] };
+            }),
+          };
         });
         return true;
       } catch {

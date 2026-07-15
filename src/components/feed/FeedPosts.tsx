@@ -1,4 +1,4 @@
-import { Children, type ReactNode, useState } from "react";
+import { Children, type ReactNode, useEffect, useRef, useState } from "react";
 import { useFeed } from "../../api/hooks/useFeed";
 import { config } from "../../api/client";
 import { FeedPostCard } from "./FeedPostCard";
@@ -13,12 +13,43 @@ type FeedPostsProps = {
 };
 
 export function FeedPosts({ leading }: FeedPostsProps = {}) {
-  const { data, isLoading, isError } = useFeed();
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFeed();
   const [type, setType] = useState<number | null>(null);
   const columnCount = useFeedColumnCount();
-  const posts = (data?.items ?? []).filter((post) => type === null || post.type === type);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const posts = (data?.pages.flatMap((page) => page.items) ?? []).filter(
+    (post) => type === null || post.type === type,
+  );
 
   useFeedPostDeepLink(posts, isLoading);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasNextPage || isFetchingNextPage) return;
+
+    const root =
+      node.closest<HTMLElement>(".main.main--feed-scroll") ??
+      document.querySelector<HTMLElement>(".main.main--feed-scroll");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          void fetchNextPage();
+        }
+      },
+      { root, rootMargin: "320px 0px", threshold: 0 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, posts.length]);
 
   if (config.useMock) return null;
   const leadingItems = Children.toArray(leading).filter(Boolean);
@@ -84,6 +115,14 @@ export function FeedPosts({ leading }: FeedPostsProps = {}) {
           </div>
         ))}
       </div>
+      {hasNextPage ? (
+        <div ref={loadMoreRef} className="feed-api-posts__sentinel" aria-hidden="true" />
+      ) : null}
+      {isFetchingNextPage ? (
+        <p className="feed-api-posts__status" aria-busy="true">
+          Carregando mais publicações…
+        </p>
+      ) : null}
     </div>
   );
 }

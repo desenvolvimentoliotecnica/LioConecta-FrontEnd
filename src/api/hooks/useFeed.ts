@@ -1,4 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
 import { api, apiUpload, config } from "../client";
 import type {
   CreateCommentRequest,
@@ -15,32 +21,92 @@ import { POST_TYPE_CELEBRATION, POST_TYPE_NEWS, POST_TYPE_POLL, POST_TYPE_SOCIAL
 
 export const FEED_QUERY_KEY = ["feed"] as const;
 export const FEED_LIKE_REACTION = "like";
+export const DEFAULT_FEED_PAGE_SIZE = 20;
+
+export type FeedInfiniteData = InfiniteData<PagedResult<FeedPostDto>, string | null>;
+
+export function feedInfiniteQueryKey(limit = DEFAULT_FEED_PAGE_SIZE) {
+  return [...FEED_QUERY_KEY, "infinite", limit] as const;
+}
+
+function mapFeedInfinitePages(
+  current: FeedInfiniteData | undefined,
+  mapPageItems: (items: FeedPostDto[]) => FeedPostDto[],
+): FeedInfiniteData | undefined {
+  if (!current) return current;
+  return {
+    ...current,
+    pages: current.pages.map((page) => ({
+      ...page,
+      items: mapPageItems(page.items),
+    })),
+  };
+}
 
 function updatePostInFeedCache(
   queryClient: ReturnType<typeof useQueryClient>,
   postId: string,
   updater: (post: FeedPostDto) => FeedPostDto,
 ) {
-  queryClient.setQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20], (current) => {
-    if (!current) return current;
-    return {
-      ...current,
-      items: current.items.map((post) => (post.id === postId ? updater(post) : post)),
-    };
-  });
+  queryClient.setQueriesData<FeedInfiniteData>(
+    { queryKey: [...FEED_QUERY_KEY, "infinite"] },
+    (current) =>
+      mapFeedInfinitePages(current, (items) =>
+        items.map((post) => (post.id === postId ? updater(post) : post)),
+      ),
+  );
 }
 
 function removePostFromFeedCache(
   queryClient: ReturnType<typeof useQueryClient>,
   postId: string,
 ) {
-  queryClient.setQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20], (current) => {
-    if (!current) return current;
-    return {
-      ...current,
-      items: current.items.filter((post) => post.id !== postId),
-    };
-  });
+  queryClient.setQueriesData<FeedInfiniteData>(
+    { queryKey: [...FEED_QUERY_KEY, "infinite"] },
+    (current) => mapFeedInfinitePages(current, (items) => items.filter((post) => post.id !== postId)),
+  );
+}
+
+function prependPostToFeedCache(
+  queryClient: ReturnType<typeof useQueryClient>,
+  post: FeedPostDto,
+) {
+  queryClient.setQueriesData<FeedInfiniteData>(
+    { queryKey: [...FEED_QUERY_KEY, "infinite"] },
+    (current) => {
+      if (!current) {
+        return {
+          pages: [{ items: [post], hasMore: false, nextCursor: null }],
+          pageParams: [null],
+        };
+      }
+
+      return {
+        ...current,
+        pages: current.pages.map((page, index) => {
+          const withoutDuplicate = page.items.filter((item) => item.id !== post.id);
+          if (index === 0) {
+            return { ...page, items: [post, ...withoutDuplicate] };
+          }
+          return { ...page, items: withoutDuplicate };
+        }),
+      };
+    },
+  );
+}
+
+function snapshotFeedCache(queryClient: ReturnType<typeof useQueryClient>, limit = DEFAULT_FEED_PAGE_SIZE) {
+  return queryClient.getQueryData<FeedInfiniteData>(feedInfiniteQueryKey(limit));
+}
+
+function restoreFeedCache(
+  queryClient: ReturnType<typeof useQueryClient>,
+  previous: FeedInfiniteData | undefined,
+  limit = DEFAULT_FEED_PAGE_SIZE,
+) {
+  if (previous) {
+    queryClient.setQueryData(feedInfiniteQueryKey(limit), previous);
+  }
 }
 
 export function useDeletePost() {
@@ -55,14 +121,12 @@ export function useDeletePost() {
     },
     onMutate: async (postId) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
-      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      const previous = snapshotFeedCache(queryClient);
       removePostFromFeedCache(queryClient, postId);
       return { previous };
     },
     onError: (_error, _postId, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
-      }
+      restoreFeedCache(queryClient, context?.previous);
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
@@ -83,7 +147,7 @@ export function useAddPostComment() {
     },
     onMutate: async ({ postId, text }) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
-      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      const previous = snapshotFeedCache(queryClient);
       const trimmed = text.trim();
       const me = queryClient.getQueryData<MeDto>(["me"]);
 
@@ -122,9 +186,7 @@ export function useAddPostComment() {
       });
     },
     onError: (_error, _variables, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
-      }
+      restoreFeedCache(queryClient, context?.previous);
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
@@ -236,7 +298,7 @@ export function useTogglePostLike() {
     },
     onMutate: async (postId: string) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
-      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      const previous = snapshotFeedCache(queryClient);
 
       updatePostInFeedCache(queryClient, postId, (post) => {
         const liked = post.viewerReaction?.toLowerCase() === FEED_LIKE_REACTION;
@@ -250,9 +312,7 @@ export function useTogglePostLike() {
       return { previous };
     },
     onError: (_error, _postId, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
-      }
+      restoreFeedCache(queryClient, context?.previous);
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
@@ -260,15 +320,21 @@ export function useTogglePostLike() {
   });
 }
 
-export function useFeed(limit = 20) {
-  return useQuery({
-    queryKey: [...FEED_QUERY_KEY, limit],
-    queryFn: async (): Promise<PagedResult<FeedPostDto>> => {
+export function useFeed(limit = DEFAULT_FEED_PAGE_SIZE) {
+  return useInfiniteQuery({
+    queryKey: feedInfiniteQueryKey(limit),
+    queryFn: async ({ pageParam }): Promise<PagedResult<FeedPostDto>> => {
       if (config.useMock) {
         return { items: [], hasMore: false, nextCursor: null };
       }
-      return api.get<PagedResult<FeedPostDto>>(`/feed?limit=${limit}`);
+      const params = new URLSearchParams({ limit: String(limit) });
+      if (pageParam) {
+        params.set("cursor", pageParam);
+      }
+      return api.get<PagedResult<FeedPostDto>>(`/feed?${params.toString()}`);
     },
+    initialPageParam: null as string | null,
+    getNextPageParam: (last) => (last.hasMore && last.nextCursor ? last.nextCursor : undefined),
     staleTime: 30_000,
     retry: config.useMock ? 0 : 2,
   });
@@ -379,25 +445,6 @@ export function useUploadPostMedia() {
   });
 }
 
-function prependPostToFeedCache(
-  queryClient: ReturnType<typeof useQueryClient>,
-  post: FeedPostDto,
-) {
-  queryClient.setQueryData<PagedResult<FeedPostDto>>(
-    [...FEED_QUERY_KEY, 20],
-    (current) => {
-      if (!current) {
-        return { items: [post], hasMore: false, nextCursor: null };
-      }
-      const withoutDuplicate = current.items.filter((item) => item.id !== post.id);
-      return {
-        ...current,
-        items: [post, ...withoutDuplicate],
-      };
-    },
-  );
-}
-
 export function useCreatePoll() {
   const queryClient = useQueryClient();
 
@@ -451,7 +498,7 @@ export function useVotePoll() {
     },
     onMutate: async ({ postId, optionId }) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
-      const previous = queryClient.getQueryData<PagedResult<FeedPostDto>>([...FEED_QUERY_KEY, 20]);
+      const previous = snapshotFeedCache(queryClient);
 
       updatePostInFeedCache(queryClient, postId, (post) => {
         if (!post.poll) return post;
@@ -464,9 +511,7 @@ export function useVotePoll() {
       return { previous };
     },
     onError: (_error, _variables, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData([...FEED_QUERY_KEY, 20], context.previous);
-      }
+      restoreFeedCache(queryClient, context?.previous);
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
