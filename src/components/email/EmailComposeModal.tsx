@@ -108,8 +108,21 @@ export function EmailComposeModal({ open, onClose, onSent, defaults }: EmailComp
       try {
         const uploaded = await uploadAttachment.mutateAsync(file);
         setAttachments((current) => [...current, { ...uploaded, localName: file.name }]);
-      } catch {
-        setFeedback({ type: "error", message: `Falha ao anexar ${file.name}.` });
+      } catch (error) {
+        const apiMessage =
+          error instanceof ApiError &&
+          error.body &&
+          typeof error.body === "object" &&
+          "message" in error.body &&
+          typeof (error.body as { message?: unknown }).message === "string"
+            ? (error.body as { message: string }).message
+            : null;
+        setFeedback({
+          type: "error",
+          message: apiMessage
+            ? `Falha ao anexar ${file.name}: ${apiMessage}`
+            : `Falha ao anexar ${file.name}.`,
+        });
       }
     }
 
