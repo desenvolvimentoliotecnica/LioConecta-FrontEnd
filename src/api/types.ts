@@ -248,6 +248,8 @@ export interface BirthdayPersonDto {
   departmentName?: string | null;
   birthDate: string;
   photoUrl?: string | null;
+  /** True when the current user already congratulated this person this year. */
+  alreadyCongratulatedByMe?: boolean;
 }
 
 export interface NewHirePersonDto extends PersonSummaryDto {
