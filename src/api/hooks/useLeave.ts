@@ -117,7 +117,7 @@ export function useLeaveManagementReject() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, comment }: { id: string; comment?: string }) =>
-      api.post<LeaveManagementDetailDto>(`/rh/leave/management/${id}/reject`, { comment: comment ?? null }),
+      api.post<LeaveManagementDetailDto>(`/rh/leave/management/${id}/reject`, { reason: comment ?? null }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: LEAVE_QUERY_KEY });
     },
