@@ -637,12 +637,235 @@
     });
   }
 
-  function mountProfileModalsToBody() {
-    document.querySelectorAll(".profile-edit-modal, .profile-vcard-modal").forEach(function (modal) {
-      if (modal.parentElement !== document.body) {
-        document.body.appendChild(modal);
+  var galleryState = {
+    slug: "",
+    personName: "",
+    items: [],
+    nextCursor: null,
+    hasMore: false,
+    loading: false,
+    bound: false
+  };
+
+  function resolveMediaAssetUrl(url) {
+    if (!url || typeof url !== "string") return "";
+    var trimmed = url.trim();
+    if (!trimmed) return "";
+    if (/^(https?:|data:|blob:)/i.test(trimmed)) return trimmed;
+    var path = trimmed.startsWith("/") ? trimmed : "/" + trimmed;
+    var servedByBackend =
+      path.indexOf("/posts/") === 0 ||
+      path.indexOf("/media/") === 0 ||
+      path.indexOf("/systems/") === 0;
+    if (!servedByBackend) return path;
+    var base = (global.LioApi && global.LioApi.baseUrl) || "";
+    if (!/^https?:\/\//i.test(base)) return path;
+    try {
+      return new URL(base).origin + path;
+    } catch (_error) {
+      return path;
+    }
+  }
+
+  function closeGalleryLightbox() {
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    if (lightbox) lightbox.hidden = true;
+    var mediaHost = document.getElementById("profile-gallery-lightbox-media");
+    if (mediaHost) mediaHost.innerHTML = "";
+  }
+
+  function openGalleryLightbox(item) {
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    var mediaHost = document.getElementById("profile-gallery-lightbox-media");
+    var viewPost = document.getElementById("profile-gallery-view-post");
+    if (!lightbox || !mediaHost || !item) return;
+
+    mediaHost.innerHTML = "";
+    var src = resolveMediaAssetUrl(item.url || item.Url);
+    var mediaType = String(item.mediaType || item.MediaType || "image").toLowerCase();
+    if (mediaType === "video") {
+      var video = document.createElement("video");
+      video.src = src;
+      video.controls = true;
+      video.playsInline = true;
+      mediaHost.appendChild(video);
+    } else {
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = "Mídia da postagem";
+      mediaHost.appendChild(img);
+    }
+
+    var postId = item.postId || item.PostId || "";
+    if (viewPost) {
+      viewPost.href = postId ? "/feed?post=" + encodeURIComponent(postId) : "/feed";
+    }
+    lightbox.hidden = false;
+  }
+
+  function renderGalleryGrid() {
+    var grid = document.getElementById("profile-gallery-grid");
+    var empty = document.getElementById("profile-gallery-empty");
+    var loadMore = document.getElementById("profile-gallery-load-more");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    galleryState.items.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "profile-gallery-item";
+      var src = resolveMediaAssetUrl(item.url || item.Url);
+      var mediaType = String(item.mediaType || item.MediaType || "image").toLowerCase();
+      if (mediaType === "video") {
+        var video = document.createElement("video");
+        video.src = src;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        btn.appendChild(video);
+        var badge = document.createElement("span");
+        badge.className = "profile-gallery-item__badge";
+        badge.innerHTML = '<i class="fa-solid fa-play" aria-hidden="true"></i>';
+        btn.appendChild(badge);
+      } else {
+        var img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+        btn.appendChild(img);
       }
+      btn.addEventListener("click", function () {
+        openGalleryLightbox(item);
+      });
+      grid.appendChild(btn);
     });
+
+    var hasItems = galleryState.items.length > 0;
+    if (empty) empty.hidden = hasItems || galleryState.loading;
+    if (loadMore) loadMore.hidden = !galleryState.hasMore;
+  }
+
+  function setGalleryStatus(message, visible) {
+    var status = document.getElementById("profile-gallery-status");
+    if (!status) return;
+    status.textContent = message || "";
+    status.hidden = !visible;
+  }
+
+  function fetchGalleryPage(reset) {
+    if (!galleryState.slug || galleryState.loading) return Promise.resolve();
+    if (!global.LioApi || global.LioApi.useMock) {
+      galleryState.items = [];
+      galleryState.hasMore = false;
+      galleryState.nextCursor = null;
+      setGalleryStatus("Galeria indisponível no modo demonstração.", true);
+      renderGalleryGrid();
+      return Promise.resolve();
+    }
+
+    galleryState.loading = true;
+    setGalleryStatus(reset ? "Carregando mídias…" : "Carregando mais…", true);
+    var path = "/people/" + encodeURIComponent(galleryState.slug) + "/post-media?limit=40";
+    if (!reset && galleryState.nextCursor) {
+      path += "&cursor=" + encodeURIComponent(galleryState.nextCursor);
+    }
+
+    return global.LioApi
+      .get(path)
+      .then(function (page) {
+        var items = (page && (page.items || page.Items)) || [];
+        if (reset) {
+          galleryState.items = items.slice();
+        } else {
+          galleryState.items = galleryState.items.concat(items);
+        }
+        galleryState.nextCursor = (page && (page.nextCursor || page.NextCursor)) || null;
+        galleryState.hasMore = !!(page && (page.hasMore || page.HasMore));
+        setGalleryStatus("", false);
+        renderGalleryGrid();
+      })
+      .catch(function (error) {
+        var status = error && (error.status || error.statusCode);
+        if (status === 403) {
+          setGalleryStatus("Você não tem permissão para ver esta galeria.", true);
+        } else {
+          setGalleryStatus("Não foi possível carregar a galeria. Tente de novo.", true);
+        }
+        if (reset) {
+          galleryState.items = [];
+          renderGalleryGrid();
+        }
+      })
+      .finally(function () {
+        galleryState.loading = false;
+        var loadMore = document.getElementById("profile-gallery-load-more");
+        if (loadMore) loadMore.disabled = false;
+      });
+  }
+
+  function openGalleryModal(person) {
+    var modal = document.getElementById("profile-gallery-modal");
+    if (!modal || !person) return;
+    var title = document.getElementById("profile-gallery-title");
+    galleryState.slug = person.id || person.slug || "";
+    galleryState.personName = person.name || "";
+    galleryState.items = [];
+    galleryState.nextCursor = null;
+    galleryState.hasMore = false;
+    if (title) {
+      title.textContent = galleryState.personName
+        ? "Galeria — " + galleryState.personName
+        : "Galeria";
+    }
+    closeGalleryLightbox();
+    modal.hidden = false;
+    renderGalleryGrid();
+    fetchGalleryPage(true);
+  }
+
+  function setupGalleryModal() {
+    if (galleryState.bound) return;
+    galleryState.bound = true;
+
+    var modal = document.getElementById("profile-gallery-modal");
+    if (modal) {
+      modal.querySelectorAll("[data-close-gallery]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          modal.hidden = true;
+          closeGalleryLightbox();
+        });
+      });
+    }
+
+    var lightbox = document.getElementById("profile-gallery-lightbox");
+    if (lightbox) {
+      lightbox.querySelectorAll("[data-close-gallery-lightbox]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          closeGalleryLightbox();
+        });
+      });
+    }
+
+    var loadMore = document.getElementById("profile-gallery-load-more");
+    if (loadMore) {
+      loadMore.addEventListener("click", function () {
+        if (!galleryState.hasMore || galleryState.loading) return;
+        loadMore.disabled = true;
+        fetchGalleryPage(false);
+      });
+    }
+  }
+
+  function mountProfileModalsToBody() {
+    document
+      .querySelectorAll(
+        ".profile-edit-modal, .profile-vcard-modal, .profile-gallery-modal, .profile-gallery-lightbox"
+      )
+      .forEach(function (modal) {
+        if (modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+      });
   }
 
   var currentPerson = null;
@@ -1425,6 +1648,12 @@
     document.getElementById("profile-vcard-btn").onclick = function () {
       openVCardModal(person);
     };
+    var galleryBtn = document.getElementById("profile-gallery-btn");
+    if (galleryBtn) {
+      galleryBtn.onclick = function () {
+        openGalleryModal(person);
+      };
+    }
     document.getElementById("profile-print-btn").onclick = function () {
       window.print();
     };
@@ -1660,6 +1889,7 @@
   function init() {
     var loadId = ++activeLoadId;
     setupVCardModal();
+    setupGalleryModal();
     mountProfileModalsToBody();
     setupProfileEditModals();
     var profileId = getProfileId();
