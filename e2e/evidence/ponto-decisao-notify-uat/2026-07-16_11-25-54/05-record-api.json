@@ -1,0 +1,10 @@
+{
+  "id": "f3104bd0-f4a6-4f65-9da8-c2449478e6d8",
+  "serviceRequestId": "336026a8-2c88-4554-a1d1-3ab4d3f6c61a",
+  "title": "Ajuste de ponto — 16/07/2026",
+  "status": "pending",
+  "dayCount": 1,
+  "reason": "E2E-PONTO-DEC-1784211954331 — UAT decisão: colaborador deve ser avisado após aprovação.",
+  "createdAt": "2026-07-16T14:26:16.613228+00:00",
+  "protocol": "Protocolo: PT-F3104BD0"
+}

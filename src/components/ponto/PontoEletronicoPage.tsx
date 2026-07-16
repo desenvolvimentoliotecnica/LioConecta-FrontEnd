@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   extractPontoAdjustmentError,
   usePonto,
@@ -103,6 +103,7 @@ function EntryRow({
 }
 
 export function PontoEletronicoPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const meQuery = useMe();
   const periodsQuery = usePontoPeriods();
   const options = periodsQuery.data?.options ?? [];
@@ -113,10 +114,17 @@ export function PontoEletronicoPage() {
   const [resultMessage, setResultMessage] = useState<string | null>(null);
   const [resultProtocol, setResultProtocol] = useState<string | null>(null);
   const [resultVariant, setResultVariant] = useState<"success" | "error">("success");
-  const [detailId, setDetailId] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(searchParams.get("requestId"));
 
   const requestMutation = usePontoAdjustmentRequest();
   const canManage = canAccessPontoManagement(meQuery.data);
+
+  useEffect(() => {
+    const requestId = searchParams.get("requestId");
+    if (requestId) {
+      setDetailId(requestId);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (options.length === 0 || selectedPeriodKey) return;
@@ -369,7 +377,16 @@ export function PontoEletronicoPage() {
         onClose={() => setResultOpen(false)}
       />
 
-      <PontoAdjustmentDetailModal recordId={detailId} onClose={() => setDetailId(null)} />
+      <PontoAdjustmentDetailModal
+        recordId={detailId}
+        onClose={() => {
+          setDetailId(null);
+          if (searchParams.has("requestId")) {
+            searchParams.delete("requestId");
+            setSearchParams(searchParams, { replace: true });
+          }
+        }}
+      />
     </main>
   );
 }

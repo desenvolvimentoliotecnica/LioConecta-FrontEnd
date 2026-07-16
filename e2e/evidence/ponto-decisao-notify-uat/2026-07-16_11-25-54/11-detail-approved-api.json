@@ -1,0 +1,50 @@
+{
+  "id": "f3104bd0-f4a6-4f65-9da8-c2449478e6d8",
+  "serviceRequestId": "336026a8-2c88-4554-a1d1-3ab4d3f6c61a",
+  "employeeName": "Leonardo Sabino Mendes",
+  "employeeId": "00000887",
+  "email": "leonardo.mendes@liotecnica.com.br",
+  "title": "Ajuste de ponto — 16/07/2026",
+  "status": "approved",
+  "reason": "E2E-PONTO-DEC-1784211954331 — UAT decisão: colaborador deve ser avisado após aprovação.",
+  "dayCount": 1,
+  "dataSource": "portal",
+  "createdAt": "2026-07-16T14:26:16.613228+00:00",
+  "days": [
+    {
+      "date": "2026-07-16",
+      "originalClockIn": "",
+      "originalLunchOut": "",
+      "originalLunchIn": "",
+      "originalClockOut": "",
+      "clockIn": "08:15",
+      "lunchOut": "12:00",
+      "lunchIn": "13:00",
+      "clockOut": "17:00"
+    }
+  ],
+  "timeline": [
+    {
+      "label": "Solicitação enviada",
+      "status": "completed",
+      "occurredAt": "2026-07-16T14:26:16.613228+00:00",
+      "detail": "Registro criado no portal."
+    },
+    {
+      "label": "Status: Aprovado",
+      "status": "approved",
+      "occurredAt": "2026-07-16T14:26:21.62556+00:00",
+      "detail": null
+    }
+  ],
+  "infoNote": "Esta solicitação notifica o gestor direto. A correção formal no espelho ocorre após tratamento no RM Labore.",
+  "attachments": [
+    {
+      "fileName": "comprovante-ponto.png",
+      "storageFileName": "99e264dcb4834d509667cba8313ff42b.png",
+      "contentType": "image/png",
+      "sizeBytes": 78,
+      "url": "/rh/ponto/adjustments/management/f3104bd0-f4a6-4f65-9da8-c2449478e6d8/attachments/99e264dcb4834d509667cba8313ff42b.png"
+    }
+  ]
+}
