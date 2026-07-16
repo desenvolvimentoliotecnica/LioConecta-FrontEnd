@@ -3,6 +3,7 @@ import { canAccessLoopModule, canAccessCompassModule, canAccessPulseModule, canA
 import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
+import { buildCompassLaunchUrl, isCompassExternalEnabled } from "../../config/compassApp";
 import { PERMISSIONS, RBAC_ADMIN_PERMISSIONS } from "../../config/rbac/permissions";
 import { usePermissions } from "../../hooks/usePermissions";
 
@@ -18,6 +19,8 @@ type SidebarItemConfig = {
   permission?: string | readonly string[];
   moduleGate?: ModuleGate;
   adminRoleOnly?: boolean;
+  /** Abre URL absoluta (ex.: app Compass) em nova aba com token. */
+  external?: boolean;
 };
 
 const LEFT_ITEMS: SidebarItemConfig[] = [
@@ -55,6 +58,7 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     activePrefix: "/compass",
     permission: PERMISSIONS.compass.access,
     moduleGate: "compass",
+    external: isCompassExternalEnabled(),
   },
   {
     label: "UniLio",
@@ -176,6 +180,7 @@ function SidebarItem({
   label,
   icon,
   href,
+  external = false,
   isActive = false,
 }: SidebarItemConfig & { isActive?: boolean }) {
   const className = `sidebar__item${isActive ? " is-active" : ""}`;
@@ -187,6 +192,23 @@ function SidebarItem({
       </a>
     );
   }
+
+  if (external) {
+    const launchUrl = label === "Compass" ? buildCompassLaunchUrl("/compass") : href;
+    return (
+      <a
+        className={className}
+        href={launchUrl}
+        title={label}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <SidebarIcon icon={icon} />
+        <span className="sidebar__text">{label}</span>
+      </a>
+    );
+  }
+
   return (
     <Link className={className} to={href} title={label}>
       <SidebarIcon icon={icon} />

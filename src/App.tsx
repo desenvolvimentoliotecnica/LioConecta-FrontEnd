@@ -98,6 +98,7 @@ import { PulseRetroPage } from "./components/pulse/pages/PulseRetroPage";
 import { PulseImpedimentsPage } from "./components/pulse/pages/PulseImpedimentsPage";
 import { PulseMeetingsPage } from "./components/pulse/pages/PulseMeetingsPage";
 import { CompassAccessGate } from "./components/compass/CompassAccessGate";
+import { CompassExternalRedirect } from "./components/compass/CompassExternalRedirect";
 import { CompassShell } from "./components/compass/CompassShell";
 import { CompassDashboardPage } from "./components/compass/pages/CompassDashboardPage";
 import { CompassAnaliseYtdPage } from "./components/compass/pages/CompassAnaliseYtdPage";
@@ -110,6 +111,7 @@ import { CompassCenariosPage } from "./components/compass/pages/CompassCenariosP
 import { CompassMeetingsPage } from "./components/compass/pages/CompassMeetingsPage";
 import { CompassDecisionsPage } from "./components/compass/pages/CompassDecisionsPage";
 import { CompassRelatoriosPage } from "./components/compass/pages/CompassRelatoriosPage";
+import { isCompassExternalEnabled } from "./config/compassApp";
 import { UniLioAccessGate } from "./components/unilio/UniLioAccessGate";
 import { UniLioShell } from "./components/unilio/UniLioShell";
 import { UniLioDashboardPage } from "./components/unilio/pages/UniLioDashboardPage";
@@ -212,28 +214,32 @@ function App() {
           <Route path="impedimentos" element={<PulseImpedimentsPage />} />
           <Route path="meetings" element={<PulseMeetingsPage />} />
         </Route>
-        <Route
-          path="/compass"
-          element={
-            <CompassAccessGate>
-              <CompassShell />
-            </CompassAccessGate>
-          }
-        >
-          <Route index element={<CompassDashboardPage />} />
-          <Route path="analise-ytd" element={<CompassAnaliseYtdPage />} />
-          <Route path="ciclo" element={<CompassCicloPage />} />
-          <Route path="volume" element={<CompassVolumePage />} />
-          <Route path="canais" element={<CompassCanaisPage />} />
-          <Route path="demanda" element={<CompassVolumePage />} />
-          <Route path="supply" element={<CompassCanaisPage />} />
-          <Route path="financeiro" element={<CompassFinanceiroPage />} />
-          <Route path="reconciliacao" element={<CompassReconciliacaoPage />} />
-          <Route path="reunioes" element={<CompassMeetingsPage />} />
-          <Route path="decisoes" element={<CompassDecisionsPage />} />
-          <Route path="cenarios" element={<CompassCenariosPage />} />
-          <Route path="relatorios" element={<CompassRelatoriosPage />} />
-        </Route>
+        {isCompassExternalEnabled() ? (
+          <Route path="/compass/*" element={<CompassExternalRedirect />} />
+        ) : (
+          <Route
+            path="/compass"
+            element={
+              <CompassAccessGate>
+                <CompassShell />
+              </CompassAccessGate>
+            }
+          >
+            <Route index element={<CompassDashboardPage />} />
+            <Route path="analise-ytd" element={<CompassAnaliseYtdPage />} />
+            <Route path="ciclo" element={<CompassCicloPage />} />
+            <Route path="volume" element={<CompassVolumePage />} />
+            <Route path="canais" element={<CompassCanaisPage />} />
+            <Route path="demanda" element={<CompassVolumePage />} />
+            <Route path="supply" element={<CompassCanaisPage />} />
+            <Route path="financeiro" element={<CompassFinanceiroPage />} />
+            <Route path="reconciliacao" element={<CompassReconciliacaoPage />} />
+            <Route path="reunioes" element={<CompassMeetingsPage />} />
+            <Route path="decisoes" element={<CompassDecisionsPage />} />
+            <Route path="cenarios" element={<CompassCenariosPage />} />
+            <Route path="relatorios" element={<CompassRelatoriosPage />} />
+          </Route>
+        )}
         <Route
           path="/unilio"
           element={

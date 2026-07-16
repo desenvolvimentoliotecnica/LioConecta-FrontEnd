@@ -4,6 +4,8 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string;
   readonly VITE_USE_MOCK: string;
   readonly VITE_OBSERVABILITY_ENABLED?: string;
+  /** URL base da SPA Compass standalone (ex.: http://localhost:5174). */
+  readonly VITE_COMPASS_APP_URL?: string;
 }
 
 interface ImportMeta {

@@ -277,8 +277,8 @@ export function buildSitemapSections(): SitemapSection[] {
       label: "Compass IBP",
       icon: "fa-compass",
       items: [
-        entry("Visão Geral", "/compass", "Dashboard Hyperion YTD com KPIs IBP Atual vs Anterior."),
-        entry("Análise YTD", "/compass/analise-ytd", "Tabela paginada 11 colunas do cubo Oracle Hyperion EPBCS."),
+        entry("Visão Geral", "/compass", "Abre a app Compass standalone (IBP/Hyperion). Configure VITE_COMPASS_APP_URL no portal."),
+        entry("Análise YTD", "/compass/analise-ytd", "Tabela paginada do cubo Oracle Hyperion EPBCS (app Compass)."),
         entry("Ciclo IBP", "/compass/ciclo", "Linha do tempo e fases do ciclo de planejamento integrado."),
         entry("Volume", "/compass/volume", "Volume YTD agregado por família (tipo Volume)."),
         entry("Canais", "/compass/canais", "IBP YTD por unidade/canal de negócio."),
@@ -383,7 +383,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry(
           "Compass IBP — permissões",
           "/admin/configuracoes-backend?category=compass",
-          "Define quem acessa o módulo Compass (IBP) no menu lateral esquerdo.",
+          "Define quem acessa o módulo Compass (IBP). Com VITE_COMPASS_APP_URL, o menu abre a app standalone.",
         ),
         entry(
           "UniLio — permissões",
