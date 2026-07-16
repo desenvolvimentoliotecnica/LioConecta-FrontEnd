@@ -1,0 +1,7 @@
+{
+  "apiBaseUrl": "http://10.0.0.79:8092",
+  "pageBaseUrl": "http://10.0.0.79:8092",
+  "marker": "E2E-PONTO-DEC-1784211954331",
+  "employee": "leonardo.mendes@liotecnica.com.br",
+  "manager": "e2e.ponto.gestor@liotecnica.com.br"
+}
