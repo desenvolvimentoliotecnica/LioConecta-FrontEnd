@@ -1,0 +1,15 @@
+{
+  "managerEmail": "e2e.ponto.gestor@liotecnica.com.br",
+  "subjectCount": 1,
+  "assignments": [
+    {
+      "id": "f2173c7d-fd5b-4c90-ab30-56f988f92ce8",
+      "subjectType": 2,
+      "subjectId": "a98fee4c-71d9-47d2-b215-a133ba6e24e7",
+      "subjectLabel": "e2e.ponto.gestor@liotecnica.com.br",
+      "roleId": "09d915e3-d855-4493-af1f-14619481a892",
+      "roleName": "Colaborador",
+      "assignedAt": "2026-07-16T14:25:56.264212+00:00"
+    }
+  ]
+}
