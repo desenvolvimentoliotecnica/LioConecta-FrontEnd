@@ -9,6 +9,12 @@ export const PERMISSIONS = {
     emailManage: "admin.email.manage",
     totvsManage: "admin.totvs.manage",
   },
+  integration: {
+    feedWrite: "portal.integration.feed.write",
+    notificationWrite: "portal.integration.notification.write",
+    emailEnqueue: "portal.integration.email.enqueue",
+    peopleResolve: "portal.integration.people.resolve",
+  },
   rbac: {
     rolesManage: "rbac.roles.manage",
     assignmentsManage: "rbac.assignments.manage",

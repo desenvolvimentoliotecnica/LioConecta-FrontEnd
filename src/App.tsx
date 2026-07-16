@@ -112,7 +112,9 @@ import { CompassMeetingsPage } from "./components/compass/pages/CompassMeetingsP
 import { CompassDecisionsPage } from "./components/compass/pages/CompassDecisionsPage";
 import { CompassRelatoriosPage } from "./components/compass/pages/CompassRelatoriosPage";
 import { isCompassExternalEnabled } from "./config/compassApp";
+import { isUniLioExternalEnabled } from "./config/unilioApp";
 import { UniLioAccessGate } from "./components/unilio/UniLioAccessGate";
+import { UniLioExternalRedirect } from "./components/unilio/UniLioExternalRedirect";
 import { UniLioShell } from "./components/unilio/UniLioShell";
 import { UniLioDashboardPage } from "./components/unilio/pages/UniLioDashboardPage";
 import { UniLioCatalogoPage } from "./components/unilio/pages/UniLioCatalogoPage";
@@ -240,34 +242,38 @@ function App() {
             <Route path="relatorios" element={<CompassRelatoriosPage />} />
           </Route>
         )}
-        <Route
-          path="/unilio"
-          element={
-            <UniLioAccessGate>
-              <UniLioShell />
-            </UniLioAccessGate>
-          }
-        >
-          <Route index element={<UniLioDashboardPage />} />
-          <Route path="catalogo" element={<UniLioCatalogoPage />} />
-          <Route path="trilhas" element={<UniLioTrilhasPage />} />
-          <Route path="curso/:courseId" element={<UniLioPlayerPage />} />
-          <Route path="avaliacoes" element={<UniLioAvaliacoesPage />} />
-          <Route path="certificados" element={<UniLioCertificadosPage />} />
-          <Route path="compliance" element={<UniLioCompliancePage />} />
-          <Route path="comunidade" element={<UniLioComunidadePage />} />
-          <Route path="minhas-duvidas" element={<UniLioMinhasDuvidasPage />} />
-          <Route path="recomendacoes" element={<UniLioRecomendacoesPage />} />
-          <Route path="instrutor" element={<UniLioInstrutorPage />} />
-          <Route path="instrutor/duvidas" element={<UniLioInstrutorDuvidasPage />} />
-          <Route path="instrutor/curso/:courseId/editar" element={<UniLioCourseEditPage />} />
-          <Route path="admin/aprovacoes" element={<UniLioAprovacaoListPage />} />
-          <Route path="admin/aprovacoes/:courseId" element={<UniLioAprovacaoReviewPage />} />
-          <Route path="gestor" element={<UniLioGestorPage />} />
-          <Route path="eventos" element={<UniLioEventosPage />} />
-          <Route path="competencias" element={<UniLioCompetenciasPage />} />
-          <Route path="relatorios" element={<UniLioRelatoriosPage />} />
-        </Route>
+        {isUniLioExternalEnabled() ? (
+          <Route path="/unilio/*" element={<UniLioExternalRedirect />} />
+        ) : (
+          <Route
+            path="/unilio"
+            element={
+              <UniLioAccessGate>
+                <UniLioShell />
+              </UniLioAccessGate>
+            }
+          >
+            <Route index element={<UniLioDashboardPage />} />
+            <Route path="catalogo" element={<UniLioCatalogoPage />} />
+            <Route path="trilhas" element={<UniLioTrilhasPage />} />
+            <Route path="curso/:courseId" element={<UniLioPlayerPage />} />
+            <Route path="avaliacoes" element={<UniLioAvaliacoesPage />} />
+            <Route path="certificados" element={<UniLioCertificadosPage />} />
+            <Route path="compliance" element={<UniLioCompliancePage />} />
+            <Route path="comunidade" element={<UniLioComunidadePage />} />
+            <Route path="minhas-duvidas" element={<UniLioMinhasDuvidasPage />} />
+            <Route path="recomendacoes" element={<UniLioRecomendacoesPage />} />
+            <Route path="instrutor" element={<UniLioInstrutorPage />} />
+            <Route path="instrutor/duvidas" element={<UniLioInstrutorDuvidasPage />} />
+            <Route path="instrutor/curso/:courseId/editar" element={<UniLioCourseEditPage />} />
+            <Route path="admin/aprovacoes" element={<UniLioAprovacaoListPage />} />
+            <Route path="admin/aprovacoes/:courseId" element={<UniLioAprovacaoReviewPage />} />
+            <Route path="gestor" element={<UniLioGestorPage />} />
+            <Route path="eventos" element={<UniLioEventosPage />} />
+            <Route path="competencias" element={<UniLioCompetenciasPage />} />
+            <Route path="relatorios" element={<UniLioRelatoriosPage />} />
+          </Route>
+        )}
         <Route path="/admin/configuracoes-backend" element={<BackendConfigPage />} />
         <Route path="/admin/controle-acesso" element={<ControleAcessoPage />} />
         <Route path="/admin/trilha-auditoria" element={<AuditTrailPage />} />

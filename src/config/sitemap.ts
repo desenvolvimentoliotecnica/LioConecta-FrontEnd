@@ -295,7 +295,7 @@ export function buildSitemapSections(): SitemapSection[] {
       label: "UniLio",
       icon: "fa-graduation-cap",
       items: [
-        entry("Visão Geral", "/unilio", "Dashboard de aprendizagem com KPIs, trilha ativa e próximos passos."),
+        entry("Visão Geral", "/unilio", "Dashboard de aprendizagem com KPIs, trilha ativa e próximos passos. Configure VITE_UNILIO_APP_URL no portal para abrir a app UniLio standalone."),
         entry("Catálogo", "/unilio/catalogo", "Biblioteca de cursos corporativos com filtros por área e tipo."),
         entry("Trilhas", "/unilio/trilhas", "Percursos estruturados de desenvolvimento de competências."),
         entry("Avaliações", "/unilio/avaliacoes", "Quizzes pendentes e histórico de tentativas."),
@@ -388,7 +388,7 @@ export function buildSitemapSections(): SitemapSection[] {
         entry(
           "UniLio — permissões",
           "/admin/configuracoes-backend?category=unilio",
-          "Define quem acessa o portal de aprendizagem UniLio no menu lateral esquerdo.",
+          "Define quem acessa o portal de aprendizagem UniLio. Com VITE_UNILIO_APP_URL, o menu abre a app standalone.",
         ),
         entry(
           "Sistemas — permissões",
