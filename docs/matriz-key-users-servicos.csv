@@ -1,0 +1,254 @@
+﻿Area,Servico,Solicitacao,Departamento,Setor,Responsavel
+RH,Acessos ao contracheque,Auditoria de acessos ao contracheque,RH,Folha de Pagamento / DP,Key-user Folha / Analista de Folha / DP
+RH,Benefícios,Auxílio Creche,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Auxílio Home Office,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Licenças e Afastamentos,RH,Benefícios,Analista de RH (Férias e ausências)
+RH,Benefícios,Plano de Saúde,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Plano Odontológico,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Previdência Privada,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Programa de Assistência,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Seguro de Vida,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Vale-alimentação,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Vale-refeição,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Vale-transporte,RH,Benefícios,Analista de Benefícios (RH)
+RH,Benefícios,Wellhub (Gympass),RH,Benefícios,Analista de Benefícios (RH)
+RH,Clima organizacional,Analytics de clima / humor,RH,Cultura & Clima,Key-user Clima / People Analytics (RH)
+RH,Contracheque,Carta de Consignação,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Comparativo Salarial,RH,Folha de Pagamento / DP,Self-service; suporte: Analista de Folha / DP
+RH,Contracheque,Comprovante de Rendimentos,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Demonstrativo Detalhado,RH,Folha de Pagamento / DP,Self-service; suporte: Analista de Folha / DP
+RH,Contracheque,Descontos em Folha,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Download em PDF,RH,Folha de Pagamento / DP,Self-service; suporte: Analista de Folha / DP
+RH,Contracheque,Dúvidas sobre Rubricas,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,FGTS e Encargos,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Histórico de Holerites,RH,Folha de Pagamento / DP,Self-service; suporte: Analista de Folha / DP
+RH,Contracheque,Informe de Rendimentos,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Solicitar 2ª Via,RH,Folha de Pagamento / DP,Analista de Folha / DP
+RH,Contracheque,Visualizar Contracheque,RH,Folha de Pagamento / DP,Self-service; suporte: Analista de Folha / DP
+RH,Feedback,Canal de feedback (RH e 1:1),RH,Cultura & Feedback,Key-user Feedback (RH)
+RH,Férias e ausências,Abono Pecuniário,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Afastamento INSS,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Banco de Horas,RH,Departamento Pessoal,Analista de RH (Férias e ausências)
+RH,Férias e ausências,Calendário da Equipe,RH,Departamento Pessoal,Gestor imediato
+RH,Férias e ausências,Consultar Saldo de Férias,RH,Departamento Pessoal,Analista de RH (Férias e ausências)
+RH,Férias e ausências,Falta Justificada,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Histórico de Ausências,RH,Departamento Pessoal,Analista de RH (Férias e ausências)
+RH,Férias e ausências,Licença Gala / Nojo,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Licença Maternidade,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Licença Paternidade,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Registrar Atestado Médico,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Férias e ausências,Solicitar Férias,RH,Departamento Pessoal,Analista de RH (Férias e ausências) (aprovação: Gestor imediato)
+RH,Gestão de benefícios,Catálogo e atribuições de benefícios,RH,Benefícios,Key-user Benefícios / Analista de Benefícios (RH)
+RH,Gestão de férias,Aprovar/rejeitar férias e ausências da equipe,RH,Departamento Pessoal,Gestor imediato
+RH,Gestão de ponto,Fila de ajustes e aprovações de ponto,RH,Ponto / Departamento Pessoal,Gestor imediato + Analista de Ponto / DP
+RH,Movimentações,Mérito (workflow gestor → RH),RH,Remuneração / C&B,Gestor imediato + Analista de RH (Remuneração / C&B)
+RH,Ponto eletrônico,App e Relógio de Ponto,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP / suporte TI
+RH,Ponto eletrônico,Aprovar Pontos da Equipe,RH,Ponto / Departamento Pessoal,Gestor imediato
+RH,Ponto eletrônico,Banco de Horas,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Espelho de Ponto,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Histórico de Marcações,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Horário de Trabalho,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Horas Extras,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Intervalo e Refeição,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Justificar Falta no Ponto,RH,Ponto / Departamento Pessoal,Gestor imediato + Analista de Ponto / DP
+RH,Ponto eletrônico,Marcação Remota,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Registrar Ponto,RH,Ponto / Departamento Pessoal,Analista de Ponto / DP
+RH,Ponto eletrônico,Solicitar Ajuste de Ponto,RH,Ponto / Departamento Pessoal,Gestor imediato + Analista de Ponto / DP
+RH,Solicitações RH,Abrir Nova Solicitação ao RH,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Acompanhar por Protocolo,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Alteração de Dados Pessoais,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Assinar Termo Aditivo,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Atualizar Dados Cadastrais,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Central de Pendências,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Confirmar Opção de Benefícios,RH,Benefícios,Analista de Benefícios (RH)
+RH,Solicitações RH,Enviar Documentos ao RH,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Histórico de Solicitações,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Responder Pesquisa do RH,RH,Cultura & Clima,Key-user Clima / People Analytics (RH)
+RH,Solicitações RH,Solicitar Declaração de Vínculo,RH,Atendimento / Departamento Pessoal,Analista de RH
+RH,Solicitações RH,Solicitar Transferência Interna,RH,Movimentações / C&B,Gestor imediato + Analista de RH
+RH,Triagem de feedback,Fila de triagem de feedback,RH,Cultura & Feedback,Key-user Triagem Feedback / Analista de RH
+Financeiro,Adiantamento de viagem,Acompanhar Adiantamento,Financeiro,Viagens / Tesouraria,Self-service; suporte: Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Aprovar Adiantamentos,Financeiro,Viagens / Tesouraria,Gestor imediato + Analista Financeiro
+Financeiro,Adiantamento de viagem,Cadastrar Roteiro,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Cancelar Solicitação,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Comprovantes de Viagem,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Despesas Previstas,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Dúvidas sobre Viagens,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Extrato de Adiantamentos,Financeiro,Viagens / Tesouraria,Self-service; suporte: Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Política de Viagens,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Prestar Contas,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Simular Valor de Viagem,Financeiro,Viagens / Tesouraria,Self-service; suporte: Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Adiantamento de viagem,Solicitar Adiantamento,Financeiro,Viagens / Tesouraria,Analista Financeiro (Viagens / Adiantamentos)
+Financeiro,Reembolso de despesas,Acompanhar Status,Financeiro,Contas a Pagar,Self-service; suporte: Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Anexar Comprovantes,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Aprovar Reembolsos da Equipe,Financeiro,Contas a Pagar,Gestor imediato
+Financeiro,Reembolso de despesas,Despesas de Alimentação,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Dúvidas Financeiras,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Extrato de Reembolsos,Financeiro,Contas a Pagar,Self-service; suporte: Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Hospedagem,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Material e Escritório,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Nova Solicitação de Reembolso,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Política de Reembolso,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Prestação de Contas,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Reembolso de despesas,Transporte e Táxi,Financeiro,Contas a Pagar,Analista Financeiro (Reembolsos / Contas a pagar)
+Financeiro,Vale-transporte,2ª Via do Cartão,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Alterar Itinerário,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Cadastrar Rota Casa–Trabalho,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Comunicar Perda ou Roubo,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Consultar Saldo do VT,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Dúvidas sobre Vale-Transporte,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Extrato de Utilização,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Operadoras e Linhas,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Renunciar ao Vale-Transporte,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Simular Desconto em Folha,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Solicitar Inclusão no VT,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+Financeiro,Vale-transporte,Solicitar Recarga,Financeiro,Vale-transporte,Analista de Vale-transporte (Financeiro/RH)
+TI,Acesso a sistemas,Active Directory,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Acesso a sistemas,Jira / Confluence,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Acesso a sistemas,Microsoft 365,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Acesso a sistemas,Portal RH,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Acesso a sistemas,Power BI,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Acesso a sistemas,SAP / ERP,TI,Identidade e Acessos (IAM),Analista de TI (Acessos / IAM) (com key-user do sistema)
+TI,Help Desk,Abrir chamado,TI,Service Desk,Analista de Service Desk (N1)
+TI,Help Desk,Acompanhar ticket,TI,Service Desk,Analista de Service Desk (N1)
+TI,Help Desk,Base de conhecimento,TI,Service Desk,Key-user Wiki TI / Service Desk
+TI,Solicitar equipamento,Celular corporativo,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Dock station,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Headset,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Monitor adicional,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Notebook corporativo,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Outros,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,Solicitar equipamento,Teclado e mouse,TI,Ativos / Equipamentos,Analista de TI (Ativos / Equipamentos)
+TI,VPN e acesso remoto,Acesso RDP / VDI,TI,Infraestrutura / Rede,Analista de Infraestrutura / Rede
+TI,VPN e acesso remoto,Configurar MFA,TI,Segurança da Informação,Analista de Infraestrutura / Rede
+TI,VPN e acesso remoto,Guia home office,TI,Segurança da Informação,Key-user Segurança da Informação / Infra
+TI,VPN e acesso remoto,Instalar VPN FortiClient,TI,Infraestrutura / Rede,Analista de Infraestrutura / Rede
+TI,VPN e acesso remoto,Política de acesso remoto,TI,Segurança da Informação,Key-user Segurança da Informação / Infra
+TI,VPN e acesso remoto,Reset senha VPN,TI,Infraestrutura / Rede,Analista de Infraestrutura / Rede
+Facilities,Climatização,Ajuste de temperatura,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Climatização,Ar-condicionado com defeito,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Climatização,Controle remoto / automação,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Climatização,Inspeção preventiva,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Climatização,Limpeza de filtros,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Climatização,Ventilação insuficiente,Facilities,Climatização / HVAC,Analista / Técnico de Climatização (Facilities)
+Facilities,Copiadora e impressão,Digitalização de documentos,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Copiadora e impressão,Encadernação e acabamento,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Copiadora e impressão,Impressão confidencial,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Copiadora e impressão,Impressão em grande volume,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Copiadora e impressão,Plotagem técnica,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Copiadora e impressão,Reposição de toner e papel,Facilities,Reprografia,Analista de Facilities (Reprografia)
+Facilities,Crachá e visitantes,Acesso de terceiros,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Crachá e visitantes,Crachá de estacionamento,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Crachá e visitantes,Eventos e grupos,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Crachá e visitantes,Política de visitantes,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Crachá e visitantes,Registrar visitante,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Crachá e visitantes,Solicitar crachá,Facilities,Recepção / Segurança patrimonial,Analista de Facilities / Recepção
+Facilities,Encomendas e correios,Malotes internos,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Encomendas e correios,Minhas encomendas,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Encomendas e correios,Notificação de chegada,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Encomendas e correios,Rastrear envio,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Encomendas e correios,Retirada pendente,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Encomendas e correios,Solicitar envio,Facilities,Malote / Correios,Analista de Facilities (Malote / Correios)
+Facilities,Estacionamento,Estacionamento coberto,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Estacionamento,Estacionamento de motos,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Estacionamento,Mapa de vagas,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Estacionamento,Solicitar vaga mensalista,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Estacionamento,Troca de veículo,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Estacionamento,Vaga para visitante,Facilities,Estacionamento,Analista de Facilities (Estacionamento)
+Facilities,Gestão de cardápio,Editar cardápio do refeitório,Facilities,Refeitório / Copa,Key-user Cardápio / Facilities (Refeitório)
+Facilities,Gestão de resíduos,Agendar coleta especial,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Gestão de resíduos,Campanhas de sustentabilidade,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Gestão de resíduos,Coleta seletiva,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Gestão de resíduos,Descarte de eletrônicos,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Gestão de resíduos,Resíduos orgânicos,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Gestão de resíduos,Resíduos químicos,Facilities,Resíduos / Sustentabilidade,Analista de Facilities (Resíduos / Sustentabilidade)
+Facilities,Limpeza e higienização,Apoio a eventos,Facilities,Limpeza,Analista de Facilities
+Facilities,Limpeza e higienização,Atendimento emergencial,Facilities,Limpeza,Plantão Facilities
+Facilities,Limpeza e higienização,Coleta de materiais,Facilities,Limpeza,Analista de Facilities
+Facilities,Limpeza e higienização,Desinfecção de ambientes,Facilities,Limpeza,Analista de Facilities
+Facilities,Limpeza e higienização,Limpeza de estações,Facilities,Limpeza,Analista de Facilities
+Facilities,Limpeza e higienização,Limpeza profunda de sala,Facilities,Limpeza,Analista de Facilities
+Facilities,Manutenção predial,Abrir chamado de manutenção,Facilities,Manutenção Predial,Analista / Técnico de Manutenção Predial (Facilities)
+Facilities,Manutenção predial,Elevadores e acessos,Facilities,Manutenção Predial,Analista de Facilities
+Facilities,Manutenção predial,Inspeção preventiva,Facilities,Manutenção Predial,Analista de Facilities
+Facilities,Manutenção predial,Manutenção elétrica,Facilities,Manutenção Predial,Analista / Técnico de Manutenção Predial (Facilities)
+Facilities,Manutenção predial,Manutenção hidráulica,Facilities,Manutenção Predial,Analista / Técnico de Manutenção Predial (Facilities)
+Facilities,Manutenção predial,Reparos civis,Facilities,Manutenção Predial,Analista de Facilities
+Facilities,Refeitório e copa,Alimentação para eventos,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Refeitório e copa,Cardápio da semana,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Refeitório e copa,Dieta restritiva,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Refeitório e copa,Horário estendido,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Refeitório e copa,Reportar problema na copa,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Refeitório e copa,Reservar coffee break,Facilities,Refeitório / Copa,Analista de Facilities (Refeitório / Copa)
+Facilities,Reserva de veículos,Checklist de devolução,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reserva de veículos,Corolla — ABC1D23,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reserva de veículos,Frota disponível,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reserva de veículos,Reservar veículo,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reserva de veículos,Spin — DEF4G56,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reserva de veículos,Strada — GHI7J89,Facilities,Frota,Analista de Facilities (Frota)
+Facilities,Reservas de salas,Auditório Principal — 80 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Facilities,Reservas de salas,Sala Alpha — 8 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Facilities,Reservas de salas,Sala Beta — 12 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Facilities,Reservas de salas,Sala Foco — 4 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Facilities,Reservas de salas,Sala Híbrida — 20 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Facilities,Reservas de salas,War Room — 16 lugares,Facilities,Reservas / Recepção,Analista de Facilities / Recepção
+Jurídico,Assinatura digital,Assinar documento pendente,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Assinatura digital,Assinatura em lote,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Assinatura digital,Certificado ICP-Brasil,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Assinatura digital,Enviar para assinatura,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Assinatura digital,Política de assinatura,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Assinatura digital,Validar documento assinado,Jurídico,Contratos / Assinatura,Analista Jurídico (Assinatura digital / Contratos)
+Jurídico,Canal de denúncias,Acompanhar protocolo,Compliance,Ética,Compliance / Ética
+Jurídico,Canal de denúncias,Assédio moral ou sexual,Compliance,Ética,Compliance / Ética
+Jurídico,Canal de denúncias,Estatísticas anuais,Compliance,Ética,Compliance / Ética
+Jurídico,Canal de denúncias,Fraude e corrupção,Compliance,Ética,Compliance / Ética
+Jurídico,Canal de denúncias,Política antirretaliação,Compliance,Ética,Compliance / Ética
+Jurídico,Canal de denúncias,Registrar denúncia,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Certificado de leitura,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Código de conduta vigente,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Declaração de conflito,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Política anticorrupção,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Presentes e hospitalidade,Compliance,Ética,Compliance / Ética
+Jurídico,Código de conduta,Treinamento de integridade,Compliance,Ética,Compliance / Ética
+Jurídico,Consultoria jurídica,Agendar consulta,Jurídico,Consultoria,Analista Jurídico
+Jurídico,Consultoria jurídica,Base de pareceres,Jurídico,Consultoria,Analista Jurídico
+Jurídico,Consultoria jurídica,Orientação trabalhista,Jurídico,Trabalhista,Advogado Trabalhista / Jurídico
+Jurídico,Consultoria jurídica,Parecer expresso,Jurídico,Consultoria,Analista Jurídico
+Jurídico,Consultoria jurídica,Questões societárias,Jurídico,Consultoria,Analista Jurídico
+Jurídico,Consultoria jurídica,Regulatório e licenças,Jurídico,Regulatório,Advogado Regulatório / Jurídico
+Jurídico,Contratos e minutas,Cláusulas essenciais,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Contratos e minutas,Contrato de fornecedor,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Contratos e minutas,Minutas padronizadas,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Contratos e minutas,NDA / Confidencialidade,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Contratos e minutas,Revisão de contrato,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Contratos e minutas,Termo de parceria,Jurídico,Contratos,Advogado de Contratos / Jurídico
+Jurídico,Declarações e certidões,Carta de referência,Jurídico,Trabalhista (apoio RH),"Advogado Trabalhista / Jurídico (ou RH, conforme documento)"
+Jurídico,Declarações e certidões,Certidão negativa trabalhista,Jurídico,Geral,Analista Jurídico
+Jurídico,Declarações e certidões,Certidão simplificada da Junta,Jurídico,Geral,Analista Jurídico
+Jurídico,Declarações e certidões,Declaração de renda,Jurídico,Trabalhista (apoio RH),"Advogado Trabalhista / Jurídico (ou RH, conforme documento)"
+Jurídico,Declarações e certidões,Declaração de vínculo,Jurídico,Trabalhista (apoio RH),"Advogado Trabalhista / Jurídico (ou RH, conforme documento)"
+Jurídico,Declarações e certidões,Emissão urgente,Jurídico,Geral,Analista Jurídico
+Jurídico,Due diligence,Análise de mídia,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,Due diligence,Consultar status,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,Due diligence,Due diligence simplificada,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,Due diligence,Iniciar due diligence,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,Due diligence,Listas restritivas,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,Due diligence,Matriz de risco,Compliance,Jurídico,Compliance / Ética / Analista Jurídico
+Jurídico,LGPD e privacidade,Comunicar incidente,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,LGPD e privacidade,Direitos do titular,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,LGPD e privacidade,Mapeamento de dados,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,LGPD e privacidade,Política de privacidade,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,LGPD e privacidade,RIPD / DPIA,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,LGPD e privacidade,Treinamento LGPD,Privacidade,LGPD (DPO),DPO / Encarregado de Dados (LGPD)
+Jurídico,Procurações e poderes,Consultar procurações ativas,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Procurações e poderes,Matriz de alçadas,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Procurações e poderes,Procuração pública,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Procurações e poderes,Revogar procuração,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Procurações e poderes,Solicitar procuração,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Procurações e poderes,Substabelecimento,Jurídico,Societário,Advogado Societário / Jurídico
+Jurídico,Seguro de vida,Atualizar beneficiários,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico
+Jurídico,Seguro de vida,Carteirinha digital,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico
+Jurídico,Seguro de vida,Comunicar sinistro,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico
+Jurídico,Seguro de vida,Consultar cobertura,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico
+Jurídico,Seguro de vida,FAQ do seguro,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico
+Jurídico,Seguro de vida,Seguro complementar,RH,Benefícios (apoio Jurídico),Analista de Benefícios (RH) / Analista Jurídico

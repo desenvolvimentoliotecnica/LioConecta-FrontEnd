@@ -1,0 +1,18 @@
+[
+  {
+    "n": 1,
+    "plannerTaskId": "uaC7_9UhTUy9YaRMwX21k2UAEPIs",
+    "title": "[LIOCONNECTA] Colocar pedidos de benefícios e contracheque numa fila com aprovação",
+    "status": "completed",
+    "prBackend": "https://github.com/desenvolvimentoliotecnica/LioConecta.Backend/pull/51",
+    "prFrontend": "https://github.com/desenvolvimentoliotecnica/LioConecta-FrontEnd/pull/106"
+  },
+  {
+    "n": 6,
+    "plannerTaskId": "Nh33MVssjkGt0K7-ieg4dWUAJVng",
+    "title": "[LIOCONNECTA] Trocar a página fake de Solicitações RH por uma central real de pedidos",
+    "status": "completed",
+    "prBackend": "https://github.com/desenvolvimentoliotecnica/LioConecta.Backend/pull/51",
+    "prFrontend": "https://github.com/desenvolvimentoliotecnica/LioConecta-FrontEnd/pull/106"
+  }
+]
