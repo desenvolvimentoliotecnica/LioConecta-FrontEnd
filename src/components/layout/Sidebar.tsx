@@ -4,6 +4,7 @@ import { useCompassSettings } from "../../api/hooks/useCompassSettings";
 import { useLoopSettings } from "../../api/hooks/useLoopSettings";
 import { useUniLioSettings } from "../../api/hooks/useUniLioSettings";
 import { buildCompassLaunchUrl, isCompassExternalEnabled } from "../../config/compassApp";
+import { buildUniLioLaunchUrl, isUniLioExternalEnabled } from "../../config/unilioApp";
 import { PERMISSIONS, RBAC_ADMIN_PERMISSIONS } from "../../config/rbac/permissions";
 import { usePermissions } from "../../hooks/usePermissions";
 
@@ -67,6 +68,7 @@ const LEFT_ITEMS: SidebarItemConfig[] = [
     activePrefix: "/unilio",
     permission: PERMISSIONS.unilio.access,
     moduleGate: "unilio",
+    external: isUniLioExternalEnabled(),
   },
 ];
 
@@ -194,7 +196,12 @@ function SidebarItem({
   }
 
   if (external) {
-    const launchUrl = label === "Compass" ? buildCompassLaunchUrl("/compass") : href;
+    const launchUrl =
+      label === "Compass"
+        ? buildCompassLaunchUrl("/compass")
+        : label === "UniLio"
+          ? buildUniLioLaunchUrl("/unilio")
+          : href;
     return (
       <a
         className={className}
